@@ -1,0 +1,29 @@
+{
+    "content":[
+    {"key": "User-friendly interface", "our": "Yes", "other": "No" },
+    {"key": "Advanced diagnostic capabilities", "our": "Yes", "other": "No" },
+    {"key": "Compatibility with existing systems", "our": "Yes", "other": "Yes" },
+    {"key": "Customizable workflows", "our": "Yes", "other": "No" },
+    {"key": "Enhanced imaging clarity", "our": "Yes", "other": "Yes" },
+    {"key": "Seamless integration", "our": "Yes", "other": "Yes" },
+    {"key": "Responsive customer support", "our": "Yes", "other": "Yes" },
+    {"key":"Lab Integrated", "our": "yes", "other":"no"},
+    {"key":"Pharmacy Integrated", "our": "yes", "other":"no"},
+    {"key": "Regular updates", "our": "Yes", "other": "Yes" },
+    {"key": "Cost-effectiveness", "our": "Yes", "other": "No" },{"key": "Cloud storage options", "our": "Yes", "other": "Yes" },
+    {"key": "Mobile accessibility", "our": "Yes", "other": "Yes" },
+    {"key": "AI-powered features", "our": "Yes", "other": "Yes" },
+    {"key": "Training and education resources", "our": "Yes", "other": "No" },
+    {"key": "Remote access capabilities", "our": "Yes", "other": "Yes" },
+    {"key": "Multi-modality support", "our": "Yes", "other": "Yes" },
+    { "key": "Fully Customizable", "our": "yes", "other":"no"},
+    { "key": "All In One Solutions", "our": "yes", "other":"no"}
+],
+    
+    "img": [
+        { "title" :"Features" , "text" : "Have a look at the following features of Healthcare  software that assists in comparing both options."},
+        { "key": "Healthray", "img": "https://healthray.com/wp-content/uploads/2024/02/Healthray-Logo.svg" },
+        { "key": "Healthplix", "img": "https://healthray.com/wp-content/uploads/2024/02/healthplix.webp" }
+    ]
+
+}

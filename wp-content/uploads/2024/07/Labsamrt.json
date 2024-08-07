@@ -1,0 +1,32 @@
+{
+    "content": [ 
+        {"key": "Patient Portal", "our" : "yes", "other" : "yes"},
+        {"key": "Appointment system", "our" : "yes", "other" : "yes"},
+        {"key": "Machine interfacing", "our" : "yes", "other" : "yes"},
+        {"key": "BI Reports", "our" : "yes", "other" : "No"},
+        {"key": "Interfacing with systems", "our" : "yes", "other" : "No"},
+        {"key": "Automated workflows", "our" : "yes", "other" : "yes"},
+        {"key": "Stringent compliance", "our" : "yes", "other" : "yes"},
+        {"key": "Team management", "our" : "yes", "other" : "yes"},
+        {"key": "Inventory management", "our" : "yes", "other" : "yes"},
+        {"key": "Tracking", "our" : "yes", "other" : "yes"},
+        {"key": "Collaboration", "our" : "yes", "other" : "yes"},
+        {"key": "Document management", "our" : "yes", "other" : "yes"},
+        {"key": "Radiology reports", "our" : "yes", "other" : "yes"},
+        {"key": "Quality management", "our" : "yes", "other" : "yes"}
+    ],
+    "img": [
+        {
+            "title": "Features",
+            "text": "Have a look at the following features of Healthcare  software that assists in comparing both options."
+        },
+        {
+            "key": "Healthray",
+            "img": "https://healthray.com/wp-content/uploads/2024/02/Healthray-Logo.svg"
+        },
+        {
+            "key": "CrelioHealth",
+            "img": "https://healthray.com/wp-content/uploads/2024/07/Labsamrt-Logo.webp"
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "content":[
+    { "key": "Advanced analytics  ", "our": "yes", "other": "Yes"},
+    { "key": "Queue management ", "our": "yes", "other": "Yes"},
+    { "key": "Pharmacy management system ", "our": "yes", "other": "no"},
+    { "key": "Radiology information system ", "our": "yes", "other": "Yes"},
+    { "key": "Medical formulas", "our": "yes", "other": "no"},
+    { "key": "Cloud based solution ", "our": "yes", "other": "Yes"},
+    { "key": "HRMS ", "our": "yes", "other": "no"},
+    { "key": "Tracking health records", "our": "yes", "other": "Yes"}
+],    
+    "img": [
+        { "title" :"Features" , "text" : "Have a closer look on the distinction between Healthray and Ezovion."},
+        { "key": "Healthray", "img": "https://healthray.com/wp-content/uploads/2024/02/Healthray-Logo.svg" },
+        { "key": "Practo", "img": "https://healthray.com/wp-content/uploads/2024/08/Ezovion.webp" }
+    ]
+}

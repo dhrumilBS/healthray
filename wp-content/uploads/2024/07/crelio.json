@@ -1,0 +1,25 @@
+{
+    "content":
+    [ 
+        { "key": "Hospital management", "our": "Yes", "other":"No"},
+        { "key": "Dicom viewer ", "our": "Yes", "other":"Yes"},
+        { "key": "Outsource report manage", "our": "Yes", "other":"Yes"},
+        { "key": "Role base permissions", "our": "Yes", "other":"Yes"},
+        { "key": "Dynamic print", "our": "Yes", "other":"Yes"},
+        { "key": "Manage report print sequence ", "our": "Yes", "other":"Yes"},
+        { "key": "Report sharing", "our": "Yes", "other":"Yes"},
+        { "key": "Label & Sticker print", "our": "Yes", "other":"No"},
+        { "key": "Manage sample collection agent", "our": "Yes", "other":"No"},
+        { "key": "Collection center manage", "our": "Yes", "other":"Yes"},
+        { "key": "Business Reports", "our": "Yes", "other":"No"},
+        { "key": "Manage 3C form", "our": "Yes", "other":"Yes"},
+        { "key": "Patient case history ", "our": "Yes", "other":"Yes"},
+        { "key": "Manage patient detail", "our": "Yes", "other":"No"},
+        { "key": "Radiology template manage ", "our": "Yes", "other":"No"}
+    ],
+    "img": [
+        { "title" :"Features" , "text" : "Have a look at the following features of Healthcare  software that assists in comparing both options."},
+        { "key": "Healthray", "img": "https://healthray.com/wp-content/uploads/2024/02/Healthray-Logo.svg" },
+        { "key": "CrelioHealth", "img": "https://healthray.com/wp-content/uploads/2024/07/CrelioHealth-logo.webp" }
+    ]
+}

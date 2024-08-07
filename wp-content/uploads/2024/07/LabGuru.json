@@ -1,0 +1,33 @@
+{
+    "content": [ 
+        {"key": "Pharmacy Management", "our":"Yes","other":"No"  },
+        {"key": "Hospital Management Software", "our":"Yes","other":"No"  },
+        {"key": "Sample Collection", "our":"Yes","other":"Yes"  },
+        {"key": "Digital Lab Notebook", "our":"Yes","other":"Yes"  },
+        {"key": "AutomatedSolution", "our":"Yes","other":"Yes"  },
+        {"key": "Equipment Management", "our":"Yes","other":"Yes"  },
+        {"key": "Interactive dashboards", "our":"Yes","other":"Yes"},
+        {"key": "Remote Permission", "our":"Yes","other":"Yes"  },
+        {"key": "Human Resource Management System", "our":"Yes","other":"No"  },
+        {"key": "Customizable template", "our":"Yes","other":"Yes"  },
+        {"key": "Appointment Management", "our":"Yes","other":"Yes"  },
+        {"key": "AI Technologies", "our":"Yes","other":"Yes"  },
+        {"key": "Sample traceability", "our":"Yes","other":"Yes"  },
+        {"key": "Remote Accessibility", "our":"Yes","other":"Yes"  },
+        {"key": "Instrument Management", "our":"Yes","other":"Yes"  }
+    ],
+    "img": [
+        {
+            "title": "Features",
+            "text": "Have a look at the following features of Healthcare  software that assists in comparing both options."
+        },
+        {
+            "key": "Healthray",
+            "img": "https://healthray.com/wp-content/uploads/2024/02/Healthray-Logo.svg"
+        },
+        {
+            "key": "CrelioHealth",
+            "img": "https://healthray.com/wp-content/uploads/2024/07/Labguru-logo.webp"
+        }
+    ]
+}
