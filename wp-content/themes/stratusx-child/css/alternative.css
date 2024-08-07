@@ -1,0 +1,26 @@
+.img-scribble { display: none; }
+
+.patient-caring .elementor-widget-container { list-style-type: none;padding: 0;}
+.patient-caring .elementor-widget-container p {display: flex;position: relative;line-height: 33px;align-items: center;color: #1B3C74;font-size: 18px;font-weight: 600; }
+.patient-caring .elementor-widget-container p::before { content: ''; min-width: 20px; height: 20px; line-height:33px; margin-bottom: 3px; margin-right: 9px; background-image: url(/wp-content/uploads/assets/tick.svg); background-position: center; background-repeat: no-repeat; flex-shrink:0; }
+
+.healthray_goal {border-collapse: collapse;border-radius: 4px;width: 100%;border: 1px solid #007AFF;}
+.healthray_goal td {text-align: center;padding: 20px;}
+.healthray_goal tr td:first-child {text-align: left;} 
+
+.healthray_goal .healthray_feature { background-color: transparent !important; }
+.healthray_goal .healthray_feature h3.feature { font-size: 22px; margin: 0; color: #6691FF; }
+.healthray_goal .healthray_feature p.feature_desc {margin-bottom: 0;}
+.healthray_goal .healthray_feature td {border: 1px solid #007AFF;}
+.healthray_goal .healthray_right_image {width: 200px;}
+.healthray_goal .healthray_right_image img {width: 100%;height: 100px;object-fit: contain;}
+ 
+.healthray_goal tbody tr td.our {background-color: #F3F6FF;border: 1px solid #007AFF;border-top-color: #bcbcbc;border-bottom-color: #bcbcbc;}
+.healthray_goal tbody td:not(.our) {border: 1px solid #bcbcbc;border-right: 0;border-left: 0;}
+.healthray_goal tbody tr:last-child td {border-bottom-color: #007AFF;} 
+
+@media(max-width: 576px) {
+    .healthray_goal td {padding: 6px;} 
+    .healthray_goal .healthray_feature h3.feature{font-size: 16px;}
+    .healthray_goal .healthray_feature p.feature_desc{font-size: 13px; margin-top: 8px;}
+}

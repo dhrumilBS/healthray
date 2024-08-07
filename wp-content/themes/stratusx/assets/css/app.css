@@ -1,0 +1,11 @@
+html { font-size: 100%; overflow-x: hidden; }
+body { font-family: "Nunito", sans-serif; color: #5c5c5c; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden; }
+@font-face { font-family: "themovation-icons"; src: url("../fonts/themovation-icons.eot"); src: url("../fonts/themovation-icons.eot?#iefix") format("embedded-opentype"), url("../fonts/themovation-icons.woff") format("woff"), url("../fonts/themovation-icons.ttf") format("truetype"), url("../fonts/themovation-icons.svg#themovation-icons") format("svg"); font-weight: normal; font-style: normal; } 
+.container { width: calc(100% - 30px); max-width: 1170px !important; }
+
+.inner-container>.content-editor { width: calc(100% - 30px); max-width: 1170px; margin: 0 auto; }
+.error-404 { padding-top: 40px; padding-bottom: 40px }
+
+body.elementor-page .inner-container>.content-editor,
+body.elementor-editor-active .inner-container>.content-editor,
+body.elementor-editor-preview .inner-container>.content-editor { width: auto!important;max-width: none;margin: 0;padding: 0; }
