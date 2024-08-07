@@ -1,0 +1,25 @@
+{
+  "_ProBadge-eda32c5a.js": {
+    "file": "ProBadge-eda32c5a.js"
+  },
+  "admin.tsx": {
+    "file": "admin.tsx-660b3de3.js",
+    "imports": [
+      "_ProBadge-eda32c5a.js"
+    ],
+    "isEntry": true,
+    "src": "admin.tsx"
+  },
+  "main.tsx": {
+    "file": "main.tsx-b5c7e8c5.js",
+    "imports": [
+      "_ProBadge-eda32c5a.js"
+    ],
+    "isEntry": true,
+    "src": "main.tsx"
+  },
+  "style.css": {
+    "file": "style.css",
+    "src": "style.css"
+  }
+}

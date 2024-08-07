@@ -1,0 +1,7 @@
+*** Yoast SEO premium Changelog ***
+
+
+2024-07-23 - version 23.1
+* add -  Converts the _Yoast Table of Contents_ block to use the Blocks V3 API.
+* update -  Sets the _WordPress tested up to_ version to 6.6.
+
