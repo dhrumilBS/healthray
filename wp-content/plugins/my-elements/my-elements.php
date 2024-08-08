@@ -57,6 +57,7 @@ function my_elements()
 	require_once ML_PATH . 'elements/product-slider.php';
 	require_once ML_PATH . 'elements/product-slider-2.php';
 	require_once ML_PATH . 'elements/ehr-product-slider-3.php';
+	require_once ML_PATH . 'elements/pms-product-slider.php';
 	    require_once ML_PATH . 'elements/swiper-grid.php';
 	    require_once ML_PATH . 'elements/alternativ.php';
 
