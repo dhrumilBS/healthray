@@ -13,7 +13,7 @@ jQuery(document).ready(function ($) {
 
 	// 	=========================================== BLOG FAQ ===========================================
 	function owl_carousel(e) {
-		jQuery('.product-slider').each(function () {
+		jQuery('.owl-carousel').each(function () {
 			var app_slider = jQuery(this);
 			var prev = '<span><svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.99983 1L3.05284 4.87375C3.03612 4.89016 3.02283 4.90979 3.01375 4.93147C3.00468 4.95316 3 4.97646 3 5C3 5.02354 3.00468 5.04684 3.01375 5.06853C3.02283 5.09021 3.03612 5.10984 3.05284 5.12625L7 9" stroke="currentcolor" stroke-linecap="round"/> </svg></span>';
 			var next = '<span><svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M3.00017 9L6.94716 5.12625C6.96388 5.10984 6.97717 5.09021 6.98625 5.06853C6.99532 5.04684 7 5.02354 7 5C7 4.97646 6.99532 4.95316 6.98625 4.93147C6.97717 4.90979 6.96388 4.89016 6.94716 4.87375L3 1" stroke="currentcolor" stroke-linecap="round"/> </svg></span>';
@@ -60,7 +60,7 @@ jQuery(document).ready(function ($) {
 		});
 	}  
 
-	if (jQuery('.product-slider').length > 0) {
+	if (jQuery('.owl-carousel').length > 0) {
 		owl_carousel();
 	} 
 });
