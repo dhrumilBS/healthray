@@ -230,7 +230,7 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img  ) {
 			</div>
 
 			<div class="th-d-flex">
-				<div class="left-content content-box half-width">
+				<div class="width-33 content-box half-width">
 					<h3>EMR software presides over a paper record system</h3>
 					<p>Nowadays, most physicians write prescriptions on the computer, not on paper. Furthermore, they write on the electronic medical record software because of its tremendous functionalities. The advantages of Healthray’s EMR software are defined below: </p>
 					<ul>
@@ -248,7 +248,7 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img  ) {
 					<img decoding="async" width="436" height="560" src="https://healthray.com/wp-content/uploads/2024/07/Doctor-Healthray.webp" class="attachment-large size-large wp-image-39208" alt="Doctor Healthray">
 				</div>
 
-				<div class="right-content content-box half-width">
+				<div class="width-33 content-box half-width">
 					<h3>Redesign your healthcare system with an EMR software</h3>
 					<p>With Healthray’s EMR software, it is easy to accumulate and extract data from any location. Moreover, this software aids to innovate the medical system and encompasses a flexible template that generates different medical forms in a short span of time. Here are a few of the advantages: </p>
 					<ul>

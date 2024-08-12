@@ -211,7 +211,7 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img  ) {
 			</div>
 
 			<div class="th-d-flex">
-				<div class="left-content content-box half-width">
+				<div class="width-33 content-box half-width">
 					<h3>Unified patient records with the EMR software</h3>
 					<p>Each and every patient information record in the electronic platform. Furthermore, it stores patient demographic details along with their healthcare records. Consequently, it aids in combining data and getting immediate medical information. Following are the advantages of the unified patient records : </p>
 					<ul><li>Enhancing coordination with internal medical segments and makes it easier to share patient documents to other ones.</li><li>EMR software facilitates insightful patient information that aids to make prompt health actions.</li><li>Improve patient care through remote appointments system, accessible medical data, and interlinked with medical care segments.</li><li>Helps to advance patient outcomes through proper analytics of medical records and advanced diagnostic tools.</li><li>Ease to forecast any critical disease. Therefore, it saves patients money and aids them to be aware of healthcare conditions.</li><li>EMR software eliminates the challenge of pulling information from various sources. Therefore, simplifying consolidated information.</li><li>Patients can store healthcare documents from any region.</li></ul>
@@ -220,7 +220,7 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img  ) {
 					<img decoding="async" width="436" height="560" src="https://healthray.com/wp-content/uploads/2024/07/Doctor-Healthray.webp" class="attachment-large size-large wp-image-39208" alt="Doctor Healthray">
 				</div>
 
-				<div class="right-content content-box half-width">
+				<div class="width-33 content-box half-width">
 					<h3>Modernize diagnostic practice with EMR software</h3>
 					<p>If you want to advance your diagnostic practice and make quicker decisions. Therefore, it is crucial for you to acquire the best EMR software that is embedded with AI functionalities. This software is affordable in costs and can be purchased by anyone: </p>
 					<ul><li>The electronic medical record software has included advanced tools that support speedy and accurate patient diagnosis.</li><li>Facilitating visual reports for ease to analyze patient conditions and can understand medical history in a concise manner.</li><li>Eliminating paper records is the foremost advantage of EMR software that aids to reduce medical mistakes.</li><li>Removing diagnostic hurdles through exact patient records in the best format.Ultimately, it enhances patient care.</li><li>Radiology images in the digital format helps to enhance image quality and alleviates workload</li></ul>

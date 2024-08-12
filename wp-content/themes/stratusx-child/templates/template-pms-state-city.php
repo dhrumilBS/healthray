@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: EHR State City
+Template Name: PMS State City
 */
 // the_content();
 

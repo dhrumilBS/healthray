@@ -407,7 +407,7 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img  ) {
 				</div>
 
 				<div class="half-width">
-					<div class="icon-box-container technical-challenges-icon">
+					<div class="icon-box-container technical-challenges-icon grid-box">
 						<div class="icon-box-wrapper">
 							<div class="icon-box-icon">
 								<span class="icon"><img width="80" height="80" src="https://healthray.com/wp-content/uploads/2024/07/Minimizing-Errors-Healthray.svg" class="attachment-full size-full" alt="Minimizing Errors Healthray" decoding="async"></span>

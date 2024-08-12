@@ -1,7 +1,7 @@
 html { font-size: 100%; overflow-x: hidden; }
 body { background: #FFF; color: #5c5c5c; overflow-x: hidden; }
 body, a, input, select, textarea { font-family: 'Nunito', sans-serif; }
-img { max-width: 100%; height: auto; }
+img { max-width: 100%; height: auto; display: block;}
 a { color: #3A3B74; -webkit-transition: all 0.2s ease-in-out; -moz-transition: all 0.2s ease-in-out; transition: all 0.2s ease-in-out; }
 a:hover { color: #5c5c5c; }
 p, li { font-size: 15px; line-height: 165%; }
@@ -140,22 +140,27 @@ p, li { font-size: 15px; line-height: 165%; }
 .pre-title .elementor-heading-title { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.1px; margin: 0;} 
 .best-in p { margin-bottom: 12px; }
 .best-in .elementor-heading-title { margin-bottom: 20px; line-height: 1.4}
-.icon-box-container { display: flex; flex-wrap: wrap;}
+.icon-box-container {display: flex;flex-wrap: wrap;--gap: 20px;gap: var(--gap);}
 .icon-box-container.vertical-align { display: flex; flex-wrap: wrap; flex-direction: column;}
-.icon-box-container .icon-box-wrapper {  width: 100%; text-align: center;}
+.icon-box-container .icon-box-wrapper {width: 100%;text-align: center;padding: 12px;}
 .icon-box-container .icon-box-title { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
 .icon-box-container p{ margin: 0; }
 /* Left Side Icon */
 .icon-box-container .icon-box-wrapper.icon-left {display: flex;text-align: left;width: 100%;align-items: center;}
 .icon-box-container .icon-box-wrapper.icon-left .icon-box-content {margin-left: 16px;}
 @media screen and (min-width:768px){
-	.icon-box-container .icon-box-wrapper {max-width: calc(100% / 3);}
+	.icon-box-container .icon-box-wrapper {max-width: calc((100% - var(--gap) * (var(--col) - 1)) / var(--col));}
 }
 @media screen and (max-width: 767px){
 	.heading { text-align: center; }
 	.icon-box-container{ flex-direction: column; }
 	.form-wrapper{ margin: 0 auto; }
 }
+.section-tech-challange .grid-box.technical-challenges-icon .icon-box-wrapper {max-width: 100%;}
+@media screen and (min-width: 767px) {
+	.section-tech-challange .grid-box.technical-challenges-icon .icon-box-wrapper {max-width: calc(50% - 12px);position: relative;}
+}
+
 /* section-best-in */
 .section-best-in .img-scribble{ top: -12px;}
 @media screen and  (max-width:767px){
@@ -188,7 +193,7 @@ p, li { font-size: 15px; line-height: 165%; }
 }
 /* section-all-india */
 .section-all-india .container { max-width: 1264px!important}
-.section-all-india .image { display: flex; justify-content: center;}
+.section-all-india .image {}
 .section-all-india .image img{ aspect-ratio: 3 / 2; }
 
 @media screen and (max-width: 767px){
@@ -233,7 +238,7 @@ p, li { font-size: 15px; line-height: 165%; }
 
 .section-procuct .half-width { padding: 0; } 
 .section-procuct .product-slider { display: flex; align-items: center; flex-wrap: wrap; padding: 20px; } 
-.section-procuct .product-content { padding: 50px 32px; background: #FFF; box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.15); margin-right: -78px; position: relative; } 
+.section-procuct .product-content {padding: 50px 32px;background: #FFF;box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.15);margin-right: -78px;position: relative;overflow: hidden;} 
 .section-procuct .product-content ul { column-count: 2; padding: 0; list-style-position: inside; } 
 
 
@@ -249,32 +254,41 @@ p, li { font-size: 15px; line-height: 165%; }
 	.section-procuct .product-content { margin-top: -30px; } 
 }
 
-.section-doctor { position: relative;}
-.section-doctor .container{max-width: 1440px !important}
-.section-doctor .th-d-flex { justify-content: space-between; }
-
-.section-doctor .th-d-flex > *{ max-width: 33%; padding: 0; }
+.best-emr-in-state .section-doctor { position: relative;}
+.best-emr-in-state .section-doctor .container{max-width: 1440px !important}
+.best-emr-in-state .section-doctor .th-d-flex { justify-content: space-between; }
+.best-emr-in-state .section-doctor .th-d-flex > .width-33 { max-width:50%; }
 .section-doctor .content-box ul{ padding: 12px 8px; padding-left:26px;background: #FFF;box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.10);  }
-.section-doctor .image { display: flex; justify-content: center; align-items: flex-end; margin-bottom: -30px;}
-.section-doctor .image img { max-width: 75%; }
+.best-emr-in-state .section-doctor .image{ display: none; position: absolute;bottom: 0;left: 0;right: 0;}
+.best-emr-in-state .section-doctor .image img { max-width: 75%; }
 
+@media screen and (min-width: 991px){
+	.best-emr-in-state .section-doctor .th-d-flex > .width-33{max-width: 33%;padding: 0;z-index: 2;}
+	.best-emr-in-state .section-doctor .image {display: flex;justify-content: center;align-items: flex-end;z-index: 0;}
+}
+
+@media screen and (max-width: 767px){
+	.best-emr-in-state .section-doctor .th-d-flex > .width-33 { max-width:100%; margin-bottom: 20px; }
+}
 @media screen and (max-width: 575px){
-	.section-doctor .th-d-flex > * { max-width:100%; }
-	.section-doctor .image{ margin-bottom:10px;  }
-	.section-doctor .image img{ max-width: 75%; }
+	.best-emr-in-state .section-doctor .image{ margin-bottom:10px;  }
+	.best-emr-in-state .section-doctor .image img{ max-width: 75%; }
 }
 
 /* technical-challenges */
-.technical-challenges-icon { --gap: 24px; gap: var(--gap); margin-right: var(--gap); }
-.technical-challenges-icon .icon-box-wrapper-1{ max-width: calc(50% - (var(--gap) / 2)); }
-.technical-challenges-icon .icon-box-wrapper{max-width:100%; padding: 24px 30px; border-radius: 8px;background: #FFF; box-shadow: 0px 12px 40px -4px rgba(0, 0, 0, 0.07); }
-.technical-challenges-icon .icon-box-wrapper-1:nth-child(odd){ margin-top: calc(var(--gap) * 2)}
-.technical-challenges-icon .icon-box-wrapper:nth-child(even){ margin-top:  var(--gap); }
+.technical-challenges-icon {--gap: 24px;gap: var(--gap);}
+.technical-challenges-icon .icon-box-wrapper-1{max-width: calc(100% - (var(--gap) / 2));display: flex;margin: 0;flex-direction: column;gap: var(--gap);}
+.technical-challenges-icon .icon-box-wrapper{max-width:100%;padding: 24px 30px;border-radius: 8px;background: #FFF;box-shadow: 0px 12px 40px 4px rgba(0, 0, 0, 0.11);border-bottom: 2px solid #477bff;}
+
+@media screen and (min-width:767px) {
+	.technical-challenges-icon .icon-box-wrapper-1{max-width: calc(50% - (var(--gap) / 2));}
+	.technical-challenges-icon .icon-box-wrapper-1:nth-child(odd){margin-top: calc(var(--gap) * 2);}
+}
 /*------------------------------------- best-ehr-in-state ------------------------------ */
 .best-ehr-in-state .section-healthcare { display: flex; padding-bottom: 180px; flex-direction: column; align-items: center; gap: 25px; align-self: stretch; background: #f1f5ff; }
 .best-ehr-in-state .section-healthcare .full-width { max-width: 800px;}
 .best-ehr-in-state .section-healthcare .heading {display: flex; flex-direction: column; align-items: center;}
-.best-ehr-in-state .section-healthcare .button{ background-color: var(--hr-secondary-color); color: #fff; font-weight: 700; letter-spacing: 0.4px; border-radius: 8px; padding: 12px 32px; margin-bottom: 20px; }
+.section-healthcare .button{background-color: var(--hr-secondary-color);color: #fff;font-weight: 700;letter-spacing: 0.4px;border-radius: 8px;padding: 12px 32px;margin-bottom: 20px;display: inline-block;}
 
 .best-ehr-in-state .section-functionaly { margin-top: -150px; }
 .best-ehr-in-state .section-functionaly .functionaly-wrapper { display: flex; padding: 12px; flex-direction: column; align-items: center; gap: 12px; align-self: stretch; border-radius: 8px; background: var(--White-Color, #fff); box-shadow: 0px 7px 150px 0px rgba(218, 223, 226, 0.45); }
@@ -283,40 +297,57 @@ p, li { font-size: 15px; line-height: 165%; }
 	.best-ehr-in-state .section-functionaly .functionaly-wrapper { padding: 36px; border-radius: 32px; }
 }
 
-.best-ehr-in-state .section-benefits .icon-box-container { --gap: 20px; gap: var(--gap); }
-.best-ehr-in-state .section-benefits .icon-box-container .icon-box-wrapper { --hue: 29; --color-hue: calc(var(--hue) - 10); max-width: calc((100% - var(--gap) * (var(--col) - 1)) / var(--col)); display: flex; padding: 12px; flex-direction: column; align-items: center; gap: 10px; border-radius: 16px; background: hsla(var(--hue), 100%, 93%, 1); box-shadow: 0px 0px 100px 0px rgba(0, 0, 0, 0.05); }
+.section-benefits .icon-box-container {}
+.best-ehr-in-state .section-benefits .icon-box-container .icon-box-wrapper {--hue: 29;--color-hue: calc(var(--hue) - 10);/* max-width: calc((100% - var(--gap) * (var(--col) - 1)) / var(--col)); */display: flex;padding: 12px;flex-direction: column;align-items: center;gap: 10px;border-radius: 16px;background: hsla(var(--hue), 100%, 93%, 1);box-shadow: 0px 0px 100px 0px rgba(0, 0, 0, 0.05);}
 .best-ehr-in-state .section-benefits .icon-box-container .icon-box-wrapper .icon-box-content { padding: 16px 8px; align-items: center; border-radius: 8px; background: #fff; height: 100%; }
-.best-ehr-in-state .section-benefits .icon-box-container .icon-box-wrapper .icon-box-title { color: hsla(var(--color-hue), 96%, 67%, 1); }
+.best-ehr-in-state .section-benefits .icon-box-container .icon-box-wrapper .icon-box-title {color: hsla(var(--color-hue), 96%, 67%, 1);}
 .best-ehr-in-state .section-benefits .icon-box-container .icon-box-wrapper:nth-child(2) { --hue: 263; }
 .best-ehr-in-state .section-benefits .icon-box-container .icon-box-wrapper:nth-child(3) { --hue: 210; }
 @media screen and (min-width: 768px) {
-	.best-ehr-in-state .section-benefits .icon-box-container { --col: 2; justify-content: center; }
+	.section-benefits .icon-box-container { --col: 2; justify-content: center; }
 }
 @media screen and (min-width: 991px) {
-	.best-ehr-in-state .section-benefits .icon-box-container { --col: 3; }
+	.section-benefits .icon-box-container { --col: 3; }
 }
 
 .best-ehr-in-state .section-all-india .container { max-width: 1140px !important; }
 .best-ehr-in-state .section-all-india .image img { aspect-ratio: 1.15/0.425; }
 
-.best-ehr-in-state .section-doctor { background-color: #f1f5ff; }
-.best-ehr-in-state .section-doctor .th-d-flex { background: #fff; box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.1); justify-content: unset; align-items: center; }
-.best-ehr-in-state .section-doctor .th-d-flex .image { margin-bottom: 0; }
-.best-ehr-in-state .section-doctor .th-d-flex .image img { max-width: 100%; width: 100%; }
+.section-doctor {background-color: #f1f5ff;}
+.best-ehr-in-state .section-doctor .th-d-flex {background: #fff;box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.1);}
+.best-ehr-in-state .section-doctor .th-d-flex .image { }
+.best-ehr-in-state .section-doctor .th-d-flex .image img {max-width: 100%;height: 100%;width: 100%;object-fit: cover;}
 .best-ehr-in-state .section-doctor .th-d-flex .content-box { padding: 12px; }
 .best-ehr-in-state .section-doctor .th-d-flex .content-box h3 { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
 .best-ehr-in-state .section-doctor .th-d-flex .content-box ul { box-shadow: none; padding: 0 0 0 20px; }
-.best-ehr-in-state .section-doctor .th-d-flex > * { max-width: 100%; }
+.best-ehr-in-state .section-doctor .th-d-flex > * {max-width: 100%;}
 @media screen and (min-width: 769px) {
-	.best-ehr-in-state .section-doctor .th-d-flex > * { max-width: 50%; }
+	.best-ehr-in-state .section-doctor .th-d-flex > * {max-width: 50%;padding: 0;}
 	.best-ehr-in-state .section-doctor .th-d-flex .content-box { padding: 20px; }
 	.best-ehr-in-state .section-doctor .th-d-flex .content-box h3 { font-size: 24px; }
 }
-.best-in-state .section-procuct .container{max-width:1340px !important; }
-.best-ehr-in-state .section-tech-challange .th-d-flex .half-width { max-width: 100%; }
-.best-ehr-in-state .section-tech-challange .technical-challenges-icon { margin: 0; }
-.best-ehr-in-state .section-tech-challange .technical-challenges-icon .icon-box-wrapper { max-width: 100%; margin-top: 0; border-radius: 8px; border-bottom: 2px solid #477bff; background: #fff; box-shadow: 0px 12px 40px 4px rgba(0, 0, 0, 0.11); padding: 10px; }
-@media screen and (min-width: 768px) {
+.best-ehr-in-state .section-procuct .container{max-width:1340px !important; } 
+
+@media screen and (min-width: 767px) {
 	.best-ehr-in-state .section-tech-challange .th-d-flex .half-width { max-width: 50%; }
-	.best-ehr-in-state .section-tech-challange .technical-challenges-icon .icon-box-wrapper { max-width: calc(50% - 12px); padding: 24px 30px; }
 }
+
+@media screen and (max-width: 768px) {
+	.section-tech-challange .th-d-flex .half-width { max-width: 100%; }
+}
+
+/* best-pms-in-state */
+.best-pms-in-state .icon-box-container { --gap: 24px; }
+.best-pms-in-state .icon-box-container .icon-box-wrapper { border: 4px solid hsl(223, 100%, 90%); background: #fff; box-shadow: 0px 9px 12px 0px rgba(71, 123, 255, 0.25); border-radius: 0; text-align: left; }
+.best-pms-in-state .icon-box-container .icon-box-wrapper .icon-box-icon { margin-bottom: 8px; }
+.best-pms-in-state .section-healthcare .full-width { display: flex; max-width: 769px; width: 100%; padding: 24px; justify-content: center; align-items: center; right: 290px; margin-top: -12em; border-radius: 30px; border: 1px solid var(--hr-secondary-color, #477bff); background: #fff; box-shadow: 0px 10px 50px 0px rgba(71, 123, 255, 0.1); }
+.best-pms-in-state .section-healthcare .button { margin: 0; }
+.best-pms-in-state .section-benefits .icon-box-container .icon-box-wrapper { --hue: 263; background: hsla(var(--hue), 100%, 95%, 1); text-align: left; border-radius: 0px; border-radius: 0px; border: 0; box-shadow: none; }
+.best-pms-in-state .section-benefits .icon-box-container .icon-box-wrapper:nth-child(2) { --hue: 30; }
+.best-pms-in-state .section-benefits .icon-box-container .icon-box-wrapper:nth-child(3) { --hue: 210; }
+.best-pms-in-state .section-benefits .icon-box-container .icon-box-icon { text-align: end; float: right; }
+.best-pms-in-state .section-doctor { padding-bottom: 0; }
+.best-pms-in-state .section-doctor .doctor-image { margin-top: 52px; }
+.best-pms-in-state .section-doctor .doctor-image img { width: 100%; height: auto; }
+.best-pms-in-state .section-procuct .container { max-width: 1170px !important; }
+.best-pms-in-state .section-procuct .container .slider .slide { border: 1px solid var(--hr-primary-color); }
