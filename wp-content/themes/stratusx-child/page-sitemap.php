@@ -327,6 +327,53 @@
 			</div>
 		</div>
 	</div>
+	
+	<div class="container">
+		<div class="menu-item sub-menu-item">
+			<div>
+				<h2>Best PMS Software In India</h2>
+				<ul class="sub-menu">
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-india/" target="_blank"> Best PMS Software In India </a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-andaman-nicobar-islands/">Best PMS Software In Andaman and Nicobar Islands</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-andhra-pradesh/">Best PMS Software In Andhra Pradesh</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-arunachal-pradesh/">Best PMS Software In Arunachal Pradesh</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-assam/">Best PMS Software In Assam</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-bihar/">Best PMS Software In Bihar</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-chandigarh/">Best PMS Software In Chandigarh</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-chhattisgarh/">Best PMS Software In Chhattisgarh</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-dadra-nagar-haveli-daman-diu/">Best PMS Software In Dadra and Nagar Haveli and Daman and Diu</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-delhi/">Best PMS Software In Delhi</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-goa/">Best PMS Software In Goa</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-gujarat/">Best PMS Software In Gujarat</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-haryana/">Best PMS Software In Haryana</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-himachal-pradesh/">Best PMS Software In Himachal Pradesh</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-jammu-kashmir/">Best PMS Software In Jammu and Kashmir</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-jharkhand/">Best PMS Software In Jharkhand</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-karnataka/">Best PMS Software In Karnataka</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-kerala/">Best PMS Software In Kerala</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-ladakh/">Best PMS Software In Ladakh</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-lakshadweep/">Best PMS Software In Lakshadweep</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-madhya-pradesh/">Best PMS Software In Madhya Pradesh</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-maharashtra/">Best PMS Software In Maharashtra</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-manipur/">Best PMS Software In Manipur</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-meghalaya/">Best PMS Software In Meghalaya</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-mizoram/">Best PMS Software In Mizoram</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-nagaland/">Best PMS Software In Nagaland</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-odisha/">Best PMS Software In Odisha</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-puducherry/">Best PMS Software In Puducherry</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-punjab/">Best PMS Software In Punjab</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-rajasthan/">Best PMS Software In Rajasthan</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-sikkim/">Best PMS Software In Sikkim</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-tamil-nadu/">Best PMS Software In Tamil Nadu</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-telangana/">Best PMS Software In Telangana</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-tripura/">Best PMS Software In Tripura</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-uttar-pradesh/">Best PMS Software In Uttar Pradesh</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-uttarakhand/">Best PMS Software In Uttarakhand</a></li>
+					<li class="menu-link"><a href="https://healthray.com/best-pms-software-west-bengal/">Best PMS Software In West Bengal</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
 
 	<!-- Alternative -->
 	<div class="container">

@@ -8555,3 +8555,7 @@ wp-content/uploads/wpallexport/exports/9a30fa7706cc79c9a01295838869bfe1/index.ph
 wp-content/wflogs/config-livewaf.php
 wp-content/wflogs/config-synced.php
 wp-content/wflogs/config-transient.php
+wp-content/wflogs/config-livewaf.php
+wp-content/wflogs/config-synced.php
+wp-content/wflogs/config-transient.php
+wp-content/wflogs/config.php

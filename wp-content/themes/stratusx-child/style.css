@@ -35,7 +35,8 @@ h1,h2,h3,h4,h5,h6{color: var(--hr-primary-color); text-transform: capitalize; }
 .grecaptcha-badge { visibility: hidden; }
 
 .elementor-section-boxed .elementor-container{width: calc(100% - 20px);}
-.elementor-section .elementor-section-boxed .elementor-container{ width: 100%; }
+
+.elementor-section .elementor-section-boxed .elementor-container{ width: calc(100% - 20px); }
 .headline-color .elementor-heading-title span { color: #477BFF; }
 .ml-line .elementor-heading-title span{ border-bottom: 3px solid; border-image: linear-gradient(270deg, #FF6161 24.42%, #264D7F 54.15%, #1884C7 83.28%); border-image-slice: 1; word-wrap: break-word; }
 .elementor-widget-container p:not(:last-child){ margin-bottom: 12px; }
@@ -447,7 +448,7 @@ form.wpcf7-form select:focus,form textarea:focus,form input:focus,.th-widget-are
 
 /* avatar */
 .page-title { text-transform: capitalize; padding: 60px 10%; }
-.page-title .profile-picture { position: relative; }
+.page-title .profile-picture { position: relative; text-align: -webkit-center; }
 .page-title .avatar { margin-bottom: 12px; border: 1px solid #e1e1e1; border-radius: 100px; }
 .post-list-item { display: flex; }
 .post-list-item .post-img { margin-right: 10px; }
@@ -457,7 +458,8 @@ form.wpcf7-form select:focus,form textarea:focus,form input:focus,.th-widget-are
 /* --------------------------------------------- Elementor ------------------------------------------- */
 /*  Button  */
 .elementor-button .elementor-align-icon-right{ display: flex; }
-
+/* Home page */
+.rating-section .elementor-image img{ margin: 0 auto; }
 /* elementor tabs
 LIMS - PMS  */
 .lims-tabs .elementor-tabs-wrapper {max-width: 266px; width: 100%; padding: 11px 0px;border-radius: 10px; background: #F6F6F6; height: fit-content; }

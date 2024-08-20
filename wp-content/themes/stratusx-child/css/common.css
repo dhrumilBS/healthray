@@ -153,7 +153,7 @@ p, li { font-size: 15px; line-height: 165%; }
 }
 @media screen and (max-width: 767px){
 	.heading { text-align: center; }
-	.icon-box-container{ flex-direction: column; }
+	.icon-box-container{/* flex-direction: column; */}
 	.form-wrapper{ margin: 0 auto; }
 }
 .section-tech-challange .grid-box.technical-challenges-icon .icon-box-wrapper {max-width: 100%;}
@@ -164,7 +164,7 @@ p, li { font-size: 15px; line-height: 165%; }
 /* section-best-in */
 .section-best-in .img-scribble{ top: -12px;}
 @media screen and  (max-width:767px){
-	.section-best-in .image {margin-top: 12px;}
+	.section-best-in .image {margin-top: 12px;text-align: -webkit-center;}
 }
 /* section-features */
 .section-features .container{ max-width: 990px !important; }
@@ -194,7 +194,7 @@ p, li { font-size: 15px; line-height: 165%; }
 /* section-all-india */
 .section-all-india .container { max-width: 1264px!important}
 .section-all-india .image {}
-.section-all-india .image img{ aspect-ratio: 3 / 2; }
+.section-all-india .image img{/* aspect-ratio: 3 / 2; */}
 
 @media screen and (max-width: 767px){
 	.section-all-india .sec-heading{ margin-top: 12px}
@@ -254,11 +254,14 @@ p, li { font-size: 15px; line-height: 165%; }
 	.section-procuct .product-content { margin-top: -30px; } 
 }
 
+.section-doctor {background-color: #f1f5ff;}
+.section-doctor .content-box h3{    font-size: 20px;     font-weight: 700;}
+.section-doctor .content-box ul{ padding: 12px 8px; padding-left:26px;background: #FFF;box-shadow: 0px 10px 30px 0px hsl(227deg 37% 41% / 10%)  }
+
 .best-emr-in-state .section-doctor { position: relative;}
 .best-emr-in-state .section-doctor .container{max-width: 1440px !important}
 .best-emr-in-state .section-doctor .th-d-flex { justify-content: space-between; }
 .best-emr-in-state .section-doctor .th-d-flex > .width-33 { max-width:50%; }
-.section-doctor .content-box ul{ padding: 12px 8px; padding-left:26px;background: #FFF;box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.10);  }
 .best-emr-in-state .section-doctor .image{ display: none; position: absolute;bottom: 0;left: 0;right: 0;}
 .best-emr-in-state .section-doctor .image img { max-width: 75%; }
 
@@ -266,7 +269,6 @@ p, li { font-size: 15px; line-height: 165%; }
 	.best-emr-in-state .section-doctor .th-d-flex > .width-33{max-width: 33%;padding: 0;z-index: 2;}
 	.best-emr-in-state .section-doctor .image {display: flex;justify-content: center;align-items: flex-end;z-index: 0;}
 }
-
 @media screen and (max-width: 767px){
 	.best-emr-in-state .section-doctor .th-d-flex > .width-33 { max-width:100%; margin-bottom: 20px; }
 }
@@ -293,12 +295,12 @@ p, li { font-size: 15px; line-height: 165%; }
 .best-ehr-in-state .section-functionaly { margin-top: -150px; }
 .best-ehr-in-state .section-functionaly .functionaly-wrapper { display: flex; padding: 12px; flex-direction: column; align-items: center; gap: 12px; align-self: stretch; border-radius: 8px; background: var(--White-Color, #fff); box-shadow: 0px 7px 150px 0px rgba(218, 223, 226, 0.45); }
 @media screen and (min-width: 1024px) {
-	.best-in-city .section-functionaly .icon-box-container{ --col: 3; }
+	.best-ehr-in-state .section-functionaly .icon-box-container{ --col: 3; }
 	.best-ehr-in-state .section-functionaly .functionaly-wrapper { padding: 36px; border-radius: 32px; }
 }
 
 .section-benefits .icon-box-container {}
-.best-ehr-in-state .section-benefits .icon-box-container .icon-box-wrapper {--hue: 29;--color-hue: calc(var(--hue) - 10);/* max-width: calc((100% - var(--gap) * (var(--col) - 1)) / var(--col)); */display: flex;padding: 12px;flex-direction: column;align-items: center;gap: 10px;border-radius: 16px;background: hsla(var(--hue), 100%, 93%, 1);box-shadow: 0px 0px 100px 0px rgba(0, 0, 0, 0.05);}
+.best-ehr-in-state .section-benefits .icon-box-container .icon-box-wrapper {--hue: 29;--color-hue: calc(var(--hue) - 10);display: flex;padding: 12px;flex-direction: column;align-items: center;gap: 10px;border-radius: 16px;background: hsla(var(--hue), 100%, 93%, 1);box-shadow: 0px 0px 100px 0px rgba(0, 0, 0, 0.05);}
 .best-ehr-in-state .section-benefits .icon-box-container .icon-box-wrapper .icon-box-content { padding: 16px 8px; align-items: center; border-radius: 8px; background: #fff; height: 100%; }
 .best-ehr-in-state .section-benefits .icon-box-container .icon-box-wrapper .icon-box-title {color: hsla(var(--color-hue), 96%, 67%, 1);}
 .best-ehr-in-state .section-benefits .icon-box-container .icon-box-wrapper:nth-child(2) { --hue: 263; }
@@ -313,8 +315,7 @@ p, li { font-size: 15px; line-height: 165%; }
 .best-ehr-in-state .section-all-india .container { max-width: 1140px !important; }
 .best-ehr-in-state .section-all-india .image img { aspect-ratio: 1.15/0.425; }
 
-.section-doctor {background-color: #f1f5ff;}
-.best-ehr-in-state .section-doctor .th-d-flex {background: #fff;box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.1);}
+.best-ehr-in-state .section-doctor .th-d-flex {background: #fff;box-shadow: 0px 10px 30px 0px hsl(227deg 37% 41% / 10%)}
 .best-ehr-in-state .section-doctor .th-d-flex .image { }
 .best-ehr-in-state .section-doctor .th-d-flex .image img {max-width: 100%;height: 100%;width: 100%;object-fit: cover;}
 .best-ehr-in-state .section-doctor .th-d-flex .content-box { padding: 12px; }
@@ -337,11 +338,25 @@ p, li { font-size: 15px; line-height: 165%; }
 }
 
 /* best-pms-in-state */
+
+.best-pms-in-state .section-best-in {background-image: url(https://healthray.com/wp-content/uploads/2024/08/Best-Pharmacy-Management-Software-in-india-BG.webp);}
 .best-pms-in-state .icon-box-container { --gap: 24px; }
-.best-pms-in-state .icon-box-container .icon-box-wrapper { border: 4px solid hsl(223, 100%, 90%); background: #fff; box-shadow: 0px 9px 12px 0px rgba(71, 123, 255, 0.25); border-radius: 0; text-align: left; }
+.best-pms-in-state .icon-box-container .icon-box-wrapper {border: 4px solid hsl(223, 100%, 90%);background: #fff;box-shadow: 0px 4px 12px 0px rgb(154 183 255 / 25%);border-radius: 0;text-align: left;}
 .best-pms-in-state .icon-box-container .icon-box-wrapper .icon-box-icon { margin-bottom: 8px; }
-.best-pms-in-state .section-healthcare .full-width { display: flex; max-width: 769px; width: 100%; padding: 24px; justify-content: center; align-items: center; right: 290px; margin-top: -12em; border-radius: 30px; border: 1px solid var(--hr-secondary-color, #477bff); background: #fff; box-shadow: 0px 10px 50px 0px rgba(71, 123, 255, 0.1); }
+.best-pms-in-state .icon-box-container .icon-box-wrapper .icon-box-icon img{ width: 50px; }
+@media screen and (min-width:991px){
+	.best-pms-in-state .icon-box-container .icon-box-wrapper .icon-box-icon img{width: 80px;}
+}
+@media screen and (max-width:767px){
+	.best-pms-in-state .section { padding-top: 20px; padding-bottom: 20px; }
+	.best-pms-in-state .icon-box-container{margin-bottom: 20px;}
+}
+.best-pms-in-state .section-healthcare .full-width { display: flex; max-width: 769px; width: 100%; padding: 16px; justify-content: center; align-items: center; margin-top: 1em; border-radius: 12px; border: 1px solid var(--hr-secondary-color, #477bff); background: #fff; box-shadow: 0px 10px 50px 0px rgba(71, 123, 255, 0.1); }
 .best-pms-in-state .section-healthcare .button { margin: 0; }
+@media screen and (min-width:991px){
+	.best-pms-in-state .section-healthcare .full-width { padding: 24px; margin-top: -12em; border-radius: 30px; max-width: 75%}
+
+}
 .best-pms-in-state .section-benefits .icon-box-container .icon-box-wrapper { --hue: 263; background: hsla(var(--hue), 100%, 95%, 1); text-align: left; border-radius: 0px; border-radius: 0px; border: 0; box-shadow: none; }
 .best-pms-in-state .section-benefits .icon-box-container .icon-box-wrapper:nth-child(2) { --hue: 30; }
 .best-pms-in-state .section-benefits .icon-box-container .icon-box-wrapper:nth-child(3) { --hue: 210; }
@@ -349,5 +364,8 @@ p, li { font-size: 15px; line-height: 165%; }
 .best-pms-in-state .section-doctor { padding-bottom: 0; }
 .best-pms-in-state .section-doctor .doctor-image { margin-top: 52px; }
 .best-pms-in-state .section-doctor .doctor-image img { width: 100%; height: auto; }
+@media screen and (max-width:767px){
+	.best-pms-in-state .section-doctor .content-box ul{margin-bottom: 20px;}
+}
 .best-pms-in-state .section-procuct .container { max-width: 1170px !important; }
-.best-pms-in-state .section-procuct .container .slider .slide { border: 1px solid var(--hr-primary-color); }
+.best-pms-in-state .section-procuct .container .slider .slide {border: 1px solid var(--hr-primary-color);}

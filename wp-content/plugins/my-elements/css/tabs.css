@@ -30,7 +30,7 @@
 
 /* Product slider */
 .slider { width: 100%; overflow: hidden; position: relative; background-color: #fff; display: flex; }
-.slider .owl-carousel{ display: flex; gap:20px; }
+.slider .owl-carousel{display: flex;gap: 12px;}
 .slider .owl-carousel.owl-loaded{ flex-direction: column; }
 .slider .owl-carousel .slide { width: 100%; }
 .slide { height: 100%; overflow: hidden; }

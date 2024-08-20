@@ -26,7 +26,7 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 							<h1 class="elementor-heading-title elementor-size-default">Best <span>PMS</span> Software in <span><?= $state_name; ?></span></h1>
 						</div>
 						<div class="description">
-							<p>Advance your medical operations, increase financial sustainability, and keep your information at a secure place with the best PMS software in <?= $state_name; ?>.</p>
+							<p>Thriving pharmacy practice and increasing patient experience is just getting easier with the best PMS software in <?= $state_name; ?>. Additionally, heightens  employee satisfaction with upgrading their skill level.</p>
 						</div>
 					</div>
 
@@ -53,9 +53,9 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 				<div class="full-width">
 					<div class="heading sec-heading centered">
 						<div class="headline-color">
-							<h2 class="elementor-heading-title elementor-size-default"> Unique Features of the Best PMS Software </h2>
+							<h2 class="elementor-heading-title elementor-size-default"> Strategic Financial management with Ease </h2>
 						</div>
-						<p>Escalating medical efficiency, curtailing expenses, and scrutinizing patient outcomes is now easy through implementing Healthray, the best PMS software in <?= $state_name; ?>. Additionally, it increases healthcare efficiency, improves health outcomes, and enhances quality of care.</p>
+						<p>Administrating finance is a significant task as this component is interlinked with each pharmacy segment. Furthermore, finance is essential for smooth running business and accomplishing objectives faster. The pharmacy management software helps to improve cash flow through strategic planning and procedure.</p>
 						<a class="button" href="https://healthray.com/pms-software"> Explore </a>
 					</div>
 				</div>
@@ -68,80 +68,80 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 			<div class="functionaly-wrapper">
 				<div class="heading sec-heading centered">
 					<div class="headline-color">
-						<h2 class="elementor-heading-title elementor-size-default"> Unique Features of the Best PMS Software </h2>
+						<h2 class="elementor-heading-title elementor-size-default"> Explore Features of The Best PMS Software </h2>
 					</div>
 				</div>
 				<div class="icon-box-container">
 					<div class="icon-box-wrapper left-align">
 						<div class="icon-box-icon">
-							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/07/Clinical-workflows-Healthray.svg" class="attachment-full size-full" alt="Clinical workflows Healthray" decoding="async"></span>
+							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/08/Medication-Reminder-Healthray.svg" class="attachment-full size-full" alt="Medication Reminder Healthray" decoding="async"></span>
 						</div>
 						<div class="icon-box-content">
-							<h3 class="icon-box-title"> Clinical workflows</h3>
-							<p class="icon-box-description">It is a procedure of operational activity, which directly improves patient care, enhancing engagement, and facilitates an enormous satisfaction.</p>
+							<h3 class="icon-box-title"> Medication Reminder</h3>
+							<p class="icon-box-description">Study shows that more than 80% of people forget to take medication on time. However, the PMS software lightens the brain overload by providing reminders.</p>
 						</div>
 					</div>
 					<div class="icon-box-wrapper left-align">
 						<div class="icon-box-icon">
-							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/07/Remote-Access-Healthray.svg" class="attachment-full size-full" alt="Remote Access Healthray" decoding="async"></span>
+							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/08/Re-order-Management-Healthray.svg" class="attachment-full size-full" alt="Re-order Management Healthray" decoding="async"></span>
 						</div>
 						<div class="icon-box-content">
-							<h3 class="icon-box-title"> Remote Access</h3>
-							<p class="icon-box-description">Electronic health record system software can provide data access to another person regardless of their distance and aids to effortlessly monitor.</p>
+							<h3 class="icon-box-title"> Re-order Management </h3>
+							<p class="icon-box-description">Best pharmacy management software maintains the re-order level, which supports facilitating immediate medical facility. Therefore, it improves client satisfaction.</p>
 						</div>
 					</div>
 					<div class="icon-box-wrapper left-align">
 						<div class="icon-box-icon">
-							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/07/Data-migration-Healthray.svg" class="attachment-full size-full" alt="Data migration Healthray" decoding="async"></span>
+							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/08/Revenue-Management-Healthray.svg" class="attachment-full size-full" alt="Revenue Management Healthray" decoding="async"></span>
 						</div>
 						<div class="icon-box-content">
-							<h3 class="icon-box-title"> Data migration</h3>
-							<p class="icon-box-description">Implemented leading-edge technologies that aids to transfer medical information from one to another system and eradicate data silos scenario.</p>
+							<h3 class="icon-box-title"> Revenue Management</h3>
+							<p class="icon-box-description">Includes strategic procedure to maximize profitability with reducing overhead costs. Moreover,  it aids in predicting financial results and lightens worker efforts.</p>
 						</div>
 					</div>
 					<div class="icon-box-wrapper left-align">
 						<div class="icon-box-icon">
-							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/07/Profit-management-Healthray.svg" class="attachment-full size-full" alt="Profit management Management Healthray" decoding="async"></span>
+							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/08/Resource-Allocation-Healthray.svg" class="attachment-full size-full" alt="Resource Allocation Healthray" decoding="async"></span>
 						</div>
 						<div class="icon-box-content">
-							<h3 class="icon-box-title"> Profit management</h3>
-							<p class="icon-box-description">Helpful for managing healthcare finances with a precise workflow. Therefore, it dispenses profit accurately and makes effective cost related strategies.</p>
+							<h3 class="icon-box-title"> Resource Allocation</h3>
+							<p class="icon-box-description">Administering assets and working towards the direction of accomplishing pharmacy goals. Therefore, it increases retention rate.</p>
 						</div>
 					</div>
 					<div class="icon-box-wrapper left-align">
 						<div class="icon-box-icon">
-							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/07/Client-data-management-Healthray.svg" class="attachment-full size-full" alt="Client data management Healthray" decoding="async"></span>
+							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/08/Dashboard-Reporting-Healthray.svg" class="attachment-full size-full" alt="Dashboard Reporting Healthray" decoding="async"></span>
 						</div>
 						<div class="icon-box-content">
-							<h3 class="icon-box-title"> Client data management</h3>
-							<p class="icon-box-description">Effortlessly accumulating client data and applying guidelines. Moreover, it is easy for clinical workers to find and enter information in the specified platform.</p>
+							<h3 class="icon-box-title"> Dashboard Reporting</h3>
+							<p class="icon-box-description">Our PMS software makes it easier to visualize data on the unified dashboard and simplify to determine overall performance and increasing collaboration.</p>
 						</div>
 					</div>
 					<div class="icon-box-wrapper left-align">
 						<div class="icon-box-icon">
-							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/07/Claims-automation-Healthray.svg" class="attachment-full size-full" alt="Claims automation Healthray" decoding="async"></span>
+							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/08/Mobile-Accessibility-Healthray.svg" class="attachment-full size-full" alt="Mobile Accessibility Healthray" decoding="async"></span>
 						</div>
 						<div class="icon-box-content">
-							<h3 class="icon-box-title"> Claims automation</h3>
-							<p class="icon-box-description">The pms software speeds up the claim insurance process from verifying policy to examining claim documents. Therefore, it minimizes processing time. </p>
+							<h3 class="icon-box-title"> Mobile Accessibility</h3>
+							<p class="icon-box-description">This software is available on mobile, which means managerial level people can handle the pharmacy operations easily from any remote area. </p>
 						</div>
 					</div>
 					<div class="icon-box-wrapper left-align">
 						<div class="icon-box-icon">
-							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/07/Telehealth-platform-Healthray.svg" class="attachment-full size-full" alt="Telehealth platform Healthray" decoding="async"></span>
+							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/08/Document-Management-Healthray.svg" class="attachment-full size-full" alt="Document Management Healthray" decoding="async"></span>
 						</div>
 						<div class="icon-box-content">
-							<h3 class="icon-box-title"> Telehealth platform</h3>
-							<p class="icon-box-description">The best PMS software in <?= $state_name; ?> facilitates a remote consultation. Also, it helps to write prescriptions from any geographical place. </p>
+							<h3 class="icon-box-title"> Document Management</h3>
+							<p class="icon-box-description">Numerous documents are compiled with the systematic format and retrieved at your convenient time and desired place. </p>
 						</div>
 					</div>
 					<div class="icon-box-wrapper left-align">
 						<div class="icon-box-icon">
-							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/07/System-integration-Healthray.svg" class="attachment-full size-full" alt="System integration Healthray" decoding="async"></span>
+							<span class="icon"> <img width="92" height="92" src="https://healthray.com/wp-content/uploads/2024/08/Integrated-Billing-System-Healthray.svg" class="attachment-full size-full" alt="Integrated Billing System Healthray" decoding="async"></span>
 						</div>
 						<div class="icon-box-content">
-							<h3 class="icon-box-title"> System integration</h3>
-							<p class="icon-box-description">All systems are interconnected within this pms platform. Moreover, it can effortlessly transmit documents in less time and improved analytics.</p>
+							<h3 class="icon-box-title"> Integrated Billing System</h3>
+							<p class="icon-box-description">Our software has API incorporation and a cloud-based system that simplifies custom connections and set up software.</p>
 						</div>
 					</div>
 				</div>
@@ -154,37 +154,37 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 		<div class="container">
 			<div class="heading sec-heading centered">
 				<div class="headline-color">
-					<h2 class="elementor-heading-title elementor-size-default"> Entice Patients with the Leading Technology </h2>
+					<h2 class="elementor-heading-title elementor-size-default"> Unlock Advantages of The Pharmacy Management Software </h2>
 				</div>
 			</div>
 
 			<div class="icon-box-container">
 				<div class="icon-box-wrapper">
 					<div class="icon-box-content">
-						<h3 class="icon-box-title"> Building trust</h3>
-						<p class="icon-box-description">Patients want their record to be secure and need authorization access on it. Moreover, they can exchange their documents to any medical specialists.</p>
+						<h3 class="icon-box-title"> Reduce Errors</h3>
+						<p class="icon-box-description">Implemented automated technologies for mitigating mistakes, eliminating repetition words, reducing random errors or correcting any omission.</p>
 					</div>
 					<div class="icon-box-icon">
-						<span class="icon"> <img width="89" height="88" src="https://healthray.com/wp-content/uploads/2024/07/Building-trust-Healthray.svg" class="attachment-full size-full" alt="Building trust Healthray" decoding="async"></span>
+						<span class="icon"> <img width="89" height="88" src="https://healthray.com/wp-content/uploads/2024/08/Reduce-Errors.svg" class="attachment-full size-full" alt="Reduce Errors Healthray" decoding="async"></span>
 					</div>
 
 				</div>
 				<div class="icon-box-wrapper">
 					<div class="icon-box-content">
-						<h3 class="icon-box-title"> Enhancing convenient care</h3>
-						<p class="icon-box-description">Online appointments provide the right to book empty time from any geographical place and glance at their medical reports from any electronic gadget.</p>
+						<h3 class="icon-box-title"> Transaction Security</h3>
+						<p class="icon-box-description">Secure the payment transaction from the online attackers through practices of security protocols, and safe pharmaceutical practices.</p>
 					</div>
 					<div class="icon-box-icon">
-						<span class="icon"> <img width="88" height="88" src="https://healthray.com/wp-content/uploads/2024/07/Enhancing-convenient-care-Healthray.svg" class="attachment-full size-full" alt="Enhancing convenient care Healthray" decoding="async"></span>
+						<span class="icon"> <img width="88" height="88" src="https://healthray.com/wp-content/uploads/2024/08/Transaction-Security.svg" class="attachment-full size-full" alt="Transaction Security Healthray" decoding="async"></span>
 					</div>
 				</div>
 				<div class="icon-box-wrapper">
 					<div class="icon-box-content">
-						<h3 class="icon-box-title"> Preventing information</h3>
-						<p class="icon-box-description">Automatically followed several steps to secure information from outside and inside attackers. Therefore, it saves hospital money and their productive time.</p>
+						<h3 class="icon-box-title"> Information Analysis</h3>
+						<p class="icon-box-description">Several pieces of information accumulated  with no repetitive and omission mistakes. Consequently, it prepares statistical reports.</p>
 					</div>
 					<div class="icon-box-icon">
-						<span class="icon"> <img width="89" height="88" src="https://healthray.com/wp-content/uploads/2024/07/Preventing-information-Healthray.svg" class="attachment-full size-full" alt="Preventing information Healthray" decoding="async"></span>
+						<span class="icon"> <img width="89" height="88" src="https://healthray.com/wp-content/uploads/2024/08/Information-Analysis.svg" class="attachment-full size-full" alt="Information Analysis Healthray" decoding="async"></span>
 					</div>
 				</div>
 			</div>
@@ -208,26 +208,10 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 			</div>
 
 			<style>
-				.pms-product-slider .slide {
-					padding: 20px;
-					border-radius: 20px;
-					background-color: #E9F8FF;
-					height: auto;
-				}
-
-				.pms-product-slider .slide .slide-img {
-					flex-shrink: 0;
-				}
-
-				.pms-product-slider .slide h3 {
-					font-size: 20px;
-					font-weight: 700;
-					margin-left: 8px;
-				}
-
-				.pms-product-slider .slide .slide-content {
-					padding: 0;
-				}
+				.pms-product-slider .slide {padding: 20px;border-radius: 20px;background-color: #E9F8FF;height: auto;}
+				.pms-product-slider .slide .slide-img {flex-shrink: 0;}
+				.pms-product-slider .slide h3 {font-size: 20px;font-weight: 700;margin-left: 8px;}
+				.pms-product-slider .slide .slide-content {padding: 0;}
 			</style>
 
 			<div class="slider">
@@ -236,39 +220,38 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 						<div class="slide-img"> <img decoding="async" width="300" height="159" src="https://healthray.com/wp-content/uploads/2024/08/Hospital-Information-Management-System-Healthray.webp" class="attachment-300xauto size-300xauto" alt="Hospital Information Management System Healthray" srcset="https://healthray.com/wp-content/uploads/2024/08/Hospital-Information-Management-System-Healthray.webp 650w, https://healthray.com/wp-content/uploads/2024/08/Hospital-Information-Management-System-Healthray-300x159.webp 300w, https://healthray.com/wp-content/uploads/2024/08/Hospital-Information-Management-System-Healthray-150x79.webp 150w, https://healthray.com/wp-content/uploads/2024/08/Hospital-Information-Management-System-Healthray-113x60.webp 113w" sizes="(max-width: 300px) 100vw, 300px"></div>
 						<div class="slide-content">
 							<h3 class="title_text">Hospital Information Management System</h3>
-							<p class="text_style">Improving the clinical system and overcoming medical hurdles without much difficulty. Furthermore, this system helps to create smart plans for attaining best results and increasing efficiency</p>
+							<p class="text_style">Digitizing the healthcare functions for enhancing clinical productivity, reduces errors, and intensifies healthcare efficiency. Furthermore, it delegates tasks across all departments and improves the response team.</p>
 							<div class="content_style">
 								<ul>
-									<li>Imaging records </li>
-									<li>Patient registration system </li>
-									<li>Monitoring records </li>
-									<li>Store optimization </li>
-									<li>Team management </li>
-									<li>Ambulance</li>
-									<li>management </li>
-									<li>API integration </li>
-									<li>Security</li>
+									<li>Appointment management</li>
+									<li>Invoicing management </li>
+									<li>Patient portal </li>
+									<li>Dashboard reporting  </li>
+									<li>Ward management</li>
+									<li>Inventory control </li>
+									<li>Template management </li>
+									<li>Nursing management</li> 
 								</ul>
 							</div>
 						</div>
 					</div>
 					<div class="slide">
 						<div class="slide-img">
-						<img decoding="async" width="300" height="159" src="https://healthray.com/wp-content/uploads/2024/08/Electronic-Medical-Records-Healthray.webp" class="attachment-300xauto size-300xauto" alt="Electronic Medical Record Software Healthray">
+							<img decoding="async" width="300" height="159" src="https://healthray.com/wp-content/uploads/2024/08/Electronic-Medical-Records-Healthray.webp" class="attachment-300xauto size-300xauto" alt="Electronic Medical Record Software Healthray">
 						</div>
 						<div class="slide-content">
-							<h3 class="title_text">Electronic Medical Record Software</h3>
-							<p class="text_style">The electronic medical record software encompasses a variety of solutions that helps to provide a smooth workflow. Therefore, it improves patient safety, enhancing better care, and saves healthcare costs.</p>
+							<h3 class="title_text">Electronic Medical Record</h3>
+							<p class="text_style">This system applies consistent steps for structured data. Furthermore, the steps begin with acquiring information from multiple ways and end with the data analysis. Therefore, it heightens customer satisfaction and prevents employee burnout.</p>
 							<div class="content_style">
 								<ul>
-									<li>Tasks management </li>
-									<li>Digital prescribing </li>
+									<li>Smart reporting </li>
+									<li>Operating system </li>
 									<li>Tracking </li>
-									<li>Automatic reporting </li>
-									<li>Reminders </li>
-									<li>System interfacing </li>
-									<li>Sharing documents </li>
-									<li>Paperless system</li>
+									<li>Appointment reminders </li>
+									<li>Stock alerts </li>
+									<li>Maintain clinical documentation</li>
+									<li>Digital payments </li>
+									<li>Custom forms</li>
 								</ul>
 							</div>
 						</div>
@@ -277,17 +260,17 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 						<div class="slide-img"> <img decoding="async" width="300" height="159" src="https://healthray.com/wp-content/uploads/2024/08/Electronic-Health-Records-Healthray.webp" class="attachment-300xauto size-300xauto" alt="Electronic Health Records Healthray" srcset="https://healthray.com/wp-content/uploads/2024/08/Electronic-Health-Records-Healthray.webp 650w, https://healthray.com/wp-content/uploads/2024/08/Electronic-Health-Records-Healthray-300x159.webp 300w, https://healthray.com/wp-content/uploads/2024/08/Electronic-Health-Records-Healthray-150x79.webp 150w, https://healthray.com/wp-content/uploads/2024/08/Electronic-Health-Records-Healthray-113x60.webp 113w" sizes="(max-width: 300px) 100vw, 300px"></div>
 						<div class="slide-content">
 							<h3 class="title_text">Electronic Health Record Software</h3>
-							<p class="text_style">Maintains vast healthcare records with applying regulations. Furthermore, it aids in generating, editing, and modifying medical documents. Consequently, it improves medical practice, lowering redundancy, and preventing data</p>
+							<p class="text_style">Maintaining large healthcare information is an arduous task, which is being simplified with the electronic health record. Moreover, this system improves patient safety, enhancing care, and saving lab costs.</p>
 							<div class="content_style">
 								<ul>
-									<li>Documentation management </li>
-									<li>Scalability </li>
-									<li>Digital invoicing system </li>
-									<li>Portability </li>
-									<li>IPD Management </li>
-									<li>Reporting </li>
-									<li>Patient record management </li>
-									<li>Integration </li>
+									<li>User-friendly interface </li>
+									<li>Analytics  </li>
+									<li>Patient engagement tools </li>
+									<li>Interoperability </li>
+									<li>Population management </li>
+									<li>Smart reports </li>
+									<li>Document management </li>
+									<li>Record histories</li> 
 								</ul>
 							</div>
 						</div>
@@ -296,17 +279,17 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 						<div class="slide-img"> <img decoding="async" width="300" height="159" src="https://healthray.com/wp-content/uploads/2024/08/Pharmacy-Management-System-Healthray.webp" class="attachment-300xauto size-300xauto" alt="Pharmacy Management System Healthray" srcset="https://healthray.com/wp-content/uploads/2024/08/Pharmacy-Management-System-Healthray.webp 650w, https://healthray.com/wp-content/uploads/2024/08/Pharmacy-Management-System-Healthray-300x159.webp 300w, https://healthray.com/wp-content/uploads/2024/08/Pharmacy-Management-System-Healthray-150x79.webp 150w, https://healthray.com/wp-content/uploads/2024/08/Pharmacy-Management-System-Healthray-113x60.webp 113w" sizes="(max-width: 300px) 100vw, 300px"></div>
 						<div class="slide-content">
 							<h3 class="title_text">Pharmacy Management System</h3>
-							<p class="text_style">Handling pharmacy tasks efficiently from accepting orders to generating test results. Moreover, this system builds connections with experienced physicians and large organizations. Consequently, it heightens efficiency.</p>
+							<p class="text_style">Maintain pharmacy stock with the right quantity. Furthermore, this software comprises other multiple functions to reduce healthcare costs, increasing manpower efficiency, seamless integration, and operational optimization.</p>
 							<div class="content_style">
 								<ul>
-									<li>E-medical counsel </li>
-									<li>Centralized records </li>
-									<li>Dispensing management </li>
-									<li>Automate workflow </li>
-									<li>Inventory control </li>
-									<li>Reception management </li>
-									<li>System coordination </li>
-									<li>Data Security </li>
+									<li>Result management </li>
+									<li>Data migration </li>
+									<li>Inventory management</li>
+									<li>Centralized data </li>
+									<li>Personnel management  </li>
+									<li>Customer management system </li>
+									<li>Integration </li>
+									<li>Remote counsel</li> 
 								</ul>
 							</div>
 						</div>
@@ -315,17 +298,17 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 						<div class="slide-img"> <img decoding="async" width="300" height="159" src="https://healthray.com/wp-content/uploads/2024/08/Laboratory-Information-Management-System-Healthray.webp" class="attachment-300xauto size-300xauto" alt="Laboratory Information Management System Healthray" srcset="https://healthray.com/wp-content/uploads/2024/08/Laboratory-Information-Management-System-Healthray.webp 650w, https://healthray.com/wp-content/uploads/2024/08/Laboratory-Information-Management-System-Healthray-300x159.webp 300w, https://healthray.com/wp-content/uploads/2024/08/Laboratory-Information-Management-System-Healthray-150x79.webp 150w, https://healthray.com/wp-content/uploads/2024/08/Laboratory-Information-Management-System-Healthray-113x60.webp 113w" sizes="(max-width: 300px) 100vw, 300px"></div>
 						<div class="slide-content">
 							<h3 class="title_text">Laboratory Information Management System</h3>
-							<p class="text_style">Combining various data to improve speed and properly monitoring them. Moreover, it helps in administering sample workflow, utilizing space efficiently, and facilitating graphical reports. Therefore, it heightens laboratory efficiency.</p>
+							<p class="text_style">Manage your lab with ease through adopting the cloud-based LIMS systems like ours. This software assimilate documents, administering sample workflow and prepare test reports for streamline lab tasks.</p>
 							<div class="content_style">
 								<ul>
-									<li>Sample management</li>
-									<li>Traceability </li>
-									<li>Instrumentation management</li>
-									<li>Compliance regulations </li>
-									<li>Billing management </li>
-									<li>Resource management </li>
-									<li>Audit trails </li>
-									<li>Data management</li>
+									<li>Tracking sample </li>
+									<li>Record lab information </li>
+									<li>Inventory monitoring </li>
+									<li>Barcode labeling </li>
+									<li>Revenue management</li>
+									<li>Tasks management  </li>
+									<li>Sample management </li>
+									<li>Printing results</li>
 								</ul>
 							</div>
 						</div>
@@ -352,24 +335,9 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 			</div>
 
 			<style>
-				.list-widget {
-					display: flex;
-					flex-wrap: wrap;
-					gap: 12px;
-					margin-bottom: 20px;
-				}
-
-				.list-widget .list-widget-text {
-					display: flex;
-				}
-
-				.list-widget .list-widget-text a {
-					width: 100%;
-					background-color: #FFFFFF;
-					border: 1px solid var(--e-global-color-secondary);
-					border-radius: 8px;
-					padding: 8px 12px;
-				}
+				.list-widget {display: flex;flex-wrap: wrap;gap: 12px;margin-bottom: 20px;}
+				.list-widget .list-widget-text {display: flex;}
+				.list-widget .list-widget-text a {width: 100%;background-color: #FFFFFF;border: 1px solid var(--e-global-color-secondary);border-radius: 8px;padding: 8px 12px;}
 			</style>
 			<div class="list-widget width-auto">
 				<div class="list-widget-text">
@@ -393,9 +361,9 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 					$state = get_field('state_name_link', $item->ID);
 					$state_id = $state->ID;
 					if ($state_id == $post_id) { ?>
-						<div class="list-widget-text">
-							<a href="<?= get_permalink($item->ID); ?>" target="_blank"> <?= $title; ?> </a>
-						</div>
+				<div class="list-widget-text">
+					<a href="<?= get_permalink($item->ID); ?>" target="_blank"> <?= $title; ?> </a>
+				</div>
 				<?php }
 				}
 				?>
@@ -413,30 +381,26 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 			<div class="th-d-flex">
 				<div class="half-width">
 					<div class="content-box">
-						<h3>EMR software presides over a paper record system</h3>
-						<p>Nowadays, most physicians write prescriptions on the computer, not on paper. Furthermore, they write on the electronic medical record software because of its tremendous functionalities. The advantages of Healthray’s EMR software are defined below: </p>
+						<h3>Maximizing Sales with Automated Tools</h3>
+						<p>Ultimate hospital pharmacy management system for upgrading inventory quality, pursuing pharmaceutical guidelines, and improving revenue. This system maximizing sales through the following functions: </p>
 						<ul>
-							<li>Connect with several hospital segments in an unified platform.</li>
-							<li>Minimize upfront investment and reduce the major expenses on acquiring cabinets, paper and printing.</li>
-							<li>Healthray is the best EMR software in <?= $state_name; ?> because it is 100% configurable and has a simple interface.</li>
-							<li>EMR software requires limited resources to conduct their medical tasks and aids to optimize hospital space.</li>
-							<li>With Healthray’s EMR software, the medical procedure is taking less amount of time and personnel efforts</li>
-							<li>Helps to easily back-up the medical information and simplifies to find any particular information.</li>
-							<li>EMR software can provide data access to anyone from any location and mitigates healthcare mistakes.</li>
-							<li>Ease to track and analyze medical reports and facilitating high end security data.</li>
+							<li> Easy to collaborate with diverse pharmacy teams. Therefore, it is easy to make accurate decisions. </li>
+							<li>Implementing pharmacy protocols for safeguarding information, improving patient safety, and saving costs.    </li>
+							<li>Incorporates sharing tools to send new medicine rates, templates, promoting pharmacy brands, and prescription bills.   </li>
+							<li>Provides communication security and billing transactions for improving customer satisfaction.</li>
 						</ul>
 					</div>
 				</div>
 				<div class="half-width">
 					<div class="content-box">
-						<h3>Redesign your healthcare system with an EMR software</h3>
-						<p>With Healthray’s EMR software, it is easy to accumulate and extract data from any location. Moreover, this software aids to innovate the medical system and encompasses a flexible template that generates different medical forms in a short span of time. Here are a few of the advantages: </p>
+						<h3>Cost reduction strategies by analysis</h3>
+						<p>The PMS software amassed diverse information including personnel data, customer information, and historical records. Here are the list of cost strategies adopted by PMS software: </p>
 						<ul>
-							<li>Enhance physician practices with numerous AI technologies.Therefore, it improves healthcare efficiency.</li>
-							<li>Provide a patient healthcare portal for systematically maintaining patient information. Also, provide some rights to them.</li>
-							<li>Minimizes healthcare expenses on acquiring unnecessary stationary items, and efficiently administrates medical revenue.</li>
-							<li>Patients can book appointments from anywhere, record all history, and can reschedule or cancel appointments as per their requirements.</li>
-							<li>Supports in generating digital bills in the right format and conformance of billing regulation.</li>
+							<li>It is an electronic pharmacy software, which minimizes expenses through saving a variety of costs.</li>
+							<li>Includes interoperability for efficient communication with stakeholders and other experienced physicians.</li>
+							<li>Requires less employees for executing pharma activities, and  saves pharma space due to remote working employees.</li>
+							<li>Maximizing profitability for reducing managing costs, increasing patient engagement, and precisely tracking resources.</li>
+
 						</ul>
 					</div>
 				</div>
@@ -453,7 +417,7 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 		<div class="container">
 			<div class="heading sec-heading centered">
 				<div class="headline-color">
-					<h2 class="elementor-heading-title elementor-size-default">How to deliver quality care with the Superior EHR software? </h2>
+					<h2 class="elementor-heading-title elementor-size-default">Streamlining Cash Flow with The Best Pharmacy Management Software </h2>
 				</div>
 			</div>
 
@@ -462,38 +426,38 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 					<div class="icon-box-container technical-challenges-icon grid-box">
 						<div class="icon-box-wrapper">
 							<div class="icon-box-content">
-								<h3 class="icon-box-title"> Minimizing Errors</h3>
+								<h3 class="icon-box-title"> Control Finance</h3>
 								<div class="icon-box-icon">
-									<span class="icon"><img width="80" height="80" src="https://healthray.com/wp-content/uploads/2024/07/Minimizing-Errors-Healthray.svg" class="attachment-full size-full" alt="Minimizing Errors Healthray" decoding="async"></span>
+									<span class="icon"><img width="80" height="80" src="https://healthray.com/wp-content/uploads/2024/08/Control-Finance-Healthray.svg" class="attachment-full size-full" alt="Control Finance Healthray" decoding="async"></span>
 								</div>
-								<p class="icon-box-description">Automatically reduces mistakes and simplifies the entry system</p>
+								<p class="icon-box-description">Implementing financial policies and procedure for accurate records</p>
 							</div>
 						</div>
 						<div class="icon-box-wrapper">
 							<div class="icon-box-content">
-								<h3 class="icon-box-title"> Track data</h3>
+								<h3 class="icon-box-title"> Maximize Profit</h3>
 								<div class="icon-box-icon">
-									<span class="icon"><img width="80" height="80" src="https://healthray.com/wp-content/uploads/2024/07/Track-data-Healthray.svg" class="attachment-full size-full" alt="Track data Healthray" decoding="async"></span>
+									<span class="icon"><img width="80" height="80" src="https://healthray.com/wp-content/uploads/2024/08/Maximize-Profit-Healthray.svg" class="attachment-full size-full" alt="Maximize Profit Healthray" decoding="async"></span>
 								</div>
 								<p class="icon-box-description">Accurate treatment through monitoring each step of healthcare workflow</p>
 							</div>
 						</div>
 						<div class="icon-box-wrapper">
 							<div class="icon-box-content">
-								<h3 class="icon-box-title"> Precise results</h3>
+								<h3 class="icon-box-title"> Cash Care</h3>
 								<div class="icon-box-icon">
-									<span class="icon"><img width="80" height="81" src="https://healthray.com/wp-content/uploads/2024/07/Precise-results-Healthray.svg" class="attachment-full size-full" alt="Precise results Healthray" decoding="async"></span>
+									<span class="icon"><img width="80" height="81" src="https://healthray.com/wp-content/uploads/2024/08/Cash-Care-Healthray.svg" class="attachment-full size-full" alt="Cash Care Healthray" decoding="async"></span>
 								</div>
-								<p class="icon-box-description">Digitize automatic documents led to accurate information and results</p>
+								<p class="icon-box-description">Monitoring of finance documents for predicting furniture outcomes</p>
 							</div>
 						</div>
 						<div class="icon-box-wrapper">
 							<div class="icon-box-content">
-								<h3 class="icon-box-title"> E-billing</h3>
+								<h3 class="icon-box-title">Save Cost</h3>
 								<div class="icon-box-icon">
-									<span class="icon"><img width="80" height="81" src="https://healthray.com/wp-content/uploads/2024/07/E-billing-Healthray.svg" class="attachment-full size-full" alt="E-billing Healthray" decoding="async"></span>
+									<span class="icon"><img width="80" height="81" src="https://healthray.com/wp-content/uploads/2024/08/Save-Cost-Healthray.svg" class="attachment-full size-full" alt="Save Cost Healthray" decoding="async"></span>
 								</div>
-								<p class="icon-box-description">Generate medical invoices and record financial reports in a matter of minutes</p>
+								<p class="icon-box-description">Make correct decisions after analyzing financial information</p>
 							</div>
 						</div>
 					</div>
@@ -501,14 +465,15 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 				<div class="half-width">
 					<div class="heading sec-heading">
 						<div class="headline-color">
-							<h2 class="elementor-heading-title elementor-size-default"> Modernized healthcare solutions with the Best PMS Software </h2>
+							<h2 class="elementor-heading-title elementor-size-default"> Pharmacy Management System for Improving Finance Operations </h2>
 						</div>
 						<div class="texh-content">
-							<p> Modifying conventional healthcare systems and eradicating medical challenges are only possible with the electronic health record software. Furthermore, the prominent hurdles are long queues, increasing medical costs, and difficulty optimizing resources. </p>
-							<p>Electronic health records have the unimaginable capacity as it instantly improves patient safety and coordinated care. Furthermore, it can apply medical regulations with the structured format and easily connect with multiple medical players. </p>
-							<p> It transmitted information to another healthcare practitioner without incurring any difficulty and saves a plenty of time Consequently, it improves patient quality care, increasing their experiences, and enhances satisfaction of medical workers. </p>
-							<p> Always opt for software which is easily modified, simplified to implement and includes necessary functions such as custom forms, prescription reports, medication tracking, information security, and consolidating healthcare records. </p>
-							<p> Digital communication with diverse physicians improves patient medical knowledge and advanced experience. Moreover, the pms software simplifies to maintain documentation, placing time at a decided place and improves efficiency.</p>
+							<p>The pharmacy management software includes intelligent tools such as calendar management for scheduling meetings with members, stock control to maintain inventory level, syncing with medical systems, aids to accumulate performance reports, and order management for optimizing pharmacy processes.</p>
+							<p>Most importantly, our software helps to manage the rooting element for improving efficiency like pharmacy finances and smooth billing. Furthermore, the PMS software handles these elements so well. It has automated features which lower errors, eliminate omissions, and iteration mistakes for capturing accurate transactions.</p>
+							<p>Our software helps in accurate accounting management through precise record-keeping, adherence to accounting principles and consistent monitoring. Moreover, the PMS software consolidated an array of information that supports the creation of the monthly or financial budget of pharmacies.</p>
+							<p>It analyzes pharmacy cash flow and forecasts financial outcomes. Moreover, it records financial historical information, current transactions, and maintains confidentiality of pharmacy documents. Therefore, the PMS software saves you from financial crises and unnecessary legitimate expenses.</p>
+							<p>The pharmacy management system software monitors each financial transaction with precise details. Consequently, it improves financial performance, increases pharmacy efficiency, maximizes resource utilization, simplifies to predict upcoming costs, and makes clear decisions.</p>
+
 						</div>
 					</div>
 				</div>
@@ -534,46 +499,46 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 				<div class="elementor-toggle-item">
 					<div id="elementor-tab-title-1" class="elementor-tab-title" data-tab="1" role="button" aria-controls="elementor-tab-content-1" aria-expanded="false">
 						<?= $arrow; ?>
-						<a class="elementor-toggle-title" tabindex="0">What is the role of pms software in the medical industry?</a>
+						<a class="elementor-toggle-title" tabindex="0">What are the Key Features of PMS software?</a>
 					</div>
 					<div id="elementor-tab-content-1" class="elementor-tab-content elementor-clearfix answer" data-tab="1" role="region" aria-labelledby="elementor-tab-title-1">
-						<p>The electronic health record software encompasses a variety of unique features that significantly improve patient outcomes and their medical experiences by connecting with diverse medical professionals. Moreover, it stores healthcare information in the best fitted format and creates advanced statements. Ultimately, it escalates efficiency.</p>
+						<p>The pharmacy management software is the computerized software for administering pharmacy operations. Furthermore, the operations include registering client details with their prescription data, amassing numerous data, tasks delegation, space optimization, and re-order management. Therefore, it increases efficiency.</p>
 					</div>
 				</div>
 				<div class="elementor-toggle-item">
 					<div id="elementor-tab-title-2" class="elementor-tab-title" data-tab="2" role="button" aria-controls="elementor-tab-content-2" aria-expanded="false">
 						<?= $arrow; ?>
-						<a class="elementor-toggle-title" tabindex="0">What is the key importance of electronic health record system software?</a>
+						<a class="elementor-toggle-title" tabindex="0">What are the core advantages of a pharmacy management system?</a>
 					</div>
 					<div id="elementor-tab-content-2" class="elementor-tab-content elementor-clearfix answer" data-tab="2" role="region" aria-labelledby="elementor-tab-title-2">
-						<p>The electronic health record system is the digitization healthcare system, which has the function to improve healthcare delivery, extensifying patient experience, and hospital ecosystem. Furthermore, it has the unique properties like slot booking of any specified doctor without standing hours in line queue. Additionally, the pms software helps to lock all your records at a safe place.</p>
+						<p>The pharmacy management system is the modern software, which is particularly for pharma software. Furthermore, this software includes advanced characteristics such as inventory control, dashboard reporting, mobile accessibility, and cash flow management. Therefore, it maximizes productivity and increases patient safety.</p>
 					</div>
 				</div>
 				<div class="elementor-toggle-item">
 					<div id="elementor-tab-title-3" class="elementor-tab-title" data-tab="3" role="button" aria-controls="elementor-tab-content-3" aria-expanded="false">
 						<?= $arrow; ?>
-						<a class="elementor-toggle-title" tabindex="0">What are the additional benefits of the pms software?</a>
+						<a class="elementor-toggle-title" tabindex="0">Does PMS software improve financial sustainability?</a>
 					</div>
 					<div id="elementor-tab-content-3" class="elementor-tab-content elementor-clearfix answer" data-tab="3" role="region" aria-labelledby="elementor-tab-title-3">
-						<p>The electronic health record software improves the lifestyles of healthcare practitioners and patients. Moreover, it improves clinical productivity, patient safety, and enhances care. The electronic health record software reduces legal actions, saves miscellaneous expenses, personalized template, and helps in accurate documentation.</p>
+						<p>Indeed, pharmacy management software improves financial sustainability. Moreover, this software includes advanced functionalities and those elements which are the root cause of improving efficiency. It stores information, systemizes it, and develops reports. Consequently, the PMS software makes great decisions and improves patient engagement.</p>
 					</div>
 				</div>
 				<div class="elementor-toggle-item">
 					<div id="elementor-tab-title-4" class="elementor-tab-title" data-tab="4" role="button" aria-controls="elementor-tab-content-4" aria-expanded="false">
 						<?= $arrow; ?>
-						<a class="elementor-toggle-title" tabindex="0">Does the best PMS software in <?= $state_name; ?> improve financial performance?</a>
+						<a class="elementor-toggle-title" tabindex="0">Does the PMS software support cost reduction strategies?</a>
 					</div>
 					<div id="elementor-tab-content-4" class="elementor-tab-content elementor-clearfix answer" data-tab="4" role="region" aria-labelledby="elementor-tab-title-4">
-						<p>Indeed, The best PMS software in <?= $state_name; ?> improves financial performance. Moreover, it can accurately manage clinical finances such as calculating the salaries of an employee, automatically adding any type of expenditure, inventory cost, and other costs.Therefore, the recorded finance helps to make sound decisions and examine the situation accurately.</p>
+						<p>Indeed, the pharmacy management software is the leading system for cutting expenses and enhancing income. The cost reduction strategies related to proper planning and execution of pharmacy resources, precise budgeting, and reducing investment expenses. Furthermore, it includes tools to improve patient care, increasing patient safety, and enhancing performance.</p>
 					</div>
 				</div>
 				<div class="elementor-toggle-item">
 					<div id="elementor-tab-title-5" class="elementor-tab-title" data-tab="5" role="button" aria-controls="elementor-tab-content-5" aria-expanded="false">
 						<?= $arrow; ?>
-						<a class="elementor-toggle-title" tabindex="0">Does the pms software support tracking medical data?</a>
+						<a class="elementor-toggle-title" tabindex="0">What is the objective of financial management?</a>
 					</div>
 					<div id="elementor-tab-content-5" class="elementor-tab-content elementor-clearfix answer" data-tab="5" role="region" aria-labelledby="elementor-tab-title-5">
-						<p>Indeed, the electronic health record software supports tracking medical data. Moreover, it has the potential to keep big data healthcare information and categorize information into accurate data. Therefore, the information is converted into the best formatted reports, which aids in swift quality planning and execution of an activity.</p>
+						<p>Financial management is the prominent objective of all pharmacies. Furthermore, the system aids in precisely distributing funds, accurate forecasting, intelligent decisions for managing finances, accurately entering cash transactions, and simplifies follow-up with non-payers.</p>
 					</div>
 				</div>
 				<div class="elementor-toggle-item">
@@ -582,122 +547,133 @@ if (has_post_thumbnail($post->ID) && get_post_thumbnail_id() != $state_img) {
 						<a class="elementor-toggle-title" tabindex="0">Which is the best PMS software in <?= $state_name; ?>?</a>
 					</div>
 					<div id="elementor-tab-content-6" class="elementor-tab-content elementor-clearfix answer" data-tab="6" role="region" aria-labelledby="elementor-tab-title-6">
-						<p>Healthray is the best PMS software in <?= $state_name; ?>. Moreover, this software makes it easy to prepare documents, generate any type of medical form, secure information, fabricate financial statements, simplify to create workflows, and facilitate an electronic platform for writing medication. Overall, it improves healthcare efficiency.</p>
+						<p>Healthray is the pharmacy management software in <?= $state_name; ?>. This software comprises an intelligent tool that revolutionizes the pharmacy workflow with minimizing expenses. Furthermore, it practices pharmacy protocols accurately to save invaluable time and lower legitimate costs.</p>
 					</div>
 				</div>
 				<div class="elementor-toggle-item">
 					<div id="elementor-tab-title-7" class="elementor-tab-title" data-tab="7" role="button" aria-controls="elementor-tab-content-7" aria-expanded="false">
 						<?= $arrow; ?>
-						<a class="elementor-toggle-title" tabindex="0">Does the pms software predict a patient's health outcomes?</a>
+						<a class="elementor-toggle-title" tabindex="0">Does the pharmacy software increase revenue?</a>
 					</div>
 					<div id="elementor-tab-content-7" class="elementor-tab-content elementor-clearfix answer" data-tab="7" role="region" aria-labelledby="elementor-tab-title-7">
-						<p>Indeed, the electronic health record software predicts a patient’s health outcomes. Moreover, this system software included some of the attributes, which are specially for patients. The attributes are patient recording system, gentle reminder for appointments, digital prescribing, and arranging tasks as per priority of urgency. </p>
+						<p>InIndeed, the pharmacy software increases revenue. This software has exceptional functionalities that amaze you and win your heart to adopt this instantly. Furthermore, it includes a revenue management tool, stock controlling tool, patient engagement tool, and resource management tool. Ultimately, it overall increases pharmacy income. </p>
 					</div>
 				</div>
 				<div class="elementor-toggle-item">
 					<div id="elementor-tab-title-8" class="elementor-tab-title" data-tab="8" role="button" aria-controls="elementor-tab-content-8" aria-expanded="false">
 						<?= $arrow; ?>
-						<a class="elementor-toggle-title" tabindex="0">What are the vital benefits of monitoring patient condition?</a>
+						<a class="elementor-toggle-title" tabindex="0">What is the objective of PMS software?</a>
 					</div>
 					<div id="elementor-tab-content-8" class="elementor-tab-content elementor-clearfix answer" data-tab="8" role="region" aria-labelledby="elementor-tab-title-8">
-						<p>The main records in healthcare organization, which is hard keeping and utmost priority. Moreover, it can easily consolidate a patient’s medical data and edit information as required. The vital benefits of monitoring patient conditions are analyzing medical situations, predicted outcomes, simplifying to plan treatment steps, and improving health outcomes.</p>
+						<p>The pharmacy management software facilitates sophisticated solutions of pharmaceutical works and makes it easier. Furthermore, this software turns complicated procedures to simple procedures and well-dispensed each resource across pharma segments. It includes marvelous functions, which streamlined pharma workflow. Simultaneously, heightens the enthusiasm among workers.</p>
 					</div>
 				</div>
 				<div class="elementor-toggle-item">
 					<div id="elementor-tab-title-9" class="elementor-tab-title" data-tab="9" role="button" aria-controls="elementor-tab-content-9" aria-expanded="false">
 						<?= $arrow; ?>
-						<a class="elementor-toggle-title" tabindex="0">Does the electronic health record software have greater coordination across segments?</a>
+						<a class="elementor-toggle-title" tabindex="0">Does the pharmacy management software boost output?</a>
 					</div>
 					<div id="elementor-tab-content-9" class="elementor-tab-content elementor-clearfix answer" data-tab="9" role="region" aria-labelledby="elementor-tab-title-9">
-						<p>Indeed, electronic health record software has greater coordination among segments. Furthermore, it includes various segments of hospital organization such as billing management, research departments, drug development department, care support department, and administrative department. Moreover, all departmental data entered in the platform and can communicate well across teams.</p>
+						<p>Indeed, the pharmacy management software boosts output. This software well-organized pharma resources, precisely maintain data, provide accurate reporting, improve billing workflow, and create invoices in no time. Consequently, it administers stock, aids to find items instantly, promptly boosts output, and enhances efficiency..</p>
 					</div>
 				</div>
 				<div class="elementor-toggle-item">
 					<div id="elementor-tab-title-10" class="elementor-tab-title" data-tab="10" role="button" aria-controls="elementor-tab-content-10" aria-expanded="false">
 						<?= $arrow; ?>
-						<a class="elementor-toggle-title" tabindex="0">Does the pms software facilitate precise results?</a>
+						<a class="elementor-toggle-title" tabindex="0">What is the scope of pharmacy management software?</a>
 					</div>
 					<div id="elementor-tab-content-10" class="elementor-tab-content elementor-clearfix answer" data-tab="10" role="region" aria-labelledby="elementor-tab-title-10">
-						<p>Indeed, electronic health record software facilitates precise results. Moreover, this software brings transformative change in the medical industry. It keeps information in the digitized version that has less chances of medical error, minimizing repetitive tasks, accurately entering data, and implementing regulations. Overall, it enhances medical proficiency.</p>
+						<p>The pharmacy management software maintains inventory in a way that it reduces the overstock situation and minimizes wastage. Moreover, this software helps to manage pharma accounts and monitor each payment. Furthermore, this maintains information of pharma workers in the precise ledger format Therefore, the pms software improves patient care.</p>
 					</div>
 				</div>
 			</div>
 			<script type="application/ld+json">
-				{
-					"@context": "https://schema.org",
-					"@type": "FAQPage",
-					"mainEntity": [{
-						"@type": "Question",
-						"name": "What is the role of pms software in the medical industry?",
-						"acceptedAnswer": {
-							"@type": "Answer",
-							"text": "The electronic health record software encompasses a variety of unique features that significantly improve patient outcomes and their medical experiences by connecting with diverse medical professionals. Moreover, it stores healthcare information in the best fitted format and creates advanced statements. Ultimately, it escalates efficiency."
-						}
-					}, {
-						"@type": "Question",
-						"name": "What is the key importance of electronic health record system software?",
-						"acceptedAnswer": {
-							"@type": "Answer",
-							"text": "The electronic health record system is the digitization healthcare system, which has the function to improve healthcare delivery, extensifying patient experience, and hospital ecosystem. Furthermore, it has the unique properties like slot booking of any specified doctor without standing hours in line queue. Additionally, the pms software helps to lock all your records at a safe place."
-						}
-					}, {
-						"@type": "Question",
-						"name": "What are the additional benefits of the pms software?",
-						"acceptedAnswer": {
-							"@type": "Answer",
-							"text": "The electronic health record software improves the lifestyles of healthcare practitioners and patients. Moreover, it improves clinical productivity, patient safety, and enhances care. The electronic health record software reduces legal actions, saves miscellaneous expenses, personalized template, and helps in accurate documentation."
-						}
-					}, {
-						"@type": "Question",
-						"name": "Does the best PMS software in <?= $state_name; ?> improve financial performance?",
-						"acceptedAnswer": {
-							"@type": "Answer",
-							"text": "Indeed, The best PMS software in <?= $state_name; ?> improves financial performance. Moreover, it can accurately manage clinical finances such as calculating the salaries of an employee, automatically adding any type of expenditure, inventory cost, and other costs.Therefore, the recorded finance helps to make sound decisions and examine the situation accurately."
-						}
-					}, {
-						"@type": "Question",
-						"name": "Does the pms software support tracking medical data?",
-						"acceptedAnswer": {
-							"@type": "Answer",
-							"text": "Indeed, the electronic health record software supports tracking medical data. Moreover, it has the potential to keep big data healthcare information and categorize information into accurate data. Therefore, the information is converted into the best formatted reports, which aids in swift quality planning and execution of an activity."
-						}
-					}, {
-						"@type": "Question",
-						"name": "Which is the best PMS software in <?= $state_name; ?>?",
-						"acceptedAnswer": {
-							"@type": "Answer",
-							"text": "Healthray is the best PMS software in <?= $state_name; ?>. Moreover, this software makes it easy to prepare documents, generate any type of medical form, secure information, fabricate financial statements, simplify to create workflows, and facilitate an electronic platform for writing medication. Overall, it improves healthcare efficiency."
-						}
-					}, {
-						"@type": "Question",
-						"name": "Does the pms software predict a patient's health outcomes?",
-						"acceptedAnswer": {
-							"@type": "Answer",
-							"text": "Indeed, the electronic health record software predicts a patient’s health outcomes. Moreover, this system software included some of the attributes, which are specially for patients. The attributes are patient recording system, gentle reminder for appointments, digital prescribing, and arranging tasks as per priority of urgency."
-						}
-					}, {
-						"@type": "Question",
-						"name": "What are the vital benefits of monitoring patient condition?",
-						"acceptedAnswer": {
-							"@type": "Answer",
-							"text": "The main records in healthcare organization, which is hard keeping and utmost priority. Moreover, it can easily consolidate a patient’s medical data and edit information as required. The vital benefits of monitoring patient conditions are analyzing medical situations, predicted outcomes, simplifying to plan treatment steps, and improving health outcomes."
-						}
-					}, {
-						"@type": "Question",
-						"name": "Does the electronic health record software have greater coordination across segments?",
-						"acceptedAnswer": {
-							"@type": "Answer",
-							"text": "Indeed, electronic health record software has greater coordination among segments. Furthermore, it includes various segments of hospital organization such as billing management, research departments, drug development department, care support department, and administrative department. Moreover, all departmental data entered in the platform and can communicate well across teams."
-						}
-					}, {
-						"@type": "Question",
-						"name": "Does the pms software facilitate precise results?",
-						"acceptedAnswer": {
-							"@type": "Answer",
-							"text": "Indeed, electronic health record software facilitates precise results. Moreover, this software brings transformative change in the medical industry. It keeps information in the digitized version that has less chances of medical error, minimizing repetitive tasks, accurately entering data, and implementing regulations. Overall, it enhances medical proficiency."
-						}
-					}]
-				}
+			{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What are the Key Features of PMS software?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The pharmacy management software is the computerized software for administering pharmacy operations. Furthermore, the operations include registering client details with their prescription data, amassing numerous data, tasks delegation, space optimization, and re-order management. Therefore, it increases efficiency."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are the core advantages of a pharmacy management system?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The pharmacy management system is the modern software, which is particularly for pharma software. Furthermore, this software includes advanced characteristics such as inventory control, dashboard reporting, mobile accessibility, and cash flow management. Therefore, it maximizes productivity and increases patient safety."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does PMS software improve financial sustainability?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Indeed, pharmacy management software improves financial sustainability. Moreover, this software includes advanced functionalities and those elements which are the root cause of improving efficiency. It stores information, systemizes it, and develops reports. Consequently, the PMS software makes great decisions and improves patient engagement."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the PMS software support cost reduction strategies?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Indeed, the pharmacy management software is the leading system for cutting expenses and enhancing income. The cost reduction strategies related to proper planning and execution of pharmacy resources, precise budgeting, and reducing investment expenses. Furthermore, it includes tools to improve patient care, increasing patient safety, and enhancing performance."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the objective of financial management?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Financial management is the prominent objective of all pharmacies. Furthermore, the system aids in precisely distributing funds, accurate forecasting, intelligent decisions for managing finances, accurately entering cash transactions, and simplifies follow-up with non-payers."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which is the best PMS software in <?= $state_name; ?>?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Healthray is the pharmacy management software in <?= $state_name; ?>. This software comprises an intelligent tool that revolutionizes the pharmacy workflow with minimizing expenses. Furthermore, it practices pharmacy protocols accurately to save invaluable time and lower legitimate costs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the pharmacy software increase revenue?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Indeed, the pharmacy software increases revenue. This software has exceptional functionalities that amaze you and win your heart to adopt this instantly. Furthermore, it includes a revenue management tool, stock controlling tool, patient engagement tool, and resource management tool. Ultimately, it overall increases pharmacy income."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the objective of PMS software?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The pharmacy management software facilitates sophisticated solutions of pharmaceutical works and makes it easier. Furthermore, this software turns complicated procedures to simple procedures and well-dispensed each resource across pharma segments. It includes marvelous functions, which streamlined pharma workflow. Simultaneously, heightens the enthusiasm among workers."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the pharmacy management software boost output?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Indeed, the pharmacy management software boosts output. This software well-organized pharma resources, precisely maintain data, provide accurate reporting, improve billing workflow, and create invoices in no time. Consequently, it administers stock, aids to find items instantly, promptly boosts output, and enhances efficiency."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the scope of pharmacy management software?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The pharmacy management software maintains inventory in a way that it reduces the overstock situation and minimizes wastage. Moreover, this software helps to manage pharma accounts and monitor each payment. Furthermore, this maintains information of pharma workers in the precise ledger format. Therefore, the PMS software improves patient care."
+      }
+    }
+  ]
+}
 			</script>
 		</div>
 	</div>
