@@ -8,7 +8,7 @@
  * - Image fallbacks (.noimg / initials): small inline script in <head>, functions.php.
  *
  * 1. Customer story video
- * 2. Mobile action bar
+ * 2. Mobile action bar (hidden over the hero form, final CTA and footer)
  * 3. Walkthrough video
  * 4. Doctor wall carousel (tablet/mobile)
  * 5. FAQ accordion
@@ -83,16 +83,32 @@
 		video.addEventListener('contextmenu', noContextMenu);
 	})();
 
-	/* 2. Mobile action bar: hidden while the hero form is on screen. */
+	/* 2. Mobile action bar: hidden while the hero form, the final CTA or the footer is on screen. */
 	(function () {
 		var bar = document.getElementById('mbar');
-		var form = document.getElementById('demo');
-		if (!bar || !form || !hasIO) {
+		var targets = [
+			document.getElementById('demo'),
+			document.querySelector('.ppc-hims .final'),
+			document.querySelector('.ppc-hims .foot')
+		].filter(Boolean);
+		if (!bar || !targets.length || !hasIO) {
 			return;
 		}
-		new IntersectionObserver(function (entries) {
-			bar.classList.toggle('away', entries[0].isIntersecting);
-		}, { threshold: 0.25 }).observe(form);
+		var onScreen = [];
+		var io = new IntersectionObserver(function (entries) {
+			entries.forEach(function (e) {
+				var i = onScreen.indexOf(e.target);
+				if (e.isIntersecting && i < 0) {
+					onScreen.push(e.target);
+				} else if (!e.isIntersecting && i > -1) {
+					onScreen.splice(i, 1);
+				}
+			});
+			bar.classList.toggle('away', onScreen.length > 0);
+		}, { threshold: 0.25 });
+		targets.forEach(function (t) {
+			io.observe(t);
+		});
 	})();
 
 	/* 3. Walkthrough: autoplays muted on screen, pauses off screen; a manual pause sticks. */
@@ -104,6 +120,9 @@
 			return;
 		}
 		var userPaused = false;
+		// No autoplay on Data Saver or a 2G connection; the play button still works.
+		var conn = navigator.connection || {};
+		var lowData = !!conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '');
 
 		function sync() {
 			var on = !video.paused;
@@ -135,7 +154,7 @@
 		if (hasIO) {
 			new IntersectionObserver(function (entries) {
 				if (entries[0].isIntersecting) {
-					if (!userPaused && !reduceMotion) {
+					if (!userPaused && !reduceMotion && !lowData) {
 						start();
 					}
 				} else if (!video.paused) {
@@ -356,7 +375,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		const step1 = form.querySelector('.hr-step-1');
 		const step2 = form.querySelector('.hr-step-2');
 		const bedOptions = form.querySelectorAll('.hr-bed-option');
-		const bedInput = form.querySelector('#bed_size');
+		// By name, not #bed_size: CF7 drops the id on the second copy of the form (the popup).
+		const bedInput = form.querySelector('[name="bed_size"]');
 		const selectedBed = form.querySelector('.hr-selected-bed-value');
 		const backButton = form.querySelector('.hr-back-step');
 		const changeButton = form.querySelector('.hr-change-bed');

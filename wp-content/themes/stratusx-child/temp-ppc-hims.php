@@ -3,10 +3,10 @@
  * Template Name: PPC - Hospital Management Software (HIMS)
  *
  * Google Ads landing page for hospital management software.
- * Built from assets/healthray-ads-final.html (final design).
+ * Built from assets/healthray-ads-ppc.html (final design).
  *
  * - Standalone render: this page has its OWN header (.top) and footer (.foot)
- *   from the PPC mockup, NOT the site header/footer. base-standalone.php is used as
+ *   from the PPC mockup, NOT the site header/footer. templates/base-standalone.php is used as
  *   the Roots wrapper for every temp-ppc-*.php template (functions.php,
  *   section 12), so the site nav, footer, popup and preloader are never printed.
  * - URL        : /ppc/hospital-management-software/ (lib/virtual-urls.php)
@@ -14,8 +14,8 @@
  * - CSS        : css/ppc-hims.css + css/ppc-popup.css (inlined, minified, in <head>)
  * - JS         : js/ppc-hims.js
  * - Assets     : assets/ppc-hims/ (walkthrough poster, consultation screens)
- * - Form       : shared CF7 lead form 9a13f7a (hero card + the site lead popup).
- * - CTAs       : every "Book a free demo" (.hr-cta-btn) opens the popup (js/script.js).
+ * - Form       : CF7 stepper form c8e3c0a, in the hero card AND in the popup ($ppc_form below).
+ * - CTAs       : every "Book a free demo" (.hr-cta-btn) opens the popup with that form (js/script.js).
  * - Images     : no inline handlers; a failed image falls back via functions.php
  *                (data-fallback="AB" -> initials, data-fallback-src -> retry, else .fb text).
  *
@@ -26,11 +26,29 @@
  * Oct 2026 round 2: copy rewritten in plain words, new logo order (+ Mamta Medical College),
  * new customer quotes, Jabalpur result card (replaces Lilavati), price band after the modules
  * (section 5c), longer FAQ. New CSS: section 21-23.
+ *
+ * Oct 2026 round 3 (phone review): "How the switch happens" moved up after the staff worry (3b),
+ * hero line in two parts (phones show the second), 7 certificates, footer in two lines on phones.
+ * New CSS: section 24-25. JS: bottom bar also hides over the final CTA and footer; no video autoplay
+ * on Data Saver / 2G.
  */
 
 defined('ABSPATH') || exit;
 
 $ppc_assets = get_stylesheet_directory_uri() . '/assets/ppc-hims';
+
+/*
+ * Lead form: the same stepper form in the hero card and in the popup that every
+ * "Book a free demo" button opens (instead of the site-wide popup form).
+ */
+$ppc_form = '[contact-form-7 id="c8e3c0a" title="PPC Stepper Form"]';
+add_filter('hr_ppc_popup_args', function () use ($ppc_form) {
+	return array(
+		'form'  => $ppc_form,
+		'title' => 'Book a free demo',
+		'text'  => "A free 30-minute demo, set up for your hospital's size and departments.",
+	);
+});
 $ppc_headlines = array(
 	'billing'  => array( 'Hospital billing software', "Hospital billing software that doesn't miss a single charge" ),
 	'pharmacy' => array( 'Hospital pharmacy software', 'Hospital pharmacy software where stock and bills always match' ),
@@ -83,46 +101,47 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
       <div class="hero-copy">
         <p class="eyebrow"><?php echo esc_html($ppc_head[0]); ?></p>
         <h1><?php echo esc_html($ppc_head[1]); ?></h1>
-        <p class="hero-sub">OPD, IPD, billing, pharmacy, lab and TPA claims in one software, on one patient file. Most hospitals start in 1 to
-          3 weeks, with old data moved and every department trained.</p>
+        <?php // Phones show only the second part (.hs-b), css section 25. ?>
+        <p class="hero-sub"><span class="hs-a">OPD, IPD, billing, pharmacy, lab and TPA claims in one software. </span><span
+            class="hs-b">Moving from paper, Excel or separate software? Go live in 1 to 3 weeks, with your data moved,
+            staff trained and 24×7 support.</span></p>
         <?php // Phones only (the full proof block sits below the form there). ?>
-        <p class="mini-trust" aria-label="Rated 4.8, used by 2,500+ hospitals and clinics, NABH certified, ABDM compliant"><b>★ 4.8</b>
-          rating <i>·</i> <b>2,500+</b> hospitals &amp; clinics <i>·</i> NABH <i>·</i> ABDM</p>
+        <p class="mini-trust" aria-label="Rated 4.8, used by 2,500+ hospitals and clinics, NABH certified, ABDM compliant"><b>★ 4.8</b> <i>·</i> <b>2,500+</b> hospitals &amp; clinics <i>·</i> NABH <i>·</i> ABDM</p>
       </div>
 
       <div class="form-card" id="demo">
         <h2>Book a free demo</h2>
         <p class="fc-sub">A free 30-minute demo, set up for your hospital's size and departments.</p>
-        <?php echo do_shortcode('[contact-form-7 id="c8e3c0a" title="PPC Stepper Form"]'); ?>
+        <?php echo do_shortcode($ppc_form); ?>
       </div>
 
       <div class="hero-proof">
         <div class="faces">
           <div class="pile">
-            <span class="noimgable"><img
+            <span><img loading="lazy"
                 src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Ketan-Rupala-150x150.webp"
                 alt="Dr. Ketan Rupala" width="44" height="44" data-fallback="KR"></span>
-            <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Bhaumik-Rathore-150x150.webp"
+            <span><img loading="lazy" src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Bhaumik-Rathore-150x150.webp"
                 alt="Dr. Bhaumik Rathore" width="44" height="44" data-fallback="BR"></span>
-            <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Maharshi-Desai-150x150.webp"
+            <span><img loading="lazy" src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Maharshi-Desai-150x150.webp"
                 alt="Dr. Maharshi Desai" width="44" height="44" data-fallback="MD"></span>
-            <span><img src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Vimal-Dhaduk-150x150.webp"
+            <span><img loading="lazy" src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Vimal-Dhaduk-150x150.webp"
                 alt="Dr. Vimal Dhaduk" width="44" height="44" data-fallback="VD"></span>
-            <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Arpit-gajjar-150x150.webp"
+            <span><img loading="lazy" src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Arpit-gajjar-150x150.webp"
                 alt="Dr. Arpit Gajjar" width="44" height="44" data-fallback="AG"></span>
           </div>
           <p><b>2,500+ hospitals and clinics</b> across India run on Healthray</p>
         </div>
         <div class="trust-row">
           <div class="seals">
-            <span class="seal"><img
+            <span class="seal"><img loading="lazy"
                 src="https://healthray.com/wp-content/uploads/2026/07/NABH-ehr-certified-150x150.webp"
                 alt="NABH certified" width="42" height="42"><span class="fb">NABH</span></span>
-            <span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/09/ABDM-Logo-Healthray.webp"
+            <span class="seal"><img loading="lazy" src="https://healthray.com/wp-content/uploads/2026/09/ABDM-Logo-Healthray.webp"
                 alt="ABDM compliant" width="42" height="42"><span class="fb">ABDM</span></span>
-            <span class="seal"><img src="https://healthray.com/wp-content/uploads/2025/07/NHA.webp" alt="NHA approved"
+            <span class="seal"><img loading="lazy" src="https://healthray.com/wp-content/uploads/2025/07/NHA.webp" alt="NHA approved"
                 width="42" height="42"><span class="fb">NHA</span></span>
-            <span class="seal"><img
+            <span class="seal"><img loading="lazy"
                 src="https://healthray.com/wp-content/uploads/2026/03/iso-27001-healthray-150x150.webp" alt="ISO 27001"
                 width="42" height="42"><span class="fb">ISO 27001</span></span>
           </div>
@@ -244,8 +263,7 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
             <?php // Customer video hosted on healthray.com; plays with sound when tapped (js/ppc-hims.js). ?>
             <video id="storyVideo" playsinline preload="metadata" disablepictureinpicture controlslist="nodownload"
               src="https://healthray.com/wp-content/uploads/2026/08/Universal-Hospital-Surat-Review_-How-Healthray-Streamlined-Our-Workflow.mp4#t=0.5"></video>
-            <button type="button" id="playBtn" class="story-cover"
-              aria-label="Play video: Divyesh Gandhi, Head of Operations, Universal Hospital Surat">
+            <button type="button" id="playBtn" class="story-cover">
               <img src="https://i.ytimg.com/vi/VRHZ9ejnBWk/oardefault.jpg" alt="" loading="lazy"
                 data-fallback-src="https://i.ytimg.com/vi/VRHZ9ejnBWk/hqdefault.jpg">
               <span class="shade"></span>
@@ -268,6 +286,65 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
           </div>
           <p class="video-alt">Universal Hospital, Surat: how Healthray streamlined their workflow.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3b. HOW THE SWITCH HAPPENS: placed right after the staff worry, so the "how" answers the fear (real sequence, so it is numbered) + real certification badges -->
+  <section class="section sw-sec">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Switching to Healthray</p>
+        <h2 class="h2">Live in 1 to 3 weeks, without stopping your billing counter</h2>
+        <p class="lead">Even a 200-bed hospital usually goes live in one to three weeks. You switch one department at a
+          time, so OPD and billing keep running.</p>
+      </div>
+      <ol class="plan">
+        <li>
+          <div class="n"><b>1</b></div><small>Setup</small>
+          <h3>Set up and move your data</h3>
+          <p>Departments, tariffs and bill formats are set up. Your old data moves over, usually in a day.</p>
+        </li>
+        <li>
+          <div class="n"><b>2</b></div><small>Training</small>
+          <h3>Train every department</h3>
+          <p>Reception, nurses, pharmacy, billing and doctors practise on their own screens before anything goes live.
+          </p>
+        </li>
+        <li>
+          <div class="n"><b>3</b></div><small>Go-live</small>
+          <h3>Switch one department at a time</h3>
+          <p>OPD and registration first, then IPD billing, pharmacy and lab. Any issue stays small and gets fixed
+            quickly.</p>
+        </li>
+        <li>
+          <div class="n"><b>4</b></div><small>After go-live</small>
+          <h3>24×7 support</h3>
+          <p>In English, Hindi or Gujarati, from a team that knows hospital work.</p>
+        </li>
+      </ol>
+
+      <div class="certs">
+        <p>Certified and compliant</p>
+        <ul>
+          <li><span class="seal"><img
+                src="https://healthray.com/wp-content/uploads/2026/07/NABH-ehr-certified-150x150.webp" alt=""
+                loading="lazy"><span class="fb">NABH</span></span>NABH certified</li>
+          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/09/ABDM-Logo-Healthray.webp"
+                alt="" loading="lazy"><span class="fb">ABDM</span></span>ABDM compliant</li>
+          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2025/07/NHA.webp" alt=""
+                loading="lazy"><span class="fb">NHA</span></span>NHA approved</li>
+          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/03/abha-healthray-150x150.webp"
+                alt="" loading="lazy"><span class="fb">ABHA</span></span>ABHA integrated</li>
+          <li><span class="seal"><img
+                src="https://healthray.com/wp-content/uploads/2026/03/iso-27001-healthray-150x150.webp" alt=""
+                loading="lazy"><span class="fb">ISO</span></span>ISO 27001</li>
+          <li><span class="seal"><img
+                src="https://healthray.com/wp-content/uploads/2026/03/Hipaa-healthray-150x150.webp" alt=""
+                loading="lazy"><span class="fb">HIPAA</span></span>HIPAA-aligned</li>
+          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/03/hl7-healthray-150x150.webp"
+                alt="" loading="lazy"><span class="fb">HL7</span></span>Connects with lab machines</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -592,69 +669,8 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
     </div>
   </section>
 
-  <!-- 7. HOW THE SWITCH HAPPENS (real sequence, so it is numbered) + real certification badges -->
-  <section class="section">
-    <div class="wrap">
-      <div class="sec-head">
-        <p class="eyebrow">Switching to Healthray</p>
-        <h2 class="h2">Live in 1 to 3 weeks, without stopping your billing counter</h2>
-        <p class="lead">Even a 200-bed hospital usually goes live in one to three weeks. You switch one department at a
-          time, so OPD and billing keep running.</p>
-      </div>
-      <ol class="plan">
-        <li>
-          <div class="n"><b>1</b></div><small>Setup</small>
-          <h3>Set up and move your data</h3>
-          <p>Departments, tariffs and bill formats are set up. Your old data moves over, usually in a day.</p>
-        </li>
-        <li>
-          <div class="n"><b>2</b></div><small>Training</small>
-          <h3>Train every department</h3>
-          <p>Reception, nurses, pharmacy, billing and doctors practise on their own screens before anything goes live.
-          </p>
-        </li>
-        <li>
-          <div class="n"><b>3</b></div><small>Go-live</small>
-          <h3>Switch one department at a time</h3>
-          <p>OPD and registration first, then IPD billing, pharmacy and lab. Any issue stays small and gets fixed
-            quickly.</p>
-        </li>
-        <li>
-          <div class="n"><b>4</b></div><small>After go-live</small>
-          <h3>24×7 support</h3>
-          <p>In English, Hindi or Gujarati, from a team that knows hospital work.</p>
-        </li>
-      </ol>
-
-      <div class="certs">
-        <p>Certified and compliant</p>
-        <ul>
-          <li><span class="seal"><img
-                src="https://healthray.com/wp-content/uploads/2026/07/NABH-ehr-certified-150x150.webp" alt=""
-                loading="lazy"><span class="fb">NABH</span></span>NABH certified</li>
-          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/09/ABDM-Logo-Healthray.webp"
-                alt="" loading="lazy"><span class="fb">ABDM</span></span>ABDM compliant</li>
-          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2025/07/NHA.webp" alt=""
-                loading="lazy"><span class="fb">NHA</span></span>NHA approved</li>
-          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/03/abha-healthray-150x150.webp"
-                alt="" loading="lazy"><span class="fb">ABHA</span></span>ABHA integrated</li>
-          <li><span class="seal"><img
-                src="https://healthray.com/wp-content/uploads/2026/03/iso-27001-healthray-150x150.webp" alt=""
-                loading="lazy"><span class="fb">ISO</span></span>ISO 27001</li>
-          <li><span class="seal"><img
-                src="https://healthray.com/wp-content/uploads/2026/03/Hipaa-healthray-150x150.webp" alt=""
-                loading="lazy"><span class="fb">HIPAA</span></span>HIPAA</li>
-          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/03/hl7-healthray-150x150.webp"
-                alt="" loading="lazy"><span class="fb">HL7</span></span>HL7</li>
-          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2025/07/FHIR.webp" alt=""
-                loading="lazy"><span class="fb">FHIR</span></span>FHIR</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
   <!-- 8. OBJECTIONS -->
-  <section class="section tint">
+  <section class="section faq-sec">
     <div class="wrap faq-grid">
       <div class="faq">
         <div class="sec-head">
@@ -746,8 +762,8 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
 
 <footer class="foot">
   <div class="wrap">
-    <span>© <?php echo esc_html(wp_date('Y')); ?> Healthray Technologies Pvt. Ltd. · Surat, Gujarat · Since
-      2019</span>
+    <span>© <?php echo esc_html(wp_date('Y')); ?> Healthray Technologies Pvt. Ltd.<span class="foot-sep"> · </span><span
+        class="foot-loc">Surat, Gujarat · Since 2019</span></span>
     <a href="https://healthray.com/privacy-policy/" rel="nofollow">Privacy policy</a>
   </div>
 </footer>

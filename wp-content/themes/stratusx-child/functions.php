@@ -1543,7 +1543,7 @@ add_action('wp_footer', function () {
 
 // =============================================================================
 // 12. STANDALONE PAGES (NO SITE HEADER / FOOTER) - Login Portal + PPC pages
-// All rendered through base-standalone.php instead of the theme's base.php.
+// All rendered through templates/base-standalone.php instead of the theme's base.php.
 //
 // PPC pages are convention-based - a new PPC page needs NO code here:
 //   template  temp-ppc-{key}.php   e.g. temp-ppc-erp.php
@@ -1595,7 +1595,7 @@ function hr_is_standalone_page()
 
 add_filter('roots_wrap_base', function ($templates) {
 	if (hr_is_standalone_page()) {
-		array_unshift($templates, 'base-standalone.php');
+		array_unshift($templates, 'templates/base-standalone.php');
 	}
 
 	return $templates;
@@ -1700,10 +1700,11 @@ add_action('wp_head', function () {
 	);
 }, 50);
 
-// PPC pages: the site lead popup (#myPopup), opened by .hr-cta-btn buttons via js/script.js.
+// PPC pages: the lead popup (#myPopup), opened by .hr-cta-btn buttons via js/script.js.
+// A PPC template can show its own form in it through the "hr_ppc_popup_args" filter (see templates/lead-popup.php).
 add_action('wp_footer', function () {
 	if ('' !== hr_ppc_page_key()) {
-		get_template_part('templates/lead-popup');
+		get_template_part('templates/lead-popup', null, (array) apply_filters('hr_ppc_popup_args', array()));
 	}
 }, 5);
 

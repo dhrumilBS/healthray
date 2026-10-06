@@ -2261,6 +2261,8 @@ html {
  * 21. Price band + initials in the quote byline (round 2)
  * 22. Logo box in a result card byline
  * 23. Footer on phones: Privacy policy stays above the bottom bar
+ * 24. Phone review fixes (M1-M16)
+ * 25. Hero line parts + switching section divider
  */
 
 /* 17. Hero trust line: phones only, where the full proof block sits below the form */
@@ -3015,6 +3017,172 @@ html {
 	}
 }
 
+/* 24. Phone review fixes (M1-M16) */
+
+/* M3: when the form scrolls to step 2, keep it clear of the header */
+.ppc-hims .lead-form {
+	scroll-margin-top: 84px;
+}
+
+/* M16: 7 certificate items */
+.ppc-hims .certs ul {
+	grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+	.ppc-hims .certs ul {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+
+	/* M7: the glass label on the BBMH photo already shows the type and city */
+	.ppc-hims .case-photo:not(.noimg) + .case-body .case-tag {
+		display: none;
+	}
+}
+
+/* M2: CF7 bed options in 2 columns on phones ("Clinic / OPD only" full width) */
+@media (max-width: 600px) {
+	.ppc-hims .hr-bed-options {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 8px;
+	}
+
+	.ppc-hims .hr-bed-full {
+		grid-column: 1 / -1;
+	}
+
+	.ppc-hims .hr-bed-option {
+		padding: 10px 12px;
+	}
+
+	.ppc-hims .hr-arrow {
+		font-size: 22px;
+	}
+}
+
+/* Darker grey for small text on every screen: #6c8093 was below the 4.5:1 readability level on white */
+body.ppc-hims {
+	--muted: #56697c;
+}
+
+@media (max-width: 767px) {
+
+	/* M4: header scrolls away on phones; the bottom bar is the one sticky button */
+	.ppc-hims .top {
+		position: static;
+	}
+
+	.ppc-hims .lead-form {
+		scroll-margin-top: 16px;
+	}
+
+	/* M1: form starts on the first screen */
+	.ppc-hims .hero {
+		padding-top: 20px;
+	}
+
+	.ppc-hims .hero h1 {
+		font-size: 28px;
+		margin-top: 10px;
+	}
+
+	.ppc-hims .hero-sub {
+		font-size: 16px;
+		margin-top: 12px;
+	}
+
+	.ppc-hims .mini-trust {
+		margin-top: 12px;
+	}
+
+	.ppc-hims .hero-grid {
+		row-gap: 20px;
+	}
+
+	.ppc-hims #demo .fc-sub {
+		display: none;
+	}
+
+	.ppc-hims .form-card {
+		padding: 20px 18px;
+	}
+
+	.ppc-hims .form-card .wpcf7 {
+		margin-top: 12px;
+	}
+
+	.ppc-hims .hr-progress {
+		margin-top: 14px;
+		margin-bottom: 14px;
+	}
+
+	/* M8: shorter page on phones, nothing removed */
+	.ppc-hims .section {
+		padding-block: 56px;
+	}
+
+	.ppc-hims .big-quote {
+		font-size: 18px;
+	}
+
+	.ppc-hims .big-quote::before {
+		font-size: 56px;
+		margin-bottom: 8px;
+	}
+
+	.ppc-hims .bbmh-note {
+		padding: 16px 18px;
+	}
+
+	.ppc-hims .case {
+		padding: 20px;
+	}
+
+	.ppc-hims .case .big {
+		font-size: 30px;
+	}
+
+	/* M10: bigger bed badges */
+	.ppc-hims .lg-badge,
+	.ppc-hims .lg-badge.mc {
+		font-size: 12px;
+	}
+
+	/* M11: 44px tap areas */
+	.ppc-hims .mm-more button {
+		padding: 12px 20px;
+	}
+
+	.ppc-hims .foot a {
+		padding: 12px 8px;
+	}
+
+	/* M12 + M5: footer in two lines; the bottom bar hides here, so no big gap is needed */
+	.ppc-hims .foot {
+		padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+	}
+
+	.ppc-hims .foot-sep {
+		display: none;
+	}
+
+	.ppc-hims .foot-loc {
+		display: block;
+	}
+}
+
+/* 25. Hero line parts (phones show only the second part) + switching section divider */
+.ppc-hims .sw-sec {
+	border-top: 1px solid var(--line);
+}
+
+@media (max-width: 767px) {
+	/* Phones show only the "paper, Excel or separate software?" line */
+	.ppc-hims .hs-a {
+		display: none;
+	}
+}
+
 /* ===== PREVIEW ONLY: stand-in for the CF7 form and the site lead popup (not needed on WordPress) ===== */
 .ppc-hims .pv-steps{display:flex;align-items:center;gap:10px;margin:20px 0 16px;font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
 .ppc-hims .pv-steps .bar{flex:1;height:4px;border-radius:4px;background:var(--line);overflow:hidden}
@@ -3076,10 +3244,10 @@ document.addEventListener('error', function (e) {
       <div class="hero-copy">
         <p class="eyebrow">Hospital management software</p>
         <h1>Run your whole hospital on one system your staff will actually use</h1>
-        <p class="hero-sub">OPD, IPD, billing, pharmacy, lab and TPA claims in one software, on one patient file. Most hospitals start in 1 to
-          3 weeks, with old data moved and every department trained.</p>
-                <p class="mini-trust" aria-label="Rated 4.8, used by 2,500+ hospitals and clinics, NABH certified, ABDM compliant"><b>★ 4.8</b>
-          rating <i>·</i> <b>2,500+</b> hospitals &amp; clinics <i>·</i> NABH <i>·</i> ABDM</p>
+                <p class="hero-sub"><span class="hs-a">OPD, IPD, billing, pharmacy, lab and TPA claims in one software. </span><span
+            class="hs-b">Moving from paper, Excel or separate software? Go live in 1 to 3 weeks, with your data moved,
+            staff trained and 24×7 support.</span></p>
+                        <p class="mini-trust" aria-label="Rated 4.8, used by 2,500+ hospitals and clinics, NABH certified, ABDM compliant"><b>★ 4.8</b> <i>·</i> <b>2,500+</b> hospitals &amp; clinics <i>·</i> NABH <i>·</i> ABDM</p>
       </div>
 
       <div class="form-card" id="demo">
@@ -3091,30 +3259,30 @@ document.addEventListener('error', function (e) {
       <div class="hero-proof">
         <div class="faces">
           <div class="pile">
-            <span class="noimgable"><img
+            <span><img loading="lazy"
                 src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Ketan-Rupala-150x150.webp"
                 alt="Dr. Ketan Rupala" width="44" height="44" data-fallback="KR"></span>
-            <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Bhaumik-Rathore-150x150.webp"
+            <span><img loading="lazy" src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Bhaumik-Rathore-150x150.webp"
                 alt="Dr. Bhaumik Rathore" width="44" height="44" data-fallback="BR"></span>
-            <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Maharshi-Desai-150x150.webp"
+            <span><img loading="lazy" src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Maharshi-Desai-150x150.webp"
                 alt="Dr. Maharshi Desai" width="44" height="44" data-fallback="MD"></span>
-            <span><img src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Vimal-Dhaduk-150x150.webp"
+            <span><img loading="lazy" src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Vimal-Dhaduk-150x150.webp"
                 alt="Dr. Vimal Dhaduk" width="44" height="44" data-fallback="VD"></span>
-            <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Arpit-gajjar-150x150.webp"
+            <span><img loading="lazy" src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Arpit-gajjar-150x150.webp"
                 alt="Dr. Arpit Gajjar" width="44" height="44" data-fallback="AG"></span>
           </div>
           <p><b>2,500+ hospitals and clinics</b> across India run on Healthray</p>
         </div>
         <div class="trust-row">
           <div class="seals">
-            <span class="seal"><img
+            <span class="seal"><img loading="lazy"
                 src="https://healthray.com/wp-content/uploads/2026/07/NABH-ehr-certified-150x150.webp"
                 alt="NABH certified" width="42" height="42"><span class="fb">NABH</span></span>
-            <span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/09/ABDM-Logo-Healthray.webp"
+            <span class="seal"><img loading="lazy" src="https://healthray.com/wp-content/uploads/2026/09/ABDM-Logo-Healthray.webp"
                 alt="ABDM compliant" width="42" height="42"><span class="fb">ABDM</span></span>
-            <span class="seal"><img src="https://healthray.com/wp-content/uploads/2025/07/NHA.webp" alt="NHA approved"
+            <span class="seal"><img loading="lazy" src="https://healthray.com/wp-content/uploads/2025/07/NHA.webp" alt="NHA approved"
                 width="42" height="42"><span class="fb">NHA</span></span>
-            <span class="seal"><img
+            <span class="seal"><img loading="lazy"
                 src="https://healthray.com/wp-content/uploads/2026/03/iso-27001-healthray-150x150.webp" alt="ISO 27001"
                 width="42" height="42"><span class="fb">ISO 27001</span></span>
           </div>
@@ -3437,8 +3605,7 @@ document.addEventListener('error', function (e) {
           <div class="video" id="video">
                         <video id="storyVideo" playsinline preload="metadata" disablepictureinpicture controlslist="nodownload"
               src="https://healthray.com/wp-content/uploads/2026/08/Universal-Hospital-Surat-Review_-How-Healthray-Streamlined-Our-Workflow.mp4#t=0.5"></video>
-            <button type="button" id="playBtn" class="story-cover"
-              aria-label="Play video: Divyesh Gandhi, Head of Operations, Universal Hospital Surat">
+                        <button type="button" id="playBtn" class="story-cover">
               <img src="https://i.ytimg.com/vi/VRHZ9ejnBWk/oardefault.jpg" alt="" loading="lazy"
                 data-fallback-src="https://i.ytimg.com/vi/VRHZ9ejnBWk/hqdefault.jpg">
               <span class="shade"></span>
@@ -3461,6 +3628,65 @@ document.addEventListener('error', function (e) {
           </div>
           <p class="video-alt">Universal Hospital, Surat: how Healthray streamlined their workflow.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3b. HOW THE SWITCH HAPPENS: placed right after the staff worry, so the "how" answers the fear (real sequence, so it is numbered) + real certification badges -->
+  <section class="section sw-sec">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Switching to Healthray</p>
+        <h2 class="h2">Live in 1 to 3 weeks, without stopping your billing counter</h2>
+        <p class="lead">Even a 200-bed hospital usually goes live in one to three weeks. You switch one department at a
+          time, so OPD and billing keep running.</p>
+      </div>
+      <ol class="plan">
+        <li>
+          <div class="n"><b>1</b></div><small>Setup</small>
+          <h3>Set up and move your data</h3>
+          <p>Departments, tariffs and bill formats are set up. Your old data moves over, usually in a day.</p>
+        </li>
+        <li>
+          <div class="n"><b>2</b></div><small>Training</small>
+          <h3>Train every department</h3>
+          <p>Reception, nurses, pharmacy, billing and doctors practise on their own screens before anything goes live.
+          </p>
+        </li>
+        <li>
+          <div class="n"><b>3</b></div><small>Go-live</small>
+          <h3>Switch one department at a time</h3>
+          <p>OPD and registration first, then IPD billing, pharmacy and lab. Any issue stays small and gets fixed
+            quickly.</p>
+        </li>
+        <li>
+          <div class="n"><b>4</b></div><small>After go-live</small>
+          <h3>24×7 support</h3>
+          <p>In English, Hindi or Gujarati, from a team that knows hospital work.</p>
+        </li>
+      </ol>
+
+      <div class="certs">
+        <p>Certified and compliant</p>
+        <ul>
+          <li><span class="seal"><img
+                src="https://healthray.com/wp-content/uploads/2026/07/NABH-ehr-certified-150x150.webp" alt=""
+                loading="lazy"><span class="fb">NABH</span></span>NABH certified</li>
+          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/09/ABDM-Logo-Healthray.webp"
+                alt="" loading="lazy"><span class="fb">ABDM</span></span>ABDM compliant</li>
+          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2025/07/NHA.webp" alt=""
+                loading="lazy"><span class="fb">NHA</span></span>NHA approved</li>
+          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/03/abha-healthray-150x150.webp"
+                alt="" loading="lazy"><span class="fb">ABHA</span></span>ABHA integrated</li>
+          <li><span class="seal"><img
+                src="https://healthray.com/wp-content/uploads/2026/03/iso-27001-healthray-150x150.webp" alt=""
+                loading="lazy"><span class="fb">ISO</span></span>ISO 27001</li>
+          <li><span class="seal"><img
+                src="https://healthray.com/wp-content/uploads/2026/03/Hipaa-healthray-150x150.webp" alt=""
+                loading="lazy"><span class="fb">HIPAA</span></span>HIPAA-aligned</li>
+          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/03/hl7-healthray-150x150.webp"
+                alt="" loading="lazy"><span class="fb">HL7</span></span>Connects with lab machines</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -3781,69 +4007,8 @@ document.addEventListener('error', function (e) {
     </div>
   </section>
 
-  <!-- 7. HOW THE SWITCH HAPPENS (real sequence, so it is numbered) + real certification badges -->
-  <section class="section">
-    <div class="wrap">
-      <div class="sec-head">
-        <p class="eyebrow">Switching to Healthray</p>
-        <h2 class="h2">Live in 1 to 3 weeks, without stopping your billing counter</h2>
-        <p class="lead">Even a 200-bed hospital usually goes live in one to three weeks. You switch one department at a
-          time, so OPD and billing keep running.</p>
-      </div>
-      <ol class="plan">
-        <li>
-          <div class="n"><b>1</b></div><small>Setup</small>
-          <h3>Set up and move your data</h3>
-          <p>Departments, tariffs and bill formats are set up. Your old data moves over, usually in a day.</p>
-        </li>
-        <li>
-          <div class="n"><b>2</b></div><small>Training</small>
-          <h3>Train every department</h3>
-          <p>Reception, nurses, pharmacy, billing and doctors practise on their own screens before anything goes live.
-          </p>
-        </li>
-        <li>
-          <div class="n"><b>3</b></div><small>Go-live</small>
-          <h3>Switch one department at a time</h3>
-          <p>OPD and registration first, then IPD billing, pharmacy and lab. Any issue stays small and gets fixed
-            quickly.</p>
-        </li>
-        <li>
-          <div class="n"><b>4</b></div><small>After go-live</small>
-          <h3>24×7 support</h3>
-          <p>In English, Hindi or Gujarati, from a team that knows hospital work.</p>
-        </li>
-      </ol>
-
-      <div class="certs">
-        <p>Certified and compliant</p>
-        <ul>
-          <li><span class="seal"><img
-                src="https://healthray.com/wp-content/uploads/2026/07/NABH-ehr-certified-150x150.webp" alt=""
-                loading="lazy"><span class="fb">NABH</span></span>NABH certified</li>
-          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/09/ABDM-Logo-Healthray.webp"
-                alt="" loading="lazy"><span class="fb">ABDM</span></span>ABDM compliant</li>
-          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2025/07/NHA.webp" alt=""
-                loading="lazy"><span class="fb">NHA</span></span>NHA approved</li>
-          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/03/abha-healthray-150x150.webp"
-                alt="" loading="lazy"><span class="fb">ABHA</span></span>ABHA integrated</li>
-          <li><span class="seal"><img
-                src="https://healthray.com/wp-content/uploads/2026/03/iso-27001-healthray-150x150.webp" alt=""
-                loading="lazy"><span class="fb">ISO</span></span>ISO 27001</li>
-          <li><span class="seal"><img
-                src="https://healthray.com/wp-content/uploads/2026/03/Hipaa-healthray-150x150.webp" alt=""
-                loading="lazy"><span class="fb">HIPAA</span></span>HIPAA</li>
-          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/03/hl7-healthray-150x150.webp"
-                alt="" loading="lazy"><span class="fb">HL7</span></span>HL7</li>
-          <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2025/07/FHIR.webp" alt=""
-                loading="lazy"><span class="fb">FHIR</span></span>FHIR</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
   <!-- 8. OBJECTIONS -->
-  <section class="section tint">
+  <section class="section faq-sec">
     <div class="wrap faq-grid">
       <div class="faq">
         <div class="sec-head">
@@ -3935,8 +4100,8 @@ document.addEventListener('error', function (e) {
 
 <footer class="foot">
   <div class="wrap">
-    <span>© 2026 Healthray Technologies Pvt. Ltd. · Surat, Gujarat · Since
-      2019</span>
+    <span>© 2026 Healthray Technologies Pvt. Ltd.<span class="foot-sep"> · </span><span
+        class="foot-loc">Surat, Gujarat · Since 2019</span></span>
     <a href="https://healthray.com/privacy-policy/" rel="nofollow">Privacy policy</a>
   </div>
 </footer>
@@ -3968,10 +4133,11 @@ document.addEventListener('error', function (e) {
  * - Image fallbacks (.noimg / initials): small inline script in <head>, functions.php.
  *
  * 1. Customer story video
- * 2. Mobile action bar
+ * 2. Mobile action bar (hidden over the hero form, final CTA and footer)
  * 3. Walkthrough video
  * 4. Doctor wall carousel (tablet/mobile)
  * 5. FAQ accordion
+ * 6. Modules menu (ppc-hims-additions.js)
  */
 (function () {
 	'use strict';
@@ -4042,16 +4208,32 @@ document.addEventListener('error', function (e) {
 		video.addEventListener('contextmenu', noContextMenu);
 	})();
 
-	/* 2. Mobile action bar: hidden while the hero form is on screen. */
+	/* 2. Mobile action bar: hidden while the hero form, the final CTA or the footer is on screen. */
 	(function () {
 		var bar = document.getElementById('mbar');
-		var form = document.getElementById('demo');
-		if (!bar || !form || !hasIO) {
+		var targets = [
+			document.getElementById('demo'),
+			document.querySelector('.ppc-hims .final'),
+			document.querySelector('.ppc-hims .foot')
+		].filter(Boolean);
+		if (!bar || !targets.length || !hasIO) {
 			return;
 		}
-		new IntersectionObserver(function (entries) {
-			bar.classList.toggle('away', entries[0].isIntersecting);
-		}, { threshold: 0.25 }).observe(form);
+		var onScreen = [];
+		var io = new IntersectionObserver(function (entries) {
+			entries.forEach(function (e) {
+				var i = onScreen.indexOf(e.target);
+				if (e.isIntersecting && i < 0) {
+					onScreen.push(e.target);
+				} else if (!e.isIntersecting && i > -1) {
+					onScreen.splice(i, 1);
+				}
+			});
+			bar.classList.toggle('away', onScreen.length > 0);
+		}, { threshold: 0.25 });
+		targets.forEach(function (t) {
+			io.observe(t);
+		});
 	})();
 
 	/* 3. Walkthrough: autoplays muted on screen, pauses off screen; a manual pause sticks. */
@@ -4063,6 +4245,9 @@ document.addEventListener('error', function (e) {
 			return;
 		}
 		var userPaused = false;
+		// No autoplay on Data Saver or a 2G connection; the play button still works.
+		var conn = navigator.connection || {};
+		var lowData = !!conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '');
 
 		function sync() {
 			var on = !video.paused;
@@ -4094,7 +4279,7 @@ document.addEventListener('error', function (e) {
 		if (hasIO) {
 			new IntersectionObserver(function (entries) {
 				if (entries[0].isIntersecting) {
-					if (!userPaused && !reduceMotion) {
+					if (!userPaused && !reduceMotion && !lowData) {
 						start();
 					}
 				} else if (!video.paused) {

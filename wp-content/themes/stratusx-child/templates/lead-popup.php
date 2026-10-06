@@ -3,7 +3,15 @@
  * Lead popup (#myPopup), opened by .hr-cta-btn buttons and the scroll trigger
  * in js/script.js (initPopup). Printed by templates/footer.php on normal pages
  * and by functions.php (section 12) on standalone PPC pages.
+ *
+ * Optional $args (PPC pages pass them through the "hr_ppc_popup_args" filter):
+ *   'form'  => shortcode to show instead of the site popup form (ACF option popupFormShortcode)
+ *   'title' => heading text, 'text' => line under the heading
  */
+
+$hr_popup_form  = !empty($args['form']) ? $args['form'] : get_field('popupFormShortcode', 'option');
+$hr_popup_title = isset($args['title']) ? $args['title'] : '';
+$hr_popup_text  = isset($args['text']) ? $args['text'] : 'Get in touch with us today for a personalized consultation and review designed specifically for doctors';
 ?>
 <div id="popupBackground"></div>
 <div class="footer-popup footer-popup-wrap" id="myPopup">
@@ -13,13 +21,16 @@
 		</svg>
 	</button>
 	<div class="widget-heading">
+		<?php if ('' !== $hr_popup_title) : ?>
+		<p class="heading-title"><?php echo esc_html($hr_popup_title); ?></p>
+		<?php else : ?>
 		<p class="heading-title">Secure Your Hospital’s Future <span style="font-size: 85%;font-weight: 500">Start With Healthray Today!</span></p>
-		<p class="description-text">Get in touch with us today for a personalized consultation and review designed specifically for doctors</p>
+		<?php endif; ?>
+		<p class="description-text"><?php echo esc_html($hr_popup_text); ?></p>
 	</div>
 	<?php
-	if (!empty(get_field('popupFormShortcode', 'option'))) {
-		$form = get_field('popupFormShortcode', 'option');
-		echo do_shortcode($form);
+	if (!empty($hr_popup_form)) {
+		echo do_shortcode($hr_popup_form);
 	}
 	?>
 </div>

@@ -580,3 +580,74 @@ html { scroll-behavior: smooth; }
 	.hr-bed-options { grid-template-columns: 1fr; }
 	.hr-bed-full { grid-column: auto; }
 }
+/* 24. Phone review fixes (M1-M16) */
+/* M3: when the form scrolls to step 2, keep it clear of the header */
+.ppc-hims .lead-form { scroll-margin-top: 84px; }
+/* M16: 7 certificate items */
+.ppc-hims .certs ul { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+@media (max-width: 900px) {
+	.ppc-hims .certs ul { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+	/* M7: the glass label on the BBMH photo already shows the type and city */
+	.ppc-hims .case-photo:not(.noimg) + .case-body .case-tag { display: none; }
+}
+
+/* M2: CF7 bed options in 2 columns on phones ("Clinic / OPD only" full width) */
+@media (max-width: 600px) {
+	.ppc-hims .hr-bed-options { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+	.ppc-hims .hr-bed-full { grid-column: 1 / -1; }
+	.ppc-hims .hr-bed-option { padding: 10px 12px; }
+	.ppc-hims .hr-arrow { font-size: 22px; }
+}
+
+/* Darker grey for small text on every screen: #6c8093 was below the 4.5:1 readability level on white */
+body.ppc-hims { --muted: #56697c; }
+
+@media (max-width: 767px) {
+	/* M4: header scrolls away on phones; the bottom bar is the one sticky button */
+	.ppc-hims .top { position: static; }
+	.ppc-hims .lead-form { scroll-margin-top: 16px; }
+	/* M1: form starts on the first screen */
+	.ppc-hims .hero { padding-top: 20px; }
+	.ppc-hims .hero h1 { font-size: 28px; margin-top: 10px; }
+	.ppc-hims .hero-sub { font-size: 16px; margin-top: 12px; }
+	.ppc-hims .mini-trust { margin-top: 12px; }
+	.ppc-hims .hero-grid { row-gap: 20px; }
+	.ppc-hims #demo .fc-sub { display: none; }
+	.ppc-hims .form-card { padding: 20px 18px; }
+	.ppc-hims .form-card .wpcf7 { margin-top: 12px; }
+	.ppc-hims .hr-progress { margin-top: 14px; margin-bottom: 14px; }
+	/* M8: shorter page on phones, nothing removed */
+	.ppc-hims .section { padding-block: 56px; }
+	.ppc-hims .big-quote { font-size: 18px; }
+	.ppc-hims .big-quote::before { font-size: 56px; margin-bottom: 8px; }
+	.ppc-hims .bbmh-note { padding: 16px 18px; }
+	.ppc-hims .case { padding: 20px; }
+	.ppc-hims .case .big { font-size: 30px; }
+	/* M10: bigger bed badges */
+	.ppc-hims .lg-badge,
+	.ppc-hims .lg-badge.mc { font-size: 12px; }
+	/* M11: 44px tap areas */
+	.ppc-hims .mm-more button { padding: 12px 20px; }
+	.ppc-hims .foot a { padding: 12px 8px; }
+	/* M12 + M5: footer in two lines; the bottom bar hides here, so no big gap is needed */
+	.ppc-hims .foot { padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)); }
+	.ppc-hims .foot-sep { display: none; }
+	.ppc-hims .foot-loc { display: block; }
+}
+
+/* 25. Hero line parts (phones show only the second part) + switching section divider */
+.ppc-hims .sw-sec { border-top: 1px solid var(--line); }
+@media (max-width: 767px) {
+	/* Phones show only the "paper, Excel or separate software?" line */
+	.ppc-hims .hs-a { display: none; }
+}
+
+/* 26. Popup (#myPopup) with the stepper form: same heading as the hero form card */
+.ppc-hims #myPopup { padding: 28px; }
+.ppc-hims #myPopup .widget-heading { text-align: left; margin-bottom: 0; padding-right: 32px; }
+.ppc-hims #myPopup .widget-heading .heading-title { margin: 0; font-size: 24px; font-weight: 800; line-height: 1.15; color: var(--navy); }
+.ppc-hims #myPopup .widget-heading .description-text { margin: 6px 0 0; font-size: 15px; color: var(--slate); }
+.ppc-hims #myPopup .wpcf7 { margin-top: 4px; }
+@media (max-width: 525px) {
+	.ppc-hims #myPopup { width: calc(100% - 24px); padding: 22px 18px; }
+}
