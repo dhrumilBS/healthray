@@ -47,6 +47,7 @@ function hr_virtual_url_map()
 	return array(
 		'ppc' => array(
 			81696, // PPC - Hospital Management Software (temp-ppc-hims-google.php) -> /ppc/hospital-management-software/
+			81838, // PPC - Hospital Software, ChatGPT Ads (temp-ppc-hims-chatgpt.php) -> /ppc/{its slug}/
 		),
 	);
 }

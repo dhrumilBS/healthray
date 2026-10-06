@@ -3185,3 +3185,120 @@ body.ppc-hims {
 		height: 18px;
 	}
 }
+
+/* 29. ChatGPT page (temp-ppc-hims-chatgpt.php): checklist, question in bold, plain answer under it, a green tick per row */
+.ppc-hims .ck-list {
+	margin: 0;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	column-gap: 48px;
+	padding: 8px 28px;
+	background: var(--white);
+	border: 1px solid var(--line-blue);
+	border-radius: var(--r-card);
+}
+
+.ppc-hims .ck-row {
+	padding: 18px 0;
+	border-top: 1px solid var(--line);
+}
+
+.ppc-hims .ck-row:nth-child(-n+2) {
+	border-top: 0;
+}
+
+.ppc-hims .ck-row dt {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	font-size: 16px;
+	font-weight: 800;
+	line-height: 1.4;
+	color: var(--navy);
+}
+
+.ppc-hims .ck-ico {
+	flex: none;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	background: var(--green-pale);
+	color: var(--green-ink);
+	display: grid;
+	place-items: center;
+}
+
+.ppc-hims .ck-ico svg {
+	width: 13px;
+	height: 13px;
+}
+
+.ppc-hims .ck-row dd {
+	margin: 4px 0 0 36px;
+	font-size: 15.5px;
+	line-height: 1.55;
+	color: var(--slate);
+}
+
+.ppc-hims .ck-row dd a {
+	font-weight: 700;
+}
+
+.ppc-hims .ck-cta {
+	display: flex;
+	justify-content: center;
+	margin-top: 28px;
+}
+
+@media (max-width: 760px) {
+	.ppc-hims .ck-list {
+		grid-template-columns: minmax(0, 1fr);
+		padding: 4px 18px;
+	}
+
+	.ppc-hims .ck-row:nth-child(2) {
+		border-top: 1px solid var(--line);
+	}
+
+	.ppc-hims .ck-row {
+		padding: 16px 0;
+	}
+
+	.ppc-hims .ck-cta .btn {
+		width: 100%;
+	}
+}
+
+/* 30. ChatGPT page: short header CTA on small phones, review-site ratings section, modules anchor offset, quote in the switching section */
+.ppc-hims .cta-short {
+	display: none;
+}
+
+@media (max-width: 480px) {
+	.ppc-hims .top .cta-long {
+		display: none;
+	}
+
+	.ppc-hims .top .cta-short {
+		display: inline;
+	}
+}
+
+.ppc-hims .rt-sec .sec-head {
+	margin-inline: auto;
+	margin-bottom: 8px;
+	text-align: center;
+	justify-items: center;
+}
+
+.ppc-hims .rt-sec .review-bar {
+	margin-top: 16px;
+}
+
+.ppc-hims .mm-sec {
+	scroll-margin-top: 80px;
+}
+
+.ppc-hims .sw-quote {
+	margin-top: 8px;
+}
