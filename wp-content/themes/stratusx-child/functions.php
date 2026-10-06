@@ -1546,7 +1546,8 @@ add_action('wp_footer', function () {
 // All rendered through templates/base-standalone.php instead of the theme's base.php.
 //
 // PPC pages are convention-based - a new PPC page needs NO code here:
-//   template  temp-ppc-{key}.php   e.g. temp-ppc-erp.php
+//   template  temp-ppc-{key}.php   e.g. temp-ppc-erp.php  (or a variant: temp-ppc-{key}-{variant}.php,
+//             e.g. temp-ppc-hims-google.php, sharing the CSS/JS/body class of "{key}")
 //   CSS       css/ppc-{key}.css    inlined in <head> (optional)
 //   JS        js/ppc-{key}.js      enqueued in the footer, deferred (optional)
 //   body      class "ppc-{key}"    scope all page CSS under it
@@ -1562,7 +1563,9 @@ function hr_is_login_portal_page()
 }
 
 /**
- * PPC page key: "hims" for a page using temp-ppc-hims.php, '' for anything else.
+ * PPC page key: "hims" for a page using temp-ppc-hims.php or a variant of it
+ * (temp-ppc-hims-{variant}.php, e.g. temp-ppc-hims-google.php), '' for anything else.
+ * Variants share css/ppc-{key}.css, js/ppc-{key}.js and the body class, so a key has no dash.
  * Memoized once the main query has run (it is called by several hooks per request).
  */
 function hr_ppc_page_key()
@@ -1576,7 +1579,8 @@ function hr_ppc_page_key()
 	$found = '';
 	if (is_page()) {
 		$template = (string) get_page_template_slug(get_queried_object_id());
-		if (preg_match('/^temp-ppc-([a-z0-9-]+)\.php$/', $template, $m)) {
+		// temp-ppc-{key}.php or temp-ppc-{key}-{variant}.php (temp-ppc-hims-google.php -> "hims").
+		if (preg_match('/^temp-ppc-([a-z0-9]+)(?:-[a-z0-9-]+)?\.php$/', $template, $m)) {
 			$found = $m[1];
 		}
 	}

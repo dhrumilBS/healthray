@@ -111,7 +111,7 @@
 		});
 	})();
 
-	/* 3. Walkthrough: autoplays muted on screen, pauses off screen; a manual pause sticks. */
+	/* 3. Walkthrough: autoplays muted on screen, pauses off screen; a manual pause sticks; fullscreen button. */
 	(function () {
 		var box = document.getElementById('player');
 		var video = document.getElementById('walkVideo');
@@ -151,9 +151,110 @@
 			}
 		});
 
+		/*
+		 * Fullscreen, in order of support:
+		 * 1. Fullscreen API on the video (Chrome, Edge, Firefox, Android, Safari 16.4+)
+		 * 2. webkit-prefixed API (older desktop Safari, iPad)
+		 * 3. webkitEnterFullscreen: the native iPhone player (iOS has no element fullscreen)
+		 * Native controls show while full screen, so the viewer can seek through the whole video.
+		 */
+		var fsBtn = document.getElementById('walkFs');
+		var inFs = false;
+
+		function fsElement() {
+			return document.fullscreenElement || document.webkitFullscreenElement || null;
+		}
+
+		function setFs(on) {
+			inFs = on;
+			video.controls = on;
+			box.classList.toggle('is-fs', on);
+			if (on) {
+				// Phones: turn to landscape while full screen (Android Chrome; ignored where unsupported).
+				if (screen.orientation && screen.orientation.lock) {
+					screen.orientation.lock('landscape').catch(function () { });
+				}
+			} else {
+				if (screen.orientation && screen.orientation.unlock) {
+					try {
+						screen.orientation.unlock();
+					} catch (e) { }
+				}
+				// Paused in the full-screen player = keep it paused here.
+				userPaused = video.paused;
+				sync();
+			}
+		}
+
+		function iosFullscreen() {
+			if (!video.webkitEnterFullscreen) {
+				return false;
+			}
+			try {
+				video.webkitEnterFullscreen();
+			} catch (e) {
+				// Not loaded far enough yet: try again as soon as the size is known.
+				video.addEventListener('loadedmetadata', function () {
+					try {
+						video.webkitEnterFullscreen();
+					} catch (e2) { }
+				}, { once: true });
+			}
+			return true;
+		}
+
+		function enterFullscreen() {
+			userPaused = false;
+			start();
+			// iPhone: element fullscreen is off, go straight to the native player (inside the tap).
+			if (!(document.fullscreenEnabled || document.webkitFullscreenEnabled) && video.webkitEnterFullscreen) {
+				iosFullscreen();
+			} else if (video.requestFullscreen) {
+				var p = video.requestFullscreen();
+				if (p && p.catch) {
+					p.catch(iosFullscreen);
+				}
+			} else if (video.webkitRequestFullscreen) {
+				video.webkitRequestFullscreen();
+			} else {
+				iosFullscreen();
+			}
+		}
+
+		if (fsBtn) {
+			if (!video.requestFullscreen && !video.webkitRequestFullscreen && !video.webkitEnterFullscreen) {
+				fsBtn.hidden = true;
+			} else {
+				fsBtn.addEventListener('click', enterFullscreen);
+				var onFsChange = function () {
+					var on = fsElement() === video;
+					if (on !== inFs) {
+						setFs(on);
+					}
+				};
+				document.addEventListener('fullscreenchange', onFsChange);
+				document.addEventListener('webkitfullscreenchange', onFsChange);
+				// iPhone native player.
+				video.addEventListener('webkitbeginfullscreen', function () {
+					setFs(true);
+				});
+				video.addEventListener('webkitendfullscreen', function () {
+					setFs(false);
+				});
+			}
+		}
+
 		if (hasIO) {
 			new IntersectionObserver(function (entries) {
+				// Full screen changes the layout; never pause the video because of that.
+				if (inFs) {
+					return;
+				}
 				if (entries[0].isIntersecting) {
+					// Load the first frame data early, so a tap on fullscreen works at once on iPhone.
+					if (video.preload === 'none') {
+						video.preload = 'metadata';
+					}
 					if (!userPaused && !reduceMotion && !lowData) {
 						start();
 					}
@@ -370,6 +471,25 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 	const forms = document.querySelectorAll('.lead-form.hr-demo-form');
+	const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	/*
+	 * After a step change, keep the page still. Scroll only when the top of the form card is
+	 * hidden (above the screen or under the sticky header), and then just enough to show it.
+	 * Not used in the popup: it is fixed on screen and scrolls on its own.
+	 */
+	function keepCardInView(form) {
+		const card = form.closest('.form-card');
+		if (!card || form.closest('#myPopup')) {
+			return;
+		}
+		const header = document.querySelector('.ppc-hims .top');
+		const headerH = header && getComputedStyle(header).position === 'sticky' ? header.offsetHeight : 0;
+		const top = card.getBoundingClientRect().top;
+		if (top < headerH) {
+			window.scrollBy({ top: top - headerH - 12, behavior: reduceMotion ? 'auto' : 'smooth' });
+		}
+	}
 
 	forms.forEach(function (form) {
 		const step1 = form.querySelector('.hr-step-1');
@@ -400,10 +520,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				step1.style.display = 'none';
 				step2.style.display = 'block';
 
-				form.scrollIntoView({
-					behavior: 'smooth',
-					block: 'start'
-				});
+				keepCardInView(form);
 			});
 		});
 
@@ -411,10 +528,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			step2.style.display = 'none';
 			step1.style.display = 'block';
 
-			form.scrollIntoView({
-				behavior: 'smooth',
-				block: 'start'
-			});
+			keepCardInView(form);
 		}
 
 		if (backButton) {

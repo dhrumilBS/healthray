@@ -46,7 +46,7 @@ function hr_virtual_url_map()
 {
 	return array(
 		'ppc' => array(
-			81696, // PPC - Hospital Management Software (temp-ppc-hims.php) -> /ppc/hospital-management-software/
+			81696, // PPC - Hospital Management Software (temp-ppc-hims-google.php) -> /ppc/hospital-management-software/
 		),
 	);
 }
