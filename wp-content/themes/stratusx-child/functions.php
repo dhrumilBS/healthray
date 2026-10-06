@@ -1621,6 +1621,9 @@ add_action('wp_enqueue_scripts', function () {
 function hr_minify_css($css)
 {
 	$parts = preg_split('/("(?:[^"\\\\]|\\\\.)*"|\'(?:[^\'\\\\]|\\\\.)*\')/s', (string) $css, -1, PREG_SPLIT_DELIM_CAPTURE);
+	if (false === $parts) {
+		return (string) $css; // regex failed (e.g. an apostrophe in a comment): serve it unminified, never empty
+	}
 	$out = '';
 
 	foreach ($parts as $i => $part) {

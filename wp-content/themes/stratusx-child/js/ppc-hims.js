@@ -12,6 +12,7 @@
  * 3. Walkthrough video
  * 4. Doctor wall carousel (tablet/mobile)
  * 5. FAQ accordion
+ * 6. Modules menu "Show all" (tablet/mobile)
  */
 (function () {
 	'use strict';
@@ -164,7 +165,7 @@
 			return;
 		}
 
-		var AUTOPLAY_MS = 3000;
+		var AUTOPLAY_MS = 7000;
 		var mq = window.matchMedia('(max-width: 1024px)');
 		var current = -1;
 		var ticking = false;
@@ -405,3 +406,20 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	});
 });
+
+/* 6. Modules menu: on phones/tablets the menu is cut to a preview; "Show all 40+ modules" opens the rest. */
+(function () {
+	'use strict';
+
+	var app = document.getElementById('mmApp');
+	var btn = document.getElementById('mmMore');
+	if (!app || !btn) {
+		return;
+	}
+
+	btn.addEventListener('click', function () {
+		var all = app.classList.toggle('all');
+		btn.setAttribute('aria-expanded', all ? 'true' : 'false');
+		btn.textContent = all ? 'Show less' : 'Show all 40+ modules';
+	});
+})();

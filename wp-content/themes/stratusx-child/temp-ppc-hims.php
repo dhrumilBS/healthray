@@ -3,7 +3,7 @@
  * Template Name: PPC - Hospital Management Software (HIMS)
  *
  * Google Ads landing page for hospital management software.
- * Built from assets/updated-version-ppc-hms.html (final design).
+ * Built from assets/healthray-ads-final.html (final design).
  *
  * - Standalone render: this page has its OWN header (.top) and footer (.foot)
  *   from the PPC mockup, NOT the site header/footer. base-standalone.php is used as
@@ -22,6 +22,10 @@
  * Oct 2026 update: ?lp= headline per ad, phone trust line in the hero, logo strip with
  * bed counts (22 hospitals), bed size on result cards, doctor section title, modules shown
  * as the app menu (own section), new price answer. New CSS: section 17-20, new JS: section 6.
+ *
+ * Oct 2026 round 2: copy rewritten in plain words, new logo order (+ Mamta Medical College),
+ * new customer quotes, Jabalpur result card (replaces Lilavati), price band after the modules
+ * (section 5c), longer FAQ. New CSS: section 21-23.
  */
 
 defined('ABSPATH') || exit;
@@ -47,32 +51,27 @@ $ppc_head = isset( $ppc_headlines[ $ppc_lp ] )
 	: array( 'Hospital management software', 'Run your whole hospital on one system your staff will actually use' );
 
 /*
- * Logo strip. Order = biggest first. Only confirmed bed counts get a badge.
+ * Logo strip, printed in this order (sizes are mixed on purpose). Only confirmed bed counts get a badge.
  * Logos live in assets/ppc-hims/. If a logo fails to load (or 'logo' is empty), the tile shows the hospital name.
+ * A logo file with a lot of empty space around it: add 'zoom' => true (css: .lg-zoom).
  */
 $ppc_hospitals = array(
-	array( 'name' => 'Sri Manakula Vinayagar Medical College', 'place' => 'Puducherry', 'beds' => '1,100 beds', 'college' => true, 'logo' => $ppc_assets . '/shri-manakula-vinayak-medical-college.webp' ),
-	array( 'name' => 'Heritage Medical College', 'place' => 'Varanasi', 'beds' => '1,000 beds', 'college' => true, 'logo' => $ppc_assets . '/heritage-medical-college.webp' ),
-	array( 'name' => 'Jabalpur Hospital & Research Centre', 'place' => 'Jabalpur, MP', 'beds' => '350 beds', 'logo' => $ppc_assets . '/jabalpur-hospital-research-center.webp' ),
-	array( 'name' => 'Universal Hospital', 'place' => 'Surat', 'beds' => '250 beds', 'logo' => $ppc_assets . '/universal-hospital.webp' ),
 	array( 'name' => 'HZB Arogyam Multispeciality Hospital', 'place' => 'Hazaribagh, Jharkhand', 'beds' => '150 beds', 'logo' => $ppc_assets . '/hzb-arogyam-multispeciality-hospital.webp' ),
-	array( 'name' => 'Parivar Super Speciality Hospital', 'place' => 'Madhya Pradesh', 'beds' => '140 beds', 'logo' => $ppc_assets . '/parivar-super-speciality-hospital.webp' ),
-	array( 'name' => 'JJ Plus Hospitals', 'place' => '', 'beds' => '135 beds', 'logo' => $ppc_assets . '/jj-plus-hospitals.webp' ),
-	array( 'name' => 'Budha Baba Multispeciality Hospital', 'place' => 'Cuttack, Odisha', 'beds' => '130 beds', 'logo' => $ppc_assets . '/budha-baba-multispeciality-hospital.webp' ),
-	array( 'name' => 'PIMS Multi-Superspeciality Hospital', 'place' => 'Udaipur', 'beds' => '120 beds', 'logo' => $ppc_assets . '/pims-multi-superspeciality-hospital.webp' ),
-	array( 'name' => 'Prabh Aasra Charitable Hospital', 'place' => 'Punjab', 'beds' => '120 beds', 'logo' => $ppc_assets . '/prabh-aasra-charitable-hospital.webp' ),
-	array( 'name' => 'Jeevan Rekha Hospital', 'place' => 'West Bengal', 'beds' => '120 beds', 'logo' => $ppc_assets . '/jeevan-rekha-hospital.webp' ),
-	array( 'name' => 'Vibrant Hospital', 'place' => 'Vapi', 'beds' => '120 beds', 'logo' => $ppc_assets . '/vibrant-hospital.webp' ),
-	array( 'name' => 'Raj Jindal Hospital', 'place' => 'Bharatpur', 'beds' => '120 beds', 'logo' => $ppc_assets . '/raj-jindal-hospital.webp' ),
-	array( 'name' => 'Heritage Hospital', 'place' => 'Noida', 'beds' => '100 beds', 'logo' => $ppc_assets . '/heritage-hospital.webp' ),
-	array( 'name' => 'Jupiter Hospital Group', 'place' => 'Vadodara', 'beds' => '100 beds', 'logo' => $ppc_assets . '/jupiter-hospital-group.webp' ),
-	array( 'name' => 'Gastron Super Speciality Hospital', 'place' => 'Surat', 'beds' => '', 'logo' => 'https://healthray.com/wp-content/uploads/2024/06/Gastron.webp' ),
-	array( 'name' => 'Lilavati Hospital', 'place' => 'Ahmedabad', 'beds' => '', 'logo' => 'https://healthray.com/wp-content/uploads/2025/08/Lilavati-Hospital.webp' ),
-	array( 'name' => 'Oriental Lily Hospital', 'place' => 'Pune', 'beds' => '', 'logo' => 'https://healthray.com/wp-content/uploads/2024/04/Oriental-Lily-Hospital.webp' ),
-	array( 'name' => 'Shushrusha Hospital', 'place' => 'Navi Mumbai', 'beds' => '', 'logo' => 'https://healthray.com/wp-content/uploads/2024/06/Shushrusha-Hospital.webp' ),
-	array( 'name' => 'Tanvir Hospital', 'place' => 'Hyderabad', 'beds' => '', 'logo' => 'https://healthray.com/wp-content/uploads/2024/10/Tanvir-Hospital.webp' ),
-	array( 'name' => 'GM Hospital', 'place' => 'Mathura', 'beds' => '', 'logo' => 'https://healthray.com/wp-content/uploads/2024/09/GM-Hospital.webp' ),
+	array( 'name' => 'Vibrant Multispecialty Hospital', 'place' => 'Vapi', 'beds' => '120 beds', 'logo' => $ppc_assets . '/vibrant-hospital.webp' ),
 	array( 'name' => 'Shraddha Arogya Mandir', 'place' => 'Vapi', 'beds' => '', 'logo' => 'https://healthray.com/wp-content/uploads/2025/08/Shraddha-Arogya-Mandir.webp' ),
+	array( 'name' => 'Sri Manakula Vinayagar Medical College', 'place' => 'Puducherry', 'beds' => '1,100 beds', 'college' => true, 'logo' => $ppc_assets . '/shri-manakula-vinayak-medical-college.webp' ),
+	array( 'name' => 'Parivar Super Speciality Hospital', 'place' => 'Madhya Pradesh', 'beds' => '140 beds', 'logo' => $ppc_assets . '/parivar-super-speciality-hospital.webp' ),
+	array( 'name' => 'Jeevan Rekha Hospital', 'place' => 'West Bengal', 'beds' => '120 beds', 'logo' => $ppc_assets . '/jeevan-rekha-hospital.webp' ),
+	array( 'name' => 'Mamta Medical College & Hospital', 'place' => 'Siwan, Bihar', 'beds' => '670 beds', 'college' => true, 'logo' => $ppc_assets . '/mamta-medical-college-hospital.webp' ),
+	array( 'name' => 'Budha Baba Multispecialty Hospital', 'place' => 'Cuttack, Odisha', 'beds' => '130 beds', 'logo' => $ppc_assets . '/budha-baba-multispeciality-hospital.webp' ),
+	array( 'name' => 'Heritage Medical College', 'place' => 'Varanasi', 'beds' => '1,000 beds', 'college' => true, 'logo' => $ppc_assets . '/heritage-medical-college.webp' ),
+	array( 'name' => 'PIMS Multi-Superspeciality Hospital', 'place' => 'Udaipur', 'beds' => '120 beds', 'logo' => $ppc_assets . '/pims-multi-superspeciality-hospital.webp' ),
+	array( 'name' => 'JJ Plus Hospitals', 'place' => '', 'beds' => '135 beds', 'logo' => $ppc_assets . '/jj-plus-hospitals.webp' ),
+	array( 'name' => 'Jabalpur Hospital & Research Centre', 'place' => 'Jabalpur, MP', 'beds' => '350 beds', 'logo' => $ppc_assets . '/jabalpur-hospital-research-center.webp' ),
+	array( 'name' => 'Prabh Aasra Charitable Hospital', 'place' => 'Punjab', 'beds' => '120 beds', 'logo' => 'https://healthray.com/wp-content/uploads/2025/08/Prabh-Aasra-Unified-Family.webp' ),
+	array( 'name' => 'Heritage Hospital', 'place' => 'Noida', 'beds' => '100 beds', 'logo' => $ppc_assets . '/heritage-hospital.webp' ),
+	array( 'name' => 'Universal Hospital', 'place' => 'Surat', 'beds' => '250 beds', 'logo' => $ppc_assets . '/universal-hospital.webp' ),
+	array( 'name' => 'Jupiter Hospital Group', 'place' => 'Vadodara', 'beds' => '100 beds', 'logo' => $ppc_assets . '/jupiter-hospital-group.webp' ),
 );
 
 // Small inline icons (static markup, printed as is).
@@ -97,16 +96,16 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
       <div class="hero-copy">
         <p class="eyebrow"><?php echo esc_html($ppc_head[0]); ?></p>
         <h1><?php echo esc_html($ppc_head[1]); ?></h1>
-        <p class="hero-sub">OPD, IPD, billing, pharmacy, lab and TPA claims share one patient record. Most hospitals go
-          live in about two weeks, with old data moved over and every department trained.</p>
+        <p class="hero-sub">OPD, IPD, billing, pharmacy, lab and TPA claims in one software, on one patient file. Most hospitals start in 1 to
+          3 weeks, with old data moved and every department trained.</p>
         <?php // Phones only (the full proof block sits below the form there). ?>
-        <p class="mini-trust" aria-label="Rated 4.8, used by 2,500+ hospitals, NABH certified, ABDM compliant"><b>★ 4.8</b>
-          rating <i>·</i> <b>2,500+</b> hospitals <i>·</i> NABH <i>·</i> ABDM</p>
+        <p class="mini-trust" aria-label="Rated 4.8, used by 2,500+ hospitals and clinics, NABH certified, ABDM compliant"><b>★ 4.8</b>
+          rating <i>·</i> <b>2,500+</b> hospitals &amp; clinics <i>·</i> NABH <i>·</i> ABDM</p>
       </div>
 
       <div class="form-card" id="demo">
         <h2>Book a free demo</h2>
-        <p class="fc-sub">See Healthray set up for a hospital of your size, from registration to discharge.</p>
+        <p class="fc-sub">A free 30-minute demo, set up for your hospital's size and departments.</p>
         <?php echo do_shortcode('[contact-form-7 id="c8e3c0a" title="PPC Stepper Form"]'); ?>
       </div>
 
@@ -125,7 +124,7 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
             <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Arpit-gajjar-150x150.webp"
                 alt="Dr. Arpit Gajjar" width="44" height="44" data-fallback="AG"></span>
           </div>
-          <p><b>2,500+ hospitals and 5,000+ doctors</b> across India run on Healthray</p>
+          <p><b>2,500+ hospitals and clinics</b> across India run on Healthray</p>
         </div>
         <div class="trust-row">
           <div class="seals">
@@ -163,7 +162,7 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
             <?php foreach ($ppc_hospitals as $ppc_h) :
               $ppc_alt = $ppc_h['name'] . ($ppc_h['place'] ? ', ' . $ppc_h['place'] : ''); ?>
             <li>
-              <span class="lg-tile<?php echo $ppc_h['logo'] ? '' : ' noimg'; ?>">
+              <span class="lg-tile<?php echo $ppc_h['logo'] ? '' : ' noimg'; ?><?php echo empty($ppc_h['zoom']) ? '' : ' lg-zoom'; ?>">
                 <?php if ($ppc_h['logo']) : ?>
                 <img src="<?php echo esc_url($ppc_h['logo']); ?>" alt="<?php echo $ppc_copy ? '' : esc_attr($ppc_alt); ?>" loading="lazy">
                 <?php endif; ?>
@@ -189,10 +188,9 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
   <section class="section tint walk" aria-labelledby="walkTitle">
     <div class="wrap">
       <div class="sec-head">
-        <p class="eyebrow">Watch the 1-minute walkthrough</p>
+        <p class="eyebrow">1-minute video</p>
         <h2 class="h2" id="walkTitle">See one patient go from registration to discharge in Healthray</h2>
-        <p class="lead">Front desk, doctor, admission, billing, insurance and discharge, shown with demo patient data.
-        </p>
+        <p class="lead">Reception, doctor, admission, billing, TPA and discharge. Sample patient, real software.</p>
       </div>
       <div class="player" id="player">
         <?php // Autoplays muted and loops on screen, pauses off screen; only control is the play/pause button (js/ppc-hims.js). ?>
@@ -216,7 +214,7 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
         </button>
       </div>
       <div class="walk-cta">
-        <p><b>Want to see this set up for your hospital?</b> We'll walk you through it on a call.</p>
+        <p><b>Want to see this set up for your hospital?</b> Get a free 30-minute demo with your own workflows.</p>
         <a class="btn btn-primary hr-cta-btn" href="#demo">Book a free demo</a>
       </div>
     </div>
@@ -232,27 +230,26 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
       <div class="fear">
         <div>
           <blockquote>
-            <p class="big-quote">The biggest concern for me was not the software itself, it was whether our staff would
-              actually use it properly. Once the workflows were set and the staff got used to it, the amount of
-              coordination between departments reduced a lot.</p>
+            <p class="big-quote">For us, buying the software was not the main concern. The real question was whether our
+              team would actually be able to use it in daily work… The Healthray team came to the hospital, trained the
+              staff on-site and showed each workflow in a simple way… Now the staff uses it comfortably in their own
+              roles.</p>
           </blockquote>
           <div class="q-by">
-            <span class="q-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16M15 9h4a1 1 0 0 1 1 1v11M3 21h18M8 8h3M8 12h3M8 16h3M11.5 6v4M9.5 8"
-                  stroke="#1B3C74" stroke-width="1.8" stroke-linecap="round" />
-              </svg></span>
-            <span><b>Hospital Administrator, Multispeciality Hospital</b><span class="verified"><svg width="12"
+            <span class="q-icon q-initials" aria-hidden="true">MP</span>
+            <span><b>Dr. Monil Parmar</b>Universal Superspeciality Hospital<br><span class="verified"><svg width="12"
                   height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="m5 12.5 4.5 4.5L19 7.5" stroke="#047857" stroke-width="3" stroke-linecap="round"
                     stroke-linejoin="round" />
                 </svg>Verified Healthray customer</span></span>
           </div>
           <div class="bbmh-note">
-            <p>"We battled constant operational issues, knew inefficiencies hurt us, but feared changing systems
-              handling patient data, billing and inventory."<br><span class="bbmh-by">Senior Administrator, BBMH
-                Hospital, Cuttack</span></p>
-            <p><b>BBMH went live in two weeks.</b> Their data was moved in one day, with zero downtime.</p>
+            <p>"We already had different systems and years of data, so switching was not something we wanted to do
+              casually… Healthray's team worked with us through the setup and configuration, and we were able to bring
+              the major workflows into one system."<br><span class="bbmh-by">CIO / IT Head, Multispecialty Hospital ·
+                Verified customer</span></p>
+            <p><b>Moving your old data and training your staff are part of every setup.</b> One department switches at a
+              time, so daily work doesn't stop.</p>
           </div>
         </div>
         <div class="reel-wrap">
@@ -282,7 +279,7 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
               </svg>
             </button>
           </div>
-          <p class="video-alt">"With Healthray, these departments are connected on the same patient record."</p>
+          <p class="video-alt">Universal Hospital, Surat: how Healthray streamlined their workflow.</p>
         </div>
       </div>
     </div>
@@ -292,8 +289,8 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
   <section class="section tint">
     <div class="wrap">
       <div class="sec-head">
-        <p class="eyebrow">Results from real hospitals</p>
-        <h2 class="h2">What changed after hospitals like yours switched</h2>
+        <p class="eyebrow">Results</p>
+        <h2 class="h2">Real results from hospitals like yours</h2>
       </div>
 
       <article class="case-main">
@@ -301,17 +298,17 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
           <img src="https://healthray.com/wp-content/uploads/2025/12/Budha-Baba-Multispecialty-Hospital-1.webp"
             alt="Budha Baba Multispecialty Hospital, Cuttack" loading="lazy">
           <span class="fb">Budha Baba Multispecialty Hospital</span>
-          <div class="bed-glass"><i><?php echo $ppc_icon_bed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></i><span><b>130 beds</b><small>Multispeciality · Cuttack, Odisha</small></span></div>
+          <div class="bed-glass"><i><?php echo $ppc_icon_bed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></i><span><b>130 beds</b><small>Multispecialty · Cuttack, Odisha</small></span></div>
         </div>
         <div class="case-body">
-          <p class="case-tag">Multispeciality hospital · Cuttack, Odisha</p>
-          <h3>BBMH Hospital moved from paper files and spreadsheets to one system in two weeks</h3>
-          <p>Patient records, billing and inventory were spread across paper, Excel and separate software. Doctors and
-            management had no clear view of what was pending.</p>
+          <p class="case-tag">Multispecialty hospital · Cuttack, Odisha</p>
+          <h3>BBMH Hospital moved from paper files and Excel to one software in two weeks</h3>
+          <p>Patient records, billing and inventory were spread across paper, Excel and separate software. Nobody had a
+            clear view of what was pending.</p>
           <div class="nums">
-            <div><b>35%</b><span>less administrative work</span></div>
+            <div><b>35%</b><span>less paperwork and admin work</span></div>
             <div><b>30%</b><span>faster billing and discharge</span></div>
-            <div><b>40%</b><span>fewer manual errors</span></div>
+            <div><b>40%</b><span>fewer mistakes</span></div>
           </div>
         </div>
       </article>
@@ -321,7 +318,8 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
           <div class="case-meta"><span class="case-tag">Vapi, Gujarat</span><span class="bed-pill"><?php echo $ppc_icon_bed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>120 beds</span></div>
           <span class="big">₹25 lakh</span>
           <h3>saved a year at Vibrant Multispecialty Hospital</h3>
-          <p>Billing time fell by 30% and errors by 40% after separate department software was replaced with one system.
+          <p>Billing got 30% faster and errors dropped 40% after they replaced separate software for each department
+            with one.
           </p>
           <div class="who"><span class="av"><img
                 src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Bhaumik-Rathore-150x150.webp" alt=""
@@ -331,23 +329,21 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
         <article class="case">
           <div class="case-meta"><span class="case-tag">Surat, Gujarat</span><span class="bed-pill"><?php echo $ppc_icon_bed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>250 beds</span></div>
           <span class="big">45%</span>
-          <h3>shorter patient wait times at Universal Hospitals</h3>
-          <p>With OPD, lab and pharmacy on the same record, patient satisfaction reached 92%.</p>
-          <div class="who"><span class="av"><img
-                src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Dipak-Viradia-150x150.webp" alt=""
-                loading="lazy" data-fallback="DV"></span><span><b>Dr. Dipak Viradia</b>Pulmonologist, Universal
-              Hospital</span></div>
+          <h3>shorter patient wait times at Universal Hospital</h3>
+          <p>OPD, lab and pharmacy now work from the same patient file. Patient satisfaction reached 92%.</p>
+          <div class="who"><span class="av" aria-hidden="true">DG</span><span><b>Divyesh Gandhi</b>Head of Operations,
+              Universal Hospital</span></div>
         </article>
         <article class="case">
-          <div class="case-meta"><span class="case-tag">Ahmedabad, Gujarat</span><?php // Add a bed pill when Lilavati's bed count is confirmed. ?></div>
-          <span class="big">40%</span>
-          <h3>faster diagnostic reporting at Lilavati Hospital</h3>
-          <p>Operating costs came down by 45%, and 70% of clinicians moved to the electronic record.</p>
-          <div class="who"><span class="av" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24"
-                fill="none">
-                <path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16M15 9h4a1 1 0 0 1 1 1v11M3 21h18" stroke="#1B3C74"
-                  stroke-width="1.8" stroke-linecap="round" />
-              </svg></span><span><b>Lilavati Hospital</b>Ahmedabad, Gujarat</span></div>
+          <div class="case-meta"><span class="case-tag">Jabalpur, Madhya Pradesh</span><span class="bed-pill"><?php echo $ppc_icon_bed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>350 beds</span></div>
+          <span class="big">60%</span>
+          <h3>more patients keeping their appointments at Jabalpur Hospital</h3>
+          <p>Workflow efficiency improved by 50%, and patient satisfaction reached 95% after scattered department data
+            moved into one system.</p>
+          <div class="who"><span class="av av-logo"><img
+                src="<?php echo esc_url($ppc_assets . '/jabalpur-hospital-research-center.webp'); ?>" alt=""
+                loading="lazy"><span class="fb">JH</span></span><span><b>Jabalpur Hospital &amp; Research Centre</b>"Healthray has given us complete patient
+              visibility." Senior Consultant</span></div>
         </article>
       </div>
       <p class="case-src">Figures from Healthray case studies published on healthray.com.</p>
@@ -361,8 +357,8 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">For your doctors</p>
-        <h2 class="h2">Made for doctors with a full OPD</h2>
-        <p class="lead">Everything a doctor needs for one patient is on one screen, so a consultation doesn't take longer
+        <h2 class="h2">Doctors see the full patient history on one screen, even in a busy OPD</h2>
+        <p class="lead">Old visits, reports, medicines and today's prescription in one place. A consultation takes no longer
           than writing on paper.</p>
       </div>
       <?php // Full width so it stays readable; phones get a zoomed-in crop. Numbers 1-3 on the image match the points below. ?>
@@ -371,7 +367,7 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
           <source media="(max-width: 720px)" srcset="<?php echo esc_url($ppc_assets . '/consult-mobile.webp'); ?>">
           <img src="<?php echo esc_url($ppc_assets . '/consult-desktop.webp'); ?>" width="2880" height="1800"
             loading="lazy" decoding="async"
-            alt="Healthray doctor consultation screen: patient Lakshmi Narayanan's past visits, ECG and reports on the left; today's prescription, lab orders and a cardiology template on the right">
+            alt="Healthray doctor consultation screen for patient Lakshmi Narayanan: today's prescription and lab orders on the left, previous visits with ECG and reports on the right, and a cardiology template at the top">
         </picture>
       </figure>
       <ol class="callouts">
@@ -380,19 +376,20 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
               asking staff to find the file.</span></div>
         </li>
         <li><span class="num" aria-hidden="true">2</span>
-          <div><b>Prescription and lab orders in the same place</b><span>Orders reach the pharmacy and lab directly and
-              post to the bill.</span></div>
+          <div><b>Prescription and lab orders in the same place</b><span>Medicines go to the pharmacy, tests go to the lab, and both are added to the
+              bill automatically.</span></div>
         </li>
         <li><span class="num" aria-hidden="true">3</span>
-          <div><b>Set up to your speciality's workflow</b><span>Templates and forms are configured for your departments,
-              not a generic clinic.</span></div>
+          <div><b>Set up for your speciality</b><span>Ready templates, like the cardiology one above, so doctors don't
+              type the same notes again.</span></div>
         </li>
       </ol>
       <figure class="doc-aside doc-wide">
-        <span class="av"><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Maharshi-Desai-150x150.webp"
-            alt="" loading="lazy" data-fallback="MD"></span>
-        <blockquote>"It's not about features for me, it just saves me from jumping between screens when the ICU is
-          already busy."<small>Dr. Maharshi Desai, Critical Care, Akshara Apollo CBCC Cancer Centre</small></blockquote>
+        <span class="av"><img src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Dipak-Viradia-150x150.webp"
+            alt="" loading="lazy" data-fallback="DV"></span>
+        <blockquote>"Morning OPD is usually very busy, so the system needs to be fast. I need old consultation, reports
+          and medicines quickly while seeing the patient. Healthray shows all this on one screen… so I don't have to ask
+          staff for old files."<small>Dr. Dipak Viradia, Pulmonologist, Universal Hospital</small></blockquote>
       </figure>
 
     </div>
@@ -402,10 +399,10 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
   <section class="section mm-sec" aria-labelledby="mmTitle">
     <div class="wrap mm-in">
       <div class="mm-copy">
-        <p class="eyebrow">Everything in one system</p>
-        <h2 class="h2" id="mmTitle">40+ modules. One login. One patient record.</h2>
-        <p class="mm-lead">Every screen your reception, doctors, nurses, pharmacy and billing staff will use, in one
-          software. They all share the same patient record, so nothing is typed twice.</p>
+        <p class="eyebrow">All departments</p>
+        <h2 class="h2" id="mmTitle">40+ modules for every department, in one software</h2>
+        <p class="mm-lead">Reception, doctors, nurses, pharmacy, lab and billing all work in the same software. Enter patient
+          details once, and every department sees them.</p>
         <p class="mm-works"><b>Also connects with</b> Tally, lab machines, PACS, WhatsApp and ABDM. Runs on cloud or your
           own server.</p>
         <a class="btn btn-primary hr-cta-btn mm-cta-desk" href="#demo">Book a free demo</a>
@@ -498,12 +495,34 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
     </div>
   </section>
 
+  <!-- 5c. PRICE: answers "what will it cost?" where the reader starts asking it, with a matching CTA -->
+  <section class="price-band" aria-labelledby="priceTitle">
+    <div class="wrap">
+      <div class="pb-card">
+        <div class="pb-copy">
+          <p class="eyebrow">Pricing</p>
+          <h2 id="priceTitle">What will Healthray cost for your hospital?</h2>
+          <p>There is no one fixed price. You pay for what your hospital needs, based on:</p>
+        </div>
+        <ul class="pb-factors">
+          <li><?php echo $ppc_icon_bed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>Number of beds</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>Departments you use</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.6-9 6 6 0 0 1 11.4 1.5A3.75 3.75 0 0 1 17.5 18z"/></svg>Cloud or your own server</li>
+        </ul>
+        <div class="pb-cta">
+          <a class="btn btn-primary hr-cta-btn" href="#demo">Get a price for my hospital</a>
+          <small>Free, no obligation. A quote matched to your hospital's size.</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- 6. DOCTOR WALL: each quote answers one objection (support, customisation, visibility, no IT staff) -->
   <section class="section tint">
     <div class="wrap">
       <div class="sec-head">
-        <p class="eyebrow">In their own words</p>
-        <h2 class="h2">Doctors and hospital teams on life after the switch</h2>
+        <p class="eyebrow">Reviews</p>
+        <h2 class="h2">What doctors and hospital teams say about Healthray</h2>
       </div>
       <div class="wall">
         <blockquote class="card-q">
@@ -534,7 +553,7 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
             <p>"I can see the hospital activity much more clearly now, and it is easier to identify where something is
               pending instead of finding out at the end of the day."</p>
           </div>
-          <footer><span class="av" aria-hidden="true">HD</span><span><b>Hospital Director</b><small>Multispeciality
+          <footer><span class="av" aria-hidden="true">HD</span><span><b>Hospital Director</b><small>Multispecialty
                 Hospital, Gujarat · Verified customer</small></span></footer>
         </blockquote>
         <blockquote class="card-q">
@@ -551,18 +570,20 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
         <blockquote class="card-q">
           <div>
             <p class="topic">One system</p>
-            <p>"We were using different software for different departments earlier. Now patient records, billing,
-              pharmacy and inventory are all connected in one system."</p>
+            <p>"A surgical patient passes through many teams before going home… With Healthray, these departments are
+              connected on the same patient record, which has made the overall workflow smoother and reduced confusion
+              for our team."</p>
           </div>
           <footer><span class="av"><img
-                src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Bhaumik-Rathore-150x150.webp" alt=""
-                loading="lazy" data-fallback="BR"></span><span><b>Dr. Bhaumik Rathore</b><small>Vibrant Multispecialty
-                Hospital</small></span></footer>
+                src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Vimal-Dhaduk-150x150.webp" alt=""
+                loading="lazy" data-fallback="VD"></span><span><b>Dr. Vimal Dhaduk</b><small>Gastrointestinal Surgeon,
+                VR Group of Hospitals</small></span></footer>
         </blockquote>
         <blockquote class="card-q">
           <div>
             <p class="topic">Front desk</p>
-            <p>"The automated appointment reminders have been quite useful for our front desk."</p>
+            <p>"The automated appointment reminders have been quite useful for our front desk. It reduces a lot of
+              routine calling because patients are automatically reminded."</p>
           </div>
           <footer><span class="av"><img
                 src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Gautam-Beladiya-150x150.webp" alt=""
@@ -588,20 +609,20 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
   <section class="section">
     <div class="wrap">
       <div class="sec-head">
-        <p class="eyebrow">How the switch happens</p>
-        <h2 class="h2">Live in about two weeks, without stopping your billing counter</h2>
-        <p class="lead">One department at a time, so OPD and billing keep running while your team moves over.</p>
+        <p class="eyebrow">Switching to Healthray</p>
+        <h2 class="h2">Live in 1 to 3 weeks, without stopping your billing counter</h2>
+        <p class="lead">Even a 200-bed hospital usually goes live in one to three weeks. You switch one department at a
+          time, so OPD and billing keep running.</p>
       </div>
       <ol class="plan">
         <li>
           <div class="n"><b>1</b></div><small>Setup</small>
-          <h3>Configure and move your data</h3>
-          <p>Departments, tariffs, packages and bill formats are set up. Patient and stock data comes over from your
-            current software, usually in a day.</p>
+          <h3>Set up and move your data</h3>
+          <p>Departments, tariffs and bill formats are set up. Your old data moves over, usually in a day.</p>
         </li>
         <li>
           <div class="n"><b>2</b></div><small>Training</small>
-          <h3>Train every role</h3>
+          <h3>Train every department</h3>
           <p>Reception, nurses, pharmacy, billing and doctors practise on their own screens before anything goes live.
           </p>
         </li>
@@ -613,8 +634,8 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
         </li>
         <li>
           <div class="n"><b>4</b></div><small>After go-live</small>
-          <h3>Support that knows your setup</h3>
-          <p>Call or email during OPD hours and talk to someone who understands hospital workflows.</p>
+          <h3>24×7 support</h3>
+          <p>In English, Hindi or Gujarati, from a team that knows hospital work.</p>
         </li>
       </ol>
 
@@ -667,18 +688,33 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
         </details>
         <details name="ppc-faq">
           <summary>We already use another software. Will we lose our data?</summary>
-          <p>No. Patient, billing and stock data is moved from your current system during setup. At BBMH Hospital in
-            Cuttack, data migration took one day with zero downtime.</p>
+          <p>No. Moving your data is included in every setup. Patient, billing and stock records come over from your
+            current system before you go live. At BBMH Hospital in Cuttack, this took one day with zero downtime.</p>
         </details>
         <details name="ppc-faq">
-          <summary>Will our doctors and staff actually use it?</summary>
+          <summary>Is our patient data safe? Can we take it with us if we leave?</summary>
+          <p>Your hospital owns its data. You can export your records at any time, so you are never locked in. Data is
+            encrypted when stored and when sent, with automatic backups and disaster recovery. Healthray is ISO 27001
+            certified.</p>
+        </details>
+        <details name="ppc-faq">
+          <summary>Our staff isn't good with computers. Will they manage?</summary>
           <p>Every role is trained on its own screens before go-live, and departments switch one at a time. Doctors get
             templates set up for their speciality, so a consultation does not take longer than writing on paper.</p>
         </details>
         <details name="ppc-faq">
-          <summary>Can it be customised to how our hospital works?</summary>
+          <summary>Our hospital works differently. Can the software be changed for us?</summary>
           <p>Yes. Workflows, forms, bill formats and packages are configured for your departments and speciality during
             setup.</p>
+        </details>
+        <details name="ppc-faq">
+          <summary>What support do we get after go-live?</summary>
+          <p>24×7 support in English, Hindi, Gujarati and more, from a team that understands hospital workflows.</p>
+        </details>
+        <details name="ppc-faq">
+          <summary>Does it handle Ayushman Bharat (PMJAY) and TPA claims?</summary>
+          <p>Yes. PMJAY and other government scheme workflows are built into billing and claims, along with TPA and
+            insurance claims.</p>
         </details>
         <details name="ppc-faq">
           <summary>Is Healthray ABDM compliant and NABH ready?</summary>
@@ -686,9 +722,15 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
             NABH certified as healthcare software. Over 1 million ABHA IDs have been created through Healthray.</p>
         </details>
         <details name="ppc-faq">
+          <summary>We have more than one branch. Can all of them use Healthray?</summary>
+          <p>Yes. All branches run on one system with shared patient records. Each branch keeps its own tariffs,
+            medicine list, departments and reports.</p>
+        </details>
+        <details name="ppc-faq">
           <summary>What happens in the demo?</summary>
-          <p>A Healthray hospital specialist walks you through registration to discharge, billing, TPA claims and
-            reports, set up for a hospital of your size. It helps to bring your administrator or billing head.</p>
+          <p>A free, no-obligation 30-minute demo with a Healthray product specialist, using your own workflows. You'll
+            see registration to discharge, billing, TPA claims and reports, set up for a hospital of your size. It helps
+            to bring your administrator or billing head.</p>
         </details>
       </div>
       <aside class="ask">
@@ -703,8 +745,9 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
   <section class="final">
     <div class="wrap">
       <div>
-        <h2>See Healthray running a hospital like yours</h2>
-        <p>Tell us your bed count. We'll show you OPD, IPD, billing and pharmacy working the way your hospital works.
+        <h2>See how Healthray will work in your hospital</h2>
+        <p>Tell us your bed count. In 30 minutes, we'll show you OPD, IPD, billing and pharmacy set up the way your
+          hospital works.
         </p>
       </div>
       <div class="final-actions">

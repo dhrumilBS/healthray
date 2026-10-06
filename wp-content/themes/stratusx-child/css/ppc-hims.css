@@ -111,19 +111,32 @@ html { scroll-behavior: smooth; }
 	.ppc-hims .form-card { padding: 22px 18px; }
 }
 
+/* 17. Hero trust line: phones only, where the full proof block sits below the form */
+.ppc-hims .mini-trust { display: none; margin-top: 18px; font-size: 14px; color: #d3def3; align-items: center; flex-wrap: wrap; gap: 4px 6px; }
+.ppc-hims .mini-trust b { color: var(--white); font-weight: 800; }
+.ppc-hims .mini-trust b:first-child { color: #f0a93b; }
+.ppc-hims .mini-trust i { font-style: normal; color: var(--hero-accent); opacity: .7; }
+@media (max-width: 960px) {
+	.ppc-hims .mini-trust { display: flex; }
+}
+
 /* 5. Hospital logos marquee */
 
 /* 18. Logo strip with bed badges */
 .ppc-hims .logos { padding-block: 26px 24px; border-bottom: 1px solid var(--line); background: var(--white); }
 .ppc-hims .logos .lg-label { font-size: 13px; font-weight: 700; color: var(--muted); text-align: center; margin: 0 0 8px; }
 .ppc-hims .marquee { overflow: hidden; padding-top: 14px; /* room for the badges that sit on the tile edge */ -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
-.ppc-hims .marquee-track { display: flex; width: max-content; animation: logoscroll 90s linear infinite; }
+.ppc-hims .marquee-track { display: flex; width: max-content; animation: logoscroll 70s linear infinite; }
 .ppc-hims .marquee:hover .marquee-track { animation-play-state: paused; }
 .ppc-hims .logos ul { list-style: none; margin: 0; padding: 0 24px 0 0; display: flex; align-items: center; gap: 24px; flex: none; }
 .ppc-hims .logos li { position: relative; height: auto; display: block; flex: none; }
-.ppc-hims .lg-tile { width: 190px; height: 86px; padding: 0 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--white); display: grid; place-items: center; text-align: center; transition: border-color .2s, box-shadow .2s; }
+.ppc-hims .lg-tile { width: 200px; height: 94px; padding: 0 12px; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: var(--white); display: grid; place-items: center; text-align: center; transition: border-color .2s, box-shadow .2s; }
 .ppc-hims .logos li:hover .lg-tile { border-color: var(--line-blue); box-shadow: 0 8px 20px rgba(27, 60, 116, .08); }
-.ppc-hims .lg-tile img { height: 40px; width: auto; max-width: 150px; object-fit: contain; display: block; }
+/* Every logo gets the same box and fills it as far as its shape allows:
+   wide logos use the full width, square or tall logos use the full height. */
+.ppc-hims .lg-tile img { width: 168px; height: 62px; max-width: none; object-fit: contain; display: block; }
+/* For a logo file with a lot of empty space around it: add "zoom" => true in the PHP list. */
+.ppc-hims .lg-tile.lg-zoom img { transform: scale(1.3); }
 .ppc-hims .lg-name { display: none; }
 .ppc-hims .lg-tile.noimg img { display: none; }
 .ppc-hims .lg-tile.noimg .lg-name { display: block; }
@@ -142,10 +155,10 @@ html { scroll-behavior: smooth; }
 	.ppc-hims .logos { padding-block: 22px 18px; }
 	.ppc-hims .logos .wrap { padding-inline: 0; }
 	.ppc-hims .logos ul { gap: 18px; }
-	.ppc-hims .lg-tile { width: 172px; height: 80px; }
-	.ppc-hims .lg-tile img { height: 34px; max-width: 124px; }
+	.ppc-hims .lg-tile { width: 176px; height: 84px; }
+	.ppc-hims .lg-tile img { width: 150px; height: 54px; }
 	.ppc-hims .lg-name b { font-size: 12px; }
-	.ppc-hims .marquee-track { animation-duration: 70s; }
+	.ppc-hims .marquee-track { animation-duration: 52s; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -161,6 +174,7 @@ html { scroll-behavior: smooth; }
 .ppc-hims .q-by { display: flex; align-items: center; gap: 12px; margin-top: 22px; font-size: 14px; }
 .ppc-hims .q-by b { display: block; color: var(--navy); font-size: 15px; }
 .ppc-hims .q-icon { width: 44px; height: 44px; border-radius: 50%; background: var(--tint); display: grid; place-items: center; flex: none; }
+.ppc-hims .q-initials { font-size: 14px; font-weight: 800; color: var(--navy); }
 .ppc-hims .verified { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--green-ink); }
 .ppc-hims .bbmh-note { margin-top: 30px; padding: 20px 22px; border-left: 3px solid var(--navy); background: var(--wash); border-radius: 0 var(--r) var(--r) 0; }
 .ppc-hims .bbmh-note p { font-size: 16px; color: var(--ink-2); }
@@ -213,6 +227,9 @@ html { scroll-behavior: smooth; }
 .ppc-hims .av { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; flex: none; background: var(--tint); display: grid; place-items: center; font-weight: 800; font-size: 13px; color: var(--navy); }
 .ppc-hims .av img { width: 100%; height: 100%; object-fit: cover; }
 .ppc-hims .case-src { font-size: 13px; color: var(--muted); margin-top: 16px; }
+/* 22. Logo box in a result card byline (wide logos do not fit a round avatar) */
+.ppc-hims .av.av-logo { width: 64px; height: 40px; border-radius: 8px; padding: 4px 6px; background: var(--white); border: 1px solid var(--line); }
+.ppc-hims .av.av-logo img { object-fit: contain; }
 @media (max-width: 900px) {
 	.ppc-hims .case-main { grid-template-columns: minmax(0, 1fr); }
 	.ppc-hims .case-photo { min-height: 220px; }
@@ -307,6 +324,28 @@ html { scroll-behavior: smooth; }
 
 @media (max-width: 600px) {
 	.ppc-hims .mm-menu { padding: 10px 6px 0; }
+}
+
+/* 21. Price band: answers "what will it cost?" right after the modules */
+.ppc-hims .price-band { padding-block: 8px 76px; }
+.ppc-hims .pb-card { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) auto; gap: 28px 40px; align-items: center; padding: 30px 32px; border: 1px solid var(--line-blue); border-radius: var(--r-card); background: var(--wash); }
+.ppc-hims .pb-copy h2 { font-size: clamp(22px, 2.4vw, 27px); font-weight: 800; margin-top: 8px; }
+.ppc-hims .pb-copy p:not(.eyebrow) { font-size: 15.5px; margin-top: 8px; }
+.ppc-hims .pb-factors { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.ppc-hims .pb-factors li { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; color: var(--navy); background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+.ppc-hims .pb-factors svg { width: 18px; height: 18px; color: var(--blue); flex: none; }
+.ppc-hims .pb-cta { display: grid; gap: 10px; justify-items: center; text-align: center; max-width: 290px; }
+.ppc-hims .pb-cta .btn { white-space: nowrap; }
+.ppc-hims .pb-cta small { font-size: 13px; color: var(--muted); line-height: 1.45; }
+@media (max-width: 1024px) {
+	.ppc-hims .pb-card { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+	.ppc-hims .pb-cta { grid-column: 1 / -1; max-width: none; grid-template-columns: auto minmax(0, 1fr); justify-items: start; text-align: left; align-items: center; }
+}
+
+@media (max-width: 720px) {
+	.ppc-hims .price-band { padding-block: 0 56px; }
+	.ppc-hims .pb-card { grid-template-columns: minmax(0, 1fr); padding: 24px 20px; gap: 18px; }
+	.ppc-hims .pb-cta { grid-template-columns: minmax(0, 1fr); justify-items: stretch; text-align: center; }
 }
 
 /* 9. Doctor wall (grid on desktop, carousel <= 1024px) */
@@ -405,6 +444,14 @@ html { scroll-behavior: smooth; }
 .ppc-hims .foot a { color: var(--muted); }
 @media (min-width: 768px) {
 	.ppc-hims .foot { padding-block: 24px; }
+}
+
+/* 23. Footer on phones: keep "Privacy policy" clear of the fixed "Book a free demo" bar.
+   The bar grows by the iPhone home-bar area (safe-area), so the footer space grows with it. */
+@media (max-width: 767px) {
+	.ppc-hims .foot { padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
+	.ppc-hims .foot .wrap { flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+	.ppc-hims .foot a { display: inline-block; padding: 8px 6px; font-weight: 700; }
 }
 
 .ppc-hims .mbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; background: var(--white); border-top: 1px solid var(--line); box-shadow: 0 -6px 20px rgba(15, 23, 42, .08); padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px)); display: none; grid-template-columns: 1fr; gap: 8px; transition: transform .25s; }
