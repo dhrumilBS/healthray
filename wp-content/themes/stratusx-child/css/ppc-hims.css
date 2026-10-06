@@ -546,8 +546,15 @@ html {
 	animation: logoscroll 70s linear infinite;
 }
 
-.ppc-hims .marquee:hover .marquee-track {
-	animation-play-state: paused;
+.grecaptcha-badge {
+	display: none;
+}
+
+/* Pause on hover only from 768px up: on phones a tap leaves a "sticky" hover that would stop the strip */
+@media (min-width: 768px) {
+	.ppc-hims .marquee:hover .marquee-track {
+		animation-play-state: paused;
+	}
 }
 
 .ppc-hims .logos ul {
@@ -581,9 +588,11 @@ html {
 	transition: border-color .2s, box-shadow .2s;
 }
 
-.ppc-hims .logos li:hover .lg-tile {
-	border-color: var(--line-blue);
-	box-shadow: 0 8px 20px rgba(27, 60, 116, .08);
+@media (min-width: 768px) {
+	.ppc-hims .logos li:hover .lg-tile {
+		border-color: var(--line-blue);
+		box-shadow: 0 8px 20px rgba(27, 60, 116, .08);
+	}
 }
 
 /* Every logo gets the same box and fills it as far as its shape allows:
