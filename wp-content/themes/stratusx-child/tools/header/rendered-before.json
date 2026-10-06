@@ -1,0 +1,600 @@
+﻿{
+    "generated": "2026-09-01T09:06:34+00:00",
+    "url": "http://localhost/healthray/",
+    "link_count": 68,
+    "unique_hrefs": 53,
+    "image_count": 38,
+    "svg_count": 10,
+    "top_level": [
+        {
+            "id": "mega-menu-item-24050",
+            "classes": "mega-menu-item mega-menu-item-type-custom mega-menu-item-object-custom mega-menu-item-has-children mega-menu-megamenu mega-align-bottom-left mega-menu-item-24050",
+            "label": "Healthray Products",
+            "href": "#"
+        },
+        {
+            "id": "mega-menu-item-27347",
+            "classes": "mega-menu-item mega-menu-item-type-custom mega-menu-item-object-custom mega-menu-item-has-children mega-menu-megamenu mega-align-bottom-left mega-menu-item-27347",
+            "label": "Speciality",
+            "href": "#"
+        },
+        {
+            "id": "mega-menu-item-66508",
+            "classes": "mega-menu-item mega-menu-item-type-custom mega-menu-item-object-custom mega-menu-item-has-children mega-menu-megamenu mega-align-bottom-left mega-menu-item-66508",
+            "label": "ABHA",
+            "href": "#"
+        },
+        {
+            "id": "mega-menu-item-66373",
+            "classes": "mega-menu-item mega-menu-item-type-custom mega-menu-item-object-custom mega-menu-item-has-children mega-menu-megamenu mega-align-bottom-left mega-menu-item-66373",
+            "label": "Resources",
+            "href": "#"
+        },
+        {
+            "id": "mega-menu-item-1162",
+            "classes": "mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-page mega-menu-item-1162",
+            "label": "Contact",
+            "href": "http://192.168.0.223/healthray/contact/"
+        },
+        {
+            "id": "mega-menu-item-1169",
+            "classes": "mega-menu-btn-contact mega-hr-cta-btn mega-menu-item mega-menu-item-type-custom mega-menu-item-object-custom mega-menu-item-1169 menu-btn-contact hr-cta-btn",
+            "label": "Book A Demo",
+            "href": "#"
+        }
+    ],
+    "links": [
+        {
+            "label": "",
+            "href": "",
+            "target": "",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "",
+            "href": "",
+            "target": "",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "",
+            "href": "",
+            "target": "",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "ABHA",
+            "href": "#",
+            "target": "",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "Book A Demo",
+            "href": "#",
+            "target": "",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "Community & Partners",
+            "href": "#",
+            "target": "",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "Healthray Products",
+            "href": "#",
+            "target": "",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "Learning Hub",
+            "href": "#",
+            "target": "",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "Media & Marketing",
+            "href": "#",
+            "target": "",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "Resources",
+            "href": "#",
+            "target": "",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "Speciality",
+            "href": "#",
+            "target": "",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "ABDM IndiaΓÇÖs digital health mission system",
+            "href": "http://192.168.0.223/healthray/abdm/",
+            "target": "",
+            "imgs": [
+                "abdm.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "ABHA Create and manage health IDs",
+            "href": "http://192.168.0.223/healthray/abha/",
+            "target": "",
+            "imgs": [
+                "abha.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Awards & Certifications Discover our industry recognitions and quality certifications across healthcare domains.",
+            "href": "http://192.168.0.223/healthray/awards/",
+            "target": "",
+            "imgs": [],
+            "svgs": 1
+        },
+        {
+            "label": "Become a Partner Collaborate with us to expand healthcare innovation and business opportunities.",
+            "href": "http://192.168.0.223/healthray/become-a-partner/",
+            "target": "",
+            "imgs": [],
+            "svgs": 1
+        },
+        {
+            "label": "Blogs Read insights, trends, and expert opinions on AI-driven healthcare innovation.",
+            "href": "http://192.168.0.223/healthray/blogs/",
+            "target": "",
+            "imgs": [],
+            "svgs": 1
+        },
+        {
+            "label": "Case Studies Explore real-world success stories of hospitals using our cloud-based HMS.",
+            "href": "http://192.168.0.223/healthray/case-studies/",
+            "target": "",
+            "imgs": [],
+            "svgs": 1
+        },
+        {
+            "label": "Clinic Management Software Robust healthcare solution for boosting clinical success and consultation journey",
+            "href": "http://192.168.0.223/healthray/clinic-management-software/",
+            "target": "",
+            "imgs": [
+                "Clinic-Management-Software.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Contact",
+            "href": "http://192.168.0.223/healthray/contact/",
+            "target": "",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "DHIS Health data information system",
+            "href": "http://192.168.0.223/healthray/dhis/",
+            "target": "",
+            "imgs": [
+                "dhis.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "EHR Software All-in-one EHR solution that manages data across multiple healthcare settings",
+            "href": "http://192.168.0.223/healthray/ehr-software/",
+            "target": "",
+            "imgs": [
+                "electronic-health-record.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Ayurveda Digitalize prakriti, panchakarma, and herbal treatment records",
+            "href": "http://192.168.0.223/healthray/emr-software-for-ayurveda/",
+            "target": "",
+            "imgs": [
+                "Ayurveda.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Cardiologist Top-rated solution for managing heart and blood vessel disease",
+            "href": "http://192.168.0.223/healthray/emr-software-for-cardiologist/",
+            "target": "",
+            "imgs": [
+                "Cardiologist.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Consultant Physicians DoctorΓÇÖs first choice for optimizing clinical outcomes",
+            "href": "http://192.168.0.223/healthray/emr-software-for-consultant-physicians/",
+            "target": "",
+            "imgs": [
+                "Consultant%20Physicians.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Dental Care Simplify charting, billing, and patient dental workflows",
+            "href": "http://192.168.0.223/healthray/emr-software-for-dental-care/",
+            "target": "",
+            "imgs": [
+                "Dental%20Care.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Dermatologist Comprehensive platform for improving skin health",
+            "href": "http://192.168.0.223/healthray/emr-software-for-dermatologist/",
+            "target": "",
+            "imgs": [
+                "Dermatologist.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Diabetologist Smart EMR for diabetes and insulin management",
+            "href": "http://192.168.0.223/healthray/emr-software-for-diabetologist/",
+            "target": "",
+            "imgs": [
+                "Diabetologist.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Endocrinologist Specifically for thyroid disorder, diabetes, and hormonal imbalances",
+            "href": "http://192.168.0.223/healthray/emr-software-for-endocrinologist/",
+            "target": "",
+            "imgs": [
+                "Endocrinologist.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "ENT Surgeon Complete workflow for audiology, diagnosis, and procedures",
+            "href": "http://192.168.0.223/healthray/emr-software-for-ent-surgeon/",
+            "target": "",
+            "imgs": [
+                "ENT%20Surgeon.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Family Medicine Intuitive EMR solution for improving family practice",
+            "href": "http://192.168.0.223/healthray/emr-software-for-family-medicine/",
+            "target": "",
+            "imgs": [
+                "Family%20Medicine.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Gastroenterologists Optimizing gastroenterologist practice from front desk to OT department",
+            "href": "http://192.168.0.223/healthray/emr-software-for-gastroenterologists/",
+            "target": "",
+            "imgs": [
+                "Gastroenterologists.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "General Medicine AI-powered EMR software for enhancing care and clinic efficiency",
+            "href": "http://192.168.0.223/healthray/emr-software-for-general-medicine/",
+            "target": "",
+            "imgs": [
+                "General%20Medicine.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "General Surgeon Unified surgical scheduling, documentation, and recovery tracking",
+            "href": "http://192.168.0.223/healthray/emr-software-for-general-surgeon/",
+            "target": "",
+            "imgs": [
+                "General%20Surgeon.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Gynaecologists Specialized solution for managing pregnancy, IVF treatment",
+            "href": "http://192.168.0.223/healthray/emr-software-for-gynaecologists/",
+            "target": "",
+            "imgs": [
+                "Gynaecologists.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Hematologist Manage blood tests, transfusions, and reports seamlessly",
+            "href": "http://192.168.0.223/healthray/emr-software-for-hematologist/",
+            "target": "",
+            "imgs": [
+                "Hematologist.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Homeopathy Organize repertory, prescriptions, and progress efficiently",
+            "href": "http://192.168.0.223/healthray/emr-software-for-homeopathy/",
+            "target": "",
+            "imgs": [
+                "Homeopathy.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Internal Medicine Manage chronic diseases, tests, and care continuity",
+            "href": "http://192.168.0.223/healthray/emr-software-for-internal-medicine/",
+            "target": "",
+            "imgs": [
+                "Internal%20Medicine.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Nephrologists Effective solution for kidney disorder and dialysis management",
+            "href": "http://192.168.0.223/healthray/emr-software-for-nephrologists/",
+            "target": "",
+            "imgs": [
+                "Nephrologists.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Neurologist Intuitive EMR platform for treating brain, spinal cord, and nerves disease",
+            "href": "http://192.168.0.223/healthray/emr-software-for-neurologist/",
+            "target": "",
+            "imgs": [
+                "Neurologist.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Neuropsychiatrists Combine therapy, medication, and neurology insights efficiently",
+            "href": "http://192.168.0.223/healthray/emr-software-for-neuropsychiatrists/",
+            "target": "",
+            "imgs": [
+                "Neuropsychiatrists.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Nutritionist Designed for nutritional management and effective meal planning",
+            "href": "http://192.168.0.223/healthray/emr-software-for-nutritionist/",
+            "target": "",
+            "imgs": [
+                "Nutritionist.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Oncologist Integrated cancer care management from chemo to follow-up",
+            "href": "http://192.168.0.223/healthray/emr-software-for-oncologist/",
+            "target": "",
+            "imgs": [
+                "Oncologist.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Ophthalmologist Connected vision charts, imaging, and prescriptions instantly",
+            "href": "http://192.168.0.223/healthray/emr-software-for-ophthalmologist/",
+            "target": "",
+            "imgs": [
+                "Ophthalmologist.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Orthopedics Simplifying the treatment of the musculoskeletal system",
+            "href": "http://192.168.0.223/healthray/emr-software-for-orthopedics/",
+            "target": "",
+            "imgs": [
+                "Orthopedics.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Osteopathy Structure assessments, treatments, and follow-ups clearly",
+            "href": "http://192.168.0.223/healthray/emr-software-for-osteopathy/",
+            "target": "",
+            "imgs": [
+                "Osteopathy.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Pediatric Integrate growth charts, vaccinations, and follow-up care",
+            "href": "http://192.168.0.223/healthray/emr-software-for-pediatric/",
+            "target": "",
+            "imgs": [
+                "Pediatric.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Pulmonologists Specifically built for advancing pulmonologist practice",
+            "href": "http://192.168.0.223/healthray/emr-software-for-pulmonologists/",
+            "target": "",
+            "imgs": [
+                "Pulmonologists.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Rheumatologist Smart EMR for joint care and autoimmune management",
+            "href": "http://192.168.0.223/healthray/emr-software-for-rheumatologist/",
+            "target": "",
+            "imgs": [
+                "Rheumatologist.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Urologist Streamlined EMR for diagnostics, imaging, and procedures",
+            "href": "http://192.168.0.223/healthray/emr-software-for-urologist/",
+            "target": "",
+            "imgs": [
+                "Urologist.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "EMR Software Intuitive EMR Solution that boosts practice efficiency and empowers clinicians",
+            "href": "http://192.168.0.223/healthray/emr-software/",
+            "target": "",
+            "imgs": [
+                "electronic-medical-record.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Events Stay updated on upcoming medical expos, webinars, and Healthray-hosted events.",
+            "href": "http://192.168.0.223/healthray/events/",
+            "target": "",
+            "imgs": [],
+            "svgs": 1
+        },
+        {
+            "label": "FAQs Find answers to commonly asked questions about our platform and services.",
+            "href": "http://192.168.0.223/healthray/faqs/",
+            "target": "",
+            "imgs": [],
+            "svgs": 1
+        },
+        {
+            "label": "Hospital Information Management System AI-Powered Healthcare Solution that automates workflows and enhances patient care",
+            "href": "http://192.168.0.223/healthray/hospital-information-management-system/",
+            "target": "",
+            "imgs": [
+                "hospital-information-management-system.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Laboratory Information Management System Administer lab operations from sample management to regulatory compliance",
+            "href": "http://192.168.0.223/healthray/laboratory-information-management-system/",
+            "target": "",
+            "imgs": [
+                "laboratory-information.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Our Story Discover the vision, journey, and purpose driving HealthrayΓÇÖs healthcare transformation.",
+            "href": "http://192.168.0.223/healthray/our-story/",
+            "target": "",
+            "imgs": [],
+            "svgs": 1
+        },
+        {
+            "label": "Brochure Get downloadable brochures with in-depth information about our products and features.",
+            "href": "http://192.168.0.223/healthray/pdf/Healthray.pdf",
+            "target": "",
+            "imgs": [],
+            "svgs": 1
+        },
+        {
+            "label": "Pharmacy Management System Simplifying pharmacy operations that enhances accuracy and reduces costs",
+            "href": "http://192.168.0.223/healthray/pharmacy-management-system/",
+            "target": "",
+            "imgs": [
+                "pharmacy-management.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "PMJAY Affordable health coverage scheme",
+            "href": "http://192.168.0.223/healthray/pmjay/",
+            "target": "",
+            "imgs": [
+                "pmjay.svg"
+            ],
+            "svgs": 0
+        },
+        {
+            "label": "Reviews Read firsthand experiences from healthcare professionals and clients.",
+            "href": "http://192.168.0.223/healthray/reviews/",
+            "target": "",
+            "imgs": [],
+            "svgs": 1
+        },
+        {
+            "label": "Whitepaper Access detailed research papers and technical analyses from Healthray experts.",
+            "href": "http://192.168.0.223/healthray/whitepaper/",
+            "target": "",
+            "imgs": [],
+            "svgs": 1
+        },
+        {
+            "label": "Book A Demo",
+            "href": "https://calendly.com/healthray/healthray-technologies-lead-meeting",
+            "target": "_blank",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "Book A Demo",
+            "href": "https://calendly.com/healthray/healthray-technologies-lead-meeting",
+            "target": "_blank",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "Book A Demo",
+            "href": "https://calendly.com/healthray/healthray-technologies-lead-meeting",
+            "target": "_blank",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "Book A Demo",
+            "href": "https://calendly.com/healthray/healthray-technologies-lead-meeting",
+            "target": "_blank",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "Explore Products",
+            "href": "https://calendly.com/healthray/healthray-technologies-lead-meeting",
+            "target": "",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "Brochure",
+            "href": "https://healthray.com/pdf/Healthray.pdf",
+            "target": "_blank",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "Brochure",
+            "href": "https://healthray.com/pdf/Healthray.pdf",
+            "target": "_blank",
+            "imgs": [],
+            "svgs": 0
+        },
+        {
+            "label": "Brochure",
+            "href": "https://healthray.com/pdf/Healthray.pdf",
+            "target": "_blank",
+            "imgs": [],
+            "svgs": 0
+        }
+    ]
+}

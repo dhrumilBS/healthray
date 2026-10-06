@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <title>ABHA - Health ID Card</title>
+  <rect x="8" y="18" width="104" height="84" rx="8" fill="#ffffff" stroke="#1f6feb" stroke-width="4"/>
+  <rect x="18" y="28" width="34" height="24" rx="4" fill="#1f6feb"/>
+  <rect x="18" y="58" width="74" height="10" rx="3" fill="#e6f0ff"/>
+  <rect x="18" y="72" width="50" height="8" rx="3" fill="#e6f0ff"/>
+  <circle cx="88" cy="36" r="10" fill="#ffd166" stroke="#f9a826" stroke-width="2"/>
+  <path d="M78 48c6 6 14 6 20 0" fill="none" stroke="#0b2f5a" stroke-width="3" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,27 @@
+.clinic-landing .outcomes { background: var(--brand-deep); color: #fff; padding: 72px 0; }
+.clinic-landing .outcomes .eyebrow { color: var(--hr-hero-accent); }
+.clinic-landing .outcomes .eyebrow::before { background: var(--hr-hero-accent); }
+.clinic-landing .outcomes h2 { color: #fff; }
+.clinic-landing .outcomes .section-head p { color: var(--hr-hero-ink); }
+.clinic-landing .outcomes-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; margin-top: 8px; }
+.clinic-landing .outcome { border: 1px solid rgba(255, 255, 255, .14); border-radius: var(--radius); padding: 22px 14px; text-align: center; background: rgba(255, 255, 255, .04); }
+.clinic-landing .outcome b { display: block; font-family: var(--font-display); font-size: clamp(1.5rem, 2.4vw, 2rem); font-weight: 700; color: var(--hr-hero-success); }
+.clinic-landing .outcome b.down { color: var(--hr-hero-accent); }
+.clinic-landing .outcome span { font-size: .8rem; color: var(--hr-hero-ink); line-height: 1.35; display: block; margin-top: 4px; }
+.clinic-landing .outcomes-note { margin-top: 26px; font-size: .82rem; color: var(--hr-hero-muted); text-align: center; }
+@media (max-width: 980px) { .clinic-landing .outcomes-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 720px) { .clinic-landing .outcomes-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.clinic-landing .card .more { display: inline-block; margin-top: 12px; font-size: .85rem; font-weight: 600; color: var(--brand); }
+
+.clinic-landing .t-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.clinic-landing .t-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; display: flex; flex-direction: column; gap: 16px; }
+.clinic-landing .t-card blockquote { font-size: .94rem; color: var(--ink); line-height: 1.55; margin: 0; }
+.clinic-landing .t-card blockquote::before { content: "\201C"; font-family: var(--font-display); font-size: 2rem; color: var(--brand); display: block; line-height: .6; margin-bottom: 10px; }
+.clinic-landing .t-who { margin-top: auto; display: flex; align-items: center; gap: 11px; }
+.clinic-landing .t-who img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--brand-tint); flex: none; }
+.clinic-landing .t-who b { display: block; font-size: .88rem; }
+.clinic-landing .t-who span { font-size: .75rem; color: var(--ink-soft); }
+@media (max-width:980px){
+	.clinic-landing .t-grid { grid-template-columns: repeat(1, 1fr); }
+}

@@ -1,0 +1,63 @@
+
+===== PAGE 2 TABLE 1 =====
+ROW 0:  ||  ||  ||  ||  ||  ||  ||  || 
+ROW 1: CATEGO || RY || Healthray || KareXpert || SoftClinic GenX || Caresoft HIS || HaleMind ||  || Miracle HIS
+ROW 2: Best For ||  || Multi-speciality hospitals & hospital groups || Nursing homes, small to large & corporate hospitals || Clinics, nursing homes & small to large hospitals || Hospitals, medical colleges & multi-centre hospitals || Hospitals, medical colleges & clinics ||  || Hospitals, clinics & nursing homes
+ROW 3: Pricing ||  || Custom quote || Quote-based || Quote-based || ₹90,000 onwards || ₹4,999/mon ||  || Quote-based
+ROW 4: Migration & Impl || ementation || ✓ || ✗ || (Training) || ✓ || (Implementation) ||  || ✓
+ROW 5: India Readiness ||  || ✓ India-first workflows || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 6: Key Integrations ||  || HL7/FHIR + PACS/DICOM + lab + APIs + pharmacy + e-claims || HL7/FHIR/D ICOM + LIMS + RIS/PACS || Lab + instrument || PACS + lab || ✗ ||  || HL7/FHIR/DIC OM + PACS
+ROW 7: Deployment ||  || Cloud / on-premises / hybrid || Cloud || Cloud / on-premises || Cloud / on-premises || Cloud ||  || Cloud / on-premises / hybrid
+ROW 8: Ratings ||  || 4.8/5 || 4.2/5 || 4.4/5 || 4.7/5 || 4.7/5 ||  || 3.4/5
+ROW 9: Core Feature Cov || erage ||  ||  ||  ||  ||  ||  || 
+ROW 10: OPD / IPD Mana || gement || ✓ || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 11: Bed & Ward Man || agement || ✓ || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 12: Operation Theatr || e || ✓ || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 13: EMR / EHR ||  || ✓ || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 14: Pharmacy ||  || ✓ || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 15: Lab / LIMS ||  || ✓ || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 16: Billing ||  || ✓ || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 17:  ||  ||  ||  ||  ||  ||  ||  || 
+
+===== PAGE 3 TABLE 1 =====
+ROW 0:  ||  ||  ||  ||  ||  ||  ||  || 
+ROW 1: TPA / Insurance || Claims || ✓ || ✓ || (Insurance claims) || ✓ || ✗ ||  || ✓
+ROW 2: Compliance & In || teroperability ||  ||  ||  ||  ||  ||  || 
+ROW 3: ABDM / ABHA ||  || ✓ || (ABDM) || ✗ || (ABDM) || ✗ ||  || ✓
+ROW 4: PMJAY Support ||  || ✓ || ✗ || ✗ || ✗ || ✗ ||  || ✗
+ROW 5: NHCX Readiness ||  || ✓ || ✗ || ✗ || ✗ || ✗ ||  || ✗
+ROW 6: NABH-Related To || ols || ✓ || ✓ || ✗ || ✓ || ✗ ||  || ✓
+ROW 7: HL7 / FHIR ||  || ✓ || ✓ || ✗ || ✗ || ✗ ||  || ✓
+ROW 8: PACS / DICOM ||  || ✓ || ✓ || (Radiology) || (PACS) || ✗ ||  || ✓
+ROW 9: Lab-Instrument I || ntegration || ✓ || ✓ || ✓ || ✓ || ✗ ||  || ✓
+ROW 10: Implementation, || Migration & Support ||  ||  ||  ||  ||  ||  || 
+ROW 11: Typical Impleme Time || ntation || 7 days–3 weeks for larger hospitals || Not Stated || ✓ || Not Stated || Not Stated ||  || Not Stated
+ROW 12: Migration & Train || ing Support || ✓ || (Training) || (Training) || ✓ || ✗ ||  || ✓
+ROW 13: Offline-Tolerant || Workflows || ✗ || ✗ || ✗ || ✗ || ✗ ||  || ✗
+ROW 14: Support Model / || SLA || ✓ 24×7 || ✓ || (Chat) || ✓ 24×7 || ✓ ||  || ✓
+ROW 15: Post-Go-Live Sup || port || ✓ || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 16: Analytics & Repo || rting ||  ||  ||  ||  ||  ||  || 
+ROW 17: MIS Dashboards ||  || ✓ || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 18: Custom Reportin || g || ✓ || ✓ || ✓ || ✓ || (Configurable reports) ||  || ✓
+ROW 19: Smart / Predictiv || e Analytics || ✓ || ✓ || (Analytics) || (BI) || (Analytics) ||  || ✗
+ROW 20: AI & Automation ||  || ✓ || ✓ || ✓ || ✗ || ✗ ||  || ✗
+ROW 21: Platform Quality || & Security ||  ||  ||  ||  ||  ||  || 
+ROW 22: Encryption & Dat || a Protection || ✓ || ✓ || ✓ || ✓ || ✗ ||  || ✗
+ROW 23:  ||  ||  ||  ||  ||  ||  ||  || 
+
+===== PAGE 4 TABLE 1 =====
+ROW 0:  ||  ||  ||  ||  ||  ||  ||  || 
+ROW 1: Access Control & || Audit Trails || ✓ || ✓ || ✓ || ✓ || ✗ ||  || (RBAC)
+ROW 2: High Availability || & Backup || ✓ || ✓ || (Backup) || ✓ || ✗ ||  || (Backup)
+ROW 3: Disaster Recover || y || ✓ || ✗ || ✗ || ✓ || ✗ ||  || ✗
+ROW 4: Security Certifica Data Residency || tions / || (HIPPA + GDPR + ISO 27001 + CERT-In + SOC 2) || ✓ || (ISO) || (ISO 27001 + PCI DSS) || ✗ ||  || ✗
+ROW 5: Hospital Operati || ons & Add-Ons ||  ||  ||  ||  ||  ||  || 
+ROW 6: Central Stores & Procurement ||  || ✓ || ✓ || ✓ || ✓ || (Inventory) ||  || ✓
+ROW 7: Ambulance Mana || gement || ✓ || ✓ || ✗ || ✗ || ✗ ||  || ✗
+ROW 8: Housekeeping Ma || nagement || ✓ || ✓ || ✗ || ✓ || ✗ ||  || ✗
+ROW 9: Dietary Managem || ent || ✓ || ✓ || ✗ || ✓ || ✗ ||  || ✓
+ROW 10: Biomedical & Ass Management || et || ✓ || ✓ || ✗ || ✓ || ✗ ||  || ✓
+ROW 11: HR / Payroll / Du || ty Rosters || ✓ Built-In HRMS || ✗ || (HR) || (HR + Payroll) || (Staff) ||  || (HR/staff)
+ROW 12: Patient Communi || cation || ✓ SMS + WhatsApp + portal/apps || ✓ Alerts + patient portal/apps || ✓ SMS + patient portal || ✓ SMS + WhatsApp + email + patient portal || ✓ Patient portal + reminders ||  || ✓ SMS/email + patient portal + mobile apps
+ROW 13: Multi-Facility Sup || port || ✓ || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 14:  ||  ||  ||  ||  ||  ||  ||  || 

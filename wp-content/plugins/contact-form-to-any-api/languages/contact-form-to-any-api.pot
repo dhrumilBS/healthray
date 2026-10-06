@@ -1,0 +1,1357 @@
+# Contact Form to Any API WordPress Plugin
+# Copyright (C) 2025 Contact Form to API
+# This file is distributed under the same license as the Contact Form to Any API package.
+# Contact Form to API Team <support@contactformtoapi.com>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Contact Form to Any API\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-18 06:58+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Contact Form to Any API Team <support@contactformtoapi.com>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.7.2; wp-6.8\n"
+"X-Domain: contact-form-to-any-api"
+
+# array(
+# 'singular'  => __( 'cf7anyapi_logs', 'contact-form-to-any-api' ),     //singular name of the listed records
+# 'plural'    => __( 'cf7anyapi_logs', 'contact-form-to-any-api' ),   //plural name of the listed records
+
+msgid "cf7anyapi_logs"
+msgstr ""
+
+# $columns = array(
+# 'form_id' => __( 'Form Name', 'contact-form-to-any-api' ),
+# 'post_id' => __( 'API Name', 'contact-form-to-any-api' ),
+
+msgid "Form Name"
+msgstr ""
+
+# 'form_id' => __( 'Form Name', 'contact-form-to-any-api' ),
+# 'post_id' => __( 'API Name', 'contact-form-to-any-api' ),
+# 'form_data' => __( 'Submitted Data', 'contact-form-to-any-api' ),
+
+msgid "API Name"
+msgstr ""
+
+# 'post_id' => __( 'API Name', 'contact-form-to-any-api' ),
+# 'form_data' => __( 'Submitted Data', 'contact-form-to-any-api' ),
+# 'log' => __( 'API Response', 'contact-form-to-any-api' ),
+
+msgid "Submitted Data"
+msgstr ""
+
+# 'form_data' => __( 'Submitted Data', 'contact-form-to-any-api' ),
+# 'log' => __( 'API Response', 'contact-form-to-any-api' ),
+# 'created_date' => __( 'Created Date', 'contact-form-to-any-api' )
+
+msgid "API Response"
+msgstr ""
+
+# 'log' => __( 'API Response', 'contact-form-to-any-api' ),
+# 'created_date' => __( 'Created Date', 'contact-form-to-any-api' )
+# );
+
+msgid "Created Date"
+msgstr ""
+
+# <span><?php esc_html_e( 'Email Address', 'contact-form-to-any-api' ); ?></span>
+# <input type="email" name="selected-email" value="" placeholder="<?php esc_attr_e( 'Enter Email Address', 'contact-form-to-any-api' ); ?>">
+# </label>
+
+msgid "Enter Email Address"
+msgstr ""
+
+# <div class="cf7-any-api-modal-footer">
+# <input type="submit" class="button button-secondary" name="submit" value="<?php esc_attr_e( 'Submit &amp; Deactivate', 'contact-form-to-any-api' ); ?>">
+# <?php wp_nonce_field('cf7_any_api_action', 'cf7_any_api_nonce_field');?>
+
+msgid "Submit &amp; Deactivate"
+msgstr ""
+
+# <div class="cf7-any-api-modal-header">
+# <h4><?php esc_html_e( 'Quick Feedback', 'contact-form-to-any-api' ); ?></h4>
+# </div>
+
+msgid "Quick Feedback"
+msgstr ""
+
+# <div class="cf7-any-api-modal-body">
+# <h3><strong><?php esc_html_e( 'If you have a moment, please let us know why you are deactivating:', 'contact-form-to-any-api' ); ?></strong></h3>
+# <ul id="cf7-any-api-list">
+
+msgid "If you have a moment, please let us know why you are deactivating:"
+msgstr ""
+
+# <input type="radio" name="selected-reason" value="I found a better plugin.">
+# <span for="rad"><?php esc_html_e( 'I found a better plugin', 'contact-form-to-any-api' ); ?></span>
+# </label>
+
+msgid "I found a better plugin"
+msgstr ""
+
+# <input type="radio" name="selected-reason" value="This plugin does not work on my site.">
+# <span><?php esc_html_e( 'This plugin does not work on my site', 'contact-form-to-any-api' ); ?></span>
+# </label>
+
+msgid "This plugin does not work on my site"
+msgstr ""
+
+# <input type="radio" name="selected-reason" value="It's just temporary. I will be back soon.">
+# <span><?php esc_html_e( "It's just temporary. I will be back soon", 'contact-form-to-any-api' ); ?></span>
+# </label>
+
+msgid "It's just temporary. I will be back soon"
+msgstr ""
+
+# <input type="radio" name="selected-reason" value="I am finding it difficult to configure it as per my needs">
+# <span><?php esc_html_e( 'I am finding it difficult to configure it as per my needs', 'contact-form-to-any-api' ); ?></span>
+# </label>
+
+msgid "I am finding it difficult to configure it as per my needs"
+msgstr ""
+
+# <input type="radio" name="selected-reason" value="Design is outdated, difficult to navigate.">
+# <span><?php esc_html_e( 'Design is outdated, difficult to navigate', 'contact-form-to-any-api' ); ?></span>
+# </label>
+
+msgid "Design is outdated, difficult to navigate"
+msgstr ""
+
+# <input type="radio" name="selected-reason" value="It is not what I am looking for.">
+# <span><?php esc_html_e( 'It is not what I am looking for', 'contact-form-to-any-api' ); ?></span>
+# </label>
+
+msgid "It is not what I am looking for"
+msgstr ""
+
+# <input type="radio" name="selected-reason" value="__other_option__">
+# <span><?php esc_html_e( 'Other', 'contact-form-to-any-api' ); ?></span>
+# <textarea name="comment"></textarea>
+
+msgid "Other"
+msgstr ""
+
+# <label>
+# <span><?php esc_html_e( 'Email Address', 'contact-form-to-any-api' ); ?></span>
+# <input type="email" name="selected-email" value="" placeholder="<?php esc_attr_e( 'Enter Email Address', 'contact-form-to-any-api' ); ?>">
+
+msgid "Email Address"
+msgstr ""
+
+# <?php wp_nonce_field('cf7_any_api_action', 'cf7_any_api_nonce_field');?>
+# <a href="jQuery:;" class="button button-secondary button-close"><?php esc_html_e( 'Cancel', 'contact-form-to-any-api' ); ?></a>
+# </div>
+
+msgid "Cancel"
+msgstr ""
+
+# <ul>
+# <li><?php echo wp_kses_post(__( 'Click on <strong>Add New CF7 API</strong>.', 'contact-form-to-any-api' )); ?></li>
+# <li><?php echo wp_kses_post(__( 'Provide a suitable title for your API in the <strong>API Title</strong> field.', 'contact-form-to-any-api' )); ?></li>
+
+msgid "Click on <strong>Add New CF7 API</strong>."
+msgstr ""
+
+# <li><?php echo wp_kses_post(__( 'Click on <strong>Add New CF7 API</strong>.', 'contact-form-to-any-api' )); ?></li>
+# <li><?php echo wp_kses_post(__( 'Provide a suitable title for your API in the <strong>API Title</strong> field.', 'contact-form-to-any-api' )); ?></li>
+# </ul>
+
+msgid "Provide a suitable title for your API in the <strong>API Title</strong> field."
+msgstr ""
+
+# <ul>
+# <li><?php echo wp_kses_post(__( 'Input the URL for your CRM or API in the <strong>API URL</strong> field.', 'contact-form-to-any-api' )); ?></li>
+# <li><?php esc_html_e( 'Example:', 'contact-form-to-any-api' ); ?>
+
+msgid "Input the URL for your CRM or API in the <strong>API URL</strong> field."
+msgstr ""
+
+# <ul>
+# <li><?php echo wp_kses_post(__( 'Include the necessary headers for the API in the <strong>Header Request</strong> field. ', 'contact-form-to-any-api' )); ?><?php esc_html_e( 'Examples:', 'contact-form-to-any-api' ); ?></li>
+# <pre>
+
+msgid "Include the necessary headers for the API in the <strong>Header Request</strong> field. "
+msgstr ""
+
+# <?php echo wp_kses(
+# __( 'If your API requires a username and password, convert them to <strong>Base64</strong> format. You can use an online Base64 converter to achieve this.', 'contact-form-to-any-api' ),
+# array( 'strong' => array() )
+
+msgid "If your API requires a username and password, convert them to <strong>Base64</strong> format. You can use an online Base64 converter to achieve this."
+msgstr ""
+
+# <ul>
+# <li><?php echo wp_kses_post(__( 'Choose your input type: <strong>JSON</strong> or <strong>GET/POST</strong>.', 'contact-form-to-any-api' )); ?></li>
+# </ul>
+
+msgid "Choose your input type: <strong>JSON</strong> or <strong>GET/POST</strong>."
+msgstr ""
+
+# <ul>
+# <li><?php echo wp_kses_post(__( 'Specify the HTTP method your API uses: <strong>POST</strong> or <strong>GET</strong>.', 'contact-form-to-any-api' )); ?></li>
+# </ul>
+
+msgid "Specify the HTTP method your API uses: <strong>POST</strong> or <strong>GET</strong>."
+msgstr ""
+
+# <ol>
+# <li><?php echo wp_kses(__( 'After submitting data you can see your data in <b>Logs</b> tab.', 'contact-form-to-any-api' ), array('b' => array()) ); ?></li>
+# <li><?php esc_html_e( 'You can see your API logs and its data which is submitted by user', 'contact-form-to-any-api' ); ?></li>
+
+msgid "After submitting data you can see your data in <b>Logs</b> tab."
+msgstr ""
+
+# <li><?php esc_html_e( 'You can see your API logs and its data which is submitted by user', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo wp_kses(__( 'You can see your <b>API response too</b>.', 'contact-form-to-any-api' ), array('b' => array() ) ); ?></li>
+# <p><?php esc_html_e( 'Example: ', 'contact-form-to-any-api' ); ?></p><img src="<?php echo esc_url( plugin_dir_url( __DIR__ ).'images/logs.png' ); ?>" alt="logs list" style="height:100%; width:100%;">
+
+msgid "You can see your <b>API response too</b>."
+msgstr ""
+
+# <li><?php esc_html_e( 'Select the form and its data will display.', 'contact-form-to-any-api' ); ?></li>
+# <li> <?php echo wp_kses(__( 'You can download your data in <b>CSV</b>, <b>Excel</b>, <b>PDF</b> and also you can <b>Print</b> your data.', 'contact-form-to-any-api' ), array('b' => array() ) ); ?></li>
+# <p><?php esc_html_e( 'Example: ', 'contact-form-to-any-api' ); ?></p><img src="<?php echo esc_url( plugin_dir_url( __DIR__ ).'images/entries.png');?>" alt="entries list" style="height:100%; width:100%;">
+
+msgid "You can download your data in <b>CSV</b>, <b>Excel</b>, <b>PDF</b> and also you can <b>Print</b> your data."
+msgstr ""
+
+# 
+# <li><?php echo wp_kses(__( '<b>Nested JSON Format Required </b><a href="https://www.contactformtoapi.com/pricing/#pricing" class="cf7_to_any_api_doc_link" target="_blank"><strong>Pro Version</strong></a>', 'contact-form-to-any-api' ), array('b' => array(), 'a' => array('href' => array(), 'class' => array(), 'target' => array() ), 'strong' => array() ) ); ?></br>
+# <pre>
+
+msgid "<b>Nested JSON Format Required </b><a href=\"https://www.contactformtoapi.com/pricing/#pricing\" class=\"cf7_to_any_api_doc_link\" target=\"_blank\"><strong>Pro Version</strong></a>"
+msgstr ""
+
+# 
+# <h5 class="mt-5 mb-2"><?php echo wp_kses_post(__('<b>Your API has Nested or Multilevel format of JSON?</b>','contact-form-to-any-api'), array('b' => array())); ?></h5>
+# 
+
+msgid "<b>Your API has Nested or Multilevel format of JSON?</b>"
+msgstr ""
+
+# 
+# <h5><?php echo wp_kses(__('<b> Don\'t worry, our development team can customize our plugin as per your need.</b><p class="get_pro_version-btn"><a target="_blank" href="https://www.contactformtoapi.com/#contact_us">Click here to contact us</a></p>','contact-form-to-any-api'), array('b' => array(),'p' => array('class' => array()),'a' => array('href' => array(), 'target' => array()))); ?></h5>
+# </li>
+
+msgid "<b> Don't worry, our development team can customize our plugin as per your need.</b><p class=\"get_pro_version-btn\"><a target=\"_blank\" href=\"https://www.contactformtoapi.com/#contact_us\">Click here to contact us</a></p>"
+msgstr ""
+
+# <h5 class="tab-title"><?php esc_html_e( 'Contact Us', 'contact-form-to-any-api' ); ?></h5><br>
+# <h5><?php echo wp_kses(__( 'Email : <a href="mailto:support@contactformtoapi.com">support@contactformtoapi.com</a>', 'contact-form-to-any-api' ), array('a' => array('href' => array() ) ) ); ?></h5>
+# <p class="text-center"><?php echo wp_kses(__( 'Need Help with Plugin Integration ? <b><a target="_blank" href="https://www.contactformtoapi.com/#contact_us">Click to Connect us</a></b>', 'contact-form-to-any-api' ), array('b' => array(), 'a' => array('href' => array(), 'target' => array() ) ) ); ?></p>
+
+msgid "Email : <a href=\"mailto:support@contactformtoapi.com\">support@contactformtoapi.com</a>"
+msgstr ""
+
+# <h5><?php echo wp_kses(__( 'Email : <a href="mailto:support@contactformtoapi.com">support@contactformtoapi.com</a>', 'contact-form-to-any-api' ), array('a' => array('href' => array() ) ) ); ?></h5>
+# <p class="text-center"><?php echo wp_kses(__( 'Need Help with Plugin Integration ? <b><a target="_blank" href="https://www.contactformtoapi.com/#contact_us">Click to Connect us</a></b>', 'contact-form-to-any-api' ), array('b' => array(), 'a' => array('href' => array(), 'target' => array() ) ) ); ?></p>
+# </div>
+
+msgid "Need Help with Plugin Integration ? <b><a target=\"_blank\" href=\"https://www.contactformtoapi.com/#contact_us\">Click to Connect us</a></b>"
+msgstr ""
+
+# <div class="our-plugin-icon">
+# <img src="<?php echo esc_url( plugin_dir_url( __DIR__ ) . 'images/contact-form-to-any-api-icon.svg' ); ?>" alt="<?php echo esc_attr__( 'Plugin Icon', 'contact-form-to-any-api' ); ?>">
+# </div>
+
+msgid "Plugin Icon"
+msgstr ""
+
+# <div class="our-plugin-details">
+# <h4><?php echo esc_html__( 'Contact Form 7 to Any API PRO', 'contact-form-to-any-api' ); ?></h4>
+# <ul>
+
+msgid "Contact Form 7 to Any API PRO"
+msgstr ""
+
+# <ul>
+# <li><?php echo esc_html__( 'Support Multi Level or Any Format of JSON', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'Option to Choose when to send data to API – Before CF7 mail sent OR After mail sent', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Support Multi Level or Any Format of JSON"
+msgstr ""
+
+# <li><?php echo esc_html__( 'Support Multi Level or Any Format of JSON', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'Option to Choose when to send data to API – Before CF7 mail sent OR After mail sent', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'Compatible with Multiline files upload for contact form 7 Plugin', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Option to Choose when to send data to API – Before CF7 mail sent OR After mail sent"
+msgstr ""
+
+# <li><?php echo esc_html__( 'Option to Choose when to send data to API – Before CF7 mail sent OR After mail sent', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'Compatible with Multiline files upload for contact form 7 Plugin', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'File input supported – Uploaded file will convert into BASE64 and send to API', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Compatible with Multiline files upload for contact form 7 Plugin"
+msgstr ""
+
+# <li><?php echo esc_html__( 'Compatible with Multiline files upload for contact form 7 Plugin', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'File input supported – Uploaded file will convert into BASE64 and send to API', 'contact-form-to-any-api' ); ?></li>
+# </ul>
+
+msgid "File input supported – Uploaded file will convert into BASE64 and send to API"
+msgstr ""
+
+# </ul>
+# <span class="our-plugin-badge"><?php echo esc_html__( 'PRO', 'contact-form-to-any-api' ); ?></span>
+# <a target="_blank" href="<?php echo esc_url( 'https://www.contactformtoapi.com/pricing/' ); ?>">
+
+msgid "PRO"
+msgstr ""
+
+# <a target="_blank" href="<?php echo esc_url( 'https://www.contactformtoapi.com/pricing/' ); ?>">
+# <?php echo esc_html__( 'Get Now', 'contact-form-to-any-api' ); ?>
+# </a>
+
+msgid "Get Now"
+msgstr ""
+
+# <div class="our-plugin-details">
+# <h4><?php echo esc_html__( 'OAuth 2.0 Customization Addon for Contact Form 7 to Any API PRO', 'contact-form-to-any-api' ); ?></h4>
+# <ul>
+
+msgid "OAuth 2.0 Customization Addon for Contact Form 7 to Any API PRO"
+msgstr ""
+
+# <ul>
+# <li><?php echo esc_html__( 'OAuth 2.0 Authentication & Integration for Any API.', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'Dynamic Access and Refresh Tokens Update automatically based on expiration time.', 'contact-form-to-any-api' ); ?></li>
+
+msgid "OAuth 2.0 Authentication & Integration for Any API."
+msgstr ""
+
+# <li><?php echo esc_html__( 'OAuth 2.0 Authentication & Integration for Any API.', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'Dynamic Access and Refresh Tokens Update automatically based on expiration time.', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'JWT Token Integration with Any API.', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Dynamic Access and Refresh Tokens Update automatically based on expiration time."
+msgstr ""
+
+# <li><?php echo esc_html__( 'Dynamic Access and Refresh Tokens Update automatically based on expiration time.', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'JWT Token Integration with Any API.', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'Create a JSON file for each entry and upload it to an FTP server based on your required JSON payload or format.', 'contact-form-to-any-api' ); ?></li>
+
+msgid "JWT Token Integration with Any API."
+msgstr ""
+
+# <li><?php echo esc_html__( 'JWT Token Integration with Any API.', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'Create a JSON file for each entry and upload it to an FTP server based on your required JSON payload or format.', 'contact-form-to-any-api' ); ?></li>
+# </ul>
+
+msgid "Create a JSON file for each entry and upload it to an FTP server based on your required JSON payload or format."
+msgstr ""
+
+# </ul>
+# <span class="our-plugin-badge"><?php echo esc_html__( 'PRO Addon', 'contact-form-to-any-api' ); ?></span>
+# <a target="_blank" href="<?php echo esc_url( 'https://www.contactformtoapi.com/pricing/' ); ?>">
+
+msgid "PRO Addon"
+msgstr ""
+
+# <div class="our-plugin-details">
+# <h4><?php echo esc_html__( 'Connect WPForm to Any API', 'contact-form-to-any-api' ); ?></h4>
+# <ul>
+
+msgid "Connect WPForm to Any API"
+msgstr ""
+
+# <li><?php echo esc_html__( 'Send WPForm Leads to Remote API’s such as CRM and other Extrenal API using POST/GET' ); ?></li>
+# <li><?php echo esc_html__( 'Create unlimited connection with any API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'Supports Simple & Fixed Format of JSON', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Create unlimited connection with any API"
+msgstr ""
+
+# <li><?php echo esc_html__( 'Create unlimited connection with any API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'Supports Simple & Fixed Format of JSON', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'API Logs Management with submitted data and API response', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Supports Simple & Fixed Format of JSON"
+msgstr ""
+
+# <li><?php echo esc_html__( 'Supports Simple & Fixed Format of JSON', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo esc_html__( 'API Logs Management with submitted data and API response', 'contact-form-to-any-api' ); ?></li>
+# </ul>
+
+msgid "API Logs Management with submitted data and API response"
+msgstr ""
+
+# </ul>
+# <span class="our-plugin-badge"><?php echo esc_html__( 'Free', 'contact-form-to-any-api' ); ?></span>
+# <a target="_blank" href="<?php echo esc_url( 'https://wordpress.org/plugins/connect-wpform-to-any-api/' ); ?>">
+
+msgid "Free"
+msgstr ""
+
+# <a target="_blank" href="<?php echo esc_url( 'https://wordpress.org/plugins/connect-wpform-to-any-api/' ); ?>">
+# <?php echo esc_html__( 'Download Now', 'contact-form-to-any-api' ); ?>
+# </a>
+
+msgid "Download Now"
+msgstr ""
+
+# <div class="iframe-wrap embed-responsive embed-responsive-16by9">
+# <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/1K-JdXwDH_k" title="<?php esc_attr_e( 'YouTube video player', 'contact-form-to-any-api' ); ?>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+# </div>
+
+msgid "YouTube video player"
+msgstr ""
+
+# <div class="cf7anyapi_doc">
+# <h3><?php esc_html_e( 'CF7 To Any API Documentation', 'contact-form-to-any-api' ); ?></h3>
+# <div class="row">
+
+msgid "CF7 To Any API Documentation"
+msgstr ""
+
+# <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+# <a class="nav-link active tab-index-1" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"><div class="tab-index"></div><?php esc_html_e( 'How to configure', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-2" id="v-pills-video-tab" data-toggle="pill" href="#v-pills-video" role="tab" aria-controls="v-pills-video" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Video for configuration', 'contact-form-to-any-api' ); ?></a>
+
+msgid "How to configure"
+msgstr ""
+
+# <a class="nav-link active tab-index-1" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"><div class="tab-index"></div><?php esc_html_e( 'How to configure', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-2" id="v-pills-video-tab" data-toggle="pill" href="#v-pills-video" role="tab" aria-controls="v-pills-video" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Video for configuration', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-3" id="v-pills-logs-tab" data-toggle="pill" href="#v-pills-logs" role="tab" aria-controls="v-pills-logs" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Logs', 'contact-form-to-any-api' ); ?></a>
+
+msgid "Video for configuration"
+msgstr ""
+
+# <a class="nav-link tab-index-2" id="v-pills-video-tab" data-toggle="pill" href="#v-pills-video" role="tab" aria-controls="v-pills-video" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Video for configuration', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-3" id="v-pills-logs-tab" data-toggle="pill" href="#v-pills-logs" role="tab" aria-controls="v-pills-logs" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Logs', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-4" id="v-pills-entries-tab" data-toggle="pill" href="#v-pills-entries" role="tab" aria-controls="v-pills-entries" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Entries', 'contact-form-to-any-api' ); ?></a>
+
+msgid "Logs"
+msgstr ""
+
+# <a class="nav-link tab-index-3" id="v-pills-logs-tab" data-toggle="pill" href="#v-pills-logs" role="tab" aria-controls="v-pills-logs" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Logs', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-4" id="v-pills-entries-tab" data-toggle="pill" href="#v-pills-entries" role="tab" aria-controls="v-pills-entries" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Entries', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-5" id="v-pills-json-format-tab" data-toggle="pill" href="#v-pills-json-format" role="tab" aria-controls="v-pills-json-format" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Supported JSON Format', 'contact-form-to-any-api' ); ?></a>
+
+msgid "Entries"
+msgstr ""
+
+# <a class="nav-link tab-index-4" id="v-pills-entries-tab" data-toggle="pill" href="#v-pills-entries" role="tab" aria-controls="v-pills-entries" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Entries', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-5" id="v-pills-json-format-tab" data-toggle="pill" href="#v-pills-json-format" role="tab" aria-controls="v-pills-json-format" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Supported JSON Format', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-6" id="v-pills-cf7-hidden-field-tab" data-toggle="pill" href="#v-pills-cf7-hidden-field" role="tab" aria-controls="v-pills-cf7-hidden-field" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'CF7 Hidden Fields', 'contact-form-to-any-api' ); ?></a>
+
+msgid "Supported JSON Format"
+msgstr ""
+
+# <a class="nav-link tab-index-5" id="v-pills-json-format-tab" data-toggle="pill" href="#v-pills-json-format" role="tab" aria-controls="v-pills-json-format" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Supported JSON Format', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-6" id="v-pills-cf7-hidden-field-tab" data-toggle="pill" href="#v-pills-cf7-hidden-field" role="tab" aria-controls="v-pills-cf7-hidden-field" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'CF7 Hidden Fields', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-7" id="v-pills-pro-tab" data-toggle="pill" href="#v-pills-pro" role="tab" aria-controls="v-pills-pro" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Contact form to any API PRO', 'contact-form-to-any-api' ); ?></a>
+
+msgid "CF7 Hidden Fields"
+msgstr ""
+
+# <a class="nav-link tab-index-6" id="v-pills-cf7-hidden-field-tab" data-toggle="pill" href="#v-pills-cf7-hidden-field" role="tab" aria-controls="v-pills-cf7-hidden-field" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'CF7 Hidden Fields', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-7" id="v-pills-pro-tab" data-toggle="pill" href="#v-pills-pro" role="tab" aria-controls="v-pills-pro" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Contact form to any API PRO', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-8" id="v-pills-contact-us-tab" data-toggle="pill" href="#v-pills-contact-us" role="tab" aria-controls="v-pills-contact-us" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Contact Us', 'contact-form-to-any-api' ); ?></a>
+
+msgid "Contact form to any API PRO"
+msgstr ""
+
+# <a class="nav-link tab-index-7" id="v-pills-pro-tab" data-toggle="pill" href="#v-pills-pro" role="tab" aria-controls="v-pills-pro" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Contact form to any API PRO', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-8" id="v-pills-contact-us-tab" data-toggle="pill" href="#v-pills-contact-us" role="tab" aria-controls="v-pills-contact-us" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Contact Us', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-9" id="v-pills-other-plugins-tab" data-toggle="pill" href="#v-pills-other-plugins" role="tab" aria-controls="v-pills-other-plugins" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Our Other Plugins', 'contact-form-to-any-api' ); ?></a>
+
+msgid "Contact Us"
+msgstr ""
+
+# <a class="nav-link tab-index-8" id="v-pills-contact-us-tab" data-toggle="pill" href="#v-pills-contact-us" role="tab" aria-controls="v-pills-contact-us" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Contact Us', 'contact-form-to-any-api' ); ?></a>
+# <a class="nav-link tab-index-9" id="v-pills-other-plugins-tab" data-toggle="pill" href="#v-pills-other-plugins" role="tab" aria-controls="v-pills-other-plugins" aria-selected="false"><div class="tab-index"></div><?php esc_html_e( 'Our Other Plugins', 'contact-form-to-any-api' ); ?></a>
+# </div>
+
+msgid "Our Other Plugins"
+msgstr ""
+
+# <div class="tab-pane fade show active cf7anyapi_full_width" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+# <h5 class="tab-title"><?php esc_html_e( 'Guide to Adding a New CF7 API Integration', 'contact-form-to-any-api' ); ?></h5>
+# 
+
+msgid "Guide to Adding a New CF7 API Integration"
+msgstr ""
+
+# 
+# <h5 class="text-left"><?php esc_html_e( 'Steps to Configure the API:', 'contact-form-to-any-api' ); ?></h5>
+# 
+
+msgid "Steps to Configure the API:"
+msgstr ""
+
+# <li>
+# <strong><?php esc_html_e( 'Add a New CF7 API', 'contact-form-to-any-api' ); ?></strong>
+# <ul>
+
+msgid "Add a New CF7 API"
+msgstr ""
+
+# <li>
+# <strong><?php esc_html_e( 'Select the Form', 'contact-form-to-any-api' ); ?></strong>
+# <ul>
+
+msgid "Select the Form"
+msgstr ""
+
+# <ul>
+# <li><?php esc_html_e( 'Choose the Contact Form 7 form you want to connect with the API from the dropdown list.', 'contact-form-to-any-api' ); ?></li>
+# </ul>
+
+msgid "Choose the Contact Form 7 form you want to connect with the API from the dropdown list."
+msgstr ""
+
+# <li>
+# <strong><?php esc_html_e( 'Enter the API URL', 'contact-form-to-any-api' ); ?></strong>
+# <ul>
+
+msgid "Enter the API URL"
+msgstr ""
+
+# <li><?php echo wp_kses_post(__( 'Input the URL for your CRM or API in the <strong>API URL</strong> field.', 'contact-form-to-any-api' )); ?></li>
+# <li><?php esc_html_e( 'Example:', 'contact-form-to-any-api' ); ?>
+# <pre>
+
+msgid "Example:"
+msgstr ""
+
+# <pre>
+# <?php esc_html_e( 'https://api.mailbluster.com/api/leads/', 'contact-form-to-any-api' ); ?>
+# </pre>
+
+msgid "https://api.mailbluster.com/api/leads/"
+msgstr ""
+
+# <li>
+# <strong><?php esc_html_e( 'Add Header Requests', 'contact-form-to-any-api' ); ?></strong>
+# <ul>
+
+msgid "Add Header Requests"
+msgstr ""
+
+# <ul>
+# <li><?php echo wp_kses_post(__( 'Include the necessary headers for the API in the <strong>Header Request</strong> field. ', 'contact-form-to-any-api' )); ?><?php esc_html_e( 'Examples:', 'contact-form-to-any-api' ); ?></li>
+# <pre>
+
+msgid "Examples:"
+msgstr ""
+
+# <li>
+# <strong><?php esc_html_e( 'Authorization with Username and Password (Base64 Encoding)', 'contact-form-to-any-api' ); ?></strong>
+# <ul>
+
+msgid "Authorization with Username and Password (Base64 Encoding)"
+msgstr ""
+
+# <li>
+# <?php esc_html_e( 'Add the converted string in the header:', 'contact-form-to-any-api' ); ?>
+# <pre>
+
+msgid "Add the converted string in the header:"
+msgstr ""
+
+# <li>
+# <strong><?php esc_html_e( 'Select Input Type', 'contact-form-to-any-api' ); ?></strong>
+# <ul>
+
+msgid "Select Input Type"
+msgstr ""
+
+# <li>
+# <strong><?php esc_html_e( 'Select API Method', 'contact-form-to-any-api' ); ?></strong>
+# <ul>
+
+msgid "Select API Method"
+msgstr ""
+
+# <li>
+# <strong><?php esc_html_e( 'Map Fields', 'contact-form-to-any-api' ); ?></strong>
+# <ul>
+
+msgid "Map Fields"
+msgstr ""
+
+# <ul>
+# <li><?php esc_html_e( 'Map the form fields to the corresponding API keys provided by your API documentation.', 'contact-form-to-any-api' ); ?></li>
+# </ul>
+
+msgid "Map the form fields to the corresponding API keys provided by your API documentation."
+msgstr ""
+
+# <li>
+# <strong><?php esc_html_e( 'Save Configuration', 'contact-form-to-any-api' ); ?></strong>
+# <ul>
+
+msgid "Save Configuration"
+msgstr ""
+
+# <ul>
+# <li><?php esc_html_e( 'Click on', 'contact-form-to-any-api' ); ?> <strong><?php esc_html_e( 'Save', 'contact-form-to-any-api' ); ?></strong> <?php esc_html_e( 'to store your API configuration.', 'contact-form-to-any-api' ); ?></li>
+# </ul>
+
+msgid "Click on"
+msgstr ""
+
+# <ul>
+# <li><?php esc_html_e( 'Click on', 'contact-form-to-any-api' ); ?> <strong><?php esc_html_e( 'Save', 'contact-form-to-any-api' ); ?></strong> <?php esc_html_e( 'to store your API configuration.', 'contact-form-to-any-api' ); ?></li>
+# </ul>
+
+msgid "Save"
+msgstr ""
+
+# <ul>
+# <li><?php esc_html_e( 'Click on', 'contact-form-to-any-api' ); ?> <strong><?php esc_html_e( 'Save', 'contact-form-to-any-api' ); ?></strong> <?php esc_html_e( 'to store your API configuration.', 'contact-form-to-any-api' ); ?></li>
+# </ul>
+
+msgid "to store your API configuration."
+msgstr ""
+
+# 
+# <p><?php esc_html_e( 'By following these steps, you can successfully connect your Contact Form 7 forms to external APIs.', 'contact-form-to-any-api' ); ?></p>
+# 
+
+msgid "By following these steps, you can successfully connect your Contact Form 7 forms to external APIs."
+msgstr ""
+
+# <li><?php echo wp_kses(__( 'After submitting data you can see your data in <b>Logs</b> tab.', 'contact-form-to-any-api' ), array('b' => array()) ); ?></li>
+# <li><?php esc_html_e( 'You can see your API logs and its data which is submitted by user', 'contact-form-to-any-api' ); ?></li>
+# <li><?php echo wp_kses(__( 'You can see your <b>API response too</b>.', 'contact-form-to-any-api' ), array('b' => array() ) ); ?></li>
+
+msgid "You can see your API logs and its data which is submitted by user"
+msgstr ""
+
+# <li><?php echo wp_kses(__( 'You can see your <b>API response too</b>.', 'contact-form-to-any-api' ), array('b' => array() ) ); ?></li>
+# <p><?php esc_html_e( 'Example: ', 'contact-form-to-any-api' ); ?></p><img src="<?php echo esc_url( plugin_dir_url( __DIR__ ).'images/logs.png' ); ?>" alt="logs list" style="height:100%; width:100%;">
+# </ol>
+
+msgid "Example: "
+msgstr ""
+
+# <ol>
+# <li><?php esc_html_e( 'Select the form and its data will display.', 'contact-form-to-any-api' ); ?></li>
+# <li> <?php echo wp_kses(__( 'You can download your data in <b>CSV</b>, <b>Excel</b>, <b>PDF</b> and also you can <b>Print</b> your data.', 'contact-form-to-any-api' ), array('b' => array() ) ); ?></li>
+
+msgid "Select the form and its data will display."
+msgstr ""
+
+# <div class="tab-pane fade cf7anyapi_full_width" id="v-pills-json-format" role="tabpanel" aria-labelledby="v-pills-json-format-tab">
+# <h5 class="tab-title"><?php esc_html_e( 'Supported JSON format', 'contact-form-to-any-api' ); ?></h5>
+# <ol>
+
+msgid "Supported JSON format"
+msgstr ""
+
+# <ol>
+# <li><b><?php esc_html_e( 'Supported JSON format by Free Version', 'contact-form-to-any-api' ); ?></b></br>
+# 
+
+msgid "Supported JSON format by Free Version"
+msgstr ""
+
+# <div class="tab-pane fade cf7anyapi_full_width" id="v-pills-cf7-hidden-field" role="tabpanel" aria-labelledby="v-pills-cf7-hidden-field">
+# <h5 class="tab-title"><?php esc_html_e( 'How to use CF7 Hidden fields', 'contact-form-to-any-api' ); ?></h5><br>
+# <ul>
+
+msgid "How to use CF7 Hidden fields"
+msgstr ""
+
+# <ul>
+# <li><p class="pro_tab_description"><?php esc_html_e( 'Hidden field without value: ', 'contact-form-to-any-api' ); ?><strong>[hidden tracking-id]</strong></p></li>
+# <li><p class="pro_tab_description"><?php esc_html_e( 'Hidden field with Default value: ', 'contact-form-to-any-api' ); ?><strong>[hidden tracking-id default "12345"]</strong></p></li>
+
+msgid "Hidden field without value: "
+msgstr ""
+
+# <li><p class="pro_tab_description"><?php esc_html_e( 'Hidden field without value: ', 'contact-form-to-any-api' ); ?><strong>[hidden tracking-id]</strong></p></li>
+# <li><p class="pro_tab_description"><?php esc_html_e( 'Hidden field with Default value: ', 'contact-form-to-any-api' ); ?><strong>[hidden tracking-id default "12345"]</strong></p></li>
+# <li><p class="pro_tab_description"><?php esc_html_e( 'Hidden field with fix/static value: ', 'contact-form-to-any-api' ); ?><strong>[hidden tracking-id "12345"]</strong></p></li>
+
+msgid "Hidden field with Default value: "
+msgstr ""
+
+# <li><p class="pro_tab_description"><?php esc_html_e( 'Hidden field with Default value: ', 'contact-form-to-any-api' ); ?><strong>[hidden tracking-id default "12345"]</strong></p></li>
+# <li><p class="pro_tab_description"><?php esc_html_e( 'Hidden field with fix/static value: ', 'contact-form-to-any-api' ); ?><strong>[hidden tracking-id "12345"]</strong></p></li>
+# <li><p class="pro_tab_description"><?php esc_html_e( 'Hidden field is important part whenver we want to send data to API. Many API has parameter that need to send with static value in that case we can create hidden field and put static value and simply Map Hidden field with API mapping Key', 'contact-form-to-any-api' ); ?></p></li>
+
+msgid "Hidden field with fix/static value: "
+msgstr ""
+
+# <li><p class="pro_tab_description"><?php esc_html_e( 'Hidden field with fix/static value: ', 'contact-form-to-any-api' ); ?><strong>[hidden tracking-id "12345"]</strong></p></li>
+# <li><p class="pro_tab_description"><?php esc_html_e( 'Hidden field is important part whenver we want to send data to API. Many API has parameter that need to send with static value in that case we can create hidden field and put static value and simply Map Hidden field with API mapping Key', 'contact-form-to-any-api' ); ?></p></li>
+# </ul>
+
+msgid "Hidden field is important part whenver we want to send data to API. Many API has parameter that need to send with static value in that case we can create hidden field and put static value and simply Map Hidden field with API mapping Key"
+msgstr ""
+
+# <div class="tab-pane fade cf7anyapi_full_width" id="v-pills-video" role="tabpanel" aria-labelledby="v-pills-video-tab">
+# <h5 class="tab-title"><?php esc_html_e( 'CF7 to any API video tutorial', 'contact-form-to-any-api' ); ?></h5>
+# <div class="iframe-wrap embed-responsive embed-responsive-16by9">
+
+msgid "CF7 to any API video tutorial"
+msgstr ""
+
+# <div class="tab-pane fade cf7anyapi_full_width" id="v-pills-pro" role="tabpanel" aria-labelledby="v-pills-pro-tab">
+# <p class="pro_tab_description"><?php esc_html_e( 'Still not convinced? Here is the list of features that shows how Contact Form to Any API is the best plugin to connect any contact form with your CRM or any other third party services.', 'contact-form-to-any-api' ); ?></p>
+# <h5 class="pro_tab_title tab-title"><?php esc_html_e( 'Pro Version Features:', 'contact-form-to-any-api' ); ?></h5>
+
+msgid "Still not convinced? Here is the list of features that shows how Contact Form to Any API is the best plugin to connect any contact form with your CRM or any other third party services."
+msgstr ""
+
+# <p class="pro_tab_description"><?php esc_html_e( 'Still not convinced? Here is the list of features that shows how Contact Form to Any API is the best plugin to connect any contact form with your CRM or any other third party services.', 'contact-form-to-any-api' ); ?></p>
+# <h5 class="pro_tab_title tab-title"><?php esc_html_e( 'Pro Version Features:', 'contact-form-to-any-api' ); ?></h5>
+# <ul class="pro_feature_list">
+
+msgid "Pro Version Features:"
+msgstr ""
+
+# <li><?php esc_html_e( 'Support Multi Level or Any Format of JSON', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Send data to multiple API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'File input supported – Uploaded file will convert into BASE64 and send to API', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Send data to multiple API"
+msgstr ""
+
+# <li><?php esc_html_e( 'File input supported – Uploaded file will convert into BASE64 and send to API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Option to Choose when to send data to API – Before cf7 mail sent OR After mail sent', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Send attachments to any API', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Option to Choose when to send data to API – Before cf7 mail sent OR After mail sent"
+msgstr ""
+
+# <li><?php esc_html_e( 'Option to Choose when to send data to API – Before cf7 mail sent OR After mail sent', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Send attachments to any API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Option to choose Numerical Fields / Integer Fields', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Send attachments to any API"
+msgstr ""
+
+# <li><?php esc_html_e( 'Send attachments to any API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Option to choose Numerical Fields / Integer Fields', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Compatible with Multiline files upload for contact form 7 Plugin', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Option to choose Numerical Fields / Integer Fields"
+msgstr ""
+
+# <li><?php esc_html_e( 'Compatible with Multiline files upload for contact form 7 Plugin', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Priority Support', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Paid plugin customization support', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Priority Support"
+msgstr ""
+
+# <li><?php esc_html_e( 'Priority Support', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Paid plugin customization support', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Paid oauth 2.0 API Integration support', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Paid plugin customization support"
+msgstr ""
+
+# <li><?php esc_html_e( 'Paid plugin customization support', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Paid oauth 2.0 API Integration support', 'contact-form-to-any-api' ); ?></li>
+# </ul>
+
+msgid "Paid oauth 2.0 API Integration support"
+msgstr ""
+
+# 
+# <h5 class="pro_tab_title tab-title"><?php esc_html_e( 'Supported CRM/API:', 'contact-form-to-any-api' ); ?></h5>
+# <ul class="pro_crm_list">
+
+msgid "Supported CRM/API:"
+msgstr ""
+
+# <ul class="pro_crm_list">
+# <li><?php esc_html_e( 'Sage CRM', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Mailchimp', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Sage CRM"
+msgstr ""
+
+# <li><?php esc_html_e( 'Sage CRM', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Mailchimp', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Zapier', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Mailchimp"
+msgstr ""
+
+# <li><?php esc_html_e( 'Mailchimp', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Zapier', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Odoo CRM/ERP system', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Zapier"
+msgstr ""
+
+# <li><?php esc_html_e( 'Zapier', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Odoo CRM/ERP system', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'MailBluster', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Odoo CRM/ERP system"
+msgstr ""
+
+# <li><?php esc_html_e( 'Odoo CRM/ERP system', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'MailBluster', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Lead Post Api', 'contact-form-to-any-api' ); ?></li>
+
+msgid "MailBluster"
+msgstr ""
+
+# <li><?php esc_html_e( 'MailBluster', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Lead Post Api', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Pilot Solution', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Lead Post Api"
+msgstr ""
+
+# <li><?php esc_html_e( 'Lead Post Api', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Pilot Solution', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Virtuagym API', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Pilot Solution"
+msgstr ""
+
+# <li><?php esc_html_e( 'Pilot Solution', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Virtuagym API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Clio Grow', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Virtuagym API"
+msgstr ""
+
+# <li><?php esc_html_e( 'Virtuagym API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Clio Grow', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'OSTicket', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Clio Grow"
+msgstr ""
+
+# <li><?php esc_html_e( 'Clio Grow', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'OSTicket', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Samdock CRM', 'contact-form-to-any-api' ); ?></li>
+
+msgid "OSTicket"
+msgstr ""
+
+# <li><?php esc_html_e( 'OSTicket', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Samdock CRM', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'FRS Labs API', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Samdock CRM"
+msgstr ""
+
+# <li><?php esc_html_e( 'Samdock CRM', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'FRS Labs API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Mikrowisp', 'contact-form-to-any-api' ); ?></li>
+
+msgid "FRS Labs API"
+msgstr ""
+
+# <li><?php esc_html_e( 'FRS Labs API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Mikrowisp', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Network Worldfilia', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Mikrowisp"
+msgstr ""
+
+# <li><?php esc_html_e( 'Mikrowisp', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Network Worldfilia', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Hubspot', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Network Worldfilia"
+msgstr ""
+
+# <li><?php esc_html_e( 'Network Worldfilia', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Hubspot', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'GorillaDesk API', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Hubspot"
+msgstr ""
+
+# <li><?php esc_html_e( 'Hubspot', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'GorillaDesk API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Superoffice CRM', 'contact-form-to-any-api' ); ?></li>
+
+msgid "GorillaDesk API"
+msgstr ""
+
+# <li><?php esc_html_e( 'GorillaDesk API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Superoffice CRM', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Sembark API', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Superoffice CRM"
+msgstr ""
+
+# <li><?php esc_html_e( 'Superoffice CRM', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Sembark API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'SingleOps', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Sembark API"
+msgstr ""
+
+# <li><?php esc_html_e( 'Sembark API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'SingleOps', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Twilio WhatsApp', 'contact-form-to-any-api' ); ?></li>
+
+msgid "SingleOps"
+msgstr ""
+
+# <li><?php esc_html_e( 'SingleOps', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Twilio WhatsApp', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Kala CRM Israel', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Twilio WhatsApp"
+msgstr ""
+
+# <li><?php esc_html_e( 'Twilio WhatsApp', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Kala CRM Israel', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Personio', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Kala CRM Israel"
+msgstr ""
+
+# <li><?php esc_html_e( 'Kala CRM Israel', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Personio', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Lead Docket', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Personio"
+msgstr ""
+
+# <li><?php esc_html_e( 'Personio', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Lead Docket', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Fincenfetch', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Lead Docket"
+msgstr ""
+
+# <li><?php esc_html_e( 'Lead Docket', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Fincenfetch', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Jetbrains / Intellij Space API', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Fincenfetch"
+msgstr ""
+
+# <li><?php esc_html_e( 'Fincenfetch', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Jetbrains / Intellij Space API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Agendor API', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Jetbrains / Intellij Space API"
+msgstr ""
+
+# <li><?php esc_html_e( 'Jetbrains / Intellij Space API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Agendor API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Unlatch CRM', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Agendor API"
+msgstr ""
+
+# <li><?php esc_html_e( 'Agendor API', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Unlatch CRM', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'JobAdder', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Unlatch CRM"
+msgstr ""
+
+# <li><?php esc_html_e( 'Unlatch CRM', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'JobAdder', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Flowdesk', 'contact-form-to-any-api' ); ?></li>
+
+msgid "JobAdder"
+msgstr ""
+
+# <li><?php esc_html_e( 'JobAdder', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'Flowdesk', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'And many more', 'contact-form-to-any-api' ); ?></li>
+
+msgid "Flowdesk"
+msgstr ""
+
+# <li><?php esc_html_e( 'Flowdesk', 'contact-form-to-any-api' ); ?></li>
+# <li><?php esc_html_e( 'And many more', 'contact-form-to-any-api' ); ?></li>
+# </ul>
+
+msgid "And many more"
+msgstr ""
+
+# 
+# <p class="get_pro_version-btn text-center"><a href="https://www.contactformtoapi.com/pricing/#pricing" target="_blank"><?php esc_html_e( 'Get Pro Version', 'contact-form-to-any-api' ); ?></a></p>
+# </div>
+
+msgid "Get Pro Version"
+msgstr ""
+
+# printf(
+# esc_html__('Supports only a fixed format of JSON. Requires the %1$sPRO Version%2$s for Nested or Multi Level JSON', 'contact-form-to-any-api'),
+# '<a href="' . esc_url('https://contactformtoapi.com/pricing/') . '" target="_blank">',
+
+msgid "Supports only a fixed format of JSON. Requires the %1$sPRO Version%2$s for Nested or Multi Level JSON"
+msgstr ""
+
+# <label for="cf7anyapi_base_url"><?php esc_html_e( 'API url', 'contact-form-to-any-api' ); ?></label>
+# <input type="text" id="cf7anyapi_base_url" name="cf7anyapi_base_url" value="<?php echo esc_url($cf7anyapi_base_url); ?>" placeholder="<?php esc_attr_e( 'Enter Your API URL', 'contact-form-to-any-api' ); ?>" required>
+# </div>
+
+msgid "Enter Your API URL"
+msgstr ""
+
+# <label for="cf7anyapi_header_request"><?php esc_html_e( 'Header Request', 'contact-form-to-any-api' ); ?></label>
+# <textarea id="cf7anyapi_header_request" name="cf7anyapi_header_request" placeholder="<?php esc_attr_e( 'Authorization: MY_API_KEY
+# Authorization : Bearer xxxxxxx
+
+msgid "Authorization: MY_API_KEY \r\nAuthorization : Bearer xxxxxxx\r\nAuthorization : Basic xxxxxx\r\nContent-Type: application/json\r\n\r\nAll your header Parameters set here."
+msgstr ""
+
+# <label for="cf7anyapi_<?php echo esc_html($cf7anyapi_form_field_key); ?>"><?php echo esc_html($cf7anyapi_form_field_key); ?></label>
+# <input type="text" id="cf7anyapi_<?php echo esc_html($cf7anyapi_form_field_key); ?>" name="cf7anyapi_form_field[<?php echo esc_html($cf7anyapi_form_field_key); ?>]" value="<?php echo esc_html($cf7anyapi_form_field_value); ?>" placeholder="<?php esc_attr_e( 'Enter your API side mapping key', 'contact-form-to-any-api' ); ?>">
+# </div>
+
+msgid "Enter your API side mapping key"
+msgstr ""
+
+# <div id="cf7anyapi_admin" class="cf7anyapi_wrap">
+# <p><?php esc_html_e( 'Contact form 7 api integrations requires CONTACT FORM 7 Plugin to be installed and active', 'contact-form-to-any-api' ); ?></p>
+# </div>
+
+msgid "Contact form 7 api integrations requires CONTACT FORM 7 Plugin to be installed and active"
+msgstr ""
+
+# <div id="cf7anyapi_admin" class="cf7anyapi_wrap">
+# <p><?php esc_html_e( 'Your Selected Contact Form was not found Please try to add new data in this API', 'contact-form-to-any-api' ); ?></p>
+# </div>
+
+msgid "Your Selected Contact Form was not found Please try to add new data in this API"
+msgstr ""
+
+# <?php wp_nonce_field('cf7_to_any_api_cpt_nonce','cf7_to_any_api_cpt_nonce' ); ?>
+# <label for="cf7anyapi_selected_form"><?php esc_html_e( 'Select Contact Form', 'contact-form-to-any-api' ); ?></label>
+# <select name="cf7anyapi_selected_form" id="cf7anyapi_selected_form" required>
+
+msgid "Select Contact Form"
+msgstr ""
+
+# <select name="cf7anyapi_selected_form" id="cf7anyapi_selected_form" required>
+# <option value=""><?php esc_html_e( 'Select Form', 'contact-form-to-any-api' ); ?></option>
+# <?php
+
+msgid "Select Form"
+msgstr ""
+
+# <div class="cf7anyapi_field">
+# <label for="cf7anyapi_base_url"><?php esc_html_e( 'API url', 'contact-form-to-any-api' ); ?></label>
+# <input type="text" id="cf7anyapi_base_url" name="cf7anyapi_base_url" value="<?php echo esc_url($cf7anyapi_base_url); ?>" placeholder="<?php esc_attr_e( 'Enter Your API URL', 'contact-form-to-any-api' ); ?>" required>
+
+msgid "API url"
+msgstr ""
+
+# <div class="cf7anyapi_full_width">
+# <label for="cf7anyapi_header_request"><?php esc_html_e( 'Header Request', 'contact-form-to-any-api' ); ?></label>
+# <textarea id="cf7anyapi_header_request" name="cf7anyapi_header_request" placeholder="<?php esc_attr_e( 'Authorization: MY_API_KEY
+
+msgid "Header Request"
+msgstr ""
+
+# <div class="cf7anyapi_field">
+# <label for="cf7anyapi_input_type"><?php esc_html_e( 'Input type', 'contact-form-to-any-api' ); ?></label>
+# <select id="cf7anyapi_input_type" name="cf7anyapi_input_type" required>
+
+msgid "Input type"
+msgstr ""
+
+# <select id="cf7anyapi_input_type" name="cf7anyapi_input_type" required>
+# <option value="json" <?php echo ($cf7anyapi_input_type == 'json' || $cf7anyapi_input_type == '' ? esc_html('selected="selected"') : ''); ?>><?php esc_html_e( 'Raw (application/json)', 'contact-form-to-any-api' ); ?></option>
+# <option value="params" <?php echo ($cf7anyapi_input_type == 'params' ? esc_html('selected="selected"') : ''); ?>><?php esc_html_e( 'Parameters - GET/POST ( Available in PRO Version Only )', 'contact-form-to-any-api' ); ?></option>
+
+msgid "Raw (application/json)"
+msgstr ""
+
+# <option value="json" <?php echo ($cf7anyapi_input_type == 'json' || $cf7anyapi_input_type == '' ? esc_html('selected="selected"') : ''); ?>><?php esc_html_e( 'Raw (application/json)', 'contact-form-to-any-api' ); ?></option>
+# <option value="params" <?php echo ($cf7anyapi_input_type == 'params' ? esc_html('selected="selected"') : ''); ?>><?php esc_html_e( 'Parameters - GET/POST ( Available in PRO Version Only )', 'contact-form-to-any-api' ); ?></option>
+# </select>
+
+msgid "Parameters - GET/POST ( Available in PRO Version Only )"
+msgstr ""
+
+# <div class="cf7anyapi_field">
+# <label for="cf7anyapi_method"><?php esc_html_e( 'Method', 'contact-form-to-any-api' ); ?></label>
+# <select id="cf7anyapi_method" name="cf7anyapi_method" required>
+
+msgid "Method"
+msgstr ""
+
+# <div class="cf7anyapi-form-mapping-fields">
+# <h3><?php esc_html_e( 'Map your Fields', 'contact-form-to-any-api' ); ?></h3>
+# <span>
+
+msgid "Map your Fields"
+msgstr ""
+
+# <form name="form_entries" id="form_entries" class="cf7toanyapi_entries" method="get">
+# <label for="form" class="cf7toanyapi_select_form"><?php esc_html_e( 'Choose a form:', 'contact-form-to-any-api' ); ?></label>
+# <select name="form" id="form_id" class="form_id cf7toanyapi_forms">
+
+msgid "Choose a form:"
+msgstr ""
+
+# <div id="table_data">
+# <h3><?php esc_html_e( 'No data Found...!!!', 'contact-form-to-any-api' ); ?></h3>
+# </div>
+
+msgid "No data Found...!!!"
+msgstr ""
+
+# 'add_new' => _x('Add New CF7 API', 'add new', 'contact-form-to-any-api'),
+# 'add_new_item' => __('Add New CF7 API', 'contact-form-to-any-api'),
+# 'new_item' => __('New CF7 API', 'contact-form-to-any-api'),
+
+msgid "Add New CF7 API"
+msgstr ""
+
+# 'add_new_item' => __('Add New CF7 API', 'contact-form-to-any-api'),
+# 'new_item' => __('New CF7 API', 'contact-form-to-any-api'),
+# 'edit_item' => __('Edit CF7 API', 'contact-form-to-any-api'),
+
+msgid "New CF7 API"
+msgstr ""
+
+# 'new_item' => __('New CF7 API', 'contact-form-to-any-api'),
+# 'edit_item' => __('Edit CF7 API', 'contact-form-to-any-api'),
+# 'view_item' => __('View CF7 API', 'contact-form-to-any-api'),
+
+msgid "Edit CF7 API"
+msgstr ""
+
+# 'edit_item' => __('Edit CF7 API', 'contact-form-to-any-api'),
+# 'view_item' => __('View CF7 API', 'contact-form-to-any-api'),
+# 'all_items' => __('All CF7 API', 'contact-form-to-any-api'),
+
+msgid "View CF7 API"
+msgstr ""
+
+# 'view_item' => __('View CF7 API', 'contact-form-to-any-api'),
+# 'all_items' => __('All CF7 API', 'contact-form-to-any-api'),
+# 'not_found' => __('No CF7 API found.', 'contact-form-to-any-api'),
+
+msgid "All CF7 API"
+msgstr ""
+
+# 'all_items' => __('All CF7 API', 'contact-form-to-any-api'),
+# 'not_found' => __('No CF7 API found.', 'contact-form-to-any-api'),
+# 'register_meta_box_cb' => 'aps_metabox',
+
+msgid "No CF7 API found."
+msgstr ""
+
+# 'cf7anyapi-setting',
+# __( 'Contact Form 7 Any Api Setting', 'contact-form-to-any-api' ),
+# array($this,'cf7anyapi_settings'),
+
+msgid "Contact Form 7 Any Api Setting"
+msgstr ""
+
+# $links = (array) $links;
+# $links[] = sprintf('<a href="%s">%s</a>', $url, __('Settings','contact-form-to-any-api'));
+# $links[] = sprintf('<a href="%s">%s</a>', $documentation, __('Documentation','contact-form-to-any-api'));
+
+msgid "Settings"
+msgstr ""
+
+# $links[] = sprintf('<a href="%s">%s</a>', $url, __('Settings','contact-form-to-any-api'));
+# $links[] = sprintf('<a href="%s">%s</a>', $documentation, __('Documentation','contact-form-to-any-api'));
+# }
+
+msgid "Documentation"
+msgstr ""
+
+# 'cb' => $columns['cb'],
+# 'title' => __('Title', 'contact-form-to-any-api'),
+# 'cf7form' => __('Form Name','contact-form-to-any-api'),
+
+msgid "Title"
+msgstr ""
+
+# 'cf7form' => __('Form Name','contact-form-to-any-api'),
+# 'date' => __('Date','contact-form-to-any-api'),
+# );
+
+msgid "Date"
+msgstr ""
+
+# if(empty((int)sanitize_text_field(wp_unslash($_POST['form_id'])))){
+# echo wp_json_encode(__( 'No Fields Found for Selected Form.', 'contact-form-to-any-api' ));
+# exit();
+
+msgid "No Fields Found for Selected Form."
+msgstr ""
+
+# 'cf7anyapi_dashboard_widget',       // Widget slug
+# __('Contact Form 7 to Any API Statistics', 'contact-form-to-any-api'), // Widget title
+# array(&$this,'cf7anyapi_render_dashboard_widget') // Callback function to display content
+
+msgid "Contact Form 7 to Any API Statistics"
+msgstr ""
+
+# if ($cf7_api_count > 0) {
+# echo '<li><span class="dashicons dashicons-rest-api"></span> <strong>' . esc_html(__('Number of API Connections:', 'contact-form-to-any-api')) . '</strong> ' . esc_html($cf7_api_count) . '</li>';
+# } else {
+
+msgid "Number of API Connections:"
+msgstr ""
+
+# } else {
+# echo '<li><span class="dashicons dashicons-rest-api"></span> <a href="' . esc_url(admin_url('post-new.php?post_type=cf7_to_any_api')) . '"><strong>' . esc_html(__('Add New API Connection', 'contact-form-to-any-api')) . '</strong></a></li>';
+# }
+
+msgid "Add New API Connection"
+msgstr ""
+
+# }
+# echo '<li><span class="dashicons dashicons-book-alt"></span> <a href="' . esc_url(admin_url('edit.php?post_type=cf7_to_any_api&page=cf7anyapi_docs')) . '"><strong>' .esc_html(__('API Documentation', 'contact-form-to-any-api')) . '</strong></a></li>';
+# echo '<li><span class="dashicons dashicons-clipboard"></span> <a href="' . esc_url(admin_url('edit.php?post_type=cf7_to_any_api&page=cf7anyapi_logs')) . '"><strong>' . esc_html(__('API Logs', 'contact-form-to-any-api')) . '</strong></a></li>';
+
+msgid "API Documentation"
+msgstr ""
+
+# echo '<li><span class="dashicons dashicons-book-alt"></span> <a href="' . esc_url(admin_url('edit.php?post_type=cf7_to_any_api&page=cf7anyapi_docs')) . '"><strong>' .esc_html(__('API Documentation', 'contact-form-to-any-api')) . '</strong></a></li>';
+# echo '<li><span class="dashicons dashicons-clipboard"></span> <a href="' . esc_url(admin_url('edit.php?post_type=cf7_to_any_api&page=cf7anyapi_logs')) . '"><strong>' . esc_html(__('API Logs', 'contact-form-to-any-api')) . '</strong></a></li>';
+# echo '</ul>';
+
+msgid "API Logs"
+msgstr ""
+
+# echo '<ul>';
+# echo '<li><span class="dashicons dashicons-saved"></span> ' . esc_html(__('200+ API Supports', 'contact-form-to-any-api')) . '</li>';
+# echo '<li><span class="dashicons dashicons-saved"></span> ' . esc_html(__('Support Multi Level or Any Format of JSON', 'contact-form-to-any-api')) . '</li>';
+
+msgid "200+ API Supports"
+msgstr ""
+
+# echo '<li><span class="dashicons dashicons-saved"></span> ' . esc_html(__('Support Multi Level or Any Format of JSON', 'contact-form-to-any-api')) . '</li>';
+# echo '<li><span class="dashicons dashicons-saved"></span> ' . esc_html(__('Supports Multiple Files Upload BASE64', 'contact-form-to-any-api')) . '</li>';
+# echo '<li><span class="dashicons dashicons-saved"></span> ' . esc_html(__('Priority Support (support@contactformtoapi.com)', 'contact-form-to-any-api')) . '</li>';
+
+msgid "Supports Multiple Files Upload BASE64"
+msgstr ""
+
+# echo '<li><span class="dashicons dashicons-saved"></span> ' . esc_html(__('Supports Multiple Files Upload BASE64', 'contact-form-to-any-api')) . '</li>';
+# echo '<li><span class="dashicons dashicons-saved"></span> ' . esc_html(__('Priority Support (support@contactformtoapi.com)', 'contact-form-to-any-api')) . '</li>';
+# echo '<li><span class="dashicons dashicons-saved"></span> ' . esc_html(__('OAuth 2.0 Customization From our Expert Developer Team', 'contact-form-to-any-api')) . '</li>';
+
+msgid "Priority Support (support@contactformtoapi.com)"
+msgstr ""
+
+# echo '<li><span class="dashicons dashicons-saved"></span> ' . esc_html(__('Priority Support (support@contactformtoapi.com)', 'contact-form-to-any-api')) . '</li>';
+# echo '<li><span class="dashicons dashicons-saved"></span> ' . esc_html(__('OAuth 2.0 Customization From our Expert Developer Team', 'contact-form-to-any-api')) . '</li>';
+# echo '</ul>';
+
+msgid "OAuth 2.0 Customization From our Expert Developer Team"
+msgstr ""
+
+# echo '<ul>';
+# echo '<li><a href="https://www.contactformtoapi.com/pricing/" class="button button-primary"><strong>' . esc_html(__('Buy now', 'contact-form-to-any-api')) . '</strong></a> ';
+# echo '<a href="https://www.contactformtoapi.com/#contact_us" class="button button-secondary"><strong>' . esc_html(__('Need Help with Plugin Integration', 'contact-form-to-any-api')) . '</strong></a></li>';
+
+msgid "Buy now"
+msgstr ""
+
+# echo '<li><a href="https://www.contactformtoapi.com/pricing/" class="button button-primary"><strong>' . esc_html(__('Buy now', 'contact-form-to-any-api')) . '</strong></a> ';
+# echo '<a href="https://www.contactformtoapi.com/#contact_us" class="button button-secondary"><strong>' . esc_html(__('Need Help with Plugin Integration', 'contact-form-to-any-api')) . '</strong></a></li>';
+# echo '</ul>';
+
+msgid "Need Help with Plugin Integration"
+msgstr ""
+
+# 
+# echo '<div class="notice notice-warning is-dismissible"><p>'.esc_html__( 'Contact form 7 API integrations requires CONTACT FORM 7 Plugin to be installed and active', 'contact-form-to-any-api' ).'</p></div>';
+# }
+
+msgid "Contact form 7 API integrations requires CONTACT FORM 7 Plugin to be installed and active"
+msgstr ""
+
+# $myListTable = new cf7anyapi_List_Table();
+# echo '<div class="wrap"><h2>' . esc_html__( 'CF7 To Any API Log Data', 'contact-form-to-any-api' ) . '</h2>';
+# echo wp_kses_post( wp_nonce_field('cf_to_any_api_log_del_nonce','cf_to_any_api_log_del_nonce' ) );
+
+msgid "CF7 To Any API Log Data"
+msgstr ""
+
+# echo '<div class="cf7anyapi_log_button">';
+# echo '<a href="javascript:void(0);" class="cf7anyapi_bulk_log_delete">'.esc_html__( 'Delete All Log', 'contact-form-to-any-api' ).'</a>';
+# echo '</div><div id="cf7anyapi-log-popup"><span class="close-popup">X</span><div class="cf7anyapi-log-content"><pre></pre></div></div>';
+
+msgid "Delete All Log"
+msgstr ""
+
+# $new_links = array(
+# '<a href="https://www.contactformtoapi.com/#contact_us" target="_blank">' . esc_html__( 'Support', 'contact-form-to-any-api' ) . '</a>',
+# '<a href="https://www.contactformtoapi.com/pricing/#pricing" target="_blank">' . esc_html__( 'Upgrade To PRO', 'contact-form-to-any-api' ) . '</a>',
+
+msgid "Support"
+msgstr ""
+
+# '<a href="https://www.contactformtoapi.com/#contact_us" target="_blank">' . esc_html__( 'Support', 'contact-form-to-any-api' ) . '</a>',
+# '<a href="https://www.contactformtoapi.com/pricing/#pricing" target="_blank">' . esc_html__( 'Upgrade To PRO', 'contact-form-to-any-api' ) . '</a>',
+# '<a href="https://www.contactformtoapi.com/pricing/#oauth" target="_blank">' . esc_html__( 'OAuth 2.0 Customization', 'contact-form-to-any-api' ) . '</a>',
+
+msgid "Upgrade To PRO"
+msgstr ""
+
+# '<a href="https://www.contactformtoapi.com/pricing/#pricing" target="_blank">' . esc_html__( 'Upgrade To PRO', 'contact-form-to-any-api' ) . '</a>',
+# '<a href="https://www.contactformtoapi.com/pricing/#oauth" target="_blank">' . esc_html__( 'OAuth 2.0 Customization', 'contact-form-to-any-api' ) . '</a>',
+# '<a href="https://www.contactformtoapi.com/pricing/#crm" target="_blank">' . esc_html__( 'Supported CRM/API', 'contact-form-to-any-api' ) . '</a>',
+
+msgid "OAuth 2.0 Customization"
+msgstr ""
+
+# '<a href="https://www.contactformtoapi.com/pricing/#oauth" target="_blank">' . esc_html__( 'OAuth 2.0 Customization', 'contact-form-to-any-api' ) . '</a>',
+# '<a href="https://www.contactformtoapi.com/pricing/#crm" target="_blank">' . esc_html__( 'Supported CRM/API', 'contact-form-to-any-api' ) . '</a>',
+# '<a href="https://wordpress.org/plugins/connect-wpform-to-any-api/" target="_blank">' . esc_html__( 'Connect WPForm to Any API', 'contact-form-to-any-api' ) . '</a>'
+
+msgid "Supported CRM/API"
+msgstr ""
+
+# $labels = array(
+# 'name' => _x('CF7 to API', 'plural', 'contact-form-to-any-api'),
+# 'singular_name' => _x('cf7 to api', 'singular', 'contact-form-to-any-api'),
+
+msgctxt "plural"
+msgid "CF7 to API"
+msgstr ""
+
+# 'name' => _x('CF7 to API', 'plural', 'contact-form-to-any-api'),
+# 'singular_name' => _x('cf7 to api', 'singular', 'contact-form-to-any-api'),
+# 'menu_name' => _x('CF7 to Any API', 'admin menu', 'contact-form-to-any-api'),
+
+msgctxt "singular"
+msgid "cf7 to api"
+msgstr ""
+
+# 'singular_name' => _x('cf7 to api', 'singular', 'contact-form-to-any-api'),
+# 'menu_name' => _x('CF7 to Any API', 'admin menu', 'contact-form-to-any-api'),
+# 'name_admin_bar' => _x('CF7 to Any API', 'admin bar', 'contact-form-to-any-api'),
+
+msgctxt "admin menu"
+msgid "CF7 to Any API"
+msgstr ""
+
+# 'menu_name' => _x('CF7 to Any API', 'admin menu', 'contact-form-to-any-api'),
+# 'name_admin_bar' => _x('CF7 to Any API', 'admin bar', 'contact-form-to-any-api'),
+# 'add_new' => _x('Add New CF7 API', 'add new', 'contact-form-to-any-api'),
+
+msgctxt "admin bar"
+msgid "CF7 to Any API"
+msgstr ""
+
+# 'name_admin_bar' => _x('CF7 to Any API', 'admin bar', 'contact-form-to-any-api'),
+# 'add_new' => _x('Add New CF7 API', 'add new', 'contact-form-to-any-api'),
+# 'add_new_item' => __('Add New CF7 API', 'contact-form-to-any-api'),
+
+msgctxt "add new"
+msgid "Add New CF7 API"
+msgstr ""

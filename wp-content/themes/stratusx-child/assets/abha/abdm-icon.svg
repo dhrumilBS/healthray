@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <title>ABDM - Digital Health Network</title>
+  <rect x="12" y="12" width="96" height="96" rx="12" fill="#fff" stroke="#0b8a78" stroke-width="4"/>
+  <circle cx="36" cy="36" r="6" fill="#0b8a78"/>
+  <circle cx="84" cy="36" r="6" fill="#0b8a78"/>
+  <circle cx="36" cy="84" r="6" fill="#0b8a78"/>
+  <circle cx="84" cy="84" r="6" fill="#0b8a78"/>
+  <path d="M42 36 L78 36" stroke="#0b8a78" stroke-width="3" stroke-linecap="round"/>
+  <path d="M36 42 L36 78" stroke="#0b8a78" stroke-width="3" stroke-linecap="round"/>
+  <path d="M84 42 L84 78" stroke="#0b8a78" stroke-width="3" stroke-linecap="round"/>
+  <path d="M42 84 L78 84" stroke="#0b8a78" stroke-width="3" stroke-linecap="round"/>
+  <rect x="50" y="50" width="20" height="20" rx="4" fill="#e9fffb" stroke="#0b8a78" stroke-width="2"/>
+</svg>

@@ -1,0 +1,35 @@
+<div class="lead-form">
+    <div class="row-2">
+        <div class="field"><label>Full name *</label>[text* your-name class:lf-name autocomplete:name placeholder "Doctor/Hospital Name"]</div>
+        <div class="field"><label>Mobile number *</label> [tel* your-number class:lf-phone placeholder "+91 98765-43210"]</div>
+    </div>
+    <div class="row-2">
+        <div class="field"><label>Work email *</label>[email* your-email class:lf-email autocomplete:email placeholder "you@hospital.com"]</div>
+        <div class="field"><label>City *</label>[text* your-city class:lf-city placeholder "Your City"]</div>
+    </div>
+    <div class="row-2">
+        <div class="field">
+            <label>Business type *</label> [select* your-business class:lf-biz class:input-wrapper first_as_label "Your Business" "Hospital Management Software (HMS)" "Clinic Management Software (CMS)" "Polyclinic Management Software" "Laboratory Management Software (LIMS)" "Pharmacy Management Software" "Medical College & Hospital" "Channel Partner / Consultant" "Other"] <span class="other-field-wrap" data-for="your-business">[text your-business-other placeholder "Please specify"]</span>
+        </div>
+        <div class="field">
+            <label>Speciality *</label> [select* speciality class:lf-spec class:input-wrapper first_as_label "Your Speciality" "Multi-Specialty" "General / Family Practice" "Cardiology" "Orthopedics & Podiatry" "Gastroenterology" "Gynecology (OB/GYN)" "Pediatrics" "Urology" "Pulmonology" "Nephrology" "Laboratory / Pathology" "Other"] <span class="other-field-wrap" data-for="speciality">[text your-speciality-other placeholder "Please specify"]</span>
+        </div>
+    </div>
+
+    <div class="field"> <label>Message</label> [textarea your-text placeholder "Your Message"] </div>
+
+    <div class="consent"><span>[acceptance consent] I have read and agree to the <a href="/privacy-policy/" target="_blank">Privacy Policy</a>. [/acceptance]</span></div>
+    <div class="field-wrapper" style="display:none;"> [handl_url_cf7 handl_url_cf7-264]
+        [handl_url_base_cf7 page-name]
+        [utm_campaign_i]<input type="hidden" name="utm_campaign" value="%s" />[/utm_campaign_i]
+        [utm_source_i]<input type="hidden" name="utm_source" value="%s" />[/utm_source_i]
+        [utm_medium_i]<input type="hidden" name="utm_medium" value="%s" />[/utm_medium_i]
+        [utm_term_i]<input type="hidden" name="utm_term" value="%s" />[/utm_term_i]
+        [matchtype_i]<input type="hidden" name="matchtype" value="%s" />[/matchtype_i]
+        [utm_device_i]<input type="hidden" name="utm_device" value="%s" />[/utm_device_i]
+        [utm_sitelink_i]<input type="hidden" name="utm_sitelink" value="%s" />[/utm_sitelink_i]
+    </div>
+
+    <div class="form-submit-btn">[submit "Request my demo"]</div>
+    <p class="form-note">No spam. Your details are used only to arrange the demo.</p>
+</div>

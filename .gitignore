@@ -1,0 +1,31 @@
+# WordPress uploads
+wp-content/uploads/
+
+# Cache
+wp-content/cache/
+wp-content/upgrade/
+
+# Environment / secrets
+.env
+
+# Logs
+*.log
+php_error_log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# WordPress config (DB credentials & salts)
+wp-config.php
+
+# Backups
+wp-content/updraft/
+wp-content/ai1wm-backups/
+wp-content/backups*/
+*.sql
+*.sql.gz

@@ -1,0 +1,1642 @@
+/* ==========================================================================
+   Case studies: single-case-studies.php and archive-case-studies.php.
+
+   Everything down to "WORDPRESS INTEGRATION" is the approved design file,
+   case-studies/healthray-case-v3.css, copied so the two can be diffed. The
+   only edits are the colour tokens and the hero gradient, which now use the
+   shared values in style.css. The design's own header/footer/skip-link rules stay but match
+   nothing here: the theme renders the real header and footer. Changes for
+   the live theme go in the integration section at the end.
+   ========================================================================== */
+
+/* Colours point at the site palette in style.css (:root), so a brand change
+   there reaches the case studies too. Only the two greens are page-specific. */
+.hrcs {
+  --navy: var(--hr-navy);
+  --navy-mid: var(--hr-navy-mid);
+  --blue: var(--hr-blue);
+  --blue-dark: var(--hr-blue-dark);
+  --blue-pale: var(--hr-blue-pale);
+  --coral: var(--hr-accent-color);
+  --ink: var(--hr-ink-strong);
+  --ink-2: var(--hr-ink-mid);
+  --ink-3: var(--hr-ink-soft);
+  --ink-4: var(--hr-ink-faint);
+  --line: var(--hr-line);
+  --line-2: var(--hr-line-strong);
+  --line-blue: var(--hr-line-blue);
+  --tint: var(--hr-tint);
+  --pale: var(--hr-pale);
+  --pale-cool: var(--hr-pale-cool);
+  --wash-cool: var(--hr-wash-cool);
+  --slate: var(--hr-wash-slate);
+  --ok: #137a4d;
+  --ok-bg: #e8f7ef;
+  --warn: var(--hr-warning);
+  --note: var(--hr-warning-pale);
+
+  --font: 'Mulish', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+  --sh-1: 0 2px 8px rgba(var(--hr-ink-strong-rgb), .06);
+  --sh-2: 0 8px 24px rgba(var(--hr-navy-mid-rgb), .10);
+  --max: 1200px;
+
+  margin: 0;
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink-2);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.hrcs *,
+.hrcs *::before,
+.hrcs *::after {
+  box-sizing: border-box;
+}
+
+.hrcs img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.hrcs svg {
+  flex: 0 0 auto;
+}
+
+.hrcs h1,
+.hrcs h2,
+.hrcs h3 {
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -.02em;
+}
+
+.hrcs p {
+  margin: 0;
+}
+
+.hrcs a {
+  color: var(--blue-dark);
+}
+
+.hrcs ul,
+.hrcs ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hrcs .num,
+.hrcs .strip-num,
+.hrcs .r-num,
+.hrcs .m-num {
+  font-variant-numeric: tabular-nums;
+}
+
+.hrcs a:focus-visible,
+.hrcs button:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+.hrcs .wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* --------------------------------------------------------------------------
+   BUTTONS
+   -------------------------------------------------------------------------- */
+
+.hrcs .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 12px 24px;
+  border-radius: var(--r-sm);
+  background: var(--blue);
+  color: #fff;
+  border: 1px solid var(--blue);
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+
+.hrcs .btn:hover {
+  background: var(--blue-dark);
+  border-color: var(--blue-dark);
+  color: #fff;
+}
+
+.hrcs .btn-ghost {
+  background: #fff;
+  color: var(--navy);
+  border-color: var(--line-2);
+}
+
+.hrcs .btn-ghost:hover {
+  background: #fff;
+  color: var(--blue-dark);
+  border-color: var(--blue);
+}
+
+.hrcs .btn-block {
+  width: 100%;
+}
+
+.hrcs .btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* --------------------------------------------------------------------------
+   SECTION LABEL — the brand's coral used once, as a small mark
+   -------------------------------------------------------------------------- */
+
+.hrcs .label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blue-dark);
+  line-height: 1.4;
+}
+
+.hrcs .label::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--coral);
+  flex: 0 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   HERO — the theme's pale gradient, text left, real photo right
+   -------------------------------------------------------------------------- */
+
+.hrcs .hero {
+  background: var(--hr-hero-gradient);
+  border-bottom: 1px solid var(--line-2);
+  padding: 40px 0 96px;
+}
+
+.hrcs .crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--ink-3);
+  margin-bottom: 28px;
+}
+
+.hrcs .crumbs a {
+  color: var(--ink-3);
+  text-decoration: none;
+}
+
+.hrcs .crumbs a:hover {
+  color: var(--blue-dark);
+  text-decoration: underline;
+}
+
+.hrcs .crumbs [aria-current] {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.hrcs .hero-grid {
+  display: grid;
+  gap: 40px;
+  align-items: center;
+}
+
+@media (min-width:900px) {
+  .hrcs .hero-grid {
+    grid-template-columns: 1.05fr .95fr;
+    gap: 56px;
+  }
+}
+
+.hrcs .hero h1 {
+  font-size: clamp(30px, 2.4vw + 18px, 46px);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 14px 0 18px;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+
+.hrcs .hero .lede {
+  font-size: clamp(17px, .4vw + 15px, 19px);
+  line-height: 1.65;
+  color: var(--ink-3);
+  max-width: 52ch;
+  margin-bottom: 28px;
+}
+
+.hrcs .hero-photo {
+  margin: 0;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  border: 1px solid var(--line-2);
+  background: var(--pale);
+  box-shadow: var(--sh-2);
+}
+
+.hrcs .hero-photo picture {
+  display: block;
+}
+
+.hrcs .hero-photo img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  object-position: 56% 50%;
+}
+
+/* Featured image is not shown on small screens. */
+@media (max-width:767px) {
+  .hrcs .hero-photo {
+    display: none;
+  }
+}
+
+.hrcs .trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+  margin-top: 28px;
+  font-size: 15px;
+  color: var(--ink-3);
+}
+
+.hrcs .trust li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hrcs .trust b {
+  color: var(--navy);
+  font-weight: 800;
+}
+
+.hrcs .trust svg {
+  color: var(--ok);
+}
+
+/* --------------------------------------------------------------------------
+   RESULTS STRIP — four numbers, overlapping the hero edge
+   -------------------------------------------------------------------------- */
+
+.hrcs .strip-wrap {
+  position: relative;
+  z-index: 2;
+  margin-top: -56px;
+}
+
+.hrcs .strip {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  background: #fff;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-2);
+  overflow: hidden;
+}
+
+@media (min-width:860px) {
+  .hrcs .strip {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.hrcs .strip li {
+  padding: 24px 26px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.hrcs .strip li:nth-child(2n) {
+  border-right: 0;
+}
+
+.hrcs .strip li:nth-child(n+3) {
+  border-bottom: 0;
+}
+
+@media (min-width:860px) {
+  .hrcs .strip li {
+    border-bottom: 0;
+    border-right: 1px solid var(--line);
+  }
+
+  .hrcs .strip li:nth-child(2n) {
+    border-right: 1px solid var(--line);
+  }
+
+  .hrcs .strip li:last-child {
+    border-right: 0;
+  }
+}
+
+.hrcs .strip-num {
+  display: block;
+  font-size: clamp(28px, 1.6vw + 18px, 38px);
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+
+.hrcs .strip-lbl {
+  display: block;
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   BODY LAYOUT — story on the left, "at a glance" card on the right
+   -------------------------------------------------------------------------- */
+
+.hrcs .layout {
+  display: grid;
+  gap: 40px;
+  margin-top: 56px;
+}
+
+@media (min-width:1024px) {
+  .hrcs .layout {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .hrcs .layout>.glance {
+    grid-column: 2;
+    grid-row: 1;
+    position: sticky;
+    top: 24px;
+  }
+
+  .hrcs .layout>.story {
+    grid-column: 1;
+    grid-row: 1;
+  }
+}
+
+.hrcs .glance-card {
+  background: #fff;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  box-shadow: var(--sh-1);
+}
+
+.hrcs .glance-h {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.hrcs .facts {
+  margin: 0 0 20px;
+}
+
+.hrcs .facts div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 15px;
+}
+
+.hrcs .facts dt {
+  color: var(--ink-3);
+}
+
+.hrcs .facts dd {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 700;
+  text-align: right;
+}
+
+.hrcs .glance-sub {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.hrcs .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.hrcs .chips li {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  background: var(--pale);
+  border: 1px solid var(--line-blue);
+  padding: 5px 12px;
+  border-radius: var(--r-pill);
+}
+
+/* --------------------------------------------------------------------------
+   STORY SECTIONS
+   -------------------------------------------------------------------------- */
+
+.hrcs .sec {
+  padding-bottom: 64px;
+}
+
+.hrcs .sec:last-child {
+  padding-bottom: 0;
+}
+
+.hrcs .sec h2 {
+  font-size: clamp(24px, 1.1vw + 18px, 32px);
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 10px 0 14px;
+  max-width: 26ch;
+}
+
+.hrcs .sec>p {
+  max-width: 68ch;
+  margin-bottom: 14px;
+}
+
+.hrcs .sec>p:last-of-type {
+  margin-bottom: 0;
+}
+
+.hrcs .sec h3 {
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: -.01em;
+}
+
+/* Problem cards: a 2 × 2 grid, no icons, no colour blocks. */
+.hrcs .problems {
+  display: grid;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+@media (min-width:640px) {
+  .hrcs .problems {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.hrcs .problems li {
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 20px 22px;
+  background: #fff;
+}
+
+.hrcs .problems h3 {
+  margin-bottom: 6px;
+}
+
+.hrcs .problems p {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+
+/* Quote: the theme's tint panel, placed next to the claim it proves. */
+.hrcs .quote {
+  margin: 28px 0 0;
+  background: var(--tint);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  padding: 32px 32px 26px;
+  position: relative;
+}
+
+.hrcs .quote::before {
+  content: '\201C';
+  position: absolute;
+  top: 10px;
+  left: 26px;
+  font-size: 64px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--coral);
+}
+
+.hrcs .quote blockquote {
+  margin: 0;
+  padding-top: 22px;
+}
+
+.hrcs .quote blockquote p {
+  font-size: clamp(18px, .5vw + 16px, 21px);
+  line-height: 1.5;
+  font-weight: 700;
+  color: var(--navy);
+  max-width: 46ch;
+}
+
+.hrcs .quote figcaption {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 20px;
+  font-size: 14.5px;
+  color: var(--ink-3);
+  line-height: 1.45;
+}
+
+.hrcs .quote figcaption strong {
+  display: block;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.hrcs .avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--blue-pale);
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 800;
+  flex: 0 0 auto;
+}
+
+/* Modules used: the real product modules. */
+.hrcs .modules {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+@media (min-width:720px) {
+  .hrcs .modules {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.hrcs .modules li {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 16px;
+  align-items: start;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 20px;
+  background: #fff;
+}
+
+.hrcs .m-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--pale);
+  color: var(--navy);
+  display: grid;
+  place-items: center;
+}
+
+.hrcs .modules h3 {
+  margin-bottom: 4px;
+}
+
+.hrcs .modules p {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+
+/* Setup steps: horizontal on desktop, vertical on mobile. */
+.hrcs .steps {
+  display: grid;
+  gap: 18px;
+  margin-top: 28px;
+  position: relative;
+}
+
+.hrcs .steps li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 4px 16px;
+}
+
+.hrcs .steps::before {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 20px;
+  bottom: 20px;
+  width: 2px;
+  background: var(--line-blue);
+}
+
+.hrcs .step-n {
+  grid-row: 1 / span 3;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--navy);
+  color: var(--navy);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 15px;
+  position: relative;
+  z-index: 1;
+}
+
+.hrcs .step-when {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blue-dark);
+  line-height: 1.4;
+}
+
+.hrcs .steps h3 {
+  font-size: 16.5px;
+}
+
+.hrcs .steps p {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+
+@media (min-width:768px) {
+  .hrcs .steps {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .hrcs .steps::before {
+    left: 12.5%;
+    right: 12.5%;
+    top: 19px;
+    bottom: auto;
+    width: auto;
+    height: 2px;
+  }
+
+  .hrcs .steps li {
+    grid-template-columns: 1fr;
+    text-align: center;
+    justify-items: center;
+    gap: 6px;
+  }
+
+  .hrcs .step-n {
+    grid-row: auto;
+    margin-bottom: 8px;
+  }
+}
+
+/* Results: a check list, each line leading with its number. */
+.hrcs .results {
+  margin-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.hrcs .results li {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 14px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.hrcs .tick {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ok-bg);
+  color: var(--ok);
+  display: grid;
+  place-items: center;
+  margin-top: 2px;
+}
+
+.hrcs .results h3 {
+  font-size: 18px;
+}
+
+.hrcs .r-num {
+  color: var(--navy);
+}
+
+.hrcs .results p {
+  margin-top: 4px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ink-3);
+  max-width: 62ch;
+}
+
+/* Before and after: two columns anyone can read in seconds. */
+.hrcs .ba-title {
+  font-size: 20px !important;
+  margin: 40px 0 16px;
+}
+
+.hrcs .ba {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  font-size: 15.5px;
+  line-height: 1.5;
+}
+
+.hrcs .ba th,
+.hrcs .ba td {
+  padding: 14px 18px;
+  text-align: left;
+  vertical-align: top;
+  border-top: 1px solid var(--line);
+}
+
+.hrcs .ba thead th {
+  border-top: 0;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.hrcs .ba thead th:nth-child(1) {
+  background: #fff;
+  color: var(--ink-3);
+}
+
+.hrcs .ba thead th:nth-child(2) {
+  background: var(--slate);
+  color: var(--ink-3);
+}
+
+.hrcs .ba thead th:nth-child(3) {
+  background: var(--navy);
+  color: #fff;
+}
+
+.hrcs .ba tbody th {
+  font-weight: 700;
+  color: var(--ink);
+  width: 24%;
+}
+
+.hrcs .ba td {
+  color: var(--ink-3);
+}
+
+.hrcs .ba td+td {
+  color: var(--ink);
+  font-weight: 600;
+  background: var(--wash-cool);
+}
+
+.hrcs .ba .cell {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.hrcs .ba .x {
+  color: var(--ink-4);
+  margin-top: 3px;
+}
+
+.hrcs .ba .ck {
+  color: var(--ok);
+  margin-top: 3px;
+}
+
+/* Self-check panel: helps the reader decide if the story applies. */
+.hrcs .fit {
+  background: var(--pale-cool);
+  border: 1px solid var(--line-blue);
+  border-radius: var(--r-lg);
+  padding: 28px;
+}
+
+.hrcs .fit h2 {
+  margin-top: 0 !important;
+  font-size: clamp(21px, .8vw + 17px, 26px) !important;
+}
+
+.hrcs .fit>p {
+  color: var(--ink-3);
+  margin-bottom: 14px;
+}
+
+.hrcs .checks li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 7px 0;
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.hrcs .checks svg {
+  color: var(--blue);
+  margin-top: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   CTA — a copy of the theme's .blog-cta-section
+   -------------------------------------------------------------------------- */
+
+.hrcs .cta-box {
+  margin-top: 72px;
+  text-align: center;
+  background: var(--tint);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  box-shadow: 0 4px 18px rgba(15, 23, 42, .06);
+  padding: clamp(28px, 4vw, 44px);
+}
+
+.hrcs .cta-box h2 {
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 0 auto 12px;
+  max-width: 24ch;
+}
+
+.hrcs .cta-box p {
+  color: var(--ink-3);
+  font-size: 17px;
+  line-height: 1.7;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.hrcs .cta-box .btns {
+  justify-content: center;
+  margin-top: 24px;
+}
+
+/* --------------------------------------------------------------------------
+   CASE STUDY CARDS (related + hub)
+   -------------------------------------------------------------------------- */
+
+.hrcs .sec-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 72px 0 24px;
+}
+
+.hrcs .sec-head h2 {
+  font-size: clamp(24px, 1.1vw + 18px, 30px);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.hrcs .sec-head a {
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.hrcs .sec-head a:hover {
+  text-decoration: underline;
+}
+
+.hrcs .cards {
+  display: grid;
+  gap: 24px;
+}
+
+@media (min-width:680px) {
+  .hrcs .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width:1024px) {
+  .hrcs .cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.hrcs .card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  transition: box-shadow .2s ease, border-color .2s ease;
+  position: relative;
+}
+
+.hrcs .card:hover {
+  box-shadow: var(--sh-2);
+  border-color: var(--line-2);
+}
+
+.hrcs .card-img {
+  aspect-ratio: 2 / 1;
+  background: var(--pale);
+  overflow: hidden;
+}
+
+.hrcs .card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hrcs .card-body {
+  padding: 20px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.hrcs .card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-bottom: 12px;
+  font-size: 13.5px;
+  color: var(--ink-3);
+}
+
+.hrcs .tag {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--navy);
+  background: var(--pale);
+  border: 1px solid var(--line-blue);
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+}
+
+.hrcs .loc {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.hrcs .card h3 {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -.01em;
+  margin-bottom: 16px;
+}
+
+.hrcs .card h3 a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.hrcs .card h3 a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+/* whole card clickable */
+.hrcs .card h3 a:hover {
+  color: var(--blue-dark);
+}
+
+.hrcs .metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  margin-top: auto;
+}
+
+.hrcs .m-num {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1.15;
+  letter-spacing: -.02em;
+}
+
+.hrcs .m-lbl {
+  display: block;
+  font-size: 13.5px;
+  color: var(--ink-3);
+  line-height: 1.4;
+  margin-top: 3px;
+}
+
+.hrcs .card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--blue-dark);
+}
+
+/* Featured card on the hub: image left, content right. */
+.hrcs .featured {
+  display: grid;
+  background: #fff;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--sh-1);
+  position: relative;
+  transition: box-shadow .2s ease;
+}
+
+.hrcs .featured:hover {
+  box-shadow: var(--sh-2);
+}
+
+@media (min-width:900px) {
+  .hrcs .featured {
+    grid-template-columns: 1.1fr 1fr;
+  }
+}
+
+.hrcs .featured .card-img {
+  aspect-ratio: auto;
+  min-height: 260px;
+}
+
+@media (max-width:899px) {
+  .hrcs .featured .card-img {
+    aspect-ratio: 2 / 1;
+    min-height: 0;
+  }
+}
+
+.hrcs .featured .card-body {
+  padding: 32px;
+}
+
+.hrcs .featured h2 {
+  font-size: clamp(22px, 1vw + 17px, 28px);
+  font-weight: 800;
+  line-height: 1.28;
+  margin-bottom: 12px;
+}
+
+.hrcs .featured h2 a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.hrcs .featured h2 a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.hrcs .featured h2 a:hover {
+  color: var(--blue-dark);
+}
+
+.hrcs .featured .sum {
+  font-size: 16px;
+  color: var(--ink-3);
+  line-height: 1.65;
+  margin-bottom: 22px;
+}
+
+.hrcs .featured .metrics {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.hrcs .badge {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--ok);
+  background: var(--ok-bg);
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+}
+
+/* Hub filter tabs — the theme's .archive .filter-btn, in a tint tray. */
+.hrcs .tabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  background: var(--tint);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  padding: 5px;
+}
+
+.hrcs .tabs button {
+  border: 0;
+  background: transparent;
+  color: var(--ink-3);
+  padding: 9px 18px;
+  border-radius: var(--r-sm);
+  min-height: 40px;
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+.hrcs .tabs button:hover {
+  color: var(--navy-mid);
+  background: #fff;
+}
+
+.hrcs .tabs button[aria-pressed="true"] {
+  color: var(--navy-mid);
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, .08);
+}
+
+.hrcs .tabs .n {
+  color: var(--ink-4);
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.hrcs .toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 48px 0 24px;
+}
+
+.hrcs .count {
+  font-size: 15px;
+  color: var(--ink-3);
+}
+
+.hrcs .empty {
+  padding: 40px;
+  text-align: center;
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r-lg);
+  color: var(--ink-3);
+}
+
+.hrcs [hidden] {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   MOBILE CTA BAR
+   -------------------------------------------------------------------------- */
+
+.hrcs .mcta {
+  display: none;
+}
+
+@media (max-width:767px) {
+  .hrcs {
+    padding-bottom: 76px;
+  }
+
+  .hrcs .mcta {
+    display: flex;
+    gap: 10px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    background: #fff;
+    border-top: 1px solid var(--line-2);
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    box-shadow: 0 -4px 16px rgba(15, 23, 42, .06);
+  }
+
+  .hrcs .mcta .btn {
+    flex: 1;
+  }
+
+  .hrcs .mcta .call {
+    flex: 0 0 48px;
+    padding: 0;
+  }
+
+  .hrcs .hero {
+    padding: 28px 0 88px;
+  }
+
+  .hrcs .strip li {
+    padding: 18px 18px;
+  }
+
+  .hrcs .glance-card {
+    padding: 20px;
+  }
+
+  .hrcs .quote {
+    padding: 28px 22px 22px;
+  }
+
+  .hrcs .featured .card-body {
+    padding: 22px;
+  }
+
+  .hrcs .featured .metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hrcs .tabs {
+    display: flex;
+    width: 100%;
+  }
+
+  .hrcs .tabs button {
+    flex: 1 1 auto;
+    padding: 9px 12px;
+  }
+}
+
+/* At 360px the before/after table becomes one card per row. */
+@media (max-width:640px) {
+  .hrcs .ba thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .hrcs .ba,
+  .hrcs .ba tbody,
+  .hrcs .ba tr,
+  .hrcs .ba th,
+  .hrcs .ba td {
+    display: block;
+    width: 100%;
+  }
+
+  .hrcs .ba tr {
+    border-top: 1px solid var(--line);
+    padding: 14px 16px;
+  }
+
+  .hrcs .ba tr:first-child {
+    border-top: 0;
+  }
+
+  .hrcs .ba th,
+  .hrcs .ba td {
+    border: 0;
+    padding: 4px 0;
+    background: transparent !important;
+  }
+
+  .hrcs .ba tbody th {
+    width: 100%;
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .hrcs .ba td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ink-4);
+    margin-bottom: 2px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   MOTION AND PRINT
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion:reduce) {
+
+  .hrcs *,
+  .hrcs *::before,
+  .hrcs *::after {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .hrcs {
+    font-size: 11pt;
+    padding-bottom: 0;
+  }
+
+  .hrcs .mcta,
+  .hrcs .btns,
+  .hrcs .glance .btn,
+  .hrcs .tabs {
+    display: none !important;
+  }
+
+  .hrcs .hero {
+    background: #fff;
+    padding: 0 0 16pt;
+  }
+
+  .hrcs .strip-wrap {
+    margin-top: 12pt;
+  }
+
+  .hrcs .strip,
+  .hrcs .glance-card,
+  .hrcs .card,
+  .hrcs .featured,
+  .hrcs .hero-photo {
+    box-shadow: none;
+  }
+
+  .hrcs .layout {
+    display: block;
+  }
+
+  .hrcs .glance {
+    position: static;
+    margin-bottom: 18pt;
+  }
+
+  .hrcs .sec,
+  .hrcs .quote,
+  .hrcs .ba,
+  .hrcs .card,
+  .hrcs .strip {
+    break-inside: avoid;
+  }
+
+  .hrcs h2,
+  .hrcs h3 {
+    break-after: avoid;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   THREE-ITEM ROWS
+   The writer's copy has three results and three setup steps. Same strip and
+   same steps as above, split into three even columns instead of leaving an
+   empty fourth slot. On mobile the first result spans the full row.
+   -------------------------------------------------------------------------- */
+
+.hrcs .strip--3 li:first-child {
+  grid-column: 1 / -1;
+  border-right: 0;
+}
+
+.hrcs .strip--3 li:nth-child(2) {
+  border-right: 1px solid var(--line);
+  border-bottom: 0;
+}
+
+.hrcs .strip--3 li:nth-child(3) {
+  border-right: 0;
+  border-bottom: 0;
+}
+
+@media (min-width:860px) {
+  .hrcs .strip--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .hrcs .strip--3 li:first-child {
+    grid-column: auto;
+    border-right: 1px solid var(--line);
+  }
+}
+
+@media (min-width:768px) {
+  .hrcs .steps--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .hrcs .steps--3::before {
+    left: 16.667%;
+    right: 16.667%;
+  }
+
+  /* Keep every step's text top-aligned when one step is a line shorter. */
+  .hrcs .steps li {
+    align-content: start;
+  }
+}
+
+/* ==========================================================================
+   WORDPRESS INTEGRATION
+   .hrcs is the <main> wrapper here, not <body>, and the theme loads
+   Bootstrap 5, whose .btn, .card, .card-img, .card-body and .badge share
+   class names with the design.
+   ========================================================================== */
+
+/* Space above the theme footer, which replaces the design's .foot. On mobile
+   the room for the fixed CTA bar goes on <body> instead, so the bar never
+   covers the end of the theme footer. */
+.hrcs {
+  padding-bottom: 80px;
+}
+
+@media (max-width:767px) {
+  body.hrcs-page {
+    padding-bottom: 76px;
+  }
+}
+
+/* Sticky "At a glance" card clears the theme's sticky header, and only sticks
+   when it fits on screen so its button is never cut off. */
+@media (min-width:1024px) {
+  .hrcs .layout>.glance {
+    top: calc(var(--hr-header-h, 80px) + 16px);
+  }
+}
+
+@media (min-width:1024px) and (max-height:760px) {
+  .hrcs .layout>.glance {
+    position: static;
+  }
+}
+
+/* style.css capitalises every heading site-wide; the design is sentence case. */
+.hrcs h1,
+.hrcs h2,
+.hrcs h3 {
+  text-transform: none;
+}
+
+/* Bootstrap resets. */
+.hrcs .btn:focus-visible {
+  box-shadow: none;
+}
+
+.hrcs .btn:active,
+.hrcs .btn:first-child:active {
+  background: var(--blue-dark);
+  border-color: var(--blue-dark);
+  color: #fff;
+}
+
+.hrcs .btn-ghost:active,
+.hrcs .btn-ghost:first-child:active {
+  background: #fff;
+  border-color: var(--blue);
+  color: var(--blue-dark);
+}
+
+.hrcs .card {
+  color: var(--ink-2);
+  min-width: 0;
+}
+
+.hrcs .card-img {
+  width: auto;
+  border-radius: 0;
+}
+
+.hrcs .badge {
+  line-height: inherit;
+  white-space: normal;
+  vertical-align: baseline;
+}
+
+/* Inline styles from the design moved to classes. */
+.hrcs .sec .sec-outro {
+  margin-top: 20px;
+}
+
+/* Hub hero: centred to match the blog and alternatives archive heroes
+   (.blog-hero in css/custom.css, .alt-archive-hero in css/alternatives.css).
+   The single case study keeps the design's left-aligned hero. */
+.hrcs .hero--hub {
+  padding: 72px 0 56px;
+  text-align: center;
+}
+
+.hrcs .hero--hub .crumbs {
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.hrcs .hero--hub .label {
+  padding: 6px 16px;
+  border-radius: var(--r-pill);
+  background: rgba(var(--hr-navy-rgb), .08);
+  color: var(--navy);
+  font-size: 13px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.hrcs .hero--hub h1 {
+  max-width: 22ch;
+  margin: 18px auto 14px;
+  font-size: var(--hr-hero-title-size);
+  line-height: 1.2;
+  color: var(--navy);
+}
+
+.hrcs .hero--hub .lede {
+  max-width: 720px;
+  margin: 0 auto;
+  font-size: var(--hr-hero-lead-size);
+  line-height: 1.7;
+}
+
+.hrcs .hero--hub .trust {
+  justify-content: center;
+  gap: 12px;
+}
+
+.hrcs .hero--hub .trust li {
+  padding: 8px 16px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+@media (max-width:767px) {
+  .hrcs .hero--hub {
+    padding: 48px 0 36px;
+  }
+
+  .hrcs .hero--hub .trust {
+    gap: 8px;
+  }
+
+  .hrcs .hero--hub .trust li {
+    padding: 7px 14px;
+    font-size: 13px;
+  }
+}
+
+.hrcs .featured+.cards {
+  margin-top: 24px;
+}
+
+/* No filter toolbar (a single case study): keep the toolbar's spacing. */
+.hrcs .hub-list>.featured:first-child,
+.hrcs .hub-list>.cards:first-child,
+.hrcs .hub-list>.empty:first-child {
+  margin-top: 48px;
+}
+
+/* Optional parts left empty. */
+@media (min-width:900px) {
+  .hrcs .hero-grid--solo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (min-width:1024px) {
+  .hrcs .layout--solo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

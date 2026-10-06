@@ -1,0 +1,145 @@
+
+===== PAGE 2 TABLE 1 =====
+ROW 0:  || We started with the vendors' own websites and product documentation. We also checked G2, Capterra, SoftwareSuggest, TechJockey, and Google reviews where they had useful information. The details in this comparison were checked in September 2026. We looked at how well each platform fits Indian diagnostic and pathology lab operations, rather than judging it only on the number of features listed. Ratings were one part of the research, not the basis for choosing an alternative. We compared the software for its actual workflows, ease of use, the kind of lab it can support, and the areas worth checking before a switch. When a vendor had not published clear information about a feature, integration, price, or compliance requirement, we did not treat it as confirmed. A Quick Look At 5 CrelioHealth Alternatives for Diagnostic Labs Before diving into each platform, here’s a side-by-side look at the five CrelioHealth alternatives. A ✓ means the software covers the full requirement, X means it does not cover the requirement, and brackets mean the vendor publicly lists only part of it. ||  ||  ||  ||  ||  || 
+ROW 1: Category ||  || Healthray || LabSmart || Flabs || eLabAssist ||  || PathoGold
+ROW 2: Best For ||  || Pathology/diagnostic labs, hospital labs, multi-branch networks || Small to medium pathology labs and diagnostic centres || Pathology labs, diagnostic centres, multi-branch networks || Diagnostic centre multi-branch laboratories, B2B labs, hospital lab || s, s || Small to large pathology labs and diagnostic centres
+ROW 3: Pricing ||  || Custom quote + 10% off || Multiple plans || Quote based || Quote based ||  || Multiple plans
+ROW 4: Deployment ||  || Cloud / On-premises / Hybrid || Cloud || Cloud || Cloud ||  || Cloud / Desktop
+ROW 5: Single / Multi-Site ||  || ✓ || (Collection-centre support) || ✓ || ✓ ||  || ✓
+ROW 6: India & Accreditation Readiness ||  || ABDM, ABHA, TPA, NABL/ISO 15189 workflow support || TPA/Mediclaim || ABHA, NABL || ABDM/ABHA, NA audit-readiness support || BL || Not clearly published
+ROW 7:  ||  ||  ||  ||  ||  ||  || 
+
+===== PAGE 3 TABLE 1 =====
+ROW 0:  ||  ||  ||  ||  ||  ||  || 
+ROW 1: Key Integrations ||  || HL7/FHIR, EMR/EHR/HIS, analysers, RIS/PACS/DICOM, API || WhatsApp, SMS, Email, Doctor Portal || Analyser interfaces, ABHA, API, HIS/EMR || HL7/EDI, HIMS/E PACS/DICOM, SAP/Tally || RP, || Instrument interfaces, PACS, third-party accounting API
+ROW 2: Implementation / Migrati || on || Implementation + migration || Implementation + migration || Implementation + migration || Implementation migration || + || Implementation + migration
+ROW 3: Rating ||  || ★★★★★ || ★★★★☆ || ★★★★☆ || ★★★★☆ ||  || ★★★★☆
+ROW 4: Core Lab Workflow & Sam || ple Management ||  ||  ||  ||  ||  || 
+ROW 5: Patient / Referring Doctor Management ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 6: Test Order / Accession Management ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 7: Online Booking / Order Ent || ry || ✓ || ✓ || ✓ || ✓ ||  || X
+ROW 8: Sample Collection & Accessioning ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 9: Barcode / Label Managem || ent || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 10: Sample Tracking ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 11: Sample Routing / Aliquotin || g || ✓ || X || (Sample routing) || ✓ ||  || X
+ROW 12: Outsourced / Referral Test Management ||  || ✓ || ✓ || (Referral management) || ✓ ||  || (Referral management)
+ROW 13: Phlebotomy ||  || ✓ || ✓ || ✓ || ✓ ||  || X
+ROW 14: Test Master / Profiles / Pan || els || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 15: Laboratory Discipline Cove || rage || Pathology, Biochemistry, Haematology, Microbiology, Serology & Immunology, Endocrinology, Histopathology, Cytology, Radiology || (Pathology, Histopathology, Radiology, Haematology, Biochemistry) || (Pathology & Radiology) || (Pathology & Radiology) ||  || (Pathology, Histopathology, Cytology, Radiology)
+ROW 16: Priority Tests ||  || ✓ || X || ✓ || ✓ ||  || X
+ROW 17:  ||  ||  ||  ||  ||  ||  || 
+
+===== PAGE 4 TABLE 1 =====
+ROW 0:  ||  ||  ||  ||  ||  ||  || 
+ROW 1: Analyser Connectivity & I || nteroperability ||  ||  ||  ||  ||  || 
+ROW 2: Analyser Integration ||  || ✓ || X || ✓ || ✓ ||  || ✓
+ROW 3: Uni-directional Interface ||  || ✓ || X || ✓ || ✓ ||  || ✓
+ROW 4: Bi-directional Interface ||  || ✓ || X || ✓ || ✓ ||  || ✓
+ROW 5: HL7 / ASTM ||  || (HL7) || X || X || (HL7) ||  || X
+ROW 6: FHIR / APIs ||  || ✓ || X || (API) || Not clearly publish || ed || (Third-party API)
+ROW 7: HIS / EMR Integration ||  || ✓ || X || ✓ || ✓ ||  || X
+ROW 8: Automated Result Mapping ||  || ✓ || X || ✓ || (Result Transfer) ||  || (Formatting)
+ROW 9: Results, Validation & Rep || ort Delivery ||  ||  ||  ||  ||  || 
+ROW 10: Manual Result Entry ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 11: Result Review & Validation ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 12: Auto-verification ||  || ✓ || X || ✓ || ✓ ||  || X
+ROW 13: Reference Ranges & Flags ||  || ✓ || ✓ || ✓ || ✓ ||  || (Reference values)
+ROW 14: Critical Value Alerts ||  || ✓ || (Abnormal-value checker) || ✓ || ✓ ||  || X
+ROW 15: Pathologist Authorisation ||  || ✓ || (Pathologist sign-off) || ✓ || ✓ ||  || (Report verification)
+ROW 16: Digital Signature ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 17: Report Amendment / Versi History || on || ✓ || X || ✓ || X ||  || X
+ROW 18: Custom Report Templates ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 19: SMS / Email / WhatsApp Delivery ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 20: Patient Report Portal ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 21: Doctor Portal ||  || ✓ || ✓ || ✓ || ✓ ||  || X
+ROW 22: Quality Management & A || ccreditation ||  ||  ||  ||  ||  || 
+ROW 23: Internal Quality Control (IQ || C) || ✓ || X || ✓ || ✓ ||  || X
+ROW 24:  ||  ||  ||  ||  ||  ||  || 
+
+===== PAGE 5 TABLE 1 =====
+ROW 0:  ||  ||  ||  ||  ||  ||  || 
+ROW 1: Levey-Jennings / Westgar Rules || d || ✓ || X || ✓ || ✓ ||  || X
+ROW 2: Reagent & QC Lot Tracking ||  || ✓ || X || (Kit/QC mapping) || ✓ ||  || X
+ROW 3: Calibration & Equipment Maintenance ||  || ✓ || X || X || ✓ ||  || (Calibration)
+ROW 4: Proficiency Testing ||  || ✓ || X || X || X ||  || X
+ROW 5: Non-Conformance Management ||  || X || X || X || X ||  || X
+ROW 6: CAPA Management ||  || ✓ || X || ✓ || (Corrective Action || s) || X
+ROW 7: SOP & Document Control ||  || ✓ || X || X || X ||  || X
+ROW 8: Internal Audit Support ||  || X || X || X || X ||  || X
+ROW 9: Audit Trail ||  || ✓ || (Activity tracking) || ✓ || ✓ ||  || ✓
+ROW 10: NABL / ISO 15189 Support ||  || ✓ || X || (NABL) || (NABL) ||  || ✓
+ROW 11: Multi-Branch, Collection C || entre & B2B Operations ||  ||  ||  ||  ||  || 
+ROW 12: Multi-Branch Management ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 13: Collection Centre Managem || ent || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 14: Central / Reference Lab Workflow ||  || (Sample routing) || X || ✓ || ✓ ||  || X
+ROW 15: Inter-Branch Sample Trans || fer || X || X || ✓ || ✓ ||  || X
+ROW 16: B2B Client Management ||  || ✓ || (Referral/B2B) || ✓ || ✓ ||  || ✓
+ROW 17: Referral Doctor Manageme || nt || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 18: Centralised Administration ||  || ✓ || X || ✓ || ✓ ||  || ✓
+ROW 19: Inventory & Procurement ||  ||  ||  ||  ||  ||  || 
+ROW 20: Reagent & Consumables Inventory ||  || ✓ || X || ✓ || ✓ ||  || ✓
+ROW 21: Lot / Batch / Expiry Tracki || ng || ✓ || X || ✓ || ✓ ||  || X
+ROW 22:  ||  ||  ||  ||  ||  ||  || 
+
+===== PAGE 6 TABLE 1 =====
+ROW 0:  ||  ||  ||  ||  ||  ||  || 
+ROW 1: Stock / Reorder Alerts ||  || ✓ || X || ✓ || ✓ ||  || X
+ROW 2: Consumption Tracking ||  || ✓ || X || ✓ || ✓ ||  || X
+ROW 3: Procurement ||  || ✓ || X || ✓ || ✓ ||  || (Purchase & Accounting)
+ROW 4: Vendor Management ||  || ✓ || X || ✓ || ✓ ||  || X
+ROW 5: Billing & Commercial Ope || rations ||  ||  ||  ||  ||  || 
+ROW 6: Laboratory Billing / Test Pr || icing || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 7: Packages / Discounts ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 8: B2B Billing ||  || ✓ || (B2B pricing) || ✓ || ✓ ||  || ✓
+ROW 9: Referral Billing ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 10: Insurance / TPA ||  || ✓ || ✓ || X || (Medical-aid/claim || s) || X
+ROW 11: Online Payments ||  || ✓ || X || ✓ || ✓ ||  || X
+ROW 12: GST / Invoicing ||  || ✓ || X || X || Not clearly publish || ed || X
+ROW 13: Receivables ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 14: Analytics, TAT & Automat || ion ||  ||  ||  ||  ||  || 
+ROW 15: TAT Dashboard ||  || ✓ || (TAT reporting) || ✓ || ✓ ||  || X
+ROW 16: Pending Sample Alerts ||  || ✓ || (Pending status tracking) || ✓ || (TAT monitoring || ) || (Sample status)
+ROW 17: Test Volume Analytics ||  || ✓ || ✓ || (Operational reporting) || ✓ ||  || X
+ROW 18: Revenue Analytics ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 19: Branch Analytics ||  || ✓ || X || ✓ || ✓ ||  || X
+ROW 20: QC Analytics ||  || ✓ || X || ✓ || ✓ ||  || X
+ROW 21: Custom MIS ||  || ✓ || (Business reports) || ✓ || (MIS reports) ||  || ✓
+ROW 22: Workflow Automation ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 23: AI / Predictive Analytics ||  || ✓ || X || (AI-assisted analysis) || ✓ ||  || X
+ROW 24:  ||  ||  ||  ||  ||  ||  || 
+
+===== PAGE 7 TABLE 1 =====
+ROW 0:  ||  ||  ||  ||  ||  ||  || 
+ROW 1: Security & Data Governa || nce ||  ||  ||  ||  ||  || 
+ROW 2: Role-Based Access ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 3: Audit Logs ||  || ✓ || (Activity tracking) || ✓ || ✓ ||  || ✓
+ROW 4: Encryption ||  || ✓ || X || ✓ || ✓ ||  || ✓
+ROW 5: Backup ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 6: Disaster Recovery ||  || ✓ || X || X || ✓ ||  || X
+ROW 7: Data Export / Portability ||  || ✓ || ✓ || X || (PDF/Excel/CSV || ) || (PDF/Excel)
+ROW 8: Migration, Implementatio || n & Support ||  ||  ||  ||  ||  || 
+ROW 9: Historical Data Migration ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 10: Implementation Timeline ||  || 3-7 days || Not stated || Not stated || Not stated ||  || Not stated
+ROW 11: Customisation ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 12: Training ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 13: Go-Live Support ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 14: Support Channels & Hours ||  || 24/7; Multilingual support || 10:30 AM–5:30 PM, Mon–Fri || 24×7 || 365-day support ||  || Phone, email, online chat, mobile app
+ROW 15: SLA / Response Time ||  || Within 30 mins || Not stated || Not stated || Not stated ||  || Not stated
+ROW 16: Post-Go-Live Support ||  || 24/7 || Ongoing support || 24×7 || Dedicated suppo || rt || Not stated
+ROW 17: Optional & Specialist Mod || ules ||  ||  ||  ||  ||  || 
+ROW 18: Blood Bank ||  || ✓ || X || X || X ||  || X
+ROW 19: Radiology Management ||  || ✓ || ✓ || ✓ || ✓ ||  || ✓
+ROW 20: PACS ||  || ✓ || X || X || ✓ ||  || ✓
+ROW 21: DICOM / Imaging Integrat || ion || ✓ || X || ✓ || ✓ ||  || Not clearly specified
+ROW 22:  ||  ||  ||  ||  ||  ||  || 
+
+===== PAGE 20 TABLE 1 =====
+ROW 0: Website || healthray.com
+ROW 1: Title/topic || 5 Best CrelioHealth Alternatives & Competitors in 2026
+ROW 2: Primary keyword(s) || CrelioHealth Alternatives
+ROW 3: Word count || 3537
+
+===== PAGE 20 TABLE 2 =====
+ROW 0: Meta title (60) || CrelioHealth Alternatives & Competitors in 2026 | Healthray
+ROW 1: Meta description (160) || Compare the 5 best CrelioHealth alternatives in 2026: Healthray, LabSmart, Flabs, eLabAssist, PathoGold, and find your best fit.
+ROW 2: URL || https://healthray.com/creliohealth-alternatives/

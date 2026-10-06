@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <title>PMJAY - Health Coverage</title>
+  <rect x="10" y="10" width="100" height="100" rx="12" fill="#fff" stroke="#ff6b6b" stroke-width="4"/>
+  <path d="M60 28 L82 40 L82 68 C74 76 66 82 60 82 C54 82 46 76 38 68 L38 40 Z" fill="#ffeef0" stroke="#ff6b6b" stroke-width="3"/>
+  <path d="M60 46
+           C56 40 46 42 46 50
+           C46 58 60 66 60 66
+           C60 66 74 58 74 50
+           C74 42 64 40 60 46 Z"
+        fill="#ff6b6b" stroke="#c74444" stroke-width="1"/>
+</svg>

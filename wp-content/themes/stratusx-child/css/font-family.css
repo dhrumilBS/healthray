@@ -1,0 +1,72 @@
+:root {
+	--hr-font: Mulish, system-ui, sans-serif;
+	--font-body: Mulish, system-ui, sans-serif;
+	--font-display: Mulish, system-ui, sans-serif;
+	--hr-font-body: Mulish, system-ui, sans-serif;
+	--fb: Mulish, system-ui, sans-serif;
+	--fh: Mulish, system-ui, sans-serif;
+}
+
+html,
+body,
+button,
+input,
+optgroup,
+select,
+textarea {
+	font-family: var(--hr-font) !important;
+}
+
+body :not(i,
+	svg,
+	svg *,
+	.fa, .fas, .far, .fab, .fal, .fad, .fa-solid, .fa-regular, .fa-brands,
+	[class*="eicon"],
+	[class*="fa-"],
+	[class*="icon-"],
+	[class*="-icon"],
+	[class*="flaticon"],
+	[class*="themify"],
+	[class*="dashicons"],
+	[class*="elementor-icon"],
+	.hr-cell-icon,
+	code, kbd, pre, samp, tt,
+	code *, pre *) {
+	font-family: var(--hr-font) !important;
+}
+
+.elementor-widget-container,
+.elementor-heading-title,
+.elementor-button,
+.elementor-button-text,
+.elementor-text-editor,
+.elementor-widget-text-editor,
+.elementor-tab-title,
+.elementor-tab-content,
+.elementor-accordion-title,
+.elementor-toggle-title,
+.elementor-price-table__price,
+.elementor-icon-box-title,
+.elementor-icon-box-description,
+.elementor-icon-list-text,
+.elementor-image-box-title,
+.elementor-image-box-description,
+.elementor-testimonial-content,
+.elementor-testimonial-name,
+.elementor-testimonial-job,
+.elementor-counter-number,
+.elementor-progress-percentage,
+.elementor-field-group label,
+.elementor-field-group input,
+.elementor-field-group textarea,
+.elementor-field-group select {
+	font-family: var(--hr-font) !important;
+}
+
+code,
+kbd,
+pre,
+samp,
+tt {
+	font-family: ui-monospace, "JetBrains Mono", "Cascadia Mono", Consolas, monospace;
+}

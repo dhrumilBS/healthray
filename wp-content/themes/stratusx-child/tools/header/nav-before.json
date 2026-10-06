@@ -1,0 +1,1666 @@
+﻿{
+    "generated": "2026-09-01T09:01:16+00:00",
+    "location": "primary_navigation",
+    "menu_id": 25,
+    "menu_name": "Healthray Main Menu",
+    "item_count": 38,
+    "top_level": [
+        "Contact",
+        "Book A Demo",
+        "Healthray Products",
+        "Speciality",
+        "Resources",
+        "ABHA"
+    ],
+    "depth_counts": {
+        "0": 6,
+        "3": 10,
+        "2": 13,
+        "1": 9
+    },
+    "mega_widgets": [],
+    "items": [
+        {
+            "id": 1162,
+            "parent": 0,
+            "depth": 0,
+            "order": 37,
+            "title_raw": "Contact",
+            "title_text": "Contact",
+            "url": "http://192.168.0.223/healthray/contact/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "167",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": []
+        },
+        {
+            "id": 1169,
+            "parent": 0,
+            "depth": 0,
+            "order": 38,
+            "title_raw": "Book A Demo",
+            "title_text": "Book A Demo",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "1169",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [
+                "menu-btn-contact",
+                "hr-cta-btn"
+            ],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": []
+        },
+        {
+            "id": 23520,
+            "parent": 66523,
+            "depth": 3,
+            "order": 24,
+            "title_raw": "Blogs",
+            "title_text": "Blogs",
+            "url": "http://192.168.0.223/healthray/blogs/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "23517",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<!-- Blogs -->\r\n<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\">\r\n\t\t<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 7v14\"></path><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\"></path></svg>\r\n\t</div>\r\n\t<div class=\"mega-title\">\r\n\t\t<div class=\"title\">Blogs</div>\r\n\t\t<div class=\"text\">Read insights, trends, and expert opinions on AI-driven healthcare innovation.</div>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 24050,
+            "parent": 0,
+            "depth": 0,
+            "order": 1,
+            "title_raw": "Healthray Products",
+            "title_text": "Healthray Products",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "24050",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "type": "megamenu",
+                "grid": [
+                    {
+                        "meta": {
+                            "class": "",
+                            "hide-on-desktop": "false",
+                            "hide-on-mobile": "false",
+                            "columns": "12"
+                        },
+                        "columns": [
+                            {
+                                "meta": {
+                                    "span": "3",
+                                    "class": "",
+                                    "hide-on-desktop": "false",
+                                    "hide-on-mobile": "false"
+                                },
+                                "items": [
+                                    {
+                                        "id": "66505",
+                                        "type": "item"
+                                    },
+                                    {
+                                        "id": "66504",
+                                        "type": "item"
+                                    },
+                                    {
+                                        "id": "66506",
+                                        "type": "item"
+                                    }
+                                ]
+                            },
+                            {
+                                "meta": {
+                                    "span": "4",
+                                    "class": "",
+                                    "hide-on-desktop": "false",
+                                    "hide-on-mobile": "false"
+                                },
+                                "items": [
+                                    {
+                                        "id": "custom_html-5",
+                                        "type": "widget"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "panel_columns": "6",
+                "submenu_ordering": "forced"
+            }
+        },
+        {
+            "id": 27347,
+            "parent": 0,
+            "depth": 0,
+            "order": 11,
+            "title_raw": "Speciality",
+            "title_text": "Speciality",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "27347",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "type": "megamenu",
+                "panel_columns": "2"
+            }
+        },
+        {
+            "id": 27447,
+            "parent": 66512,
+            "depth": 2,
+            "order": 19,
+            "title_raw": "DHIS",
+            "title_text": "DHIS",
+            "url": "http://192.168.0.223/healthray/dhis/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "26844",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<div class=\"menu-item\">\r\n        <img src=\"http://192.168.0.223/healthray/wp-content/themes/stratusx-child/assets/abha/dhis.svg\" alt=\"DHIS\">\r\n        <div class=\"menu-text\">\r\n            <h3>DHIS</h3>\r\n            <p>Health data information system</p>\r\n        </div>\r\n    </div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 27448,
+            "parent": 66512,
+            "depth": 2,
+            "order": 17,
+            "title_raw": "ABHA",
+            "title_text": "ABHA",
+            "url": "http://192.168.0.223/healthray/abha/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "26834",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<div class=\"menu-item\">\r\n\t<img src=\"http://192.168.0.223/healthray/wp-content/themes/stratusx-child/assets/abha/abha.svg\" alt=\"ABHA\">\r\n\t<div class=\"menu-text\">\r\n\t\t<h3>ABHA</h3>\r\n\t\t<p>Create and manage health IDs</p>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 27449,
+            "parent": 66512,
+            "depth": 2,
+            "order": 18,
+            "title_raw": "PMJAY",
+            "title_text": "PMJAY",
+            "url": "http://192.168.0.223/healthray/pmjay/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "26475",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<div class=\"menu-item\">\r\n\t<img src=\"http://192.168.0.223/healthray/wp-content/themes/stratusx-child/assets/abha/pmjay.svg\" alt=\"PMJAY\">\r\n\t<div class=\"menu-text\">\r\n\t\t<h3>PMJAY</h3>\r\n\t\t<p>Affordable health coverage scheme</p>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 27456,
+            "parent": 66512,
+            "depth": 2,
+            "order": 16,
+            "title_raw": "ABDM",
+            "title_text": "ABDM",
+            "url": "http://192.168.0.223/healthray/abdm/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "27377",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<div class=\"menu-item\">\r\n\t<img src=\"http://192.168.0.223/healthray/wp-content/themes/stratusx-child/assets/abha/abdm.svg\" alt=\"ABDM\">\r\n\t<div class=\"menu-text\">\r\n\t\t<h3>ABDM</h3>\r\n\t\t<p>IndiaΓÇÖs digital health mission system</p>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 66373,
+            "parent": 0,
+            "depth": 0,
+            "order": 21,
+            "title_raw": "Resources",
+            "title_text": "Resources",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "66373",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "type": "megamenu",
+                "panel_columns": "6"
+            }
+        },
+        {
+            "id": 66496,
+            "parent": 66524,
+            "depth": 3,
+            "order": 31,
+            "title_raw": "Awards &#038; Certifications",
+            "title_text": "Awards &#038; Certifications",
+            "url": "http://192.168.0.223/healthray/awards/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "62094",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<!-- Awards & Certifications -->\r\n<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\">\r\n\t\t<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\"\r\n\t\t\t\t stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\r\n\t\t\t<path d=\"m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526\">\r\n\t\t\t</path>\r\n\t\t\t<circle cx=\"12\" cy=\"8\" r=\"6\"></circle>\r\n\t\t</svg>\r\n\t</div>\r\n\t<div class=\"mega-title\">\r\n\t\t<div class=\"title\">Awards &amp; Certifications</div>\r\n\t\t<div class=\"text\">Discover our industry recognitions and quality certifications across healthcare\r\n\t\t\tdomains.</div>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 66497,
+            "parent": 66525,
+            "depth": 3,
+            "order": 35,
+            "title_raw": "Become A Partner",
+            "title_text": "Become A Partner",
+            "url": "http://192.168.0.223/healthray/become-a-partner/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "59820",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<!-- Become a Partner -->\r\n<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\">\r\n\t\t<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\"\r\n\t\t\t\t stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\r\n\t\t<path d=\"m11 17 2 2a1 1 0 1 0 3-3\"></path>\r\n\t\t<path\r\n\t\t\t\t\td=\"m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4\">\r\n\t\t</path>\r\n\t\t<path d=\"m21 3 1 11h-2\"></path>\r\n\t\t<path d=\"M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3\"></path>\r\n\t\t<path d=\"M3 4h8\"></path>\r\n\t\t</svg>\r\n</div>\r\n<div class=\"mega-title\">\r\n\t<div class=\"title\">Become a Partner</div>\r\n\t<div class=\"text\">Collaborate with us to expand healthcare innovation and business opportunities.\r\n\t</div>\r\n</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 66498,
+            "parent": 66523,
+            "depth": 3,
+            "order": 26,
+            "title_raw": "Case Studies",
+            "title_text": "Case Studies",
+            "url": "http://192.168.0.223/healthray/case-studies/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "61981",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<!-- Case Studies -->\r\n<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\">\r\n\t\t<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2\"></path></svg>\r\n\t</div>\r\n\t<div class=\"mega-title\">\r\n\t\t<div class=\"title\">Case Studies</div>\r\n\t\t<div class=\"text\">Explore real-world success stories of hospitals using our cloud-based HMS.</div>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 66499,
+            "parent": 66525,
+            "depth": 3,
+            "order": 34,
+            "title_raw": "Events",
+            "title_text": "Events",
+            "url": "http://192.168.0.223/healthray/events/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "65164",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<!-- Events -->\r\n<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\">\r\n\t\t<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\"\r\n\t\t\t\t stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\r\n\t\t\t<path d=\"M8 2v4\"></path>\r\n\t\t\t<path d=\"M16 2v4\"></path>\r\n\t\t\t<rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"></rect>\r\n\t\t\t<path d=\"M3 10h18\"></path>\r\n\t\t\t<path d=\"M8 14h.01\"></path>\r\n\t\t\t<path d=\"M12 14h.01\"></path>\r\n\t\t\t<path d=\"M16 14h.01\"></path>\r\n\t\t\t<path d=\"M8 18h.01\"></path>\r\n\t\t\t<path d=\"M12 18h.01\"></path>\r\n\t\t\t<path d=\"M16 18h.01\"></path>\r\n\t\t</svg>\r\n\t</div>\r\n\t<div class=\"mega-title\">\r\n\t\t<div class=\"title\">Events</div>\r\n\t\t<div class=\"text\">Stay updated on upcoming medical expos, webinars, and Healthray-hosted events.\r\n\t\t</div>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 66500,
+            "parent": 66523,
+            "depth": 3,
+            "order": 27,
+            "title_raw": "FAQs",
+            "title_text": "FAQs",
+            "url": "http://192.168.0.223/healthray/faqs/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "65487",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<!-- FAQs -->\r\n<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\">\r\n\t\t<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\"\r\n\t\t\t\t stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"\r\n\t\t\t\t class=\"lucide lucide-hand-helping-icon lucide-hand-helping\">\r\n\t\t\t<path d=\"M11 12h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 14\" />\r\n\t\t\t<path\r\n\t\t\t\t\t\td=\"m7 18 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9\" />\r\n\t\t\t<path d=\"m2 13 6 6\" />\r\n\t\t</svg>\r\n\t</div>\r\n\t<div class=\"mega-title\">\r\n\t\t<div class=\"title\">FAQs</div>\r\n\t\t<div class=\"text\">Find answers to commonly asked questions about our platform and services.\r\n\t\t</div>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 66501,
+            "parent": 66524,
+            "depth": 3,
+            "order": 30,
+            "title_raw": "Healthray Reviews",
+            "title_text": "Healthray Reviews",
+            "url": "http://192.168.0.223/healthray/reviews/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "61837",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<!-- Testimonial -->\r\n<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\">\r\n\t\t<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\"\r\n\t\t\t\t stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\r\n\t\t\t<path\r\n\t\t\t\t\t\td=\"M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719\">\r\n\t\t\t</path>\r\n\t\t</svg>\r\n\t</div>\r\n\t<div class=\"mega-title\">\r\n\t\t<div class=\"title\">Reviews</div>\r\n\t\t<div class=\"text\">Read firsthand experiences from healthcare professionals and clients.</div>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 66502,
+            "parent": 66523,
+            "depth": 3,
+            "order": 25,
+            "title_raw": "Whitepaper",
+            "title_text": "Whitepaper",
+            "url": "http://192.168.0.223/healthray/whitepaper/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "61804",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<!-- Whitepaper -->\r\n<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\">\r\n\t\t<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z\"></path><path d=\"M14 2v4a2 2 0 0 0 2 2h4\"></path><path d=\"M10 9H8\"></path><path d=\"M16 13H8\"></path><path d=\"M16 17H8\"></path></svg>\r\n\t</div>\r\n\t<div class=\"mega-title\">\r\n\t\t<div class=\"title\">Whitepaper</div>\r\n\t\t<div class=\"text\">Access detailed research papers and technical analyses from Healthray experts.</div>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 66503,
+            "parent": 66524,
+            "depth": 3,
+            "order": 32,
+            "title_raw": "Brochure",
+            "title_text": "Brochure",
+            "url": "http://192.168.0.223/healthray/pdf/Healthray.pdf",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "66503",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<!-- Brochure -->\r\n<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\">\r\n\t\t<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z\"></path><path d=\"M14 2v4a2 2 0 0 0 2 2h4\"></path></svg>\r\n\t</div>\r\n\t<div class=\"mega-title\">\r\n\t\t<div class=\"title\">Brochure</div>\r\n\t\t<div class=\"text\">Get downloadable brochures with in-depth information about our products and features.</div>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 66508,
+            "parent": 0,
+            "depth": 0,
+            "order": 14,
+            "title_raw": "ABHA",
+            "title_text": "ABHA",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "66508",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "type": "megamenu"
+            }
+        },
+        {
+            "id": 66509,
+            "parent": 24050,
+            "depth": 1,
+            "order": 2,
+            "title_raw": "Products",
+            "title_text": "Products",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "66509",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "mega_menu_order": {
+                    "24050": 1
+                },
+                "mega_menu_columns": 4,
+                "hide_text": "true",
+                "disable_link": "true",
+                "icon_position": "left",
+                "sticky_visibility": "always",
+                "hide_arrow": "false",
+                "hide_on_mobile": "false",
+                "hide_on_desktop": "false",
+                "close_after_click": "false",
+                "hide_sub_menu_on_mobile": "false",
+                "collapse_children": "false",
+                "submenu_columns": "2"
+            }
+        },
+        {
+            "id": 66510,
+            "parent": 24050,
+            "depth": 1,
+            "order": 9,
+            "title_raw": "CTA Box",
+            "title_text": "CTA Box",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "66510",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [
+                "review-box"
+            ],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "mega_menu_columns": 2,
+                "mega_menu_order": {
+                    "24050": 2
+                },
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "outer",
+                        "code": "[healthray_cta title=\"Transform Your Practice with Smart Tools\" text=\"Discover HealthrayΓÇÖs all-in-one solutions ΓÇö from hospitals to labs, designed to make healthcare simpler, faster, and more accurate.\" button_text=\"Explore Products\"]"
+                    }
+                },
+                "hide_text": "true",
+                "disable_link": "true",
+                "icon_position": "left",
+                "sticky_visibility": "always",
+                "hide_arrow": "false",
+                "hide_on_mobile": "false",
+                "hide_on_desktop": "false",
+                "close_after_click": "false",
+                "hide_sub_menu_on_mobile": "false",
+                "collapse_children": "false"
+            }
+        },
+        {
+            "id": 66511,
+            "parent": 24050,
+            "depth": 1,
+            "order": 10,
+            "title_raw": "cta",
+            "title_text": "cta",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "66511",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [
+                "notice-box"
+            ],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "mega_menu_columns": 6,
+                "mega_menu_order": {
+                    "24050": 3
+                },
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "outer",
+                        "code": "[healthray_megamenu_notice]"
+                    }
+                }
+            }
+        },
+        {
+            "id": 66512,
+            "parent": 66508,
+            "depth": 1,
+            "order": 15,
+            "title_raw": "abha",
+            "title_text": "abha",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "66512",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "mega_menu_columns": 6,
+                "hide_text": "true",
+                "disable_link": "true",
+                "icon_position": "left",
+                "sticky_visibility": "always",
+                "hide_arrow": "false",
+                "hide_on_mobile": "false",
+                "hide_on_desktop": "false",
+                "close_after_click": "false",
+                "hide_sub_menu_on_mobile": "false",
+                "collapse_children": "false"
+            }
+        },
+        {
+            "id": 66513,
+            "parent": 66508,
+            "depth": 1,
+            "order": 20,
+            "title_raw": "CTA",
+            "title_text": "CTA",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "66513",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [
+                "notice-box"
+            ],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "mega_menu_columns": 6,
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "outer",
+                        "code": "[healthray_megamenu_notice]"
+                    }
+                }
+            }
+        },
+        {
+            "id": 66515,
+            "parent": 27347,
+            "depth": 1,
+            "order": 12,
+            "title_raw": "speciality",
+            "title_text": "speciality",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "66515",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "outer",
+                        "code": "[speciality_megamenu]"
+                    }
+                },
+                "mega_menu_columns": 2
+            }
+        },
+        {
+            "id": 66516,
+            "parent": 27347,
+            "depth": 1,
+            "order": 13,
+            "title_raw": "cta",
+            "title_text": "cta",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "66516",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [
+                "notice-box"
+            ],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "outer",
+                        "code": "[healthray_megamenu_notice]"
+                    }
+                },
+                "mega_menu_columns": 2
+            }
+        },
+        {
+            "id": 66523,
+            "parent": 67434,
+            "depth": 2,
+            "order": 23,
+            "title_raw": "Learning Hub",
+            "title_text": "Learning Hub",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "66523",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "mega_menu_columns": 2
+            }
+        },
+        {
+            "id": 66524,
+            "parent": 67434,
+            "depth": 2,
+            "order": 28,
+            "title_raw": "Media & Marketing",
+            "title_text": "Media & Marketing",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "66524",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "mega_menu_columns": 2
+            }
+        },
+        {
+            "id": 66525,
+            "parent": 67434,
+            "depth": 2,
+            "order": 33,
+            "title_raw": "Community & Partners",
+            "title_text": "Community & Partners",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "66525",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "mega_menu_columns": 2
+            }
+        },
+        {
+            "id": 67433,
+            "parent": 66373,
+            "depth": 1,
+            "order": 36,
+            "title_raw": "CTA",
+            "title_text": "CTA",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "67433",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [
+                "notice-box"
+            ],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "outer",
+                        "code": "[healthray_megamenu_notice brochure_link=\"no\"]"
+                    }
+                },
+                "mega_menu_columns": 6
+            }
+        },
+        {
+            "id": 67434,
+            "parent": 66373,
+            "depth": 1,
+            "order": 22,
+            "title_raw": "ressss",
+            "title_text": "ressss",
+            "url": "#",
+            "type": "custom",
+            "object": "custom",
+            "object_id": "67434",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "mega_menu_columns": 6,
+                "hide_text": "true",
+                "disable_link": "true",
+                "icon_position": "left",
+                "sticky_visibility": "always",
+                "hide_arrow": "false",
+                "hide_on_mobile": "false",
+                "hide_on_desktop": "false",
+                "close_after_click": "false",
+                "hide_sub_menu_on_mobile": "false",
+                "collapse_children": "false",
+                "submenu_columns": "3"
+            }
+        },
+        {
+            "id": 77343,
+            "parent": 66524,
+            "depth": 3,
+            "order": 29,
+            "title_raw": "Our Story",
+            "title_text": "Our Story",
+            "url": "http://192.168.0.223/healthray/our-story/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "31213",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<!-- Our Story -->\r\n<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\">\r\n\t\t<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" data-lucide=\"book-open\" aria-hidden=\"true\"><path d=\"M12 7v14\"></path><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\"></path></svg>\r\n\t</div>\r\n\t<div class=\"mega-title\">\r\n\t\t<div class=\"title\">Our Story</div>\r\n\t\t<div class=\"text\">Discover the vision, journey, and purpose driving HealthrayΓÇÖs healthcare transformation.</div>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 79729,
+            "parent": 66509,
+            "depth": 2,
+            "order": 4,
+            "title_raw": "EMR software",
+            "title_text": "EMR software",
+            "url": "http://192.168.0.223/healthray/emr-software/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "79713",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\"> <img src=\"http://192.168.0.223/healthray/wp-content/themes/stratusx-child/assets/navIcon/electronic-medical-record.svg\" alt=\"EMR Software\">  </div>\r\n\t<div class=\"mega-title\">\r\n\t\t<div class=\"title\">EMR Software</div>\r\n\t\t<div class=\"text\">Intuitive EMR Solution that boosts practice efficiency and empowers clinicians </div>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 79806,
+            "parent": 66509,
+            "depth": 2,
+            "order": 5,
+            "title_raw": "EHR software",
+            "title_text": "EHR software",
+            "url": "http://192.168.0.223/healthray/ehr-software/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "79754",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\">\r\n\t\t<img src=\"http://192.168.0.223/healthray/wp-content/themes/stratusx-child/assets/navIcon/electronic-health-record.svg\" alt=\"EHR Software\">\r\n\t</div>\r\n\t<div class=\"mega-title\">\r\n\t\t<div class=\"title\">EHR Software</div>\r\n\t\t<div class=\"text\">All-in-one EHR solution that manages data across multiple healthcare settings</div>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 79879,
+            "parent": 66509,
+            "depth": 2,
+            "order": 8,
+            "title_raw": "Clinic Management Software",
+            "title_text": "Clinic Management Software",
+            "url": "http://192.168.0.223/healthray/clinic-management-software/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "79865",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\">\r\n\t\t<img src=\"http://192.168.0.223/healthray/wp-content/uploads/2025/10/Clinic-Management-Software.svg\" alt=\"Clinic Management Software\">\r\n\t</div>\r\n\t<div class=\"mega-title\">\r\n\t\t<div class=\"title\">Clinic Management Software</div>\r\n\t\t<div class=\"text\">Robust healthcare solution for boosting clinical success and consultation journey</div>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 79939,
+            "parent": 66509,
+            "depth": 2,
+            "order": 7,
+            "title_raw": "Laboratory Information Management System (LIMS)",
+            "title_text": "Laboratory Information Management System (LIMS)",
+            "url": "http://192.168.0.223/healthray/laboratory-information-management-system/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "79924",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\">\r\n\t\t<img src=\"http://192.168.0.223/healthray/wp-content/themes/stratusx-child/assets/navIcon/laboratory-information.svg\" alt=\"Laboratory Information Management System\">\r\n\t</div>\r\n\t<div class=\"mega-title\">\r\n\t\t<div class=\"title\">Laboratory Information Management System</div>\r\n\t\t<div class=\"text\">Administer lab operations from sample management to regulatory compliance</div>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 79954,
+            "parent": 66509,
+            "depth": 2,
+            "order": 6,
+            "title_raw": "Pharmacy Management System",
+            "title_text": "Pharmacy Management System",
+            "url": "http://192.168.0.223/healthray/pharmacy-management-system/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "79928",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\">\r\n\t\t<img src=\"http://192.168.0.223/healthray/wp-content/themes/stratusx-child/assets/navIcon/pharmacy-management.svg\" alt=\"Pharmacy Management System\">\r\n\t</div>\r\n\t<div class=\"mega-title\">\r\n\t\t<div class=\"title\">Pharmacy Management System</div>\r\n\t\t<div class=\"text\">Simplifying pharmacy operations that enhances accuracy and reduces costs</div>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        },
+        {
+            "id": 81149,
+            "parent": 66509,
+            "depth": 2,
+            "order": 3,
+            "title_raw": "Hospital Information Management System",
+            "title_text": "Hospital Information Management System",
+            "url": "http://192.168.0.223/healthray/hospital-information-management-system/",
+            "type": "post_type",
+            "object": "page",
+            "object_id": "81124",
+            "target": "",
+            "xfn": "",
+            "attr_title": "",
+            "description": "",
+            "classes": [],
+            "inner_images": [],
+            "inner_svg_count": 0,
+            "inner_links": [],
+            "megamenu": {
+                "replacements": {
+                    "type": "html",
+                    "logo": {
+                        "id": "",
+                        "width": "100",
+                        "height": "60"
+                    },
+                    "search": {
+                        "type": "expand_to_left",
+                        "height": "30px",
+                        "width": "200px",
+                        "text_color": "#333",
+                        "icon_color_closed": "#fff",
+                        "icon_color_open": "#333",
+                        "search_icon_type": "dashicons-search",
+                        "background_color_closed": "rgba(0,0,0,0)",
+                        "background_color_open": "#fff",
+                        "border_radius": "2px",
+                        "placeholder_text": "Search...",
+                        "vertical_offset": "0px"
+                    },
+                    "html": {
+                        "mode": "inner",
+                        "code": "<div class=\"mega-box\">\r\n\t<div class=\"mega-icon\"> <img src=\"http://192.168.0.223/healthray/wp-content/themes/stratusx-child/assets/navIcon/hospital-information-management-system.svg\" alt=\"Hospital Information Management System\">  </div>\r\n\t<div class=\"mega-title\">\r\n\t\t<div class=\"title\">Hospital Information Management System</div>\r\n\t\t<div class=\"text\">AI-Powered Healthcare Solution that automates workflows and enhances patient care </div>\r\n\t</div>\r\n</div>"
+                    }
+                }
+            }
+        }
+    ]
+}

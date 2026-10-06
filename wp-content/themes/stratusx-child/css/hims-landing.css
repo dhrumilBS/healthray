@@ -1,0 +1,41 @@
+@media (prefers-reduced-motion: reduce) {
+  .hims-landing .ecg-path { stroke-dasharray: none; stroke-dashoffset: 0; }
+}
+
+.hims-landing .t-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+@media (max-width: 980px) {
+  .hims-landing .t-grid { grid-template-columns: 1fr; }
+}
+
+/* ---- Platform module map — this page's visual signature + internal-link hub ---- */
+.hims-landing .platform { border: 1px solid var(--line); border-radius: 20px; overflow: hidden; background: #fff; }
+.hims-landing .platform-head { background: var(--brand-deep); color: #fff; padding: 20px 26px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.hims-landing .platform-head b { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; }
+.hims-landing .platform-head span { font-size: .85rem; color: var(--hr-hero-ink); }
+.hims-landing .platform-body { padding: 26px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.hims-landing .mod { border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 16px; display: flex; flex-direction: column; gap: 7px; transition: border-color .15s, box-shadow .15s, transform .18s; }
+.hims-landing .mod:hover { border-color: var(--brand); box-shadow: 0 12px 28px rgba(var(--ink-rgb), .09); transform: translateY(-3px); }
+.hims-landing .mod .m-ico { width: 34px; height: 34px; border-radius: 9px; background: var(--brand-glow); display: grid; place-items: center; margin-bottom: 2px; }
+.hims-landing .mod .m-ico svg { width: 17px; height: 17px; stroke: var(--brand); fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.hims-landing .mod b { font-family: var(--font-display); font-size: .92rem; font-weight: 600; color: var(--ink); line-height: 1.3; }
+.hims-landing .mod p { font-size: .82rem; line-height: 1.45; }
+.hims-landing .mod .m-link { margin-top: auto; padding-top: 6px; font-size: .8rem; font-weight: 600; color: var(--brand); }
+.hims-landing .mod.core { background: var(--brand-tint); border-style: dashed; }
+.hims-landing .platform-note { padding: 0 26px 24px; font-size: .85rem; color: var(--ink-soft); }
+@media (max-width: 980px) { .hims-landing .platform-body { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .hims-landing .platform-body { grid-template-columns: 1fr; } }
+
+/* ---- Outcomes band — this page's other visual signature ---- */
+.hims-landing .outcomes { background: var(--brand-deep); color: #fff; padding: 72px 0; }
+.hims-landing .outcomes .eyebrow { color: var(--hr-hero-accent); }
+.hims-landing .outcomes .eyebrow::before { background: var(--hr-hero-accent); }
+.hims-landing .outcomes h2 { color: #fff; }
+.hims-landing .outcomes .section-head p { color: var(--hr-hero-ink); }
+.hims-landing .outcomes-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; margin-top: 8px; }
+.hims-landing .outcome { border: 1px solid rgba(255,255,255,.14); border-radius: var(--radius); padding: 22px 14px; text-align: center; background: rgba(255,255,255,.04); }
+.hims-landing .outcome b { display: block; font-family: var(--font-display); font-size: clamp(1.5rem, 2.4vw, 2rem); font-weight: 700; color: var(--hr-hero-success); }
+.hims-landing .outcome b.down { color: var(--hr-hero-accent); }
+.hims-landing .outcome span { font-size: .8rem; color: var(--hr-hero-ink); line-height: 1.35; display: block; margin-top: 4px; }
+.hims-landing .outcomes-note { margin-top: 26px; font-size: .82rem; color: var(--hr-hero-muted); text-align: center; }
+@media (max-width: 980px) { .hims-landing .outcomes-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 720px) { .hims-landing .outcomes-grid { grid-template-columns: repeat(2, 1fr); } }

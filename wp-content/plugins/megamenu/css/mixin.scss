@@ -1,0 +1,452 @@
+@mixin arrow-icon($val, $font, $weight) {
+    @if $font == 'svg' {
+        content: '';
+        mask-image: url("#{$val}");
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+        background-color: currentColor;
+        width: 1em;
+        height: 1em;
+    } @else {
+        content: $val;
+        font-family: $font;
+        font-weight: $weight;
+    }
+}
+
+@mixin arrow-icon-state($val, $font) {
+    @if $font == 'svg' {
+        mask-image: url("#{$val}");
+    } @else {
+        content: $val;
+    }
+}
+
+@mixin padding($top: 0, $right: 0, $bottom: 0, $left: 0) {
+    @if $top == $right and $right == $bottom and $bottom == $left and $left == $top {
+        padding: $top;
+    } @else if $top == $bottom and $right == $left {
+        padding: $top $right;
+    } @else {
+        padding: $top $right $bottom $left;
+    }
+}
+
+@mixin border-radius($topleft: 0, $topright: 0, $bottomright: 0, $bottomleft: 0) {
+    @if not ($topleft == 0 and $topright == 0 and $bottomright == 0 and $bottomleft == 0) {
+        @if $topleft == $topright and $topright == $bottomright and $bottomright == $bottomleft {
+            border-radius: $topleft;
+        } @else {
+            border-radius: $topleft $topright $bottomright $bottomleft;
+        }
+    }
+}
+
+@mixin box-shadow($value) {
+    box-shadow: $value;
+}
+
+@mixin background($from, $to) {
+    @if $to == $from {
+        background-color: $to;
+    } @else {
+        background: linear-gradient(to bottom, $from, $to);
+    }
+}
+
+@mixin border($top, $left, $right, $bottom, $color) {
+    @if $top == 0px and $left == 0px and $right == 0px and $bottom == 0px {
+        border: 0;
+    } @else {
+        border-top: $top solid $color;
+        border-left: $left solid $color;
+        border-right: $right solid $color;
+        border-bottom: $bottom solid $color;
+    }
+}
+
+@mixin mobile {
+    @media only screen and (max-width : $responsive_breakpoint) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media only screen and (min-width : $responsive_breakpoint + 1) {
+        @content;
+    }
+}
+
+@mixin resets {
+    #{$wrap},
+    #{$wrap} #{$menu},
+    #{$wrap} #{$menu} ul.mega-sub-menu,
+    #{$wrap} #{$menu} li.mega-menu-item,
+    #{$wrap} #{$menu} li.mega-menu-row,
+    #{$wrap} #{$menu} li.mega-menu-column,
+    #{$wrap} #{$menu} a.mega-menu-link,
+    #{$wrap} #{$menu} span.mega-indicator,
+    #{$wrap} #{$menu} span.mega-menu-badge,
+    #{$wrap} button.mega-close,
+    #{$wrap} button.mega-toggle-standard {
+        transition: none;
+        @include border-radius(0, 0, 0, 0);
+        @include box-shadow(none);
+        background: none;
+        border: 0;
+        bottom: auto;
+        box-sizing: border-box;
+        clip: auto;
+        color: $panel_font_color;
+        display: block;
+        float: none;
+        font-family: unquote($panel_font_family);
+        font-size: $panel_font_size;
+        height: auto;
+        left: auto;
+        line-height: $line_height;
+        list-style-type: none;
+        margin: 0;
+        min-height: auto;
+        max-height: none;
+        min-width: auto;
+        max-width: none;
+        opacity: 1;
+        outline: none;
+        overflow: visible;
+        padding: 0;
+        position: relative;
+        pointer-events: auto;
+        right: auto;
+        text-align: left;
+        text-decoration: none;
+        text-indent: 0;
+        text-transform: none;
+        transform: none;
+        top: auto;
+        vertical-align: baseline;
+        visibility: inherit;
+        width: auto;
+        word-wrap: break-word;
+        white-space: normal;
+        -webkit-tap-highlight-color: transparent;
+
+        &:before,
+        &:after {
+            display: none;
+        }
+    }
+
+    @if $resets == 'on' {
+        #{$wrap} #{$menu} {
+            ul, li, p, img:not(.mega-menu-logo), div, a, button {
+                color: $panel_font_color;
+                font-family: unquote($panel_font_family);
+                font-size: $panel_font_size;
+                background: none;
+                border: 0;
+                @include border-radius(0, 0, 0, 0);
+                margin: 0;
+                opacity: 1;
+                padding: 0;
+                position: relative;
+                right: auto;
+                top: auto;
+                bottom: auto;
+                left: auto;
+                text-align: left;
+                text-transform: none;
+                vertical-align: baseline;
+                @include box-shadow(none);
+                list-style-type: none;
+                line-height: $line_height;
+                box-sizing: border-box;
+                float: none;
+                overflow: visible;
+                display: block;
+                min-height: 0;
+                transition: none;
+                text-decoration: none;
+                width: auto;
+                clip: auto;
+                height: auto;
+                outline: none;
+                visibility: inherit;
+                pointer-events: auto;
+
+                &:before,
+                &:after {
+                    display: none;
+                }
+            }
+
+            table, td, tr, th {
+                border: 0;
+                margin: 0;
+                padding: 0;
+                background: none;
+            }
+        }
+    }
+}
+
+@mixin mobilemenu {
+
+    .mega-menu-toggle {
+        display: none;
+
+        ~ button.mega-close {
+            display: none;
+        }
+
+        @include mobile {
+            z-index: 1;
+            @include background($toggle_background_from, $toggle_background_to);
+            @include border-radius($toggle_bar_border_radius_top_left, $toggle_bar_border_radius_top_right, $toggle_bar_border_radius_bottom_right, $toggle_bar_border_radius_bottom_left);
+            line-height: $toggle_bar_height;
+            height: $toggle_bar_height;
+            text-align: left;
+            user-select: none;
+            outline: none;
+            white-space: nowrap;
+
+            @if $disable_mobile_toggle == on {
+                display: none;
+            } @else {
+                display: flex;
+            }
+
+            img {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .mega-toggle-blocks-left,
+            .mega-toggle-blocks-center,
+            .mega-toggle-blocks-right {
+                display: flex;
+                flex: 1;
+                gap: 6px;
+            }
+
+            .mega-toggle-block {
+                display: flex;
+                height: 100%;
+                outline: 0;
+                align-self: center;
+                flex-shrink: 0;
+            }
+
+            .mega-toggle-blocks-left {
+                justify-content: flex-start;
+                padding-left: 6px;
+            }
+
+            .mega-toggle-blocks-center {
+                justify-content: center;
+            }
+
+            .mega-toggle-blocks-right {
+                justify-content: flex-end;
+                padding-right: 6px;
+            }
+
+            + #{$menu} {
+                flex-direction: column;
+                flex-wrap: nowrap;
+                @include background($mobile_background_from, $mobile_background_to);
+                @include padding($mobile_menu_padding_top, $mobile_menu_padding_right, $mobile_menu_padding_bottom, $mobile_menu_padding_left);
+                
+                @if $disable_mobile_toggle == on {
+                    display: flex; 
+                } @else {
+                    display: none;
+
+                    @if $mobile_menu_overlay == on or $mobile_menu_force_width == on {
+                        position: absolute;
+                        width: 100%;
+                        z-index: 9999999;
+                    }
+                }
+
+                @if ( ( $effect_mobile == slide_right or $effect_mobile == slide_left ) and $disable_mobile_toggle == off ) {
+                    position: fixed;
+                    width: $mobile_menu_off_canvas_width;
+                    max-width: 100%;
+                    height: 100dvh;
+                    max-height: 100dvh;
+                    top: 0;
+                    box-sizing: border-box;
+                    transition: left $effect_speed_mobile ease-in-out, right $effect_speed_mobile ease-in-out, visibility $effect_speed_mobile ease-in-out;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                    z-index: 9999999999;
+                    overscroll-behavior: contain;
+                    visibility: hidden;
+                    display: flex;
+
+                    @if $effect_mobile == slide_right {
+                        left: -$mobile_menu_off_canvas_width;
+                    }
+
+                    @if $effect_mobile == slide_left {
+                        right: -$mobile_menu_off_canvas_width;
+                    }
+                }
+            }
+
+            &.mega-menu-open {
+                & + #{$menu} {
+                    display: flex;
+                    visibility: visible;
+
+                    @if $effect_mobile == slide_right {
+                        left: 0;
+                    }
+
+                    @if $effect_mobile == slide_left {
+                        right: 0;
+                    }
+                }
+            }
+
+            @if ( ( $effect_mobile == slide_right or $effect_mobile == slide_left ) and $disable_mobile_toggle == off ) {
+                position: relative;
+
+                & ~ button.mega-close {
+                    @if $css_type == flex {
+                        all: revert;
+                        appearance: none;
+                        background: none;
+                        border: 0;
+                        padding: 0;
+                        margin: 0;
+                    }
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 40px;
+                    height: 40px;
+                    position: fixed;
+                    top: 0;
+                    z-index: 99999999999;
+                    cursor: pointer;
+                    visibility: hidden;
+                    opacity: 0;
+                    transition: left $effect_speed_mobile ease-in-out, right $effect_speed_mobile ease-in-out, visibility $effect_speed_mobile ease-in-out, opacity $effect_speed_mobile ease-out;
+
+                    @if $effect_mobile == slide_left {
+                        right: 0;
+                        left: auto;
+                    }
+
+                    @if $effect_mobile == slide_right {
+                        right: auto;
+                        left: 0;
+                    }
+
+                    @if $close_icon_font == svg {
+                        svg {
+                            display: flex;
+                            width: $close_icon_font_size;
+                            height: $close_icon_font_size;
+                            color: $close_icon_color;
+                            stroke: currentColor;
+                            stroke-width: 2;
+                            fill: none;
+                        }
+                    } @else {
+                        &:before {
+                            display: flex;
+                            content: $close_icon;
+                            font-family: $close_icon_font;
+                            font-weight: $close_icon_font_weight;
+                            color: $close_icon_color;
+                            font-size: $close_icon_font_size;
+                        }
+                    }
+                }
+
+                &.mega-menu-open ~ button.mega-close {
+                    visibility: visible;
+                    opacity: 1;
+
+                    @if $effect_mobile == slide_right {
+                        @if $mobile_menu_off_canvas_width == '100%' {
+                            left: auto;
+                            right: 0;
+                        } @else {
+                            left: calc(min(100vw - 40px, #{$mobile_menu_off_canvas_width}));
+                            right: auto;
+                        }
+                    }
+
+                    @if $effect_mobile == slide_left {
+                        @if $mobile_menu_off_canvas_width == '100%' {
+                            right: auto;
+                            left: 0;
+                        } @else {
+                            right: calc(min(100vw - 40px, #{$mobile_menu_off_canvas_width}));
+                            left: auto;
+                        }
+                    }
+                }
+
+                &.mega-menu-open:after {
+                    position: fixed;
+                    width: 100%;
+                    height: 99999px;
+                    content: "";
+                    top: 0;
+                    left: 0;
+                    opacity: 0.5;
+                    background: black;
+                    cursor: pointer;
+                    z-index: 9999999998;
+                }
+            }
+        }
+    }
+}
+
+
+@mixin keyboard {
+    &.mega-keyboard-navigation {
+        .mega-menu-toggle:focus,
+        .mega-toggle-block:focus,
+        .mega-toggle-block a:focus,
+        .mega-toggle-block button:focus,
+        .mega-toggle-block .mega-search input[type=text]:focus,
+        .mega-toggle-block button.mega-toggle-animated:focus,
+        #{$menu} a:focus,
+        #{$menu} span:focus,
+        #{$menu} input:focus,
+        #{$menu} li.mega-menu-item .mega-menu-link:focus,
+        #{$menu} form.mega-search-open:has(input[type=text]:focus),
+        #{$menu} + button.mega-close:focus,
+        #{$menu} .mega-mobile-back > button:focus {
+            outline-style: solid;
+            outline-width: $keyboard_highlight_width;
+            outline-color: $keyboard_highlight_color;
+            outline-offset: $keyboard_highlight_offset;
+        }
+
+        .mega-toggle-block button.mega-toggle-animated:focus {
+            outline-offset: 2px;
+        }
+
+        > li.mega-menu-item > a.mega-menu-link:focus {
+            @include background($menu_item_background_hover_from, $menu_item_background_hover_to);
+            color: $menu_item_link_color_hover;
+            font-weight: $menu_item_link_weight_hover;
+            text-decoration: $menu_item_link_text_decoration_hover;
+            border-color: $menu_item_border_color_hover;
+
+            @include mobile {
+                color: $mobile_menu_item_link_color_hover;
+                @include background($mobile_menu_item_background_hover_from, $mobile_menu_item_background_hover_to);
+            }
+        }
+    }
+}

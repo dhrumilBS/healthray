@@ -1,0 +1,110 @@
+.contact-page .hero-grid { grid-template-columns: 1.05fr .95fr; }
+
+/* Response-time promise pill above the H1 */
+.contact-page .sla-pill { display: inline-flex; align-items: center; gap: 9px; margin-bottom: 16px; padding: 7px 15px 7px 11px; border: 1px solid var(--line); border-radius: 999px; background: #fff; box-shadow: 0 4px 14px rgba(var(--ink-rgb), .05); font-size: .82rem; font-weight: 600; color: var(--ink); }
+.contact-page .sla-pill .pip { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--hr-success); flex: none; }
+.contact-page .sla-pill .pip::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--hr-success); opacity: .45; animation: hrPip 1.9s ease-out infinite; }
+@keyframes hrPip {
+    0% { transform: scale(.55); opacity: .55; }
+    100% { transform: scale(1.25); opacity: 0; }
+}
+
+/* Call / WhatsApp / email row under the hero copy */
+.contact-page .quick-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 24px; }
+.contact-page .quick-actions .btn { padding: 12px 20px; }
+.contact-page .quick-actions .btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* ---- contact channels ------------------------------------------------- */
+.contact-page .channel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.contact-page .channel { display: flex; flex-direction: column; gap: 8px; padding: 24px 22px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+.contact-page a.channel:hover { transform: translateY(-4px); border-color: var(--brand); box-shadow: 0 14px 34px rgba(var(--ink-rgb), .1); }
+.contact-page .channel .c-ico { display: grid; place-items: center; width: 42px; height: 42px; margin-bottom: 6px; border-radius: 11px; background: var(--brand-glow); }
+.contact-page .channel .c-ico svg { width: 21px; height: 21px; fill: none; stroke: var(--brand); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.contact-page .channel h3 { font-size: 1rem; }
+.contact-page .channel .c-value { font-family: var(--font-display); font-size: 1.02rem; font-weight: 700; color: var(--brand); overflow-wrap: anywhere; }
+.contact-page .channel p { font-size: .87rem; }
+.contact-page .channel .c-meta { margin-top: auto; padding-top: 12px; font-size: .78rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft); }
+
+/* ---- "what do you need" routing cards --------------------------------- */
+.contact-page .route .card { display: flex; flex-direction: column; }
+.contact-page .route .card .more { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; font-size: .86rem; font-weight: 600; color: var(--brand); }
+.contact-page .route .card:hover .more { gap: 10px; }
+
+/* ---- office ----------------------------------------------------------- */
+/* Single horizontal card: pin, address, directions button. The embedded map
+   was removed because an address-only Maps query resolved to a neighbouring
+   business, so there is no second column to fill - the card runs full width
+   and stacks on tablet down. */
+.contact-page .office-card { display: flex; align-items: center; gap: 28px; padding: 28px 32px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; transition: border-color .18s ease, box-shadow .18s ease; }
+.contact-page .office-card:hover { border-color: var(--brand); box-shadow: 0 14px 34px rgba(var(--ink-rgb), .08); }
+.contact-page .office-pin { display: grid; place-items: center; width: 54px; height: 54px; flex: none; border-radius: 14px; background: var(--brand-glow); color: var(--brand); }
+.contact-page .office-pin svg { width: 26px; height: 26px; }
+.contact-page .office-body { flex: 1 1 auto; min-width: 0; }
+.contact-page .office-body h3 { font-size: 1.1rem; margin-bottom: 6px; }
+.contact-page .office-body address { font-style: normal; font-size: .96rem; line-height: 1.6; color: var(--ink-soft); }
+.contact-page .office-hint { margin-top: 8px; font-size: .86rem; color: var(--ink-soft); }
+.contact-page .office-actions { flex: none; display: flex; flex-direction: column; align-items: stretch; gap: 8px; text-align: center; }
+.contact-page .office-actions .btn { white-space: nowrap; }
+.contact-page .office-actions .btn svg { width: 17px; height: 17px; flex: none; }
+.contact-page .office-meta { font-size: .76rem; color: var(--ink-soft); }
+
+/* ---- what happens next (numbered steps) ------------------------------- */
+.contact-page .steps { counter-reset: hrstep; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.contact-page .step { position: relative; padding: 26px 22px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; }
+.contact-page .step::before { counter-increment: hrstep; content: counter(hrstep); display: grid; place-items: center; width: 34px; height: 34px; margin-bottom: 14px; border-radius: 10px; background: var(--brand); color: #fff; font-family: var(--font-display); font-size: .95rem; font-weight: 800; }
+.contact-page .step h3 { margin-bottom: 7px; font-size: 1rem; }
+.contact-page .step p { font-size: .9rem; }
+.contact-page .step .when { display: block; margin-top: 10px; font-size: .76rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--brand); }
+
+/* ---- support SLA table ------------------------------------------------ */
+.contact-page .sla-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: .93rem; }
+.contact-page .sla-table caption { text-align: left; padding-bottom: 12px; font-size: .86rem; color: var(--ink-soft); }
+.contact-page .sla-table th { font-family: var(--font-display); font-size: .95rem; text-align: left; padding: 13px 16px; background: var(--brand-tint); border: 1px solid var(--line); color: var(--ink); }
+.contact-page .sla-table td { padding: 13px 16px; border: 1px solid var(--line); color: var(--ink-soft); vertical-align: top; }
+.contact-page .sla-table tbody th { background: #fff; font-weight: 700; color: var(--ink); width: 34%; }
+
+/* ---- testimonials ---------------------------------------------------- */
+.contact-page .t-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+/* ---- final CTA ------------------------------------------------------- */
+.contact-page .cta-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.contact-page .cta-actions .btn-light { background: #fff; color: var(--brand-deep); }
+.contact-page .cta-actions .btn-light:hover { background: var(--brand-tint); transform: translateY(-2px); }
+.contact-page .cta-actions .btn-outline { border: 1.5px solid rgba(255, 255, 255, .45); color: #fff; background: transparent; }
+.contact-page .cta-actions .btn-outline:hover { border-color: #fff; background: rgba(255, 255, 255, .1); color: #fff; }
+.contact-page .cta-actions .btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* ---- responsive ------------------------------------------------------ */
+@media (max-width: 1100px) {
+    .contact-page .channel-grid { grid-template-columns: repeat(2, 1fr); }
+    .contact-page .steps { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 992px) {
+    .contact-page .hero-grid { grid-template-columns: 1fr; text-align: left; }
+    .contact-page .hero-sub { max-width: none; }
+    /* Card goes vertical: pin above the address, button full width below. */
+    .contact-page .office-card { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .contact-page .office-actions { align-self: stretch; }
+}
+
+@media (max-width: 720px) {
+    .contact-page .hero { padding: 34px 0 48px; }
+    .contact-page .quick-actions { gap: 8px; order: 6; }
+    .contact-page .quick-actions .btn { flex: 1 1 100%; }
+    .contact-page .channel-grid { grid-template-columns: 1fr; gap: 14px; }
+    .contact-page .channel { padding: 20px 18px; }
+    .contact-page .steps { grid-template-columns: 1fr; gap: 14px; }
+    .contact-page .office-card { padding: 22px 18px; gap: 16px; }
+    .contact-page .office-pin { width: 46px; height: 46px; }
+    .contact-page .office-pin svg { width: 22px; height: 22px; }
+    .contact-page .t-grid { grid-template-columns: 1fr; }
+    .contact-page .sla-table { font-size: .85rem; }
+    .contact-page .sla-table th,
+    .contact-page .sla-table td { padding: 10px; }
+    .contact-page .cta-actions .btn { flex: 1 1 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .contact-page .sla-pill .pip::after { animation: none; }
+}

@@ -1,0 +1,9 @@
+html { font-size: 100%; overflow-x: hidden; }
+body { font-family: "Nunito", sans-serif; }
+
+.inner-container>.content-editor { width: 100%; max-width: 1170px; margin: 0 auto; padding: 0 12px;  }
+.error-404 { padding-top: 40px; padding-bottom: 40px }
+
+body.elementor-page .inner-container>.content-editor,
+body.elementor-editor-active .inner-container>.content-editor,
+body.elementor-editor-preview .inner-container>.content-editor { width: auto!important;max-width: none;margin: 0;padding: 0; }

@@ -1,0 +1,1370 @@
+{
+    "post": {
+        "id": 81676,
+        "title": "5 Best CrelioHealth Alternatives & Competitors in 2026",
+        "slug": "creliohealth-alternatives",
+        "status": "draft"
+    },
+    "fields": {
+        "subject_name": "CrelioHealth",
+        "hero_intro": "",
+        "hero_cta_text": null,
+        "hero_cta_url": null,
+        "toc_heading_levels": null,
+        "intro_content": "<p>As sample volumes increase, coordinating the work between collection and report delivery gets harder. Staff collect and barcode a sample, send it for testing, and match it with analyser results. Staff are checking pending tests, following up on results waiting for approval, and making sure reports are sent out on time. When this is happening across a high number of samples every day, small delays can quickly turn into extra work for the team.</p>\n<p>It gets harder when the lab starts handling work from more collection centres, adding new analysers, sending some tests to outside labs, or managing more referring doctors. There is simply more to track across the same workflow, and it becomes easier for a sample, result, or report to get held up.</p>\n<p>That is when lab owners start asking whether their current LIMS still fits how the laboratory operates. For a lab using CrelioHealth, the search for an alternative is less about finding the software with the longest feature list and more about finding one that fits its workflow, integrations, reporting needs, and growth plans.</p>\n<p>This guide compares five CrelioHealth alternatives for 2026 and looks at what each platform is built to handle, where it has limitations, and which laboratory requirements are worth checking before making a switch.</p>",
+        "why_look_title": null,
+        "why_look_content": "",
+        "methodology_title": null,
+        "methodology_content": "<section class=\"common-content-box\">\n<h2>How We Evaluated CrelioHealth Alternatives</h2>\n<p>We looked at all five CrelioHealth alternatives using the same checklist. The focus was on how each platform handles everyday lab work, from patient and sample management to collection centres, barcode and phlebotomy, analyser integration, results, reports, and sharing. We also looked at areas that matter when a lab is growing, such as ease of use, B2B and referral work, customisation, reporting, implementation, migration, scalability, support, security, pricing, and India-specific requirements.</p>\n<p>We started with the vendors' own websites and product documentation. We also checked G2, Capterra, SoftwareSuggest, TechJockey, and Google reviews where they had useful information. The details in this comparison were checked in September 2026.</p>\n<p>We looked at how well each platform fits Indian diagnostic and pathology lab operations, rather than judging it only on the number of features listed. Ratings were one part of the research, not the basis for choosing an alternative. We compared the software for its actual workflows, ease of use, the kind of lab it can support, and the areas worth checking before a switch.</p>\n<p>When a vendor had not published clear information about a feature, integration, price, or compliance requirement, we did not treat it as confirmed.</p>\n</section>",
+        "comparison_title": "A Quick Look At 5 CrelioHealth Alternatives for Diagnostic Labs",
+        "comparison_intro": "<p>Before diving into each platform, here’s a side-by-side look at the five CrelioHealth alternatives. A ✓ means the software covers the full requirement, X means it does not cover the requirement, and brackets mean the vendor publicly lists only part of it.</p>",
+        "comparison_cta_text": null,
+        "profiles_heading": "CrelioHealth Alternatives Reviewed in Detail",
+        "competitors": [
+            "LabSmart",
+            "Flabs",
+            "eLabAssist",
+            "PathoGold"
+        ],
+        "glance_rows": [
+            {
+                "label": "Best For",
+                "type": "text",
+                "values": [
+                    "Pathology/diagnostic labs, hospital labs, multi-branch networks",
+                    "Small to medium pathology labs and diagnostic centres",
+                    "Pathology labs, diagnostic centres, multi-branch networks",
+                    "Diagnostic centres, multi-branch laboratories, B2B labs, hospital labs",
+                    "Small to large pathology labs and diagnostic centres"
+                ]
+            },
+            {
+                "label": "Pricing",
+                "type": "text",
+                "values": [
+                    "Custom quote + 10% off",
+                    "Multiple plans",
+                    "Quote based",
+                    "Quote based",
+                    "Multiple plans"
+                ]
+            },
+            {
+                "label": "Deployment",
+                "type": "text",
+                "values": [
+                    "Cloud / On-premises / Hybrid",
+                    "Cloud",
+                    "Cloud",
+                    "Cloud",
+                    "Cloud / Desktop"
+                ]
+            },
+            {
+                "label": "Single / Multi-Site",
+                "type": "yesno",
+                "values": [
+                    "yes",
+                    "(Collection-centre support)",
+                    "yes",
+                    "yes",
+                    "yes"
+                ]
+            },
+            {
+                "label": "India & Accreditation Readiness",
+                "type": "text",
+                "values": [
+                    "ABDM, ABHA, TPA, NABL/ISO 15189 workflow support",
+                    "TPA/Mediclaim",
+                    "ABHA, NABL",
+                    "ABDM/ABHA, NABL audit-readiness support",
+                    "Not clearly published"
+                ]
+            },
+            {
+                "label": "Key Integrations",
+                "type": "text",
+                "values": [
+                    "HL7/FHIR, EMR/EHR/HIS, analysers, RIS/PACS/DICOM, API",
+                    "WhatsApp, SMS, Email, Doctor Portal",
+                    "Analyser interfaces, ABHA, API, HIS/EMR",
+                    "HL7/EDI, HIMS/ERP, PACS/DICOM, SAP/Tally",
+                    "Instrument interfaces, PACS, third-party accounting API"
+                ]
+            },
+            {
+                "label": "Implementation / Migration",
+                "type": "text",
+                "values": [
+                    "Implementation + migration",
+                    "Implementation + migration",
+                    "Implementation + migration",
+                    "Implementation + migration",
+                    "Implementation + migration"
+                ]
+            },
+            {
+                "label": "Rating",
+                "type": "rating",
+                "values": [
+                    "5",
+                    "4",
+                    "4",
+                    "4",
+                    "4"
+                ]
+            }
+        ],
+        "comparison_categories": [
+            {
+                "name": "Core Lab Workflow & Sample Management",
+                "features": [
+                    {
+                        "name": "Patient / Referring Doctor Management",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Test Order / Accession Management",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Online Booking / Order Entry",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Sample Collection & Accessioning",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Barcode / Label Management",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Sample Tracking",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Sample Routing / Aliquoting",
+                        "values": [
+                            "yes",
+                            "no",
+                            "(Sample routing)",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Outsourced / Referral Test Management",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "(Referral management)",
+                            "yes",
+                            "(Referral management)"
+                        ]
+                    },
+                    {
+                        "name": "Phlebotomy",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Test Master / Profiles / Panels",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Laboratory Discipline Coverage",
+                        "values": [
+                            "Pathology, Biochemistry, Haematology, Microbiology, Serology & Immunology, Endocrinology, Histopathology, Cytology, Radiology",
+                            "(Pathology, Histopathology, Radiology, Haematology, Biochemistry)",
+                            "(Pathology & Radiology)",
+                            "(Pathology & Radiology)",
+                            "(Pathology, Histopathology, Cytology, Radiology)"
+                        ]
+                    },
+                    {
+                        "name": "Priority Tests",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Analyser Connectivity & Interoperability",
+                "features": [
+                    {
+                        "name": "Analyser Integration",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Uni-directional Interface",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Bi-directional Interface",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "HL7 / ASTM",
+                        "values": [
+                            "(HL7)",
+                            "no",
+                            "no",
+                            "(HL7)",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "FHIR / APIs",
+                        "values": [
+                            "yes",
+                            "no",
+                            "(API)",
+                            "Not clearly published",
+                            "(Third-party API)"
+                        ]
+                    },
+                    {
+                        "name": "HIS / EMR Integration",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Automated Result Mapping",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "(Result Transfer)",
+                            "(Formatting)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Results, Validation & Report Delivery",
+                "features": [
+                    {
+                        "name": "Manual Result Entry",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Result Review & Validation",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Auto-verification",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Reference Ranges & Flags",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "(Reference values)"
+                        ]
+                    },
+                    {
+                        "name": "Critical Value Alerts",
+                        "values": [
+                            "yes",
+                            "(Abnormal-value checker)",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Pathologist Authorisation",
+                        "values": [
+                            "yes",
+                            "(Pathologist sign-off)",
+                            "yes",
+                            "yes",
+                            "(Report verification)"
+                        ]
+                    },
+                    {
+                        "name": "Digital Signature",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Report Amendment / Version History",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "no",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Custom Report Templates",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "SMS / Email / WhatsApp Delivery",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Patient Report Portal",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Doctor Portal",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Quality Management & Accreditation",
+                "features": [
+                    {
+                        "name": "Internal Quality Control (IQC)",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Levey-Jennings / Westgard Rules",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Reagent & QC Lot Tracking",
+                        "values": [
+                            "yes",
+                            "no",
+                            "(Kit/QC mapping)",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Calibration & Equipment Maintenance",
+                        "values": [
+                            "yes",
+                            "no",
+                            "no",
+                            "yes",
+                            "(Calibration)"
+                        ]
+                    },
+                    {
+                        "name": "Proficiency Testing",
+                        "values": [
+                            "yes",
+                            "no",
+                            "no",
+                            "no",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Non-Conformance Management",
+                        "values": [
+                            "no",
+                            "no",
+                            "no",
+                            "no",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "CAPA Management",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "(Corrective Actions)",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "SOP & Document Control",
+                        "values": [
+                            "yes",
+                            "no",
+                            "no",
+                            "no",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Internal Audit Support",
+                        "values": [
+                            "no",
+                            "no",
+                            "no",
+                            "no",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Audit Trail",
+                        "values": [
+                            "yes",
+                            "(Activity tracking)",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "NABL / ISO 15189 Support",
+                        "values": [
+                            "yes",
+                            "no",
+                            "(NABL)",
+                            "(NABL)",
+                            "yes"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Multi-Branch, Collection Centre & B2B Operations",
+                "features": [
+                    {
+                        "name": "Multi-Branch Management",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Collection Centre Management",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Central / Reference Lab Workflow",
+                        "values": [
+                            "(Sample routing)",
+                            "no",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Inter-Branch Sample Transfer",
+                        "values": [
+                            "no",
+                            "no",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "B2B Client Management",
+                        "values": [
+                            "yes",
+                            "(Referral/B2B)",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Referral Doctor Management",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Centralised Administration",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Inventory & Procurement",
+                "features": [
+                    {
+                        "name": "Reagent & Consumables Inventory",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Lot / Batch / Expiry Tracking",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Stock / Reorder Alerts",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Consumption Tracking",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Procurement",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "(Purchase & Accounting)"
+                        ]
+                    },
+                    {
+                        "name": "Vendor Management",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Billing & Commercial Operations",
+                "features": [
+                    {
+                        "name": "Laboratory Billing / Test Pricing",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Packages / Discounts",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "B2B Billing",
+                        "values": [
+                            "yes",
+                            "(B2B pricing)",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Referral Billing",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Insurance / TPA",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "no",
+                            "(Medical-aid/claims)",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Online Payments",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "GST / Invoicing",
+                        "values": [
+                            "yes",
+                            "no",
+                            "no",
+                            "Not clearly published",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Receivables",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Analytics, TAT & Automation",
+                "features": [
+                    {
+                        "name": "TAT Dashboard",
+                        "values": [
+                            "yes",
+                            "(TAT reporting)",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Pending Sample Alerts",
+                        "values": [
+                            "yes",
+                            "(Pending status tracking)",
+                            "yes",
+                            "(TAT monitoring)",
+                            "(Sample status)"
+                        ]
+                    },
+                    {
+                        "name": "Test Volume Analytics",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "(Operational reporting)",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Revenue Analytics",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Branch Analytics",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "QC Analytics",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Custom MIS",
+                        "values": [
+                            "yes",
+                            "(Business reports)",
+                            "yes",
+                            "(MIS reports)",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Workflow Automation",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "AI / Predictive Analytics",
+                        "values": [
+                            "yes",
+                            "no",
+                            "(AI-assisted analysis)",
+                            "yes",
+                            "no"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Security & Data Governance",
+                "features": [
+                    {
+                        "name": "Role-Based Access",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Audit Logs",
+                        "values": [
+                            "yes",
+                            "(Activity tracking)",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Encryption",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Backup",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Disaster Recovery",
+                        "values": [
+                            "yes",
+                            "no",
+                            "no",
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Data Export / Portability",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "no",
+                            "(PDF/Excel/CSV)",
+                            "(PDF/Excel)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Migration, Implementation & Support",
+                "features": [
+                    {
+                        "name": "Historical Data Migration",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Implementation Timeline",
+                        "values": [
+                            "3-7 days",
+                            "Not stated",
+                            "Not stated",
+                            "Not stated",
+                            "Not stated"
+                        ]
+                    },
+                    {
+                        "name": "Customisation",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Training",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Go-Live Support",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "Support Channels & Hours",
+                        "values": [
+                            "24/7; Multilingual support",
+                            "10:30 AM–5:30 PM, Mon–Fri",
+                            "24×7",
+                            "365-day support",
+                            "Phone, email, online chat, mobile app"
+                        ]
+                    },
+                    {
+                        "name": "SLA / Response Time",
+                        "values": [
+                            "Within 30 mins",
+                            "Not stated",
+                            "Not stated",
+                            "Not stated",
+                            "Not stated"
+                        ]
+                    },
+                    {
+                        "name": "Post-Go-Live Support",
+                        "values": [
+                            "24/7",
+                            "Ongoing support",
+                            "24×7",
+                            "Dedicated support",
+                            "Not stated"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Optional & Specialist Modules",
+                "features": [
+                    {
+                        "name": "Blood Bank",
+                        "values": [
+                            "yes",
+                            "no",
+                            "no",
+                            "no",
+                            "no"
+                        ]
+                    },
+                    {
+                        "name": "Radiology Management",
+                        "values": [
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "PACS",
+                        "values": [
+                            "yes",
+                            "no",
+                            "no",
+                            "yes",
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "DICOM / Imaging Integration",
+                        "values": [
+                            "yes",
+                            "no",
+                            "yes",
+                            "yes",
+                            "Not clearly specified"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "profiles": [
+            {
+                "name": "Healthray",
+                "content": "<div class=\"alt-profile__description\">\n<p>Healthray LIMS is designed for labs that need to scale as operations grow. It brings laboratory work onto a shared system, covering routine investigations such as CBC, Lipid Profile, LFT, and KFT, while connecting analysers and other healthcare systems, and uses automation and AI for routine lab tasks. The platform also supports quality workflows, multi-centre operations, flexible deployment, data migration, and ongoing support, helping labs move to a new system while migrating existing data and workflows.</p>\n</div>\n<div class=\"alt-profile__best-for\">\n<h4 class=\"alt-profile__subheading\">Best For</h4>\n<p>Growing diagnostic labs, pathology centres, hospital laboratories, and multi-branch diagnostic networks</p>\n<p>[alt-rating]</p>\n</div>\n<h4 class=\"alt-profile__subheading\">What Stands Out</h4>\n<ul class=\"alt-profile__modules\">\n<li><strong>Connected Lab Workflows:</strong> Every module works from the same sample record, connecting order entry, barcode tracking, analyser results, validation, QC, billing, and QR-based report delivery without repeatedly entering the same information.</li>\n<li><strong>Analyser &amp; System Integration:</strong> Supports bi-directional analyser interfacing with HL7, FHIR, EMR/EHR/HIS, and PACS/DICOM connections, making it easier to move lab data between instruments and connected healthcare systems.</li>\n<li><strong>Quality &amp; Accreditation Workflows:</strong> Covers Levey-Jennings charts, Westgard rules, SOP version control, CAPA, staff competency records, equipment calibration logs, and tamper-proof audit trails for NABL/ISO-related workflows.</li>\n<li><strong>Simpler Migration &amp; Go-Live:</strong> Healthray supports migration from registers or legacy lab systems, along with workflow-based staff training and implementation, with bills and reports ready to start printing.</li>\n<li><strong>AI-Powered Lab Automation:</strong> AI features include smart sample routing, urgent-sample prioritisation, barcode and specimen error detection, abnormal-result flagging, and voice-to-text reporting, while TAT tracking helps identify delays at each stage.</li>\n<li><strong>24×7 Multilingual Support:</strong> Support is available 24×7 in English, Hindi, and Gujarati, so lab teams can get assistance outside standard working hours.</li>\n</ul>\n<p>[alt-pros-cons]</p>\n",
+                "rating": "5",
+                "rating_source": "Techjockey",
+                "pros": [
+                    {
+                        "title": "",
+                        "text": "<p>Reduces manual work by connecting sample tracking, data entry, validation, billing, and report delivery in one workflow</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Helps staff get started quickly with minimal training and an easy-to-understand interface</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Connects laboratory workflows with hospital systems, supporting smoother data exchange between departments</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Helps improve sample traceability and turnaround time through automated tracking, result handling, and reporting</p>\n"
+                    }
+                ],
+                "pros_review": {
+                    "author": "Milan",
+                    "rating": "5",
+                    "quote": "<p>The best part about Healthray LIMS is how simple it is to use. Staff can learn it quickly, work smoothly, and handle data without any trouble. It saves time and helps the lab run without stress.</p>\n",
+                    "url": "",
+                    "label": "Techjockey Review"
+                },
+                "cons": [
+                    {
+                        "title": "",
+                        "text": "<p>Custom report creation can take additional time during setup</p>\n"
+                    }
+                ],
+                "cons_review": {
+                    "author": "Milan",
+                    "rating": "5",
+                    "quote": "<p>We’ve had a great experience so far. There’s nothing big to complain about. If new features come in the future, they’ll just add more value to an already great system.</p>\n",
+                    "url": "",
+                    "label": "Techjockey Review"
+                }
+            },
+            {
+                "name": "LabSmart",
+                "content": "<div class=\"alt-profile__description\">\n<p>LabSmart is a cloud-based pathology lab management software focused on routine laboratory operations. It brings patient registration, billing, lab reporting, report delivery, and business management into one system. Labs can also customise tests and report formats, and access the software remotely.</p>\n</div>\n<div class=\"alt-profile__best-for\">\n<h4 class=\"alt-profile__subheading\">Best For</h4>\n<p>Small to mid-sized pathology labs, diagnostic centres, and hospital pathology laboratories</p>\n<p>[alt-rating]</p>\n</div>\n<h4 class=\"alt-profile__subheading\">What Stands Out</h4>\n<ul class=\"alt-profile__modules\">\n<li><strong>Automated Result Calculations:</strong> LabSmart can automatically calculate results for tests such as CBC and Lipid Profile, reducing manual calculation work.</li>\n<li><strong>Abnormal Result Checks:</strong> The system can flag values outside defined normal ranges for review before reports are finalised.</li>\n<li><strong>Turnaround Time Tracking:</strong> Registration, sample collection, sample receipt, and reporting timestamps can be tracked to monitor TAT.</li>\n<li><strong>Mobile Home Collection:</strong> Staff can register patients and generate case details from a mobile device while collecting samples at home.</li>\n</ul>\n<p>[alt-pros-cons]</p>\n",
+                "rating": "4.8",
+                "rating_source": "Techjockey",
+                "pros": [
+                    {
+                        "title": "",
+                        "text": "<p>Easy to operate for daily lab work</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Provides responsive and knowledgeable support</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Delivers reliable performance without reported downtime</p>\n"
+                    }
+                ],
+                "pros_review": {
+                    "author": "Madhuraa Lab",
+                    "rating": "4",
+                    "quote": "<p>User-friendly, customizable, feature-rich lab management software with excellent support and great value for money.</p>\n",
+                    "url": "",
+                    "label": "Techjockey Review"
+                },
+                "cons": [
+                    {
+                        "title": "",
+                        "text": "<p>Letterhead customisation could be improved</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Post-support follow-up can be limited</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Some advanced settings may require initial technical assistance</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Some test panels may print in reverse order</p>\n"
+                    }
+                ],
+                "cons_review": {
+                    "author": "Madhuraa Lab",
+                    "rating": "4",
+                    "quote": "<p>Letterhead customization could be improved, post-support follow-up is limited, and some advanced settings may require initial technical assistance.</p>\n",
+                    "url": "",
+                    "label": "Techjockey Review"
+                }
+            },
+            {
+                "name": "Flabs",
+                "content": "<div class=\"alt-profile__description\">\n<p>Flabs is a cloud-based LIS built for pathology and diagnostic laboratories. It covers the core lab cycle from patient registration and sample tracking to analyser results, reporting, billing, and digital report delivery. It also supports labs that handle multiple branches, referral business, and higher sample volumes.</p>\n</div>\n<div class=\"alt-profile__best-for\">\n<h4 class=\"alt-profile__subheading\">Best For</h4>\n<p>High-volume pathology labs, diagnostic centres, corporate/B2B laboratories, and multi-branch lab networks</p>\n<p>[alt-rating]</p>\n</div>\n<h4 class=\"alt-profile__subheading\">What Stands Out</h4>\n<ul class=\"alt-profile__modules\">\n<li><strong>AI-Assisted Reporting:</strong> Flabs includes AI-based result interpretation, Smart Reports, result flagging, and voice reporting to support report preparation.</li>\n<li><strong>Multi-Branch Management:</strong> Labs can manage branches and collection centres centrally with shared test catalogues, report formats, access controls, and consolidated reporting.</li>\n<li><strong>Referral Management:</strong> The platform supports corporate accounts, referral details, commission management, and partner billing for labs handling outside referrals.</li>\n<li><strong>Quality &amp; Audit Tracking:</strong> Flabs records user actions, report changes, approval history, and audit trails while supporting structured quality-control workflows and NABL-aligned processes.</li>\n</ul>\n<p>[alt-pros-cons]</p>\n",
+                "rating": "5",
+                "rating_source": "Techjockey",
+                "pros": [
+                    {
+                        "title": "",
+                        "text": "<p>User-friendly interface for lab operations</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Reduces reporting time</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Supports smooth workflow automation</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Provides fast support when needed</p>\n"
+                    }
+                ],
+                "pros_review": {
+                    "author": "Pawan G",
+                    "rating": "4",
+                    "quote": "<p>Although it&#8217;s good, need more flexible and easy to access with B2B and Pre-booking. Allowable to download by all users. It should also contain option to download report for any lab patient who is registered through flabs.</p>\n",
+                    "url": "",
+                    "label": "Verified Review"
+                },
+                "cons": [
+                    {
+                        "title": "",
+                        "text": "<p>Staff access is too restricted beyond admin accounts</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Report downloads are not available to all staff accounts</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Pre-booking needs more flexibility</p>\n"
+                    }
+                ],
+                "cons_review": {
+                    "author": "Suman Kavali Somasekhar",
+                    "rating": "1",
+                    "quote": "<p>There is no user access. only admin can access. poorly made application.</p>\n",
+                    "url": "",
+                    "label": "Verified Review"
+                }
+            },
+            {
+                "name": "eLabAssist",
+                "content": "<div class=\"alt-profile__description\">\n<p>eLabAssist helps diagnostic laboratories manage their operations across sample collection, processing, reporting, billing, and multiple locations. Its system is designed to connect laboratory teams, instruments, collection centres, and other operational workflows in one place, with remote access for pathologists and lab staff.</p>\n</div>\n<div class=\"alt-profile__best-for\">\n<h4 class=\"alt-profile__subheading\">Best For</h4>\n<p>Diagnostic centres, multi-branch laboratories, B2B labs, and hospital laboratories</p>\n<p>[alt-rating]</p>\n</div>\n<h4 class=\"alt-profile__subheading\">What Stands Out</h4>\n<ul class=\"alt-profile__modules\">\n<li><strong>Cost-Per-Test Tracking:</strong> Its CPRT module helps laboratories calculate real test costs, identify hidden expenses, and track profitability at the test level.</li>\n<li><strong>Phlebotomy Logistics:</strong> The phlebotomist module includes live tracking, route planning, mileage calculation, and field-staff activity monitoring for home collections.</li>\n<li><strong>Patient Apps:</strong> Laboratories can provide white-labelled mobile apps and patient portals using their own logo, colours, and branding for digital report access and notifications.</li>\n<li><strong>AI Reporting:</strong> eLabAssist uses AI and RPA to reduce manual reporting work and support faster turnaround for high-volume laboratories.</li>\n</ul>\n<p>[alt-pros-cons]</p>\n",
+                "rating": "5",
+                "rating_source": "Software Suggest",
+                "pros": [
+                    {
+                        "title": "",
+                        "text": "<p>Easy-to-understand workflow for lab teams</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Quick onboarding with minimal disruption</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Flexible pathology report customisation</p>\n"
+                    }
+                ],
+                "pros_review": {
+                    "author": "Hrushikesh",
+                    "rating": "5",
+                    "quote": "<p>The eLabAssist Laboratory Information Management software is very powerful as it can be accessed from any device, now I can Remotely access and authorize reports which ultimately results in low TAT. eLabassist onboarded me Quickly without interrupting my current Lab Operations, Training was smooth, and Workflow is very easy to understand and support is quick.</p>\n",
+                    "url": "",
+                    "label": "Techjockey Review"
+                },
+                "cons": [
+                    {
+                        "title": "",
+                        "text": "<p>Post-sale support can take 24–72 hours to resolve queries</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Product quality needs improvement</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Payment details need clearer information</p>\n"
+                    }
+                ],
+                "cons_review": {
+                    "author": "Prashant Thakur",
+                    "rating": "1",
+                    "quote": "<p>Software is good but post sale service is very poor that&#8217;s the most important thing i would say. Once you request them they will solve your queries in next 24-72 hrs. no support. Need lot of improvement. Management is so poor.</p>\n",
+                    "url": "",
+                    "label": "Verified Review"
+                }
+            },
+            {
+                "name": "PathoGold",
+                "content": "<div class=\"alt-profile__description\">\n<p>PathoGold is built to digitise pathology and diagnostic-centre operations, with tools for laboratory reporting, billing, accounting, referrals, and inventory. It is available in both desktop and cloud-based versions, giving labs different options for how they deploy the system.</p>\n</div>\n<div class=\"alt-profile__best-for\">\n<h4 class=\"alt-profile__subheading\">Best For</h4>\n<p>Small to mid-sized pathology labs, diagnostic centres, and multi-centre laboratories</p>\n<p>[alt-rating]</p>\n</div>\n<h4 class=\"alt-profile__subheading\">What Stands Out</h4>\n<ul class=\"alt-profile__modules\">\n<li><strong>Previous Result Comparison:</strong> PathoGold can compare a patient&#8217;s current and previous results, helping laboratories track changes across reports.</li>\n<li><strong>Histopathology Reporting:</strong> The system supports histopathology reports with slide-picture printing and haematology cell-counter interfacing.</li>\n<li><strong>Multi-Patient Data Entry:</strong> Its transverse data-entry interface allows multiple patient results to be entered from a single screen.</li>\n<li><strong>Graphical Lab Analytics:</strong> PathoGold provides graphical views for areas such as income, purchases, sales, outstanding amounts, and test data.</li>\n</ul>\n<p>[alt-pros-cons]</p>\n",
+                "rating": "4.3",
+                "rating_source": "TechJockey",
+                "pros": [
+                    {
+                        "title": "",
+                        "text": "<p>Strong customer support experience</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Convenient report sharing with physicians and patients</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Easy Email and SMS integration</p>\n"
+                    }
+                ],
+                "pros_review": {
+                    "author": "Harshit Vindhya",
+                    "rating": "4",
+                    "quote": "<p>Running a successful clinic and at the same time managing an efficient customer relationship can be a cumbersome task. Thankfully, with the easy integration of Email and SMS through Birlamedisoft &#8211; PathoGold software, it has helped me send reports directly through email, app or SMS to physicians and consultants. Additionally, I can also send these reports to my patients, which has helped me to speed up the patient treatment cycle and improve my clinic’s reputation.</p>\n",
+                    "url": "",
+                    "label": "Techjockey Review"
+                },
+                "cons": [
+                    {
+                        "title": "",
+                        "text": "<p>Does not provide cloud-based soft-copy backup</p>\n"
+                    },
+                    {
+                        "title": "",
+                        "text": "<p>Offline work can become slow when connectivity issues arise</p>\n"
+                    }
+                ],
+                "cons_review": {
+                    "author": "Shweta Saraf",
+                    "rating": "4",
+                    "quote": "<p>The software fails to provide a soft copy backup over the cloud and all the essential files and folders are located on my computer only. With the data being locally secured over the computer’s hard-drives, it gets impossible to maintain a backup there and the fear of losing documents always stays.</p>\n",
+                    "url": "",
+                    "label": "Techjockey Review"
+                }
+            }
+        ],
+        "how_to_choose_title": "How to Choose the Right CrelioHealth Alternative",
+        "how_to_choose_content": "<p>Before choosing a CrelioHealth alternative, start with the way your lab works right now. Look at your daily sample volume, collection process, branches and collection centres, and the analysers or other systems you already use. Also make a note of the parts of your current setup that create the most manual work or slow things down.</p>\n<p>Then find out what switching will actually involve. Inquire about the vendor’s plans for migrating data, training staff, implementing the software, support, security, and even customisation for your lab if required. Also be clear about the pricing beyond just the basic subscription.</p>\n<p>Before you make the final call, ask each shortlisted vendor to show the software using a few situations from your own lab. See how the staff would handle registration, samples, results, reports, billing, or other everyday tasks, and how much manual work is involved. It is also worth checking whether the software can handle the next stage of your growth, such as more tests, instruments, collection centres, branches, or B2B work.</p>",
+        "final_verdict_title": "Making the Switch from CrelioHealth",
+        "final_verdict_content": "<p>Finding a CrelioHealth alternative usually starts with a simple question: what is no longer working well for your lab? It could be the way samples move through the lab, reporting delays, limited integrations, branch management, or the amount of manual work your team still handles.</p>\n<p>The five LIMS compared above approach these needs differently. Before choosing one, look at the workflows that matter most to your lab and make sure the software fits them without adding unnecessary steps or requiring major changes to how your team works.</p>\n<p>Healthray is one option to evaluate for labs looking for connected lab workflows, analyser and system integrations, quality management, migration support, and multi-centre operations. The final decision comes down to the areas you want to improve and the kind of setup your lab plans to have going forward.</p>",
+        "inline_cta_heading": null,
+        "inline_cta_text": "",
+        "inline_cta_button_text": null,
+        "inline_cta_url": null,
+        "mid_cta_heading": null,
+        "mid_cta_text": "",
+        "mid_cta_button_text": null,
+        "mid_cta_url": null,
+        "faqs": [
+            {
+                "question": "What happens to our existing CrelioHealth data after we switch?",
+                "answer": "<p>You can ask the new LIMS provider to move your existing data, but first find out exactly what they will take across. Old patient records, reports, test masters, billing information, and other data may not all be handled in the same way. Get this clarified before you start the migration.</p>\n"
+            },
+            {
+                "question": "Will our lab have to stop work while moving to a new LIMS?",
+                "answer": "<p>Your lab can keep running during the change in many cases. The new system can be prepared in the background, and the final move can be planned for a suitable time. Ask the vendor what will happen on the day you go live and whether any part of your normal work will be affected.</p>\n"
+            },
+            {
+                "question": "Can our existing report formats and test masters be moved from CrelioHealth?",
+                "answer": "<p>Some can be moved or recreated, but do not assume everything will come across exactly as it is. Show the vendor your current report formats and test setup before you sign up. They can then tell you what they can transfer and what will have to be configured again.</p>\n"
+            },
+            {
+                "question": "What happens to samples and reports that are still pending when we switch?",
+                "answer": "<p>Make sure these are part of the migration discussion. Samples still in process, reports waiting for approval, unpaid bills, and similar open work need a clear handover plan. Otherwise, your team may have to check two systems to work out what is still pending.</p>\n"
+            },
+            {
+                "question": "Can we use CrelioHealth and the new LIMS at the same time?",
+                "answer": "<p>You can discuss a short overlap period with both vendors. This can be useful while the team gets familiar with the new system, but decide which software will be used for new registrations, samples, billing, and reports during that period. Otherwise, the same work can end up being entered twice.</p>\n"
+            }
+        ]
+    },
+    "images": {
+        "_note": "Attachment IDs are per-site. The importer never writes images; re-attach these by hand on the destination.",
+        "featured_image": null,
+        "competitor_logos": {
+            "LabSmart": null,
+            "Flabs": null,
+            "eLabAssist": null,
+            "PathoGold": null
+        },
+        "profile_screenshots": {
+            "Healthray": null,
+            "LabSmart": null,
+            "Flabs": null,
+            "eLabAssist": null,
+            "PathoGold": null
+        }
+    }
+}

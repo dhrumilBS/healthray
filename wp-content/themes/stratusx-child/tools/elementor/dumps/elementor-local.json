@@ -1,0 +1,616 @@
+{
+    "label": "local",
+    "dumped_at": "2026-09-08T06:20:07+00:00",
+    "site_url": "http://192.168.0.223/healthray/",
+    "versions": {
+        "elementor_version": "4.2.4",
+        "elementor_pro_version": "4.2.1",
+        "wordpress": "7.1",
+        "php": "8.2.12",
+        "active_theme": "stratusx-child"
+    },
+    "active_kit": 394,
+    "kit": {
+        "colors": {
+            "system_colors:Primary": "#1B2374",
+            "system_colors:Secondary": "#152CE1",
+            "system_colors:Text": "#6C8093",
+            "system_colors:Accent": "#0073E6",
+            "custom_colors:White": "#FFFFFF"
+        },
+        "fonts": {
+            "system_typography:Primary": "Mulish",
+            "system_typography:Secondary": "Mulish",
+            "system_typography:Text": "Mulish",
+            "system_typography:Accent": "Mulish"
+        },
+        "layout": {
+            "activeItemIndex": 1,
+            "body_typography_font_size": {
+                "unit": "px",
+                "size": 16,
+                "sizes": []
+            },
+            "body_typography_font_size_mobile": {
+                "unit": "px",
+                "size": 14,
+                "sizes": []
+            },
+            "body_typography_line_height": {
+                "unit": "custom",
+                "size": "1.4",
+                "sizes": []
+            },
+            "body_typography_typography": "custom",
+            "button_border_radius": {
+                "unit": "px",
+                "top": "8",
+                "right": "8",
+                "bottom": "8",
+                "left": "8",
+                "isLinked": true
+            },
+            "button_padding": {
+                "unit": "px",
+                "top": "12",
+                "right": "32",
+                "bottom": "12",
+                "left": "32",
+                "isLinked": false
+            },
+            "button_typography_font_weight": "700",
+            "button_typography_letter_spacing": {
+                "unit": "px",
+                "size": 0.4,
+                "sizes": []
+            },
+            "button_typography_typography": "custom",
+            "colors_enable_styleguide_preview": "yes",
+            "container_width": {
+                "unit": "px",
+                "size": 1240,
+                "sizes": []
+            },
+            "default_generic_fonts": "Sans-serif",
+            "h1_typography_font_size": {
+                "unit": "px",
+                "size": 42,
+                "sizes": []
+            },
+            "h1_typography_font_size_mobile": {
+                "unit": "px",
+                "size": 26,
+                "sizes": []
+            },
+            "h1_typography_font_size_tablet": {
+                "unit": "px",
+                "size": 36,
+                "sizes": []
+            },
+            "h1_typography_font_weight": "700",
+            "h1_typography_line_height": {
+                "unit": "custom",
+                "size": "1.4",
+                "sizes": []
+            },
+            "h1_typography_typography": "custom",
+            "h2_typography_font_size": {
+                "unit": "px",
+                "size": 36,
+                "sizes": []
+            },
+            "h2_typography_font_size_mobile": {
+                "unit": "px",
+                "size": 24,
+                "sizes": []
+            },
+            "h2_typography_font_size_tablet": {
+                "unit": "px",
+                "size": 30,
+                "sizes": []
+            },
+            "h2_typography_font_weight": "700",
+            "h2_typography_line_height": {
+                "unit": "custom",
+                "size": 1.4,
+                "sizes": []
+            },
+            "h2_typography_typography": "custom",
+            "h3_typography_font_size": {
+                "unit": "px",
+                "size": 26,
+                "sizes": []
+            },
+            "h3_typography_font_size_mobile": {
+                "unit": "px",
+                "size": 20,
+                "sizes": []
+            },
+            "h3_typography_font_size_tablet": {
+                "unit": "px",
+                "size": 22,
+                "sizes": []
+            },
+            "h3_typography_font_weight": "700",
+            "h3_typography_line_height": {
+                "unit": "custom",
+                "size": 1.3,
+                "sizes": []
+            },
+            "h3_typography_typography": "custom",
+            "h4_typography_line_height": {
+                "unit": "custom",
+                "size": "",
+                "sizes": []
+            },
+            "h4_typography_typography": "custom",
+            "h5_typography_line_height": {
+                "unit": "em",
+                "size": 1.4,
+                "sizes": []
+            },
+            "h6_typography_line_height": {
+                "unit": "em",
+                "size": 1.4,
+                "sizes": []
+            },
+            "link_normal_typography_font_size_mobile": {
+                "unit": "px",
+                "size": 14,
+                "sizes": []
+            },
+            "link_normal_typography_line_height": {
+                "unit": "custom",
+                "size": "1.4",
+                "sizes": []
+            },
+            "link_normal_typography_typography": "custom",
+            "page_title_selector": "h1.entry-title",
+            "site_description": "A Smart Healthcare Solution, For A Smart Digital Clinics.",
+            "site_name": "Healthray",
+            "space_between_widgets": {
+                "column": "10",
+                "row": "10",
+                "isLinked": true,
+                "unit": "px",
+                "size": 10
+            },
+            "typography_enable_styleguide_preview": "yes",
+            "viewport_laptop": 1024,
+            "viewport_lg": 1025,
+            "viewport_md": 769,
+            "viewport_mobile": 768
+        }
+    },
+    "options": {
+        "elementor_css_print_method": "internal",
+        "elementor_optimized_image_loading": "0",
+        "elementor_optimized_gutenberg_loading": "1",
+        "elementor_lazy_load_background_images": "0",
+        "elementor_element_cache_ttl": "disable",
+        "elementor_load_fa4_shim": "yes",
+        "elementor_font_display": "fallback",
+        "elementor_local_google_fonts": "0",
+        "elementor_google_font": "0",
+        "elementor_meta_generator_tag": "1",
+        "elementor_allow_svg": "1",
+        "elementor_unfiltered_files_upload": "1",
+        "elementor_disable_color_schemes": "yes",
+        "elementor_disable_typography_schemes": "yes",
+        "elementor_default_generic_fonts": "Sans-serif",
+        "elementor_container_width": "",
+        "elementor_space_between_widgets": "",
+        "elementor_page_title_selector": "",
+        "elementor_viewport_md": "",
+        "elementor_viewport_lg": "",
+        "elementor_cpt_support": [
+            "post",
+            "page",
+            "themo_portfolio",
+            "elementor-thhf"
+        ],
+        "elementor_disabled_elements": [],
+        "elementor_exclude_user_roles": []
+    },
+    "experiments": {
+        "additional_custom_breakpoints": "inactive",
+        "container": "active",
+        "e_atomic_elements": "active",
+        "e_classes": "active",
+        "e_components": "active",
+        "e_element_cache": "active",
+        "e_font_icon_svg": "active",
+        "e_opt_in_v4": "active",
+        "e_optimized_control_loading": "active",
+        "e_optimized_markup": "active",
+        "e_panel_promotions": "default",
+        "e_swiper_latest": "inactive",
+        "e_variables": "active",
+        "editor_v2": "active",
+        "import-export-customization": "default",
+        "landing-pages": "inactive",
+        "markdown_rendering": "default",
+        "mega-menu": "active",
+        "nested-elements": "active",
+        "theme_builder_v2": "active"
+    },
+    "theme_builder": {
+        "single": [],
+        "footer": {
+            "30749": [
+                "include/singular/page/30714"
+            ]
+        },
+        "header": {
+            "30745": [
+                "include/singular/page/30714"
+            ],
+            "567": [
+                "include/general"
+            ]
+        },
+        "popup": {
+            "27536": [
+                "include/general"
+            ],
+            "27511": [
+                "include/general"
+            ]
+        }
+    },
+    "templates": {
+        "394": {
+            "type": "kit",
+            "title": "Default Kit",
+            "status": "publish",
+            "conditions": ""
+        },
+        "567": {
+            "type": "header",
+            "title": "Healthray Theme Header",
+            "status": "publish",
+            "conditions": [
+                "include/general"
+            ]
+        },
+        "24720": {
+            "type": "section",
+            "title": "Counter Section",
+            "status": "publish",
+            "conditions": ""
+        },
+        "25539": {
+            "type": "section",
+            "title": "Hospital Logo Slider",
+            "status": "publish",
+            "conditions": ""
+        },
+        "26822": {
+            "type": "section",
+            "title": "Mobile-Apps",
+            "status": "publish",
+            "conditions": ""
+        },
+        "26869": {
+            "type": "section",
+            "title": "CTA footer",
+            "status": "publish",
+            "conditions": ""
+        },
+        "26968": {
+            "type": "section",
+            "title": "Get Mobile App",
+            "status": "publish",
+            "conditions": ""
+        },
+        "27141": {
+            "type": "widget",
+            "title": "Header CTA",
+            "status": "publish",
+            "conditions": ""
+        },
+        "27511": {
+            "type": "popup",
+            "title": "CTA Popup",
+            "status": "draft",
+            "conditions": [
+                "include/general"
+            ]
+        },
+        "27536": {
+            "type": "popup",
+            "title": "CTA",
+            "status": "draft",
+            "conditions": [
+                "include/general"
+            ]
+        },
+        "28075": {
+            "type": "section",
+            "title": "pop up",
+            "status": "publish",
+            "conditions": ""
+        },
+        "28816": {
+            "type": "section",
+            "title": "Connect with us",
+            "status": "publish",
+            "conditions": ""
+        },
+        "29541": {
+            "type": "section",
+            "title": "Quick Links",
+            "status": "publish",
+            "conditions": ""
+        },
+        "29751": {
+            "type": "section",
+            "title": "Alternative CTA",
+            "status": "publish",
+            "conditions": ""
+        },
+        "30745": {
+            "type": "header",
+            "title": "Elementor Header #30745",
+            "status": "publish",
+            "conditions": [
+                "include/singular/page/30714"
+            ]
+        },
+        "30749": {
+            "type": "footer",
+            "title": "Elementor Footer #30749",
+            "status": "publish",
+            "conditions": [
+                "include/singular/page/30714"
+            ]
+        },
+        "30796": {
+            "type": "section",
+            "title": "Doctor Testimonials",
+            "status": "publish",
+            "conditions": ""
+        },
+        "31673": {
+            "type": "loop-item",
+            "title": "Elementor Loop Item #31673",
+            "status": "publish",
+            "conditions": ""
+        },
+        "32229": {
+            "type": "page",
+            "title": "lab",
+            "status": "publish",
+            "conditions": ""
+        },
+        "32239": {
+            "type": "container",
+            "title": "Counter Lab",
+            "status": "publish",
+            "conditions": ""
+        },
+        "32881": {
+            "type": "header",
+            "title": "Elementor Header #32881",
+            "status": "publish",
+            "conditions": ""
+        },
+        "33784": {
+            "type": "section",
+            "title": "Stare page CTA",
+            "status": "publish",
+            "conditions": ""
+        },
+        "33787": {
+            "type": "container",
+            "title": "State HMS Features",
+            "status": "publish",
+            "conditions": ""
+        },
+        "33796": {
+            "type": "container",
+            "title": "State Presance",
+            "status": "publish",
+            "conditions": ""
+        },
+        "34092": {
+            "type": "page",
+            "title": "City page CTA",
+            "status": "publish",
+            "conditions": ""
+        },
+        "34095": {
+            "type": "page",
+            "title": "City HMS Features",
+            "status": "publish",
+            "conditions": ""
+        },
+        "34098": {
+            "type": "page",
+            "title": "City no.1 Healthray",
+            "status": "publish",
+            "conditions": ""
+        },
+        "34168": {
+            "type": "page",
+            "title": "City Presance",
+            "status": "publish",
+            "conditions": ""
+        },
+        "36870": {
+            "type": "page",
+            "title": "City Page Demo",
+            "status": "draft",
+            "conditions": ""
+        },
+        "38272": {
+            "type": "container",
+            "title": "Lab Testimonial",
+            "status": "publish",
+            "conditions": ""
+        },
+        "39101": {
+            "type": "page",
+            "title": "Bes lab in India",
+            "status": "draft",
+            "conditions": ""
+        },
+        "39420": {
+            "type": "widget",
+            "title": "Hero CTA",
+            "status": "publish",
+            "conditions": ""
+        },
+        "40574": {
+            "type": "container",
+            "title": "EMR Counter Section",
+            "status": "publish",
+            "conditions": ""
+        },
+        "42532": {
+            "type": "container",
+            "title": "EHR - Customer Presence",
+            "status": "publish",
+            "conditions": ""
+        },
+        "42536": {
+            "type": "container",
+            "title": "EHR - Healthray’s Products​",
+            "status": "publish",
+            "conditions": ""
+        },
+        "43997": {
+            "type": "container",
+            "title": "Pharmacy Management Software Client",
+            "status": "publish",
+            "conditions": ""
+        },
+        "45948": {
+            "type": "container",
+            "title": "PMS Testimonials",
+            "status": "publish",
+            "conditions": ""
+        },
+        "52831": {
+            "type": "container",
+            "title": "International City Template",
+            "status": "publish",
+            "conditions": ""
+        },
+        "53080": {
+            "type": "page",
+            "title": "Lab page",
+            "status": "publish",
+            "conditions": ""
+        },
+        "53307": {
+            "type": "page",
+            "title": "ABHA",
+            "status": "publish",
+            "conditions": ""
+        },
+        "53613": {
+            "type": "page",
+            "title": "Healthray LAB",
+            "status": "publish",
+            "conditions": ""
+        },
+        "57697": {
+            "type": "page",
+            "title": "Medical Billing New",
+            "status": "publish",
+            "conditions": ""
+        },
+        "57700": {
+            "type": "page",
+            "title": "Medical billing old",
+            "status": "publish",
+            "conditions": ""
+        },
+        "57834": {
+            "type": "container",
+            "title": "Healthray Slidder Set Product",
+            "status": "publish",
+            "conditions": ""
+        },
+        "59318": {
+            "type": "page",
+            "title": "PAGE | HIMS",
+            "status": "publish",
+            "conditions": ""
+        },
+        "59321": {
+            "type": "page",
+            "title": "PAGE | LIMS",
+            "status": "publish",
+            "conditions": ""
+        },
+        "59324": {
+            "type": "page",
+            "title": "PAGE | EMR",
+            "status": "publish",
+            "conditions": ""
+        },
+        "59350": {
+            "type": "page",
+            "title": "Page | Contact",
+            "status": "publish",
+            "conditions": ""
+        },
+        "59354": {
+            "type": "page",
+            "title": "EMR Software Home",
+            "status": "publish",
+            "conditions": ""
+        },
+        "62098": {
+            "type": "container",
+            "title": "Trusted Health Standards",
+            "status": "publish",
+            "conditions": ""
+        },
+        "62278": {
+            "type": "container",
+            "title": "Best Ease of Use EMR Software​",
+            "status": "publish",
+            "conditions": ""
+        },
+        "64057": {
+            "type": "container",
+            "title": "Speciality Key Points",
+            "status": "publish",
+            "conditions": ""
+        },
+        "65894": {
+            "type": "container",
+            "title": "Speciality Testimonial",
+            "status": "publish",
+            "conditions": ""
+        }
+    },
+    "secrets": {
+        "elementor_pro_license_key": "set (46 chars, value not recorded)",
+        "elementor_connect_site_key": "set (32 chars, value not recorded)"
+    },
+    "local_only_state": {
+        "elementor_safe_mode": "yes"
+    },
+    "do_not_migrate": [
+        "elementor_pro_license_key",
+        "elementor_connect_site_key",
+        "elementor_safe_mode",
+        "elementor_safe_mode_token",
+        "elementor_safe_mode_allowed_plugins",
+        "elementor_log",
+        "elementor_debug_log",
+        "elementor_checklist",
+        "elementor_controls_usage",
+        "elementor_install_history",
+        "elementor_pro_install_history",
+        "elementor_remote_info_library",
+        "elementor_remote_info_feed_data",
+        "elementor_tracker_last_send",
+        "elementor_allow_tracking",
+        "elementor_one_internal_logs"
+    ]
+}

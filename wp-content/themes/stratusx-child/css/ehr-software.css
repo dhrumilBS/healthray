@@ -1,0 +1,68 @@
+.ehr-landing .t-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+@media (max-width:980px) {
+  .ehr-landing .t-grid { grid-template-columns: repeat(1, 1fr); }
+  .ehr-landing .clients-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width:720px) {
+  .ehr-landing .clients-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.ehr-landing .media-rows { display: grid; gap: 72px; }
+.ehr-landing .media-row { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.ehr-landing .media-row.flip .media-img { order: 2; }
+.ehr-landing .media-img { position: relative; }
+.ehr-landing .media-img img { border-radius: 16px; border: 1px solid var(--line); box-shadow: 0 20px 50px rgba(var(--ink-rgb), .10); width: 100%; }
+.ehr-landing .media-img .float-chip { position: absolute; bottom: -18px; left: 22px; background: #fff; border: 1px solid var(--line); border-radius: 99px; padding: 8px 16px; font-size: .78rem; font-weight: 600; color: var(--brand); box-shadow: 0 10px 24px rgba(var(--ink-rgb), .10); display: inline-flex; gap: 7px; align-items: center; }
+.ehr-landing .media-img .float-chip svg { width: 14px; height: 14px; stroke: var(--brand); }
+.ehr-landing .media-copy h3 { font-size: 1.35rem; margin-bottom: 12px; }
+.ehr-landing .media-copy>p { font-size: .98rem; }
+.ehr-landing .media-copy ul { list-style: none; display: grid; gap: 11px; margin-top: 18px; padding: 0; }
+.ehr-landing .media-copy li { display: flex; gap: 10px; font-size: .94rem; color: var(--ink-soft); }
+.ehr-landing .media-copy li svg { width: 18px; height: 18px; stroke: var(--brand); flex: none; margin-top: 3px; }
+@media (max-width:980px) {
+  .ehr-landing .media-row { grid-template-columns: 1fr; gap: 32px; }
+  .ehr-landing .media-row.flip .media-img { order: 0; }
+  .ehr-landing .media-rows { gap: 56px; }
+}
+
+/* ---- record journey (animated ECG timeline, same pattern as EMR steps) */
+.ehr-landing .steps-track { position: relative; height: 56px; margin-bottom: 6px; }
+.ehr-landing .steps-track svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ehr-landing .steps-track path { fill: none; stroke: var(--brand); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; opacity: .85; stroke-dasharray: 1500; stroke-dashoffset: 1500; transition: stroke-dashoffset 1.8s ease .15s; }
+.ehr-landing .steps-track.in path { stroke-dashoffset: 0; }
+.ehr-landing .steps-track i { position: absolute; top: 50%; width: 15px; height: 15px; border-radius: 50%; background: #fff; border: 3px solid var(--brand); transform: translate(-50%, -50%) scale(0); transition: transform .45s cubic-bezier(.34, 1.56, .64, 1); }
+.ehr-landing .steps-track.in i { transform: translate(-50%, -50%) scale(1); }
+.ehr-landing .steps-track i:nth-child(2) { left: 10%; transition-delay: .35s; }
+.ehr-landing .steps-track i:nth-child(3) { left: 30%; transition-delay: .65s; }
+.ehr-landing .steps-track i:nth-child(4) { left: 50%; transition-delay: .95s; }
+.ehr-landing .steps-track i:nth-child(5) { left: 70%; transition-delay: 1.25s; }
+.ehr-landing .steps-track i:nth-child(6) { left: 90%; transition-delay: 1.55s; }
+.ehr-landing .steps-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.ehr-landing .steps-grid .step { position: relative; overflow: hidden; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px 20px 22px; opacity: 0; transform: translateY(24px); transition: opacity .5s ease, transform .5s ease, border-color .2s, box-shadow .2s; }
+.ehr-landing .steps-grid.in .step { opacity: 1; transform: none; }
+.ehr-landing .steps-grid.in .step:nth-child(1) { transition-delay: .25s; }
+.ehr-landing .steps-grid.in .step:nth-child(2) { transition-delay: .55s; }
+.ehr-landing .steps-grid.in .step:nth-child(3) { transition-delay: .85s; }
+.ehr-landing .steps-grid.in .step:nth-child(4) { transition-delay: 1.15s; }
+.ehr-landing .steps-grid.in .step:nth-child(5) { transition-delay: 1.45s; }
+.ehr-landing .step::after { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--brand), var(--brand-dark)); transform: scaleX(0); transform-origin: left; transition: transform .35s ease; }
+.ehr-landing .step:hover { border-color: var(--brand); box-shadow: 0 14px 34px rgba(var(--ink-rgb), .1); transform: translateY(-4px); }
+.ehr-landing .step:hover::after { transform: scaleX(1); }
+.ehr-landing .step h3 { font-size: .98rem; margin: 0 0 8px; }
+.ehr-landing .step p { font-size: .86rem; }
+@media (prefers-reduced-motion: reduce) {
+  .ehr-landing .ecg-path,
+  .ehr-landing .steps-track path { stroke-dasharray: none; stroke-dashoffset: 0; }
+  .ehr-landing .steps-track i { transform: translate(-50%, -50%) scale(1); }
+  .ehr-landing .steps-grid .step { opacity: 1; transform: none; }
+}
+
+@media (max-width:980px) {
+  .ehr-landing .steps-grid { grid-template-columns: repeat(2, 1fr); row-gap: 28px; }
+  .ehr-landing .steps-track { display: none; }
+}
+
+@media (max-width:720px) {
+  .ehr-landing .steps-grid { grid-template-columns: 1fr; row-gap: 28px; }
+}

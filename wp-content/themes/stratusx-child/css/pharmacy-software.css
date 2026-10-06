@@ -1,0 +1,32 @@
+.pharmacy-landing .stats{background:var(--brand-deep);color:#fff;padding:64px 0}
+.pharmacy-landing .stats-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:20px;text-align:center}
+.pharmacy-landing .stat b{display:block;font-family:var(--font-display);font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:700;color:#fff}
+.pharmacy-landing .stat span{font-size:.82rem;color:var(--hr-hero-ink)}
+@media (max-width:980px){.pharmacy-landing .stats-grid{grid-template-columns:repeat(3,1fr);gap:32px 16px}}
+@media (max-width:720px){.pharmacy-landing .stats-grid{grid-template-columns:repeat(2,1fr)}}
+
+.pharmacy-landing .t-carousel{position:relative}
+.pharmacy-landing .t-track{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 32px)/3);gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:6px}
+.pharmacy-landing .t-track::-webkit-scrollbar{display:none}
+.pharmacy-landing .t-track .t-card{scroll-snap-align:start}
+.pharmacy-landing .t-nav{display:flex;gap:10px;justify-content:center;margin-top:24px}
+.pharmacy-landing .t-btn{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--line);background:#fff;cursor:pointer;display:grid;place-items:center;color:var(--ink);transition:border-color .15s,color .15s;padding:0}
+.pharmacy-landing .t-btn:hover{border-color:var(--brand);color:var(--brand)}
+.pharmacy-landing .t-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:980px){.pharmacy-landing .t-track{grid-auto-columns:72%}}
+@media (max-width:720px){.pharmacy-landing .t-track{grid-auto-columns:88%}}
+
+/* ---- outcomes band (this page's visual signature) ---- */
+.pharmacy-landing .outcomes{background:var(--brand-deep);color:#fff;padding:72px 0}
+.pharmacy-landing .outcomes .eyebrow{color:var(--hr-hero-accent)}
+.pharmacy-landing .outcomes .eyebrow::before{background:var(--hr-hero-accent)}
+.pharmacy-landing .outcomes h2{color:#fff}
+.pharmacy-landing .outcomes .section-head p{color:var(--hr-hero-ink)}
+.pharmacy-landing .outcomes-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;margin-top:8px}
+.pharmacy-landing .outcome{border:1px solid rgba(255,255,255,.14);border-radius:var(--radius);padding:22px 14px;text-align:center;background:rgba(255,255,255,.04)}
+.pharmacy-landing .outcome b{display:block;font-family:var(--font-display);font-size:clamp(1.5rem,2.4vw,2rem);font-weight:700;color:var(--hr-hero-success)}
+.pharmacy-landing .outcome b.down{color:var(--hr-hero-accent)}
+.pharmacy-landing .outcome span{font-size:.8rem;color:var(--hr-hero-ink);line-height:1.35;display:block;margin-top:4px}
+.pharmacy-landing .outcomes-note{margin-top:26px;font-size:.82rem;color:var(--hr-hero-muted);text-align:center}
+@media (max-width:980px){.pharmacy-landing .outcomes-grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:720px){.pharmacy-landing .outcomes-grid{grid-template-columns:repeat(2,1fr)}}
