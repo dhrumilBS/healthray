@@ -31,13 +31,6 @@
 defined('ABSPATH') || exit;
 
 $ppc_assets = get_stylesheet_directory_uri() . '/assets/ppc-hims';
-
-/*
- * Headline that matches the ad: add ?lp=billing (or pharmacy, cloud, abdm, his) to the ad's final URL.
- * No lp, or an unknown value, keeps the default headline. Done in PHP, so there is no flicker.
- * Page cache: if your cache plugin ignores query strings, add "lp" to its "cache by query string" list.
- * To record which headline a lead saw, add  [hidden lp default:get]  to the CF7 form.
- */
 $ppc_headlines = array(
 	'billing'  => array( 'Hospital billing software', "Hospital billing software that doesn't miss a single charge" ),
 	'pharmacy' => array( 'Hospital pharmacy software', 'Hospital pharmacy software where stock and bills always match' ),
@@ -49,16 +42,10 @@ $ppc_lp   = isset( $_GET['lp'] ) ? sanitize_key( wp_unslash( $_GET['lp'] ) ) : '
 $ppc_head = isset( $ppc_headlines[ $ppc_lp ] )
 	? $ppc_headlines[ $ppc_lp ]
 	: array( 'Hospital management software', 'Run your whole hospital on one system your staff will actually use' );
-
-/*
- * Logo strip, printed in this order (sizes are mixed on purpose). Only confirmed bed counts get a badge.
- * Logos live in assets/ppc-hims/. If a logo fails to load (or 'logo' is empty), the tile shows the hospital name.
- * A logo file with a lot of empty space around it: add 'zoom' => true (css: .lg-zoom).
- */
 $ppc_hospitals = array(
 	array( 'name' => 'HZB Arogyam Multispeciality Hospital', 'place' => 'Hazaribagh, Jharkhand', 'beds' => '150 beds', 'logo' => $ppc_assets . '/hzb-arogyam-multispeciality-hospital.webp' ),
 	array( 'name' => 'Vibrant Multispecialty Hospital', 'place' => 'Vapi', 'beds' => '120 beds', 'logo' => $ppc_assets . '/vibrant-hospital.webp' ),
-	array( 'name' => 'Shraddha Arogya Mandir', 'place' => 'Vapi', 'beds' => '', 'logo' => 'https://healthray.com/wp-content/uploads/2025/08/Shraddha-Arogya-Mandir.webp' ),
+	array( 'name' => 'Shraddha Arogya Mandir', 'place' => 'Vapi', 'beds' => '120+ beds', 'logo' => 'https://healthray.com/wp-content/uploads/2025/08/Shraddha-Arogya-Mandir.webp' ),
 	array( 'name' => 'Sri Manakula Vinayagar Medical College', 'place' => 'Puducherry', 'beds' => '1,100 beds', 'college' => true, 'logo' => $ppc_assets . '/shri-manakula-vinayak-medical-college.webp' ),
 	array( 'name' => 'Parivar Super Speciality Hospital', 'place' => 'Madhya Pradesh', 'beds' => '140 beds', 'logo' => $ppc_assets . '/parivar-super-speciality-hospital.webp' ),
 	array( 'name' => 'Jeevan Rekha Hospital', 'place' => 'West Bengal', 'beds' => '120 beds', 'logo' => $ppc_assets . '/jeevan-rekha-hospital.webp' ),
