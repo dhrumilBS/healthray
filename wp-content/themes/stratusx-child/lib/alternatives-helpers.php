@@ -57,9 +57,10 @@ function hr_alt_rich_inline($raw)
  * A profile's prose — description, subheadings, bullet lists, Best For, Our
  * Experience — is one wysiwyg field, so its structure and order live in the
  * editor. The three things the editor cannot hand-write are the screenshot
- * (a media ID), the star rating (generated markup) and the pros/cons grid
- * (generated markup, icons and review boxes). Those are dropped in with a
- * token, so the editor still owns where they sit.
+ * (a media ID, or on the Healthray profile a video in the same slot, see
+ * hr_alt_render_profile_media()), the star rating (generated markup) and the
+ * pros/cons grid (generated markup, icons and review boxes). Those are dropped
+ * in with a token, so the editor still owns where they sit.
  *
  * Slug => token. Slugs match what hr_alt_profile_parts() hands the template.
  *
@@ -69,8 +70,8 @@ function hr_alt_profile_tokens()
 {
     return array(
         'screenshot' => '[alt-screenshot]',
-        'rating'     => '[alt-rating]',
-        'pros_cons'  => '[alt-pros-cons]',
+        'rating' => '[alt-rating]',
+        'pros_cons' => '[alt-pros-cons]',
     );
 }
 
@@ -110,9 +111,9 @@ function hr_alt_profile_content(array $profile)
  */
 function hr_alt_profile_parts($html)
 {
-    $html   = (string) $html;
+    $html = (string) $html;
     $tokens = hr_alt_profile_tokens();
-    $slugs  = array_flip($tokens);
+    $slugs = array_flip($tokens);
 
     $alternation = implode('|', array_map(function ($token) {
         return preg_quote($token, '~');
@@ -124,7 +125,7 @@ function hr_alt_profile_parts($html)
     $pieces = preg_split('~(' . $alternation . ')~i', $html, -1, PREG_SPLIT_DELIM_CAPTURE);
 
     $parts = array();
-    $used  = array();
+    $used = array();
 
     foreach ($pieces as $i => $piece) {
         if ($i % 2 === 0) {
@@ -140,24 +141,107 @@ function hr_alt_profile_parts($html)
             continue;
         }
 
-        $used[]  = $slug;
+        $used[] = $slug;
         $parts[] = array('type' => 'block', 'value' => $slug);
     }
 
     // The screenshot sits above the prose when it was not placed; everything
     // else falls in after it.
-    if (! in_array('screenshot', $used, true)) {
+    if (!in_array('screenshot', $used, true)) {
         array_unshift($parts, array('type' => 'block', 'value' => 'screenshot'));
         $used[] = 'screenshot';
     }
 
     foreach (array_keys($tokens) as $slug) {
-        if (! in_array($slug, $used, true)) {
+        if (!in_array($slug, $used, true)) {
             $parts[] = array('type' => 'block', 'value' => $slug);
         }
     }
 
     return $parts;
+}
+
+/**
+ * Whether a competitor_profiles row is Healthray's own write-up.
+ *
+ * Matched on the name, case-insensitively, rather than on the row's position,
+ * so "Healthray", "Healthray LIMS" and "Healthray HMIS" all count wherever the
+ * row sits. The Video field in lib/acf-alternatives.php is shown on the same
+ * rule (an ACF "==pattern" condition, which is case-insensitive too), so the
+ * editor and the template agree on which row can carry a video.
+ *
+ * @param array $profile One row of the competitor_profiles repeater.
+ * @return bool
+ */
+function hr_alt_is_healthray_profile(array $profile)
+{
+    return false !== stripos((string) ($profile['name'] ?? ''), 'healthray');
+}
+
+/**
+ * Renders the media block a profile opens with, wherever [alt-screenshot] sits.
+ *
+ * Competitor profiles show their screenshot. The Healthray profile can show a
+ * video in the same slot instead: when one is set it takes the screenshot's
+ * place, and the screenshot, if there is one, becomes the cover frame shown
+ * until the video starts.
+ *
+ * The video has no controls. It is muted and loops, and js/alternatives.js
+ * plays it while it is on screen. The frame is one transparent button so a
+ * click or a key press can still pause it (WCAG 2.2.2); its play icon only
+ * shows while the video is paused and waiting for the visitor.
+ *
+ * @param array $profile One row of the competitor_profiles repeater.
+ * @return string Empty string when the row has neither.
+ */
+function hr_alt_render_profile_media(array $profile)
+{
+    $screenshot = $profile['screenshot'] ?? '';
+    $video_id = hr_alt_is_healthray_profile($profile) ? (int) ($profile['video'] ?? 0) : 0;
+    $video_url = $video_id ? (string) wp_get_attachment_url($video_id) : '';
+
+    if ($video_url === '') {
+        return empty($screenshot)
+            ? ''
+            : '<div class="alt-profile__screenshot">' . wp_get_attachment_image($screenshot, 'large') . '</div>';
+    }
+
+    $meta = wp_get_attachment_metadata($video_id);
+    $width = (int) ($meta['width'] ?? 0);
+    $height = (int) ($meta['height'] ?? 0);
+    $poster = empty($screenshot) ? '' : (string) wp_get_attachment_image_url($screenshot, 'large');
+    $label = trim((string) $profile['name']) . ' video';
+
+    // Safari on iPhone paints no first frame without a poster; a start time a
+    // millisecond in makes it load one. The customer story video on the PPC
+    // pages uses the same trick (#t=0.5).
+    $src = $video_url . ($poster === '' ? '#t=0.001' : '');
+
+    // With a cover to show, nothing is fetched until the video starts. Without
+    // one, the metadata loads so the browser can paint the first frame. Muted
+    // and inline is what lets browsers start it without a click. No
+    // picture-in-picture or casting, matching the walkthrough player on the PPC
+    // pages (templates/ppc-hims/player.php). Hidden from screen readers: the
+    // toggle below names it.
+    $video = '<video class="alt-profile__video" muted loop playsinline'
+        . ' preload="' . ($poster !== '' ? 'none' : 'metadata') . '"'
+        . ' disablepictureinpicture disableremoteplayback'
+        . ($poster !== '' ? ' poster="' . esc_url($poster) . '"' : '')
+        . ($width && $height ? ' width="' . $width . '" height="' . $height . '"' : '')
+        . ' aria-hidden="true">'
+        . '<source src="' . esc_url($src) . '" type="' . esc_attr(get_post_mime_type($video_id) ?: 'video/mp4') . '">'
+        . '</video>';
+
+    // Pause/play toggle covering the frame. Hidden until js/alternatives.js
+    // runs; without JavaScript the video does not start and the still frame shows.
+    $toggle = '<button type="button" class="alt-profile__video-toggle" aria-label="' . esc_attr('Play the ' . $label) . '" data-label="' . esc_attr($label) . '" hidden>'
+        . '<span class="alt-profile__video-icon" aria-hidden="true">'
+        . '<svg class="alt-profile__video-icon-play" width="30" height="30" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor" /></svg>'
+        . '<svg class="alt-profile__video-icon-pause" width="28" height="28" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor" /><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor" /></svg>'
+        . '</span>'
+        . '</button>';
+
+    return '<div class="alt-profile__screenshot alt-profile__screenshot--video">' . $video . $toggle . '</div>';
 }
 
 /**
@@ -190,18 +274,18 @@ function hr_alt_profile_parts($html)
  */
 function hr_alt_profile_compose_content(array $parts, array $order = array())
 {
-    if (! $order) {
+    if (!$order) {
         $order = hr_alt_profile_default_section_order();
     }
 
     $description = (string) ($parts['description'] ?? '');
-    $stands_out  = (array) ($parts['stands_out'] ?? array());
-    $so_heading  = trim((string) ($parts['stands_out_heading'] ?? '')) ?: 'What Stands Out';
-    $best_for    = (string) ($parts['best_for'] ?? '');
+    $stands_out = (array) ($parts['stands_out'] ?? array());
+    $so_heading = trim((string) ($parts['stands_out_heading'] ?? '')) ?: 'What Stands Out';
+    $best_for = (string) ($parts['best_for'] ?? '');
     $exp_heading = trim((string) ($parts['our_experience_heading'] ?? '')) ?: 'Our Experience';
-    $experience  = (string) ($parts['our_experience'] ?? '');
-    $has_rating  = ! empty($parts['has_rating']);
-    $tokens      = hr_alt_profile_tokens();
+    $experience = (string) ($parts['our_experience'] ?? '');
+    $has_rating = !empty($parts['has_rating']);
+    $tokens = hr_alt_profile_tokens();
 
     $out = array();
 
@@ -223,7 +307,7 @@ function hr_alt_profile_compose_content(array $parts, array $order = array())
                 $items = '';
                 foreach ($stands_out as $row) {
                     $title = trim((string) ($row['title'] ?? ''));
-                    $text  = hr_alt_rich_inline($row['text'] ?? '');
+                    $text = hr_alt_rich_inline($row['text'] ?? '');
 
                     if ($title === '' && $text === '') {
                         continue;
@@ -316,18 +400,18 @@ function hr_alt_profile_legacy_content($post_id, $row_index)
     for ($i = 0; $i < $module_rows; $i++) {
         $stands_out[] = array(
             'title' => $meta('key_modules_' . $i . '_title'),
-            'text'  => $meta('key_modules_' . $i . '_text'),
+            'text' => $meta('key_modules_' . $i . '_text'),
         );
     }
 
     return hr_alt_profile_compose_content(
         array(
-            'description'            => $meta('description'),
-            'stands_out'             => $stands_out,
-            'best_for'               => $meta('best_for'),
+            'description' => $meta('description'),
+            'stands_out' => $stands_out,
+            'best_for' => $meta('best_for'),
             'our_experience_heading' => $meta('our_experience_heading'),
-            'our_experience'         => $meta('our_experience'),
-            'has_rating'             => trim($meta('rating_value')) !== '',
+            'our_experience' => $meta('our_experience'),
+            'has_rating' => trim($meta('rating_value')) !== '',
         ),
         hr_alt_profile_legacy_section_order($post_id)
     );
@@ -343,13 +427,13 @@ function hr_alt_profile_legacy_content($post_id, $row_index)
 function hr_alt_profile_legacy_section_order($post_id)
 {
     $default = hr_alt_profile_default_section_order();
-    $rows    = (int) get_post_meta($post_id, 'profile_block_order', true);
-    $order   = array();
+    $rows = (int) get_post_meta($post_id, 'profile_block_order', true);
+    $order = array();
 
     for ($i = 0; $i < $rows; $i++) {
         $block = (string) get_post_meta($post_id, 'profile_block_order_' . $i . '_block', true);
 
-        if (in_array($block, $default, true) && ! in_array($block, $order, true)) {
+        if (in_array($block, $default, true) && !in_array($block, $order, true)) {
             $order[] = $block;
         }
     }
@@ -392,7 +476,7 @@ function hr_alt_render_cell($raw)
     }
 
     if (preg_match('/^(yes|no)\s*:\s*(.+)$/i', $raw, $m)) {
-        $type    = strtolower($m[1]);
+        $type = strtolower($m[1]);
         $caption = esc_html(trim($m[2]));
         return hr_alt_icon($type) . '<span class="hr-cell-caption">' . $caption . '</span>';
     }
@@ -449,7 +533,7 @@ function hr_alt_review_label(array $profile, $slot)
 function hr_alt_render_stars($value)
 {
     $value = max(0, min(5, (float) $value));
-    $pct   = ($value / 5) * 100;
+    $pct = ($value / 5) * 100;
 
     return '<div class="hr-stars" role="img" aria-label="' . esc_attr($value . ' out of 5') . '">'
         . '<div class="hr-stars__track">&#9733;&#9733;&#9733;&#9733;&#9733;</div>'
@@ -515,7 +599,7 @@ function hr_alt_cta_target_attr($url, $site_host)
  * @param string $site_host Host of this site, so off-site links get target="_blank".
  * @return string
  */
-function hr_alt_render_cta( array $args, $site_host = '' )
+function hr_alt_render_cta(array $args, $site_host = '')
 {
     $heading = trim((string) ($args['heading'] ?? ''));
 
@@ -525,17 +609,17 @@ function hr_alt_render_cta( array $args, $site_host = '' )
 
     // The supporting line is a wysiwyg field, so it arrives as HTML. It is
     // printed inside the box's second <p>, hence the inline renderer.
-    $text        = hr_alt_rich_inline($args['text'] ?? '');
+    $text = hr_alt_rich_inline($args['text'] ?? '');
     $button_text = trim((string) ($args['button_text'] ?? '')) ?: 'Talk to an Expert';
-    $url         = trim((string) ($args['url'] ?? '')) ?: 'https://healthray.com/contact/';
-    $modifier    = trim((string) ($args['modifier'] ?? ''));
-    $wrap        = ! empty($args['wrap']);
+    $url = trim((string) ($args['url'] ?? '')) ?: 'https://healthray.com/contact/';
+    $modifier = trim((string) ($args['modifier'] ?? ''));
+    $wrap = !empty($args['wrap']);
 
     // Alignment is owned by the CSS, not a utility class, so the box can stay
     // left-aligned as designed.
     $classes = 'alt-mid-cta' . ($modifier !== '' ? ' ' . $modifier : '');
 
-    $box  = '<div class="alt-mid-cta__box">';
+    $box = '<div class="alt-mid-cta__box">';
     $box .= '<p>' . esc_html($heading) . '</p>';
     if ($text !== '') {
         $box .= '<p>' . $text . '</p>';
@@ -563,7 +647,7 @@ function hr_alt_render_cta( array $args, $site_host = '' )
 function hr_alt_render_glance_header($name, $logo_id, $is_healthray = false)
 {
     $classes = 'glance-table-top' . ($is_healthray ? ' glance-table-top--us' : '');
-    $out  = '<div class="' . esc_attr($classes) . '">';
+    $out = '<div class="' . esc_attr($classes) . '">';
     if ($logo_id) {
         $out .= wp_get_attachment_image($logo_id, 'thumbnail', false, array('title' => esc_attr($name), 'loading' => 'lazy'));
     } elseif ($is_healthray && function_exists('get_custom_logo')) {

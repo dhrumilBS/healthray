@@ -212,6 +212,20 @@ body { overflow-x: clip; }
 .alt-profile__heading { font-size: 26px; font-weight: 800; color: var(--hr-ink-strong); }
 .alt-profile__screenshot { margin-bottom: 20px; }
 .alt-profile__screenshot img { width: 100%; height: auto; border-radius: var(--hr-radius-soft); border: 1px solid var(--hr-line); display: block; }
+/* Healthray profile video: same frame as a screenshot; muted, looping, no controls, playing while on screen (js/alternatives.js). */
+.alt-profile__screenshot--video { position: relative; overflow: hidden; border-radius: var(--hr-radius-soft); border: 1px solid var(--hr-line); background: var(--hr-tint); }
+.alt-profile__video { display: block; width: 100%; height: auto; object-fit: cover; background: var(--hr-tint); }
+/* The whole frame is the pause/play toggle. Its icon only shows while the video waits for the visitor, or on keyboard focus. */
+.alt-profile__video-toggle { position: absolute; inset: 0; display: grid; place-items: center; width: 100%; height: 100%; padding: 0; border: 0; border-radius: inherit; background: transparent; color: #fff; cursor: pointer; }
+.alt-profile__video-toggle[hidden] { display: none; }
+.alt-profile__video-toggle:focus-visible { outline: 3px solid var(--hr-blue); outline-offset: -6px; }
+.alt-profile__video-icon { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--hr-blue); box-shadow: 0 14px 28px rgba(var(--hr-navy-rgb), .28); opacity: 0; transform: scale(.9); transition: opacity .2s ease, transform .2s ease, background-color .2s ease; }
+.alt-profile__screenshot--video.is-waiting .alt-profile__video-icon,
+.alt-profile__video-toggle:focus-visible .alt-profile__video-icon { opacity: 1; transform: none; }
+.alt-profile__screenshot--video.is-waiting .alt-profile__video-toggle:hover .alt-profile__video-icon { background: var(--hr-navy); transform: scale(1.06); }
+.alt-profile__video-icon-pause,
+.alt-profile__screenshot--video:not(.is-waiting) .alt-profile__video-icon-play { display: none; }
+.alt-profile__screenshot--video:not(.is-waiting) .alt-profile__video-icon-pause { display: block; }
 .alt-profile__description { font-size: 18px; line-height: 1.8; color: var(--hr-ink-soft); margin: 0 0 20px; }
 .alt-profile__subheading { font-size: 22px; font-weight: 700; color: var(--hr-ink); }
 .alt-profile__best-for { padding: 20px; margin: 20px 0; border: 1px solid var(--hr-line); border-radius: var(--hr-radius-soft); background: var(--hr-tint); }
@@ -293,6 +307,7 @@ body { overflow-x: clip; }
 	.alt-matrix { min-width: 560px; }
 	.hr-stars { font-size: 13px; }
 	.glance-table-top img { max-height: 30px; }
+	.alt-profile__video-icon svg { width: 24px; height: 24px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -309,10 +324,13 @@ body { overflow-x: clip; }
 	.alt-sidebar__cta .alt-sidebar__cta-btn,
 	.alt-toc__link,
 	.alt-matrix__cta-btn,
+	.alt-profile__video-icon,
 	.alt-single .faq-list summary::after { transition: none; }
 	.alt-hero__cta-primary:hover,
 	.alt-archive-card:hover,
-	.alt-sidebar__cta .alt-sidebar__cta-btn:hover { transform: none; }
+	.alt-sidebar__cta .alt-sidebar__cta-btn:hover,
+	.alt-profile__video-icon,
+	.alt-profile__screenshot--video.is-waiting .alt-profile__video-toggle:hover .alt-profile__video-icon { transform: none; }
 	.alt-archive-card:hover .alt-archive-card__img { transform: none; }
 }
 

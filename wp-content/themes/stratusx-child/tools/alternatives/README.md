@@ -125,7 +125,8 @@ when a row mixes ticks and text, which is the common case.
 **Omit a key to leave that field alone.** Only keys present in the JSON are
 written. This is how SEO-adjacent and image fields stay safe on an update.
 
-**Review URLs and screenshots follow the same rule.** Leave `url` out to keep
+**Review URLs, screenshots and the Healthray profile `video` follow the same
+rule.** Leave `url` out to keep
 whatever is stored. Set `"url": ""` to clear it. Set a value to replace it.
 
 **The review label is its own field.** Each review block ends with a
@@ -192,7 +193,7 @@ Put each token on its own line where the document has it:
 
 | Token | Renders |
 |---|---|
-| `[alt-screenshot]` | `profiles[].screenshot` |
+| `[alt-screenshot]` | `profiles[].screenshot`, or on the Healthray profile its video when one is attached |
 | `[alt-rating]` | the stars from `rating` + `rating_source` |
 | `[alt-pros-cons]` | the Pros/Cons grid from `pros`, `cons` and both reviews |
 
@@ -249,7 +250,7 @@ finds no `unfiltered_html` capability, puts `post_title` through kses, and store
 - Set or change the featured image
 - Publish anything. New posts are created as `draft`, and an existing post's
   status is left as-is unless you explicitly pass `--status=`
-- Replace a competitor logo or profile screenshot
+- Replace a competitor logo, a profile screenshot or the Healthray profile video
 - Write anything at all if validation fails, even with `--apply`
 
 Every update is backed up to `.kiro/backups/alt-<id>-<timestamp>.json` before a
@@ -318,7 +319,7 @@ apply:
 
 1. Featured image.
 2. Competitor logos, one per row of the Competitors repeater.
-3. Profile screenshots.
+3. Profile screenshots, and the Healthray profile video if the post has one.
 4. Yoast title and meta description.
 5. Publish, when you are ready. The importer never will.
 
@@ -336,7 +337,8 @@ an `images` block at the top level of the file:
 "images": {
   "featured_image":      { "id": 81275, "file": "2026/08/dashboard.webp", "url": "..." },
   "competitor_logos":    { "MocDoc": { "id": 81269, "file": "2026/08/Mocdoc.webp", "url": "..." } },
-  "profile_screenshots": { "Healthray": null }
+  "profile_screenshots": { "Healthray": null },
+  "profile_videos":      { "Healthray": { "id": 81708, "file": "2026/10/healthray-walkthrough.mp4", "url": "..." } }
 }
 ```
 
@@ -387,8 +389,8 @@ something not on this list, the importer will not invent a place for it; ask.
 | "FAQs" | `faqs` |
 
 Not taken from the document, because you own them: featured image, competitor
-logos, profile screenshots, Yoast title and meta description. The importer never
-writes any of these.
+logos, profile screenshots, the Healthray profile video, Yoast title and meta
+description. The importer never writes any of these.
 
 Also not from the document: review URLs. Source PDFs quote reviewers without
 linking them. Add the links by hand, or supply them in the JSON if you have them.

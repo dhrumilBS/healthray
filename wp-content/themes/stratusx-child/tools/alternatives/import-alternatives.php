@@ -16,8 +16,9 @@
  *   - Never writes the featured image.
  *   - New posts are created as drafts.
  *   - Existing post status is left alone unless --status is passed.
- *   - Competitor logos, profile screenshots and review URLs are preserved
- *     unless the JSON explicitly supplies a replacement.
+ *   - Competitor logos, profile screenshots, the Healthray profile video and
+ *     review URLs are preserved unless the JSON explicitly supplies a
+ *     replacement.
  *   - Every update is backed up to .kiro/backups/ first.
  *
  * @package stratusx-child
@@ -264,6 +265,7 @@ if ( $args['export'] ) {
 
 	$profiles         = array();
 	$profile_shots    = array();
+	$profile_videos   = array();
 	// Note: the sub fields that are TinyMCE editors (the profile content, the
 	// bullet text, the review quotes) come back formatted here, so an export
 	// carries wpautop's paragraphs for them. An unformatted read is not an
@@ -272,6 +274,10 @@ if ( $args['export'] ) {
 	// already-wrapped HTML alone.
 	foreach ( (array) get_field( 'competitor_profiles', $id ) as $pr ) {
 		$profile_shots[ $pr['name'] ] = alt_image_ref( $pr['screenshot'] ?? 0 );
+		// Only the Healthray profile can carry a video (hr_alt_is_healthray_profile()).
+		if ( hr_alt_is_healthray_profile( $pr ) ) {
+			$profile_videos[ $pr['name'] ] = alt_image_ref( $pr['video'] ?? 0 );
+		}
 
 		$pairs = function ( $rows ) {
 			$out = array();
@@ -371,10 +377,11 @@ if ( $args['export'] ) {
 		// file is a complete record of the post and tells you which images to
 		// attach by hand after importing on another site.
 		'images' => array(
-			'_note'              => 'Attachment IDs are per-site. The importer never writes images; re-attach these by hand on the destination.',
+			'_note'              => 'Attachment IDs are per-site. The importer never writes images or videos; re-attach these by hand on the destination.',
 			'featured_image'     => alt_image_ref( get_post_thumbnail_id( $id ) ),
 			'competitor_logos'   => $comp_logos,
 			'profile_screenshots' => $profile_shots,
+			'profile_videos'      => $profile_videos,
 		),
 	);
 
@@ -889,6 +896,9 @@ if ( array_key_exists( 'profiles', $f ) ) {
 		// Same rule for the screenshot: omit to preserve.
 		$screenshot = array_key_exists( 'screenshot', $profile ) ? $profile['screenshot'] : ( $old['screenshot'] ?? '' );
 
+		// And for the Healthray profile video, which sits in the screenshot's slot.
+		$video = array_key_exists( 'video', $profile ) ? $profile['video'] : ( $old['video'] ?? '' );
+
 		// The write-up is one editor in the admin, so a content file has two ways
 		// to fill it. Pass "content" to write markup verbatim, or keep describing
 		// the sections separately and let the theme compose them into the same
@@ -899,6 +909,7 @@ if ( array_key_exists( 'profiles', $f ) ) {
 		$rows[] = array(
 			'name'               => $profile['name'],
 			'screenshot'         => $screenshot,
+			'video'              => $video,
 			'content'            => $content,
 			'rating_value'       => isset( $profile['rating'] ) ? $profile['rating'] : '',
 			'rating_source'      => isset( $profile['rating_source'] ) ? $profile['rating_source'] : 'G2',
@@ -968,4 +979,4 @@ echo "  post id   : {$post_id}\n";
 echo "  status    : {$final->post_status}\n";
 echo '  edit      : ' . admin_url( "post.php?post={$post_id}&action=edit" ) . "\n";
 echo '  preview   : ' . get_preview_post_link( $post_id ) . "\n";
-echo "\nNot touched: SEO meta, featured image, competitor logos, profile screenshots.\n";
+echo "\nNot touched: SEO meta, featured image, competitor logos, profile screenshots, Healthray profile video.\n";

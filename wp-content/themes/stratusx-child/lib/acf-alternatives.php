@@ -233,6 +233,20 @@ if (function_exists('acf_add_local_field_group')) {
                     array('key' => 'field_alt_cp_name', 'label' => 'Name', 'name' => 'name', 'type' => 'text'),
                     array('key' => 'field_alt_cp_screenshot', 'label' => 'Screenshot', 'name' => 'screenshot', 'type' => 'image', 'return_format' => 'id', 'preview_size' => 'medium'),
                     array(
+                        'key' => 'field_alt_cp_video',
+                        'label' => 'Video',
+                        'name' => 'video',
+                        'type' => 'file',
+                        'return_format' => 'id',
+                        'library' => 'all',
+                        'mime_types' => 'mp4, webm',
+                        'instructions' => 'Healthray profile only, so this field appears when the Name contains "Healthray". Shown instead of the screenshot, where <code>[alt-screenshot]</code> sits: muted, on a loop and without controls, playing while it is on screen. If a Screenshot is also set, it becomes the cover image shown until the video starts. Leave empty to show the screenshot as usual. MP4 plays in every browser.',
+                        // Same rule as hr_alt_is_healthray_profile(): ACF's pattern
+                        // match is case-insensitive and finds the Name field in the
+                        // same repeater row.
+                        'conditional_logic' => array(array(array('field' => 'field_alt_cp_name', 'operator' => '==pattern', 'value' => 'healthray'))),
+                    ),
+                    array(
                         'key' => 'field_alt_cp_content',
                         'label' => 'Profile Content',
                         'name' => 'content',
@@ -248,7 +262,7 @@ if (function_exists('acf_add_local_field_group')) {
                             . '<br><code>&lt;div class="alt-profile__best-for"&gt;…&lt;/div&gt;</code> — tinted box; put a subheading and prose inside it'
                             . '<br><code>&lt;div class="alt-profile__experience"&gt;…&lt;/div&gt;</code> — closing verdict box with the navy left border'
                             . '<br><br>Three things are generated from the fields below rather than written here. Put each on its own line where you want it:'
-                            . '<br><code>[alt-screenshot]</code> · <code>[alt-rating]</code> · <code>[alt-pros-cons]</code>'
+                            . '<br><code>[alt-screenshot]</code> (the screenshot, or the video on the Healthray profile) · <code>[alt-rating]</code> · <code>[alt-pros-cons]</code>'
                             . '<br>Leave a token out and that block still renders — the screenshot above this content, the rating and pros/cons after it.',
                     ),
                     array('key' => 'field_alt_cp_rating_value', 'label' => 'Rating (out of 5)', 'name' => 'rating_value', 'type' => 'number', 'min' => 0, 'max' => 5, 'step' => 0.1, 'wrapper' => array('width' => '50'), 'instructions' => 'Rendered where <code>[alt-rating]</code> sits in the content above.'),

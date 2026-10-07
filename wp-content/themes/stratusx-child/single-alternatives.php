@@ -320,8 +320,8 @@ if ($toc_heading_levels !== 'both') {
 									<?php if ($part['type'] === 'html'): ?>
 										<?= $part['value']; ?>
 
-									<?php elseif ($block === 'screenshot' && !empty($p['screenshot'])): ?>
-										<div class="alt-profile__screenshot"><?= wp_get_attachment_image($p['screenshot'], 'large'); ?></div>
+									<?php elseif ($block === 'screenshot'): ?>
+										<?= hr_alt_render_profile_media($p); ?>
 
 									<?php elseif ($block === 'rating' && !empty($p['rating_value'])): ?>
 										<div class="alt-profile__rating">

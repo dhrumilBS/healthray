@@ -163,6 +163,93 @@
 			setActive(targets[0].el);
 		})();
 
+		// Healthray profile video (hr_alt_render_profile_media() in
+		// lib/alternatives-helpers.php). No controls: it is muted and loops, starts
+		// once at least half of it is on screen and pauses once it has left the
+		// screen, or the tab is hidden. The frame is one transparent button, so a click,
+		// or Enter on keyboard focus, still pauses it (WCAG 2.2.2), and a pause the
+		// visitor chose sticks until they press again. It waits with a play icon
+		// instead of starting by itself for "reduce motion", Data Saver and 2G, the
+		// same rule as the PPC walkthrough, and when the browser refuses autoplay.
+		(function () {
+			var frames = document.querySelectorAll('.alt-profile__screenshot--video');
+			if (!frames.length) return;
+
+			var canWatch = 'IntersectionObserver' in window;
+			var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			var conn = navigator.connection || {};
+			var lowData = !!conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '');
+			var autoplay = canWatch && !reduceMotion && !lowData;
+
+			frames.forEach(function (frame) {
+				var video = frame.querySelector('video');
+				var toggle = frame.querySelector('.alt-profile__video-toggle');
+				if (!video || !toggle) return;
+
+				var label = toggle.getAttribute('data-label') || 'video';
+				var wants = autoplay; // play whenever it is on screen
+				var visible = !canWatch; // any of it on screen
+				var half = !canWatch; // at least half of it on screen
+
+				function render() {
+					frame.classList.toggle('is-waiting', !wants);
+					toggle.setAttribute('aria-label', (wants ? 'Pause the ' : 'Play the ') + label);
+				}
+
+				function play() {
+					video.muted = true;
+					var p = video.play();
+					if (p && p.catch) {
+						p.catch(function (err) {
+							// AbortError is a pause() cutting in, which scrolling does.
+							// Anything else means the browser said no: wait for a click.
+							if (err && err.name === 'AbortError') return;
+							wants = false;
+							render();
+						});
+					}
+				}
+
+				// Starting waits for half of it; stopping waits until none of it is
+				// left, so it never freezes while still partly in view.
+				function update() {
+					if (!wants || !visible || document.hidden) {
+						if (!video.paused) video.pause();
+					} else if (half && video.paused) {
+						play();
+					}
+				}
+
+				toggle.addEventListener('click', function () {
+					wants = !wants;
+					render();
+					if (wants) {
+						// It was just clicked, so it is on screen, even if less than half of it is.
+						visible = true;
+						play();
+					} else {
+						video.pause();
+					}
+				});
+
+				document.addEventListener('visibilitychange', update);
+
+				// Both thresholds matter: Chrome only reports crossings of the ones
+				// listed, so 0 is what says it has left the screen completely.
+				if (canWatch) {
+					new IntersectionObserver(function (entries) {
+						var entry = entries[entries.length - 1];
+						visible = entry.isIntersecting;
+						half = entry.intersectionRatio >= 0.5;
+						update();
+					}, { threshold: [0, 0.5] }).observe(frame);
+				}
+
+				toggle.hidden = false;
+				render();
+			});
+		})();
+
 		// FAQ accordion — uses native <details name="alt-faq-group"> so the browser
 		// keeps only one FAQ open at a time, no JS needed here.
 	});
