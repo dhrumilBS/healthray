@@ -1,19 +1,3 @@
-/**
- * PPC - Hospital Management Software (temp-ppc-hims.php).
- *
- * Page-only interactivity. Loaded deferred in the footer by functions.php (section 12).
- * Handled elsewhere, so not repeated here:
- * - "Book a free demo" buttons (.hr-cta-btn) open the lead popup: js/script.js.
- * - CF7 behaviour (button lock, "Other" fields, thank-you redirect): js/script.js.
- * - Image fallbacks (.noimg / initials): small inline script in <head>, functions.php.
- *
- * 1. Customer story video
- * 2. Mobile action bar (hidden over the hero form, final CTA and footer)
- * 3. Walkthrough video
- * 4. Doctor wall carousel (tablet/mobile)
- * 5. FAQ accordion
- * 6. Modules menu "Show all" (tablet/mobile)
- */
 (function () {
 	'use strict';
 
@@ -555,5 +539,68 @@ document.addEventListener('DOMContentLoaded', function () {
 		var all = app.classList.toggle('all');
 		btn.setAttribute('aria-expanded', all ? 'true' : 'false');
 		btn.textContent = all ? 'Show less' : 'Show all 40+ modules';
+	});
+})();
+
+/*
+ * 7. Mobile number: the campaign runs in India only. "+91" sits in its own box in front of the
+ * field, and the field takes just the 10-digit number. "+91 " is added to the value CF7 sends
+ * (formdata event), so the server check and Odoo still get "+91 9876543210".
+ * Pasted or autofilled full numbers keep their last 10 digits ("+91 98765-43210",
+ * "919876543210", "09876543210" all become "9876543210").
+ */
+(function () {
+	'use strict';
+
+	var CODE = '+91';
+	var MAX = 10;
+	var inputs = document.querySelectorAll('.lead-form.hr-demo-form input[name="your-number"]');
+	if (!inputs.length) {
+		return;
+	}
+
+	function digitsOnly(value) {
+		var d = value.replace(/\D/g, '').replace(/^0+/, '');
+		return d.length > MAX ? d.slice(-MAX) : d;
+	}
+
+	inputs.forEach(function (input) {
+		var form = input.closest('form');
+
+		var box = document.createElement('span');
+		box.className = 'hr-phone';
+		var cc = document.createElement('span');
+		cc.className = 'hr-cc';
+		cc.textContent = CODE;
+		cc.setAttribute('aria-hidden', 'true');
+		input.parentNode.insertBefore(box, input);
+		box.appendChild(cc);
+		box.appendChild(input);
+
+		input.value = digitsOnly(input.value);
+		input.placeholder = '98765 43210';
+		input.setAttribute('inputmode', 'numeric');
+		input.setAttribute('aria-label', 'Mobile number, India ' + CODE);
+
+		// Typing stops at 10 digits (the 11th is ignored); a paste or autofill keeps the last 10,
+		// so "+91 98765-43210" still becomes "9876543210".
+		input.addEventListener('input', function (e) {
+			var next;
+			if (e.inputType === 'insertText') {
+				next = input.value.replace(/\D/g, '').replace(/^0+/, '').slice(0, MAX);
+			} else {
+				next = digitsOnly(input.value);
+			}
+			if (next !== input.value) {
+				input.value = next;
+			}
+		});
+
+		if (form) {
+			form.addEventListener('formdata', function (e) {
+				var d = digitsOnly(input.value);
+				e.formData.set('your-number', d ? CODE + ' ' + d : '');
+			});
+		}
 	});
 })();

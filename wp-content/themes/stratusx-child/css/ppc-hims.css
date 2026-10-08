@@ -2586,6 +2586,44 @@ html {
 	background: var(--white);
 }
 
+/* Mobile number: "+91" and the field in one box, split by a line (built by js/ppc-hims.js, section 7). */
+.ppc-hims .hr-phone {
+	display: flex;
+	border: 1.5px solid var(--line-blue);
+	border-radius: var(--r);
+	background: var(--white);
+	overflow: hidden;
+}
+
+.ppc-hims .hr-phone:focus-within {
+	border-color: var(--blue);
+	box-shadow: 0 0 0 3px rgba(15, 104, 234, .15);
+}
+
+.ppc-hims .hr-phone:has(.wpcf7-not-valid) {
+	border-color: var(--red-ink);
+}
+
+.ppc-hims .hr-cc {
+	flex: none;
+	display: flex;
+	align-items: center;
+	padding: 0 12px 0 14px;
+	font: 700 16px var(--font);
+	color: var(--navy);
+	background: var(--tint);
+	border-right: 1.5px solid var(--line-blue);
+}
+
+.ppc-hims .field .hr-phone .wpcf7-form-control,
+.ppc-hims .field .hr-phone .wpcf7-form-control:focus {
+	flex: 1;
+	min-width: 0;
+	border: 0;
+	border-radius: 0;
+	box-shadow: none;
+}
+
 .ppc-hims .field select.wpcf7-form-control {
 	appearance: none;
 	-webkit-appearance: none;
