@@ -1,0 +1,14 @@
+# These tools are command-line utilities. Nothing here should ever be reachable
+# over HTTP. Every script also refuses to run outside the CLI SAPI, so this is a
+# second layer rather than the only guard.
+#
+# It matters most for backups/: those JSON files hold the full pre-change page
+# content and every meta key, which must not be downloadable by anyone who
+# guesses the filename.
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
