@@ -1,0 +1,120 @@
+{
+    "source": "Jabalpur Hospital.docx",
+    "post": {
+        "id": 66684,
+        "title": "How Jabalpur Hospital Connected Patient Care, Diagnostics and Hospital Operations with Healthray",
+        "slug": "jabalpur-hospital",
+        "excerpt": "Established in 1991, Jabalpur Hospital & Research Centre (JHRC) is a 300+ bed multi-specialty hospital in Jabalpur, Madhya Pradesh. The hospital provides 24×7 emergency care and has treated 3+ lakh inpatients, 20+ lakh outpatients and performed 1+ lakh surgeries since its establishment."
+    },
+    "fields": {
+        "short_name": "Jabalpur Hospital",
+        "hero_lede": "Established in 1991, Jabalpur Hospital & Research Centre (JHRC) is a 300+ bed multi-specialty hospital in Jabalpur, Madhya Pradesh. The hospital provides 24×7 emergency care and has treated 3+ lakh inpatients, 20+ lakh outpatients and performed 1+ lakh surgeries since its establishment.",
+        "metrics": [
+            { "title": "95%", "text": "Patient Information Accuracy" },
+            { "title": "60%", "text": "Faster Diagnostic Reporting" },
+            { "title": "50%", "text": "Faster Billing, Pharmacy & TPA Processing" },
+            { "title": "40%", "text": "Better Operational Visibility" }
+        ],
+        "glance_facts": [
+            { "label": "Hospital", "value": "Jabalpur Hospital & Research Centre" },
+            { "label": "Location", "value": "Russel Chowk, Jabalpur, Madhya Pradesh, India" },
+            { "label": "Type", "value": "Multi-speciality" },
+            { "label": "Size", "value": "300+ beds" },
+            { "label": "Time to go live", "value": "Under 2 weeks" },
+            { "label": "Downtime", "value": "None" },
+            { "label": "Website", "value": "jabalpurhospital.com", "url": "https://jabalpurhospital.com/" }
+        ],
+        "modules_used": [
+            { "name": "Front Desk & Registration" },
+            { "name": "OPD & IPD" },
+            { "name": "EHR / Patient Records" },
+            { "name": "Billing & Payments" },
+            { "name": "Nursing Management" },
+            { "name": "Inventory & Store Management" },
+            { "name": "Laboratory Management" },
+            { "name": "Radiology / Diagnostics" },
+            { "name": "Pharmacy Management" },
+            { "name": "TPA & Insurance" },
+            { "name": "EMR" },
+            { "name": "Appointment Management" },
+            { "name": "Discharge Management" },
+            { "name": "Dashboards & Reporting" }
+        ],
+        "overview_label": "The hospital",
+        "overview_heading": "A Multi-Specialty Hospital With Complex Care Workflows",
+        "overview_content": [
+            "Jabalpur Hospital & Research Centre (JHRC) has multiple specialised departments, supported by pathology, radiology, pharmacy, physiotherapy, and critical care. It also offers fertility care, dialysis, and cardiac care.",
+            "JHRC brings together specialised departments along with fertility care, dialysis and cardiac care. The hospital’s broad service mix brings clinical and support teams together around the same patient journey. The care journey spans these functions."
+        ],
+        "problem_label": "The operational problems",
+        "problem_heading": "Four Challenges Made Workflows Harder To Manage",
+        "problem_intro": "As patient care and hospital administration moved across departments, four areas created friction in JHRC’s day-to-day work. The issues affected staff and coordination across teams.",
+        "problems": [
+            { "title": "Patient Data Access", "text": "Patient information had to be accessed across different stages of care, making it harder for teams to find the right details from consultation through treatment, pharmacy, admission and discharge." },
+            { "title": "Diagnostic Information", "text": "Pathology and radiology reports needed to reach treating doctors and remain linked to patient records. Any delay in sharing this information could slow down the next step in patient care." },
+            { "title": "Billing, Pharmacy & TPA", "text": "Billing, pharmacy and TPA teams handled related patient and treatment information. Working through separate processes meant more data entry and more follow-ups between teams." },
+            { "title": "Management Visibility", "text": "Management needed timely information on patient activity, billing and departmental performance. Getting this information from different areas made it harder to track hospital operations." }
+        ],
+        "problem_outro": "These challenges made it important to improve how different hospital workflows worked together.",
+        "decision_label": "The experience",
+        "decision_heading": "What Jabalpur Hospital Says",
+        "decision_intro": "JHRC chose Healthray to support its clinical and administrative workflows across departments, including patient records, diagnostics, billing, and pharmacy.",
+        "quote_text": "Healthray has given us complete patient visibility; every work operation from diagnosis to discharge can now be accessed in just one single click. We no longer waste time on searching records…",
+        "quote_name": "Dr. Rajesh B. Dhirawani",
+        "quote_role": "Jabalpur Hospital",
+        "solution_label": "The solution",
+        "solution_heading": "How Healthray Solved These Challenges",
+        "solution_intro": "Healthray helped JHRC simplify how teams worked across departments through its <a href=\"https://healthray.com/hospital-information-management-system/\"><strong>hospital management system</strong></a>.",
+        "solutions": [
+            { "icon": "records", "title": "Unified Patient Records", "text": "A centralised EHR brought patient history, prescriptions and reports together, so authorised teams could access them across departments." },
+            { "icon": "lab", "title": "Connected Diagnostics", "text": "Laboratory management connected lab orders and results with patient records, making diagnostic information easier for treating teams to access." },
+            { "icon": "billing", "title": "Integrated Billing, Pharmacy & TPA", "text": "Patient and treatment details could be used across pharmacy management, billing and TPA workflows, reducing the need to enter them again." },
+            { "icon": "chart", "title": "Real-Time Dashboards", "text": "Clinical, operational, and financial data were brought into dashboards, giving management a clearer view across departments." }
+        ],
+        "setup_label": "Implementation",
+        "setup_heading": "A Smooth Transition to Healthray HMS",
+        "setup_intro": "JHRC moved its key hospital workflows to Healthray HMS with support for implementation, data migration, and staff onboarding.",
+        "steps": [
+            { "when": "Data Migration", "title": "Existing Records Moved", "text": "JHRC’s existing patient and operational data were migrated into Healthray HMS to support the transition" },
+            { "when": "Implementation", "title": "Workflows Configured", "text": "Healthray HMS was set up to support JHRC’s clinical and administrative workflows across departments" },
+            { "when": "Staff Onboarding", "title": "Teams Trained", "text": "Staff were introduced to the system and trained to use the workflows relevant to their roles" }
+        ],
+        "results_label": "The result",
+        "results_heading": "The Impact at JHRC",
+        "results_intro": "JHRC achieved measurable improvements in the accuracy and speed of key hospital processes, along with better visibility for management.",
+        "results": [
+            { "number": "95%", "title": "Patient Information Accuracy", "text": "Staff had more accurate patient information to work with across different stages of care." },
+            { "number": "60%", "title": "Faster Diagnostic Reporting", "text": "Doctors received diagnostic reports sooner, reducing the wait between investigation and clinical review." },
+            { "number": "50%", "title": "Faster Billing, Pharmacy & TPA Processing", "text": "Billing, pharmacy and TPA teams completed related work faster, reducing the time needed for processing." },
+            { "number": "40%", "title": "Better Operational Visibility", "text": "Management had a clearer view of hospital activity and departmental performance." }
+        ],
+        "ba_title": "Before and After Healthray",
+        "ba_before_label": "Before Healthray",
+        "ba_after_label": "With Healthray HMS",
+        "ba_rows": [
+            { "area": "Patient information", "before": "Teams needed to locate details at different points of care", "after": "Records were available across the care process" },
+            { "area": "Diagnostic reporting", "before": "Reports required follow-up before clinical review", "after": "Reports reached treating teams sooner" },
+            { "area": "Billing", "before": "Billing required more checking and handling", "after": "Billing was completed faster" },
+            { "area": "Pharmacy", "before": "Medication-related work involved separate handling", "after": "Pharmacy teams could work with patient details" },
+            { "area": "TPA", "before": "TPA processing involved more follow-ups", "after": "TPA processing was completed faster" },
+            { "area": "Operational visibility", "before": "Department updates were harder to consolidate", "after": "Management had a clearer view of operations" }
+        ],
+        "fit_heading": "Is Your Hospital Facing The Same Challenges?",
+        "fit_intro": "This story will help you most if:",
+        "fit_points": [
+            { "text": "Patient information is difficult to access across departments" },
+            { "text": "Diagnostic reports take time to reach treating doctors" },
+            { "text": "Billing, pharmacy and TPA require frequent coordination" },
+            { "text": "Management needs a clearer view of hospital operations" }
+        ],
+        "cta_heading": "See Healthray HMS in Action",
+        "cta_text": "Book a free demo. Our team will show you how Healthray can support patient records, diagnostics, billing, pharmacy, TPA and hospital operations."
+    },
+    "brief": {
+        "meta_title": "Jabalpur Hospital Case Study | Healthray HMS",
+        "meta_description": "See how Jabalpur Hospital used Healthray HMS to improve patient information, diagnostics, pharmacy, billing, TPA processing and operational visibility.",
+        "old_url": "https://healthray.com/case-studies/how-jabalpur-hospital-transformed-medical-operations-with-healthray/",
+        "new_url": "http://healthray.com/case-study/jabalpur-hospital",
+        "links_not_carried": "Solution cards link EHR, Laboratory management and pharmacy management to healthray.com product pages; card text prints as plain text, so those three links are not on the page."
+    }
+}

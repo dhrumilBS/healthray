@@ -1,0 +1,203 @@
+===== Jabalpur Hospital.docx =====
+paragraphs: 34  tables: 11  images: 1
+normalised: none
+
+[TITLE] Jabalpur Hospital
+[H1] How Jabalpur Hospital Connected Patient Care, Diagnostics and Hospital Operations with Healthray
+[P] [IMAGE media/image1.png]
+[P] Established in 1991, Jabalpur Hospital & Research Centre (JHRC) is a 300+ bed multi-specialty hospital in Jabalpur, Madhya Pradesh. The hospital provides 24×7 emergency care and has treated 3+ lakh inpatients, 20+ lakh outpatients and performed 1+ lakh surgeries since its establishment.
+
+----- TABLE 1 (1 rows x 4 cols) -----
+[row 0 cell 0]
+    **95%**
+    **Patient Information** 
+    **Accuracy**
+[row 0 cell 1]
+    **60%**
+    **Faster** 
+    **Diagnostic Reporting**
+[row 0 cell 2]
+    **50%**
+    **Faster Billing, Pharmacy & TPA** 
+    **Processing**
+[row 0 cell 3]
+    **40%**
+    **Better** 
+    **Operational Visibility**
+----- END TABLE 1 -----
+
+
+----- TABLE 2 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (1 rows x 1 cols)
+    [row 0 cell 0]
+        **JHRC Hospital Snapshot**
+        NESTED TABLE (7 rows x 2 cols)
+        ROW 0: HOSPITAL || Jabalpur Hospital & Research Centre
+        ROW 1: LOCATION || Russel Chowk, Jabalpur, Madhya Pradesh, India
+        ROW 2: TYPE || Multi-speciality
+        ROW 3: SIZE || 300+ beds
+        ROW 4: TIME TO GO LIVE  || Under 2 weeks 
+        ROW 5: DOWNTIME || None
+        ROW 6: WEBSITE || [jabalpurhospital.com](https://jabalpurhospital.com/) 
+    **MODULES USED**
+    NESTED TABLE (15 rows x 1 cols)
+    ROW 0: **MODULES**
+    ROW 1: Front Desk & Registration
+    ROW 2: OPD & IPD
+    ROW 3: **EHR / Patient Records**
+    ROW 4: **Billing & Payments**
+    ROW 5: Nursing Management
+    ROW 6: Inventory & Store Management
+    ROW 7: **Laboratory Management**
+    ROW 8: Radiology / Diagnostics
+    ROW 9: **Pharmacy Management**
+    ROW 10: **TPA & Insurance**
+    ROW 11: EMR
+    ROW 12: Appointment Management
+    ROW 13: Discharge Management
+    ROW 14: **Dashboards & Reporting**
+----- END TABLE 2 -----
+
+[SUBTITLE] **– THE HOSPITAL**
+[H2] A Multi-Specialty Hospital With Complex Care Workflows
+[P] Jabalpur Hospital & Research Centre (JHRC) has multiple specialised departments, supported by pathology, radiology, pharmacy, physiotherapy, and critical care. It also offers fertility care, dialysis, and cardiac care.
+[P] JHRC brings together specialised departments along with fertility care, dialysis and cardiac care. The hospital’s broad service mix brings clinical and support teams together around the same patient journey. The care journey spans these functions.
+[SUBTITLE] **– THE OPERATIONAL PROBLEMS**
+[H2] Four Challenges Made Workflows Harder To Manage
+[P] As patient care and hospital administration moved across departments, four areas created friction in JHRC’s day-to-day work. The issues affected staff and coordination across teams.
+
+----- TABLE 3 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (2 rows x 2 cols)
+    [row 0 cell 0]
+        01 – Patient Data Access
+        Patient information had to be accessed across different stages of care, making it harder for teams to find the right details from consultation through treatment, pharmacy, admission and discharge.
+    [row 0 cell 1]
+        02 – Diagnostic Information
+        Pathology and radiology reports needed to reach treating doctors and remain linked to patient records. Any delay in sharing this information could slow down the next step in patient care.
+    [row 1 cell 0]
+        03 – Billing, Pharmacy & TPA
+        Billing, pharmacy and TPA teams handled related patient and treatment information. Working through separate processes meant more data entry and more follow-ups between teams.
+    [row 1 cell 1]
+        04 – Management Visibility
+        Management needed timely information on patient activity, billing and departmental performance. Getting this information from different areas made it harder to track hospital operations.
+----- END TABLE 3 -----
+
+[P] These challenges made it important to improve how different hospital workflows worked together.
+[SUBTITLE] **– THE SOLUTION**
+[H2] How Healthray Solved These Challenges
+[P] Healthray helped JHRC simplify how teams worked across departments through its [**hospital management system**](https://healthray.com/hospital-information-management-system/)**.**
+
+----- TABLE 4 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (2 rows x 2 cols)
+    [row 0 cell 0]
+        01 – Unified Patient Records
+        A centralised [**EHR**](https://healthray.com/ehr-software/) brought patient history, prescriptions and reports together, so authorised teams could access them across departments. 
+    [row 0 cell 1]
+        02 – Connected Diagnostics
+        [**Laboratory management**](https://healthray.com/laboratory-information-management-system/) connected lab orders and results with patient records, making diagnostic information easier for treating teams to access.
+    [row 1 cell 0]
+        03 – Integrated Billing, Pharmacy & TPA
+        Patient and treatment details could be used across [**pharmacy management**](https://healthray.com/pharmacy-management-system/), billing and TPA workflows, reducing the need to enter them again.
+    [row 1 cell 1]
+        04 – Real-Time Dashboards
+        Clinical, operational, and financial data were brought into dashboards, giving management a clearer view across departments.
+----- END TABLE 4 -----
+
+[SUBTITLE] **– IMPLEMENTATION**
+[H2] A Smooth Transition to Healthray HMS
+[P] JHRC moved its key hospital workflows to Healthray HMS with support for implementation, data migration, and staff onboarding.
+
+----- TABLE 5 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (1 rows x 3 cols)
+    [row 0 cell 0]
+        **01 - Data Migration**
+        NESTED TABLE (1 rows x 1 cols)
+        ROW 0: Existing Records Moved
+        JHRC’s existing patient and operational data were migrated into Healthray HMS to support the transition
+    [row 0 cell 1]
+        **02 - Implementation**
+        NESTED TABLE (1 rows x 1 cols)
+        ROW 0: Workflows Configured
+        Healthray HMS was set up to support JHRC’s clinical and administrative workflows across departments
+    [row 0 cell 2]
+        **03 - Staff Onboarding**
+        NESTED TABLE (1 rows x 1 cols)
+        ROW 0: Teams Trained
+        Staff were introduced to the system and trained to use the workflows relevant to their roles
+----- END TABLE 5 -----
+
+[SUBTITLE] **– THE EXPERIENCE**
+[H2] What Jabalpur Hospital Says
+[P] JHRC chose Healthray to support its clinical and administrative workflows across departments, including patient records, diagnostics, billing, and pharmacy.
+
+----- TABLE 6 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    **“Healthray has given us complete patient visibility; every work operation from diagnosis to discharge can now be accessed in just one single click. We no longer waste time on searching records…”**
+    **Dr. Rajesh B. Dhirawani**
+    **Jabalpur Hospital**
+----- END TABLE 6 -----
+
+[SUBTITLE] **– THE RESULT**
+[H2] The Impact at JHRC
+[P] JHRC achieved measurable improvements in the accuracy and speed of key hospital processes, along with better visibility for management.
+[H3] 1. 95% Patient Information Accuracy
+[P] Staff had more accurate patient information to work with across different stages of care.
+[H3] 2. 60% Faster Diagnostic Reporting
+[P] Doctors received diagnostic reports sooner, reducing the wait between investigation and clinical review.
+[H3] 3. 50% Faster Billing, Pharmacy & TPA Processing
+[P] Billing, pharmacy and TPA teams completed related work faster, reducing the time needed for processing.
+[H3] 4. 40% Better Operational Visibility
+[P] Management had a clearer view of hospital activity and departmental performance.
+[H2] Before and After Healthray
+
+----- TABLE 7 (7 rows x 3 cols) -----
+ROW 0: **AREA** || **BEFORE HEALTHRAY** || **WITH HEALTHRAY HMS**
+ROW 1: **Patient information** || Teams needed to locate details at different points of care || Records were available across the care process
+ROW 2: **Diagnostic reporting** || Reports required follow-up before clinical review || Reports reached treating teams sooner
+ROW 3: **Billing** || Billing required more checking and handling || Billing was completed faster
+ROW 4: **Pharmacy** || Medication-related work involved separate handling || Pharmacy teams could work with patient details
+ROW 5: **TPA** || TPA processing involved more follow-ups || TPA processing was completed faster
+ROW 6: **Operational visibility** || Department updates were harder to consolidate || Management had a clearer view of operations
+----- END TABLE 7 -----
+
+
+----- TABLE 8 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    Is Your Hospital Facing The Same Challenges?
+    This story will help you most if:
+    ✓ Patient information is difficult to access across departments
+    ✓ Diagnostic reports take time to reach treating doctors
+    ✓ Billing, pharmacy and TPA require frequent coordination
+    ✓ Management needs a clearer view of hospital operations
+----- END TABLE 8 -----
+
+
+----- TABLE 9 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    See Healthray HMS in Action
+    Book a free demo. Our team will show you how Healthray can support patient records, diagnostics, billing, pharmacy, TPA and hospital operations.
+    NESTED TABLE (1 rows x 1 cols)
+    ROW 0: **Book a FREE Demo**
+----- END TABLE 9 -----
+
+[TITLE] Content Brief Template
+
+----- TABLE 10 (4 rows x 2 cols) -----
+ROW 0: Website || [healthray.com](http://healthray.com) 
+ROW 1: Title/topic || How Jabalpur Hospital Connected Patient Care, Diagnostics and Hospital Operations with Healthray
+ROW 2: Primary keyword(s) || Jabalpur Hospital 
+ROW 3: Word count || 897 words
+----- END TABLE 10 -----
+
+
+----- TABLE 11 (4 rows x 2 cols) -----
+ROW 0: Meta title (60) || Jabalpur Hospital Case Study | Healthray HMS
+ROW 1: Meta description (160) || See how Jabalpur Hospital used Healthray HMS to improve patient information, diagnostics, pharmacy, billing, TPA processing and operational visibility.
+ROW 2: URL || [https://healthray.com/case-studies/how-jabalpur-hospital-transformed-medical-operations-with-healthray/](https://healthray.com/case-studies/how-jabalpur-hospital-transformed-medical-operations-with-healthray/) 
+ROW 3: New URL || [http://healthray.com/case-study/jabalpur-hospital](http://healthray.com/case-study/jabalpur-hospital) 
+----- END TABLE 11 -----
+

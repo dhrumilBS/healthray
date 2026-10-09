@@ -1,0 +1,112 @@
+===== Vibrant Hospital_.docx =====
+paragraphs: 65  tables: 4  images: 1
+normalised: soft line breaks x1
+
+
+----- TABLE 1 (7 rows x 2 cols) -----
+ROW 0: **Hospital** || **Vibrant Multi-Speciality Hospital**
+ROW 1: **Location** || **Vapi, Gujarat, India**
+ROW 2: **Type** || **Multi-speciality**
+ROW 3: **Size** || **200+ beds**
+ROW 4: **Time to go live**  || **Under 2 weeks** 
+ROW 5: **Downtime** || **None**
+ROW 6: **Website** || [**https://vibranthospital.com/**](https://vibranthospitalvapi.com/)
+----- END TABLE 1 -----
+
+[P] **Modules used:**
+[LI-b:0] Front Desk
+[LI-b:0] Billing
+[LI-b:0] Patient Records
+[LI-b:0] Inventory
+[LI-b:0] Staff & Task Management
+[H1] **How Vibrant Hospital Saved ₹25 Lakh Annually with Healthray HMS**
+[P] [IMAGE media/image1.png]
+[P] Vibrant Hospital is a 200+ bed multispeciality hospital in Vapi, Gujarat. It brought billing, patient records and inventory workflows into a single system. Bills are now ready in hours instead of days, and manual mistakes have dropped by 40%.  
+
+----- TABLE 2 (1 rows x 3 cols) -----
+[row 0 cell 0]
+    ₹25 lakh 
+    saved annually 
+[row 0 cell 1]
+    30% reduction 
+    in billing time 
+[row 0 cell 2]
+    40% fewer 
+    manual mistakes 
+----- END TABLE 2 -----
+
+[H2] **A busy hospital facing operational challenges**
+[P] Vibrant Multi Speciality Hospital provides emergency, outpatient and surgical care across multiple departments. The hospital is NABH accredited and provides 24/7 emergency care. 
+[P] As its operations grew, managing the administrative side became increasingly difficult. Billing, inventory, and patient workflows relied on manual processes and disconnected systems, leading to delays, errors and unnecessary administrative work. Staff were spending significant time on these activities, while leadership was hesitant to replace systems handling critical patient, inventory and billing data.
+[H2] **Four operational challenges were slowing the hospital down** 
+[P] The main challenge at Vibrant Hospital was not simply having different tools, but the manual work and fragmented processes required to manage information across departments. 
+[H3] **01 – Separate Systems**
+[P] Different departments relied on separate systems for patient, billing and inventory activities. Information was spread across platforms, making coordination and visibility more difficult. 
+[H3] **02 – Billing Took Days**
+[P] Staff had to enter billing information manually, verify details and collect data from different systems. This stretched billing cycles over days instead of hours and delayed the process. 
+[H3] **03 – Limited Stock Visibility**
+[P] Staff lacked clear visibility into medical supplies, making it harder to maintain stock levels. Some supplies were over-ordered while others ran short, leading to wastage and unnecessary purchases. 
+[H3] **04 – Heavy Administrative Work**
+[P] Staff spent considerable time on paperwork and routine administrative tasks. This increased their workload and reduced the time available for their core responsibilities.
+[P] These challenges highlighted the need for a more connected way to manage daily hospital operations. 
+[H2] **Why they chose Healthray**
+[P] Vibrant Hospital needed a more integrated way to manage its operations. The hospital chose Healthray HMS to bring billing, patient records and inventory workflows together in one system. 
+[P] **"After switching to Healthray, we moved everything into one system. Now patient records, billing, pharmacy and inventory are all connected in one system."** 
+[P] **Dr. Bhaumik Rathore** <BR>Vibrant Multispeciality Hospital 
+[H2] **How Healthray improved daily workflows** 
+[P] Healthray HMS addressed the operational challenges at Vibrant Hospital by reducing manual work across billing, patient management, inventory and routine task management.
+[H3] **01 – Automated Billing**
+[P] Billing processes were automated, reducing repetitive data entry and verification and helping staff complete billing faster. 
+[H3] **02 – Integrated Patient Management**
+[P] Patient information was centralised in one system, reducing the need to search across platforms.
+[H3] **03 – Inventory Management**
+[P] Real-time inventory monitoring improved stock visibility, helping reduce wastage and unnecessary purchases. 
+[H3] **04 – Staff & Task Management**
+[P] Staff and task management tools helped staff organise routine activities and reduce manual coordination.
+[H2] **Go-live in under 2 weeks, with no downtime.**
+[P] Vibrant Hospital completed the transition to Healthray HMS without disrupting its operations. 
+[P] **01 – 1 day**
+[H3] **Data transferred**
+[P] The hospital’s existing data was transferred to Healthray within a single day.
+[P] **02 – Under 2 weeks**
+[H3] **System live**
+[P] Healthray HMS went live in under two weeks with zero downtime. 
+[P] **03 – Simple interface**
+[H3] **Staff onboarded**
+[P] The simple interface helped staff get familiar with the system quickly.
+[P] **Results after implementing Healthray**
+[P] Within a few months of implementing Healthray HMS, Vibrant Hospital saw measurable improvements across billing, administration and inventory management.
+[H3] **₹25 lakh saved annually**
+[P] Automation and better operational visibility helped reduce billing errors, inventory wastage and administrative work. 
+[H3] **30% reduction in billing time**
+[P] Automated charge capture helped shorten billing cycles and reduce the time required to complete billing.
+[H3] **40% reduction in manual errors**
+[P] Standardised workflows and centralised data reduced manual errors across billing, records and coordination, reducing the need for rework. 
+[H3] **Better inventory control**
+[P] Real-time inventory monitoring helped the hospital maintain appropriate stock levels, reduce wastage and avoid unnecessary purchases.
+[H2] **Before and after Healthray**
+
+----- TABLE 3 (7 rows x 3 cols) -----
+ROW 0: **Area** || **Before Healthray** || **With Healthray HMS**
+ROW 1: **Systems** || Separate systems for patient, billing and inventory || **Patient, billing, inventory and task management in one system**
+ROW 2: **Billing** || Manual entry and verification across platforms || **Automated billing; 30% reduction in billing time**
+ROW 3: **Patient information** || Information spread across separate systems || **Patient information available in one system**
+ROW 4: **Inventory** || No clear visibility into available supplies || **Real-time inventory monitoring**
+ROW 5: **Manual errors** || Manual entry and verification at multiple steps || **40% reduction in manual errors**
+ROW 6: **Staff time** || Paperwork and routine administrative work || **Less manual coordination and administrative work**
+----- END TABLE 3 -----
+
+[H2] **Is your hospital in the same situation?**
+[P] This story will help you most if:
+[LI-b:0] Your billing, patient records and stock are in separate software, or on paper.
+[LI-b:0] Bills take days to prepare after discharge.
+[LI-b:0] You cannot see what is in stock right now.
+[LI-b:0] Your staff spend a lot of time on paperwork. 
+
+----- TABLE 4 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    **See how Healthray HMS can work for your hospital**
+    Book a free demo. Our team will show you how billing, patient records and stock work together in one system.
+    **[Button: Book a Demo]**
+----- END TABLE 4 -----
+

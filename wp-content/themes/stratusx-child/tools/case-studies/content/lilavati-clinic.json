@@ -1,0 +1,112 @@
+{
+    "source": "Lilavati Clinic.docx",
+    "post": {
+        "id": 66680,
+        "title": "How Lilavati Clinic Streamlined Multi-Speciality Care and Diagnostics with Healthray",
+        "slug": "lilavati-clinic",
+        "excerpt": "Lilavati Clinic & Wellness has cared for Ahmedabad patients for 32 years. It runs 50+ specialities with 50+ staff, and over 10,000 patients have passed through its consultations, diagnostics and speciality services."
+    },
+    "fields": {
+        "short_name": "Lilavati Clinic",
+        "hero_lede": "Lilavati Clinic & Wellness has cared for Ahmedabad patients for 32 years. It runs 50+ specialities with 50+ staff, and over 10,000 patients have passed through its consultations, diagnostics and speciality services.",
+        "metrics": [
+            { "title": "2 hrs", "text": "Saved Daily" },
+            { "title": "8%", "text": "Fewer No-Shows" },
+            { "title": "10,400", "text": "Digital Records" },
+            { "title": "50%", "text": "Faster Reporting" }
+        ],
+        "glance_facts": [
+            { "label": "Clinic", "value": "Lilavati Clinic & Wellness" },
+            { "label": "Location", "value": "C.J. Road, Ambli, Ahmedabad, Gujarat" },
+            { "label": "Type", "value": "Super Multi-speciality Clinic" },
+            { "label": "Size", "value": "50+ OPD Rooms" },
+            { "label": "Time to go live", "value": "11 working days" },
+            { "label": "Downtime", "value": "None" },
+            { "label": "Website", "value": "www.lilavaticlinic.com", "url": "https://www.lilavaticlinic.com/" }
+        ],
+        "modules_used": [
+            { "name": "Appointment Management" },
+            { "name": "EMR / EHR" },
+            { "name": "AI & Automation" },
+            { "name": "Patient Communication" },
+            { "name": "Laboratory Management" },
+            { "name": "Diagnostics & Imaging" },
+            { "name": "Pharmacy Management" },
+            { "name": "Reporting & Analytics" }
+        ],
+        "overview_label": "The clinic",
+        "overview_heading": "The Care Setup At Lilavati Clinic",
+        "overview_content": [
+            "At Lilavati, diagnostics, imaging, physiotherapy and an in-house pharmacy sit alongside specialist consultations. In a single visit, a patient might see a doctor, get an investigation done, pick up a report, then use another service on the way out.",
+            "So the day only runs if teams stay in sync. The doctor needs earlier records to hand. The diagnostics team needs the exact test details. And the patient needs the prescription and report without a wait or a follow-up call."
+        ],
+        "problem_label": "The clinical problems",
+        "problem_heading": "Where The Clinic Workflow Was Getting Stuck",
+        "problem_intro": "Four recurring workflows consumed staff time each day.",
+        "problems": [
+            { "title": "Routine Requests", "text": "After a visit, patients contacted the front desk for prescriptions, reports and follow-up details — around 120 calls a day, close to one full role spent on the phone." },
+            { "title": "Follow-Up Calls", "text": "Staff made reminder and follow-up calls. At a 21% no-show rate, nearly one in five specialist slots stayed empty, requiring the team to rearrange the day." },
+            { "title": "Clinical Notes", "text": "Each speciality had different documentation needs. Handwritten notes added minutes to each consult and made records harder to read across departments." },
+            { "title": "Test Hand-Offs", "text": "Test orders moved through several teams before reaching the lab, so staff had to confirm manually that each order had been received." }
+        ],
+        "decision_label": "The experience",
+        "decision_heading": "What Lilavati Says",
+        "decision_intro": "Dr. Gunjan Desai shared how the team adapted after go-live.",
+        "quote_text": "The reminders changed our days; no-shows dropped from about a fifth of bookings to roughly one in eight, so specialists stopped losing slots. Training took two rounds for some of us, but the team stayed with us until it stuck.",
+        "quote_name": "Dr. Gunjan Desai",
+        "quote_role": "Gastroenterology, General Surgeon",
+        "solution_label": "The solution",
+        "solution_heading": "The Change With Healthray",
+        "solution_intro": "Healthray's clinic software now supports these workflows with connected digital tools.",
+        "solutions": [
+            { "icon": "cloud", "title": "Patient Portal", "text": "Prescriptions and reports now reach patients through the Healthray app, reducing routine calls and visits to the front desk." },
+            { "icon": "calendar", "title": "Reminders", "text": "Automated reminders go out by WhatsApp, SMS and email, while the waitlist helps fill slots when appointments are cancelled." },
+            { "icon": "records", "title": "EMR Templates", "text": "AI suggestions, auto-fill and voice-to-note help doctors document care faster, with clinician review of the final record." },
+            { "icon": "lab", "title": "Test Alerts", "text": "Orders are saved in the patient record, and the lab receives an alert as soon as a test is requested." }
+        ],
+        "setup_label": "Implementation",
+        "setup_heading": "Making the Shift to Healthray",
+        "setup_intro": "Healthray's team completed three steps with the clinic before the system went live.",
+        "steps": [
+            { "when": "Assessment", "title": "Workflows Mapped", "text": "Healthray specialists mapped the clinic's workflows and configured each module around how teams work." },
+            { "when": "Migration", "title": "Records Moved", "text": "10,400 existing patient records were migrated so relevant history remained available to authorised teams." },
+            { "when": "Onboarding", "title": "Teams Trained", "text": "Training was tailored by role, allowing each team to practise the screens and tasks it uses." }
+        ],
+        "results_label": "The result",
+        "results_heading": "What Improved After the Shift",
+        "results_intro": "Lilavati Clinic reported these results in the four months after rollout.",
+        "results": [
+            { "number": "2 Hours", "title": "Saved Daily", "text": "Front-desk call time fell from about 3.5 hours to 1.5 hours, giving the team more time to support patients." },
+            { "number": "8 Points", "title": "Fewer No-Shows", "text": "The no-show rate fell from 21% to 13%, helping specialists avoid unused appointment slots." },
+            { "number": "10,400", "title": "Records", "text": "More than 10,000 patient records are now available in speciality-specific formats." },
+            { "number": "50%", "title": "Faster Reports", "text": "Report turnaround fell from about 26 hours to 13 hours after test orders were placed." }
+        ],
+        "ba_title": "Before And After Healthray",
+        "ba_before_label": "Before Healthray",
+        "ba_after_label": "With Healthray",
+        "ba_rows": [
+            { "area": "Scheduling", "before": "Separate appointment lists by speciality", "after": "Bookings in a single calendar" },
+            { "area": "Registration", "before": "Patient details entered manually at the desk", "after": "Details recorded once" },
+            { "area": "Cross-specialty care", "before": "Notes shared manually", "after": "Past notes available" },
+            { "area": "Prescriptions", "before": "Pharmacy informed separately", "after": "Prescription sent directly to pharmacy" },
+            { "area": "Imaging", "before": "Imaging kept apart from the visit", "after": "Imaging linked to the visit" },
+            { "area": "Reporting", "before": "Clinic figures compiled manually", "after": "Activity visible in reports" }
+        ],
+        "fit_heading": "Is Your Centre Facing The Same Challenges?",
+        "fit_intro": "This story will help you most if:",
+        "fit_points": [
+            { "text": "Your front desk spends hours on patient queries" },
+            { "text": "Missed appointments leave slots unused" },
+            { "text": "Each speciality follows its own note format" },
+            { "text": "Staff chase test orders by phone" }
+        ],
+        "cta_heading": "See Healthray in Action",
+        "cta_text": "Book a free demo. We'll show you the patient app, reminders and speciality templates, and how orders reach the lab."
+    },
+    "brief": {
+        "meta_title": "Lilavati Clinic & Wellness Case Study | Healthray",
+        "meta_description": "See how Lilavati Clinic & Wellness in Ahmedabad cut routine requests and no-shows with Healthray's EMR, reminders and diagnostics tools.",
+        "old_url": "https://healthray.com/case-studies/how-lilavati-hospital-transformed-medical-operations-with-healthray/",
+        "new_url": "http://healthray.com/case-study/lilavati-clinic"
+    }
+}

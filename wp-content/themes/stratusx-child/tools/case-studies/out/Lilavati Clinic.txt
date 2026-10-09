@@ -1,0 +1,200 @@
+===== Lilavati Clinic.docx =====
+paragraphs: 24  tables: 12  images: 0
+normalised: none
+
+[TITLE] Lilavati Clinic
+[H1] How Lilavati Clinic Streamlined Multi-Speciality Care and Diagnostics with Healthray
+[P] Lilavati Clinic & Wellness has cared for Ahmedabad patients for 32 years. It runs 50+ specialities with 50+ staff, and over 10,000 patients have passed through its consultations, diagnostics and speciality services.
+
+----- TABLE 1 (1 rows x 4 cols) -----
+[row 0 cell 0]
+    **2 hrs**
+    Saved Daily
+[row 0 cell 1]
+    **8%**
+    Fewer No-Shows
+[row 0 cell 2]
+    **10,400**
+    Digital Records
+[row 0 cell 3]
+    **50%**
+    Faster Reporting
+----- END TABLE 1 -----
+
+
+----- TABLE 2 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (1 rows x 1 cols)
+    [row 0 cell 0]
+        LILAVATI CLINIC Snapshot
+        NESTED TABLE (7 rows x 2 cols)
+        ROW 0: CLINIC || Lilavati Clinic & Wellness
+        ROW 1: LOCATION || C.J. Road, Ambli, Ahmedabad, Gujarat
+        ROW 2: TYPE || Super Multi-speciality Clinic
+        ROW 3: SIZE || 50+ OPD Rooms
+        ROW 4: TIME TO GO LIVE  || 11 working days
+        ROW 5: DOWNTIME || None
+        ROW 6: WEBSITE || [www.lilavaticlinic.com](https://www.lilavaticlinic.com/)
+    **MODULES USED**
+    NESTED TABLE (8 rows x 1 cols)
+    ROW 0: Appointment Management
+    ROW 1: EMR / EHR
+    ROW 2: AI & Automation
+    ROW 3: Patient Communication
+    ROW 4: Laboratory Management
+    ROW 5: Diagnostics & Imaging
+    ROW 6: Pharmacy Management
+    ROW 7: Reporting & Analytics
+----- END TABLE 2 -----
+
+[SUBTITLE] **- THE CLINIC**
+[H2] The Care Setup At Lilavati Clinic
+[P] At Lilavati, diagnostics, imaging, physiotherapy and an in-house pharmacy sit alongside specialist consultations. In a single visit, a patient might see a doctor, get an investigation done, pick up a report, then use another service on the way out.
+[P] So the day only runs if teams stay in sync. The doctor needs earlier records to hand. The diagnostics team needs the exact test details. And the patient needs the prescription and report without a wait or a follow-up call.
+[SUBTITLE] **- THE CLINICAL PROBLEMS**
+[H2] Where The Clinic Workflow Was Getting Stuck
+[P] Four recurring workflows consumed staff time each day.
+
+----- TABLE 3 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (2 rows x 2 cols)
+    [row 0 cell 0]
+        **01 - Routine Requests**
+        After a visit, patients contacted the front desk for prescriptions, reports and follow-up details — around 120 calls a day, close to one full role spent on the phone.
+    [row 0 cell 1]
+        **02 - Follow-Up Calls**
+        Staff made reminder and follow-up calls. At a 21% no-show rate, nearly one in five specialist slots stayed empty, requiring the team to rearrange the day.
+    [row 1 cell 0]
+        **03 - Clinical Notes**
+        Each speciality had different documentation needs. Handwritten notes added minutes to each consult and made records harder to read across departments.
+    [row 1 cell 1]
+        **04 - Test Hand-Offs**
+        Test orders moved through several teams before reaching the lab, so staff had to confirm manually that each order had been received.
+----- END TABLE 3 -----
+
+[SUBTITLE] **- THE SOLUTION**
+[H2] The Change With Healthray
+[P] Healthray's clinic software now supports these workflows with connected digital tools.
+
+----- TABLE 4 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (2 rows x 2 cols)
+    [row 0 cell 0]
+        **01 - Patient Portal**
+        Prescriptions and reports now reach patients through the Healthray app, reducing routine calls and visits to the front desk.
+    [row 0 cell 1]
+        **02 - Reminders**
+        Automated reminders go out by WhatsApp, SMS and email, while the waitlist helps fill slots when appointments are cancelled.
+    [row 1 cell 0]
+        **03 - EMR Templates**
+        AI suggestions, auto-fill and voice-to-note help doctors document care faster, with clinician review of the final record.
+    [row 1 cell 1]
+        **04 - Test Alerts**
+        Orders are saved in the patient record, and the lab receives an alert as soon as a test is requested.
+----- END TABLE 4 -----
+
+[SUBTITLE] **- IMPLEMENTATION**
+[H2] Making the Shift to Healthray
+[P] Healthray's team completed three steps with the clinic before the system went live.
+
+----- TABLE 5 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (1 rows x 3 cols)
+    [row 0 cell 0]
+        **01 - Assessment**
+        NESTED TABLE (1 rows x 1 cols)
+        ROW 0: Workflows Mapped
+        Healthray specialists mapped the clinic's workflows and configured each module around how teams work.
+    [row 0 cell 1]
+        **02 - Migration**
+        NESTED TABLE (1 rows x 1 cols)
+        ROW 0: Records Moved
+        10,400 existing patient records were migrated so relevant history remained available to authorised teams.
+    [row 0 cell 2]
+        **03 - Onboarding**
+        NESTED TABLE (1 rows x 1 cols)
+        ROW 0: Teams Trained
+        Training was tailored by role, allowing each team to practise the screens and tasks it uses.
+----- END TABLE 5 -----
+
+[SUBTITLE] **- THE EXPERIENCE**
+[H2] What Lilavati Says
+[P] Dr. Gunjan Desai shared how the team adapted after go-live.
+
+----- TABLE 6 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    **"The reminders changed our days; no-shows dropped from about a fifth of bookings to roughly one in eight, so specialists stopped losing slots. Training took two rounds for some of us, but the team stayed with us until it stuck."**
+    **Dr. Gunjan Desai**
+    **Gastroenterology, General Surgeon**
+----- END TABLE 6 -----
+
+[SUBTITLE] **- THE RESULT**
+[H2] What Improved After the Shift
+[P] Lilavati Clinic reported these results in the four months after rollout.
+
+----- TABLE 7 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (2 rows x 2 cols)
+    [row 0 cell 0]
+        **1. 2 Hours Saved Daily**
+        Front-desk call time fell from about 3.5 hours to 1.5 hours, giving the team more time to support patients.
+    [row 0 cell 1]
+        **2. 8 Points Fewer No-Shows**
+        The no-show rate fell from 21% to 13%, helping specialists avoid unused appointment slots.
+    [row 1 cell 0]
+        **3. 10,400 Records**
+        More than 10,000 patient records are now available in speciality-specific formats.
+    [row 1 cell 1]
+        **4. 50% Faster Reports**
+        Report turnaround fell from about 26 hours to 13 hours after test orders were placed.
+----- END TABLE 7 -----
+
+[H2] Before And After Healthray
+
+----- TABLE 8 (7 rows x 3 cols) -----
+ROW 0: **AREA** || **BEFORE HEALTHRAY** || **WITH HEALTHRAY**
+ROW 1: Scheduling || Separate appointment lists by speciality || Bookings in a single calendar
+ROW 2: Registration || Patient details entered manually at the desk || Details recorded once
+ROW 3: Cross-specialty care || Notes shared manually || Past notes available
+ROW 4: Prescriptions || Pharmacy informed separately || Prescription sent directly to pharmacy
+ROW 5: Imaging || Imaging kept apart from the visit || Imaging linked to the visit
+ROW 6: Reporting || Clinic figures compiled manually || Activity visible in reports
+----- END TABLE 8 -----
+
+
+----- TABLE 9 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    Is Your Centre Facing The Same Challenges?
+    This story will help you most if:
+    ✓ Your front desk spends hours on patient queries
+    ✓ Missed appointments leave slots unused
+    ✓ Each speciality follows its own note format
+    ✓ Staff chase test orders by phone
+----- END TABLE 9 -----
+
+
+----- TABLE 10 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    See Healthray in Action
+    Book a free demo. We'll show you the patient app, reminders and speciality templates, and how orders reach the lab.
+    NESTED TABLE (1 rows x 1 cols)
+    ROW 0: **Book a FREE Demo**
+----- END TABLE 10 -----
+
+[TITLE] Content Brief Template
+
+----- TABLE 11 (4 rows x 2 cols) -----
+ROW 0: Website || [healthray.com](http://healthray.com) 
+ROW 1: Title/topic || How Lilavati Clinic Streamlined Multi-Specialty Care and Diagnostics with Healthray
+ROW 2: Primary keyword(s) || Lilavati Clinic
+ROW 3: Word count || 807 words
+----- END TABLE 11 -----
+
+
+----- TABLE 12 (4 rows x 2 cols) -----
+ROW 0: Meta title (60) || Lilavati Clinic & Wellness Case Study | Healthray
+ROW 1: Meta description (160) || See how Lilavati Clinic & Wellness in Ahmedabad cut routine requests and no-shows with Healthray's EMR, reminders and diagnostics tools.
+ROW 2: URL || [https://healthray.com/case-studies/how-lilavati-hospital-transformed-medical-operations-with-healthray/](https://healthray.com/case-studies/how-lilavati-hospital-transformed-medical-operations-with-healthray/) 
+ROW 3: New URL || [http://healthray.com/case-study/lilavati-clinic](http://healthray.com/case-study/lilavati-clinic) 
+----- END TABLE 12 -----
+

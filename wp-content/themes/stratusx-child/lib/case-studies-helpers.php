@@ -222,6 +222,76 @@ function hr_cs_archive_query( $query ) {
 add_action( 'pre_get_posts', 'hr_cs_archive_query' );
 
 /**
+ * 301 old case study URLs to the current one.
+ *
+ * Stories used to live at /case-studies/{slug}/, which is now the hub's base
+ * only, and most slugs were shortened at the same time. WordPress catches
+ * neither change here: /case-studies/{slug}/ no longer matches a case study
+ * rewrite rule, so it is parsed as a blog post in a "case-studies" category,
+ * 404s, and the core old-slug lookup then searches blog posts.
+ *
+ * So on that 404 only, the last segment is looked up as a case study slug,
+ * current or old. WordPress records old slugs in _wp_old_slug whenever a
+ * published post's slug changes, so renamed stories keep redirecting. The query
+ * string is kept (gclid, utm_*), as in lib/virtual-urls.php.
+ *
+ * /case-study/{old-slug}/ needs nothing here: it matches the post type's rule,
+ * so WordPress's own wp_old_slug_redirect() handles it.
+ */
+function hr_cs_redirect_old_urls() {
+	if ( ! is_404() ) {
+		return;
+	}
+
+	$method = isset( $_SERVER['REQUEST_METHOD'] ) ? strtoupper( sanitize_key( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) ) : 'GET';
+	if ( ! in_array( $method, array( 'GET', 'HEAD' ), true ) ) {
+		return;
+	}
+
+	global $wp;
+	if ( ! preg_match( '#^case-studies/([^/]+)/?$#', (string) $wp->request, $matches ) ) {
+		return;
+	}
+
+	$slug = sanitize_title( rawurldecode( $matches[1] ) );
+	if ( '' === $slug ) {
+		return;
+	}
+
+	$query = array(
+		'post_type'      => 'case-studies',
+		'post_status'    => 'publish',
+		'posts_per_page' => 1,
+		'fields'         => 'ids',
+		'no_found_rows'  => true,
+	);
+
+	$ids = get_posts( $query + array( 'name' => $slug ) );
+	if ( ! $ids ) {
+		$ids = get_posts(
+			$query + array(
+				'meta_key'   => '_wp_old_slug', // phpcs:ignore WordPress.DB.SlowDBQuery -- 404s under one prefix only.
+				'meta_value' => $slug, // phpcs:ignore WordPress.DB.SlowDBQuery -- 404s under one prefix only.
+			)
+		);
+	}
+	if ( ! $ids ) {
+		return;
+	}
+
+	parse_str( isset( $_SERVER['QUERY_STRING'] ) ? wp_unslash( $_SERVER['QUERY_STRING'] ) : '', $args ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- rebuilt with http_build_query() onto our own URL.
+
+	$target = get_permalink( $ids[0] );
+	if ( ! empty( $args ) ) {
+		$target .= '?' . http_build_query( $args );
+	}
+
+	wp_safe_redirect( $target, 301, 'Healthray case study URL' );
+	exit;
+}
+add_action( 'template_redirect', 'hr_cs_redirect_old_urls', 1 );
+
+/**
  * Return a case study's hand-written excerpt (the card summary) as written.
  *
  * The parent theme appends " … Read More" to every manual excerpt

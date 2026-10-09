@@ -1,0 +1,198 @@
+===== Rainbow Hospital.docx =====
+paragraphs: 24  tables: 12  images: 0
+normalised: none
+
+[TITLE] Rainbow Hospital
+[H1] From Admission to Discharge: How Healthray Runs the Floor at Rainbow Hospital
+[P] Rainbow Super Speciality Hospital runs 100 beds and 25 specialities in Vapi, with 50+ doctors on the floor. In 5+ years, it has grown into the kind of hospital where one patient can be admitted, operated on and discharged under a single roof.
+
+----- TABLE 1 (1 rows x 4 cols) -----
+[row 0 cell 0]
+    **- 20 min**
+    To Admit
+[row 0 cell 1]
+    **50%**
+    Faster Discharges
+[row 0 cell 2]
+    **90%**
+    OT Utilisation
+[row 0 cell 3]
+    **1 Day**
+    Claim Prep
+----- END TABLE 1 -----
+
+
+----- TABLE 2 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (1 rows x 1 cols)
+    [row 0 cell 0]
+        **RAINBOW HOSPITAL Snapshot**
+        NESTED TABLE (7 rows x 2 cols)
+        ROW 0: HOSPITAL || Rainbow Super Speciality Hospital
+        ROW 1: LOCATION || CM 8/16, NH 48, next to Nexa Showroom & Aakar Motors, Vapi, Gujarat
+        ROW 2: TYPE || Super-Speciality Hospital
+        ROW 3: SIZE || 100 Beds
+        ROW 4: TIME TO GO LIVE  || 14 working days
+        ROW 5: DOWNTIME || None
+        ROW 6: WEBSITE || [rainbowhospitalvapi.com](http://www.rainbowhospitalvapi.com) 
+    **MODULES USED**
+    NESTED TABLE (9 rows x 1 cols)
+    ROW 0: Bed & Admission Management
+    ROW 1: OT Scheduling
+    ROW 2: Billing & TPA Claims
+    ROW 3: EMR / EHR
+    ROW 4: Laboratory Management
+    ROW 5: Diagnostics & Imaging
+    ROW 6: Pharmacy Management
+    ROW 7: Reporting & Analytics
+    ROW 8: Emergency Management
+----- END TABLE 2 -----
+
+[SUBTITLE] **– THE HOSPITAL**
+[H2] How a Day Runs at Rainbow Hospital
+[P] A busy day moves through four hands – the admission desk, the operating theatre, the billing counter and the records room. Each one holds the next. When a bed opens late or a file goes missing, every hand down the line waits with it.
+[P] That coordination was being done on phone calls, whiteboards and paper files. It held while volumes were small, but at this scale the gaps started to cost beds, theatre hours and staff time the hospital could not spare.
+[SUBTITLE] **– THE OPERATIONAL PROBLEMS**
+[H2] Where the Floor Was Getting Stuck
+[P] Four daily workflows were quietly draining capacity.
+
+----- TABLE 3 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (2 rows x 2 cols)
+    [row 0 cell 0]
+        **01 - Admissions**
+        With no live view of free, cleaned beds, placing a patient meant a ward-by-ward hunt that dragged on long after the call to admit.
+    [row 0 cell 1]
+        **02 - Operation Theatres**
+        Theatre lists were juggled by hand between surgeons. Starts slipped, and no one could see the idle gaps a case could have filled.
+    [row 1 cell 0]
+        **03 - Discharge & Claims**
+        A ready patient still waited while the summary and TPA file were built by hand and that occupied bed stayed shut to the next admission.
+    [row 1 cell 1]
+        **04 - Scattered Records**
+        One patient's history sat across unlinked files, so a specialist often re-ordered a test rather than hunt down a result that already existed.
+----- END TABLE 3 -----
+
+[SUBTITLE] **- THE SOLUTION**
+[H2] What Changed with Healthray
+[P] The same four workflows now share one live system.
+
+----- TABLE 4 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (2 rows x 2 cols)
+    [row 0 cell 0]
+        **01 - Live Bed Board**
+        Every bed's status shows on one screen, so the desk assigns without a single call.
+    [row 0 cell 1]
+        **02 - OT Planner**
+        Surgeons book into a shared theatre calendar that exposes idle gaps to fill.
+    [row 1 cell 0]
+        **03 - Claim-Ready Discharge**
+        The summary and TPA file build as care is given, so the bill is ready at discharge.
+    [row 1 cell 1]
+        **04 - One Patient Record**
+        Every test, note and scan lands in one file the next doctor opens instantly.
+----- END TABLE 4 -----
+
+[SUBTITLE] **- IMPLEMENTATION**
+[H2] Making the Shift to Healthray
+[P] Healthray's team worked through three steps with the hospital before go-live.
+
+----- TABLE 5 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (1 rows x 3 cols)
+    [row 0 cell 0]
+        **01 - Assessment**
+        NESTED TABLE (1 rows x 1 cols)
+        ROW 0: Workflows Mapped
+        Healthray traced how beds, theatres and billing actually move, then shaped each module to it.
+    [row 0 cell 1]
+        **02 - Migration**
+        NESTED TABLE (1 rows x 1 cols)
+        ROW 0: Records Moved
+        Existing patient histories were brought across so every ward opened with its records in place.
+    [row 0 cell 2]
+        **03 - Onboarding**
+        NESTED TABLE (1 rows x 1 cols)
+        ROW 0: Teams Trained
+        Training ran by role, so ward, theatre and billing staff each practised their own screens.
+----- END TABLE 5 -----
+
+[SUBTITLE] **- THE EXPERIENCE**
+[H2] What Rainbow Hospital Says
+[P] A senior clinician described the floor after go-live.
+
+----- TABLE 6 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    **"I used to piece a patient's history together from paper before I could even start. Now the past visits, scans and notes are already on the screen when she walks in – I spend the time on her, not on the file."**
+    **Dr. Rupal Bhabhor**
+    **GYNECOLOGIST**
+----- END TABLE 6 -----
+
+[SUBTITLE] **- THE RESULT**
+[H2] What Changed, Measured
+[P] Rainbow Hospital tracked these in the months after go-live.
+
+----- TABLE 7 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (4 rows x 1 cols)
+    [row 0 cell 0]
+        **✓ Admissions Without the Hunt**
+        A glance at the board shows which beds are free and ready, so an inpatient is placed in minutes, not a ward-by-ward search.
+    [row 1 cell 0]
+        **✓ Beds Freed a Day Sooner**
+        With the bill built on discharge day, the six-hour wait fell to three, and each freed bed opened to the next admission.
+    [row 2 cell 0]
+        **✓ Theatres Run Fuller**
+        Once idle gaps were visible, surgeons filled them, lifting OT use to about 90% and fitting more cases into the same day.
+    [row 3 cell 0]
+        **✓ Claims Close in a Day**
+        A TPA cycle that used to run three days now closes in one, pulling revenue closer to the date care was actually given.
+----- END TABLE 7 -----
+
+[H2] How the Numbers Add Up
+
+----- TABLE 8 (5 rows x 2 cols) -----
+ROW 0: **AREA** || **IMPACT**
+ROW 1: Bed Turnover || Quicker admissions and discharges help keep more of the 100 beds occupied and earning revenue each day.
+ROW 2: Theatre Time || Filling gaps in the operating theatre schedule allows more surgeries without extending operating hours.
+ROW 3: Claim Cycle || A one-day TPA turnaround brings payments closer to the date of care.
+ROW 4: Staff Workload || Less time spent on phone calls and searching for files gives staff more time for patient care.
+----- END TABLE 8 -----
+
+
+----- TABLE 9 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    Is Your Hospital Facing The Same Challenges?
+    This story will help you most if:
+    ✓ Admissions stall while staff hunt ward by ward for a free bed
+    ✓ Theatre lists slip and gaps go unfilled
+    ✓ Discharges wait on a bill that isn't ready
+    ✓ A patient's records are scattered across departments
+----- END TABLE 9 -----
+
+
+----- TABLE 10 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    See Healthray in Action
+    Book a free demo. We'll show the bed board, OT planner and claim-ready discharge, and how one record follows the patient.
+    NESTED TABLE (1 rows x 1 cols)
+    ROW 0: **Book a FREE Demo**
+----- END TABLE 10 -----
+
+[TITLE] Content Brief Template
+
+----- TABLE 11 (4 rows x 2 cols) -----
+ROW 0: Website || [healthray.com](http://healthray.com) 
+ROW 1: Title/topic || From Admission to Discharge: How Healthray Runs the Floor at Rainbow Hospital
+ROW 2: Primary keyword(s) || Rainbow Hospital
+ROW 3: Word count || 914 words
+----- END TABLE 11 -----
+
+
+----- TABLE 12 (3 rows x 2 cols) -----
+ROW 0: Meta title (60) || Rainbow Super Speciality Hospital Case Study | Healthray
+ROW 1: Meta description (160) || See how Rainbow Super Speciality Hospital in Vapi sped up admissions, freed beds and closed TPA claims faster with Healthray's bed, OT and billing modules.
+ROW 2: New URL || [healthray.com/case-study/rainbow-hospital-vapi](http://healthray.com/case-study/rainbow-hospital-vapi) 
+----- END TABLE 12 -----
+

@@ -1,0 +1,115 @@
+===== Jeevan Rekha Hospital.docx =====
+paragraphs: 65  tables: 4  images: 1
+normalised: none
+
+[TITLE] Hospital
+
+----- TABLE 1 (7 rows x 2 cols) -----
+ROW 0: **Hospital** || **Jeevan Rekha Hospital**
+ROW 1: **Location** || Raiganj, West Bengal, India
+ROW 2: **Type** || Superspeciality hospital
+ROW 3: **Size** || 220 beds
+ROW 4: Time to go live || Under 2 weeks
+ROW 5: Downtime || None
+ROW 6: Website || [https://jeevanrekhahospital.com/](https://jeevanrekhahospital.com/)
+----- END TABLE 1 -----
+
+[P] **Modules used:**
+[LI-b:0] Sample Management
+[LI-b:0] Test Result Management
+[LI-b:0] Laboratory Reporting
+[LI-b:0] Sample & Report Tracking
+[LI-b:0] Error & Quality Management
+[H1] **How Jeevan Rekha Hospital Improved Sample Processing Speed by 80% with Healthray LIMS** 
+[P] [IMAGE media/image1.png]
+[P] Jeevan Rekha Hospital is a 220-bed super-speciality hospital in Raiganj, West Bengal, with NABL-accredited diagnostic services. The hospital strengthened its laboratory operations, with sample processing now 80% faster.
+
+----- TABLE 2 (1 rows x 4 cols) -----
+[row 0 cell 0]
+    **80% faster**
+    **Sample processing**
+[row 0 cell 1]
+    **45% reduction**
+    **Report turnaround time**
+[row 0 cell 2]
+    **50% fewer**
+    **Manual entry and reporting errors**
+[row 0 cell 3]
+    **30% higher**
+    **Productivity without additional staff**
+----- END TABLE 2 -----
+
+[H2] **Diagnostic lab workflow under pressure**
+[P] Jeevan Rekha Hospital provides emergency care, inpatient and outpatient services, along with speciality treatments and diagnostic services. As diagnostic volumes increased, the laboratory team had to manage more samples, results and reports as part of its routine work.
+[P] Tracking samples, entering results, checking information and completing reports required additional time and effort. Processing delays, data-entry errors and repeated checking made these tasks more difficult and slowed down report completion. The team also had to spend more time resolving errors and following up on pending work.
+[H2] **Four challenges affecting Jeevan Rekha's diagnostic lab**
+[H3] **01 – Sample tracking gaps**
+[P] Tracking samples across different testing stages was difficult. The team spent additional time checking sample status and following up on pending samples.
+[H3] **02 – Result entry errors**
+[P] Manual result entry increased the risk of incorrect or missed information. Errors required additional checking and correction before reports could be completed.
+[H3] **03 – Report turnaround delays**
+[P] Higher diagnostic volumes made it harder to complete reports within the expected time. Delays in processing and verification increased report turnaround time.
+[H3] **04 – Limited team capacity**
+[P] The existing laboratory team had to handle increasing sample volumes without additional staff. This limited the team's ability to take on more diagnostic work.
+[H2] **Why Jeevan Rekha Hospital chose Healthray LIMS**
+[P] Jeevan Rekha Hospital needed to improve sample tracking, reduce errors in result entry and speed up report completion as diagnostic volumes increased. It chose Healthray LIMS to bring these laboratory processes into a single digital workflow, with data migration support and a smooth transition for the laboratory team. 
+[P] “Earlier, tracking samples and completing reports took more time. With Healthray LIMS, our team can manage these tasks more easily and handle the increased sample volume more efficiently.”
+[P] **Dr. Ishita Das**
+[P] **Jeevan Rekha Hospital**
+[H2] **How Healthray helped Jeevan Rekha streamline laboratory operations**
+[H3] **01 – Digital sample tracking**
+[P] Healthray LIMS digitally recorded and tracked samples through different testing stages, reducing dependence on registers and verbal status updates.
+[H3] **02 – Accurate result entry**
+[P] Structured result entry and automated checks helped reduce manual entry errors and the correction work associated with them.
+[H3] **03 – Faster report processing**
+[P] Healthray LIMS moved test information through the reporting workflow more efficiently, reducing delays and helping the team complete reports faster.
+[H3] **04 – Higher team productivity**
+[P] The structured LIMS workflow helped the existing laboratory team handle higher sample volumes without additional staff, contributing to higher productivity.
+[H2] **A smooth transition to Healthray LIMS**
+[P] Jeevan Rekha Hospital transitioned to Healthray LIMS without disrupting its ongoing diagnostic operations.
+[P] **01 – Day 1**
+[H3] **Existing data migrated**
+[P] The hospital's laboratory data was migrated to Healthray LIMS.
+[P] **02 – Under two weeks**
+[H3] **LIMS went live**
+[P] Healthray LIMS went live in under two weeks with no downtime.
+[P] **03 – Team adoption**
+[H3] **Laboratory staff onboarded**
+[P] Staff quickly adapted to the new LIMS workflow.
+[H2] **Results after implementing Healthray LIMS**
+[P] The shift from manual laboratory processes to a structured LIMS workflow delivered measurable improvements in processing speed, reporting, accuracy and productivity.
+[H3] **80% faster sample processing**
+[P] Digital sample handling and tracking helped the laboratory process samples faster.
+[H3] **45% reduction in report turnaround time**
+[P] A more structured result and reporting process reduced delays and helped reports reach doctors and patients sooner.
+[H3] **50% fewer manual entry and reporting errors**
+[P] Standardised workflows and automated checks reduced avoidable errors, correction work and repeated entries.
+[H3] **30% higher productivity**
+[P] The improved laboratory process helped the team manage more diagnostic work and increase overall productivity.
+[H2] **Jeevan Rekha's lab before and after Healthray LIMS**
+
+----- TABLE 3 (7 rows x 3 cols) -----
+ROW 0: **Area** || **Before** || **After Healthray LIMS**
+ROW 1: **Sample tracking** || Registers and verbal updates || Samples tracked digitally across testing stages
+ROW 2: **Result entry** || Information had to be entered and checked manually || Structured result entry with automated checks
+ROW 3: **Lab visibility** || Pending work required repeated follow-ups || Clear visibility into pending tests and reports
+ROW 4: **Report completion** || Reports took longer to complete || Reports completed faster through a structured workflow
+ROW 5: **Error correction** || Errors required additional checking and rework || 50% fewer entry and reporting errors
+ROW 6: **Team productivity** || Higher sample volumes increased pressure on the existing team || 30% higher productivity without additional staff
+----- END TABLE 3 -----
+
+[H2] **Is your diagnostic lab facing similar challenges?**
+[P] This story may be relevant if:
+[LI-b:0] Your team relies on registers or manual sample tracking.
+[LI-b:0] Staff spend significant time entering and checking test results.
+[LI-b:0] Reports take longer to complete and deliver.
+[LI-b:0] Your existing team needs to manage increasing test volumes.
+[LI-b:0] You want to digitise laboratory workflows without disrupting ongoing operations.
+
+----- TABLE 4 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    **See how Healthray LIMS can streamline your laboratory**
+    Book a free demo to see how Healthray LIMS brings sample tracking, result processing, and laboratory reporting into one connected workflow. 
+    **CTA Button: Book a Demo**
+----- END TABLE 4 -----
+

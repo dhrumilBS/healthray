@@ -93,11 +93,15 @@ return array(
 	// ACF fields: lib/acf-case-studies.php. Helpers and the archive query:
 	// lib/case-studies-helpers.php. Templates: archive-case-studies.php,
 	// single-case-studies.php, template-parts/case-study-card.php.
+	//
+	// URLs: each story is /case-study/{slug}/ and the hub stays at
+	// /case-studies/. Stories used to live under /case-studies/ too;
+	// hr_cs_redirect_old_urls() 301s those old addresses.
 	// -------------------------------------------------------------------------
 	'case-studies' => array(
 		'singular'       => 'Case Study',
 		'plural'         => 'Case Studies',
-		'slug'           => 'case-studies',
+		'slug'           => 'case-study',
 		'classic_editor' => true,
 		'labels'         => array(
 			'not_found'          => 'No case studies found.',
@@ -106,6 +110,7 @@ return array(
 		'args'           => array(
 			'menu_position' => 20,
 			'menu_icon'     => 'dashicons-portfolio',
+			'has_archive'   => 'case-studies',
 			'supports'      => array( 'title', 'author', 'excerpt', 'revisions', 'thumbnail', 'custom-fields' ),
 		),
 		'assets'         => array(

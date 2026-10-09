@@ -1,0 +1,104 @@
+===== Lotus Hospital.docx =====
+paragraphs: 58  tables: 4  images: 1
+normalised: soft line breaks x7
+
+
+----- TABLE 1 (7 rows x 2 cols) -----
+ROW 0: **Hospital** || Lotus Hospital
+ROW 1: **Location** || Valsad, Gujarat, India
+ROW 2: **Type** || Multispeciality 
+ROW 3: **Size** || 200 Beds
+ROW 4: **Time to go live** || Under 2 weeks
+ROW 5: **Downtime** || None
+ROW 6: **Website** || [https://lotushospital.in/](https://lotushospital.in/)
+----- END TABLE 1 -----
+
+[P] **Modules used:**
+[LI-b:0] Bed & Ward Management
+[LI-b:0] OT Management
+[LI-b:0] IPD EMR & Nursing
+[LI-b:0] Pharmacy Management
+[H1] **How Lotus Hospital Improved Daily Operations with Healthray** 
+[P] [IMAGE media/image1.png]
+[P] Lotus Hospital is a 200-bed multispeciality hospital in Valsad, Gujarat, with four operation theatres and critical care facilities. Its admissions, surgical, nursing and pharmacy workflows are now more streamlined, helping teams manage daily operations more efficiently.
+
+----- TABLE 2 (1 rows x 4 cols) -----
+[row 0 cell 0]
+    **30% faster**<BR>bed <BR>allocation
+[row 0 cell 1]
+    **25% fewer**
+    OT scheduling conflicts 
+[row 0 cell 2]
+    **30% fewer**
+    missed nursing updates 
+[row 0 cell 3]
+    **20% less**<BR>medicine wastage
+----- END TABLE 2 -----
+
+[H2] **Managing Multiple Hospital Workflows** 
+[P] Lotus Hospital provides medical and surgical care, supported by dialysis, radiology, laboratory and pharmacy facilities. Its radiology department offers digital X-ray, sonography, colour Doppler and CT services.
+[P] As the hospital managed these activities across different teams, staff needed timely information to allocate beds, schedule procedures, hand over patient updates, and monitor medicine stock. Gaps in these workflows could slow down routine operations and make important updates harder to track.
+[H2] **Four Workflow Gaps Affecting Daily Operations**
+[H3] **01 – Bed status gaps**
+[P] Staff had to check whether beds were occupied, available or ready during admissions and transfers. Delayed bed-status updates could slow allocation.
+[H3] **02 – OT scheduling conflicts**
+[P] Teams had to manage theatre availability and procedure timings across four operating theatres. Schedule changes could lead to conflicts between procedures. 
+[H3] **03 – Missed nursing updates**
+[P] Important patient updates could be missed during shift handovers when information was passed between nursing teams, leaving incoming staff without key updates. 
+[H3] **04 – Late expiry tracking**
+[P] Pharmacy teams had to monitor medicine expiry dates across stock. Late identification of near-expiry medicines left less time to act.
+[H2] **Why Lotus Hospital chose Healthray**
+[P] In order to manage the admissions process, OT schedules, nursing workflows and pharmaceuticals at Lotus Hospital, there was a need for a more structured approach. The hospital selected the Healthray software, where all these aspects can be managed digitally in one system.
+[P] “Managing different workflows across departments was challenging, especially when teams needed to coordinate information. Healthray has brought these workflows together on one platform, making it easier for our teams to access information, coordinate their work and manage daily operations. We have found it much easier to keep things organised across departments.”
+[P] **Dr. Sanjeev Desai** <BR>**Lotus Hospital**
+[H2] **How Healthray helped Lotus improve hospital workflows**
+[H3] **01 – Bed & Ward Management**
+[P] Bed status was managed through a central workflow, helping staff check occupied, available and ready beds during admissions and transfers and allocate beds more efficiently.
+[H3] **02 – OT Management**
+[P] OT schedules and theatre availability were managed digitally, helping teams coordinate procedures across the operating theatres and reduce scheduling conflicts.
+[H3] **03 – IPD EMR & Nursing**
+[P] Patient updates were recorded in IPD workflows, giving nursing teams a structured way to review information during shift handovers and reducing missed updates.
+[H3] **04 – Pharmacy Management**
+[P] Medicine stock and expiry information was managed digitally, helping pharmacy teams identify near-expiry medicines earlier and take action before they became unusable.
+[H2] **From setup to team adoption**
+[P] Lotus Hospital worked with Healthray to transition its existing workflows to the new system.
+[H3] **01 – Workflow setup**
+[P] **Workflows configured**<BR>The hospital's existing processes were configured in the system.
+[H3] **02 – Data migration**
+[P] **Existing information transferred**<BR>Relevant hospital data was migrated into the configured workflows.
+[H3] **03 – Staff training**
+[P] **Teams trained for daily use**<BR>Staff were trained on the workflows relevant to their roles.
+[H2] **Results After Implementing Healthray**
+[P] After implementing Healthray, Lotus Hospital improved its day-to-day operations. 
+[H3] **30% faster bed allocation**
+[P] Staff spent less time checking bed availability, allowing beds to be assigned faster during admissions and transfers. 
+[H3] **25% fewer OT scheduling conflicts**
+[P] Fewer clashes between procedures made it easier for teams to keep OT schedules organised. 
+[H3] **30% fewer missed nursing updates**
+[P] Incoming nursing staff had better access to the information they needed during shift handovers, reducing missed patient updates. 
+[H3] **20% less medicine wastage**
+[P] Pharmacy teams had more time to act on medicines approaching expiry, helping reduce avoidable wastage. 
+[H2] **Before and After Healthray**
+
+----- TABLE 3 (5 rows x 3 cols) -----
+ROW 0: **Area** || **Before Healthray** || **After Healthray**
+ROW 1: **Bed allocation** || Staff checked bed status during admissions and transfers || Bed availability was centrally managed for quicker allocation
+ROW 2: **OT scheduling** || Theatre availability and procedure timings were managed separately || Theatre schedules and procedure timings were coordinated in one place
+ROW 3: **Nursing handovers** || Patient updates could be missed during shift changes || Nursing teams could record and review patient updates during handovers
+ROW 4: **Medicine expiry** || Near-expiry medicines could be identified late || Pharmacy teams could track expiry information and act earlier
+----- END TABLE 3 -----
+
+[H2] **Is your hospital facing similar challenges?**
+[P] This case study may be relevant if your hospital:
+[LI-b:0] Struggles to keep bed status updated during admissions and transfers.
+[LI-b:0] Needs to coordinate OT schedules across multiple operation theatres.
+[LI-b:0] Has difficulty keeping nursing updates consistent during shift handovers.
+[LI-b:0] Needs to track medicine stock and expiry dates more efficiently.
+
+----- TABLE 4 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    **See how Healthray HMS can support your hospital**
+    Book a free demo to see how Healthray can help your teams manage these workflows in one system and coordinate daily hospital operations more efficiently.
+    **CTA Button:** Book a Demo
+----- END TABLE 4 -----
+

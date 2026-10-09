@@ -1,0 +1,197 @@
+===== Shraddha Aarogya Mandir Hospital.docx =====
+paragraphs: 24  tables: 12  images: 0
+normalised: none
+
+[TITLE] Shraddha Aarogya Mandir
+[H1] How Shraddha Aarogya Mandir Digitised 25 Years of Medical Records with Healthray
+[P] Shraddha Aarogya Mandir has looked after Vapi for more than 25 years. It is a 150-bed multispeciality hospital, with cardiology, orthopaedics, surgery, gynaecology and intensive care all in one building. A hospital that old keeps a lot of paper. That paper is where the day kept getting stuck.
+
+----- TABLE 1 (1 rows x 4 cols) -----
+[row 0 cell 0]
+    **12 Depts**
+    On One System  
+[row 0 cell 1]
+    **25+ Yrs**
+    Of Records Migrated
+[row 0 cell 2]
+    **3x**
+    Faster File Pulls
+[row 0 cell 3]
+    **Zero**
+    Downtime at Cut-over
+----- END TABLE 1 -----
+
+
+----- TABLE 2 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (1 rows x 1 cols)
+    [row 0 cell 0]
+        **RAINBOW HOSPITAL Snapshot**
+        NESTED TABLE (7 rows x 2 cols)
+        ROW 0: HOSPITAL || Shraddha Aarogya Mandir Multispeciality Hospital
+        ROW 1: LOCATION || Opposite Sanidhya Apartment, Ganeshwadi, Shanthi Nagar, Vapi, Gujarat
+        ROW 2: TYPE || Multispeciality Hospital
+        ROW 3: SIZE || 150 Beds
+        ROW 4: TIME TO GO LIVE  || 18 working days
+        ROW 5: DOWNTIME || None
+        ROW 6: WEBSITE || [shraddhaaarogyamandir.com](http://shraddhaaarogyamandir.com) 
+    **MODULES USED**
+    NESTED TABLE (8 rows x 1 cols)
+    ROW 0: EMR / EHR
+    ROW 1: Billing & Claims
+    ROW 2: Pharmacy Management
+    ROW 3: Laboratory Management
+    ROW 4: Radiology & Diagnostics
+    ROW 5: OPD & IPD Management
+    ROW 6: Emergency & ICU
+    ROW 7: Reporting & Analytics
+----- END TABLE 2 -----
+
+[SUBTITLE] **– THE HOSPITAL**
+[H2] A Day Built on Paper
+[P] For years, every patient visit meant another sheet in a folder. The folders filled cabinets, and someone had to walk over and pull the right one by hand each time a doctor asked.
+[P] That worked when the hospital was smaller. At 150 beds and 12 departments, it stopped working. The file a doctor needed was often upstairs, or in use somewhere else, and the whole visit sat there waiting for it.
+[SUBTITLE] **- WHERE THE DAY SLOWED**
+[H2] Four Places the Paper Caught
+[P] Nothing here was dramatic. These were four small delays that happened over and over, every day.
+
+----- TABLE 3 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (2 rows x 2 cols)
+    [row 0 cell 0]
+        **01 - Records Out of Reach**
+        Pulling a paper file took minutes, and now and then it just could not be found. So a doctor either stood waiting, or re-ran a test whose result was already sitting in that same folder.
+    [row 0 cell 1]
+        **02 - Billing Left for the End**
+        At discharge, someone added up the charges by hand off a pile of slips. The patient was ready to go home and still had to wait at the counter while that total got built.
+    [row 1 cell 0]
+        **03 - Pharmacy Running Blind**
+        Stock and dispensing sat in different registers. A medicine could run low and nobody knew until it was gone, and what went out did not always line up with what the bill said.
+    [row 1 cell 1]
+        **04 - Numbers No One Could See**
+        Occupancy and revenue were kept in registers. Ask how last week went and you waited days, because someone had to count it all up first.
+----- END TABLE 3 -----
+
+[SUBTITLE] **– THE SHIFT**
+[H2] One Record, Opened Anywhere
+[P] Healthray took those same four jams and moved them onto one system the whole hospital works from.
+
+----- TABLE 4 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (2 rows x 2 cols)
+    [row 0 cell 0]
+        **01 - The Record Opens Instantly**
+        Notes, tests and prescriptions all live in one file. A doctor pulls it up at the bedside. Nothing gets fetched, and nothing gets ordered a second time.
+    [row 0 cell 1]
+        **02 - The Bill Builds Itself**
+        Each charge posts the moment care is given. By the time the patient reaches the counter, the total is already done.
+    [row 1 cell 0]
+        **03 - Pharmacy on the Same System**
+        Dispensing comes off live stock and goes straight onto the bill. Low stock shows up early, and nothing leaves the shelf unaccounted.
+    [row 1 cell 1]
+        **04 - The Week on One Screen**
+        Occupancy, revenue, department load — all of it updates as it happens. A manager can read today's numbers today.
+----- END TABLE 4 -----
+
+[SUBTITLE] **– GETTING THERE**
+[H2] How the Switch Was Made
+[P] Healthray did it in three stages, and the wards never once went down.
+
+----- TABLE 5 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (1 rows x 3 cols)
+    [row 0 cell 0]
+        **01 – Listen**
+        NESTED TABLE (1 rows x 1 cols)
+        ROW 0: Shadowed the Floor
+        Healthray spent a week sitting with each department, watching how its files, tests and charges really move.
+    [row 0 cell 1]
+        **02 - Move**
+        NESTED TABLE (1 rows x 1 cols)
+        ROW 0: Carried the Archive
+        Twenty-five years of records were digitised and loaded, so no patient turned up to a blank screen.
+    [row 0 cell 2]
+        **03 - Settle**
+        NESTED TABLE (1 rows x 1 cols)
+        ROW 0: Walked Beside Staff
+        Support stayed on the floor through the first live weeks, sorting out questions right at the desk.
+----- END TABLE 5 -----
+
+[SUBTITLE] **– IN THEIR WORDS**
+[H2] What the Floor Noticed
+[P] A consultant on how the record changed her clinic.
+
+----- TABLE 6 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    **"A patient would be sitting in front of me while someone went off to find her old file. Sometimes it never showed up. Now I type her name and the whole history is right there, so I can look at her first instead of waiting on paper."**
+    **Dr. Deepika Singhavi**
+    **Obstetrics & Gynaecology**
+----- END TABLE 6 -----
+
+[SUBTITLE] **– THE RESULT**
+[H2] What Shifted After Go-Live
+[P] Measured and estimated across the first months on the system.
+
+----- TABLE 7 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    NESTED TABLE (4 rows x 1 cols)
+    [row 0 cell 0]
+        **✓ Files Pulled in Seconds**
+        What used to take a runner a few minutes now opens on the ward in one tap. Rounds keep moving from one patient to the next with no gap in between.
+    [row 1 cell 0]
+        **✓ Pharmacy That Reconciles**
+        What gets dispensed now matches the bill, line for line. And low stock shows its hand before the shelf is empty, not after a patient has been sent away.
+    [row 2 cell 0]
+        **✓ Discharge Without the Counter Wait**
+        The charges are already in, so the discharge bill closes in minutes. The bed opens up and the family gets to leave at the same time.
+    [row 3 cell 0]
+        **✓ A Week You Can Actually Read**
+        The dashboards do the counting now. Management can see occupancy, revenue and load whenever they want it, instead of waiting days for a tally.
+----- END TABLE 7 -----
+
+[H2] How the Gains Add Up
+
+----- TABLE 8 (5 rows x 2 cols) -----
+ROW 0: **AREA** || **IMPACT**
+ROW 1: Clinician Time || Fast file pulls hand minutes back to doctors on every round, across all 12 departments.
+ROW 2: Cost Control || One record kills duplicate tests, and matched pharmacy stock closes a leak nobody used to catch.
+ROW 3: Cash Flow || Charges logged as care happens close the bill sooner and bring the payment date closer.
+ROW 4: Oversight || Live dashboards replace the hand count, so calls get made on current numbers, not last week's.
+----- END TABLE 8 -----
+
+
+----- TABLE 9 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    Does This Sound Like Your Hospital?
+    This story fits you if:
+    ✓ Doctors wait on rounds while paper files are fetched
+    ✓ Discharge bills are added up by hand from loose slips
+    ✓ Pharmacy stock and billing don't match
+    ✓ You wait days for occupancy and revenue numbers
+----- END TABLE 9 -----
+
+
+----- TABLE 10 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    See Healthray in Action
+    Book a free demo. We'll show one patient record opening across departments, pharmacy posting straight to the bill, and your week on a single live dashboard.
+    NESTED TABLE (1 rows x 1 cols)
+    ROW 0: **Book a FREE Demo**
+----- END TABLE 10 -----
+
+[TITLE] Content Brief Template
+
+----- TABLE 11 (4 rows x 2 cols) -----
+ROW 0: Website || [healthray.com](http://healthray.com) 
+ROW 1: Title/topic || How Shraddha Aarogya Mandir Digitised 25 Years of Medical Records with Healthray
+ROW 2: Primary keyword(s) || Shraddha Aarogya Mandir Hospital
+ROW 3: Word count ||  979 words
+----- END TABLE 11 -----
+
+
+----- TABLE 12 (3 rows x 2 cols) -----
+ROW 0: Meta title (60) || Shraddha Aarogya Mandir Hospital Case Study | Healthray
+ROW 1: Meta description (160) || How a 150-bed multispeciality hospital in Vapi ran 25 years of records, billing, pharmacy and reporting on paper – until Healthray's HIMS put it on one system.
+ROW 2: New URL || [healthray.com/case-study/shraddha-aarogya-mandir-hospital](http://healthray.com/case-study/shraddha-aarogya-mandir-hospital) 
+----- END TABLE 12 -----
+

@@ -1,0 +1,102 @@
+{
+    "source": "Rainbow Hospital.docx",
+    "post": {
+        "id": 81912,
+        "title": "From Admission to Discharge: How Healthray Runs the Floor at Rainbow Hospital",
+        "slug": "rainbow-hospital-vapi",
+        "excerpt": "Rainbow Super Speciality Hospital runs 100 beds and 25 specialities in Vapi, with 50+ doctors on the floor. In 5+ years, it has grown into the kind of hospital where one patient can be admitted, operated on and discharged under a single roof."
+    },
+    "fields": {
+        "short_name": "Rainbow Hospital",
+        "hero_lede": "Rainbow Super Speciality Hospital runs 100 beds and 25 specialities in Vapi, with 50+ doctors on the floor. In 5+ years, it has grown into the kind of hospital where one patient can be admitted, operated on and discharged under a single roof.",
+        "metrics": [
+            { "title": "- 20 min", "text": "To Admit" },
+            { "title": "50%", "text": "Faster Discharges" },
+            { "title": "90%", "text": "OT Utilisation" },
+            { "title": "1 Day", "text": "Claim Prep" }
+        ],
+        "glance_facts": [
+            { "label": "Hospital", "value": "Rainbow Super Speciality Hospital" },
+            { "label": "Location", "value": "CM 8/16, NH 48, next to Nexa Showroom & Aakar Motors, Vapi, Gujarat" },
+            { "label": "Type", "value": "Super-Speciality Hospital" },
+            { "label": "Size", "value": "100 Beds" },
+            { "label": "Time to go live", "value": "14 working days" },
+            { "label": "Downtime", "value": "None" },
+            { "label": "Website", "value": "rainbowhospitalvapi.com", "url": "http://www.rainbowhospitalvapi.com" }
+        ],
+        "modules_used": [
+            { "name": "Bed & Admission Management" },
+            { "name": "OT Scheduling" },
+            { "name": "Billing & TPA Claims" },
+            { "name": "EMR / EHR" },
+            { "name": "Laboratory Management" },
+            { "name": "Diagnostics & Imaging" },
+            { "name": "Pharmacy Management" },
+            { "name": "Reporting & Analytics" },
+            { "name": "Emergency Management" }
+        ],
+        "overview_label": "The hospital",
+        "overview_heading": "How a Day Runs at Rainbow Hospital",
+        "overview_content": [
+            "A busy day moves through four hands – the admission desk, the operating theatre, the billing counter and the records room. Each one holds the next. When a bed opens late or a file goes missing, every hand down the line waits with it.",
+            "That coordination was being done on phone calls, whiteboards and paper files. It held while volumes were small, but at this scale the gaps started to cost beds, theatre hours and staff time the hospital could not spare."
+        ],
+        "problem_label": "The operational problems",
+        "problem_heading": "Where the Floor Was Getting Stuck",
+        "problem_intro": "Four daily workflows were quietly draining capacity.",
+        "problems": [
+            { "title": "Admissions", "text": "With no live view of free, cleaned beds, placing a patient meant a ward-by-ward hunt that dragged on long after the call to admit." },
+            { "title": "Operation Theatres", "text": "Theatre lists were juggled by hand between surgeons. Starts slipped, and no one could see the idle gaps a case could have filled." },
+            { "title": "Discharge & Claims", "text": "A ready patient still waited while the summary and TPA file were built by hand and that occupied bed stayed shut to the next admission." },
+            { "title": "Scattered Records", "text": "One patient's history sat across unlinked files, so a specialist often re-ordered a test rather than hunt down a result that already existed." }
+        ],
+        "decision_label": "The experience",
+        "decision_heading": "What Rainbow Hospital Says",
+        "decision_intro": "A senior clinician described the floor after go-live.",
+        "quote_text": "I used to piece a patient's history together from paper before I could even start. Now the past visits, scans and notes are already on the screen when she walks in – I spend the time on her, not on the file.",
+        "quote_name": "Dr. Rupal Bhabhor",
+        "quote_role": "GYNECOLOGIST",
+        "solution_label": "The solution",
+        "solution_heading": "What Changed with Healthray",
+        "solution_intro": "The same four workflows now share one live system.",
+        "solutions": [
+            { "icon": "check", "title": "Live Bed Board", "text": "Every bed's status shows on one screen, so the desk assigns without a single call." },
+            { "icon": "calendar", "title": "OT Planner", "text": "Surgeons book into a shared theatre calendar that exposes idle gaps to fill." },
+            { "icon": "billing", "title": "Claim-Ready Discharge", "text": "The summary and TPA file build as care is given, so the bill is ready at discharge." },
+            { "icon": "records", "title": "One Patient Record", "text": "Every test, note and scan lands in one file the next doctor opens instantly." }
+        ],
+        "setup_label": "Implementation",
+        "setup_heading": "Making the Shift to Healthray",
+        "setup_intro": "Healthray's team worked through three steps with the hospital before go-live.",
+        "steps": [
+            { "when": "Assessment", "title": "Workflows Mapped", "text": "Healthray traced how beds, theatres and billing actually move, then shaped each module to it." },
+            { "when": "Migration", "title": "Records Moved", "text": "Existing patient histories were brought across so every ward opened with its records in place." },
+            { "when": "Onboarding", "title": "Teams Trained", "text": "Training ran by role, so ward, theatre and billing staff each practised their own screens." }
+        ],
+        "results_label": "The result",
+        "results_heading": "What Changed, Measured",
+        "results_intro": "Rainbow Hospital tracked these in the months after go-live.",
+        "results": [
+            { "number": "", "title": "Admissions Without the Hunt", "text": "A glance at the board shows which beds are free and ready, so an inpatient is placed in minutes, not a ward-by-ward search." },
+            { "number": "", "title": "Beds Freed a Day Sooner", "text": "With the bill built on discharge day, the six-hour wait fell to three, and each freed bed opened to the next admission." },
+            { "number": "", "title": "Theatres Run Fuller", "text": "Once idle gaps were visible, surgeons filled them, lifting OT use to about 90% and fitting more cases into the same day." },
+            { "number": "", "title": "Claims Close in a Day", "text": "A TPA cycle that used to run three days now closes in one, pulling revenue closer to the date care was actually given." }
+        ],
+        "fit_heading": "Is Your Hospital Facing The Same Challenges?",
+        "fit_intro": "This story will help you most if:",
+        "fit_points": [
+            { "text": "Admissions stall while staff hunt ward by ward for a free bed" },
+            { "text": "Theatre lists slip and gaps go unfilled" },
+            { "text": "Discharges wait on a bill that isn't ready" },
+            { "text": "A patient's records are scattered across departments" }
+        ],
+        "cta_heading": "See Healthray in Action",
+        "cta_text": "Book a free demo. We'll show the bed board, OT planner and claim-ready discharge, and how one record follows the patient."
+    },
+    "brief": {
+        "meta_title": "Rainbow Super Speciality Hospital Case Study | Healthray",
+        "meta_description": "See how Rainbow Super Speciality Hospital in Vapi sped up admissions, freed beds and closed TPA claims faster with Healthray's bed, OT and billing modules.",
+        "new_url": "http://healthray.com/case-study/rainbow-hospital-vapi",
+        "not_imported": "\"How the Numbers Add Up\" (Area / Impact table, 4 rows) has no field: the before/after table needs Before and After columns."
+    }
+}

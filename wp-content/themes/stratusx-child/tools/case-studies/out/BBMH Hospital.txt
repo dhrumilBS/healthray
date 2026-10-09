@@ -1,0 +1,117 @@
+===== BBMH Hospital.docx =====
+paragraphs: 62  tables: 5  images: 1
+normalised: soft line breaks x2
+
+
+----- TABLE 1 (2 rows x 2 cols) -----
+ROW 0: Meta title (60) || Jabalpur Hospital Case Study | Healthray HMS
+ROW 1: Meta description (160) || See how Jabalpur Hospital used Healthray HMS to improve patient information, diagnostics, pharmacy, billing, TPA processing and operational visibility.
+----- END TABLE 1 -----
+
+
+----- TABLE 2 (7 rows x 2 cols) -----
+ROW 0: **Hospital** || **BBMH Hospital**
+ROW 1: **Location** || **Cuttack, Odisha, India**
+ROW 2: **Type** || **Multispeciality** 
+ROW 3: **Size** || **100 beds**
+ROW 4: **Time to go live** || **Under 2 weeks**
+ROW 5: **Downtime** || **None**
+ROW 6: **Website** || [**https://www.bbmh.in/**](https://www.bbmh.in/) 
+----- END TABLE 2 -----
+
+[P] **Modules used:**
+[LI-b:0] Patient Records
+[LI-b:0] Billing
+[LI-b:0] Staff & Task Management
+[LI-b:0] Reporting
+[LI-b:0] Laboratory
+[H1] **How BBMH Hospital Digitised Operations and Cut Administrative Workload by 35%**
+[P] [IMAGE media/image1.png]<BR>BBMH Hospital is a 100-bedded multispeciality hospital in Cuttack, Odisha, with 50+ doctors. Its front desk, clinical and billing operations now work together through digital workflows, reducing administrative work by 35%.
+
+----- TABLE 3 (1 rows x 4 cols) -----
+[row 0 cell 0]
+    **35% reduction**
+    **in administrative workload**
+[row 0 cell 1]
+    **30% faster**
+    **billing and discharge processing**
+[row 0 cell 2]
+    **40% fewer**
+    **manual errors across operations** 
+[row 0 cell 3]
+    **20% faster access to operational information** 
+----- END TABLE 3 -----
+
+[H2] **A growing hospital facing administrative challenges** 
+[P] BBMH provides advanced laboratory and imaging services, ICU care, cath lab services, and multiple clinical and surgical specialities, along with 24×7 emergency services. As its patient volume increased, managing the hospital's internal processes became harder.
+[P] Information was spread across paper files, spreadsheets and different systems. Administrative teams spent considerable time searching for information, tracking data and handling follow-ups, while doctors were also pulled into administrative work. 
+[H2] **Four challenges affecting BBMH's hospital operations**
+[H3] **01 – Scattered Information**
+[P] Patient records, billing information and reports were spread across paper files, spreadsheets and different systems, making information harder to find.
+[H3] **02 – Manual Workflows** 
+[P] Billing and record-keeping involved manual processes and repeated cross-checking, making routine administrative work more time-consuming. 
+[H3] **03 – Limited Visibility** 
+[P] Management did not have timely access to information about hospital activities. Reports took time to compile, making it harder to get a clear view of operations. 
+[H3] **04 – Administrative Burden** 
+[P] Internal coordination and follow-ups were taking doctors and teams away from their core responsibilities. 
+[H2] **Why BBMH chose Healthray** 
+[P] BBMH needed to move away from scattered records and manual processes while keeping billing, patient information and reporting connected. It chose Healthray HMS to centralise these workflows, reduce administrative follow-ups and give teams faster access to operational information. 
+[P] **“Moving to Healthray made the shift to digital hospital management much easier for us. Our existing data was migrated smoothly, and our teams moved to the new system without disrupting hospital operations.”**
+[P] Dr. Umesh Ray <BR>BBMH Hospital
+[H2] **How Healthray helped BBMH digitise operations**
+[H3] **01 – Centralised hospital information**
+[P] Healthray's Patient Records module brought patient information into one digital system, reducing the need to search across paper files, spreadsheets and separate sources. 
+[H3] **02 – Digital billing** 
+[P] The Billing module reduced manual data handling and helped teams process billing and discharge activities faster. 
+[H3] **03 – Faster operational reporting** 
+[P] Reporting tools gave teams and management quicker access to hospital information instead of relying on manually compiled reports. 
+[H3] **04 – Better task coordination**  
+[P] Staff & Task Management helped teams organise follow-ups and routine activities digitally, reducing manual coordination. 
+[H2] **From data migration to team onboarding** 
+[P] BBMH moved to Healthray without disrupting its ongoing hospital operations. 
+[P] **01 – 1 day**
+[H3] **Data migration**
+[P] BBMH's existing data was migrated to Healthray within one day.
+[P] **02 – Under 2 weeks**
+[H3] **Implementation**
+[P] Healthray HMS went live within two weeks without disrupting hospital operations.
+[P] **03 – Training and adoption**
+[H3] **Teams onboarded**
+[P] Doctors and teams were onboarded to Healthray and its digital workflows. 
+[H2] **Results from Healthray implementation** 
+[P] The move to digital hospital management delivered measurable improvements at BBMH.
+[H3] **35% reduction in administrative workload**
+[P] Reduced manual tracking, follow-ups and routine administrative work helped lower the overall workload. 
+[H3] **30% faster billing and discharge processing**
+[P] Digital billing workflows helped streamline billing and discharge activities. 
+[H3] **40% fewer manual errors**
+[P] Reducing manual data handling and repeated cross-checking helped improve accuracy. 
+[H3] **20% faster access to operational information** 
+[P] Digital access to hospital information gave teams and management a clearer view of hospital activities and processes.
+[H2] **BBMH's operations before and after Healthray** 
+
+----- TABLE 4 (7 rows x 3 cols) -----
+ROW 0: **Area** || **Before** || **After Healthray**
+ROW 1: **Information** || Stored in different places || **Managed in one digital system**
+ROW 2: **Administrative work** || Time spent on routine tasks || **Reduced administrative workload**
+ROW 3: **Management reporting** || Reports took time to compile || **Faster access to reports**
+ROW 4: **Team coordination** || Teams relied on manual follow-ups  || **Teams manage follow-ups digitally** 
+ROW 5: **Billing & discharge** || Manual processing || **30% faster processing**
+ROW 6: **Manual errors** || Data entry errors  || **40% fewer manual errors**
+----- END TABLE 4 -----
+
+[H2] **Is your hospital facing similar challenges?**
+[P] BBMH's experience may be relevant if your hospital:
+[LI-b:0] Relies on paper records, spreadsheets or disconnected systems.
+[LI-b:0] Spends significant time on administrative follow-ups.
+[LI-b:0] Finds it difficult to access operational information quickly.
+[LI-b:0] Wants to reduce manual work across hospital operations.
+[LI-b:0] Needs to digitise processes without disrupting ongoing activities.
+
+----- TABLE 5 (1 rows x 1 cols) -----
+[row 0 cell 0]
+    **See how Healthray HMS can work for your hospital**
+    Book a free demo. Our team will show you how to move your hospital operations from manual processes to digital workflows.
+    **CTA Button:** Book a Demo
+----- END TABLE 5 -----
+
