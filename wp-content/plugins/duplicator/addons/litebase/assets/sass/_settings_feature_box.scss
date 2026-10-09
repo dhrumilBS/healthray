@@ -1,0 +1,85 @@
+#dup-litebase-settings-feature-box {
+    background: #fff;
+    border: 1px solid $light-gray;
+    border-radius: 4px;
+    padding: 25px 30px;
+    margin: 30px 0 10px;
+    position: relative;
+
+    .dismiss {
+        position: absolute;
+        top: 10px;
+        right: 12px;
+        color: $dark-gray;
+        text-decoration: none;
+        font-size: 18px;
+        line-height: 1;
+
+        &:hover {
+            color: $primary-color;
+        }
+    }
+
+    h5 {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0 0 12px;
+    }
+
+    h6 {
+        font-size: 14px;
+        font-weight: 600;
+        margin: 18px 0 8px;
+    }
+
+    p {
+        margin: 0 0 12px;
+        font-size: 13px;
+        line-height: 1.55;
+
+        .fa-star {
+            color: #f5b400;
+            margin: 0 1px;
+        }
+    }
+
+    ul.list {
+        list-style: none;
+        margin: 0 0 18px;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 4px 18px;
+
+        .item {
+            margin: 0;
+            padding-left: 18px;
+            position: relative;
+            font-size: 13px;
+
+            &:before {
+                content: "\f147";
+                font-family: dashicons;
+                position: absolute;
+                left: -2px;
+                top: 0;
+                color: $success-color;
+            }
+        }
+    }
+
+    .button.primary {
+        background: $primary-color;
+        color: #fff;
+    }
+
+    .bonus {
+        margin-top: 14px;
+        font-size: 13px;
+
+        .green {
+            color: $success-color;
+            font-weight: 600;
+        }
+    }
+}

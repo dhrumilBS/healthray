@@ -1,5 +1,15 @@
 # Elementor Pro - by Elementor.com
 
+#### 4.2.3 - 2026-08-31
+
+* Tweak: Updated WordPress compatibility to version 7.1
+
+#### 4.2.2 - 2026-08-19
+
+* Fix: Improved code security enforcement in Dynamic Tags
+* Fix: Improved code security enforcement in Form widget
+* Fix: Dynamic tags are not supported in email recipient fields in Form - Atomic Editor
+
 #### 4.2.1 - 2026-07-28
 
 * Fix: Child product categories display the parent category image when Loop Taxonomy is used in a Product Archive template - Atomic Editor

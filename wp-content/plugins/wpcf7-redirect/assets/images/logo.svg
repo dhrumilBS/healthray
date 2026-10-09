@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 78 90" fill="none"
+    xmlns:v="https://vecta.io/nano">
+    <g fill-rule="evenodd">
+        <path d="M0 72.906l16.906 16.906 44.906-44.906L16.906 0 0 16.906l28 28-28 28z"
+            fill="#58b1ff" />
+        <path d="M7.811 72.906l16.905 16.906 44.906-44.906L24.717 0 7.811 16.906l28 28-28 28z"
+            fill="#4683ff" />
+        <use href="#C" fill="#154aff" />
+        <use href="#C" fill="url(#A)" fill-opacity=".2" />
+        <path d="M15.622 72.906l16.906 16.906 44.906-44.906L32.528 0 15.622 16.906l28 28-28 28z"
+            fill="#4d96ff" />
+        <use href="#C" x="7.811" fill="#154aff" />
+        <use href="#C" x="7.811" fill="url(#B)" fill-opacity=".2" />
+    </g>
+    <defs>
+        <linearGradient id="A" x1="34.811" y1="85.906" x2="34.811" y2="3.906"
+            gradientUnits="userSpaceOnUse">
+            <stop stop-color="#fff" />
+            <stop offset="1" stop-color="#454545" />
+        </linearGradient>
+        <linearGradient id="B" x1="34.811" y1="85.906" x2="34.811" y2="3.906"
+            gradientUnits="userSpaceOnUse">
+            <stop stop-color="#fff" />
+            <stop offset="1" />
+        </linearGradient>
+        <path id="C" d="M20.811 3.906l-13 13 28 28-28 28 13 13 41-41-41-41z" />
+    </defs>
+</svg>

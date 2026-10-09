@@ -1,0 +1,2003 @@
+body {
+  background-color: rgb(241, 241, 241);
+}
+
+/* Fixes conflict with woosquared */
+.modal {
+  z-index: 99999;
+}
+
+/* Fixes conflict with wp core on mobile hidding modal under background fade */
+body.mobile.modal-open #wpwrap {
+  position: relative;
+}
+
+.card {
+  margin-top: inherit;
+  padding: inherit;
+  min-width: inherit;
+  max-width: inherit;
+  box-shadow: inherit;
+  background: inherit;
+  box-sizing: inherit;
+  background-color: #ffffff;
+}
+
+.card-header {
+  background-color: #ffffff;
+}
+
+.card-body.cloud {
+  background: bottom url("../img/wave-bg.svg") no-repeat;
+  background-size: 100% auto;
+}
+
+.badge-primary {
+  background-color: rgba(38, 169, 224, 1);
+}
+
+.badge-primary:hover, .badge-primary:active, .badge-primary:focus {
+  background-color: rgba(38, 169, 224, 0.7);
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.badge-primary:active {
+  background-color: rgba(38, 169, 224, 0.9);
+}
+
+.btn-group-lg > .btn, .btn-lg {
+  padding: .5rem 2rem;
+}
+
+.btn-primary {
+  background-color: rgba(38, 169, 224, 1);
+  border-radius: 24px;
+  border-width: 0;
+}
+
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+  background-color: rgba(38, 169, 224, 0.7) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.btn-primary:active {
+  background-color: rgba(38, 169, 224, 0.9) !important;
+}
+
+.btn-info {
+  background-color: #EE7C1E;
+  border-radius: 24px;
+  border-width: 0;
+}
+
+.btn-info:hover, .btn-info:active, .btn-info:focus {
+  background-color: rgba(238, 124, 30, 0.7) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.btn-info:active {
+  background-color: rgba(238, 124, 30, 0.9) !important;
+}
+
+.btn .dashicons {
+  font-size: 1.8rem;
+  line-height: 1;
+  margin-right: 1rem;
+}
+
+.progress {
+  height: 30px;
+  border-radius: 15px;
+  padding: 5px;
+}
+
+.progress .progress-bar {
+  background-color: rgba(38, 169, 224, 1);
+  border-radius: 10px;
+}
+
+.progress.download .progress-bar {
+  background-color: #EE7C1E;
+}
+
+.tooltip {
+  max-width: 150px;
+}
+
+.tooltip .tooltip-inner {
+  background-color: #f1f1f1;
+  color: #2A2A2A;
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+}
+
+.bs-tooltip-top .arrow {
+  margin-left: 0;
+}
+
+.bs-tooltip-top .arrow:before {
+  border-top-color: #F1F1F1;
+}
+
+.bs-tooltip-bottom .arrow:before {
+  border-bottom-color: #F1F1F1;
+}
+
+.mb-lc-0 > :last-child {
+  margin-bottom: 0 !important;
+}
+
+#bfu-sync-errors, #bfu-download-errors {
+  height: 3em;
+  display: none;
+  overflow-y: scroll;
+}
+
+.bfu-enabled-status .dashicons {
+  font-size: 25px;
+}
+
+.bfu-enabled-status .dashicons-cloud-saved {
+  color: rgba(38, 169, 224, 1);
+}
+
+.bfu-enabled-status .dashicons-cloud-upload {
+  color: #EE7C1E;
+}
+
+p.lead {
+  font-size: 1em;
+}
+
+#bfu-footer .text-muted {
+  color: rgba(108, 117, 125, 0.5) !important;
+}
+
+.bfu-refresh-icon .dashicons {
+  font-size: 25px;
+}
+
+.text-warning, .text-warning a {
+  color: #EE7C1E !important;
+  font-weight: 500;
+}
+
+#bfu-error {
+  display: none;
+}
+
+/* jQuery .show() sets an inline display:block on this one, so it cannot rely on
+   flex; the icon comes from a background image instead of a child element
+   (admin.js replaces its contents with .text()). */
+#bfu-error.bfu-alert {
+  padding-left: 46px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b3312c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' y1='8' x2='12' y2='12'/%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 16px center;
+  background-size: 18px 18px;
+}
+
+#bfu-scan-progress, #bfu-scan-remote-progress, #bfu-upload-progress, #bfu-download-progress {
+  display: none;
+}
+
+#bfu-local-pie, #bfu-cloud-pie, .bfu-pie-wrapper {
+  max-height: 300px;
+  max-width: 600px;
+}
+
+#bfu-enable-errors .alert-link {
+  float: right;
+}
+
+#bfu-enable-errors .alert-link:hover {
+  text-decoration: none;
+}
+
+#bfu-enable-errors .dashicons {
+  line-height: 1.2;
+}
+
+#bfu-collapse-errors {
+  max-height: 200px;
+  overflow-y: scroll;
+}
+
+#bfu-collapse-errors .list-group-item {
+  padding: 0.25rem 1.25rem;
+  margin: 0;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  color: #fff;
+  border-color: rgba(38, 169, 224, 1);
+  background-color: rgba(38, 169, 224, 1);
+}
+
+.custom-filetype.custom-control-input:checked ~ .custom-filetype.custom-control-label::before {
+  border-color: #EE7C1E;
+  background-color: #EE7C1E;
+}
+
+.badge-core {
+  color: #fff;
+  background-color: #26A9E0;
+}
+
+.badge-addon {
+  color: #fff;
+  background-color: #EE7C1E;
+}
+
+/* filetype list */
+.card-columns .card-header {
+  cursor: pointer;
+  background-color: rgb(241, 241, 241);
+}
+
+.card-columns .card-header:after {
+  font-family: dashicons;
+  content: "\f343";
+  float: right;
+}
+
+.card-columns .card-header.collapsed:after {
+  /* symbol for "collapsed" panels */
+  content: "\f347";
+}
+
+.bfu-input-limit input {
+  border-radius: 30px 0 0 30px;
+  font-size: 1.2em;
+  font-weight: bold;
+  background-color: rgb(241, 241, 241);
+}
+
+.bfu-input-limit .input-group-append select {
+  border-radius: 0 30px 30px 0;
+  font-size: 1.1em;
+  font-weight: bold;
+  background-color: rgb(241, 241, 241);
+}
+
+input.bfu-input-subscribe {
+  border-radius: 30px;
+  text-align: center;
+  font-size: 1.1em;
+  background-color: rgb(241, 241, 241);
+}
+
+
+.card-body.scan {
+  background: top url("../img/scan-preview.jpg") no-repeat;
+  background-size: 80% auto;
+}
+
+.bfu-disabled {
+  display: none;
+}
+
+.dashicons-info {
+  font-size: 15px;
+  height: 15px;
+  width: 15px;
+  vertical-align: text-top;
+}
+
+p.iu-upgrade-text {
+  font-size: 14px;
+}
+
+
+/* ==========================================================================
+   Infinite Uploads upsell (feature grid + cloud banner)
+   Brand palette: #26a9e0 (primary), #4bc2ec (light), pill CTAs.
+   ========================================================================== */
+.bfu-upsell-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.bfu-upsell-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #dbe9f1;
+  border-radius: 12px;
+  text-align: left;
+  text-decoration: none;
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.bfu-upsell-card:hover,
+.bfu-upsell-card:focus {
+  background: #f0fafe;
+  border-color: #a9ddf3;
+  box-shadow: 0 6px 18px rgba(38, 169, 224, 0.15);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.bfu-upsell-icon {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: #cfe8f8;
+  color: #26a9e0;
+  transition: background-color 0.18s ease;
+}
+
+.bfu-upsell-card:hover .bfu-upsell-icon,
+.bfu-upsell-card:focus .bfu-upsell-icon {
+  background: #ffffff;
+}
+
+.bfu-upsell-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.bfu-upsell-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.bfu-upsell-card .bfu-upsell-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.3;
+}
+
+.bfu-upsell-desc {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.45;
+}
+
+/* Cloud upsell banner */
+.bfu-cloud-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+  padding: 22px 28px;
+  background: linear-gradient(90deg, #d8eefb 0%, #e9f6fd 55%, #d8eefb 100%);
+  border: 1px solid #cbe9f7;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.bfu-cloud-banner__badge {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid #cbe9f7;
+  box-shadow: 0 4px 12px rgba(38, 169, 224, 0.12);
+}
+
+.bfu-cloud-banner__badge img {
+  width: 38px;
+  height: auto;
+  display: block;
+}
+
+.bfu-cloud-banner__content {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.bfu-cloud-banner__title {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: #1f2937;
+  line-height: 1.25;
+}
+
+.bfu-cloud-banner__subtitle {
+  display: block;
+  margin-top: 6px;
+  font-size: 14px;
+  color: #5b6472;
+  line-height: 1.4;
+}
+
+.bfu-cloud-banner__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 10px 22px;
+  border-radius: 24px;
+  background: #26a9e0;
+  color: #ffffff !important;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(38, 169, 224, 0.28);
+  transition: background-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.bfu-cloud-banner__cta:hover,
+.bfu-cloud-banner__cta:focus,
+.bfu-cloud-banner__cta:active {
+  background: #1c8fbf;
+  color: #ffffff !important;
+  border-radius: 24px; /* keep the pill on focus; WP admin forces a:focus{border-radius:2px} */
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(38, 169, 224, 0.36);
+  outline: none;
+}
+
+.bfu-cloud-banner__cta svg {
+  width: 16px;
+  height: 16px;
+}
+
+.bfu-cloud-banner__art {
+  position: absolute;
+  right: 96px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a9ddf3;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.bfu-cloud-banner__art svg {
+  width: 150px;
+  height: 150px;
+}
+
+.bfu-cloud-banner__dismiss {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  display: inline-flex;
+  padding: 4px;
+  background: none;
+  border: none;
+  color: #5b6472;
+  cursor: pointer;
+  line-height: 0;
+  transition: color 0.18s ease;
+}
+
+.bfu-cloud-banner__dismiss:hover,
+.bfu-cloud-banner__dismiss:focus {
+  color: #1f2937;
+  outline: none;
+}
+
+.bfu-cloud-banner__dismiss svg {
+  width: 18px;
+  height: 18px;
+}
+
+@media (max-width: 960px) {
+  .bfu-upsell-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 782px) {
+  .bfu-cloud-banner__art {
+    display: none;
+  }
+
+  .bfu-cloud-banner__title {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .bfu-upsell-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bfu-cloud-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+  }
+}
+
+/* Feature detail modal */
+body.bfu-modal-open {
+  overflow: hidden;
+}
+
+.bfu-feature-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100050;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.bfu-feature-modal.is-open {
+  display: flex;
+}
+
+.bfu-feature-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 58, 78, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.bfu-feature-modal__dialog {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  padding: 36px 36px 30px;
+  background: #ffffff;
+  border-radius: 16px;
+  border-top: 4px solid #26a9e0;
+  box-shadow: 0 24px 60px rgba(16, 24, 40, 0.28);
+  text-align: center;
+  animation: bfu-modal-in 0.18s ease-out;
+}
+
+@keyframes bfu-modal-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.bfu-feature-modal__close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  display: inline-flex;
+  padding: 6px;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: #6b7280;
+  cursor: pointer;
+  line-height: 0;
+  transition: color 0.18s ease, background-color 0.18s ease;
+}
+
+.bfu-feature-modal__close:hover,
+.bfu-feature-modal__close:focus {
+  color: #1f2937;
+  background: #eef7fb;
+  outline: none;
+}
+
+.bfu-feature-modal__close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.bfu-feature-modal__brand {
+  display: block;
+  width: 132px;
+  height: auto;
+  margin: 0 auto 22px;
+}
+
+.bfu-feature-modal__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 20px;
+  border-radius: 18px;
+  background: #cfe8f8;
+  color: #26a9e0;
+}
+
+.bfu-feature-modal__icon svg {
+  width: 36px;
+  height: 36px;
+}
+
+.bfu-feature-modal__heading {
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: #1f2937;
+}
+
+.bfu-feature-modal__subtitle {
+  margin: 0 0 24px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #5b6472;
+}
+
+.bfu-feature-modal__actions {
+  display: flex;
+  justify-content: center;
+}
+
+/* The modal CTA reuses the classic Infinite Uploads button
+   (.btn.btn-primary.btn-lg) so it matches every other IU button. The
+   explicit radius keeps the rounded pill even though the modal is moved
+   out to <body>, where Bootstrap's .btn-lg could otherwise win. */
+.bfu-feature-modal__actions .btn {
+  margin: 0;
+  border-radius: 24px;
+}
+
+.bfu-feature-modal__note {
+  margin: 18px 0 0;
+  font-size: 12px;
+  color: #8a92a2;
+}
+
+.bfu-feature-modal__note .dashicons {
+  font-size: 15px;
+  width: 15px;
+  height: 15px;
+  vertical-align: text-top;
+  color: #26a9e0;
+}
+
+/* ==========================================================================
+   Analyze Your Storage Usage — scan start panel (Infinite Uploads brand)
+   ========================================================================== */
+.bfu-scan-card {
+  margin-bottom: 24px;
+  border: 1px solid #e6eef4;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
+}
+
+.bfu-scan {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 32px 36px;
+}
+
+/* Left: progress ring + steps */
+.bfu-scan__visual {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 180px;
+}
+
+.bfu-scan__ring {
+  position: relative;
+  width: 158px;
+  height: 158px;
+}
+
+.bfu-scan__ring-track {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.bfu-scan__ring-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #26a9e0;
+}
+
+.bfu-scan__ring-icon svg {
+  width: 54px;
+  height: 54px;
+}
+
+.bfu-scan__steps {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #26a9e0;
+}
+
+/* Middle: heading, CTA, fast note */
+.bfu-scan__main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.bfu-scan__title {
+  margin: 0 0 8px;
+  padding: 0;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: #1f2d3d;
+}
+
+.bfu-scan__lead {
+  margin: 0 0 22px;
+  max-width: 430px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #5b6b7b;
+}
+
+/* "Run Free Scan" reuses the classic Infinite Uploads button
+   (.btn.btn-primary.btn-lg) so it matches every other IU button. */
+.bfu-scan__main .btn-primary {
+  margin: 0;
+}
+
+/* Right: feature points with divider */
+.bfu-scan__features {
+  flex: 0 0 auto;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 22px;
+  width: 320px;
+  padding-left: 32px;
+  border-left: 1px solid #e6eef4;
+}
+
+.bfu-scan__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.bfu-scan__feature-icon {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: #cfe8f8;
+  color: #26a9e0;
+}
+
+.bfu-scan__feature-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.bfu-scan__feature-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.bfu-scan__feature-text strong {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2d3d;
+}
+
+.bfu-scan__feature-text span {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #7c8a99;
+}
+
+@media (max-width: 1120px) {
+  .bfu-scan {
+    flex-wrap: wrap;
+  }
+  .bfu-scan__features {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-left: 0;
+    padding-top: 24px;
+    border-left: none;
+    border-top: 1px solid #e6eef4;
+  }
+  .bfu-scan__feature {
+    flex: 1 1 230px;
+  }
+}
+
+@media (max-width: 700px) {
+  .bfu-scan {
+    flex-direction: column;
+    text-align: center;
+  }
+  .bfu-scan__lead {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .bfu-scan__features {
+    flex-direction: column;
+  }
+}
+
+/* ==========================================================================
+   Subscribe modal (shown after the free scan results) — Infinite Uploads brand
+   ========================================================================== */
+#subscribe-modal .modal-content.bfu-subscribe {
+  position: relative;
+  border: none;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #f5f9ff 0%, #eef4fe 100%);
+  box-shadow: 0 24px 60px rgba(16, 24, 40, 0.22);
+  overflow: hidden;
+}
+
+#subscribe-modal .modal-body {
+  padding: 42px 48px 34px;
+}
+
+.bfu-subscribe__close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #8a94a6;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.bfu-subscribe__close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.bfu-subscribe__close:hover,
+.bfu-subscribe__close:focus {
+  color: #1f2d3d;
+  outline: none;
+}
+
+.bfu-subscribe__title {
+  margin: 0 0 10px;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #1f2d3d;
+}
+
+.bfu-subscribe__lead {
+  margin: 0 auto 24px;
+  max-width: 620px;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #5b6b7b;
+}
+
+.bfu-subscribe__responses {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.bfu-subscribe__field {
+  position: relative;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.bfu-subscribe__field-icon {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  display: flex;
+  color: #26a9e0;
+  pointer-events: none;
+}
+
+.bfu-subscribe__field-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+#subscribe-modal #mce-EMAIL {
+  width: 100%;
+  height: 54px;
+  margin: 0;
+  padding: 0 18px 0 46px;
+  border: 1px solid #d5e3ef;
+  border-radius: 12px;
+  background: #ffffff;
+  font-size: 15px;
+  text-align: left;
+  color: #1f2d3d;
+  box-shadow: 0 2px 6px rgba(16, 24, 40, 0.05);
+}
+
+#subscribe-modal #mce-EMAIL:focus {
+  border-color: #26a9e0;
+  box-shadow: 0 0 0 3px rgba(38, 169, 224, 0.18);
+  outline: none;
+}
+
+.bfu-subscribe__fine {
+  margin: 12px 0 22px;
+  text-align: center;
+  font-size: 13px;
+  color: #7c8a99;
+}
+
+.bfu-subscribe__fine a {
+  color: #26a9e0;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.bfu-subscribe__fine a:hover,
+.bfu-subscribe__fine a:focus {
+  text-decoration: underline;
+}
+
+.bfu-subscribe__actions {
+  text-align: center;
+}
+
+#subscribe-modal #bfu-subscribe-button {
+  min-width: 264px;
+}
+
+.bfu-subscribe__skip {
+  margin: 16px 0 0;
+  text-align: center;
+  font-size: 13px;
+  color: #7c8a99;
+}
+
+.bfu-subscribe__skip a {
+  color: #7c8a99;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.bfu-subscribe__skip a:hover,
+.bfu-subscribe__skip a:focus {
+  color: #26a9e0;
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Scanning modal (scan in progress) — Infinite Uploads brand
+   ========================================================================== */
+#scan-modal .modal-content.bfu-scanning {
+  position: relative;
+  border: none;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgba(16, 24, 40, 0.22);
+  overflow: hidden;
+}
+
+#scan-modal .modal-body {
+  padding: 48px 48px 44px;
+  text-align: center;
+}
+
+.bfu-scanning__close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #8a94a6;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.bfu-scanning__close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.bfu-scanning__close:hover,
+.bfu-scanning__close:focus {
+  color: #1f2d3d;
+  outline: none;
+}
+
+.bfu-scanning__spinner {
+  width: 64px;
+  height: 64px;
+  margin: 4px auto 28px;
+  border-radius: 50%;
+  border: 5px solid #cfe8f8;
+  border-top-color: #26a9e0;
+  animation: bfu-spin 0.9s linear infinite;
+}
+
+@keyframes bfu-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.bfu-scanning__title {
+  margin: 0 0 12px;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #1f2d3d;
+}
+
+.bfu-scanning__lead {
+  margin: 0 auto 26px;
+  max-width: 560px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #5b6b7b;
+}
+
+.bfu-scanning__progress {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: #7c8a99;
+}
+
+#scan-modal #bfu-scan-storage,
+#scan-modal #bfu-scan-files {
+  color: #26a9e0;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bfu-scanning__spinner {
+    animation-duration: 2.4s;
+  }
+}
+
+/* "Personalize Your Report" questions, the scan modal's first step */
+.bfu-report__question {
+  margin: 0 auto 22px;
+  padding: 0;
+  border: 0;
+}
+
+#scan-modal .bfu-report__label {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #1f2d3d;
+}
+
+.bfu-report__choices {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* The radio stays in the tab order for keyboard use; its label is the visible pill. */
+.bfu-report__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.bfu-report__choice {
+  margin: 0;
+  padding: 8px 18px;
+  border: 1px solid #d5e3ef;
+  border-radius: 999px;
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #5b6b7b;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.bfu-report__choice:hover {
+  border-color: #26a9e0;
+  color: #1f2d3d;
+}
+
+.bfu-report__input:checked + .bfu-report__choice {
+  border-color: #26a9e0;
+  background: #26a9e0;
+  color: #ffffff;
+}
+
+.bfu-report__input:focus-visible + .bfu-report__choice {
+  box-shadow: 0 0 0 3px rgba(38, 169, 224, 0.3);
+}
+
+#scan-modal #bfu-report-start {
+  min-width: 220px;
+  margin-top: 6px;
+}
+
+/* Bootstrap would otherwise swap in its own blue for the disabled state. */
+#scan-modal #bfu-report-start:disabled {
+  background-color: rgba(38, 169, 224, 1) !important;
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Room for two answer pills per row on phones. */
+@media (max-width: 600px) {
+  #scan-modal .modal-body {
+    padding: 40px 20px 32px;
+  }
+}
+
+/* ==========================================================================
+   Storage Usage Analysis (scan results) — Infinite Uploads brand
+   ========================================================================== */
+.bfu-results-card {
+  margin-bottom: 24px;
+  border: 1px solid #e6eef4;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
+}
+
+.bfu-results__header {
+  padding: 20px 30px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2d3d;
+}
+
+.bfu-results {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 22px 32px 30px;
+}
+
+/* Left: ring with the total */
+.bfu-results__visual {
+  flex: 0 0 auto;
+  width: 228px;
+  display: flex;
+  justify-content: center;
+}
+
+.bfu-results__ring {
+  position: relative;
+  width: 212px;
+  height: 212px;
+}
+
+.bfu-results__ring-track {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 20px rgba(38, 169, 224, 0.10));
+}
+
+.bfu-results__ring-inner {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+}
+
+.bfu-results__ring-icon {
+  margin-bottom: 4px;
+  color: #26a9e0;
+}
+
+.bfu-results__ring-icon svg {
+  width: 34px;
+  height: 34px;
+}
+
+.bfu-results__total {
+  font-size: 23px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+  color: #1f2d3d;
+}
+
+.bfu-results__total small {
+  font-size: 17px;
+  font-weight: 700;
+  color: #9aa7b4;
+}
+
+.bfu-results__total-label {
+  margin-top: 2px;
+  font-size: 12px;
+  color: #7c8a99;
+}
+
+/* Right: meta + upgrade card */
+.bfu-results__main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.bfu-results__meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.bfu-results__scanned {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: #7c8a99;
+}
+
+.bfu-results__scanned svg {
+  width: 15px;
+  height: 15px;
+}
+
+.bfu-results__refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 15px;
+  border: 1px solid #bcdff0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #26a9e0;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.bfu-results__refresh svg {
+  width: 15px;
+  height: 15px;
+}
+
+.bfu-results__refresh:hover,
+.bfu-results__refresh:focus,
+.bfu-results__refresh:active {
+  background: #26a9e0;
+  border-color: #26a9e0;
+  color: #ffffff;
+  border-radius: 8px; /* keep rounded on focus; WP admin forces a:focus{border-radius:2px} */
+  outline: none;
+}
+
+.bfu-results__breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 460px;
+  margin-bottom: 20px;
+}
+
+.bfu-results__type {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.bfu-results__type-dot {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.bfu-results__type-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: #1f2d3d;
+}
+
+.bfu-results__type-value {
+  flex: 0 0 auto;
+  font-weight: 700;
+  color: #1f2d3d;
+}
+
+.bfu-results__upgrade {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 22px 26px;
+  border-radius: 14px;
+  background: #e7f3fc;
+}
+
+.bfu-results__upgrade-icon {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(16, 24, 40, 0.07);
+}
+
+.bfu-results__upgrade-icon img {
+  width: 42px;
+  height: 42px;
+}
+
+.bfu-results__upgrade-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.bfu-results__upgrade-text h4 {
+  margin: 0 0 6px;
+  font-size: 19px;
+  font-weight: 800;
+  color: #1f2d3d;
+}
+
+.bfu-results__upgrade-text p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #5b6b7b;
+}
+
+.bfu-results__upgrade .btn-primary {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+@media (max-width: 960px) {
+  .bfu-results {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .bfu-results__visual {
+    width: 100%;
+  }
+  .bfu-results__upgrade {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* ==========================================================================
+   Settings card (maximum upload size)
+   Shares the tokens used by the scan/results cards: 16px radius, #e6eef4
+   border, #1f2d3d headings, #26a9e0 accent.
+   ========================================================================== */
+
+.bfu-settings-card {
+  margin-bottom: 24px;
+  border: 1px solid #e6eef4;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
+  overflow: hidden;
+}
+
+.bfu-settings__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 32px;
+  border-bottom: 1px solid #eef4f9;
+}
+
+/* The logo PNG is a self-contained icon on a transparent background, so it
+   needs no tile behind it - one would read as a second, mismatched shape. */
+.bfu-settings__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.bfu-settings__logo img {
+  display: block;
+  width: auto;
+  height: 30px;
+}
+
+/* Explicit sizing: WP admin styles bare h2/h3 inside .wrap. */
+.bfu-settings-card .bfu-settings__title {
+  margin: 0;
+  padding: 0;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #1f2d3d;
+}
+
+.bfu-settings__body {
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+  padding: 30px 32px 26px;
+}
+
+/* Left: the numbered how-to */
+/* Fixed column: the split must not depend on panel content, or toggling the
+   per-type grid makes both columns reflow. */
+.bfu-settings__guide {
+  flex: 0 0 340px;
+  min-width: 0;
+}
+
+.bfu-settings-card .bfu-settings__guide-title {
+  margin: 0 0 18px;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #1f2d3d;
+}
+
+.bfu-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.bfu-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0 0 16px;
+}
+
+.bfu-step:last-child {
+  margin-bottom: 0;
+}
+
+.bfu-step__num {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e8f4fb;
+  color: #0b6d95;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.bfu-step__text {
+  display: block;
+  min-width: 0;
+}
+
+.bfu-step__title {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #1f2d3d;
+}
+
+.bfu-step__desc {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+.bfu-settings__hint {
+  margin: 18px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+/* Right: the limit panel */
+.bfu-settings__panel {
+  /* Zero basis: width comes from the container, never from content. */
+  flex: 1 1 0;
+  min-width: 0;
+  border: 1px solid #e6eef4;
+  border-radius: 12px;
+  background: #fcfdfe;
+  padding: 22px 24px;
+}
+
+.bfu-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.bfu-settings-card .bfu-panel__title {
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #1f2d3d;
+}
+
+/* Rows stretch to the widest one, so every switch pill starts on the same
+   vertical line and every info icon ends on one. */
+.bfu-panel__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.bfu-settings-card .bfu-info {
+  color: #a8b6c5;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  cursor: help;
+}
+
+/* Toggle switch */
+.bfu-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.bfu-switch__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.bfu-switch__track {
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 21px;
+  border-radius: 999px;
+  background: #cfd8e3;
+  box-shadow: inset 0 0 0 1px #8595a9;
+  transition: background-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.bfu-switch__thumb {
+  position: absolute;
+  top: 2.5px;
+  left: 2.5px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.2);
+  transition: transform 0.18s ease;
+}
+
+.bfu-switch__input:checked + .bfu-switch__track {
+  background: #26a9e0;
+  box-shadow: inset 0 0 0 1px #1c93c6;
+}
+
+.bfu-switch__input:checked + .bfu-switch__track .bfu-switch__thumb {
+  transform: translateX(17px);
+}
+
+.bfu-switch__input:focus-visible + .bfu-switch__track {
+  outline: 2px solid #26a9e0;
+  outline-offset: 2px;
+}
+
+.bfu-switch__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #445566;
+}
+
+/* Limit rows */
+.bfu-limit + .bfu-limit {
+  margin-top: 26px;
+  padding-top: 24px;
+  border-top: 1px solid #d5e2ec;
+}
+
+.bfu-settings-card .bfu-input-limit {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  border: 1px solid #dbe4ec;
+  border-radius: 10px;
+  background: #ffffff;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.bfu-settings-card .bfu-input-limit:focus-within {
+  border-color: #26a9e0;
+  box-shadow: 0 0 0 3px rgba(38, 169, 224, 0.15);
+}
+
+/* Reset the WP/Bootstrap field chrome - the wrapper carries the border now. */
+.bfu-settings-card .bfu-limit__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 46px;
+  margin: 0;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+  color: #1f2d3d;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 46px;
+}
+
+.bfu-settings-card .bfu-limit__input:focus {
+  border: 0;
+  box-shadow: none;
+  outline: none;
+}
+
+.bfu-settings-card .bfu-limit__unit {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: stretch;
+  border-left: 1px solid #e6eef4;
+}
+
+.bfu-settings-card .bfu-limit__unit select {
+  height: 46px;
+  min-height: 46px;
+  margin: 0;
+  padding: 0 34px 0 14px;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+  color: #445566;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.bfu-settings-card .bfu-limit__unit select:focus {
+  border: 0;
+  box-shadow: none;
+  outline: none;
+}
+
+.bfu-limit__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+/* The scope's name leads its section, so each role reads as its own group. */
+.bfu-limit__role {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #1f2d3d;
+}
+
+.bfu-limit__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #e8f4fb;
+  color: #0b6d95;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: help;
+}
+
+/* Save */
+.bfu-settings__actions {
+  display: flex;
+  justify-content: center;
+  padding: 0 32px 30px;
+}
+
+.bfu-save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 12px 26px;
+  border: 0;
+  border-radius: 10px;
+  background: #26a9e0;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.bfu-save svg {
+  width: 17px;
+  height: 17px;
+}
+
+.bfu-save:hover,
+.bfu-save:focus,
+.bfu-save:active {
+  background: #1c93c6;
+  color: #ffffff;
+  /* keep the radius on focus; WP admin forces a smaller one on focused controls */
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(38, 169, 224, 0.3);
+}
+
+@media screen and (max-width: 960px) {
+  .bfu-settings__body {
+    flex-direction: column;
+    gap: 28px;
+    padding: 24px 20px 20px;
+  }
+  .bfu-settings__guide {
+    flex: 1 1 auto;
+  }
+  .bfu-settings__panel {
+    width: 100%;
+  }
+  .bfu-settings__header {
+    padding: 18px 20px;
+  }
+  .bfu-settings__actions {
+    padding: 0 20px 24px;
+  }
+  .bfu-save {
+    width: 100%;
+  }
+}
+
+/* ==========================================================================
+   Admin notices (settings saved / validation errors)
+   Overrides Bootstrap's .alert so notices match the card system.
+   ========================================================================== */
+
+.bfu-alert {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  padding: 13px 46px 13px 16px;
+  border: 1px solid;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.45;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+.bfu-alert__icon {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+}
+
+.bfu-alert__text {
+  min-width: 0;
+}
+
+.bfu-alert--success {
+  border-color: #b5e3ca;
+  background: #eff9f4;
+  color: #0f6b45;
+}
+
+.bfu-alert--error {
+  border-color: #f3c9c5;
+  background: #fdf3f2;
+  color: #96231f;
+}
+
+/* Bootstrap's .close is a floated 1.5rem xmark; make it a quiet inline control. */
+.bfu-alert .bfu-alert__close {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  float: none;
+  width: 26px;
+  height: 26px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  opacity: 0.55;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1;
+  text-shadow: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.bfu-alert .bfu-alert__close:hover,
+.bfu-alert .bfu-alert__close:focus {
+  opacity: 1;
+  background: rgba(16, 24, 40, 0.06);
+  color: inherit;
+  border-radius: 6px;
+}
+
+/* ==========================================================================
+   Per-file-type limits
+   ========================================================================== */
+
+.bfu-panel__toggles {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.bfu-types {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed #dfeaf3;
+}
+
+.bfu-types__heading {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #445566;
+}
+
+.bfu-types__heading small {
+  display: block;
+  margin-top: 1px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+/* One row: every type shares the line and shrinks equally. Narrow screens
+   fall back to wrapping (media query below). */
+.bfu-types__grid {
+  display: flex;
+  gap: 10px 8px;
+  overflow-x: auto;
+}
+
+.bfu-type {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.bfu-type__label {
+  display: block;
+  margin: 0 0 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+/* Compact variant of the limit field used by the type grid. */
+.bfu-settings-card .bfu-input-limit--sm {
+  border-radius: 8px;
+}
+
+.bfu-settings-card .bfu-input-limit--sm .bfu-limit__input {
+  min-width: 0;
+  height: 34px;
+  padding: 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 34px;
+}
+
+/* The spin buttons ate the width the placeholder needs at laptop sizes. */
+.bfu-settings-card .bfu-input-limit--sm .bfu-limit__input {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.bfu-settings-card .bfu-input-limit--sm .bfu-limit__input::-webkit-outer-spin-button,
+.bfu-settings-card .bfu-input-limit--sm .bfu-limit__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.bfu-settings-card .bfu-input-limit--sm .bfu-limit__input::placeholder {
+  font-weight: 500;
+  font-style: italic;
+  color: #9aa8b8;
+}
+
+.bfu-settings-card .bfu-input-limit--sm .bfu-limit__unit select {
+  height: 34px;
+  min-height: 34px;
+  padding: 0 22px 0 6px;
+  font-size: 12px;
+}
+
+@media screen and (max-width: 960px) {
+  .bfu-types__grid {
+    flex-wrap: wrap;
+  }
+  .bfu-type {
+    flex: 1 1 140px;
+  }
+}

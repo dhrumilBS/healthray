@@ -1,0 +1,23 @@
+.dupli-litebase-did-you-know {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 24px;
+    color: #444444;
+
+    a {
+        margin-left: 5px;
+    }
+
+    .fa-info-circle {
+        font-size: 20px;
+        margin-right: 5px;
+        vertical-align: text-top;
+        color: $primary-color;
+    }
+}

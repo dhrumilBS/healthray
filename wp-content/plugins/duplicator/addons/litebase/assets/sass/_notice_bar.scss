@@ -1,0 +1,50 @@
+#dup-notice-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #dddddd !important;
+    color: $dark-gray;
+    text-align: center;
+    width: calc(100% - 25px);
+    padding: 7px 20px 7px 25px;
+    margin-bottom: -4px;
+    max-height: 100px;
+    overflow: hidden;
+    border-top: 3px solid $primary-color;
+    position: relative;
+    left: -20px;
+    z-index: 999;
+
+    a {
+        color: $primary-color;
+    }
+
+    .dup-upgrade-arrow {
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .dup-dismiss-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        border: none;
+        padding: 5px;
+        margin-top: 1px;
+        margin-right: 10px;
+        background: 0 0;
+        color: $dark-gray;
+        cursor: pointer;
+
+        &:before {
+            background: 0 0;
+            content: "\f335";
+            display: block;
+            font: normal 20px/20px dashicons;
+            height: 20px;
+            text-align: center;
+            width: 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+    }
+}

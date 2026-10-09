@@ -1,0 +1,48 @@
+<?php
+
+
+
+defined('ABSPATH') || defined('DUPXABSPATH') || exit;
+
+ /**
+ * Variables
+  *
+ * @var Exception $exception
+ */
+
+use Duplicator\Installer\Core\Params\PrmMng;
+use Duplicator\Libs\Snap\SnapString;
+
+$recoveryLink = PrmMng::getInstance()->getValue(PrmMng::PARAM_RECOVERY_LINK);
+if (SnapString::isHTML($exception->getMessage())) {
+    $message = $exception->getMessage();
+} else {
+    $message = '<b>' . DUPX_U::esc_html($exception->getMessage()) . '</b>';
+}
+?>
+<div id="ajaxerr-data">
+    <b style="color:#B80000;">INSTALL ERROR!</b>
+    <p>
+        Message: <?php echo $message; ?><br>
+        Please see the <?php DUPX_View_Funcs::installerLogLink(); ?> file for more details.
+    </p>
+    <hr>
+    Trace:
+    <pre class="exception-trace"><?php
+        echo $exception->getTraceAsString();
+    ?></pre>
+</div>
+
+<?php if (!empty($recoveryLink)) { ?>
+    <p class="text-center">
+        <a href="<?php echo DUPX_U::esc_url($recoveryLink); ?>" class="default-btn" target="_parent">
+            <i class="fas fa-house-fire"></i> Restore Backup
+        </a> 
+    </p>
+<?php } ?>
+
+<div style="text-align:center; margin:10px auto 0px auto">
+    <i style='font-size:11px'>See online help for more details at <a href='https://duplicator.com/my-account/support/' target='_blank'>
+        duplicator.com
+    </a></i>
+</div>

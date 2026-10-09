@@ -1,0 +1,28 @@
+/*!
+DUPLICATOR LITEBASE ADDON STYLE
+Loaded only on Duplicator admin pages. Contains all selectors that live
+INSIDE .dup-styles. Depends on dupli-plugin-global-style and dupli-main so
+WordPress always loads it AFTER core CSS, allowing it to override Foundation
+button styles.
+*/
+
+@import "../../../../node_modules/foundation-sites/scss/foundation";
+@import '../../../../assets/sass/settings';
+@import "variables";
+
+.dup-styles {
+    @import "mocks";
+    @import "support";
+    @import "settings_feature_box";
+    @import "extra_plugin_item";
+    @import "about_us";
+    @import "welcome";
+    @import "notice_bar";
+    @import "packages";
+    @import "storages";
+    @import "db_reset";
+    @import "did_you_know";
+    @import "upgrade_link";
+    @import "email_subscribe";
+    @import "education_box";
+}

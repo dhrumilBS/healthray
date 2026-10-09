@@ -1,0 +1,25 @@
+.dup-box.dup-cloud-connect {
+    width: 600px;
+    background: $white;
+    border: 1px solid $black;
+
+    .dup-box-title {
+        background: $body-background;
+    }
+
+    .dupli-admin-notice {
+        width: 100%;
+        background: $body-background;
+    }
+
+    .dup-storage-info {
+        background-color: $body-background;
+        border: 1px solid $medium-gray;
+        margin-bottom: $global-margin;
+        padding: 10px;
+    }
+
+    input {
+        width: 100%;
+    }
+}

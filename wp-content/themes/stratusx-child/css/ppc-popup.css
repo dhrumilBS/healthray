@@ -46,10 +46,10 @@
 	transform: translate(-50%, -50%);
 	background-color: white;
 	z-index: 9999;
-	border-radius: 10px;
+	border-radius: 18px;
 	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 	width: 85%;
-	max-width: 550px;
+	max-width: 450px;
 	padding: 16px;
 	max-height: calc(100vh - 32px);
 	max-height: calc(100dvh - 32px);

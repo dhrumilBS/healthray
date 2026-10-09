@@ -110,7 +110,8 @@ class Action_Runner {
 					);
 				}
 
-				$result = $action->execute( $form_data, $widget_settings, $context );
+				$action_context = array_merge( $context, [ 'action_type' => $action_type ] );
+				$result = $action->execute( $form_data, $widget_settings, $action_context );
 
 				$action_results[] = array_merge(
 					[ 'type' => $action_type ],

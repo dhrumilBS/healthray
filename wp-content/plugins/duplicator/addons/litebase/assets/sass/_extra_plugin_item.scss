@@ -1,0 +1,99 @@
+// Styles for the reusable `extra-plugin-item.php` partial (ExtraPluginsMng card).
+// Self-contained: scope only on `.addons-container` + `.addon-item`. Safe to
+// drop into any page that renders the partial.
+
+.addons-container {
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    .addon-item {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        margin: 0;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden;
+
+        img {
+            border: 1px solid #eee;
+            float: left;
+            width: 75px;
+            padding: 10px;
+
+            &[src*="-mi"] {
+                padding: 13px;
+            }
+        }
+
+        h5 {
+            margin: 0 0 10px 100px;
+            font-size: 16px;
+
+            a {
+                color: #444;
+                display: inline-block;
+                margin: 0 10px 10px 0;
+
+                &:hover {
+                    color: #006799;
+                }
+            }
+        }
+
+        p {
+            margin: 0 0 0 100px;
+        }
+
+        .status {
+            flex-grow: 1;
+
+            .status-active {
+                color: #00a32a;
+            }
+
+            .status-installed {
+                color: #d63638;
+            }
+        }
+
+        .details {
+            padding: 30px 20px;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            background-color: #f7f7f7;
+            border-top: 1px solid #ddd;
+            padding: 20px;
+            min-height: 75px;
+            position: relative;
+
+            .msg p {
+                margin: 0;
+            }
+
+            .msg a,
+            .msg a:hover {
+                color: inherit;
+            }
+
+            .msg.error {
+                color: #d63638;
+            }
+        }
+
+        .action-button {
+            .button.disabled,
+            .button.loading {
+                cursor: default;
+            }
+        }
+    }
+}

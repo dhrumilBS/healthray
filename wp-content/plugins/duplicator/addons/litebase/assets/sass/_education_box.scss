@@ -1,0 +1,39 @@
+// Single education box at the bottom of the scan page: blurb + subscribe form.
+.dupli-litebase-scan-education-box {
+    max-width: 825px;
+    margin: 30px auto 0;
+    padding: 20px 25px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 8px 6px -6px $dark-gray;
+
+    .dupli-litebase-did-you-know + .dupli-litebase-subscribe-form {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid #f0f0f1;
+    }
+}
+
+// Media Cleanup cross-sell: a row inside the scan report, not a separate card.
+#dupli-litebase-media-cleanup-scan {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 12px 15px;
+    border-top: 1px solid $medium-gray;
+
+    .dupli-litebase-did-you-know {
+        font-size: 14px;
+    }
+
+    .dupli-dismissable-dismiss {
+        color: #787c82;
+        text-decoration: none;
+
+        &:hover {
+            color: #1d2327;
+        }
+    }
+}

@@ -15,12 +15,7 @@
     'use strict';
 
     $(function () {
-
-        /* ════════════════════════════════════════════════════════════
-           DOM
-        ════════════════════════════════════════════════════════════ */
         const $wrapper = $('.abha-wrapper');
-
         if (!$wrapper.length) {
             return;
         }
@@ -66,11 +61,6 @@
         const $addressInput = $('#abha-address-input');
         const $addressType = $('#abha-address-type');
         const $submitSuggestion = $('#submitSuggestion');
-
-
-        /* ════════════════════════════════════════════════════════════
-           CONSTANTS & STATE
-        ════════════════════════════════════════════════════════════ */
         const VERIFY_ACTION = {
             'aadhaar': 'verify_aadhaar_otp',
             'mobile': 'verify_PHR_otp',
@@ -83,17 +73,11 @@
         const ADDRESS_RE = /^[a-zA-Z0-9_.]+$/;
         const TX_STORAGE_KEY = 'abha_transactionId';
 
-        let currentType = null;    // 'aadhaar' | 'mobile'
-        let currentNumber = null;    // number the visitor entered
-        let aadhaarProfile = null;    // data returned by the aadhaar OTP verify
+        let currentType = null;   
+        let currentNumber = null;   
+        let aadhaarProfile = null;   
         let statesLoaded = false;
         let resendTimer = null;
-
-
-        /* ════════════════════════════════════════════════════════════
-           HELPERS
-        ════════════════════════════════════════════════════════════ */
-
         function toggleLoading(show) {
             if (show) {
                 $loadingSpinner.removeAttr('hidden').attr('aria-busy', 'true');
@@ -102,7 +86,6 @@
             }
         }
 
-        /** kind: 'is-success' | 'is-error' */
         function showMessage(text, kind) {
             $responseMessage
                 .text(text)
@@ -125,12 +108,10 @@
             $('<span class="inline-error" role="alert"></span>').text(message).insertAfter($el);
         }
 
-        /** Numeric fields are type=text/tel on novalidate forms, so clean them here. */
         function digitsOnly(value) {
             return String(value == null ? '' : value).replace(/\D+/g, '');
         }
 
-        /** statusText is usually just "error", which helps nobody. */
         function requestErrorMessage(xhr) {
             if (xhr && xhr.status === 0) {
                 return 'Network error. Please check your connection and try again.';
@@ -141,11 +122,6 @@
             return fromServer || 'Something went wrong. Please try again.';
         }
 
-        /**
-         * Disable a button for the duration of a request. A second click would
-         * make the gateway send another OTP and the later response could
-         * overwrite the transaction ID of the first.
-         */
         function lockButton($button) {
             if (!$button || !$button.length) {
                 return function () { };
@@ -164,16 +140,12 @@
             clearMessage();
         }
 
-
-        /* ── Transaction ID ─────────────────────────────────────── */
-
         function setTransactionId(id) {
             if (!id) {
                 return;
             }
 
             $transactionIdField.val(id);
-
             try {
                 localStorage.setItem(TX_STORAGE_KEY, id);
             } catch (err) {
@@ -195,10 +167,6 @@
             return id;
         }
 
-        /**
-         * Drop the ID from any earlier attempt. Without this, a failed retry
-         * leaves a closed transaction behind and the next verify is rejected.
-         */
         function clearTransactionId() {
             $transactionIdField.val('');
 
@@ -208,9 +176,6 @@
                 // Nothing to clean up.
             }
         }
-
-
-        /* ── AJAX ───────────────────────────────────────────────── */
 
         function ajaxUrl() {
             return (typeof ajax_obj === 'object' && ajax_obj.url) ? ajax_obj.url : ajax_obj;
@@ -239,9 +204,6 @@
                 data: withNonce($.extend({ action: action }, params)),
             });
         }
-
-
-        /* ── UI bits ────────────────────────────────────────────── */
 
         function displayImagePreview(imageUrl) {
             $wrapper.find('.image-preview').remove();
@@ -335,11 +297,6 @@
             $submitSuggestion.prop('disabled', true);
         }
 
-
-        /* ════════════════════════════════════════════════════════════
-           VALIDATION
-        ════════════════════════════════════════════════════════════ */
-
         function validateDemographicsForm() {
             clearFieldErrors();
 
@@ -391,11 +348,6 @@
 
             return valid;
         }
-
-
-        /* ════════════════════════════════════════════════════════════
-           LOOKUPS – states, districts, suggestions
-        ════════════════════════════════════════════════════════════ */
 
         function fetchStates() {
             apiGet('get_states')
@@ -462,7 +414,6 @@
                         return;
                     }
 
-                    // No list is not fatal: a custom address can still be typed.
                     enableAddressEntry(action);
                     showMessage(
                         (res.data && res.data.message) || 'No suggestions available. Enter a custom ABHA address.',
@@ -501,11 +452,6 @@
             });
         }
 
-
-        /* ════════════════════════════════════════════════════════════
-           STEP 1 – request an OTP
-        ════════════════════════════════════════════════════════════ */
-
         function handleAuthFormSubmit(e) {
             e.preventDefault();
             clearMessage();
@@ -516,9 +462,6 @@
             const number = digitsOnly($form.find('.auth-input').val());
             const action = (type === 'aadhaar') ? 'aadhaar_auth_form_submit' : 'PHR_mobile_auth_form_submit';
             const $consent = $form.find('input[type="checkbox"]');
-
-            // The form is novalidate, so `required` on the consent box is not
-            // enforced by the browser - and ABDM needs that consent.
             if ($consent.length && !$consent.is(':checked')) {
                 showMessage('Please accept the consent checkbox to continue.', 'is-error');
                 return;
@@ -566,11 +509,6 @@
                     unlock();
                 });
         }
-
-
-        /* ════════════════════════════════════════════════════════════
-           STEP 2 – verify an OTP
-        ════════════════════════════════════════════════════════════ */
 
         function handleOtpFormSubmit(e) {
             e.preventDefault();
@@ -647,14 +585,12 @@
                 });
         }
 
-        /** The gateway returned a finished card straight away. */
         function onCardImage(data) {
             displayImagePreview(data.image_url);
             $sections.attr('hidden', '');
             showMessage(data.message || 'Your ABHA card is ready.', 'is-success');
         }
 
-        /** Aadhaar OTP accepted; decide whether a mobile OTP is still needed. */
         function onAadhaarVerified(data) {
             aadhaarProfile = data.data || {};
             setTransactionId(aadhaarProfile.transaction_id);
@@ -669,7 +605,6 @@
             fetchSuggestions('get_aadhaar_suggestion', getTransactionId());
         }
 
-        /** Mobile OTP accepted; list any ABHA addresses already on that number. */
         function onPhrVerified(data) {
             setTransactionId(data.transactionId);
 
@@ -709,7 +644,6 @@
             showMessage(data.message || 'OTP verified.', 'is-success');
         }
 
-        /** Alternate-mobile OTP accepted; move on to address suggestions. */
         function onAltMobileVerified(data) {
             setTransactionId(data.transactionId || (data.data && data.data.transaction_id));
             showSection($suggestionSection);
@@ -742,11 +676,6 @@
                     toggleLoading(false);
                 });
         }
-
-
-        /* ════════════════════════════════════════════════════════════
-           STEP 5 – confirm the ABHA address
-        ════════════════════════════════════════════════════════════ */
 
         function handleAddressSubmit(e) {
             e.preventDefault();
@@ -809,9 +738,6 @@
                         showMessage((res.data && res.data.message) || 'Failed to create the ABHA address.', 'is-error');
                         return;
                     }
-
-                    // The API sends the card image when it can render one and
-                    // plain JSON when it cannot; both mean the address is created.
                     if (res.data.image_url) {
                         displayImagePreview(res.data.image_url);
                     }
@@ -868,11 +794,6 @@
                 });
         }
 
-
-        /* ════════════════════════════════════════════════════════════
-           STEP 4 – demographics (new ABHA address)
-        ════════════════════════════════════════════════════════════ */
-
         function submitDemographics() {
             if (!validateDemographicsForm()) {
                 return;
@@ -922,11 +843,6 @@
                 });
         }
 
-
-        /* ════════════════════════════════════════════════════════════
-           EVENTS
-        ════════════════════════════════════════════════════════════ */
-
         $('.tab-btn').on('click', function () {
             const view = $(this).data('view');
 
@@ -947,9 +863,6 @@
         $resendButtons.on('click', function (e) {
             e.preventDefault();
             clearMessage();
-
-            // Inside the alternate-mobile step it is the mobile OTP that has to
-            // be resent, not the one that started the flow.
             if ($(this).closest('.abha-section').is($adharMobileOtpSection)) {
                 sendAltMobileOtp(getTransactionId(), digitsOnly($altMobileInput.val()));
                 return;
@@ -993,7 +906,6 @@
 
         $state.on('change', function () {
             const stateId = $(this).val();
-
             if (stateId) {
                 fetchDistricts(stateId);
                 return;
@@ -1004,7 +916,6 @@
 
         $('#create-abha-btn').on('click', function () {
             populateDateDropdowns();
-
             if (!statesLoaded) {
                 statesLoaded = true;
                 fetchStates();
@@ -1018,9 +929,7 @@
 
             $input.siblings('.inline-error').remove();
             $suggestionList.find('.suggestion-item').removeClass('selected-address');
-
             const value = $input.val().trim();
-
             if (value && !ADDRESS_RE.test(value)) {
                 addFieldError($input, 'Only letters, numbers, _ and . are allowed.');
                 return;
@@ -1035,11 +944,8 @@
             }
         });
 
-        // Numeric fields: strip anything that is not a digit, including pastes.
         $('.auth-input, .otp-input, #adhar-otp-mobile-input, #pincode').on('input paste', function () {
             const $input = $(this);
-
-            // Deferred so a pasted value is in the field before it is cleaned.
             setTimeout(function () {
                 const cleaned = digitsOnly($input.val());
 
@@ -1048,11 +954,6 @@
                 }
             }, 0);
         });
-
-
-        /* ════════════════════════════════════════════════════════════
-           INIT
-        ════════════════════════════════════════════════════════════ */
         clearTransactionId();
         populateDateDropdowns();
     });

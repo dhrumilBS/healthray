@@ -1,0 +1,62 @@
+#dupli-litebase-db-reset {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+
+    p,
+    div {
+        font-size: 15px;
+    }
+
+    .dupli-litebase-db-reset-title {
+        margin: 20px 0;
+    }
+
+    .dupli-litebase-db-reset-card {
+        margin: 0 0 1.5rem;
+        text-align: left;
+
+        .addons-container {
+            width: 100%;
+        }
+    }
+
+    .dupli-litebase-db-reset-headline {
+        margin: 1.5rem 0 1rem;
+    }
+
+    .dupli-litebase-db-reset-details {
+        display: flex;
+        align-items: center;
+        column-gap: 20px;
+        text-align: left;
+    }
+
+    .dupli-litebase-db-reset-screenshot img,
+    .dupli-litebase-db-reset-features {
+        margin: 0;
+        height: 200px;
+    }
+
+    .dupli-litebase-db-reset-screenshot img {
+        width: auto;
+        border: 1px solid $medium-gray;
+    }
+
+    .dupli-litebase-db-reset-features {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        list-style: none;
+        padding: 0;
+
+        li {
+            color: #777;
+
+            i.fa {
+                color: $primary-color;
+                margin-right: 6px;
+            }
+        }
+    }
+}

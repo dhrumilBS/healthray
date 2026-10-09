@@ -1,0 +1,28 @@
+.dupli-litebase-dashboard-recommended {
+    line-height: 20px;
+
+    .dupli-litebase-dashboard-recommended-label {
+        color: #787c82;
+    }
+
+    .dupli-litebase-dashboard-recommended-actions a:after {
+        content: "|";
+        cursor: not-allowed;
+        margin: 0 5px;
+        color: #646970;
+    }
+
+    .dupli-litebase-dashboard-recommended-actions a:last-child:after {
+        content: "";
+        margin: 0;
+    }
+
+    .dupli-litebase-dashboard-recommended-dismiss {
+        color: #787c82;
+        text-decoration: none;
+
+        &:hover {
+            color: #d63638;
+        }
+    }
+}

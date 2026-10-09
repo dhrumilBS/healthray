@@ -129,10 +129,12 @@ abstract class Collection_Loop_Pagination_Button extends Atomic_Element_Base {
 		return [
 			Atomic_Paragraph::generate()
 				->settings( [
-					'paragraph' => Html_V3_Prop_Type::generate( [
-						'content' => String_Prop_Type::generate( static::get_default_label() ),
-						'children' => [],
-					] ),
+					'paragraph' => class_exists( 'Elementor\Modules\AtomicWidgets\PropTypes\Escaped_Html_Prop_Type' )
+						? \Elementor\Modules\AtomicWidgets\PropTypes\Escaped_Html_Prop_Type::generate( static::get_default_label() )
+						: Html_V3_Prop_Type::generate( [
+							'content' => String_Prop_Type::generate( static::get_default_label() ),
+							'children' => [],
+						] ),
 					'tag' => String_Prop_Type::generate( 'span' ),
 				] )
 				->build(),

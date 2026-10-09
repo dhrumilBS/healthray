@@ -344,7 +344,7 @@ class Upload extends Field_Base {
 		foreach ( $files[ $id ] as $index => $file ) {
 			// not uploaded
 			if ( ! $field['required'] && UPLOAD_ERR_NO_FILE === $file['error'] ) {
-				return;
+				continue;
 			}
 
 			// is the file required and missing?
@@ -489,8 +489,12 @@ class Upload extends Field_Base {
 				continue;
 			}
 
-			$uploads_dir = $this->get_ensure_upload_dir();
 			$file_extension = pathinfo( $file['name'], PATHINFO_EXTENSION );
+			if ( in_array( strtolower( $file_extension ), $this->get_blacklist_file_ext(), true ) ) {
+				continue;
+			}
+
+			$uploads_dir = $this->get_ensure_upload_dir();
 			$filename = uniqid() . '.' . $file_extension;
 			$filename = wp_unique_filename( $uploads_dir, $filename );
 			$new_file = trailingslashit( $uploads_dir ) . $filename;

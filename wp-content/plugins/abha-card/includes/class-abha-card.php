@@ -2,33 +2,33 @@
 /**
  * Class ABHA_Card
  *
- * Registers all AJAX endpoints for the Aadhaar / ABHA / PHR flows.
+ * Registers all AJAX endpoints for Aadhaar / ABHA / PHR flows.
  *
  * Flow overview
  * ─────────────
  * Section 1 – Aadhaar-based ABHA creation (v2 m1-external/aadhaar/*)
- *   1.1  generate_otp          – send OTP to the Aadhaar-linked mobile
- *   1.2  verify_otp            – verify OTP, receive card image or user data
+ *   1.1  generate_otp          – send OTP to Aadhaar-linked mobile
+ *   1.2  verify_otp            – verify OTP, receive ABHA card image or user data
  *   1.3  mobile/generate_otp   – send OTP to an alternate mobile number
- *   1.4  mobile/verify_otp     – verify the alternate-mobile OTP
+ *   1.4  mobile/verify_otp     – verify alternate-mobile OTP
  *   1.5  suggestion            – fetch suggested ABHA addresses
- *   1.6  link                  – link the chosen ABHA address
+ *   1.6  link                  – link chosen ABHA address
  *
  * Section 2 – PHR mobile-based flow (v1 m1-external/phr/*)
- *   2.1  phr/generate_otp      – send OTP to a mobile number
- *   2.2  phr/verify_otp        – verify the PHR OTP
- *   2.3  phr/state             – list states
+ *   2.1  phr/generate_otp      – send OTP to mobile for PHR login/register
+ *   2.2  phr/verify_otp        – verify PHR OTP
+ *   2.3  phr/state             – list all states
  *   2.4  phr/district          – list districts for a state
  *   2.5  phr/add_demographic_details
  *   2.6  phr/suggession        – fetch suggested PHR addresses
- *   2.7  phr/login             – log in with the chosen PHR address
+ *   2.7  phr/login             – log in with chosen PHR address
  *
  * Upstream contract
  * ─────────────────
- * The node API always answers with HTTP 200 and puts the real result in the
- * body: { status, statusState, message, data }. `status` is therefore the only
- * reliable success signal, and an unreachable ABDM gateway surfaces as status
- * 404/5xx with a generic message. See map_upstream_message().
+ * The Healthray node API always answers with HTTP 200 and puts the real result
+ * in the body: { status, statusState, message, data }. `status` is therefore the
+ * only reliable success signal, and an unreachable ABDM gateway surfaces as
+ * status 404/5xx with a generic message. See map_upstream_message().
  */
 
 if (!defined('ABSPATH')) {
@@ -130,7 +130,6 @@ class ABHA_Card
     private function client_ip(): string
     {
         $ip = $_SERVER['REMOTE_ADDR'] ?? '';
-
         return is_string($ip) ? $ip : '';
     }
 
@@ -225,7 +224,6 @@ class ABHA_Card
 
         if (is_wp_error($response)) {
             $this->log("{$method} {$endpoint} transport error: " . $response->get_error_message(), true);
-
             return [
                 'ok' => false,
                 'error' => 'Could not reach the ABHA service. Please check your connection and try again.',
@@ -242,12 +240,11 @@ class ABHA_Card
     }
 
     /**
-     * Decode a JSON body; returns null on failure.
+     * Decode JSON body; returns null on failure.
      */
     private function parse_json(string $raw): ?array
     {
         $data = json_decode($raw, true);
-
         return (json_last_error() === JSON_ERROR_NONE && is_array($data)) ? $data : null;
     }
 
@@ -280,7 +277,6 @@ class ABHA_Card
     {
         // 422 puts the field error in data[0]; 400 uses `message`.
         $detail = '';
-
         if (isset($body['data'][0]) && is_string($body['data'][0]) && $body['data'][0] !== '') {
             $detail = $body['data'][0];
         } elseif (!empty($body['message']) && is_string($body['message'])) {
@@ -341,8 +337,8 @@ class ABHA_Card
 
     /**
      * An ABHA card image carries a name, photo and health ID. Nothing in the
-     * plugin reads a stored copy - the response embeds the image as a data URI -
-     * so writing it into the public uploads folder is off by default.
+     * plugin reads the stored copy - the response embeds the image as a data
+     * URI - so writing it into the public uploads folder is off by default.
      *
      * Opt in with: add_filter('abha_card_store_card_image', '__return_true');
      */
@@ -356,10 +352,8 @@ class ABHA_Card
         $extension = preg_replace('/[^a-z0-9]/i', '', $extension) ?: 'png';
 
         $upload_dir = wp_upload_dir();
-
         if (!empty($upload_dir['error'])) {
-            $this->log('card image not stored: ' . $upload_dir['error'], true);
-
+            $this->log('card image not stored: ' . $upload_dir['error']);
             return;
         }
 
@@ -373,7 +367,6 @@ class ABHA_Card
         if (!file_exists($upload_path . '.htaccess')) {
             file_put_contents($upload_path . '.htaccess', "Require all denied\n<IfModule !mod_authz_core.c>\ndeny from all\n</IfModule>\n");
         }
-
         if (!file_exists($upload_path . 'index.php')) {
             file_put_contents($upload_path . 'index.php', "<?php // Silence is golden.\n");
         }
@@ -381,7 +374,7 @@ class ABHA_Card
         $filename = gmdate('Y_m_d_H_i_s_') . bin2hex(random_bytes(8)) . '.' . $extension;
 
         if (file_put_contents($upload_path . $filename, $raw_body) === false) {
-            $this->log('card image could not be written to ' . $upload_path, true);
+            $this->log('card image could not be written to ' . $upload_path);
         }
     }
 

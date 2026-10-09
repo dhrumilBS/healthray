@@ -1,0 +1,76 @@
+.dupli-litebase-subscribe-form {
+    color: #3c434a;
+    text-align: center;
+
+    .dupli-litebase-subscribe-input-area {
+        display: inline-flex;
+        align-items: stretch;
+    }
+
+    .dupli-litebase-subscribe-email {
+        padding: 4px 12px;
+        margin: 0;
+        width: 320px;
+        font-size: 14px;
+        border: 1px solid #c5c5c5;
+        border-right: 0;
+        border-radius: 3px 0 0 3px;
+        height: auto;
+        box-shadow: none;
+    }
+
+    .dupli-litebase-subscribe-button {
+        border-radius: 0 3px 3px 0;
+        margin: 0;
+        font-size: 15px;
+        padding: 10px 12px;
+        background-color: $litebase-upgrade-color;
+        color: #fff;
+        border: 0;
+        cursor: pointer;
+        min-height: 0;
+        line-height: 1.4;
+
+        &:hover,
+        &:focus {
+            background-color: $litebase-upgrade-color-hover;
+            color: #fff;
+        }
+
+        &:focus {
+            box-shadow: 0 0 0 1px #fff, 0 0 0 3px $litebase-upgrade-color-hover;
+        }
+
+        &[disabled],
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    }
+
+    .dupli-litebase-subscribe-desc {
+        margin-top: 10px;
+
+        small {
+            font-size: 13px;
+        }
+    }
+}
+
+// Tweaks on top of the shared .dupli-notice-icon-warning-wrapper styling
+// for the first-backup admin notice.
+.dupli-litebase-first-backup-banner {
+    .dupli-litebase-first-backup-banner-icon {
+        font-size: 48px;
+        margin-right: 15px;
+        align-self: center;
+    }
+
+    .dupli-litebase-subscribe-form {
+        margin: 6px 0 0 0;
+    }
+
+    p {
+        margin: 6px 0 0 0;
+    }
+}

@@ -1,0 +1,10 @@
+<?php
+
+defined('ABSPATH') || defined('DUPXABSPATH') || exit;
+
+dupxTplRender('pages-parts/head/header-main', [
+    'htmlTitle'       => 'Step <span class="step">1</span> of 2: ' .
+        'Deploy Uploaded Package <div class="sub-header">This step will extract the archive file, install & update the database.</div>',
+    'showSwitchView'  => true,
+    'showHeaderLinks' => true,
+]);

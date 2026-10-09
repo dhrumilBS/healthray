@@ -58,7 +58,7 @@ if (!function_exists('hr_clients_shortcode')) {
             array(
                 'eyebrow' => 'Trusted across Globe',
                 'title' => 'Hospitals and clinics that run on Healthray',
-                'subtitle' => 'From single-doctor clinics to multi-speciality hospitals - 1,000+ healthcare facilities manage their daily operations on our platform.',
+                'subtitle' => 'From single-doctor clinics to multi-speciality hospitals - 2,500+ healthcare facilities manage their daily operations on our platform.',
                 'note' => '…and 2500+ more across India.',
                 'note_link' => home_url('/case-studies/'),
                 'note_link_text' => 'Read their case studies →',

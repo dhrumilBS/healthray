@@ -1,0 +1,39 @@
+.dupli-litebase-upgrade-link,
+.dupli-litebase-upgrade-link strong {
+    color: $litebase-upgrade-color;
+    font-weight: 600;
+
+    &:hover,
+    &:focus {
+        color: $litebase-upgrade-color-hover;
+    }
+}
+
+.dupli-litebase-upgrade-btn,
+.dupli-litebase-upgrade-btn:visited {
+    background-color: $litebase-upgrade-color;
+    border-color: $litebase-upgrade-color;
+    color: #fff;
+
+    &:hover,
+    &:focus {
+        background-color: $litebase-upgrade-color-hover;
+        border-color: $litebase-upgrade-color-hover;
+        color: #fff;
+    }
+}
+
+.button.hollow.dupli-litebase-upgrade-btn,
+.button.hollow.dupli-litebase-upgrade-btn:visited {
+    background: transparent;
+    border-color: $litebase-upgrade-color;
+    color: $litebase-upgrade-color;
+    font-weight: 700;
+
+    &:hover,
+    &:focus {
+        background: transparent;
+        border-color: $litebase-upgrade-color-hover;
+        color: $litebase-upgrade-color-hover;
+    }
+}

@@ -1,0 +1,28 @@
+#dupli-packages-bottom-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .dupli-packages-bottom-bar-icon {
+        font-size: 40px;
+        color: #fe4716;
+    }
+
+    .dupli-packages-bottom-bar-feature {
+        flex-grow: 1;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    .dupli-dismissable-dismiss {
+        color: #787c82;
+        text-decoration: none;
+        font-size: 16px;
+
+        &:hover {
+            color: #1d2327;
+        }
+    }
+}

@@ -1,0 +1,375 @@
+// Styles for LiteBase blurred mock pages.
+//
+// LiteBase pulls in only the rules needed by each mock page so the silhouette
+// behind the blur matches the equivalent full-feature page. Core/shared
+// classes loaded site-wide are NOT duplicated here.
+
+/* ============================================================
+   IMPORT MOCK
+============================================================ */
+
+.dupli-import-header {
+    position: relative;
+    margin-bottom: 20px;
+    margin-top: 10px;
+
+    .title {
+        margin: 0;
+        line-height: 40px;
+        font-size: 20px;
+    }
+
+    hr {
+        margin: 0;
+    }
+}
+
+.dupli-import-upload-box {
+    background: $white;
+    border: 1px dashed $medium-gray;
+    border-radius: 2px;
+    height: 220px;
+    box-sizing: border-box;
+    position: relative;
+    text-align: center;
+    font-size: 14px;
+
+    > div {
+        width: 100%;
+    }
+
+    .dup-import-button {
+        display: inline-block;
+        padding: 0 30px !important;
+        font-weight: normal;
+        box-sizing: border-box;
+        height: 40px;
+    }
+
+    .fs-upload-target {
+        color: $black;
+        border: 0 none;
+        border-radius: 0;
+        height: 218px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.dup-drag-drop-message {
+    font-size: 18px;
+    line-height: 1;
+    font-weight: bold;
+    display: block;
+    margin: 20px 0;
+}
+
+.dupli-import-upload-file-footer {
+    padding: 5px;
+    text-align: right;
+}
+
+table.dup-import-avail-packs {
+    width: 100%;
+    min-height: inherit;
+    border: 1px solid $medium-gray;
+    border-collapse: collapse;
+
+    th {
+        background-color: $light-gray;
+        font-weight: bold;
+    }
+
+    th,
+    td {
+        padding: 10px;
+        text-align: left;
+        vertical-align: top;
+        line-height: 30px;
+    }
+
+    tbody tr:nth-child(even) {
+        border: 1px solid $medium-gray;
+    }
+
+    thead {
+        border-bottom: 1px solid $light-gray;
+    }
+
+    .size {
+        width: 100px;
+    }
+
+    .created {
+        text-align: left;
+        width: 125px;
+    }
+
+    .funcs {
+        text-align: center;
+        width: 400px;
+        box-sizing: border-box;
+        white-space: nowrap;
+
+        button,
+        .button {
+            min-width: 120px;
+        }
+
+        .separator {
+            margin-left: 5px;
+        }
+
+        div.actions {
+            text-align: right;
+        }
+    }
+}
+
+/* ============================================================
+   STAGING MOCK
+============================================================ */
+
+.dupli-versions-column {
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: nowrap;
+
+    i {
+        width: 14px;
+        color: #666;
+    }
+}
+
+.dupli-backup-deleted {
+    color: #999;
+    font-style: italic;
+}
+
+.dupli-staging-table-footer {
+    text-align: right;
+    font-size: 12px;
+}
+
+.dupli-open-admin-column .full-cell-button,
+.dupli-delete-column .full-cell-button {
+    box-shadow: none;
+}
+
+.dupli-check-column-narrow {
+    width: 10px;
+}
+
+/* ============================================================
+   RECOVERY MOCK
+============================================================ */
+
+.dupli-recovery-widget-wrapper {
+    font-size: 14px;
+
+    .button {
+        margin-right: 10px;
+        min-width: 190px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+    label {
+        margin-bottom: 5px;
+        display: block;
+    }
+}
+
+.dupli-recovery-details-max-width-wrapper {
+    max-width: 900px;
+
+    .dupli-recovery-buttons {
+        text-align: right;
+    }
+}
+
+.dupli-recovery-point-selector {
+    .recovery-select {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        margin: 0 0 10px 0;
+    }
+}
+
+.dupli-recovery-point-selector-area-wrapper {
+    margin-bottom: 20px;
+
+    .dupli-opening-packages-windows {
+        float: right;
+    }
+}
+
+.dupli-recovery-point-selector-area {
+    text-align: right;
+}
+
+.dupli-recovery-package-info table {
+    border-collapse: collapse;
+
+    td {
+        padding: 0 5px 5px 0;
+    }
+}
+
+.dupli-recovery-active-link-header {
+    > .main-icon {
+        display: block;
+        width: 30px;
+        height: 36px;
+        color: #000;
+        text-align: center;
+        line-height: 36px;
+        font-size: 23px;
+        margin-right: 10px;
+        float: left;
+    }
+
+    > .main-title {
+        font-size: 16px;
+        line-height: 1;
+        font-weight: bold;
+    }
+
+    > .main-subtitle {
+        font-style: italic;
+        font-size: 12px;
+        margin-top: 2px;
+    }
+}
+
+.dupli-recovery-point-actions {
+    > .copy-link {
+        position: relative;
+        white-space: nowrap;
+        box-sizing: border-box;
+        border: 1px solid $medium-gray;
+        height: 30px;
+        line-height: 30px;
+        background: $white;
+        color: #000;
+        padding: 0 35px 0 5px;
+        border-radius: 2px;
+
+        .content {
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .copy-icon {
+            position: absolute;
+            right: -1px;
+            top: -1px;
+            width: 30px;
+            line-height: 30px;
+            text-align: center;
+            color: white;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+            background-color: $medium-gray;
+        }
+
+        &.disabled {
+            cursor: not-allowed;
+            border: 1px solid $medium-gray !important;
+            pointer-events: none;
+
+            .copy-icon {
+                background-color: $medium-gray !important;
+            }
+        }
+    }
+
+    > .dupli-recovery-buttons {
+        margin-top: 10px;
+        text-align: right;
+    }
+}
+
+/* ============================================================
+   STATIC POPUP -- LiteBase-only (no Pro counterpart)
+============================================================ */
+
+.dupli-litebase-static-popup {
+    // Centered inside the [top, bottom] band via auto vertical margins; the top
+    // bound keeps the popup below the admin bar + Duplicator headers. max-height
+    // must equal the band height: a taller popup would resolve the auto margins
+    // to negative values and rise above the top bound.
+    position: fixed;
+    top: 216px;
+    bottom: 184px;
+    left: calc(50% + 80px);
+    transform: translateX(-50%);
+    height: fit-content;
+    max-height: calc(100vh - 400px);
+    margin: auto 0;
+    width: 730px;
+    max-width: calc(100vw - 80px);
+    z-index: 100;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-radius: 6px;
+    box-shadow: 0 0 60px 30px rgba(0, 0, 0, 0.15);
+    text-align: center;
+
+    // On short viewports give the popup the space reserved at the bottom,
+    // so it fits without internal scrolling while still clearing the headers.
+    @media screen and (max-height: 800px) {
+        bottom: 20px;
+        max-height: calc(100vh - 236px);
+    }
+
+    .dupli-litebase-static-popup-notice {
+        padding: 10px;
+        font-size: 15px;
+        line-height: 24px;
+        color: #444;
+        background: #fcf9e8;
+
+        .fa-exclamation-triangle {
+            margin-right: 10px;
+            font-size: 16px;
+            color: #e27730;
+        }
+    }
+
+    .dupli-litebase-static-popup-content {
+        padding: 40px 40px 20px;
+        background-color: #fff;
+
+        h2 {
+            margin: 0 0 16px;
+            padding: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        p {
+            margin: 0 0 30px;
+            padding: 0;
+            font-size: 16px;
+            line-height: 24px;
+            color: #777;
+
+            &:last-of-type {
+                margin: 20px 0;
+            }
+        }
+    }
+
+    .dupli-litebase-static-popup-cta {
+        padding: 30px;
+        background: #f5f5f5;
+        text-align: center;
+    }
+}

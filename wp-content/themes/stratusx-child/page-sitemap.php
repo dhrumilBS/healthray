@@ -243,8 +243,8 @@ $speciality_pages = new WP_Query($speciality_args);
 			<h2>LIMS Compare With</h2>
 			<ul class="link-list">
 				<li><a href="https://healthray.com/crelio-laboratory-alternative/">Crelio Alternative</a></li>
-				<li><a href="https://healthray.com/labsmart-alternative/">LabSmart Alternative</a></li>
-				<li><a href="https://healthray.com/labguru-alternative/">Labguru Alternative</a></li>
+				<li><a href="https://healthray.com/alternatives/labsmart/">LabSmart Alternative</a></li>
+				<li><a href="https://healthray.com/alternatives/labguru/">Labguru Alternative</a></li>
 				<li><a href="https://healthray.com/elabassist-alternative/">eLabAssist Alternative</a></li>
 				<li><a href="https://healthray.com/flabs-alternative/">Flabs Alternative</a></li>
 			</ul>

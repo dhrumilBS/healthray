@@ -1,0 +1,13 @@
+/*!
+DUPLICATOR LITEBASE ADDON GLOBAL STYLE
+Loaded site-wide on every wp-admin page. Contains only selectors that live
+OUTSIDE the .dup-styles wrapper (sidebar entry, plugins-row link, dashboard
+widget). Depends on dupli-plugin-global-style.
+*/
+
+@import "../../../../node_modules/foundation-sites/scss/foundation";
+@import '../../../../assets/sass/settings';
+@import "variables";
+
+@import "menu";
+@import "dashboard_widget";

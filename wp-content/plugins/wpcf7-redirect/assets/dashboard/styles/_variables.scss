@@ -1,0 +1,158 @@
+:root {
+	// See https://tailwindcss.com/docs/colors#using-css-variables
+	--rcf7-red-50: oklch(0.971 0.013 17.38);
+	--rcf7-red-100: oklch(0.936 0.032 17.717);
+	--rcf7-red-200: oklch(0.885 0.062 18.334);
+	--rcf7-red-300: oklch(0.808 0.114 19.571);
+	--rcf7-red-400: oklch(0.704 0.191 22.216);
+	--rcf7-red-500: oklch(0.637 0.237 25.331);
+	--rcf7-red-600: oklch(0.577 0.245 27.325);
+	--rcf7-red-700: oklch(0.505 0.213 27.518);
+	--rcf7-red-800: oklch(0.444 0.177 26.899);
+	--rcf7-red-900: oklch(0.396 0.141 25.723);
+	--rcf7-red-950: oklch(0.258 0.092 26.042);
+
+	--rcf7-yellow-50: oklch(0.987 0.026 102.212);
+	--rcf7-yellow-100: oklch(0.973 0.071 103.193);
+	--rcf7-yellow-200: oklch(0.945 0.129 101.54);
+	--rcf7-yellow-300: oklch(0.905 0.182 98.111);
+	--rcf7-yellow-400: oklch(0.852 0.199 91.936);
+	--rcf7-yellow-500: oklch(0.795 0.184 86.047);
+	--rcf7-yellow-600: oklch(0.681 0.162 75.834);
+	--rcf7-yellow-700: oklch(0.554 0.135 66.442);
+	--rcf7-yellow-800: oklch(0.476 0.114 61.907);
+	--rcf7-yellow-900: oklch(0.421 0.095 57.708);
+	--rcf7-yellow-950: oklch(0.286 0.066 53.813);
+
+	--rcf7-green-50: oklch(0.982 0.018 155.826);
+	--rcf7-green-100: oklch(0.962 0.044 156.743);
+	--rcf7-green-200: oklch(0.925 0.084 155.995);
+	--rcf7-green-300: oklch(0.871 0.15 154.449);
+	--rcf7-green-400: oklch(0.792 0.209 151.711);
+	--rcf7-green-500: oklch(0.723 0.219 149.579);
+	--rcf7-green-600: oklch(0.627 0.194 149.214);
+	--rcf7-green-700: oklch(0.527 0.154 150.069);
+	--rcf7-green-800: oklch(0.448 0.119 151.328);
+	--rcf7-green-900: oklch(0.393 0.095 152.535);
+	--rcf7-green-950: oklch(0.266 0.065 152.934);
+
+	--rcf7-blue-50: oklch(0.97 0.014 254.604);
+	--rcf7-blue-100: oklch(0.932 0.032 255.585);
+	--rcf7-blue-200: oklch(0.882 0.059 254.128);
+	--rcf7-blue-300: oklch(0.809 0.105 251.813);
+	--rcf7-blue-400: oklch(0.707 0.165 254.624);
+	--rcf7-blue-500: oklch(0.623 0.214 259.815);
+	--rcf7-blue-600: oklch(0.546 0.245 262.881);
+	--rcf7-blue-700: oklch(0.488 0.243 264.376);
+	--rcf7-blue-800: oklch(0.424 0.199 265.638);
+	--rcf7-blue-900: oklch(0.379 0.146 265.522);
+	--rcf7-blue-950: oklch(0.282 0.091 267.935);
+
+	--rcf7-violet-50: oklch(0.969 0.016 293.756);
+	--rcf7-violet-100: oklch(0.943 0.029 294.588);
+	--rcf7-violet-200: oklch(0.894 0.057 293.283);
+	--rcf7-violet-300: oklch(0.811 0.111 293.571);
+	--rcf7-violet-400: oklch(0.702 0.183 293.541);
+	--rcf7-violet-500: oklch(0.606 0.25 292.717);
+	--rcf7-violet-600: oklch(0.541 0.281 293.009);
+	--rcf7-violet-700: oklch(0.491 0.27 292.581);
+	--rcf7-violet-800: oklch(0.432 0.232 292.759);
+	--rcf7-violet-900: oklch(0.38 0.189 293.745);
+	--rcf7-violet-950: oklch(0.283 0.141 291.089);
+
+	--rcf7-purple-50: oklch(0.977 0.014 308.299);
+	--rcf7-purple-100: oklch(0.946 0.033 307.174);
+	--rcf7-purple-200: oklch(0.902 0.063 306.703);
+	--rcf7-purple-300: oklch(0.827 0.119 306.383);
+	--rcf7-purple-400: oklch(0.714 0.203 305.504);
+	--rcf7-purple-500: oklch(0.627 0.265 303.9);
+	--rcf7-purple-600: oklch(0.558 0.288 302.321);
+	--rcf7-purple-700: oklch(0.496 0.265 301.924);
+	--rcf7-purple-800: oklch(0.438 0.218 303.724);
+	--rcf7-purple-900: oklch(0.381 0.176 304.987);
+	--rcf7-purple-950: oklch(0.291 0.149 302.717);
+	
+	--rcf7-gray-50: oklch(0.985 0.002 247.839);
+	--rcf7-gray-100: oklch(0.967 0.003 264.542);
+	--rcf7-gray-200: oklch(0.928 0.006 264.531);
+	--rcf7-gray-300: oklch(0.872 0.01 258.338);
+	--rcf7-gray-400: oklch(0.707 0.022 261.325);
+	--rcf7-gray-500: oklch(0.551 0.027 264.364);
+	--rcf7-gray-600: oklch(0.446 0.03 256.802);
+	--rcf7-gray-700: oklch(0.373 0.034 259.733);
+	--rcf7-gray-800: oklch(0.278 0.033 256.848);
+	--rcf7-gray-900: oklch(0.21 0.034 264.665);
+	--rcf7-gray-950: oklch(0.13 0.028 261.692);
+
+	--rcf7-orange-50: oklch(0.98 0.016 73.684);
+	--rcf7-orange-100: oklch(0.954 0.038 75.164);
+	--rcf7-orange-200: oklch(0.901 0.076 70.697);
+	--rcf7-orange-300: oklch(0.837 0.128 66.29);
+	--rcf7-orange-400: oklch(0.75 0.183 55.934);
+	--rcf7-orange-500: oklch(0.705 0.213 47.604);
+	--rcf7-orange-600: oklch(0.646 0.222 41.116);
+	--rcf7-orange-700: oklch(0.553 0.195 38.402);
+	--rcf7-orange-800: oklch(0.47 0.157 37.304);
+	--rcf7-orange-900: oklch(0.408 0.123 38.172);
+	--rcf7-orange-950: oklch(0.266 0.079 36.259);
+
+	--rcf7-white: #fff;
+	--rcf7-black: #000;
+
+	// Primary colors
+	--rcf7-primary: var(--rcf7-blue-700);
+	--rcf7-primary-dark: var(--rcf7-blue-950);
+	--rcf7-primary-light: var(--rcf7-blue-100);
+	--rcf7-primary-foreground: var(--rcf7-gray-50);
+
+	--rcf7-background: var(--rcf7-white);
+	
+	--rcf7-btn-radius: 4px;
+
+	// Table
+	--rcf7-table-header-bg: var(--rcf7-gray-100);
+	--rcf7-table-header-text: var(--rcf7-gray-700);
+	--rcf7-table-row-hover: var(--rcf7-gray-50);
+
+	// Text colors
+	--rcf7-text-main: var(--rcf7-gray-900);
+	--rcf7-text-body: var(--rcf7-gray-700);
+	--rcf7-text-light: var(--rcf7-gray-500);
+
+	--rcf7-border: var(--rcf7-gray-300);
+	--rcf7-border-hover: #d1d5db;
+
+	// Status colors
+	--rcf7-success: var(--rcf7-green-700);
+	--rcf7-warning: var(--rcf7-yellow-500);
+	--rcf7-danger: var(--rcf7-red-600);
+	
+	// Links
+	--rcf7-link: var(--rcf7-blue-700);
+	--rcf7-link-hover: var(--rcf7-blue-500);
+
+	// Shadow values
+	--rcf7-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 4px rgba(0, 0, 0, 0.05);
+	--rcf7-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	--rcf7-shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+	// Border radius
+	--rcf7-border-radius: 0.5rem;
+	--rcf7-border-radius-lg: 0.75rem;
+
+	// Transitions
+	--rcf7-transition-fast: all 0.2s ease;
+
+	// Premium color (specific to addons)
+	--rcf7-premium: var(--rcf7-yellow-500);
+
+	// Icon Variations
+	--rcf7-var-1: var(--rcf7-blue-700);
+	--rcf7-var-1-bg: var(--rcf7-blue-100);
+	
+	--rcf7-var-2: var(--rcf7-purple-700);
+	--rcf7-var-2-bg: var(--rcf7-purple-100);
+	
+	--rcf7-var-3: var(--rcf7-orange-600);
+	--rcf7-var-3-bg: var(--rcf7-orange-100);
+}

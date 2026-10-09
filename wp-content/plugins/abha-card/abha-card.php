@@ -18,9 +18,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
 define('ABHA_CARD_VERSION', '1.2.0');
 
 if (!defined('ABHA_LIVE_API_PATH')) {
@@ -34,10 +31,6 @@ if (!defined('ABHA_STAGE_API_PATH')) {
 if (!defined('ABHA_API_PATH')) {
     define('ABHA_API_PATH', ABHA_LIVE_API_PATH);
 }
-
-// ---------------------------------------------------------------------------
-// Assets
-// ---------------------------------------------------------------------------
 
 /**
  * Cache-buster tied to the file's mtime, so an updated asset is actually served
@@ -61,7 +54,6 @@ add_action('wp_enqueue_scripts', function () {
         abha_card_asset_version('assets/css/abha-card.css')
     );
 
-    // jQuery is a hard dependency: the script body runs inside jQuery(...).
     wp_enqueue_script(
         'abha-card',
         plugin_dir_url(__FILE__) . 'assets/js/abha-card.js',
@@ -76,16 +68,6 @@ add_action('wp_enqueue_scripts', function () {
     ));
 });
 
-// ---------------------------------------------------------------------------
-// Shortcode
-// ---------------------------------------------------------------------------
-
-/**
- * [adharAuthForm] - renders the ABHA card creation form.
- *
- * require_once is deliberate: the markup uses element IDs, so a second copy on
- * the same page would break the JavaScript that drives it.
- */
 add_shortcode('adharAuthForm', function () {
     ob_start();
     require_once __DIR__ . '/abhacardForm.php';
@@ -93,9 +75,5 @@ add_shortcode('adharAuthForm', function () {
     return ob_get_clean();
 });
 
-// ---------------------------------------------------------------------------
-// AJAX endpoints
-// ---------------------------------------------------------------------------
 require_once __DIR__ . '/includes/class-abha-card.php';
-
 new ABHA_Card();

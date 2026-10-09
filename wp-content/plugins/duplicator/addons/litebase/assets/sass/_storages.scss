@@ -1,0 +1,20 @@
+.dupli-storages-features {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+
+    &-icons {
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        flex: 1;
+        flex-wrap: wrap;
+    }
+
+    &-icon {
+        width: 18px;
+        height: 18px;
+        object-fit: contain;
+    }
+}

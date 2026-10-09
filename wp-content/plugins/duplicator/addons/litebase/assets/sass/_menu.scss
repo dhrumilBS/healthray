@@ -1,0 +1,25 @@
+#dup-link-upgrade-highlight {
+    color: $litebase-upgrade-color;
+    font-weight: 600;
+
+    &:hover {
+        color: $litebase-upgrade-color-hover;
+    }
+}
+
+.dupli-plugins-list-pro-upgrade,
+.dupli-plugins-list-pro-upgrade strong {
+    color: $litebase-upgrade-color;
+}
+
+.dupli-plugins-list-pro-upgrade strong {
+    display: inline !important;
+    font-weight: 600;
+}
+
+.dupli-plugins-list-pro-upgrade:hover,
+.dupli-plugins-list-pro-upgrade:hover strong,
+.dupli-plugins-list-pro-upgrade:focus,
+.dupli-plugins-list-pro-upgrade:focus strong {
+    color: $litebase-upgrade-color-hover;
+}

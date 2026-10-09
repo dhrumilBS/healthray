@@ -1,4 +1,22 @@
-.abha-wrapper { --abha-primary: #1b3c74; --abha-secondary: #152ce1; --abha-secondary-rgb: 21, 44, 225; --abha-accent: #5669ec; --abha-surface: #F0F2FF; --abha-border: #d0d4f0; --abha-text: #1e2130; --abha-text-muted: #5e6384; --abha-success: #16a34a; --abha-success-bg: #dcfce7; --abha-error: #dc2626; --abha-error-bg: #fee2e2; --abha-radius: 10px; --abha-radius-sm: 6px; --abha-shadow: 0 1px 12px rgba(0, 0, 0, 0.08); --abha-transition: 0.2s ease; }
+.abha-wrapper {
+    --abha-primary: #1b3c74;
+    --abha-secondary: #152ce1;
+    --abha-secondary-rgb: 21, 44, 225;
+    --abha-accent: #5669ec;
+    --abha-surface: #F0F2FF;
+    --abha-border: #d0d4f0;
+    --abha-text: #1e2130;
+    --abha-text-muted: #5e6384;
+    --abha-success: #16a34a;
+    --abha-success-bg: #dcfce7;
+    --abha-error: #dc2626;
+    --abha-error-bg: #fee2e2;
+    --abha-radius: 10px;
+    --abha-radius-sm: 6px;
+    --abha-shadow: 0 1px 12px rgba(0, 0, 0, 0.08);
+    --abha-transition: 0.2s ease;
+}
+
 .abha-wrapper { padding: 28px; border-radius: 16px; background: #fff; box-shadow: var(--abha-shadow); font-family: inherit; color: var(--abha-text); max-width: 640px; margin: 0 auto; }
 .abha-header { text-align: center; margin-bottom: 24px; }
 .abha-header h2 { font-size: 1.25rem; font-weight: 700; color: var(--abha-primary); line-height: 1.35; margin: 0; }
@@ -44,7 +62,6 @@ textarea.input-field { resize: vertical; min-height: 80px; }
 .btn:focus-visible { outline: 2px solid rgba(var(--abha-secondary-rgb), 0.5); outline-offset: 3px; }
 .btn:active { transform: translateY(1px); }
 .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
-.btn[aria-busy="true"] { opacity: 0.55; cursor: progress; }
 .btn-primary { background: var(--abha-secondary); color: #fff; }
 .btn-primary:hover:not(:disabled) { background: var(--abha-accent); box-shadow: 0 4px 12px rgba(var(--abha-secondary-rgb), 0.35); }
 .btn-outline { background: transparent; color: var(--abha-secondary); border: 2px solid var(--abha-secondary); }
@@ -88,6 +105,7 @@ textarea.input-field { resize: vertical; min-height: 80px; }
 .inline-error { display: block; margin-top: 4px; font-size: 0.775rem; color: var(--abha-error); }
 /* The gender field is a radio group, so the error state lands on the container. */
 .gender-group.is-error .gender-option span { border-color: var(--abha-error); }
+.btn[aria-busy="true"] { opacity: 0.55; cursor: progress; }
 #loading-spinner { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 16px; }
 #loading-spinner[hidden] { display: none; }
 .spinner-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--abha-secondary); animation: bounce 1s infinite ease-in-out; }

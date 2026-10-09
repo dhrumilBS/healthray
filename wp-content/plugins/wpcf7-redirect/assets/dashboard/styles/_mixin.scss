@@ -1,0 +1,45 @@
+@mixin flex-center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+@mixin flex-between {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+@mixin row-spaced-elements {
+	flex-direction: row;
+	
+	@include flex-between();
+}
+
+
+@mixin responsive-grid(
+	$columns-mobile: 1,
+	$columns-tablet: 2,
+	$columns-desktop: 3
+) {
+	display: grid;
+	grid-template-columns: repeat($columns-mobile, 1fr);
+	gap: 2rem;
+
+	@media (min-width: 640px) {
+		grid-template-columns: repeat($columns-tablet, 1fr);
+	}
+
+	@media (min-width: 992px) {
+		grid-template-columns: repeat($columns-desktop, 1fr);
+	}
+}
+
+@mixin card-hover-effect {
+	transition: var(--rcf7-transition-fast);
+
+	&:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--rcf7-shadow);
+	}
+}

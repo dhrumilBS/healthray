@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: PPC - Hospital Management Software (HIMS) - ChatGPT
+ * Template Name: PPC HIMS ChatGPT
  *
  * ChatGPT Ads landing page for hospital management software (variant "chatgpt" of the
  * "hims" PPC page: the -chatgpt suffix does not change the key, see hr_ppc_page_key()).

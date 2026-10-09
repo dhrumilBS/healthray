@@ -280,16 +280,17 @@ add_filter('body_class', function ($classes) {
 	$classes = array_values(array_diff($classes, $remove));
 
 	$landing_pages = [
-		167 => 'contact-page',
 		32399 => '',
 		79691 => '',
 		79713 => 'emr-landing',
+		81773 => 'emr-landing',
 		79754 => 'ehr-landing',
 		79865 => 'clinic-landing',
 		79924 => 'lims-landing',
 		79928 => 'pharmacy-landing',
+		81775 => 'hims-landing',
 		81124 => 'hims-landing',
-		81325 => 'login-landing'
+		81468 => 'login-landing'
 	];
 	foreach ($landing_pages as $page_id => $class) {
 		if (is_page($page_id)) {
@@ -346,58 +347,53 @@ function hr_get_inline_css($path)
 // 6. LANDING PAGES - Inline CSS + Software/Video Schema (wp_head, priority 50)
 // =============================================================================
 
+// =============================================================================
+// 6. LANDING PAGES - Inline CSS + Software/Video Schema (wp_head, priority 50)
+// =============================================================================
+
 add_action('wp_head', function () {
-	if (is_page(HR_LANDING_PAGE_IDS) || hr_is_login_portal_page()) {
-		$common_css = hr_get_inline_css(get_stylesheet_directory() . '/css/common-landing.css');
-		if ($common_css !== '') {
-			echo '<style id="common-landing-css-inline">' . $common_css . '</style>' . "\n";
+	if (is_page(79713) || is_page(79691) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81468) || is_page(81773) || is_page(81775)) {
+		$common_css_path = get_stylesheet_directory() . '/css/common-landing.css';
+		if (file_exists($common_css_path)) {
+			echo '<style id="common-landing-css-inline">' . file_get_contents($common_css_path) . '</style>' . "\n";
 		}
 	}
 
-	// Contact Page
-	if (is_page(167)) {
-		$contact_css = hr_get_inline_css(get_stylesheet_directory() . '/css/contact.css');
-		if ($contact_css !== '') {
-			echo '<style id="contact-css-inline">' . $contact_css . '</style>' . "\n";
-		}
-	}
-
-	// Log IN Page
-	if (hr_is_login_portal_page()) {
-		$page_url = get_permalink(get_queried_object_id());
+	if (is_page(81468)) {
+		$page_url = get_permalink(81468);
 		$schema = array(
 			'@context' => 'https://schema.org',
-			'@graph' => array(
+			'@graph'   => array(
 				array(
-					'@type' => 'ItemList',
-					'@id' => $page_url . '#login-portals',
-					'name' => 'Healthray Login Portals',
+					'@type'           => 'ItemList',
+					'@id'             => $page_url . '#login-portals',
+					'name'            => 'Healthray Login Portals',
 					'itemListElement' => array(
 						array(
-							'@type' => 'ListItem',
+							'@type'    => 'ListItem',
 							'position' => 1,
-							'item' => array(
+							'item'     => array(
 								'@type' => 'WebPage',
-								'name' => 'Healthray Hospital / HMS Login',
-								'url' => 'https://ray.healthray.com/',
+								'name'  => 'Healthray Hospital / HMS Login',
+								'url'   => 'https://ray.healthray.com/',
 							),
 						),
 						array(
-							'@type' => 'ListItem',
+							'@type'    => 'ListItem',
 							'position' => 2,
-							'item' => array(
+							'item'     => array(
 								'@type' => 'WebPage',
-								'name' => 'Healthray Pharmacy Login',
-								'url' => 'https://pharmacy.healthray.com/',
+								'name'  => 'Healthray Pharmacy Login',
+								'url'   => 'https://pharmacy.healthray.com/',
 							),
 						),
 						array(
-							'@type' => 'ListItem',
+							'@type'    => 'ListItem',
 							'position' => 3,
-							'item' => array(
+							'item'     => array(
 								'@type' => 'WebPage',
-								'name' => 'Healthray Laboratory Login',
-								'url' => 'https://lab.healthray.com/',
+								'name'  => 'Healthray Laboratory Login',
+								'url'   => 'https://lab.healthray.com/',
 							),
 						),
 					),
@@ -409,9 +405,9 @@ add_action('wp_head', function () {
 
 	// Home / HMS Landing Page
 	if (is_page(79691)) {
-		$hr_css = hr_get_inline_css(get_stylesheet_directory() . '/css/home-landing.css');
-		if ($hr_css !== '') {
-			echo '<style id="home-landing-css-inline">' . $hr_css . '</style>' . "\n";
+		$hr_css_path = get_stylesheet_directory() . '/css/home-landing.css';
+		if (file_exists($hr_css_path)) {
+			echo '<style id="home-landing-css-inline">' . file_get_contents($hr_css_path) . '</style>' . "\n";
 		}
 		$page_url = 'https://healthray.com/';
 		$schema = array(
@@ -427,7 +423,7 @@ add_action('wp_head', function () {
 					'applicationSubCategory' => 'Hospital Management Software',
 					'description' => 'AI-powered, ABDM-compliant hospital management system for Indian hospitals, clinics, labs and pharmacies. Covers OPD/IPD, EMR/EHR, pharmacy, laboratory, billing, TPA claims and HR.',
 					'url' => home_url(),
-					'publisher' => array('@id' => home_url('/') . '#organization'),
+					'publisher' => array('@id' => home_url() . '#organization'),
 					'offers' => array(
 						'@type' => 'Offer',
 						'price' => '0',
@@ -447,12 +443,16 @@ add_action('wp_head', function () {
 	}
 
 	// EMR Page
-	if (is_page(79713)) {
-		$emr_css = hr_get_inline_css(get_stylesheet_directory() . '/css/emr-software.css');
-		if ($emr_css !== '') {
-			echo '<style id="emr-software-css-inline">' . $emr_css . '</style>' . "\n";
+    	// EMR CSS - shared by all pages using the EMR layout
+	if (is_page(79713) || is_page(81468) || is_page(81773)) {
+		$emr_css_path = get_stylesheet_directory() . '/css/emr-software.css';
+		if (file_exists($emr_css_path)) {
+			echo '<style id="emr-software-css-inline">' . file_get_contents($emr_css_path) . '</style>' . "\n";
 		}
+	}
 
+	// EMR Schema - only on the main EMR page
+	if (is_page(79713)) {
 		$page_url = 'https://healthray.com/emr-software/';
 		$schema = array(
 			'@context' => 'https://schema.org',
@@ -501,9 +501,9 @@ add_action('wp_head', function () {
 
 	// EHR Page
 	if (is_page(79754)) {
-		$ehr_css = hr_get_inline_css(get_stylesheet_directory() . '/css/ehr-software.css');
-		if ($ehr_css !== '') {
-			echo '<style id="ehr-software-css-inline">' . $ehr_css . '</style>' . "\n";
+		$ehr_css_path = get_stylesheet_directory() . '/css/ehr-software.css';
+		if (file_exists($ehr_css_path)) {
+			echo '<style id="ehr-software-css-inline">' . file_get_contents($ehr_css_path) . '</style>' . "\n";
 		}
 
 		$page_url = 'https://healthray.com/ehr-software/';
@@ -541,9 +541,9 @@ add_action('wp_head', function () {
 
 	// Clinic Page
 	if (is_page(79865)) {
-		$clinic_css = hr_get_inline_css(get_stylesheet_directory() . '/css/clinic-landing.css');
-		if ($clinic_css !== '') {
-			echo '<style id="clinic-software-css-inline">' . $clinic_css . '</style>' . "\n";
+		$clinic_css_path = get_stylesheet_directory() . '/css/clinic-landing.css';
+		if (file_exists($clinic_css_path)) {
+			echo '<style id="clinic-software-css-inline">' . file_get_contents($clinic_css_path) . '</style>' . "\n";
 		}
 
 		$page_url = 'https://healthray.com/clinic-management-software/';
@@ -581,9 +581,9 @@ add_action('wp_head', function () {
 
 	// LIMS Page
 	if (is_page(79924)) {
-		$lims_css = hr_get_inline_css(get_stylesheet_directory() . '/css/lims-software.css');
-		if ($lims_css !== '') {
-			echo '<style id="lims-software-css-inline">' . $lims_css . '</style>' . "\n";
+		$lims_css_path = get_stylesheet_directory() . '/css/lims-software.css';
+		if (file_exists($lims_css_path)) {
+			echo '<style id="lims-software-css-inline">' . file_get_contents($lims_css_path) . '</style>' . "\n";
 		}
 		$page_url = 'https://healthray.com/laboratory-information-management-system/';
 		$schema = array(
@@ -591,14 +591,14 @@ add_action('wp_head', function () {
 			'@graph' => array(
 				array(
 					'@type' => 'SoftwareApplication',
-					'@id' => $page_url . '#software',
+					'@id' => 'https://healthray.com/laboratory-information-management-system/#software',
 					'name' => 'Healthray LIMS Software',
 					'operatingSystem' => 'Web, Android, iOS',
 					'applicationCategory' => 'BusinessApplication',
 					'applicationSubCategory' => 'Laboratory Information Management System (LIMS)',
 					'description' => 'NABH-certified LIMS software (laboratory information management system, also known as pathology lab software) for Indian clinical, diagnostic, blood bank, research and public health laboratories. Sample and order management, analyzer interfacing, QC/QA, radiology (RIS), billing, inventory and patient portal on one platform, built to support NABL (ISO 15189) accreditation workflows.',
-					'url' => $page_url,
-					'publisher' => array('@id' => home_url('/') . '#organization'),
+					'url' => 'https://healthray.com/laboratory-information-management-system/',
+					'publisher' => array('@id' => 'https://healthray.com/#organization'),
 					'offers' => array(
 						'@type' => 'Offer',
 						'price' => '0',
@@ -619,36 +619,36 @@ add_action('wp_head', function () {
 
 	// Pharmacy Page
 	if (is_page(79928)) {
-		$pharmacy_css = hr_get_inline_css(get_stylesheet_directory() . '/css/pharmacy-software.css');
-		if ($pharmacy_css !== '') {
-			echo '<style id="pharmacy-software-css-inline">' . $pharmacy_css . '</style>' . "\n";
+		$pharmacy_css_path = get_stylesheet_directory() . '/css/pharmacy-software.css';
+		if (file_exists($pharmacy_css_path)) {
+			echo '<style id="pharmacy-software-css-inline">' . file_get_contents($pharmacy_css_path) . '</style>' . "\n";
 		}
 
 		$page_url = 'https://healthray.com/pharmacy-management-system/';
 
 		$schema = array(
 			'@context' => 'https://schema.org',
-			'@graph' => array(
+			'@graph'   => array(
 				array(
-					'@type' => 'SoftwareApplication',
-					'@id' => $page_url . '#software',
-					'name' => 'Healthray Pharmacy Software',
-					'operatingSystem' => 'Web, Android, iOS',
-					'applicationCategory' => 'BusinessApplication',
+					'@type'                  => 'SoftwareApplication',
+					'@id'                    => $page_url . '#software',
+					'name'                   => 'Healthray Pharmacy Software',
+					'operatingSystem'        => 'Web, Android, iOS',
+					'applicationCategory'    => 'BusinessApplication',
 					'applicationSubCategory' => 'Pharmacy Management Software',
-					'description' => 'NABH-certified, ABDM-compliant pharmacy software (pharmacy management system, also known as medical store software) for Indian retail pharmacies, medical stores, hospital pharmacies and multi-store chains. GST billing and POS, inventory with FEFO expiry alerts, Schedule H/H1/X registers, e-prescriptions, delivery management, patient engagement and accounting on one platform.',
-					'url' => $page_url,
-					'publisher' => array('@id' => home_url('/') . '#organization'),
-					'offers' => array(
-						'@type' => 'Offer',
-						'price' => '0',
+					'description'            => 'NABH-certified, ABDM-compliant pharmacy software (pharmacy management system, also known as medical store software) for Indian retail pharmacies, medical stores, hospital pharmacies and multi-store chains. GST billing and POS, inventory with FEFO expiry alerts, Schedule H/H1/X registers, e-prescriptions, delivery management, patient engagement and accounting on one platform.',
+					'url'                    => $page_url,
+					'publisher'              => array('@id' => home_url('/') . '#organization'),
+					'offers'                 => array(
+						'@type'         => 'Offer',
+						'price'         => '0',
 						'priceCurrency' => 'INR',
-						'description' => 'Free demo and free trial available',
+						'description'   => 'Free demo and free trial available',
 					),
-					'aggregateRating' => array(
-						'@type' => 'AggregateRating',
+					'aggregateRating'        => array(
+						'@type'       => 'AggregateRating',
 						'ratingValue' => '4.8',
-						'bestRating' => '5',
+						'bestRating'  => '5',
 						'ratingCount' => '180',
 					),
 				),
@@ -658,37 +658,40 @@ add_action('wp_head', function () {
 	}
 
 	// HIMS Page
-	if (is_page(81124)) {
-		$hims_css = hr_get_inline_css(get_stylesheet_directory() . '/css/hims-landing.css');
-		if ($hims_css !== '') {
-			echo '<style id="hims-software-css-inline">' . $hims_css . '</style>' . "\n";
+	// HIMS CSS - shared by all pages using the HIMS layout
+	if (is_page(81124) || is_page(81775)) {
+		$hims_css_path = get_stylesheet_directory() . '/css/hims-landing.css';
+		if (file_exists($hims_css_path)) {
+			echo '<style id="hims-software-css-inline">' . file_get_contents($hims_css_path) . '</style>' . "\n";
 		}
+	}
 
+	// HIMS Schema - only on the main HIMS page
+	if (is_page(81124)) {
 		$page_url = 'https://healthray.com/hospital-information-management-software/';
-
 		$schema = array(
 			'@context' => 'https://schema.org',
-			'@graph' => array(
+			'@graph'   => array(
 				array(
-					'@type' => 'SoftwareApplication',
-					'@id' => $page_url . '#software',
-					'name' => 'Healthray HIMS Software',
-					'operatingSystem' => 'Web, Android, iOS',
-					'applicationCategory' => 'BusinessApplication',
+					'@type'                  => 'SoftwareApplication',
+					'@id'                    => $page_url . '#software',
+					'name'                   => 'Healthray HIMS Software',
+					'operatingSystem'        => 'Web, Android, iOS',
+					'applicationCategory'    => 'BusinessApplication',
 					'applicationSubCategory' => 'Hospital Information Management System',
-					'description' => 'NABH-certified, ABDM-compliant hospital information management system (HIMS) for Indian hospitals — registration with ABHA, OPD/IPD, OT scheduling, TPA billing, stores, HR and multi-facility MIS on one platform.',
-					'url' => $page_url,
-					'publisher' => array('@id' => home_url('/') . '#organization'),
-					'offers' => array(
-						'@type' => 'Offer',
-						'price' => '0',
+					'description'            => 'NABH-certified, ABDM-compliant hospital information management system (HIMS) for Indian hospitals — registration with ABHA, OPD/IPD, OT scheduling, TPA billing, stores, HR and multi-facility MIS on one platform.',
+					'url'                    => $page_url,
+					'publisher'              => array('@id' => home_url('/') . '#organization'),
+					'offers'                 => array(
+						'@type'         => 'Offer',
+						'price'         => '0',
 						'priceCurrency' => 'INR',
-						'description' => 'Free demo and free trial available',
+						'description'   => 'Free demo and free trial available',
 					),
-					'aggregateRating' => array(
-						'@type' => 'AggregateRating',
+					'aggregateRating'        => array(
+						'@type'       => 'AggregateRating',
 						'ratingValue' => '4.8',
-						'bestRating' => '5',
+						'bestRating'  => '5',
 						'ratingCount' => '180',
 					),
 				),
@@ -697,7 +700,6 @@ add_action('wp_head', function () {
 		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 	}
 }, 50);
-
 
 // =============================================================================
 // 7. FAQ / ORGANIZATION SCHEMA (wp_head, priority 5)
@@ -1445,6 +1447,12 @@ function cf7_mobile_exists_last_24_hours($mobile_national, $mobile_code)
 	return false;
 }
 
+// -----------------------------------------------------------------------------
+// DUPLICATE EMAIL GUARD (fixed)
+// Works for every [email] / [email*] field on every CF7 form, whatever the
+// field is named, and looks the value up in CFDB7 under that same field name.
+// -----------------------------------------------------------------------------
+
 /**
  * Trim + lowercase an email so duplicate checks compare like with like.
  */
@@ -1455,14 +1463,15 @@ function cf7_normalize_email($email)
 
 /**
  * $email must already be passed through cf7_normalize_email().
+ * $field_name is the CF7 tag name of the email field (e.g. your-email, email).
  */
-function cf7_email_exists_last_24_hours($email)
+function cf7_email_exists_last_24_hours($email, $field_name = 'your-email')
 {
 	global $wpdb;
 	$table = $wpdb->prefix . 'cf7_data_entry';
 	$since = date('Y-m-d H:i:s', current_time('timestamp') - DAY_IN_SECONDS);
 
-	// Step 1: cheap, sargable filter — only rows submitted in the last 24 hours.
+	// Step 1: only submissions from the last 24 hours.
 	$recent_ids = $wpdb->get_col($wpdb->prepare("
 		SELECT data_id FROM {$table}
 		WHERE name = 'submit_time' AND value >= %s
@@ -1472,14 +1481,14 @@ function cf7_email_exists_last_24_hours($email)
 		return false;
 	}
 
-	// Step 2: pull email values only for those recent submissions (small set).
+	// Step 2: email values for those submissions only.
 	$placeholders = implode(',', array_fill(0, count($recent_ids), '%d'));
 	$emails = $wpdb->get_col($wpdb->prepare("
 		SELECT value FROM {$table}
-		WHERE name = 'your-email' AND data_id IN ($placeholders)
-	", $recent_ids));
+		WHERE name = %s AND data_id IN ($placeholders)
+	", array_merge(array($field_name), $recent_ids)));
 
-	// Step 3: normalize + EXACT compare in PHP (no substring matching for email).
+	// Step 3: exact compare after normalizing.
 	foreach ($emails as $stored) {
 		if (cf7_normalize_email($stored) === $email) {
 			return true;
@@ -1487,6 +1496,42 @@ function cf7_email_exists_last_24_hours($email)
 	}
 
 	return false;
+}
+
+/**
+ * Runs after all per-field validators, on every form.
+ */
+add_filter('wpcf7_validate', 'cf7_validate_duplicate_email_any', 30, 2);
+
+function cf7_validate_duplicate_email_any($result, $tags)
+{
+	foreach ($tags as $tag) {
+		if ($tag->basetype !== 'email') {
+			continue;
+		}
+		if (!$result->is_valid($tag->name)) {
+			continue; // already has a required/format error
+		}
+
+		$raw = isset($_POST[$tag->name]) ? wp_unslash($_POST[$tag->name]) : '';
+		if (is_array($raw)) {
+			$raw = reset($raw);
+		}
+		$email = cf7_normalize_email($raw);
+
+		if ($email === '' || !is_email($email)) {
+			continue;
+		}
+
+		if (cf7_email_exists_last_24_hours($email, $tag->name)) {
+			$result->invalidate($tag, 'You have already submitted this form. Our team will contact you soon.');
+			// Same flag the mobile check uses, so the form-level message is shown too.
+			global $cf7_duplicate_mobile_flag;
+			$cf7_duplicate_mobile_flag = true;
+		}
+	}
+
+	return $result;
 }
 
 add_action('wp_footer', function () {
@@ -1546,8 +1591,7 @@ add_action('wp_footer', function () {
 // All rendered through templates/base-standalone.php instead of the theme's base.php.
 //
 // PPC pages are convention-based - a new PPC page needs NO code here:
-//   template  temp-ppc-{key}.php   e.g. temp-ppc-erp.php  (or a variant: temp-ppc-{key}-{variant}.php,
-//             e.g. temp-ppc-hims-google.php, sharing the CSS/JS/body class of "{key}")
+//   template  temp-ppc-{key}.php   e.g. temp-ppc-erp.php
 //   CSS       css/ppc-{key}.css    inlined in <head> (optional)
 //   JS        js/ppc-{key}.js      enqueued in the footer, deferred (optional)
 //   body      class "ppc-{key}"    scope all page CSS under it
@@ -1563,9 +1607,7 @@ function hr_is_login_portal_page()
 }
 
 /**
- * PPC page key: "hims" for a page using temp-ppc-hims.php or a variant of it
- * (temp-ppc-hims-{variant}.php, e.g. temp-ppc-hims-google.php), '' for anything else.
- * Variants share css/ppc-{key}.css, js/ppc-{key}.js and the body class, so a key has no dash.
+ * PPC page key: "hims" for a page using temp-ppc-hims.php, '' for anything else.
  * Memoized once the main query has run (it is called by several hooks per request).
  */
 function hr_ppc_page_key()
@@ -1579,7 +1621,6 @@ function hr_ppc_page_key()
 	$found = '';
 	if (is_page()) {
 		$template = (string) get_page_template_slug(get_queried_object_id());
-		// temp-ppc-{key}.php or temp-ppc-{key}-{variant}.php (temp-ppc-hims-google.php -> "hims").
 		if (preg_match('/^temp-ppc-([a-z0-9]+)(?:-[a-z0-9-]+)?\.php$/', $template, $m)) {
 			$found = $m[1];
 		}
@@ -1785,7 +1826,15 @@ add_action('wp_enqueue_scripts', function () {
  * Allow Contact Form 7 submissions on local LAN environment only.
  */
 add_filter('wpcf7_recaptcha_threshold', function ($threshold) {
-	return 0.1;
+	$server_name = $_SERVER['SERVER_NAME'] ?? '';
+	$server_addr = $_SERVER['SERVER_ADDR'] ?? '';
+	$is_local = ($server_name === 'localhost' || $server_name === '127.0.0.1' || $server_addr === '127.0.0.1' || strpos($server_addr, '192.168.') === 0);
+
+	if ($is_local) {
+		return 0.1;
+	}
+
+	return $threshold;
 });
 
 add_filter('wpcf7_spam', function ($spam) {

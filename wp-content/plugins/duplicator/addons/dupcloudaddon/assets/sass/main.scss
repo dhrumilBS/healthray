@@ -1,0 +1,10 @@
+/*!
+DUPLICATOR DUP CLOUD ADDON STYLE
+*/
+
+@import "../../../../node_modules/foundation-sites/scss/foundation";
+@import '../../../../assets/sass/settings';
+
+.dup-styles {
+    @import "components/cloud_connect";
+}
