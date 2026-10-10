@@ -6,6 +6,11 @@
         "slug": "vibrant-hospital",
         "excerpt": "Vibrant Hospital is a 200+ bed multispeciality hospital in Vapi, Gujarat. It brought billing, patient records and inventory workflows into a single system. Bills are now ready in hours instead of days, and manual mistakes have dropped by 40%."
     },
+    "seo": {
+        "title": "Vibrant Hospital Case Study: ₹25 Lakh Saved Yearly | Healthray",
+        "description": "See how Vibrant Hospital, a 200+ bed hospital in Vapi, saved ₹25 lakh a year, cut billing time by 30% and reduced manual errors by 40% with Healthray HMS.",
+        "focus_keyphrase": "Vibrant Hospital"
+    },
     "fields": {
         "short_name": "Vibrant Hospital",
         "hero_lede": "Vibrant Hospital is a 200+ bed multispeciality hospital in Vapi, Gujarat. It brought billing, patient records and inventory workflows into a single system. Bills are now ready in hours instead of days, and manual mistakes have dropped by 40%.",

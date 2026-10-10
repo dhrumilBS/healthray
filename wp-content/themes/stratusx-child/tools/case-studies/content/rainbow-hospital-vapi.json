@@ -6,6 +6,11 @@
         "slug": "rainbow-hospital-vapi",
         "excerpt": "Rainbow Super Speciality Hospital runs 100 beds and 25 specialities in Vapi, with 50+ doctors on the floor. In 5+ years, it has grown into the kind of hospital where one patient can be admitted, operated on and discharged under a single roof."
     },
+    "seo": {
+        "title": "Rainbow Hospital Vapi Case Study | Healthray HMS",
+        "description": "See how Rainbow Super Speciality Hospital in Vapi sped up admissions, freed beds and closed TPA claims faster with Healthray's bed, OT and billing modules.",
+        "focus_keyphrase": "Rainbow Hospital"
+    },
     "fields": {
         "short_name": "Rainbow Hospital",
         "hero_lede": "Rainbow Super Speciality Hospital runs 100 beds and 25 specialities in Vapi, with 50+ doctors on the floor. In 5+ years, it has grown into the kind of hospital where one patient can be admitted, operated on and discharged under a single roof.",

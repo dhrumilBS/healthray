@@ -20,6 +20,7 @@
  *     "source": "Vibrant Hospital_.docx",
  *     "post":   { "id": 71836, "title": "...", "slug": "vibrant-hospital", "excerpt": "..." },
  *     "fields": { "<ACF field name>": value, ... },
+ *     "seo":    { "title": "...", "description": "...", "focus_keyphrase": "..." },
  *     "brief":  { "meta_title": "...", "meta_description": "...", "new_url": "..." }
  *   }
  *
@@ -27,11 +28,18 @@
  *   take an array of rows keyed by sub field name. Overview content and every
  *   intro/outro take a string or an array of paragraphs.
  *   Omit a key to leave that field as stored; "" or [] clears it.
+ *   "seo" is written to Yoast: SEO title, meta description, focus keyphrase.
+ *   Omit the block (or a key in it) to leave Yoast's value as stored. The dry
+ *   run checks each value against the Yoast checks that read only these
+ *   fields and the slug (see cs_check_seo()).
  *   "brief" is reference only and never written: it carries the document's
- *   SEO lines so the dry run can remind you to set them in Yoast.
+ *   own SEO lines.
  *
  * Guarantees
- *   - Never writes Yoast/SEO meta or the featured image.
+ *   - Writes Yoast meta only from the "seo" block. Social (Facebook/X) titles
+ *     and descriptions that were copies of the old SEO text are cleared so they
+ *     follow the new text; any other custom social text is kept and reported.
+ *   - Never writes the featured image.
  *   - New posts are drafts unless --status is passed.
  *   - An existing post's status is left alone unless --status is passed.
  *   - Every existing post is backed up to .kiro/backups/ before it is written.
@@ -422,6 +430,213 @@ function cs_json( $data ) {
 	return wp_json_encode( $data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 }
 
+// -----------------------------------------------------------------------------
+// Yoast SEO
+// -----------------------------------------------------------------------------
+
+/** Yoast meta keys written from the "seo" block, keyed by the block's names. */
+const CS_SEO_KEYS = array(
+	'title'           => 'title',
+	'description'     => 'metadesc',
+	'focus_keyphrase' => 'focuskw',
+);
+
+/**
+ * Width of an SEO title in pixels, as Yoast's snippet preview measures it:
+ * Arial, 20px, regular. Advance widths come from Arial's own metrics; kerning
+ * is ignored, which can only make the real width a pixel or two narrower.
+ *
+ * Yoast 28.6 rates the width green when it is over 400px and at most 600px.
+ */
+function cs_title_width( $text ) {
+	static $widths = array(
+		' ' => 5.56, '!' => 5.56, '"' => 7.1, '#' => 11.12, '$' => 11.12, '%' => 17.78, '&' => 13.34,
+		'\'' => 3.82, '(' => 6.66, ')' => 6.66, '*' => 7.78, '+' => 11.68, ',' => 5.56, '-' => 6.66,
+		'.' => 5.56, '/' => 5.56, '0' => 11.12, '1' => 11.12, '2' => 11.12, '3' => 11.12, '4' => 11.12,
+		'5' => 11.12, '6' => 11.12, '7' => 11.12, '8' => 11.12, '9' => 11.12, ':' => 5.56, ';' => 5.56,
+		'<' => 11.68, '=' => 11.68, '>' => 11.68, '?' => 11.12, '@' => 20.3, 'A' => 13.34, 'B' => 13.34,
+		'C' => 14.44, 'D' => 14.44, 'E' => 13.34, 'F' => 12.22, 'G' => 15.56, 'H' => 14.44, 'I' => 5.56,
+		'J' => 10, 'K' => 13.34, 'L' => 11.12, 'M' => 16.66, 'N' => 14.44, 'O' => 15.56, 'P' => 13.34,
+		'Q' => 15.56, 'R' => 14.44, 'S' => 13.34, 'T' => 12.22, 'U' => 14.44, 'V' => 13.34, 'W' => 18.88,
+		'X' => 13.34, 'Y' => 13.34, 'Z' => 12.22, '[' => 5.56, '\\' => 5.56, ']' => 5.56, '^' => 9.38,
+		'_' => 11.12, '`' => 6.66, 'a' => 11.12, 'b' => 11.12, 'c' => 10, 'd' => 11.12, 'e' => 11.12,
+		'f' => 5.56, 'g' => 11.12, 'h' => 11.12, 'i' => 4.44, 'j' => 4.44, 'k' => 10, 'l' => 4.44,
+		'm' => 16.66, 'n' => 11.12, 'o' => 11.12, 'p' => 11.12, 'q' => 11.12, 'r' => 6.66, 's' => 10,
+		't' => 5.56, 'u' => 11.12, 'v' => 10, 'w' => 14.44, 'x' => 10, 'y' => 10, 'z' => 10, '{' => 6.68,
+		'|' => 5.2, '}' => 6.68, '~' => 11.68, '₹' => 11.12, '–' => 11.12, '—' => 20, '‘' => 4.44,
+		'’' => 4.44, '“' => 6.66, '”' => 6.66, '·' => 6.66, '…' => 20, '×' => 11.68,
+	);
+
+	$width = 0.0;
+	foreach ( mb_str_split( (string) $text ) as $char ) {
+		$width += $widths[ $char ] ?? 11.12; // Unknown characters: roughly a lowercase letter.
+	}
+	return $width;
+}
+
+/** Lowercase words of a text, the unit Yoast's keyphrase checks match on. */
+function cs_words( $text ) {
+	return preg_split( '/[^\p{L}\p{N}]+/u', mb_strtolower( (string) $text ), -1, PREG_SPLIT_NO_EMPTY );
+}
+
+/**
+ * Keyphrase matches in a meta description, counted as Yoast does: per
+ * sentence, the number of times every keyphrase word occurs (the lowest count
+ * among the words), summed over sentences. Word order does not matter.
+ */
+function cs_keyphrase_count( $keyphrase, $text ) {
+	if ( ! cs_words( $keyphrase ) ) {
+		return 0;
+	}
+	$total = 0;
+	foreach ( preg_split( '/(?<=[.!?])\s+/u', trim( (string) $text ) ) as $sentence ) {
+		$counts = array_count_values( cs_words( $sentence ) );
+		$total += min( array_map( function ( $word ) use ( $counts ) {
+			return $counts[ $word ] ?? 0;
+		}, cs_words( $keyphrase ) ) );
+	}
+	return $total;
+}
+
+/** Other posts that already use $keyphrase as their Yoast focus keyphrase. */
+function cs_keyphrase_users( $keyphrase, $exclude_id ) {
+	global $wpdb;
+	return array_map(
+		'intval',
+		$wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT m.post_id FROM {$wpdb->postmeta} m JOIN {$wpdb->posts} p ON p.ID = m.post_id
+				 WHERE m.meta_key = '_yoast_wpseo_focuskw' AND LOWER( m.meta_value ) = LOWER( %s )
+				 AND m.post_id <> %d AND p.post_type <> 'revision' AND p.post_status NOT IN ( 'trash', 'auto-draft' )",
+				$keyphrase,
+				$exclude_id
+			)
+		)
+	);
+}
+
+/**
+ * Check an "seo" block against the Yoast assessments that depend only on the
+ * SEO title, meta description, focus keyphrase and slug. Each failure is a
+ * warning: it would show orange or red in the Yoast box.
+ *
+ * The rest of Yoast's SEO analysis (keyphrase in introduction, density,
+ * text length, links, images) reads the post editor, which case studies do
+ * not have; their copy lives in ACF fields that Yoast does not analyse.
+ *
+ * @return string[] Report lines for checks that passed.
+ */
+function cs_check_seo( array $seo, $slug, $target_id, array &$errors, array &$warnings ) {
+	$lines = array();
+
+	foreach ( $seo as $key => $value ) {
+		if ( ! array_key_exists( $key, CS_SEO_KEYS ) ) {
+			$errors[] = "seo.{$key} is not supported (expected " . implode( ', ', array_keys( CS_SEO_KEYS ) ) . ').';
+		} elseif ( ! is_string( $value ) || '' === trim( $value ) ) {
+			$errors[] = "seo.{$key} must be a non-empty string.";
+		} elseif ( preg_match( '/[\x{000B}\x{00A0}\x{200B}\x{FEFF}]/u', $value ) ) {
+			$errors[] = "seo.{$key} contains an invisible export character (U+000B, U+00A0, U+200B or U+FEFF).";
+		} elseif ( false !== strpos( $value, '%%' ) ) {
+			$warnings[] = "seo.{$key} uses a Yoast %%variable%%; the length checks here count it literally.";
+		}
+	}
+	if ( $errors ) {
+		return $lines;
+	}
+
+	$title       = isset( $seo['title'] ) ? trim( $seo['title'] ) : '';
+	$description = isset( $seo['description'] ) ? trim( $seo['description'] ) : '';
+	$keyphrase   = isset( $seo['focus_keyphrase'] ) ? trim( $seo['focus_keyphrase'] ) : '';
+
+	if ( '' !== $title ) {
+		$width = cs_title_width( $title );
+		$px    = sprintf( '%dpx', round( $width ) );
+		if ( $width <= 400 ) {
+			$warnings[] = "SEO title is {$px} wide; Yoast wants more than 400px (too short).";
+		} elseif ( $width > 600 ) {
+			$warnings[] = "SEO title is {$px} wide; Yoast truncates beyond 600px (too long).";
+		} elseif ( $width <= 410 || $width > 590 ) {
+			$warnings[] = "SEO title is {$px} wide, within 10px of Yoast's limit; check the bar in the editor.";
+		} else {
+			$lines[] = "title width       {$px} (green: over 400, up to 600)";
+		}
+	}
+
+	if ( '' !== $description ) {
+		$length = mb_strlen( $description );
+		if ( $length <= 120 ) {
+			$warnings[] = "Meta description is {$length} characters; Yoast wants more than 120.";
+		} elseif ( $length > 156 ) {
+			$warnings[] = "Meta description is {$length} characters; Yoast wants at most 156.";
+		} else {
+			$lines[] = "description       {$length} characters (green: 121 to 156)";
+		}
+	}
+
+	if ( '' !== $keyphrase ) {
+		$words = cs_words( $keyphrase );
+		if ( count( $words ) > 4 ) {
+			$warnings[] = 'Focus keyphrase has ' . count( $words ) . ' words; Yoast recommends at most 4.';
+		}
+
+		if ( '' !== $title ) {
+			if ( 0 === mb_stripos( $title, $keyphrase ) ) {
+				$lines[] = 'keyphrase         at the start of the SEO title';
+			} elseif ( false !== mb_stripos( $title, $keyphrase ) ) {
+				$warnings[] = 'Focus keyphrase is in the SEO title but not at the start; Yoast wants it first.';
+			} else {
+				$warnings[] = 'SEO title does not contain the exact focus keyphrase.';
+			}
+		}
+
+		if ( '' !== $description ) {
+			$count = cs_keyphrase_count( $keyphrase, $description );
+			if ( $count < 1 ) {
+				$warnings[] = 'Meta description does not contain the focus keyphrase.';
+			} elseif ( $count > 2 ) {
+				$warnings[] = "Meta description contains the focus keyphrase {$count} times; Yoast allows at most 2.";
+			} else {
+				$lines[] = "keyphrase         in the meta description {$count}x";
+			}
+		}
+
+		$missing = array_diff( $words, cs_words( str_replace( '-', ' ', (string) $slug ) ) );
+		if ( $missing ) {
+			$warnings[] = "Slug '{$slug}' lacks keyphrase word(s): " . implode( ', ', $missing ) . '.';
+		} else {
+			$lines[] = "keyphrase         in the slug '{$slug}'";
+		}
+
+		$users = cs_keyphrase_users( $keyphrase, (int) $target_id );
+		if ( $users ) {
+			$warnings[] = "Focus keyphrase '{$keyphrase}' is already used by post(s) " . implode( ', ', $users ) . '.';
+		} else {
+			$lines[] = 'keyphrase         not used by any other post';
+		}
+	}
+
+	return $lines;
+}
+
+/**
+ * Rebuild a post's Yoast indexable from its current meta, which is what the
+ * front end and the admin columns read. Yoast does this itself on
+ * wp_insert_post; meta written directly needs it run again.
+ */
+function cs_rebuild_yoast_indexable( $post_id ) {
+	// Container service IDs are class names without the leading backslash.
+	$watcher = 'Yoast\WP\SEO\Integrations\Watchers\Indexable_Post_Watcher';
+	if ( function_exists( 'YoastSEO' ) && class_exists( $watcher ) ) {
+		try {
+			YoastSEO()->classes->get( $watcher )->build_indexable( $post_id );
+			return true;
+		} catch ( Throwable $e ) {
+			echo "    ! Yoast indexable rebuild failed: {$e->getMessage()}\n";
+		}
+	}
+	return false;
+}
+
 $map = cs_field_map();
 
 // -----------------------------------------------------------------------------
@@ -489,11 +704,19 @@ foreach ( $files as $file ) {
 	$post_meta = isset( $data['post'] ) && is_array( $data['post'] ) ? $data['post'] : array();
 	$f         = isset( $data['fields'] ) && is_array( $data['fields'] ) ? $data['fields'] : array();
 	$brief     = isset( $data['brief'] ) && is_array( $data['brief'] ) ? $data['brief'] : array();
+	$seo       = isset( $data['seo'] ) && is_array( $data['seo'] ) ? $data['seo'] : array();
 	$title     = isset( $post_meta['title'] ) ? trim( (string) $post_meta['title'] ) : '';
 	$slug      = isset( $post_meta['slug'] ) ? trim( (string) $post_meta['slug'] ) : '';
 
-	foreach ( array_diff( array_keys( $data ), array( 'source', 'post', 'fields', 'brief', '_info' ) ) as $key ) {
+	foreach ( array_diff( array_keys( $data ), array( 'source', 'post', 'fields', 'seo', 'brief', '_info' ) ) as $key ) {
 		$warnings[] = "Unknown top-level key '{$key}' is ignored.";
+	}
+	if ( isset( $data['seo'] ) && ! is_array( $data['seo'] ) ) {
+		$errors[] = '"seo" must be an object with title, description and/or focus_keyphrase.';
+	}
+	if ( $seo && ! class_exists( 'WPSEO_Meta' ) ) {
+		$errors[] = 'The file has an "seo" block but Yoast SEO is not active.';
+		$seo      = array();
 	}
 
 	// ---- Target post -------------------------------------------------------
@@ -673,6 +896,61 @@ foreach ( $files as $file ) {
 		}
 	}
 
+	// ---- Yoast SEO ----------------------------------------------------------
+	$seo_lines = array();
+	$seo_plan  = array(); // Social copies to clear, stale scores to drop.
+	if ( $seo ) {
+		$seo_slug  = '' !== $slug ? $slug : ( $existing ? $existing->post_name : sanitize_title( $title ) );
+		$seo_lines = cs_check_seo( $seo, $seo_slug, $existing ? $existing->ID : 0, $errors, $warnings );
+
+		if ( $existing && ! $errors ) {
+			$stored_seo = array();
+			foreach ( CS_SEO_KEYS as $key => $meta ) {
+				$stored_seo[ $key ] = (string) WPSEO_Meta::get_value( $meta, $existing->ID );
+				if ( isset( $seo[ $key ] ) && trim( $seo[ $key ] ) !== $stored_seo[ $key ] ) {
+					$changes[] = str_pad( "seo {$key}", 16 ) . ' ' . cs_preview( $stored_seo[ $key ] ) . ' -> ' . cs_preview( trim( $seo[ $key ] ) );
+				}
+			}
+
+			// Social text that merely copied the old SEO text would go stale.
+			foreach ( array( 'opengraph-title' => 'title', 'twitter-title' => 'title', 'opengraph-description' => 'description', 'twitter-description' => 'description' ) as $social => $source ) {
+				$value = (string) WPSEO_Meta::get_value( $social, $existing->ID );
+				if ( '' === $value || ! isset( $seo[ $source ] ) ) {
+					continue;
+				}
+				if ( $value === $stored_seo[ $source ] ) {
+					$seo_plan['clear'][] = $social;
+				} else {
+					$warnings[] = "Custom {$social} kept: " . cs_preview( $value ) . '.';
+				}
+			}
+			if ( ! empty( $seo_plan['clear'] ) ) {
+				$notes[] = 'social copies of the old SEO text are cleared so they follow the new text: ' . implode( ', ', $seo_plan['clear'] );
+			}
+
+			// Scores Yoast computed in the editor for the old title, description
+			// and keyphrase no longer describe anything; the editor recomputes
+			// them the next time the post is updated.
+			$stale = array();
+			if ( isset( $seo['focus_keyphrase'] ) && trim( $seo['focus_keyphrase'] ) !== $stored_seo['focus_keyphrase'] ) {
+				$stale[] = 'linkdex';
+			}
+			if ( isset( $seo['title'] ) && trim( $seo['title'] ) !== $stored_seo['title'] ) {
+				$stale[] = 'seo_title_score';
+			}
+			if ( isset( $seo['description'] ) && trim( $seo['description'] ) !== $stored_seo['description'] ) {
+				$stale[] = 'meta_description_score';
+			}
+			$stale = array_values( array_filter( $stale, function ( $key ) use ( $existing ) {
+				return '' !== (string) get_post_meta( $existing->ID, WPSEO_Meta::$meta_prefix . $key, true );
+			} ) );
+			if ( $stale ) {
+				$seo_plan['stale'] = $stale;
+				$notes[]           = 'stale Yoast scores dropped (recomputed on the next editor update): ' . implode( ', ', $stale );
+			}
+		}
+	}
+
 	// ---- Compare with what is stored ---------------------------------------
 	if ( $existing ) {
 		if ( '' !== $title && $existing->post_title !== $title ) {
@@ -737,11 +1015,25 @@ foreach ( $files as $file ) {
 			echo "    = {$line}\n";
 		}
 	}
+	if ( $seo ) {
+		echo "  yoast seo:\n";
+		foreach ( array( 'title', 'description', 'focus_keyphrase' ) as $key ) {
+			if ( isset( $seo[ $key ] ) ) {
+				echo '    ' . str_pad( $key, 16 ) . ' ' . trim( $seo[ $key ] ) . "\n";
+			}
+		}
+		foreach ( $seo_lines as $line ) {
+			echo "    ok {$line}\n";
+		}
+	}
 	if ( $brief ) {
-		echo "  not written (set these yourself):\n";
+		echo "  reference only (from the document's brief, not written):\n";
 		foreach ( $brief as $key => $value ) {
 			echo '    - ' . str_pad( $key, 16 ) . ' ' . (string) $value . "\n";
 		}
+	}
+	foreach ( $notes as $n ) {
+		echo "  * {$n}\n";
 	}
 	foreach ( $warnings as $w ) {
 		echo "  ! {$w}\n";
@@ -757,6 +1049,8 @@ foreach ( $files as $file ) {
 		'title'     => $title,
 		'slug'      => $slug,
 		'fields'    => $f,
+		'seo'       => $seo,
+		'seo_plan'  => $seo_plan,
 		'existing'  => $existing,
 		'status'    => $status_next,
 		'warnings'  => count( $warnings ),
@@ -787,10 +1081,17 @@ foreach ( $items as $item ) {
 
 	if ( $existing ) {
 		$post_id     = $existing->ID;
-		$backup      = array(
+		$yoast_meta = array();
+		foreach ( get_post_meta( $post_id ) as $key => $values ) {
+			if ( 0 === strpos( $key, '_yoast_wpseo_' ) ) {
+				$yoast_meta[ $key ] = $values[0];
+			}
+		}
+		$backup = array(
 			'_post'      => $existing->to_array(),
 			'_thumbnail' => get_post_thumbnail_id( $post_id ),
 			'_old_slugs' => array_values( (array) get_post_meta( $post_id, '_wp_old_slug' ) ),
+			'_yoast'     => $yoast_meta,
 			'fields'     => cs_export( $post_id, $map )['fields'],
 		);
 		$backup_file = sprintf( '%s/cs-%d-%s.json', $backup_dir, $post_id, gmdate( 'Ymd-His' ) );
@@ -822,6 +1123,23 @@ foreach ( $items as $item ) {
 		update_field( $map[ $name ]['key'], wp_slash( cs_normalise( $map[ $name ], $value ) ), $post_id );
 	}
 
+	// Yoast meta goes in before the post columns, so the wp_insert_post that
+	// wp_update_post fires already rebuilds the indexable with it.
+	// WPSEO_Meta::set_value() slashes for update_post_meta() itself.
+	$seo_written = array();
+	foreach ( CS_SEO_KEYS as $key => $meta ) {
+		if ( isset( $item['seo'][ $key ] ) ) {
+			WPSEO_Meta::set_value( $meta, trim( $item['seo'][ $key ] ), $post_id );
+			$seo_written[] = $key;
+		}
+	}
+	foreach ( $item['seo_plan']['clear'] ?? array() as $social ) {
+		WPSEO_Meta::delete( $social, $post_id );
+	}
+	foreach ( $item['seo_plan']['stale'] ?? array() as $score ) {
+		WPSEO_Meta::delete( $score, $post_id );
+	}
+
 	$current = get_post( $post_id );
 	$update  = array();
 	if ( '' !== $item['title'] && $current->post_title !== $item['title'] ) {
@@ -845,6 +1163,12 @@ foreach ( $items as $item ) {
 		}
 	}
 
+	// With no post column to change nothing has rebuilt the Yoast indexable,
+	// and the front end would keep serving the old title and description.
+	if ( ( $seo_written || ! empty( $item['seo_plan'] ) ) && ! $update ) {
+		cs_rebuild_yoast_indexable( $post_id );
+	}
+
 	// A slug WordPress had to change (taken, reserved) would break the URL plan.
 	$final = get_post( $post_id );
 	if ( '' !== $item['slug'] && $final->post_name !== $item['slug'] ) {
@@ -853,6 +1177,11 @@ foreach ( $items as $item ) {
 
 	echo "\n  " . ( $existing ? 'updated' : 'created' ) . " post {$post_id} [{$final->post_status}] {$final->post_title}\n";
 	echo '    fields : ' . count( $item['fields'] ) . ' written' . ( $update ? '; post columns: ' . implode( ', ', array_keys( array_diff_key( $update, array( 'ID' => 1 ) ) ) ) : '' ) . "\n";
+	if ( $seo_written || ! empty( $item['seo_plan'] ) ) {
+		echo '    yoast  : ' . implode( ', ', $seo_written )
+			. ( ! empty( $item['seo_plan']['clear'] ) ? '; cleared ' . implode( ', ', $item['seo_plan']['clear'] ) : '' )
+			. ( ! empty( $item['seo_plan']['stale'] ) ? '; dropped stale ' . implode( ', ', $item['seo_plan']['stale'] ) : '' ) . "\n";
+	}
 	echo '    edit   : ' . admin_url( "post.php?post={$post_id}&action=edit" ) . "\n";
 	echo '    view   : ' . ( 'publish' === $final->post_status ? get_permalink( $post_id ) : get_preview_post_link( $post_id ) ) . "\n";
 	if ( $backup_file ) {
@@ -860,4 +1189,4 @@ foreach ( $items as $item ) {
 	}
 }
 
-echo "\nNot touched: SEO meta, featured images, image alt text.\n";
+echo "\nNot touched: featured images, image alt text" . ( array_filter( wp_list_pluck( $items, 'seo' ) ) ? '' : ', Yoast SEO meta' ) . ".\n";

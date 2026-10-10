@@ -6,6 +6,11 @@
         "slug": "universal-hospital",
         "excerpt": "Universal Hospital is a 200-bedded tertiary-care hospital in Surat, Gujarat, with a 54-bed ICU and multiple specialities. Its clinical, diagnostic and administrative workflows are now more connected, helping doctors access medical records faster and improving coordination across departments."
     },
+    "seo": {
+        "title": "Universal Hospital Case Study: 90% Less Paper | Healthray",
+        "description": "See how Universal Hospital in Surat cut daily paper use by 90%, shortened patient wait times by 45% and made onboarding 30% faster with Healthray.",
+        "focus_keyphrase": "Universal Hospital"
+    },
     "fields": {
         "short_name": "Universal Hospital",
         "hero_lede": "Universal Hospital is a 200-bedded tertiary-care hospital in Surat, Gujarat, with a 54-bed ICU and multiple specialities. Its clinical, diagnostic and administrative workflows are now more connected, helping doctors access medical records faster and improving coordination across departments.",

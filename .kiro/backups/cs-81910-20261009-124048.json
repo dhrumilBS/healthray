@@ -1,0 +1,258 @@
+{
+    "_post": {
+        "ID": 81910,
+        "post_author": "38",
+        "post_date": "2026-10-09 17:17:47",
+        "post_date_gmt": "2026-10-09 11:47:47",
+        "post_content": "",
+        "post_title": "How Lotus Hospital Improved Daily Operations with Healthray",
+        "post_excerpt": "Lotus Hospital is a 200-bed multispeciality hospital in Valsad, Gujarat, with four operation theatres and critical care facilities. Its admissions, surgical, nursing and pharmacy workflows are now more streamlined, helping teams manage daily operations more efficiently.",
+        "post_status": "publish",
+        "comment_status": "closed",
+        "ping_status": "closed",
+        "post_password": "",
+        "post_name": "lotus-hospital",
+        "to_ping": "",
+        "pinged": "",
+        "post_modified": "2026-10-09 17:39:53",
+        "post_modified_gmt": "2026-10-09 12:09:53",
+        "post_content_filtered": "",
+        "post_parent": 0,
+        "guid": "http://192.168.0.223/healthray/?post_type=case-studies&#038;p=81910",
+        "menu_order": 0,
+        "post_type": "case-studies",
+        "post_mime_type": "",
+        "comment_count": "0",
+        "filter": "raw",
+        "ancestors": [],
+        "page_template": "",
+        "post_category": [],
+        "tags_input": []
+    },
+    "_thumbnail": 0,
+    "_old_slugs": [],
+    "_yoast": [],
+    "fields": {
+        "short_name": "Lotus Hospital",
+        "hero_label": "Case study",
+        "hero_lede": "Lotus Hospital is a 200-bed multispeciality hospital in Valsad, Gujarat, with four operation theatres and critical care facilities. Its admissions, surgical, nursing and pharmacy workflows are now more streamlined, helping teams manage daily operations more efficiently.",
+        "hero_image_alt": "",
+        "metrics": [
+            {
+                "title": "30% faster",
+                "text": "bed allocation"
+            },
+            {
+                "title": "25% fewer",
+                "text": "OT scheduling conflicts"
+            },
+            {
+                "title": "30% fewer",
+                "text": "missed nursing updates"
+            },
+            {
+                "title": "20% less",
+                "text": "medicine wastage"
+            }
+        ],
+        "glance_facts": [
+            {
+                "label": "Hospital",
+                "value": "Lotus Hospital",
+                "url": ""
+            },
+            {
+                "label": "Location",
+                "value": "Valsad, Gujarat, India",
+                "url": ""
+            },
+            {
+                "label": "Type",
+                "value": "Multispeciality",
+                "url": ""
+            },
+            {
+                "label": "Size",
+                "value": "200 Beds",
+                "url": ""
+            },
+            {
+                "label": "Time to go live",
+                "value": "Under 2 weeks",
+                "url": ""
+            },
+            {
+                "label": "Downtime",
+                "value": "None",
+                "url": ""
+            },
+            {
+                "label": "Website",
+                "value": "https://lotushospital.in/",
+                "url": "https://lotushospital.in/"
+            }
+        ],
+        "modules_used": [
+            {
+                "name": "Bed & Ward Management"
+            },
+            {
+                "name": "OT Management"
+            },
+            {
+                "name": "IPD EMR & Nursing"
+            },
+            {
+                "name": "Pharmacy Management"
+            }
+        ],
+        "overview_label": "The hospital",
+        "overview_heading": "Managing Multiple Hospital Workflows",
+        "overview_content": "Lotus Hospital provides medical and surgical care, supported by dialysis, radiology, laboratory and pharmacy facilities. Its radiology department offers digital X-ray, sonography, colour Doppler and CT services.\n\nAs the hospital managed these activities across different teams, staff needed timely information to allocate beds, schedule procedures, hand over patient updates, and monitor medicine stock. Gaps in these workflows could slow down routine operations and make important updates harder to track.",
+        "problem_label": "The problem",
+        "problem_heading": "Four Workflow Gaps Affecting Daily Operations",
+        "problem_intro": "",
+        "problems": [
+            {
+                "title": "Bed status gaps",
+                "text": "Staff had to check whether beds were occupied, available or ready during admissions and transfers. Delayed bed-status updates could slow allocation."
+            },
+            {
+                "title": "OT scheduling conflicts",
+                "text": "Teams had to manage theatre availability and procedure timings across four operating theatres. Schedule changes could lead to conflicts between procedures."
+            },
+            {
+                "title": "Missed nursing updates",
+                "text": "Important patient updates could be missed during shift handovers when information was passed between nursing teams, leaving incoming staff without key updates."
+            },
+            {
+                "title": "Late expiry tracking",
+                "text": "Pharmacy teams had to monitor medicine expiry dates across stock. Late identification of near-expiry medicines left less time to act."
+            }
+        ],
+        "problem_outro": "",
+        "decision_label": "The decision",
+        "decision_heading": "Why Lotus Hospital chose Healthray",
+        "decision_intro": "In order to manage the admissions process, OT schedules, nursing workflows and pharmaceuticals at Lotus Hospital, there was a need for a more structured approach. The hospital selected the Healthray software, where all these aspects can be managed digitally in one system.",
+        "quote_text": "Managing different workflows across departments was challenging, especially when teams needed to coordinate information. Healthray has brought these workflows together on one platform, making it easier for our teams to access information, coordinate their work and manage daily operations. We have found it much easier to keep things organised across departments.",
+        "quote_name": "Dr. Sanjeev Desai",
+        "quote_role": "Lotus Hospital",
+        "solution_label": "The solution",
+        "solution_heading": "How Healthray helped Lotus improve hospital workflows",
+        "solution_intro": "",
+        "solutions": [
+            {
+                "icon": "check",
+                "title": "Bed & Ward Management",
+                "text": "Bed status was managed through a central workflow, helping staff check occupied, available and ready beds during admissions and transfers and allocate beds more efficiently."
+            },
+            {
+                "icon": "calendar",
+                "title": "OT Management",
+                "text": "OT schedules and theatre availability were managed digitally, helping teams coordinate procedures across the operating theatres and reduce scheduling conflicts."
+            },
+            {
+                "icon": "records",
+                "title": "IPD EMR & Nursing",
+                "text": "Patient updates were recorded in IPD workflows, giving nursing teams a structured way to review information during shift handovers and reducing missed updates."
+            },
+            {
+                "icon": "pharmacy",
+                "title": "Pharmacy Management",
+                "text": "Medicine stock and expiry information was managed digitally, helping pharmacy teams identify near-expiry medicines earlier and take action before they became unusable."
+            }
+        ],
+        "setup_label": "The setup",
+        "setup_heading": "From setup to team adoption",
+        "setup_intro": "Lotus Hospital worked with Healthray to transition its existing workflows to the new system.",
+        "steps": [
+            {
+                "when": "Workflow setup",
+                "title": "Workflows configured",
+                "text": "The hospital's existing processes were configured in the system."
+            },
+            {
+                "when": "Data migration",
+                "title": "Existing information transferred",
+                "text": "Relevant hospital data was migrated into the configured workflows."
+            },
+            {
+                "when": "Staff training",
+                "title": "Teams trained for daily use",
+                "text": "Staff were trained on the workflows relevant to their roles."
+            }
+        ],
+        "results_label": "The results",
+        "results_heading": "Results After Implementing Healthray",
+        "results_intro": "After implementing Healthray, Lotus Hospital improved its day-to-day operations.",
+        "results": [
+            {
+                "number": "30%",
+                "title": "faster bed allocation",
+                "text": "Staff spent less time checking bed availability, allowing beds to be assigned faster during admissions and transfers."
+            },
+            {
+                "number": "25%",
+                "title": "fewer OT scheduling conflicts",
+                "text": "Fewer clashes between procedures made it easier for teams to keep OT schedules organised."
+            },
+            {
+                "number": "30%",
+                "title": "fewer missed nursing updates",
+                "text": "Incoming nursing staff had better access to the information they needed during shift handovers, reducing missed patient updates."
+            },
+            {
+                "number": "20%",
+                "title": "less medicine wastage",
+                "text": "Pharmacy teams had more time to act on medicines approaching expiry, helping reduce avoidable wastage."
+            }
+        ],
+        "ba_title": "Before and After Healthray",
+        "ba_before_label": "Before Healthray",
+        "ba_after_label": "After Healthray",
+        "ba_rows": [
+            {
+                "area": "Bed allocation",
+                "before": "Staff checked bed status during admissions and transfers",
+                "after": "Bed availability was centrally managed for quicker allocation"
+            },
+            {
+                "area": "OT scheduling",
+                "before": "Theatre availability and procedure timings were managed separately",
+                "after": "Theatre schedules and procedure timings were coordinated in one place"
+            },
+            {
+                "area": "Nursing handovers",
+                "before": "Patient updates could be missed during shift changes",
+                "after": "Nursing teams could record and review patient updates during handovers"
+            },
+            {
+                "area": "Medicine expiry",
+                "before": "Near-expiry medicines could be identified late",
+                "after": "Pharmacy teams could track expiry information and act earlier"
+            }
+        ],
+        "fit_heading": "Is your hospital facing similar challenges?",
+        "fit_intro": "This case study may be relevant if your hospital:",
+        "fit_points": [
+            {
+                "text": "Struggles to keep bed status updated during admissions and transfers."
+            },
+            {
+                "text": "Needs to coordinate OT schedules across multiple operation theatres."
+            },
+            {
+                "text": "Has difficulty keeping nursing updates consistent during shift handovers."
+            },
+            {
+                "text": "Needs to track medicine stock and expiry dates more efficiently."
+            }
+        ],
+        "cta_heading": "See how Healthray HMS can support your hospital",
+        "cta_text": "Book a free demo to see how Healthray can help your teams manage these workflows in one system and coordinate daily hospital operations more efficiently.",
+        "featured": 0,
+        "card_title": "",
+        "card_location": "",
+        "card_metrics": []
+    }
+}
