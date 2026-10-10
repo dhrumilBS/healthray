@@ -153,9 +153,10 @@ $hr_year = date('Y');
 				<ul>
 					<li><a href="<?php echo esc_url($hr_home_url . 'our-story/'); ?>">Our Story</a></li>
 					<li><a href="<?php echo esc_url($hr_home_url . 'case-studies/'); ?>">Case Studies</a></li>
-					<li><a href="<?php echo esc_url($hr_home_url . 'blogs/'); ?>">Blog</a></li>
+					<li><a href="<?php echo esc_url($hr_home_url . 'blog/'); ?>">Blog</a></li>
 					<li><a href="<?php echo esc_url($hr_home_url . 'become-a-partner/'); ?>">Become a Partner</a></li>
 					<li><a href="<?php echo esc_url($hr_home_url . 'contact/'); ?>">Contact</a></li>
+					<li><a href="<?php echo esc_url($hr_home_url . 'login/'); ?>">Healthray Login</a></li>
 				</ul>
 			</nav>
 		</div>

@@ -33,6 +33,7 @@ require_once get_stylesheet_directory() . '/lib/acf-case-studies.php';
 require_once get_stylesheet_directory() . '/lib/events-helpers.php';
 require_once get_stylesheet_directory() . '/lib/whitepaper-helpers.php';
 require_once get_stylesheet_directory() . '/lib/blog-rewrites.php';
+require_once get_stylesheet_directory() . '/lib/blog-redirects.php';
 require_once get_stylesheet_directory() . '/lib/virtual-urls.php';
 require_once get_stylesheet_directory() . '/lib/header.php';
 
