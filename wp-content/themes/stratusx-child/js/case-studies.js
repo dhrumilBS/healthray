@@ -1,7 +1,7 @@
 /**
- * Case studies hub: software filter tabs (archive-case-studies.php).
- * Hides cards whose data-cat does not include the chosen term slug and keeps
- * the live count and empty state in step.
+ * Case studies hub: "problem solved" filter buttons (archive-case-studies.php).
+ * Hides stories whose data-cat does not include the chosen problem slug and
+ * keeps the live count and empty state in step.
  */
 (function () {
 	var toolbar = document.querySelector('[data-cs-filter]');
@@ -36,7 +36,7 @@
 
 			if (count) {
 				count.textContent = want
-					? 'Showing ' + shown + ' of ' + total + ' ' + noun + ': ' + btn.getAttribute('data-name')
+					? 'Showing ' + shown + ' of ' + total + ' ' + noun + ' for ' + btn.getAttribute('data-name')
 					: 'Showing all ' + total + ' ' + noun;
 			}
 			if (empty) {

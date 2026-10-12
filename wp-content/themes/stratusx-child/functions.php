@@ -149,8 +149,9 @@ add_action('wp_enqueue_scripts', function () {
 		'pageId' => get_the_ID(),
 		'pageTitle' => get_the_title(get_queried_object_id()),
 		'isLoggedIn' => is_user_logged_in(),
-		// Pages where the lead popup does NOT auto-open on scroll (buttons still open it). PPC pages included.
-		'pageIds' => array_merge([28110, 60060, 60090], hr_ppc_page_key() !== '' ? [get_the_ID()] : []),
+		// Pages where the lead popup does NOT auto-open on scroll (buttons still open it). PPC pages included,
+		// and the case studies, so the popup never interrupts someone reading a story.
+		'pageIds' => array_merge([28110, 60060, 60090], hr_ppc_page_key() !== '' || is_singular('case-studies') || is_post_type_archive('case-studies') ? [get_the_ID()] : []),
 		'homeUrl' => home_url(),
 	]);
 });
@@ -188,7 +189,7 @@ function remove_from_homepage()
 	);
 
 	// Remove only on the homepage.
-	if (is_page(79691) || is_page(79713) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(167) || is_single() || is_page(28110) || hr_is_login_portal_page()) {
+	if (is_page(79691) || is_page(79713) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81834) || is_page(167) || is_single() || is_page(28110) || hr_is_login_portal_page()) {
 		$styles = array_merge($styles, array('abha-card', 'common-theme', 'owl.carousal', 'my-elements'));
 		$scripts = array_merge($scripts, array('abha-card', 'common-theme', 'owl.carousal', 'toggle-tabs', 'my-element'));
 	}
@@ -256,7 +257,7 @@ add_filter('wpseo_canonical', function ($canonical) {
 });
 
 add_filter('wpseo_opengraph_type', function ($type) {
-	if (is_page(HR_LANDING_PAGE_IDS) || is_page(43917) || hr_is_login_portal_page()) {
+	if (is_page(HR_LANDING_PAGE_IDS) || is_page(43917) || is_page(81834) || hr_is_login_portal_page()) {
 		return 'website';
 	}
 	return $type;

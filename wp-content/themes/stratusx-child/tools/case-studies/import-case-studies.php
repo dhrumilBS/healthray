@@ -43,8 +43,8 @@
  *   - New posts are drafts unless --status is passed.
  *   - An existing post's status is left alone unless --status is passed.
  *   - Every existing post is backed up to .kiro/backups/ before it is written.
- *   - Changing a published post's slug lets WordPress record the old one, which
- *     hr_cs_redirect_old_urls() uses to 301 the old address.
+ *   - Changing a published post's slug lets WordPress record the old one, and
+ *     its own wp_old_slug_redirect() then 301s the old address.
  *
  * @package stratusx-child
  */
@@ -268,7 +268,6 @@ function cs_render_keys() {
 		'results'      => 'title',
 		'ba_rows'      => 'area',
 		'fit_points'   => 'text',
-		'card_metrics' => 'title',
 	);
 }
 
