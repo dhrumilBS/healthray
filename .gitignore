@@ -29,3 +29,9 @@ wp-content/ai1wm-backups/
 wp-content/backups*/
 *.sql
 *.sql.gz
+
+# Build archives (e.g. a zipped theme for upload)
+*.zip
+
+# WordPress Importer: one-off migration tool, kept out of deploys
+wp-content/plugins/wordpress-importer/
