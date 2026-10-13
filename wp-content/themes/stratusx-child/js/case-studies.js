@@ -1,8 +1,3 @@
-/**
- * Case studies hub: "problem solved" filter buttons (archive-case-studies.php).
- * Hides stories whose data-cat does not include the chosen problem slug and
- * keeps the live count and empty state in step.
- */
 (function () {
 	var toolbar = document.querySelector('[data-cs-filter]');
 	if (!toolbar) {

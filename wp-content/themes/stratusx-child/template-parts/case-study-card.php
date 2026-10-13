@@ -98,7 +98,7 @@ if ($cs_featured) {
 		<?php if ($cs_golive) : ?>
 			<p class="card-golive"><?php echo esc_html($cs_golive); ?></p>
 		<?php endif; ?>
-		
+
 		<p class="card-foot">
 			<a class="card-link" href="<?php echo esc_url(get_permalink($cs_id)); ?>"><?php echo esc_html(sprintf('Read %s’s story', $cs_name)); ?> <span aria-hidden="true">→</span></a>
 			<time datetime="<?php echo esc_attr($cs_published['iso']); ?>">Published <?php echo esc_html($cs_published['text']); ?></time>
