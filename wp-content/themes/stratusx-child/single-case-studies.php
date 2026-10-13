@@ -19,6 +19,7 @@ $cs_title      = get_the_title();
 $cs_short_name = hr_cs_short_name($cs_id);
 $cs_thumb      = get_post_thumbnail_id();
 $cs_hero_alt   = hr_cs_image_alt($cs_id);
+$cs_lede       = trim((string) get_field('hero_lede'));
 $cs_metrics    = hr_cs_summary_metrics($cs_id);
 $cs_location   = hr_cs_location($cs_id);
 $cs_published  = hr_cs_published($cs_id);
@@ -113,16 +114,7 @@ $cs_has_parts = array(
 	'results'  => $cs_results || $cs_ba_rows,
 );
 
-$cs_related = get_posts(
-	array(
-		'post_type'      => 'case-studies',
-		'post_status'    => 'publish',
-		'posts_per_page' => 3,
-		'post__not_in'   => array($cs_id),
-		'no_found_rows'  => true,
-		'fields'         => 'ids',
-	)
-);
+$cs_related = hr_cs_related_ids($cs_id, 3);
 
 ?>
 <main class="hrcs">
@@ -137,6 +129,9 @@ $cs_related = get_posts(
 						<span aria-current="page"><?php echo esc_html($cs_short_name); ?></span>
 					</nav>
 					<h1><?php echo esc_html($cs_title); ?></h1>
+					<?php if ('' !== $cs_lede) : ?>
+						<p class="hero-lede"><?php echo esc_html($cs_lede); ?></p>
+					<?php endif; ?>
 					<p class="hero-meta">
 						<time datetime="<?php echo esc_attr($cs_published['iso']); ?>">Published <?php echo esc_html($cs_published['text']); ?></time>
 						<?php if ($cs_location) : ?>
@@ -150,25 +145,21 @@ $cs_related = get_posts(
 				<?php if ($cs_thumb) : ?>
 					<figure class="hero-photo">
 						<?php
-						// The photo is hidden below 768px (css/case-studies.css). The blank
-						// source stops phones downloading it; keep the two widths in step.
+						// On phones the photo sits under the text at a shorter crop and
+						// srcset serves the 768px file. It is the page's only high-priority
+						// image. Sizes follow the 1440px container (css/case-studies.css).
+						echo hr_cs_image( // phpcs:ignore WordPress.Security.EscapeOutput -- wp_get_attachment_image().
+							$cs_thumb,
+							'large',
+							array(
+								'alt'           => $cs_hero_alt,
+								'sizes'         => '(min-width: 1440px) 610px, (min-width: 900px) 43vw, calc(100vw - 32px)',
+								'loading'       => 'eager',
+								'fetchpriority' => 'high',
+								'decoding'      => 'async',
+							)
+						);
 						?>
-						<picture>
-							<source media="(max-width: 767px)" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-							<?php
-							echo wp_get_attachment_image(
-								$cs_thumb,
-								'full',
-								false,
-								array(
-									'alt'           => $cs_hero_alt,
-									'loading'       => 'eager',
-									'fetchpriority' => 'high',
-									'decoding'      => 'async',
-								)
-							);
-							?>
-						</picture>
 					</figure>
 				<?php endif; ?>
 			</div>
@@ -177,9 +168,10 @@ $cs_related = get_posts(
 
 	<?php if ($cs_metrics) : ?>
 		<section class="wrap strip-wrap" aria-label="Results, before and after Healthray">
+			<?php // Metric 1 is the headline result (its field says so), so it leads. ?>
 			<ul class="strip strip--<?php echo (int) min(count($cs_metrics), 4); ?>">
-				<?php foreach ($cs_metrics as $cs_metric) : ?>
-					<li><strong class="strip-num"><?php echo hr_cs_metric_html($cs_metric['value']); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in hr_cs_metric_html(). 
+				<?php foreach ($cs_metrics as $cs_i => $cs_metric) : ?>
+					<li<?php echo 0 === $cs_i && count($cs_metrics) > 1 ? ' class="strip-lead"' : ''; ?>><strong class="strip-num"><?php echo hr_cs_metric_html($cs_metric['value']); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in hr_cs_metric_html(). 
 													?></strong><span class="strip-lbl"><?php echo esc_html($cs_metric['label']); ?></span></li>
 				<?php endforeach; ?>
 			</ul>
@@ -211,8 +203,23 @@ $cs_related = get_posts(
 					<?php if ($cs_modules) : ?>
 						<p class="glance-sub">Modules used</p>
 						<ul class="chips">
-							<?php foreach ($cs_modules as $cs_module) : ?>
-								<li><?php echo esc_html($cs_module['name']); ?></li>
+							<?php
+							// Each product page is linked once, from its first module.
+							$cs_linked = array();
+							foreach ($cs_modules as $cs_module) :
+								$cs_module_url = hr_cs_module_url($cs_module);
+								if (isset($cs_linked[$cs_module_url])) {
+									$cs_module_url = '';
+								}
+								$cs_linked[$cs_module_url] = true;
+							?>
+								<li>
+									<?php if ($cs_module_url) : ?>
+										<a href="<?php echo esc_url($cs_module_url); ?>"><?php echo esc_html($cs_module['name']); ?></a>
+									<?php else : ?>
+										<?php echo esc_html($cs_module['name']); ?>
+									<?php endif; ?>
+								</li>
 							<?php endforeach; ?>
 						</ul>
 					<?php endif; ?>
@@ -331,9 +338,12 @@ $cs_related = get_posts(
 							if ($cs_ba_rows) :
 							?>
 								<?php if ($cs_ba_title) : ?>
-									<h3 class="ba-title"><?php echo esc_html($cs_ba_title); ?></h3>
+									<h3 class="ba-title" id="cs-ba"><?php echo esc_html($cs_ba_title); ?></h3>
 								<?php endif; ?>
-								<table class="ba">
+								<table class="ba" <?php echo $cs_ba_title ? 'aria-labelledby="cs-ba"' : ''; ?>>
+									<?php if (! $cs_ba_title) : ?>
+										<caption class="sr"><?php echo esc_html($cs_ba_before . ' and ' . $cs_ba_after); ?></caption>
+									<?php endif; ?>
 									<thead>
 										<tr>
 											<th scope="col">Area</th>

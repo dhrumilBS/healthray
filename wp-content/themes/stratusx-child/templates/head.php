@@ -13,7 +13,9 @@
   <link rel="stylesheet" href="https://healthray.com/wp-content/fonts/font.css"> 
    <?php wp_head(); ?>
    <?php
-  if (has_post_thumbnail()) {
+  // Case studies mark their own first image fetchpriority="high"; a preload
+  // here would fetch a hidden hero on phones and the wrong card on the hub.
+  if (has_post_thumbnail() && ! is_singular('case-studies') && ! is_post_type_archive('case-studies')) {
     $thumb_id = get_post_thumbnail_id(get_the_ID());
     $featured_img_src = wp_get_attachment_image_src($thumb_id, 'large')[0];
     $featured_img_srcset = wp_get_attachment_image_srcset($thumb_id);

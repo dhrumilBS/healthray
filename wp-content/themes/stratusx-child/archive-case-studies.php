@@ -20,6 +20,9 @@ global $wp_query;
 
 $cs_ids = array_map('intval', wp_list_pluck((array) $wp_query->posts, 'ID'));
 
+// The main query already loaded meta and terms; this adds the card photos.
+update_post_thumbnail_cache($wp_query);
+
 // Featured: the newest one flagged in the editor, otherwise the newest.
 $cs_featured_id = 0;
 foreach ($cs_ids as $cs_id) {
@@ -67,7 +70,7 @@ $cs_proof = '' !== $cs_proof ? $cs_proof : hr_cs_default_proof_line();
 				<span aria-current="page">Case studies</span>
 			</nav>
 			<h1>Real results from hospitals like yours</h1>
-			<p class="lede">How hospitals, clinics and labs across India switched to Healthray, in their own numbers and words.</p>
+			<p class="lede">How hospitals, clinics and labs across India switched to Healthray, told in their own numbers and their own words.</p>
 			<?php if ($cs_proof) : ?>
 				<p class="proof"><?php echo esc_html($cs_proof); ?></p>
 			<?php endif; ?>
@@ -81,8 +84,9 @@ $cs_proof = '' !== $cs_proof ? $cs_proof : hr_cs_default_proof_line();
 		<?php else : ?>
 
 			<?php if ($cs_show_tabs) : ?>
-				<div class="toolbar" data-cs-filter data-total="<?php echo (int) $cs_total; ?>">
-					<div class="tabs" role="group" aria-label="Filter by problem solved">
+				<div class="toolbar" data-cs-filter>
+					<p class="toolbar-label" id="cs-filter-label">Filter by problem solved</p>
+					<div class="tabs" role="group" aria-labelledby="cs-filter-label">
 						<button type="button" data-filter="" aria-pressed="true">All <span class="n"><?php echo (int) $cs_total; ?></span></button>
 						<?php foreach ($cs_tabs as $cs_slug => $cs_tab) : ?>
 							<button type="button" data-filter="<?php echo esc_attr($cs_slug); ?>" data-name="<?php echo esc_attr($cs_tab['name']); ?>" aria-pressed="false"><?php echo esc_html($cs_tab['name']); ?> <span class="n"><?php echo (int) $cs_tab['count']; ?></span></button>
@@ -98,7 +102,7 @@ $cs_proof = '' !== $cs_proof ? $cs_proof : hr_cs_default_proof_line();
 				<ul class="cards">
 					<?php
 					foreach ($cs_grid_ids as $cs_id) {
-						get_template_part('template-parts/case-study-card', null, array('post_id' => $cs_id));
+						get_template_part('template-parts/case-study-card', null, array('post_id' => $cs_id, 'heading' => 'h2'));
 					}
 					?>
 				</ul>

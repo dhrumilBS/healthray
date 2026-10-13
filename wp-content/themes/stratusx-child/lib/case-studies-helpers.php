@@ -165,6 +165,44 @@ function hr_cs_glyph($name)
 }
 
 /**
+ * Product page for a "Modules used" row: the row's own link, else the first
+ * page whose pattern matches the module name. Pages that do not exist are
+ * skipped, so a renamed or deleted page never leaves a broken link.
+ *
+ * @param array $module Repeater row with name and optional url.
+ * @return string URL, or '' for no link.
+ */
+function hr_cs_module_url(array $module)
+{
+	$own = trim((string) ($module['url'] ?? ''));
+	if ('' !== $own) {
+		return $own;
+	}
+
+	// Pattern => page path, most specific first.
+	$map = array(
+		'/pharmacy/i'                                => 'pharmacy-management-system',
+		'/\b(lab|laborator|sample|test result)/i'   => 'laboratory-information-management-system',
+		'/\bemr\b/i'                                 => 'emr-software',
+		'/\behr\b|patient records/i'                 => 'ehr-software',
+		'/billing|\btpa\b|claims|insurance/i'        => 'medical-billing-software',
+		'/inventory|\bstore\b/i'                     => 'inventory-management-software',
+		'/appointment/i'                             => 'doctor-appointment-system',
+		'/patient communication|engagement/i'        => 'patient-engagement-software',
+		'/\b(bed|ward|ot|opd|ipd|front desk|registration|emergency|icu|nursing|discharge)\b/i' => 'hospital-information-management-system',
+	);
+
+	foreach ($map as $pattern => $path) {
+		if (preg_match($pattern, (string) $module['name'])) {
+			$page = get_page_by_path($path);
+			return ($page && 'publish' === $page->post_status) ? get_permalink($page) : '';
+		}
+	}
+
+	return '';
+}
+
+/**
  * "01 – Title" numbering used on problem and solution cards.
  *
  * @param int    $index Zero-based position.
@@ -433,11 +471,12 @@ function hr_cs_face($id, $name, $lazy = true)
 		return '';
 	}
 
-	return wp_get_attachment_image($id, 'thumbnail', false, array(
-		'class'    => 'face',
-		'alt'      => $name,
-		'loading'  => $lazy ? 'lazy' : 'eager',
-		'decoding' => 'async',
+	return hr_cs_image($id, 'thumbnail', array(
+		'class'         => 'face',
+		'alt'           => $name,
+		'loading'       => $lazy ? 'lazy' : 'eager',
+		'fetchpriority' => 'auto',
+		'decoding'      => 'async',
 	));
 }
 
@@ -485,6 +524,105 @@ function hr_cs_image_alt($post_id)
 	$alt = trim((string) get_field('hero_image_alt', $post_id));
 
 	return '' !== $alt ? $alt : (string) get_post_meta(get_post_thumbnail_id($post_id), '_wp_attachment_image_alt', true);
+}
+
+/**
+ * wp_get_attachment_image() that keeps the template's own loading and
+ * fetchpriority.
+ *
+ * functions.php forces the first three attachment images on every page to
+ * eager and high priority. Case study templates know which image is the LCP
+ * one, so only that image keeps fetchpriority="high"; the rest stay lazy or
+ * at normal priority.
+ *
+ * @param int    $attachment_id Attachment ID.
+ * @param string $size          Image size.
+ * @param array  $attr          Attributes, including loading and fetchpriority.
+ * @return string
+ */
+function hr_cs_image($attachment_id, $size, array $attr)
+{
+	$keep    = array_intersect_key($attr, array('loading' => true, 'fetchpriority' => true));
+	$restore = function ($image_attr) use ($keep) {
+		unset($image_attr['fetchpriority']);
+		$image_attr = array_merge($image_attr, $keep);
+		// "auto" sizes are only valid on lazy images.
+		if (isset($image_attr['sizes']) && 'lazy' !== ($image_attr['loading'] ?? '')) {
+			$image_attr['sizes'] = preg_replace('/^auto,\s*/', '', $image_attr['sizes']);
+		}
+		return $image_attr;
+	};
+
+	add_filter('wp_get_attachment_image_attributes', $restore, 99);
+	$html = wp_get_attachment_image($attachment_id, $size, false, $attr);
+	remove_filter('wp_get_attachment_image_attributes', $restore, 99);
+
+	return $html;
+}
+
+/**
+ * Load the posts, meta, terms and featured images of a set of case studies
+ * in a few queries, so the cards that follow do not query one by one.
+ *
+ * @param int[] $ids Case study IDs.
+ */
+function hr_cs_prime_caches(array $ids)
+{
+	if (! $ids) {
+		return;
+	}
+
+	_prime_post_caches($ids, true, true);
+
+	$thumbs = array_filter(array_map('get_post_thumbnail_id', $ids));
+	if ($thumbs) {
+		_prime_post_caches($thumbs, false, true);
+	}
+}
+
+/**
+ * "More case studies": stories sharing a problem with this one first, newest
+ * first, then the newest others to fill the row.
+ *
+ * @param int $post_id Current case study.
+ * @param int $limit   How many to return.
+ * @return int[]
+ */
+function hr_cs_related_ids($post_id, $limit = 3)
+{
+	$base = array(
+		'post_type'           => 'case-studies',
+		'post_status'         => 'publish',
+		'posts_per_page'      => $limit,
+		'post__not_in'        => array($post_id),
+		'ignore_sticky_posts' => true,
+		'no_found_rows'       => true,
+		'fields'              => 'ids',
+	);
+
+	$ids      = array();
+	$term_ids = wp_list_pluck(hr_cs_problem_terms($post_id), 'term_id');
+	if ($term_ids) {
+		$ids = get_posts($base + array(
+			'tax_query' => array(
+				array(
+					'taxonomy' => HR_CS_PROBLEM_TAXONOMY,
+					'terms'    => $term_ids,
+				),
+			),
+		));
+	}
+
+	if (count($ids) < $limit) {
+		$base['posts_per_page'] = $limit - count($ids);
+		$base['post__not_in']   = array_merge(array($post_id), $ids);
+		$ids                    = array_merge($ids, get_posts($base));
+	}
+
+	$ids = array_map('intval', $ids);
+	hr_cs_prime_caches($ids);
+
+	return $ids;
 }
 
 /**
@@ -559,6 +697,191 @@ function hr_cs_body_class($classes)
 	return $classes;
 }
 add_filter('body_class', 'hr_cs_body_class');
+
+/**
+ * Visible words in a case study. The story lives in ACF fields, so Yoast
+ * counts an empty post_content; this counts what the page actually shows.
+ *
+ * @param int $post_id Case study ID.
+ * @return int
+ */
+function hr_cs_word_count($post_id)
+{
+	static $counts = array();
+
+	if (! isset($counts[$post_id])) {
+		$text   = array();
+		$fields = (array) (function_exists('get_fields') ? get_fields($post_id) : array());
+		array_walk_recursive(
+			$fields,
+			function ($value) use (&$text) {
+				if (is_string($value) && ! preg_match('#^(https?://|\d+$)#', trim($value))) {
+					$text[] = wp_strip_all_tags($value);
+				}
+			}
+		);
+		$counts[$post_id] = str_word_count(implode(' ', $text));
+	}
+
+	return $counts[$post_id];
+}
+
+/**
+ * The client as a schema.org entity: Hospital, MedicalClinic or
+ * DiagnosticLab, with its city and website where the story gives them.
+ *
+ * @param int $post_id Case study ID.
+ * @return array
+ */
+function hr_cs_client_entity($post_id)
+{
+	$type_text = trim((string) get_field('facility_type', $post_id));
+	$type_text = '' !== $type_text ? $type_text : hr_cs_glance_value($post_id, '/^(type|facility( type)?)$/i');
+	$name      = hr_cs_glance_value($post_id, '/^(hospital|clinic|lab|name)$/i');
+	$name      = '' !== $name ? $name : hr_cs_short_name($post_id);
+
+	if (preg_match('/\b(lab|laborator|diagnostic|patholog)/i', $type_text . ' ' . $name)) {
+		$type = 'DiagnosticLab';
+	} elseif (preg_match('/\bclinic\b/i', $type_text . ' ' . $name)) {
+		$type = 'MedicalClinic';
+	} else {
+		$type = 'Hospital';
+	}
+
+	$entity = array(
+		'@type' => $type,
+		'name'  => $name,
+	);
+
+	$facts = hr_cs_card_facts($post_id);
+	if (! empty($facts['Location'])) {
+		$parts             = array_map('trim', explode(',', $facts['Location']));
+		$entity['address'] = array_filter(array(
+			'@type'           => 'PostalAddress',
+			'addressLocality' => $parts[0],
+			'addressRegion'   => $parts[1] ?? '',
+			'addressCountry'  => 'IN',
+		), 'strlen');
+	}
+
+	foreach (hr_cs_rows(get_field('glance_facts', $post_id), 'label') as $row) {
+		if (preg_match('/^(website|web|url)$/i', trim((string) $row['label']))) {
+			$url = trim((string) (! empty($row['url']) ? $row['url'] : ($row['value'] ?? '')));
+			if (wp_http_validate_url($url)) {
+				$entity['url'] = esc_url_raw($url);
+			}
+			break;
+		}
+	}
+
+	return $entity;
+}
+
+/**
+ * Yoast leaves the case-studies Article type at "None", so the story is only
+ * a bare WebPage in the graph. Default it to Article; an editor's own choice
+ * under Yoast > Settings > Content types still wins.
+ *
+ * @param mixed $titles wpseo_titles option.
+ * @return mixed
+ */
+function hr_cs_default_article_type($titles)
+{
+	if (is_array($titles) && in_array($titles['schema-article-type-case-studies'] ?? 'None', array('', 'None'), true)) {
+		$titles['schema-article-type-case-studies'] = 'Article';
+	}
+
+	return $titles;
+}
+add_filter('option_wpseo_titles', 'hr_cs_default_article_type');
+
+/**
+ * Article schema for a case study: who it is about, the real word count and
+ * the problems it covers.
+ *
+ * @param array $data Article piece.
+ * @return array
+ */
+function hr_cs_schema_article($data)
+{
+	if (! is_singular('case-studies')) {
+		return $data;
+	}
+
+	$post_id  = get_queried_object_id();
+	$keywords = wp_list_pluck(hr_cs_problem_terms($post_id), 'name');
+
+	foreach (hr_cs_rows(get_field('modules_used', $post_id), 'name') as $module) {
+		$keywords[] = $module['name'];
+	}
+
+	$data['articleSection'] = 'Case Studies';
+	$data['about']          = hr_cs_client_entity($post_id);
+	$data['wordCount']      = hr_cs_word_count($post_id);
+
+	// Match the date shown on the page when the editor set Published Date.
+	if (get_field('published_date', $post_id)) {
+		$data['datePublished'] = hr_cs_published($post_id)['iso'];
+	}
+
+	if ($keywords) {
+		$data['keywords'] = array_values(array_unique(array_merge((array) ($data['keywords'] ?? array()), $keywords)));
+	}
+
+	return $data;
+}
+add_filter('wpseo_schema_article', 'hr_cs_schema_article');
+
+/**
+ * The hub's CollectionPage lists its stories as an ItemList.
+ *
+ * @param array $data WebPage piece.
+ * @return array
+ */
+function hr_cs_schema_hub($data)
+{
+	global $wp_query;
+
+	if (! is_post_type_archive('case-studies') || empty($wp_query->posts)) {
+		return $data;
+	}
+
+	$items = array();
+	foreach ($wp_query->posts as $i => $post) {
+		$items[] = array(
+			'@type'    => 'ListItem',
+			'position' => $i + 1,
+			'url'      => get_permalink($post),
+			'name'     => get_the_title($post),
+		);
+	}
+
+	$data['mainEntity'] = array(
+		'@type'           => 'ItemList',
+		'numberOfItems'   => count($items),
+		'itemListElement' => $items,
+	);
+
+	return $data;
+}
+add_filter('wpseo_schema_webpage', 'hr_cs_schema_hub');
+
+/**
+ * Yoast's "Est. reading time" share label, from the story's real length.
+ *
+ * @param array $data Label => value.
+ * @return array
+ */
+function hr_cs_slack_reading_time($data)
+{
+	if (is_singular('case-studies') && isset($data[__('Est. reading time', 'wordpress-seo')])) {
+		$minutes = max(1, (int) ceil(hr_cs_word_count(get_queried_object_id()) / 200));
+		$data[__('Est. reading time', 'wordpress-seo')] = sprintf(_n('%s minute', '%s minutes', $minutes, 'wordpress-seo'), $minutes);
+	}
+
+	return $data;
+}
+add_filter('wpseo_enhanced_slack_data', 'hr_cs_slack_reading_time');
 
 /**
  * Fixed mobile call-to-action bar shared by the single and archive templates.

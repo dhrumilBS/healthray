@@ -112,7 +112,7 @@ function hr_cs_register_fields()
 				'instructions' => 'The everyday name, e.g. "Vibrant Hospital". Used in the breadcrumb, in the card link ("Read Vibrant Hospital\'s story") and on the grey box shown when there is no photo. Defaults to the title. The title is the page H1.',
 			)),
 			$textarea('hero_lede', 'Hero Summary', array(
-				'instructions' => 'Not shown on the page at the moment: the hero is the title, date and location only. Kept so imported summaries are not lost. The featured image is the hero photo.',
+				'instructions' => 'Shown under the page title as plain text, in two or three sentences. Leave empty to show the title, date and location only. The featured image is the hero photo.',
 			)),
 			$text('hero_image_alt', 'Hero Image Alt Text', array(
 				'instructions' => 'Describes the featured image for screen readers. Leave empty to use the image\'s own alt text.',
@@ -200,10 +200,17 @@ function hr_cs_register_fields()
 				'label'        => 'Modules Used',
 				'name'         => 'modules_used',
 				'type'         => 'repeater',
+				'instructions' => 'Modules link to their Healthray product page automatically (e.g. Pharmacy, Lab, Billing, EMR). Add a link only to point a module somewhere else.',
 				'layout'       => 'table',
 				'button_label' => 'Add Module',
 				'sub_fields'   => array(
 					$text('module_name', 'Module', array('name' => 'name', 'key' => 'field_cs_module_name')),
+					array(
+						'key'   => 'field_cs_module_url',
+						'label' => 'Link (optional)',
+						'name'  => 'url',
+						'type'  => 'url',
+					),
 				),
 			),
 		),
