@@ -32,6 +32,7 @@ require_once get_stylesheet_directory() . '/lib/case-studies-helpers.php';
 require_once get_stylesheet_directory() . '/lib/acf-case-studies.php';
 require_once get_stylesheet_directory() . '/lib/events-helpers.php';
 require_once get_stylesheet_directory() . '/lib/whitepaper-helpers.php';
+require_once get_stylesheet_directory() . '/lib/search.php';
 require_once get_stylesheet_directory() . '/lib/blog-rewrites.php';
 require_once get_stylesheet_directory() . '/lib/blog-redirects.php';
 require_once get_stylesheet_directory() . '/lib/virtual-urls.php';
@@ -133,6 +134,10 @@ add_action('wp_enqueue_scripts', function () {
 	// -----------------------------------------
 	if (in_array('archive', get_body_class(), true) || is_page(array(23517, 32399, 61837, 65487)) || is_search() || is_home()) {
 		wp_enqueue_style('custom', get_stylesheet_directory_uri() . '/css/custom.css', array(), hr_asset_version('/css/custom.css'));
+	}
+
+	if (is_search()) {
+		wp_enqueue_style('hr-search', get_stylesheet_directory_uri() . '/css/search.css', array('custom'), hr_asset_version('/css/search.css'));
 	}
 
 	if (is_page_template('temp-pricing.php')) {
