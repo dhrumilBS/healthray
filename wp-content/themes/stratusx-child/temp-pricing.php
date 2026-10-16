@@ -3,13 +3,33 @@
 ?>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-eyebrow">No. 1 for Transparency in India</div>
-  <h1>Simple, Honest<br><span>Healthcare Pricing</span></h1>
-  <p class="hero-sub">Our pricing is very competitive for the value we are offering! See our demo and pay with confidence!</p>
-  <div class="hero-trust">
-    <div class="hero-trust-dot"></div>
-    We are the only company in India who published every pricing. There is nothing hidden. <strong>&nbsp;You pay what you see.</strong>
+<section class="pricing-hero" aria-labelledby="pricing-hero-title">
+  <div class="container">
+    <div class="pricing-hero__grid<?= has_post_thumbnail() ? '' : ' pricing-hero__grid--no-visual'; ?>">
+      <div class="pricing-hero__content">
+        <span class="pricing-hero__eyebrow">No. 1 for Transparency in India</span>
+        <h1 class="pricing-hero__title" id="pricing-hero-title">Simple, Honest<br><span>Healthcare Pricing</span></h1>
+        <p class="pricing-hero__lead">Our pricing is very competitive for the value we are offering! See our demo and pay with confidence!</p>
+        <div class="pricing-hero__trust">
+          <span class="pricing-hero__trust-dot" aria-hidden="true"></span>
+          <span>We are the only company in India who published every pricing. There is nothing hidden. <strong>&nbsp;You pay what you see.</strong></span>
+        </div>
+      </div>
+
+      <?php if (has_post_thumbnail()) : ?>
+        <div class="pricing-hero__visual">
+          <div class="pricing-hero__visual-frame">
+            <?= get_the_post_thumbnail(get_queried_object_id(), 'large', array(
+              'class' => 'pricing-hero__image',
+              'loading' => 'eager',
+              'fetchpriority' => 'high',
+              'decoding' => 'async',
+              'sizes' => '(max-width: 991px) 100vw, 600px',
+            )); ?>
+          </div>
+        </div>
+      <?php endif; ?>
+    </div>
   </div>
 </section>
 
