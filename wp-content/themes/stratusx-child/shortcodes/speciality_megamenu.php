@@ -3,8 +3,6 @@
 add_shortcode('speciality_megamenu', 'emr_specialities_shortcode');
 
 function emr_specialities_shortcode() {
-	// Example: load or define the $emr_specialties array.
-	// You can replace this with your actual source (DB query, ACF field, etc.)
 	$emr_specialties = [
 		[
 			"category" => "Specialists",
@@ -76,7 +74,7 @@ function emr_specialities_shortcode() {
 	<div class="column column-<?php echo esc_attr($col_num); ?>">
 		<?php foreach ($categories as $cat): ?>
 		<div class="category <?= esc_html($cat['category']); ?>">
-			<h2 class="mb-3"><?= esc_html($cat['category']); ?></h2>
+			<div class="mb-3"><?= esc_html($cat['category']); ?></div>
 			<ul>
 				<?php foreach ($cat['specialties'] as $item):
 	$title = preg_replace('/^Best EMR Software For \s*/i', '', get_the_title($item['id']));

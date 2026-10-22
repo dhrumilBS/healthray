@@ -1,4 +1,4 @@
-﻿:root {
+:root {
 	--hrh-line: #e4e9f3;
 	--hrh-line-soft: #eef1f8;
 	--hrh-gap: 14px;
@@ -100,7 +100,7 @@ header.elementor-location-header.elementor-567 .elementor-element-9deac21 a:hove
 #mega-menu-wrap-primary_navigation #mega-menu-primary_navigation .menu-item .menu-text h3 { margin: 0; font-size: 16px; font-weight: 700; line-height: 1.3; letter-spacing: -.01em; color: var(--hr-ink-strong); text-transform: none; }
 #mega-menu-wrap-primary_navigation #mega-menu-primary_navigation .menu-item .menu-text p { margin: 5px 0 0; font-size: 13px; line-height: 1.5; color: var(--hr-ink-faint); }
 #mega-menu-wrap-primary_navigation #mega-menu-primary_navigation .category { margin-bottom: 22px; }
-#mega-menu-wrap-primary_navigation #mega-menu-primary_navigation .category h2 { margin-bottom: 10px; padding: 0 0 8px; border-bottom: 1px solid var(--hrh-line); font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--hr-ink-faint); }
+#mega-menu-wrap-primary_navigation #mega-menu-primary_navigation .category .mb-3 { margin-bottom: 10px; padding: 0 0 8px; border-bottom: 1px solid var(--hrh-line); font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--hr-ink-faint); }
 #mega-menu-wrap-primary_navigation #mega-menu-primary_navigation .column ul { margin: 0; padding: 0; list-style: none; }
 #mega-menu-wrap-primary_navigation #mega-menu-primary_navigation .column ul li { display: flex; align-items: stretch; margin-bottom: 2px; font-size: 15px; }
 #mega-menu-wrap-primary_navigation #mega-menu-primary_navigation .speciality-megamenu-grid::-webkit-scrollbar { width: 6px; }
@@ -226,7 +226,7 @@ header.elementor-location-header.elementor-567 .elementor-element-9deac21 a:hove
 	#mega-menu-wrap-primary_navigation #mega-menu-primary_navigation .mega-box .mega-title .title { font-size: 14.5px; }
 	#mega-menu-wrap-primary_navigation #mega-menu-primary_navigation .mega-box .mega-title .text,
 	#mega-menu-wrap-primary_navigation #mega-menu-primary_navigation .menu-item .menu-text p { display: none; }
-	#mega-menu-wrap-primary_navigation #mega-menu-primary_navigation .category h2 { margin-bottom: 6px; padding: 12px 8px 6px; border-bottom: 1px solid var(--hrh-line-soft); font-size: 11px; }
+	#mega-menu-wrap-primary_navigation #mega-menu-primary_navigation .category .mb-3 { margin-bottom: 6px; padding: 12px 8px 6px; border-bottom: 1px solid var(--hrh-line-soft); font-size: 11px; }
 	#mega-menu-wrap-primary_navigation #mega-menu-primary_navigation .category { margin-bottom: 10px; }
 	#mega-menu-wrap-primary_navigation #mega-menu-primary_navigation li.mega-menu-item.mega-menu-megamenu>ul.mega-sub-menu>li.mega-sub-columns>ul.mega-sub-menu>li.mega-menu-item-has-children:not(.mega-disable-link)>a.mega-menu-link { display: block; width: 100%; min-height: 0; margin: 6px 0 6px; padding: 6px 8px 7px; border-radius: 0; border-bottom: 1px solid var(--hrh-line-soft); background: transparent; color: var(--hr-ink-faint); font-size: 11px; font-weight: 700; line-height: 1.3; letter-spacing: .1em; text-transform: uppercase; }
 	#mega-menu-wrap-primary_navigation #mega-menu-primary_navigation li.mega-menu-item.mega-menu-megamenu>ul.mega-sub-menu>li.mega-sub-columns>ul.mega-sub-menu>li.mega-menu-item-has-children.mega-toggle-on>a.mega-menu-link { background: transparent; color: var(--hr-ink-faint); }
@@ -269,8 +269,6 @@ header.elementor-location-header.elementor-567 a:focus-visible,
 
 html.hr-nav-locked,
 html.hr-nav-locked body { overflow: hidden; height: auto; }
-/* Keyboard-only: fixed to the viewport so it stays fully off-screen whatever sits above the header,
-   and shown on :focus-visible so mouse clicks and scripted focus never reveal it. */
 .hr-skip-link { position: fixed; left: 12px; top: 12px; z-index: calc(var(--hrh-z) + 10); padding: 12px 18px; border-radius: 10px; background: var(--hr-navy); color: #fff; font-size: 14px; font-weight: 700; text-decoration: none; transform: translateY(calc(-100% - 24px)); transition: transform 160ms var(--hrh-ease); }
 .hr-skip-link:focus-visible { color: #fff; transform: translateY(0); }
 
@@ -296,4 +294,9 @@ html.hr-nav-locked body { overflow: hidden; height: auto; }
 	header.elementor-location-header.elementor-567 { position: static; padding: 0; }
 	body header.elementor-location-header.elementor-567 section.elementor-element.elementor-element-7642d9f { border: 0; box-shadow: none; background: none; }
 	body header.elementor-location-header.elementor-567 section.elementor-element.elementor-element-7642d9f::before { -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+
+@media (min-width: 993px) {
+  #mega-menu-primary_navigation > li:has(> a[href*="/login/"]) { margin-left: 50px!important; }
 }

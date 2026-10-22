@@ -25,13 +25,6 @@ $cs_location   = hr_cs_location($cs_id);
 $cs_published  = hr_cs_published($cs_id);
 $cs_modules    = hr_cs_rows(get_field('modules_used'), 'name');
 $cs_demo_url   = hr_cs_demo_url();
-
-/*
- * "At a glance": the summary fields first, then the editor's extra rows.
- * Extra rows that repeat a summary field are dropped once that field is
- * filled, and a Location or Address row is cut to "City, State", so the
- * street address never shows.
- */
 $cs_beds   = (int) get_field('beds');
 $cs_days   = (int) get_field('golive_days');
 $cs_facts  = array();
@@ -74,12 +67,6 @@ foreach (hr_cs_rows(get_field('glance_facts'), 'label') as $cs_fact) {
 	$cs_facts[] = $cs_fact;
 }
 
-/**
- * Story sections in page order. The decision (the quote) comes first, so on
- * every screen it is read straight after "At a glance". Each has a label,
- * heading and intro; the section-specific parts are rendered in the switch
- * below.
- */
 $cs_sections = array();
 foreach (array('decision', 'overview', 'problem', 'solution', 'setup', 'results') as $cs_key) {
 	$cs_sections[$cs_key] = array(

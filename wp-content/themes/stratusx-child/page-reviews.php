@@ -130,7 +130,7 @@ if ( ! function_exists( 'healthray_render_stars' ) ) {
 
 .testimonials-wall .heading .eyebrow,
 .wall-of-love .heading .eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 10px; }
-.testimonials-wall { position: relative; overflow: hidden; background: linear-gradient(135deg, #f7f8fb 0%, #eef3fb 100%); }
+.testimonials-wall { position: relative; overflow: hidden; background: var(--hr-hero-gradient); }
 .testimonials-wall .hero-content { text-align: left; }
 /* FIX: reset default browser heading margins now that eyebrow/title use h1/h2 tags */
 .testimonials-wall .heading h1,

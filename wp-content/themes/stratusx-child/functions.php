@@ -32,14 +32,13 @@ require_once get_stylesheet_directory() . '/lib/case-studies-helpers.php';
 require_once get_stylesheet_directory() . '/lib/acf-case-studies.php';
 require_once get_stylesheet_directory() . '/lib/events-helpers.php';
 require_once get_stylesheet_directory() . '/lib/whitepaper-helpers.php';
-require_once get_stylesheet_directory() . '/lib/search.php';
 require_once get_stylesheet_directory() . '/lib/blog-rewrites.php';
 require_once get_stylesheet_directory() . '/lib/blog-redirects.php';
 require_once get_stylesheet_directory() . '/lib/virtual-urls.php';
 require_once get_stylesheet_directory() . '/lib/header.php';
 
 if (!defined('HR_LANDING_PAGE_IDS')) {
-	define('HR_LANDING_PAGE_IDS', [167, 32399, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81325]);
+	define('HR_LANDING_PAGE_IDS', [167, 32399, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468]);
 }
 
 
@@ -136,10 +135,6 @@ add_action('wp_enqueue_scripts', function () {
 		wp_enqueue_style('custom', get_stylesheet_directory_uri() . '/css/custom.css', array(), hr_asset_version('/css/custom.css'));
 	}
 
-	if (is_search()) {
-		wp_enqueue_style('hr-search', get_stylesheet_directory_uri() . '/css/search.css', array('custom'), hr_asset_version('/css/search.css'));
-	}
-
 	if (is_page_template('temp-pricing.php')) {
 		wp_enqueue_style('pricing', get_stylesheet_directory_uri() . '/css/pricing.css', array(), hr_asset_version('/css/pricing.css'));
 	}
@@ -154,9 +149,8 @@ add_action('wp_enqueue_scripts', function () {
 		'pageId' => get_the_ID(),
 		'pageTitle' => get_the_title(get_queried_object_id()),
 		'isLoggedIn' => is_user_logged_in(),
-		// Pages where the lead popup does NOT auto-open on scroll (buttons still open it). PPC pages included,
-		// and the case studies, so the popup never interrupts someone reading a story.
-		'pageIds' => array_merge([28110, 60060, 60090], hr_ppc_page_key() !== '' || is_singular('case-studies') || is_post_type_archive('case-studies') ? [get_the_ID()] : []),
+		// Pages where the lead popup does NOT auto-open on scroll (buttons still open it). PPC pages included.
+		'pageIds' => array_merge([28110, 60060, 60090], hr_ppc_page_key() !== '' ? [get_the_ID()] : []),
 		'homeUrl' => home_url(),
 	]);
 });
@@ -1313,11 +1307,11 @@ function cf7_validate_mobile_unified($result, $tag)
 	$parsed = cf7_parse_phone($mobile_raw);
 
 	if (!$parsed['ok']) {
-		$messages = array(
-			'missing_country_code' => 'Please include country code.',
-			'invalid_chars' => 'Number should contain digits only after the country code.',
-			'unsupported_country' => 'Unsupported country code.',
-		);
+        $messages = array(
+            'missing_country_code' => 'Please include the country code with a + sign.',
+            'invalid_chars' => 'Please enter digits only after the + sign.',
+            'unsupported_country' => 'This country code is not supported.',
+        );
 		$result->invalidate($tag, $messages[$parsed['error']] ?? 'Please enter a valid mobile number.');
 		return $result;
 	}
@@ -1593,30 +1587,16 @@ add_action('wp_footer', function () {
 	<?php
 }, 20);
 
-// =============================================================================
-// 12. STANDALONE PAGES (NO SITE HEADER / FOOTER) - Login Portal + PPC pages
-// All rendered through templates/base-standalone.php instead of the theme's base.php.
-//
-// PPC pages are convention-based - a new PPC page needs NO code here:
-//   template  temp-ppc-{key}.php   e.g. temp-ppc-erp.php
-//   CSS       css/ppc-{key}.css    inlined in <head> (optional)
-//   JS        js/ppc-{key}.js      enqueued in the footer, deferred (optional)
-//   body      class "ppc-{key}"    scope all page CSS under it
-// For the /ppc/{slug}/ URL, add the page ID in lib/virtual-urls.php.
-// =============================================================================
-/**
+/** =============================================================================
+ * 12. STANDALONE PAGES (NO SITE HEADER / FOOTER) - Login Portal + PPC pages
  * Login Portal page: live ID 81325, or any page using its template
  * (the ID differs between local and live databases).
  */
 function hr_is_login_portal_page()
 {
-	return is_page(81325) || is_page_template('temp-login-landing.php');
+	return is_page(81468) || is_page_template('temp-login-landing.php');
 }
 
-/**
- * PPC page key: "hims" for a page using temp-ppc-hims.php, '' for anything else.
- * Memoized once the main query has run (it is called by several hooks per request).
- */
 function hr_ppc_page_key()
 {
 	static $key = null;
@@ -1666,10 +1646,6 @@ add_action('wp_enqueue_scripts', function () {
 	wp_dequeue_script('hr-header');
 }, 111);
 
-/**
- * Minify CSS for inline output: strips comments and whitespace, never touches
- * quoted strings (e.g. content: "\2605  " or data: URIs).
- */
 function hr_minify_css($css)
 {
 	$parts = preg_split('/("(?:[^"\\\\]|\\\\.)*"|\'(?:[^\'\\\\]|\\\\.)*\')/s', (string) $css, -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -1693,9 +1669,6 @@ function hr_minify_css($css)
 	return trim(str_replace(';}', '}', $out));
 }
 
-/**
- * Page CSS + popup CSS for a PPC page, minified, cached until either file changes.
- */
 function hr_ppc_inline_css($key)
 {
 	$dir = get_stylesheet_directory() . '/css/';
@@ -1731,7 +1704,6 @@ add_filter('body_class', function ($classes) {
 	return $classes;
 }, 1000);
 
-// PPC pages: inline CSS, and the image fallback handler (must run before any <img> loads).
 add_action('wp_head', function () {
 	$key = hr_ppc_page_key();
 	if ('' === $key) {
@@ -1743,7 +1715,6 @@ add_action('wp_head', function () {
 		echo '<style id="ppc-' . esc_attr($key) . '-css">' . $css . '</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput -- theme CSS file.
 	}
 
-	// Failed image in the page header/main: data-fallback-src -> retry once; data-fallback -> initials; else parent.noimg (shows .fb text).
 	wp_print_inline_script_tag(
 		'document.addEventListener("error",function(e){var i=e.target,s,f;if(i.tagName!=="IMG"||!i.closest(".top,main"))return;'
 		. 's=i.getAttribute("data-fallback-src");if(s){i.removeAttribute("data-fallback-src");i.src=s;return;}'
@@ -1752,15 +1723,12 @@ add_action('wp_head', function () {
 	);
 }, 50);
 
-// PPC pages: the lead popup (#myPopup), opened by .hr-cta-btn buttons via js/script.js.
-// A PPC template can show its own form in it through the "hr_ppc_popup_args" filter (see templates/lead-popup.php).
 add_action('wp_footer', function () {
 	if ('' !== hr_ppc_page_key()) {
 		get_template_part('templates/lead-popup', null, (array) apply_filters('hr_ppc_popup_args', array()));
 	}
 }, 5);
 
-// PPC pages: CSS is self-contained, so drop theme/site-chrome assets; add js/ppc-{key}.js.
 add_action('wp_enqueue_scripts', function () {
 	$key = hr_ppc_page_key();
 	if ('' === $key) {
@@ -1816,8 +1784,6 @@ add_action('wp_enqueue_scripts', function () {
 		wp_dequeue_script($handle);
 	}
 
-	// js/script.js does not use jQuery; without this dependency jQuery is not loaded here.
-	// It still loads if any other enqueued script depends on it.
 	$child = wp_scripts()->query('child-script', 'registered');
 	if ($child) {
 		$child->deps = array_values(array_diff($child->deps, array('jquery')));

@@ -7,20 +7,12 @@ $has_results = have_posts();
 	<div class="container">
 		<div class="alt-archive-hero__inner">
 			<span class="alt-archive-hero__eyebrow">Comparison Guides</span>
-			<h1 class="alt-archive-hero__title"><?php post_type_archive_title(); ?></h1>
+			<h1 class="alt-archive-hero__title">Healthray Alternatives &amp; Competitors</h1>
 			<p class="alt-archive-hero__lead">Compare Healthray against the hospital &amp; healthcare software your team already knows feature by feature, backed by real G2 reviews.</p>
 
 			<div class="alt-archive-hero__search">
 				<?php get_search_form(); ?>
 			</div>
-
-			<?php if ($total_published > 0): ?>
-				<ul class="alt-archive-hero__stats">
-					<li><?= hr_alt_icon('yes'); ?> 	<?= (int) $total_published; ?>+ in-depth comparisons</li>
-					<li><?= hr_alt_icon('yes'); ?> Updated for 2026</li>
-					<li><?= hr_alt_icon('yes'); ?> Backed by real G2 reviews</li>
-				</ul>
-			<?php endif; ?>
 		</div>
 	</div>
 </section>
@@ -59,17 +51,8 @@ $has_results = have_posts();
 									<?= wp_get_attachment_image(27662, 'medium', false, array('class' => 'alt-archive-card__img-fallback-logo')); ?>
 								</div>
 							<?php endif; ?>
-							<?php if ($archive_tag): ?>
-								<span class="alt-archive-card__tag"><?= esc_html($archive_tag); ?></span>
-							<?php endif; ?>
 						</a>
 						<div class="alt-archive-card__body">
-							<?php if ($rating_value): ?>
-								<div class="alt-archive-card__rating">
-									<?= hr_alt_render_stars((float) $rating_value); ?>
-									<span><?= esc_html($rating_value); ?>/5 on <?= esc_html($rating_source); ?></span>
-								</div>
-							<?php endif; ?>
 							<h2 class="alt-archive-card__title">
 								<a href="<?= esc_url(get_permalink()); ?>"><?= get_the_title(); ?></a>
 							</h2>

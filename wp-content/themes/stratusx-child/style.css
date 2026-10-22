@@ -30,7 +30,6 @@ Version: 4.1
 
 	--hr-navy-dark: #131a5c;
 	--hr-navy-light: #2c3fc4;
-	/* Must match --hr-navy (#1b3c74) so rgba(var(--hr-navy-rgb), x) shadows use the same colour */
 	--hr-navy-rgb: 27, 60, 116;
 	--hr-navy-mid: #132d7c;
 	--hr-navy-mid-rgb: 19, 45, 124;
@@ -987,7 +986,7 @@ p,
 
 .more-category .blog-category-more-scroll { display: grid; gap: 2px; max-height: min(46vh, 320px); margin: 0; padding: 0; overflow-y: auto; overscroll-behavior: contain; list-style: none; scrollbar-width: thin; scrollbar-color: var(--hr-line-muted) transparent; }
 .more-category .blog-category-more-scroll>li { display: block; margin: 0; }
-.more-category .blog-category-more-scroll .cat-link { display: block; padding: 9px 12px; border: 0; border-radius: 9px; background-color: transparent; color: var(--hr-ink-soft); font-size: 13.5px; font-weight: 600; letter-spacing: 0; line-height: 1.45; text-align: left; text-transform: none; overflow-wrap: anywhere; transition: background-color .16s ease, color .16s ease; }
+.more-category .blog-category-more-scroll .cat-link { display: block; padding: 8px; border: 0; border-radius: 9px; background-color: transparent; color: var(--hr-ink-soft); font-size: 13.5px; font-weight: 600; overflow-wrap: anywhere; transition: background-color .16s ease, color .16s ease; }
 .more-category .blog-category-more-scroll .cat-link:hover,
 .more-category .blog-category-more-scroll .cat-link:focus-visible { background-color: var(--hr-tint); color: var(--hr-navy); }
 .more-category .blog-category-more-scroll .cat-link.active { background-color: var(--hr-navy); color: #fff; }

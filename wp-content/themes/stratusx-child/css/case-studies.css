@@ -1,10 +1,3 @@
-/*
- * Case studies: the /case-studies/ hub and single stories.
- * Templates: archive-case-studies.php, single-case-studies.php,
- * template-parts/case-study-card.php. Everything is scoped to .hrcs; colours
- * and type come from the site tokens in style.css (:root --hr-*).
- */
-
 .hrcs {
   --navy: var(--hr-navy);
   --blue: var(--hr-blue);
@@ -29,7 +22,6 @@
   --r-lg: var(--hr-radius-soft, 14px);
   --r-xl: var(--hr-radius-card, 18px);
   --shadow: var(--hr-shadow-card);
-  /* Site-wide container width; long-form text keeps its own measure below. */
   --max: 1440px;
   --gutter: clamp(16px, 4vw, 64px);
   --h2: clamp(24px, 1.2vw + 17px, 32px);
@@ -86,7 +78,7 @@
 .hrcs .label { display: block; }
 
 /***** HERO *****/
-.hrcs .hero { padding: clamp(32px, 5vw, 64px) 0 clamp(32px, 4vw, 56px); background: linear-gradient(0deg, var(--hr-wash-sky) 0%, var(--hr-wash) 25%, #fff 60%); color: var(--hr-ink); }
+.hrcs .hero { padding: clamp(32px, 5vw, 64px) 0 clamp(32px, 4vw, 56px); background: var(--hr-hero-gradient); color: var(--hr-ink); }
 .hrcs .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 18px; font-size: 13.5px; line-height: 1.5; color: var(--ink-3); }
 .hrcs .crumbs > span[aria-hidden] { color: var(--hr-line-muted); font-size: 15px; line-height: 1; }
 .hrcs .crumbs a { color: var(--navy); font-weight: 600; text-decoration: none; }
@@ -121,8 +113,6 @@
 }
 
 /***** RESULTS STRIP *****/
-/* 1px gaps over a line-coloured background draw the dividers, so any count
-   from one to four metrics keeps clean borders. */
 .hrcs .strip-wrap { margin-top: 8px; }
 .hrcs .strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; overflow: hidden; border: 1px solid var(--line-2); border-radius: var(--r-lg); background: var(--line); }
 .hrcs .strip li { display: flex; flex-direction: column; justify-content: center; padding: clamp(18px, 2vw, 28px); background: #fff; }
@@ -159,9 +149,6 @@
   .hrcs .layout--solo { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* Sticky only where the viewport is tall enough to be useful. It stays in
-   the layout grid, so it stops before the CTA box and footer; a card taller
-   than the screen scrolls inside itself. */
 @media (min-width: 1024px) and (min-height: 760px) {
   .hrcs .layout > .glance { position: sticky; top: calc(var(--hr-header-h, 80px) + 24px); }
   .hrcs .glance-card { max-height: calc(100vh - var(--hr-header-h, 80px) - 48px); overflow-y: auto; overscroll-behavior: contain; }
@@ -391,7 +378,6 @@
 .hrcs .mcta { display: none; }
 @media (max-width: 767px) {
   .hrcs { padding-bottom: 56px; }
-  /* Below the footer, so the fixed call bar never covers it. */
   body.hrcs-page { padding-bottom: 76px; }
   .hrcs .mcta { display: flex; gap: 10px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line-2); background: #fff; }
   .hrcs .mcta .btn { flex: 1 1 auto; width: auto; white-space: nowrap; }
@@ -401,13 +387,11 @@
   .hrcs .quote { padding: 24px 20px 20px 22px; }
 }
 
-/* 320px phones: both call bar buttons fit side by side. */
 @media (max-width: 359px) {
   .hrcs .mcta .btn,
   .hrcs .mcta .call { padding: 12px 14px; font-size: 15px; }
 }
 
-/***** MOTION AND PRINT *****/
 @media (prefers-reduced-motion: reduce) {
   .hrcs *,
   .hrcs *::before,

@@ -2,14 +2,6 @@
 
 /**
  * Custom post type definitions.
- *
- * 'search' (optional) adds a post type's ACF text, textarea and wysiwyg fields to the
- * site search (lib/search.php); title, excerpt and content are always searched.
- * true, or an array with:
- *   'summary' => field shown as the result excerpt when the post has no excerpt or content
- *   'exclude' => fields to leave out; '*' matches any part of a name, e.g. a repeater row
- * Changes here re-index the affected posts in the background.
- *
  * @package stratusx-child
  */
 
@@ -48,20 +40,6 @@ return array(
 				),
 			),
 		),
-		'search'         => array(
-			'summary' => 'intro_content',
-			// Comparison cells are ticks, crosses and ratings; the CTAs repeat on every post.
-			'exclude' => array(
-				'comparison_categories_*_healthray_value',
-				'comparison_categories_*_competitor_values_*',
-				'glance_rows_*_healthray_value',
-				'glance_rows_*_competitor_values_*',
-				'competitor_profiles_*_review_label',
-				'comparison_cta_text',
-				'inline_cta_*',
-				'mid_cta_*',
-			),
-		),
 	),
 
 	'case-studies' => array(
@@ -92,10 +70,6 @@ return array(
 					'context' => 'archive',
 				),
 			),
-		),
-		'search'         => array(
-			'summary' => 'hero_lede',
-			'exclude' => array( 'cta_*' ),
 		),
 		'taxonomies'     => array(
 			'problem' => array(
@@ -141,9 +115,6 @@ return array(
 				),
 			),
 		),
-		'search'     => array(
-			'summary' => 'hero_text',
-		),
 		'taxonomies' => array(
 			'whitepaper_category' => array(
 				'singular' => 'Category',
@@ -187,7 +158,6 @@ return array(
 				),
 			),
 		),
-		'search'     => true,
 		'taxonomies' => array(
 			'event_category' => array(
 				'singular' => 'Event Category',
