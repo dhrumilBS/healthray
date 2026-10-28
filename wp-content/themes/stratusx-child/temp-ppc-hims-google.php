@@ -827,6 +827,9 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
   </div>
 </footer>
 
+<?php include __DIR__ . '/templates/ppc-hims/whatsapp.php'; ?>
+
 <nav class="mbar" id="mbar" aria-label="Quick actions">
+  <a class="wa js-wa" href="<?php echo esc_url($ppc_wa); ?>" target="_blank" rel="noopener"><?php echo $ppc_wa_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>WhatsApp</a>
   <a class="go hr-cta-btn" href="#demo">Book a free demo</a>
 </nav>

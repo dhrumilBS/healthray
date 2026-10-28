@@ -95,6 +95,40 @@
 		});
 	})();
 
+	/* WhatsApp: desktop floating button hidden over the final CTA and footer; clicks go to GTM. */
+	(function () {
+		var links = document.querySelectorAll('.ppc-hims .js-wa');
+		links.forEach(function (a) {
+			a.addEventListener('click', function () {
+				window.dataLayer = window.dataLayer || [];
+				window.dataLayer.push({ event: 'hr_whatsapp_click' });
+			});
+		});
+		var float = document.querySelector('.ppc-hims .wa-float');
+		var targets = [
+			document.querySelector('.ppc-hims .final'),
+			document.querySelector('.ppc-hims .foot')
+		].filter(Boolean);
+		if (!float || !targets.length || !hasIO) {
+			return;
+		}
+		var onScreen = [];
+		var io = new IntersectionObserver(function (entries) {
+			entries.forEach(function (e) {
+				var i = onScreen.indexOf(e.target);
+				if (e.isIntersecting && i < 0) {
+					onScreen.push(e.target);
+				} else if (!e.isIntersecting && i > -1) {
+					onScreen.splice(i, 1);
+				}
+			});
+			float.classList.toggle('away', onScreen.length > 0);
+		}, { threshold: 0.25 });
+		targets.forEach(function (t) {
+			io.observe(t);
+		});
+	})();
+
 	/* 3. Walkthrough: autoplays muted on screen, pauses off screen; a manual pause sticks; fullscreen button. */
 	(function () {
 		var box = document.getElementById('player');

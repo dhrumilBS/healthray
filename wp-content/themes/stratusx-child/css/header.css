@@ -69,7 +69,7 @@ header.elementor-location-header.elementor-567 .elementor-element-9deac21 a:hove
 #mega-menu-wrap-primary_navigation #mega-menu-primary_navigation>li.mega-menu-item.mega-toggle-on>a.mega-menu-link>span.mega-indicator { transform: rotate(180deg); }
 #mega-menu-wrap-primary_navigation #mega-menu-primary_navigation>li.mega-menu-btn-contact { margin-left: 8px; }
 #mega-menu-wrap-primary_navigation #mega-menu-primary_navigation>li.mega-menu-btn-contact>a.mega-menu-link { height: 44px; line-height: 44px; padding: 0 24px; border-radius: var(--hrh-radius); background: var(--hr-blue); color: #fff; font-size: 15.5px; font-weight: 700; box-shadow: 0 8px 20px rgba(var(--hr-blue-rgb), .26); transition: background-color 180ms var(--hrh-ease), box-shadow 180ms var(--hrh-ease), transform 180ms var(--hrh-ease); }
-#mega-menu-wrap-primary_navigation #mega-menu-primary_navigation>li.mega-menu-btn-contact>a.mega-menu-link:hover { background: var(--hr-navy); color: #fff; transform: translateY(-1px); box-shadow: 0 12px 26px rgba(27, 35, 116, .3); }
+#mega-menu-wrap-primary_navigation #mega-menu-primary_navigation>li.mega-menu-btn-contact>a.mega-menu-link:hover { background: var(--hr-blue); color: #fff; transform: translateY(-1px); box-shadow: 0 12px 26px rgba(27, 35, 116, .3); }
 #mega-menu-wrap-primary_navigation #mega-menu-primary_navigation>li.mega-menu-btn-contact>a.mega-menu-link:active { transform: translateY(0); }
 #mega-menu-wrap-primary_navigation #mega-menu-primary_navigation>li.mega-menu-btn-contact>a.mega-menu-link:after { content: none; }
 @media only screen and (min-width: 993px) {

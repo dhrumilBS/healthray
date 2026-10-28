@@ -1,72 +1,4 @@
 <?php
-global $wpdb;
-
-$query = "SELECT 
-        p.ID AS main_id, 
-        p.post_name AS main_post_name, 
-        p.post_title AS main_post_title, 
-        p.post_status AS main_post_status, 
-        p.menu_order AS main_menu_order, 
-        pm.meta_key AS main_meta_key,
-        pm.meta_value AS main_meta_value,
-        sub_p.ID AS sub_id,
-        sub_p.post_name AS sub_post_name,
-        sub_p.post_title AS sub_post_title,
-        sub_p.post_status AS sub_post_status,
-        sub_p.menu_order AS sub_menu_order,
-        sub_pm.meta_key AS sub_meta_key,
-        sub_pm.meta_value AS sub_meta_value
-    FROM 
-        {$wpdb->posts} p
-    INNER JOIN 
-        {$wpdb->postmeta} pm ON p.ID = pm.post_id
-    LEFT JOIN 
-        {$wpdb->postmeta} sub_pm ON sub_pm.meta_value = p.ID
-    LEFT JOIN 
-        {$wpdb->posts} sub_p ON sub_pm.post_id = sub_p.ID AND sub_p.post_type = 'page'
-    WHERE 
-        sub_p.post_status = 'publish' AND p.post_type = 'page' AND pm.meta_value = 'templates/template-hms-international.php'
-    ORDER BY 
-        p.post_date DESC, sub_p.post_title ASC;
-";
-
-$results = $wpdb->get_results($query, ARRAY_A);
-
-$location_groups = [];
-if (! empty($results)) {
-	$temp_array  = [];
-	$last_main_id = null;
-
-	foreach ($results as $row) {
-		$main_id = $row['main_id'];
-
-		if ($main_id !== $last_main_id && $last_main_id !== null) {
-			$location_groups[count($location_groups) - 1]['textdata'] = $temp_array;
-			$temp_array = [];
-		}
-
-		if ($main_id !== $last_main_id) {
-			$location_groups[] = [
-				'id'         => $row['main_id'],
-				'post_name'  => $row['main_post_name'],
-				'post_status' => $row['main_post_status'],
-				'post_title' => $row['main_post_title'],
-			];
-			$last_main_id = $main_id;
-		}
-
-		if (! empty($row['sub_id'])) {
-			$temp_array[] = [
-				'id'        => $row['sub_id'],
-				'post_name' => $row['sub_post_name'],
-				'post_title' => $row['sub_post_title'],
-			];
-		}
-	}
-	if (! empty($temp_array)) {
-		$location_groups[count($location_groups) - 1]['textdata'] = $temp_array;
-	}
-}
 
 // Speciality pages - flat, alphabetical (see action item #1 above)
 $speciality_args = [
@@ -256,36 +188,6 @@ $speciality_pages = new WP_Query($speciality_args);
 				<li><a href="https://healthray.com/marg-erp-9-alternative/">Marg ERP 9 Alternative</a></li>
 				<li><a href="https://healthray.com/gofrugal-alternative/">Gofrugal Alternative</a></li>
 				<li><a href="https://healthray.com/wondersoft-alternative/">Wondersoft Alternative</a></li>
-			</ul>
-		</section>
-
-
-		<?php foreach ($location_groups as $group) :
-		if (empty($group['textdata']) || ! is_array($group['textdata'])) continue;
-		$count = count($group['textdata']) + 1; // +1 for the group's own "all" page
-		?>
-		<section class="block">
-			<h2>
-				<?php echo esc_html($group['post_title']); ?>
-			</h2>
-			<ul class="link-list">
-				<li><a href="https://healthray.com/<?php echo esc_attr($group['post_name']); ?>/">
-					<?php echo esc_html($group['post_title']); ?>
-					</a></li>
-				<?php foreach ($group['textdata'] as $sub) : ?>
-				<li><a href="https://healthray.com/<?php echo esc_attr($sub['post_name']); ?>/">
-					<?php echo esc_html($sub['post_title']); ?>
-					</a></li>
-				<?php endforeach; ?>
-			</ul>
-		</section>
-		<?php endforeach; ?>
-
-
-		<section class="block" id="pharmacy-alternatives">
-			<h2>Best Hospital Management Software In Kuwait</h2>
-			<ul class="link-list">
-				<li><a href="https://healthray.com/best-hospital-management-software-kuwait/">Best Hospital Management Software In Kuwait</a></li>
 			</ul>
 		</section>
 

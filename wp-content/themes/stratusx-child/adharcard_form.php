@@ -6,9 +6,15 @@ define("LOCAL_API_PATH", "http://192.168.0.162:4004/api/");
 define("API_PATH", LIVE_API_PATH);
 function adhar_auth_form_shortcode()
 {
-	// Start output buffering
+	// ABHA form markup + its CSS/JS are loaded only on pages that use this shortcode.
+	$css = '/css/abha-shortcode.css';
+	$js  = '/js/abha-shortcode.js';
+	wp_enqueue_style('abha-shortcode', get_stylesheet_directory_uri() . $css, array(), hr_asset_version($css));
+	wp_enqueue_script('abha-shortcode', get_stylesheet_directory_uri() . $js, array('jquery'), hr_asset_version($js), true);
+	wp_add_inline_script('abha-shortcode', 'var ajax_obj = ' . wp_json_encode(admin_url('admin-ajax.php')) . ';', 'before');
+
 	ob_start();
-	// require_once(__DIR__ . '/lib/abhacardForm.php');
+	require __DIR__ . '/lib/abhacardForm.php';
 	return ob_get_clean();
 }
 add_shortcode('adharAuthForm', 'adhar_auth_form_shortcode');

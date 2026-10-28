@@ -1794,31 +1794,3 @@ add_action('wp_enqueue_scripts', function () {
 		wp_enqueue_script('ppc-' . $key, get_stylesheet_directory_uri() . $js, array(), hr_asset_version($js), array('in_footer' => true, 'strategy' => 'defer'));
 	}
 }, 1000);
-
-/**
- * Allow Contact Form 7 submissions on local LAN environment only.
- */
-add_filter('wpcf7_recaptcha_threshold', function ($threshold) {
-	$server_name = $_SERVER['SERVER_NAME'] ?? '';
-	$server_addr = $_SERVER['SERVER_ADDR'] ?? '';
-	$is_local = ($server_name === 'localhost' || $server_name === '127.0.0.1' || $server_addr === '127.0.0.1' || strpos($server_addr, '192.168.') === 0);
-
-	if ($is_local) {
-		return 0.1;
-	}
-
-	return $threshold;
-});
-
-add_filter('wpcf7_spam', function ($spam) {
-	$server_name = $_SERVER['SERVER_NAME'] ?? '';
-	$server_addr = $_SERVER['SERVER_ADDR'] ?? '';
-	$is_local = ($server_name === 'localhost' || $server_name === '127.0.0.1' || $server_addr === '127.0.0.1' || strpos($server_addr, '192.168.') === 0);
-
-	if ($is_local) {
-		return false;
-	}
-
-	return $spam;
-
-}, 999, 1);

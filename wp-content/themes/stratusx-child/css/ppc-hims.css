@@ -3365,3 +3365,69 @@ body.ppc-hims {
 .ppc-hims .hb-sec .callouts {
 	margin-top: 0;
 }
+
+/* 32. WhatsApp: button in the mobile bar, floating button bottom-left on desktop (templates/ppc-hims/whatsapp.php) */
+.ppc-hims .wa-ico {
+	width: 20px;
+	height: 20px;
+	flex: none;
+}
+
+.ppc-hims .mbar {
+	grid-template-columns: auto minmax(0, 1fr);
+}
+
+.ppc-hims .mbar a {
+	gap: 8px;
+	padding: 8px 14px;
+	line-height: 1.2;
+	text-align: center;
+}
+
+.ppc-hims .mbar .wa {
+	background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+	color: var(--white);
+	white-space: nowrap;
+}
+
+.ppc-hims .wa-float {
+	position: fixed;
+	left: 24px;
+	bottom: 24px;
+	z-index: 50;
+	display: none;
+	align-items: center;
+	gap: 10px;
+	padding: 13px 22px 13px 18px;
+	border-radius: 999px;
+	background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+	color: var(--white);
+	font: 700 15px/1 var(--font);
+	text-decoration: none;
+	box-shadow: 0 8px 24px rgba(18, 140, 126, .35);
+	transition: transform .2s, box-shadow .2s, opacity .2s, visibility .2s;
+}
+
+.ppc-hims .wa-float .wa-ico {
+	width: 22px;
+	height: 22px;
+}
+
+.ppc-hims .wa-float:hover,
+.ppc-hims .wa-float:focus-visible {
+	color: var(--white);
+	transform: translateY(-2px);
+	box-shadow: 0 12px 28px rgba(18, 140, 126, .45);
+}
+
+.ppc-hims .wa-float.away {
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(16px);
+}
+
+@media (min-width: 768px) {
+	.ppc-hims .wa-float {
+		display: inline-flex;
+	}
+}

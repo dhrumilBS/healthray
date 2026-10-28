@@ -98,30 +98,6 @@ $recent_posts_query = new WP_Query([
 					</div>
 				</div>
 			</div>
-
-			<!-- Stats bar -->
-			<div class="hr-author-stats-bar" aria-label="Author stats">
-				<div class="hr-author-stats-grid">
-					<div class="hr-author-stat">
-						<span class="hr-author-stat__value"><?php echo absint($post_count); ?>+</span>
-						<span class="hr-author-stat__label">Articles Published</span>
-					</div>
-					<div class="hr-author-stat">
-						<span class="hr-author-stat__value"><?php echo esc_html($since_year); ?></span>
-						<span class="hr-author-stat__label">Writing Since</span>
-					</div>
-					<div class="hr-author-stat">
-						<span class="hr-author-stat__value">
-							<?php
-							// Show categories the author has written in
-							$cats = get_categories([ 'hide_empty' => true, 'object_ids' => wp_list_pluck( get_posts(['author' => $author_id, 'posts_per_page' => 50, 'fields' => 'ids']), 'ID' ), ]);
-							echo count($cats) ? absint(count($cats)) : '—';
-							?>
-						</span>
-						<span class="hr-author-stat__label">Topics Covered</span>
-					</div>
-				</div>
-			</div>
 		</div>
 	</section>
 
