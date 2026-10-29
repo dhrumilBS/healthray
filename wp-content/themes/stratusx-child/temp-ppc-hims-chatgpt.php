@@ -1,23 +1,6 @@
 <?php
 /**
  * Template Name: PPC HIMS ChatGPT
- *
- * ChatGPT Ads landing page for hospital management software (variant "chatgpt" of the
- * "hims" PPC page: the -chatgpt suffix does not change the key, see hr_ppc_page_key()).
- * Built from assets/healthray-chatgpt.html. The reader comes from a ChatGPT conversation,
- * "checking options", so the page opens with a checklist and closes their checking process.
- *
- * - Standalone render: own header (.top) and footer (.foot); templates/base-standalone.php
- *   is the Roots wrapper for every temp-ppc-*.php template (functions.php, section 12).
- * - Body class : ppc-hims   (shared with temp-ppc-hims-google.php; all CSS is scoped under it)
- * - CSS        : css/ppc-hims.css (+ section 29-30 for this page) + css/ppc-popup.css
- * - JS         : js/ppc-hims.js (shared)
- * - Shared     : templates/ppc-hims/ (setup, logo strip, video player, certificates,
- *                modules menu, footer), the same as on the Google page.
- * - Form       : CF7 stepper form c8e3c0a in the hero card and in the popup (setup.php),
- *                popup heading "Get a free demo and quotation" ($ppc_popup below).
- * - CTAs       : every "Get free demo and quotation" (.hr-cta-btn) opens that popup (js/script.js).
- * - URL        : add the page ID to lib/virtual-urls.php for a /ppc/{slug}/ address.
  */
 
 defined('ABSPATH') || exit;
@@ -481,6 +464,6 @@ require __DIR__ . '/templates/ppc-hims/setup.php';
 <?php include __DIR__ . '/templates/ppc-hims/whatsapp.php'; ?>
 
 <nav class="mbar" id="mbar" aria-label="Quick actions">
-  <a class="wa js-wa" href="<?php echo esc_url($ppc_wa); ?>" target="_blank" rel="noopener"><?php echo $ppc_wa_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>WhatsApp</a>
+  <a class="wa js-wa" href="<?php echo esc_url($ppc_wa); ?>" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><?php echo $ppc_wa_logo; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
   <a class="go hr-cta-btn" href="#demo">Get free demo and quotation</a>
 </nav>

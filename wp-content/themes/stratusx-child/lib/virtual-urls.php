@@ -48,7 +48,8 @@ function hr_virtual_url_map()
 		'ppc' => array(
 			81834,
 			81838,
-			81925,
+			82169,
+			82175,
 		),
 	);
 }

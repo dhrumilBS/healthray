@@ -17,11 +17,10 @@ add_filter('hr_ppc_popup_args', function () use ($ppc_form) {
   );
 });
 
-// WhatsApp chat link (number in international format, digits only) with a prefilled message.
-$ppc_wa = 'https://wa.me/919714874435?text=' . rawurlencode("Hello Healthray, I run a hospital in Nigeria and I'd like a free demo of your hospital management software. Please share a suitable time.");
-
-// Settings for js/ppc-ng.js: Google Ads conversion IDs as AW-XXX/label (empty = GTM event only).
+// Settings for js/ppc-ng.js: WhatsApp number as 234XXXXXXXXXX (empty hides the buttons), Ads conversion IDs as AW-XXX/label.
 $ppc_ng = array(
+  'waNumber'        => '',
+  'waText'          => 'Hello Healthray, I would like a demo of your hospital software for my hospital.',
   'adsConversion'   => '',
   'adsConversionWa' => '',
 );
@@ -100,7 +99,6 @@ wp_add_inline_script('ppc-ng', 'var hrPpcNg = ' . wp_json_encode($ppc_ng) . ';',
         <div class="marquee-track">
           <ul>
             <li><img src="https://healthray.com/en-ng/wp-content/uploads/sites/2/2026/10/The-Cardiac-Clinic.webp" alt="The Cardiac Clinic" loading="lazy" decoding="async"><span class="fb">The Cardiac Clinic</span></li>
-            <li><span class="logo-txt"><b>Tender Love Medcare</b></span></li>
             <li><img src="https://healthray.com/en-ng/wp-content/uploads/sites/2/2025/02/St.-Niklaus-Medical-Center.webp" alt="St. Niklaus Medical Center, Lagos" loading="lazy" decoding="async"><span class="fb">St. Niklaus Medical Center</span></li>
             <li><img src="https://healthray.com/en-ng/wp-content/uploads/sites/2/2025/02/Redbridge-Healthcare.webp" alt="Redbridge Healthcare, Lagos" loading="lazy" decoding="async"><span class="fb">Redbridge Healthcare</span></li>
             <li><img src="https://healthray.com/en-ng/wp-content/uploads/sites/2/2025/02/Riverfront-Medical-Hub.webp" alt="Riverfront Medical Hub, Port Harcourt" loading="lazy" decoding="async"><span class="fb">Riverfront Medical Hub</span></li>
@@ -111,7 +109,6 @@ wp_add_inline_script('ppc-ng', 'var hrPpcNg = ' . wp_json_encode($ppc_ng) . ';',
           </ul>
           <ul aria-hidden="true">
             <li><img src="https://healthray.com/en-ng/wp-content/uploads/sites/2/2026/10/The-Cardiac-Clinic.webp" alt="The Cardiac Clinic" loading="lazy" decoding="async"><span class="fb">The Cardiac Clinic</span></li>
-            <li><span class="logo-txt"><b>Tender Love Medcare</b></span></li>
             <li><img src="https://healthray.com/en-ng/wp-content/uploads/sites/2/2025/02/St.-Niklaus-Medical-Center.webp" alt="" loading="lazy" decoding="async"><span class="fb">St. Niklaus Medical Center</span></li>
             <li><img src="https://healthray.com/en-ng/wp-content/uploads/sites/2/2025/02/Redbridge-Healthcare.webp" alt="" loading="lazy" decoding="async"><span class="fb">Redbridge Healthcare</span></li>
             <li><img src="https://healthray.com/en-ng/wp-content/uploads/sites/2/2025/02/Riverfront-Medical-Hub.webp" alt="" loading="lazy" decoding="async"><span class="fb">Riverfront Medical Hub</span></li>
@@ -560,7 +557,7 @@ wp_add_inline_script('ppc-ng', 'var hrPpcNg = ' . wp_json_encode($ppc_ng) . ';',
           <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/03/hl7-healthray-150x150.webp" alt="" width="58" height="58" loading="lazy" decoding="async"><span class="fb">HL7</span></span>HL7</li>
           <li><span class="seal"><img src="https://healthray.com/wp-content/uploads/2025/07/FHIR.webp" alt="" width="58" height="58" loading="lazy" decoding="async"><span class="fb">FHIR</span></span>FHIR</li>
           <li><span class="seal txt">ICD-10</span>ICD-10 coding</li>
-          <li><span class="seal txt">NDPA<br>2023</span>Supports NDPA 2023</li>
+          <li><span class="seal"><img src="https://healthray.com/en-ng/wp-content/uploads/sites/2/2026/10/Nigeria-Data-Protection-Commission-logo.webp" alt="" width="58" height="58" loading="lazy" decoding="async"><span class="fb">NDPA 2023</span></span>Supports NDPA 2023</li>
         </ul>
       </div>
     </div>
@@ -626,7 +623,7 @@ wp_add_inline_script('ppc-ng', 'var hrPpcNg = ' . wp_json_encode($ppc_ng) . ';',
         <h3>Have another question?</h3>
         <p>Ask us on the demo. We'll answer it for your hospital, using your own departments.</p>
         <a class="btn btn-primary hr-cta-btn" href="#demo">Book a free demo</a>
-        <a class="btn btn-wa js-wa" href="<?php echo esc_url($ppc_wa); ?>" target="_blank" rel="noopener"><svg class="wa-ico">
+        <a class="btn btn-wa js-wa" href="#" target="_blank" rel="noopener" hidden><svg class="wa-ico">
             <use href="#i-wa" />
           </svg>Ask on WhatsApp</a>
       </aside>
@@ -642,7 +639,7 @@ wp_add_inline_script('ppc-ng', 'var hrPpcNg = ' . wp_json_encode($ppc_ng) . ';',
       </div>
       <div class="final-actions">
         <a class="btn btn-white hr-cta-btn" href="#demo">Book a free demo</a>
-        <a class="btn btn-ghost js-wa" href="<?php echo esc_url($ppc_wa); ?>" target="_blank" rel="noopener"><svg class="wa-ico">
+        <a class="btn btn-ghost js-wa" href="#" target="_blank" rel="noopener" hidden><svg class="wa-ico">
             <use href="#i-wa" />
           </svg>WhatsApp us</a>
       </div>
@@ -653,9 +650,5 @@ wp_add_inline_script('ppc-ng', 'var hrPpcNg = ' . wp_json_encode($ppc_ng) . ';',
 <?php include __DIR__ . '/templates/ppc-hims/footer.php'; ?>
 
 <nav class="mbar" id="mbar" aria-label="Quick actions">
-  <a class="wa js-wa" href="<?php echo esc_url($ppc_wa); ?>" target="_blank" rel="noopener"><svg class="wa-ico" aria-hidden="true"><use href="#i-wa" /></svg>WhatsApp</a>
   <a class="go hr-cta-btn" href="#demo">Book a free demo</a>
 </nav>
-
-<?php // Desktop: floating WhatsApp button, bottom-left (the mobile bar covers phones). ?>
-<a class="wa-float js-wa" href="<?php echo esc_url($ppc_wa); ?>" target="_blank" rel="noopener"><svg class="wa-ico" aria-hidden="true"><use href="#i-wa" /></svg>Chat on WhatsApp</a>

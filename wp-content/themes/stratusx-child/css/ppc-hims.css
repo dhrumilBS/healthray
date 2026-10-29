@@ -3373,8 +3373,9 @@ body.ppc-hims {
 	flex: none;
 }
 
+/* Mobile bar: WhatsApp logo 30%, demo button 70% */
 .ppc-hims .mbar {
-	grid-template-columns: auto minmax(0, 1fr);
+	grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
 }
 
 .ppc-hims .mbar a {
@@ -3385,9 +3386,22 @@ body.ppc-hims {
 }
 
 .ppc-hims .mbar .wa {
-	background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-	color: var(--white);
-	white-space: nowrap;
+	padding: 6px;
+	background: var(--white);
+	border: 1.5px solid var(--line);
+}
+
+.ppc-hims .mbar .wa:hover,
+.ppc-hims .mbar .wa:focus-visible {
+	border-color: #25D366;
+}
+
+/* Official logo: the drop shadow shows its white outline on a white button */
+.ppc-hims .wa-logo {
+	width: 34px;
+	height: 34px;
+	flex: none;
+	filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .3));
 }
 
 .ppc-hims .wa-float {
