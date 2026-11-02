@@ -461,6 +461,7 @@ require __DIR__ . '/templates/ppc-hims/setup.php';
 
 <?php include __DIR__ . '/templates/ppc-hims/footer.php'; ?>
 
+<?php $ppc_wa_message = "Hi Healthray, I found you via ChatGPT and want to see a demo of your hospital software. Please share pricing."; ?>
 <?php include __DIR__ . '/templates/ppc-hims/whatsapp.php'; ?>
 
 <nav class="mbar" id="mbar" aria-label="Quick actions">

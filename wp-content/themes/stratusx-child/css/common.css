@@ -60,7 +60,7 @@
 .content-editor .main-desc>li { font-size: 16px; }
 
 /* Privacy policy blockquote */
-.privacy-policy .content-editor blockquote { background: #F7F9FC; padding: 15px 30px; border-radius: 3px; border-left: 5px solid #4554BD; margin: 0 0 1rem; }
+.privacy-policy .content-editor blockquote { background: #F7F9FC; padding: 15px 30px; border-radius: 3px; border-left: 5px solid #4554BD; margin: 1rem 0; }
 .privacy-policy .content-editor blockquote p { color: #4554BD; font-style: italic; }
 
 /* Blog page  */

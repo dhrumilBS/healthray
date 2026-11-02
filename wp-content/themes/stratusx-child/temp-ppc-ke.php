@@ -66,8 +66,6 @@ $ke_logo = array(
       <p class="cert-line">
         <img class="flag-img" src="<?php echo esc_url($ke_logo['flag']); ?>" alt="Kenya" width="24" height="16" decoding="async" data-fallback-remove>
         <span class="badge"><img class="dha-mini" src="<?php echo esc_url($ke_logo['dha_white']); ?>" alt="DHA" height="18" decoding="async" data-fallback-remove>Certified HMIS</span>
-        <span class="cert-no">Cert. no. <span class="ph"><?php echo esc_html($ke_cert_no); ?></span></span>
-        <a class="reg-link" href="https://certification.dha.go.ke/registry" target="_blank" rel="noopener nofollow">Check on the DHA registry</a>
       </p>
       <h1 id="kwH1">Hospital management software that gets your <span>SHA claims through</span></h1>
       <p class="hero-sub" id="kwSub">Submit SHA claims, take M‑Pesa payments and send eTIMS invoices from one system. We set it up and train your staff.</p>
@@ -424,7 +422,7 @@ $ke_logo = array(
       <div class="sec-head">
         <h2 class="h2" id="faqTitle">Questions facility owners ask us</h2>
       </div>
-      <details name="ppc-faq" open><summary>Is Healthray DHA certified?</summary><p>Yes. Our certificate number is <span class="ph"><?php echo esc_html($ke_cert_no); ?></span>. You can check it on the <a href="https://certification.dha.go.ke/registry" target="_blank" rel="noopener nofollow">DHA registry</a>.</p></details>
+      <details name="ppc-faq" open><summary>Is Healthray DHA certified?</summary><p>Yes, Healthray is DHA certified and committed to meeting healthcare quality, security, and regulatory standards.</p></details>
       <details name="ppc-faq"><summary>Can we submit SHA claims from Healthray?</summary><p>Yes. You check the patient's cover at registration, request pre-authorisation where it's needed, and send the claim from the patient's bill. You can see every claim: pending, paid or rejected.</p></details>
       <details name="ppc-faq"><summary>We use the SHA Provider Portal now. How do we move?</summary><p>We set Healthray up for your facility, add your SHA rates and train your staff. Your team then does the same work in Healthray, with the bill and patient records in one place.</p></details>
       <details name="ppc-faq"><summary>How much does it cost?</summary><p>It depends on your facility type, the departments you need and how many staff use it. After the demo, we send you a clear written quote in KES.</p></details>

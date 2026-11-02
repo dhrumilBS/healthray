@@ -314,6 +314,26 @@ add_filter('body_class', function ($classes) {
 	return array_unique($classes);
 }, 999);
 
+// Remove Elementor kit 394 class only on these three pharmacy pages.
+add_filter('body_class', static function ($classes) {
+    $is_pharmacy_page = is_page(array(
+        'pharma-google',
+        'pharma-meta',
+        'pharma-chatgpt',
+    ));
+
+    $is_pharmacy_template = is_page_template(array(
+        'page-pharma-google.php',
+        'page-pharma-meta.php',
+        'page-pharma-chatgpt.php',
+    ));
+
+    if ($is_pharmacy_page || $is_pharmacy_template) {
+        $classes = array_values(array_diff($classes, array('elementor-kit-394')));
+    }
+
+    return $classes;
+}, PHP_INT_MAX);
 
 // =============================================================================
 // INLINE CSS FILE CACHE HELPER
@@ -1594,7 +1614,7 @@ add_action('wp_footer', function () {
  */
 function hr_is_login_portal_page()
 {
-	return is_page(82169) || is_page(81468) || is_page_template('temp-login-landing.php');
+	return is_page(82169) || is_page(81468) || is_page(82198) || is_page(82196) || is_page(82183) || is_page_template('temp-login-landing.php');
 }
 
 function hr_ppc_page_key()
