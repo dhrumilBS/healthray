@@ -18,4 +18,5 @@ class SupportedPlugins extends BasicEnum {
 	const IMAGE_OPTIMIZATION = 'image-optimization';
 	const POJO_ACCESSIBILITY = 'pojo-accessibility';
 	const COOKIEZ = 'cookiez';
+	const ARYO_ACTIVITY_LOG = 'aryo-activity-log';
 }

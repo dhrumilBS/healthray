@@ -23858,7 +23858,7 @@ var import_regenerator = /* @__PURE__ */ __toESM(require_regenerator());
 				value: function initializeMixpanel(onLoaded) {
 					var editorEventsConfig = elementorCommon.config.editor_events;
 					installEventsProxyFetch(editorEventsConfig === null || editorEventsConfig === void 0 ? void 0 : editorEventsConfig.proxy_api_host, editorEventsConfig === null || editorEventsConfig === void 0 ? void 0 : editorEventsConfig.proxy_lib_base_path, editorEventsConfig === null || editorEventsConfig === void 0 ? void 0 : editorEventsConfig.token);
-					if (mixpanelInstance && mixpanelInstance.isInitialized) onLoaded(mixpanelInstance);
+					if (mixpanelInstance && mixpanelInstance.isInitialized) onLoaded === null || onLoaded === void 0 || onLoaded(mixpanelInstance);
 					else {
 						var _elementorCommon$conf;
 						var _elementorCommon$conf2;
@@ -23875,7 +23875,10 @@ var import_regenerator = /* @__PURE__ */ __toESM(require_regenerator());
 							flags: true,
 							api_host: (_elementorCommon$conf4 = elementorCommon.config.editor_events) === null || _elementorCommon$conf4 === void 0 ? void 0 : _elementorCommon$conf4.proxy_api_host,
 							lib_base_path: (_elementorCommon$conf5 = elementorCommon.config.editor_events) === null || _elementorCommon$conf5 === void 0 ? void 0 : _elementorCommon$conf5.proxy_lib_base_path,
-							loaded: onLoaded,
+							loaded: function loaded(instance) {
+								mixpanelInstance = instance;
+								onLoaded === null || onLoaded === void 0 || onLoaded(instance);
+							},
 							record_sessions_percent: (_elementorCommon$conf6 = (_elementorCommon$conf7 = elementorCommon.config.editor_events) === null || _elementorCommon$conf7 === void 0 ? void 0 : _elementorCommon$conf7.session_recording_percent) !== null && _elementorCommon$conf6 !== void 0 ? _elementorCommon$conf6 : 0,
 							record_idle_timeout_ms: 60 * 1e3,
 							record_min_ms: 5 * 1e3,

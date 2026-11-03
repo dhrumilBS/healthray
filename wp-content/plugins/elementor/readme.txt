@@ -4,8 +4,8 @@ Tags: ai, drag-and-drop, editor, landing page, mcp
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 4.3.4
-Beta tag: 4.3.0-beta3
+Stable tag: 4.3.6
+Beta tag: 4.4.0-beta2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -358,6 +358,22 @@ If you want to contribute, go to our [Elementor GitHub Repository](https://githu
 6. **Motion Effects** - Add entrance animations and transitions to any element in your website to captivate visitors.
 
 == Changelog ==
+
+= 4.3.6 - 2026-11-02 =
+
+* Fix: Improved code security enforcement in navigation links
+* Fix: Improved code security enforcement in icon and content handling
+* Fix: Improved code security enforcement in Atomic elements and template handling
+* Fix: Atomic styles trigger unnecessary background operations ([#32220](https://github.com/elementor/elementor/issues/32220))
+* Fix: Frontend styles are not displayed correctly when using the Internal Embedding CSS Print Method ([#37298](https://github.com/elementor/elementor/issues/37298), [#37468](https://github.com/elementor/elementor/issues/37468))
+* Fix: Atomic styles trigger unnecessary background operations ([#37790](https://github.com/elementor/elementor/issues/37790))
+* Fix: MCP resources fail to load when accessed through connected AI tools
+
+= 4.3.5 - 2026-10-13 =
+
+* Fix: Page editing can fail when Internal CSS Embedding is enabled ([#37468](https://github.com/elementor/elementor/issues/37468))
+* Fix: Improved code security enforcement across CSS, SVG, and element ID handling
+* Fix: Theme Builder fails to open correctly from "Edit with Elementor" on the frontend
 
 = 4.3.4 - 2026-10-05 =
 

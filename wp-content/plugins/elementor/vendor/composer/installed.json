@@ -132,6 +132,7 @@
                 "wp-coding-standards/wpcs": "^3.1.0"
             },
             "time": "2025-04-28T12:27:21+00:00",
+            "published-time": "2025-04-28T12:27:24+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -147,11 +148,11 @@
         },
         {
             "name": "elementor/wp-one-package",
-            "version": "1.0.72",
-            "version_normalized": "1.0.72.0",
+            "version": "1.0.73",
+            "version_normalized": "1.0.73.0",
             "dist": {
                 "type": "zip",
-                "url": "https://composer.elementor.com/download/elementor/wp-one-package/1.0.72"
+                "url": "https://composer.elementor.com/download/elementor/wp-one-package/1.0.73"
             },
             "require": {
                 "elementor/wp-notifications-package": "^1.2"
@@ -164,7 +165,7 @@
                 "wp-coding-standards/wpcs": "^3.1.0",
                 "yoast/phpunit-polyfills": "^2.0"
             },
-            "time": "2026-09-24T12:01:22+00:00",
+            "time": "2026-11-02T10:50:10+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {

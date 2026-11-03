@@ -5189,10 +5189,15 @@ var import_lib = /* @__PURE__ */ __toESM(require_lib());
 
 //#endregion
 //#region app/modules/site-editor/assets/js/pages/promotion.js
+	var DEFAULT_THEME_BUILDER_UPGRADE_URL = "https://go.elementor.com/go-pro-theme-builder/";
 	function Promotion() {
-		var promotionUrl = elementorAppConfig.promotion.upgrade_url || "https://go.elementor.com/go-pro-theme-builder/";
+		var _elementorAppConfig$p;
+		var _elementorAppConfig$p2;
+		var headerPromotionUrl = ((_elementorAppConfig$p = elementorAppConfig.promotion) === null || _elementorAppConfig$p === void 0 ? void 0 : _elementorAppConfig$p.upgrade_url) || DEFAULT_THEME_BUILDER_UPGRADE_URL;
+		var overlayPromotionUrl = DEFAULT_THEME_BUILDER_UPGRADE_URL;
+		var headerButtonText = ((_elementorAppConfig$p2 = elementorAppConfig.promotion) === null || _elementorAppConfig$p2 === void 0 ? void 0 : _elementorAppConfig$p2.button_text) || (0, _wordpress_i18n.__)("Upgrade Now", "elementor");
 		var PromotionHoverElement = function PromotionHoverElement(props) {
-			var promotionUrlWithType = "".concat(promotionUrl, "?type=").concat(props.type);
+			var promotionUrlWithType = "".concat(overlayPromotionUrl, "?type=").concat(props.type);
 			return /*#__PURE__*/ react.default.createElement(CardOverlay, { className: "e-site-editor__promotion-overlay" }, /*#__PURE__*/ react.default.createElement("a", {
 				className: "e-site-editor__promotion-overlay__link",
 				target: "_blank",
@@ -5229,9 +5234,9 @@ var import_lib = /* @__PURE__ */ __toESM(require_lib());
 			size: "sm",
 			color: "cta",
 			variant: "contained",
-			url: promotionUrl,
+			url: headerPromotionUrl,
 			target: "_blank",
-			text: (0, _wordpress_i18n.__)("Upgrade Now", "elementor")
+			text: headerButtonText
 		}))), /*#__PURE__*/ react.default.createElement("hr", { className: "eps-separator" }), /*#__PURE__*/ react.default.createElement(SiteParts, { hoverElement: PromotionHoverElement })));
 	}
 

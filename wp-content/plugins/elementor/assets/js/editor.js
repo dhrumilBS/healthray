@@ -3758,7 +3758,7 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region modules/web-cli/assets/js/modules/component-base.js
-	function ownKeys$22(e, r) {
+	function ownKeys$25(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -3768,12 +3768,12 @@ react_dom = __toESM(react_dom);
 		}
 		return t;
 	}
-	function _objectSpread$22(e) {
+	function _objectSpread$25(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$22(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$25(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$22(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$25(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -3803,8 +3803,8 @@ react_dom = __toESM(react_dom);
 		import_module = /* @__PURE__ */ __toESM(require_module());
 		init_force_method_implementation();
 		init_deprecation();
-		__name(ownKeys$22, "ownKeys");
-		__name(_objectSpread$22, "_objectSpread");
+		__name(ownKeys$25, "ownKeys");
+		__name(_objectSpread$25, "_objectSpread");
 		__name(_callSuper$312, "_callSuper");
 		__name(_isNativeReflectConstruct$312, "_isNativeReflectConstruct");
 		ComponentBase$1 = /*#__PURE__*/ function(_Module) {
@@ -4078,7 +4078,7 @@ react_dom = __toESM(react_dom);
 					key: "registerState",
 					value: function registerState(id, stateConfig) {
 						id = this.getNamespace() + (id ? "/".concat(id) : "");
-						var slice = (0, _reduxjs_toolkit.createSlice)(_objectSpread$22(_objectSpread$22({}, stateConfig), {}, { name: id }));
+						var slice = (0, _reduxjs_toolkit.createSlice)(_objectSpread$25(_objectSpread$25({}, stateConfig), {}, { name: id }));
 						$e.store.register(id, slice);
 					}
 				},
@@ -5283,7 +5283,7 @@ init_component_base$1();
 	init_classCallCheck();
 	init_createClass();
 	init_defineProperty();
-	function ownKeys$21(e, r) {
+	function ownKeys$24(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -5293,19 +5293,19 @@ init_component_base$1();
 		}
 		return t;
 	}
-	__name(ownKeys$21, "ownKeys");
-	function _objectSpread$21(e) {
+	__name(ownKeys$24, "ownKeys");
+	function _objectSpread$24(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$21(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$24(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$21(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$24(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$21, "_objectSpread");
+	__name(_objectSpread$24, "_objectSpread");
 	var Heartbeat = /*#__PURE__*/ function() {
 		function Heartbeat(document) {
 			var _this = this;
@@ -5430,7 +5430,7 @@ init_component_base$1();
 							return _this2.reloadDocument();
 						}
 					};
-					var config = isDirty ? _objectSpread$21(_objectSpread$21({}, baseConfig), {}, {
+					var config = isDirty ? _objectSpread$24(_objectSpread$24({}, baseConfig), {}, {
 						message: (0, _wordpress_i18n.__)("This page was changed externally. Save your changes or reload to get the latest version.", "elementor"),
 						strings: {
 							confirm: (0, _wordpress_i18n.__)("Force Save", "elementor"),
@@ -5442,11 +5442,11 @@ init_component_base$1();
 						onCancel: function onCancel() {
 							return _this2.reloadDocument();
 						}
-					}) : _objectSpread$21(_objectSpread$21({}, baseConfig), {}, {
+					}) : _objectSpread$24(_objectSpread$24({}, baseConfig), {}, {
 						message: (0, _wordpress_i18n.__)("This page was changed externally. Reload to get the latest version.", "elementor"),
 						strings: { confirm: (0, _wordpress_i18n.__)("Reload", "elementor") }
 					});
-					this.externalChangeModal = elementorCommon.dialogsManager.createWidget(isDirty ? "confirm" : "alert", _objectSpread$21(_objectSpread$21({}, config), {}, {
+					this.externalChangeModal = elementorCommon.dialogsManager.createWidget(isDirty ? "confirm" : "alert", _objectSpread$24(_objectSpread$24({}, config), {}, {
 						closeButton: false,
 						hide: {
 							onOutsideClick: false,
@@ -6868,7 +6868,7 @@ init_element_base();
 
 //#endregion
 //#region assets/dev/js/editor/utils/v4-flexbox-preset.js
-	function ownKeys$20(e, r) {
+	function ownKeys$23(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -6878,12 +6878,12 @@ init_element_base();
 		}
 		return t;
 	}
-	function _objectSpread$20(e) {
+	function _objectSpread$23(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$20(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$23(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$20(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$23(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -6932,8 +6932,8 @@ init_element_base();
 	var init_v4_flexbox_preset = __esmMin((() => {
 		init_defineProperty();
 		init_v4_preset_utils();
-		__name(ownKeys$20, "ownKeys");
-		__name(_objectSpread$20, "_objectSpread");
+		__name(ownKeys$23, "ownKeys");
+		__name(_objectSpread$23, "_objectSpread");
 		V4_ELEMENT_TYPE$1 = "e-flexbox";
 		DIRECTION_ROW$1 = "row";
 		DIRECTION_COLUMN$1 = "column";
@@ -6963,10 +6963,10 @@ init_element_base();
 		FULL_WIDTH_MOBILE = { width: sizeProp(100, "%") };
 		ROW = { "flex-direction": stringProp(DIRECTION_ROW$1) };
 		COLUMN = { "flex-direction": stringProp(DIRECTION_COLUMN$1) };
-		ROW_WRAP = _objectSpread$20(_objectSpread$20({}, ROW), {}, { "flex-wrap": stringProp("wrap") });
+		ROW_WRAP = _objectSpread$23(_objectSpread$23({}, ROW), {}, { "flex-wrap": stringProp("wrap") });
 		widthChild = function widthChild(size) {
 			return {
-				parent: _objectSpread$20(_objectSpread$20({}, COLUMN), widthPercent(size)),
+				parent: _objectSpread$23(_objectSpread$23({}, COLUMN), widthPercent(size)),
 				parentMobile: FULL_WIDTH_MOBILE,
 				children: []
 			};
@@ -6997,7 +6997,7 @@ init_element_base();
 			"c100-c50-50": {
 				parent: ROW,
 				children: [widthChild("50"), {
-					parent: _objectSpread$20(_objectSpread$20(_objectSpread$20({}, COLUMN), widthPercent("50")), {}, { padding: sizeProp(0, "px") }),
+					parent: _objectSpread$23(_objectSpread$23(_objectSpread$23({}, COLUMN), widthPercent("50")), {}, { padding: sizeProp(0, "px") }),
 					parentMobile: FULL_WIDTH_MOBILE,
 					children: [bareChild(), bareChild()]
 				}]
@@ -7047,7 +7047,7 @@ init_element_base();
 
 //#endregion
 //#region assets/dev/js/editor/utils/container-helper.js
-	function ownKeys$19(e, r) {
+	function ownKeys$22(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -7057,12 +7057,12 @@ init_element_base();
 		}
 		return t;
 	}
-	function _objectSpread$19(e) {
+	function _objectSpread$22(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$19(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$22(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$19(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$22(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -7076,8 +7076,8 @@ init_element_base();
 		init_v4_flexbox_preset();
 		init_v4_grid_preset();
 		;
-		__name(ownKeys$19, "ownKeys");
-		__name(_objectSpread$19, "_objectSpread");
+		__name(ownKeys$22, "ownKeys");
+		__name(_objectSpread$22, "_objectSpread");
 		ContainerHelper = /*#__PURE__*/ function() {
 			function ContainerHelper() {
 				_classCallCheck(this, ContainerHelper);
@@ -7109,7 +7109,7 @@ init_element_base();
 						var modelAttributes = arguments.length > 3 && arguments[3] !== void 0 ? arguments[3] : {};
 						return $e.run("document/elements/create", {
 							container: target,
-							model: _objectSpread$19({
+							model: _objectSpread$22({
 								elType: "container",
 								settings
 							}, modelAttributes),
@@ -7141,7 +7141,7 @@ init_element_base();
 						var shouldWrap = sizes.reduce(function(sum, size) {
 							return sum + parseInt(size);
 						}, 0) > 100;
-						var settings = _objectSpread$19(_objectSpread$19({ flex_direction: this.DIRECTION_ROW }, shouldWrap ? { flex_wrap: "wrap" } : {}), {}, { flex_gap: {
+						var settings = _objectSpread$22(_objectSpread$22({ flex_direction: this.DIRECTION_ROW }, shouldWrap ? { flex_wrap: "wrap" } : {}), {}, { flex_gap: {
 							unit: "px",
 							size: 0,
 							column: "0",
@@ -7191,7 +7191,7 @@ init_element_base();
 								unit: "fr",
 								size: parsedStructure.rows
 							}
-						}, target, options, _objectSpread$19({
+						}, target, options, _objectSpread$22({
 							title: (0, _wordpress_i18n.__)("Grid", "elementor"),
 							custom: {
 								isPreset: true,
@@ -7247,7 +7247,7 @@ init_element_base();
 										}
 									};
 									ContainerHelper.createContainer(settings, newContainer, { edit: false });
-									var rightContainer = ContainerHelper.createContainer(_objectSpread$19(_objectSpread$19({}, settings), {}, {
+									var rightContainer = ContainerHelper.createContainer(_objectSpread$22(_objectSpread$22({}, settings), {}, {
 										padding: {
 											unit: "px",
 											top: 0,
@@ -7286,7 +7286,7 @@ init_element_base();
 					key: "createContainerFromModel",
 					value: function createContainerFromModel(model, target) {
 						var options = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {};
-						return $e.run("document/elements/create", _objectSpread$19({
+						return $e.run("document/elements/create", _objectSpread$22({
 							model,
 							container: target
 						}, options));
@@ -7306,7 +7306,7 @@ init_element_base();
 
 //#endregion
 //#region assets/dev/js/editor/utils/editor-one-events.js
-	function ownKeys$18(e, r) {
+	function ownKeys$21(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -7316,12 +7316,12 @@ init_element_base();
 		}
 		return t;
 	}
-	function _objectSpread$18(e) {
+	function _objectSpread$21(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$18(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$21(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$18(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$21(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -7332,8 +7332,8 @@ init_element_base();
 		init_defineProperty();
 		init_classCallCheck();
 		init_createClass();
-		__name(ownKeys$18, "ownKeys");
-		__name(_objectSpread$18, "_objectSpread");
+		__name(ownKeys$21, "ownKeys");
+		__name(_objectSpread$21, "_objectSpread");
 		EditorOneEventManager = /*#__PURE__*/ function() {
 			function EditorOneEventManager() {
 				_classCallCheck(this, EditorOneEventManager);
@@ -7422,7 +7422,7 @@ init_element_base();
 						var _config$appTypes3;
 						var overrides = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
 						var config = this.getConfig();
-						return _objectSpread$18({ window_name: (_config$appTypes$edit = config === null || config === void 0 || (_config$appTypes3 = config.appTypes) === null || _config$appTypes3 === void 0 ? void 0 : _config$appTypes3.editor) !== null && _config$appTypes$edit !== void 0 ? _config$appTypes$edit : "editor" }, overrides);
+						return _objectSpread$21({ window_name: (_config$appTypes$edit = config === null || config === void 0 || (_config$appTypes3 = config.appTypes) === null || _config$appTypes3 === void 0 ? void 0 : _config$appTypes3.editor) !== null && _config$appTypes$edit !== void 0 ? _config$appTypes$edit : "editor" }, overrides);
 					}
 				},
 				{
@@ -7743,7 +7743,7 @@ init_element_base();
 						var _config$locations11;
 						var overrides = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
 						var config = this.getConfig();
-						return this.createBasePayload(_objectSpread$18({
+						return this.createBasePayload(_objectSpread$21({
 							window_name: (_config$appTypes$wpDa = config === null || config === void 0 || (_config$appTypes4 = config.appTypes) === null || _config$appTypes4 === void 0 ? void 0 : _config$appTypes4.wpDash) !== null && _config$appTypes$wpDa !== void 0 ? _config$appTypes$wpDa : "wpdash",
 							target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations11 = config.locations) === null || _config$locations11 === void 0 ? void 0 : _config$locations11.wpDashAdmin),
 							location_l2: ""
@@ -8140,7 +8140,7 @@ init_element_base();
 
 //#endregion
 //#region assets/dev/js/editor/views/add-section/base.js
-	function ownKeys$17(e, r) {
+	function ownKeys$20(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -8150,12 +8150,12 @@ init_element_base();
 		}
 		return t;
 	}
-	function _objectSpread$17(e) {
+	function _objectSpread$20(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$17(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$20(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$17(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$20(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -8183,8 +8183,8 @@ init_element_base();
 		init_container_helper();
 		init_environment();
 		init_editor_one_events();
-		__name(ownKeys$17, "ownKeys");
-		__name(_objectSpread$17, "_objectSpread");
+		__name(ownKeys$20, "ownKeys");
+		__name(_objectSpread$20, "_objectSpread");
 		__name(_callSuper$292, "_callSuper");
 		__name(_isNativeReflectConstruct$292, "_isNativeReflectConstruct");
 		AddSectionBase = /*#__PURE__*/ function(_Marionette$ItemView) {
@@ -8376,7 +8376,7 @@ init_element_base();
 				{
 					key: "onRender",
 					value: function onRender() {
-						this.$el.html5Droppable(_objectSpread$17({
+						this.$el.html5Droppable(_objectSpread$20({
 							axis: ["vertical"],
 							groups: ["elementor-element"],
 							placeholder: false,
@@ -11718,7 +11718,7 @@ init_element_base();
 
 //#endregion
 //#region assets/dev/js/editor/elements/views/behaviors/widget-resizeable.js
-	function ownKeys$16(e, r) {
+	function ownKeys$19(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -11728,12 +11728,12 @@ init_element_base();
 		}
 		return t;
 	}
-	function _objectSpread$16(e) {
+	function _objectSpread$19(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$16(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$19(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$16(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$19(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -11765,8 +11765,8 @@ init_element_base();
 		init_getPrototypeOf();
 		init_get();
 		init_inherits();
-		__name(ownKeys$16, "ownKeys");
-		__name(_objectSpread$16, "_objectSpread");
+		__name(ownKeys$19, "ownKeys");
+		__name(_objectSpread$19, "_objectSpread");
 		__name(_callSuper$282, "_callSuper");
 		__name(_isNativeReflectConstruct$282, "_isNativeReflectConstruct");
 		__name(_superPropGet$31, "_superPropGet");
@@ -11894,7 +11894,7 @@ init_element_base();
 						var widthSettingKey = this.getDeviceSetting(this.getWidthKey());
 						var unit = this.getSetting(widthSettingKey).unit;
 						var width = elementor.helpers.elementSizeToUnit(this.$el, ui.size.width, unit);
-						var settingToChange = _objectSpread$16(_objectSpread$16(_objectSpread$16({}, this.isContainerActive() ? { _flex_size: "none" } : {}), this.isContainer() ? { content_width: "full" } : {}), {}, _defineProperty(_defineProperty({}, elementWidthSettingKey, "initial"), widthSettingKey, {
+						var settingToChange = _objectSpread$19(_objectSpread$19(_objectSpread$19({}, this.isContainerActive() ? { _flex_size: "none" } : {}), this.isContainer() ? { content_width: "full" } : {}), {}, _defineProperty(_defineProperty({}, elementWidthSettingKey, "initial"), widthSettingKey, {
 							unit,
 							size: width
 						}));
@@ -14020,7 +14020,7 @@ init_element_base();
 
 //#endregion
 //#region assets/dev/js/editor/document/elements/commands/duplicate.js
-	function ownKeys$15(e, r) {
+	function ownKeys$18(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -14030,12 +14030,12 @@ init_element_base();
 		}
 		return t;
 	}
-	function _objectSpread$15(e) {
+	function _objectSpread$18(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$15(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$18(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$15(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$18(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -14060,8 +14060,8 @@ init_element_base();
 		init_possibleConstructorReturn();
 		init_getPrototypeOf();
 		init_inherits();
-		__name(ownKeys$15, "ownKeys");
-		__name(_objectSpread$15, "_objectSpread");
+		__name(ownKeys$18, "ownKeys");
+		__name(_objectSpread$18, "_objectSpread");
 		__name(_callSuper$268, "_callSuper");
 		__name(_isNativeReflectConstruct$268, "_isNativeReflectConstruct");
 		Duplicate$2 = /*#__PURE__*/ function(_$e$modules$editor$do) {
@@ -14111,7 +14111,7 @@ init_element_base();
 							result.push($e.run("document/elements/create", {
 								container: parent,
 								model: container.model.toJSON(),
-								options: _objectSpread$15(_objectSpread$15({}, options), {}, {
+								options: _objectSpread$18(_objectSpread$18({}, options), {}, {
 									at: ++at,
 									clone: true
 								})
@@ -19085,7 +19085,7 @@ init_element_base();
 
 //#endregion
 //#region assets/dev/js/frontend/utils/filter-unknown-elements.js
-	function ownKeys$14(e, r) {
+	function ownKeys$17(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -19095,12 +19095,12 @@ init_element_base();
 		}
 		return t;
 	}
-	function _objectSpread$14(e) {
+	function _objectSpread$17(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$14(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$17(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$14(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$17(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -19112,7 +19112,7 @@ init_element_base();
 			var _element$elements;
 			if (!element) return acc;
 			if (!elementor.elementsManager.getElementTypeClass((_element$widgetType = element.widgetType) !== null && _element$widgetType !== void 0 ? _element$widgetType : element.elType)) return acc;
-			var processedElement = (_element$elements = element.elements) !== null && _element$elements !== void 0 && _element$elements.length ? _objectSpread$14(_objectSpread$14({}, element), {}, { elements: filterChildren(element.elements) }) : element;
+			var processedElement = (_element$elements = element.elements) !== null && _element$elements !== void 0 && _element$elements.length ? _objectSpread$17(_objectSpread$17({}, element), {}, { elements: filterChildren(element.elements) }) : element;
 			acc.push(processedElement);
 			return acc;
 		}, []);
@@ -19120,11 +19120,11 @@ init_element_base();
 	var filterUnknownElements;
 	var init_filter_unknown_elements = __esmMin((() => {
 		init_defineProperty();
-		__name(ownKeys$14, "ownKeys");
-		__name(_objectSpread$14, "_objectSpread");
+		__name(ownKeys$17, "ownKeys");
+		__name(_objectSpread$17, "_objectSpread");
 		filterUnknownElements = function filterUnknownElements(data) {
 			var _data$elements;
-			if (data !== null && data !== void 0 && (_data$elements = data.elements) !== null && _data$elements !== void 0 && _data$elements.length) return _objectSpread$14(_objectSpread$14({}, data), {}, { elements: filterChildren(data.elements) });
+			if (data !== null && data !== void 0 && (_data$elements = data.elements) !== null && _data$elements !== void 0 && _data$elements.length) return _objectSpread$17(_objectSpread$17({}, data), {}, { elements: filterChildren(data.elements) });
 			return data;
 		};
 	}));
@@ -20893,7 +20893,7 @@ init_component_modal_base();
 	init_inherits();
 	init_defineProperty();
 	init_react();
-	function ownKeys$13(e, r) {
+	function ownKeys$16(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -20903,19 +20903,19 @@ init_component_modal_base();
 		}
 		return t;
 	}
-	__name(ownKeys$13, "ownKeys");
-	function _objectSpread$13(e) {
+	__name(ownKeys$16, "ownKeys");
+	function _objectSpread$16(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$13(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$16(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$13(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$16(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$13, "_objectSpread");
+	__name(_objectSpread$16, "_objectSpread");
 	function _callSuper$191(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$191() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -20952,7 +20952,7 @@ init_component_modal_base();
 				_this.props.icons.forEach(function(tabSettings) {
 					if (loaded[tabSettings.name]) return;
 					if (-1 < ["all", "recommended"].indexOf(tabSettings.name)) return;
-					elementor.iconManager.library.initIconType(_objectSpread$13({}, tabSettings), function(library) {
+					elementor.iconManager.library.initIconType(_objectSpread$16({}, tabSettings), function(library) {
 						_this.cache[library.name] = library;
 						loaded[tabSettings.name] = true;
 					});
@@ -20970,12 +20970,12 @@ init_component_modal_base();
 				}
 				if ("GoPro" === activeTab) return activeTab;
 				if (!loaded[activeTab]) return false;
-				var tabSettings = _objectSpread$13({}, icons.filter(function(tab) {
+				var tabSettings = _objectSpread$16({}, icons.filter(function(tab) {
 					return tab.name === activeTab;
 				})[0]);
-				if (loaded[activeTab]) return _objectSpread$13({}, tabSettings);
+				if (loaded[activeTab]) return _objectSpread$16({}, tabSettings);
 				if ("all" === tabSettings.name && !loaded.all) return _this.loadAllTabs();
-				elementor.iconManager.library.initIconType(_objectSpread$13({}, tabSettings), function(library) {
+				elementor.iconManager.library.initIconType(_objectSpread$16({}, tabSettings), function(library) {
 					_this.cache[library.name] = library;
 					_this.updateLoaded(library.name);
 				});
@@ -21007,7 +21007,7 @@ init_component_modal_base();
 					var librarySettings = _this.props.icons.filter(function(library) {
 						return activeTab === library.name;
 					});
-					return elementor.iconManager.library.initIconType(_objectSpread$13({}, librarySettings[0]), function(library) {
+					return elementor.iconManager.library.initIconType(_objectSpread$16({}, librarySettings[0]), function(library) {
 						_this.cache[library.name] = library;
 						_this.updateLoaded(library.name);
 					});
@@ -22032,7 +22032,7 @@ init_component_modal_base();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	function ownKeys$12(e, r) {
+	function ownKeys$15(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -22042,19 +22042,19 @@ init_component_modal_base();
 		}
 		return t;
 	}
-	__name(ownKeys$12, "ownKeys");
-	function _objectSpread$12(e) {
+	__name(ownKeys$15, "ownKeys");
+	function _objectSpread$15(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$12(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$15(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$12(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$15(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$12, "_objectSpread");
+	__name(_objectSpread$15, "_objectSpread");
 	function _callSuper$183(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$183() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -22083,7 +22083,7 @@ init_component_modal_base();
 				var options = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
 				return $e.data.run("create", "wp/media", {
 					file,
-					options: _objectSpread$12({ progress: true }, options)
+					options: _objectSpread$15({ progress: true }, options)
 				}).catch(function(result) {
 					elementor.notifications.showToast({ message: result.message });
 					return Promise.reject(result);
@@ -25277,7 +25277,7 @@ init_component_modal_base();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	function ownKeys$11(e, r) {
+	function ownKeys$14(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -25287,19 +25287,19 @@ init_component_modal_base();
 		}
 		return t;
 	}
-	__name(ownKeys$11, "ownKeys");
-	function _objectSpread$11(e) {
+	__name(ownKeys$14, "ownKeys");
+	function _objectSpread$14(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$11(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$14(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$11(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$14(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$11, "_objectSpread");
+	__name(_objectSpread$14, "_objectSpread");
 	function _callSuper$174(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$174() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -25410,7 +25410,7 @@ init_component_modal_base();
 			type: "link",
 			link: PanelMenu$1.getExitUrl()
 		};
-		PanelMenu$1.addItem(_objectSpread$11({
+		PanelMenu$1.addItem(_objectSpread$14({
 			name: "exit",
 			icon: "eicon-exit",
 			title: (0, _wordpress_i18n.__)("Exit", "elementor")
@@ -25522,7 +25522,7 @@ init_component_modal_base();
 	init_getPrototypeOf();
 	init_inherits();
 	init_defineProperty();
-	function ownKeys$10(e, r) {
+	function ownKeys$13(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -25532,19 +25532,19 @@ init_component_modal_base();
 		}
 		return t;
 	}
-	__name(ownKeys$10, "ownKeys");
-	function _objectSpread$10(e) {
+	__name(ownKeys$13, "ownKeys");
+	function _objectSpread$13(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$10(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$13(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$10(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$13(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$10, "_objectSpread");
+	__name(_objectSpread$13, "_objectSpread");
 	function _callSuper$173(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$173() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -25677,9 +25677,9 @@ init_component_modal_base();
 				key: "parseOptions",
 				value: function parseOptions() {
 					var options = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
-					return _objectSpread$10(_objectSpread$10(_objectSpread$10({}, this.defaultOptions), options), {}, {
-						position: _objectSpread$10(_objectSpread$10({}, this.defaultOptions.position), (options === null || options === void 0 ? void 0 : options.position) || {}),
-						actionButton: _objectSpread$10(_objectSpread$10({}, this.defaultOptions.actionButton), (options === null || options === void 0 ? void 0 : options.actionButton) || {})
+					return _objectSpread$13(_objectSpread$13(_objectSpread$13({}, this.defaultOptions), options), {}, {
+						position: _objectSpread$13(_objectSpread$13({}, this.defaultOptions.position), (options === null || options === void 0 ? void 0 : options.position) || {}),
+						actionButton: _objectSpread$13(_objectSpread$13({}, this.defaultOptions.actionButton), (options === null || options === void 0 ? void 0 : options.actionButton) || {})
 					});
 				}
 			},
@@ -28010,7 +28010,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 	init_inherits();
 	init_defineProperty();
 	init_component_base();
-	function ownKeys$9(e, r) {
+	function ownKeys$12(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -28020,19 +28020,19 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 		}
 		return t;
 	}
-	__name(ownKeys$9, "ownKeys");
-	function _objectSpread$9(e) {
+	__name(ownKeys$12, "ownKeys");
+	function _objectSpread$12(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$9(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$12(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$9(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$12(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$9, "_objectSpread");
+	__name(_objectSpread$12, "_objectSpread");
 	function _callSuper$150(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$150() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -28155,7 +28155,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 			{
 				key: "getSiteSettingsSessionData",
 				value: function getSiteSettingsSessionData() {
-					return _objectSpread$9({}, this.siteSettingsSession);
+					return _objectSpread$12({}, this.siteSettingsSession);
 				}
 			},
 			{
@@ -28890,7 +28890,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 	init_inherits();
 	init_defineProperty();
 	var import_controls_css_parser = /* @__PURE__ */ __toESM(require_controls_css_parser());
-	function ownKeys$8(e, r) {
+	function ownKeys$11(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -28900,19 +28900,19 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 		}
 		return t;
 	}
-	__name(ownKeys$8, "ownKeys");
-	function _objectSpread$8(e) {
+	__name(ownKeys$11, "ownKeys");
+	function _objectSpread$11(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$8(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$11(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$8(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$11(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$8, "_objectSpread");
+	__name(_objectSpread$11, "_objectSpread");
 	function _callSuper$145(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$145() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -29064,7 +29064,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 						if (data.typography) Object.values(data.typography).forEach(function(item) {
 							if (V4_GROUP === item.group) return;
 							var controls = elementor.config.kit_config.design_system_controls.typography;
-							var values = _objectSpread$8({ _id: item.id }, item.value);
+							var values = _objectSpread$11({ _id: item.id }, item.value);
 							if (item.value.typography_font_family) elementor.helpers.enqueueFont(item.value.typography_font_family);
 							_this3.variablesCSS.addStyleRules(controls, values, controls, ["{{WRAPPER}}"], ["body"]);
 						});
@@ -29458,7 +29458,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	function ownKeys$7(e, r) {
+	function ownKeys$10(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -29468,19 +29468,19 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 		}
 		return t;
 	}
-	__name(ownKeys$7, "ownKeys");
-	function _objectSpread$7(e) {
+	__name(ownKeys$10, "ownKeys");
+	function _objectSpread$10(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$7(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$10(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$7(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$10(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$7, "_objectSpread");
+	__name(_objectSpread$10, "_objectSpread");
 	function _callSuper$137(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$137() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -29811,7 +29811,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 					if (!oldTitle) settingsModel.unset("_title", { silent: true });
 					if (elementor.helpers.isAtomicWidget(this.model)) {
 						var prevEditorSettings = this.model.get("editor_settings");
-						this.model.set("editor_settings", _objectSpread$7(_objectSpread$7({}, prevEditorSettings), {}, { title: newTitle }));
+						this.model.set("editor_settings", _objectSpread$10(_objectSpread$10({}, prevEditorSettings), {}, { title: newTitle }));
 					} else settingsModel.set("_title", newTitle);
 					$e.internal("document/save/set-is-modified", { status: true });
 					elementor.removeBackgroundClickListener("navigator");
@@ -32206,7 +32206,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	function ownKeys$6(e, r) {
+	function ownKeys$9(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -32216,19 +32216,19 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		}
 		return t;
 	}
-	__name(ownKeys$6, "ownKeys");
-	function _objectSpread$6(e) {
+	__name(ownKeys$9, "ownKeys");
+	function _objectSpread$9(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$6(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$9(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$6(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$9(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$6, "_objectSpread");
+	__name(_objectSpread$9, "_objectSpread");
 	function _callSuper$120(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$120() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -32256,7 +32256,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			value: function apply(args) {
 				this.component.activate();
 				$e.uiStates.set("elements-color-picker/color-picking", "on");
-				this.component.currentPicker = _objectSpread$6(_objectSpread$6({}, args), {}, { initialColor: args.container.getSetting(args.control) });
+				this.component.currentPicker = _objectSpread$9(_objectSpread$9({}, args), {}, { initialColor: args.container.getSetting(args.control) });
 				this.component.currentPicker.trigger.classList.add("e-control-tool-disabled");
 				addNamespaceHandler(elementor.$previewContents[0].querySelectorAll(".elementor-element"), "click.color-picker", function(e) {
 					e.preventDefault();
@@ -32433,7 +32433,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	function ownKeys$5(e, r) {
+	function ownKeys$8(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -32443,19 +32443,19 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		}
 		return t;
 	}
-	__name(ownKeys$5, "ownKeys");
-	function _objectSpread$5(e) {
+	__name(ownKeys$8, "ownKeys");
+	function _objectSpread$8(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$5(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$8(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$5(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$8(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$5, "_objectSpread");
+	__name(_objectSpread$8, "_objectSpread");
 	function _callSuper$117(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$117() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -32500,7 +32500,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				key: "getActiveBreakpointsList",
 				value: function getActiveBreakpointsList() {
 					var args = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
-					args = _objectSpread$5(_objectSpread$5({}, {
+					args = _objectSpread$8(_objectSpread$8({}, {
 						largeToSmall: false,
 						withDesktop: false
 					}), args);
@@ -36856,6 +36856,853 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 	}(ComponentBase$1);
 
 //#endregion
+//#region app/modules/onboarding/assets/js/utils/modules/event-queue.js
+	var STORAGE_KEY = "elementor_core_onboarding_event_queue";
+	var MAX_QUEUE_SIZE = 200;
+	function enqueueEvent(name, payload) {
+		var dedupeKey = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : null;
+		try {
+			var queue = getEventQueue();
+			if (dedupeKey && queue.some(function(item) {
+				return item.dedupeKey === dedupeKey;
+			})) return;
+			queue.push({
+				name,
+				payload,
+				timestamp: Date.now(),
+				dedupeKey
+			});
+			while (queue.length > MAX_QUEUE_SIZE) queue.shift();
+			sessionStorage.setItem(STORAGE_KEY, JSON.stringify(queue));
+		} catch (error) {}
+	}
+	function getEventQueue() {
+		try {
+			var raw = sessionStorage.getItem(STORAGE_KEY);
+			if (!raw) return [];
+			var parsed = JSON.parse(raw);
+			return Array.isArray(parsed) ? parsed : [];
+		} catch (error) {
+			return [];
+		}
+	}
+	function clearEventQueue() {
+		try {
+			sessionStorage.removeItem(STORAGE_KEY);
+		} catch (error) {}
+	}
+
+//#endregion
+//#region app/modules/onboarding/assets/js/utils/modules/storage-manager.js
+	init_typeof();
+	var ONBOARDING_STORAGE_KEYS = {
+		START_TIME: "elementor_onboarding_start_time",
+		INITIATED: "elementor_onboarding_initiated",
+		STEP1_ACTIONS: "elementor_onboarding_step1_actions",
+		STEP2_ACTIONS: "elementor_onboarding_step2_actions",
+		STEP3_ACTIONS: "elementor_onboarding_step3_actions",
+		STEP4_ACTIONS: "elementor_onboarding_step4_actions",
+		STEP1_START_TIME: "elementor_onboarding_s1_start_time",
+		STEP2_START_TIME: "elementor_onboarding_s2_start_time",
+		STEP3_START_TIME: "elementor_onboarding_s3_start_time",
+		STEP4_START_TIME: "elementor_onboarding_s4_start_time",
+		STEP4_SITE_STARTER_CHOICE: "elementor_onboarding_s4_site_starter_choice",
+		STEP4_HAS_PREVIOUS_CLICK: "elementor_onboarding_s4_has_previous_click",
+		EDITOR_LOAD_TRACKED: "elementor_onboarding_editor_load_tracked",
+		POST_ONBOARDING_CLICK_COUNT: "elementor_onboarding_click_count",
+		CREATE_ACCOUNT_FLOW: "elementor_onboarding_create_account_flow",
+		PENDING_CONNECT_STATUS: "elementor_onboarding_pending_connect_status",
+		PENDING_CREATE_ACCOUNT_STATUS: "elementor_onboarding_pending_create_account_status",
+		PENDING_CREATE_MY_ACCOUNT: "elementor_onboarding_pending_create_my_account",
+		PENDING_TOP_UPGRADE: "elementor_onboarding_pending_top_upgrade",
+		PENDING_TOP_UPGRADE_NO_CLICK: "elementor_onboarding_pending_top_upgrade_no_click",
+		PENDING_STEP1_CLICKED_CONNECT: "elementor_onboarding_pending_step1_clicked_connect",
+		PENDING_STEP1_END_STATE: "elementor_onboarding_pending_step1_end_state",
+		PENDING_EXIT: "elementor_onboarding_pending_exit",
+		PENDING_AB_101_START_AS_FREE_USER: "elementor_onboarding_pending_ab_101_start_as_free_user",
+		PENDING_TOP_UPGRADE_MOUSEOVER: "elementor_onboarding_pending_top_upgrade_mouseover",
+		EXPERIMENT101_VARIANT: "elementor_onboarding_experiment101_variant",
+		EXPERIMENT101_STARTED: "elementor_onboarding_experiment101_started",
+		EXPERIMENT201_VARIANT: "elementor_onboarding_experiment201_variant",
+		EXPERIMENT201_STARTED: "elementor_onboarding_experiment201_started",
+		EXPERIMENT202_VARIANT: "elementor_onboarding_experiment202_variant",
+		EXPERIMENT202_STARTED: "elementor_onboarding_experiment202_started",
+		EXPERIMENT401_VARIANT: "elementor_onboarding_experiment401_variant",
+		EXPERIMENT401_STARTED: "elementor_onboarding_experiment401_started",
+		EXPERIMENT402_VARIANT: "elementor_onboarding_experiment402_variant",
+		EXPERIMENT402_STARTED: "elementor_onboarding_experiment402_started",
+		PENDING_EXPERIMENT_DATA: "elementor_onboarding_pending_experiment_data",
+		STEP1_END_STATE_SENT: "elementor_onboarding_step1_end_state_sent",
+		STEP2_END_STATE_SENT: "elementor_onboarding_step2_end_state_sent",
+		STEP3_END_STATE_SENT: "elementor_onboarding_step3_end_state_sent",
+		STEP4_END_STATE_SENT: "elementor_onboarding_step4_end_state_sent",
+		STEP2_THEMES_LOADED_SENT: "elementor_onboarding_step2_themes_loaded_sent"
+	};
+	function getString(key) {
+		return localStorage.getItem(key);
+	}
+	function setString(key, value) {
+		localStorage.setItem(key, value);
+	}
+	function remove(key) {
+		localStorage.removeItem(key);
+	}
+	function getObject(key) {
+		var storedString = getString(key);
+		if (!storedString) return null;
+		try {
+			var parsed = JSON.parse(storedString);
+			if (parsed && "object" === _typeof(parsed)) return parsed;
+			return null;
+		} catch (error) {
+			remove(key);
+			return null;
+		}
+	}
+	function setObject(key, value) {
+		try {
+			setString(key, JSON.stringify(value));
+			return true;
+		} catch (error) {
+			return false;
+		}
+	}
+	function getArray(key) {
+		var storedArray = getObject(key);
+		return Array.isArray(storedArray) ? storedArray : [];
+	}
+	function appendToArray(key, item) {
+		var existingArray = getArray(key);
+		existingArray.push(item);
+		return setObject(key, existingArray);
+	}
+	function getNumber(key) {
+		var defaultValue = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 0;
+		var storedString = getString(key);
+		if (!storedString) return defaultValue;
+		var parsed = parseInt(storedString, 10);
+		return isNaN(parsed) ? defaultValue : parsed;
+	}
+	function setNumber(key, value) {
+		setString(key, value.toString());
+	}
+	function incrementNumber(key) {
+		var increment = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1;
+		var newValue = getNumber(key) + increment;
+		setNumber(key, newValue);
+		return newValue;
+	}
+	function exists(key) {
+		return getString(key) !== null;
+	}
+	function clearMultiple(keys) {
+		keys.forEach(function(key) {
+			return remove(key);
+		});
+	}
+	function clearAllOnboardingData() {
+		clearMultiple([
+			ONBOARDING_STORAGE_KEYS.START_TIME,
+			ONBOARDING_STORAGE_KEYS.INITIATED,
+			ONBOARDING_STORAGE_KEYS.STEP1_ACTIONS,
+			ONBOARDING_STORAGE_KEYS.STEP2_ACTIONS,
+			ONBOARDING_STORAGE_KEYS.STEP3_ACTIONS,
+			ONBOARDING_STORAGE_KEYS.STEP4_ACTIONS,
+			ONBOARDING_STORAGE_KEYS.STEP4_SITE_STARTER_CHOICE,
+			ONBOARDING_STORAGE_KEYS.STEP4_HAS_PREVIOUS_CLICK,
+			ONBOARDING_STORAGE_KEYS.EDITOR_LOAD_TRACKED,
+			ONBOARDING_STORAGE_KEYS.POST_ONBOARDING_CLICK_COUNT,
+			ONBOARDING_STORAGE_KEYS.CREATE_ACCOUNT_FLOW,
+			ONBOARDING_STORAGE_KEYS.PENDING_CREATE_ACCOUNT_STATUS,
+			ONBOARDING_STORAGE_KEYS.PENDING_CREATE_MY_ACCOUNT,
+			ONBOARDING_STORAGE_KEYS.PENDING_TOP_UPGRADE,
+			ONBOARDING_STORAGE_KEYS.PENDING_TOP_UPGRADE_NO_CLICK,
+			ONBOARDING_STORAGE_KEYS.PENDING_CONNECT_STATUS,
+			ONBOARDING_STORAGE_KEYS.PENDING_STEP1_CLICKED_CONNECT,
+			ONBOARDING_STORAGE_KEYS.PENDING_STEP1_END_STATE,
+			ONBOARDING_STORAGE_KEYS.PENDING_EXIT,
+			ONBOARDING_STORAGE_KEYS.PENDING_AB_101_START_AS_FREE_USER,
+			ONBOARDING_STORAGE_KEYS.PENDING_TOP_UPGRADE_MOUSEOVER,
+			ONBOARDING_STORAGE_KEYS.STEP1_START_TIME,
+			ONBOARDING_STORAGE_KEYS.STEP2_START_TIME,
+			ONBOARDING_STORAGE_KEYS.STEP3_START_TIME,
+			ONBOARDING_STORAGE_KEYS.STEP4_START_TIME
+		]);
+		clearEventQueue();
+		for (var i = 1; i <= 4; i++) remove("elementor_onboarding_click_".concat(i, "_data"));
+		remove(ONBOARDING_STORAGE_KEYS.STEP1_END_STATE_SENT);
+		remove(ONBOARDING_STORAGE_KEYS.STEP2_END_STATE_SENT);
+		remove(ONBOARDING_STORAGE_KEYS.STEP3_END_STATE_SENT);
+		remove(ONBOARDING_STORAGE_KEYS.STEP4_END_STATE_SENT);
+		remove(ONBOARDING_STORAGE_KEYS.CREATE_ACCOUNT_FLOW);
+		remove(ONBOARDING_STORAGE_KEYS.STEP2_THEMES_LOADED_SENT);
+	}
+	function clearExperimentData() {
+		clearMultiple([
+			ONBOARDING_STORAGE_KEYS.EXPERIMENT101_VARIANT,
+			ONBOARDING_STORAGE_KEYS.EXPERIMENT101_STARTED,
+			ONBOARDING_STORAGE_KEYS.EXPERIMENT201_VARIANT,
+			ONBOARDING_STORAGE_KEYS.EXPERIMENT201_STARTED,
+			ONBOARDING_STORAGE_KEYS.EXPERIMENT202_VARIANT,
+			ONBOARDING_STORAGE_KEYS.EXPERIMENT202_STARTED,
+			ONBOARDING_STORAGE_KEYS.EXPERIMENT401_VARIANT,
+			ONBOARDING_STORAGE_KEYS.EXPERIMENT401_STARTED,
+			ONBOARDING_STORAGE_KEYS.EXPERIMENT402_VARIANT,
+			ONBOARDING_STORAGE_KEYS.EXPERIMENT402_STARTED,
+			ONBOARDING_STORAGE_KEYS.PENDING_EXPERIMENT_DATA
+		]);
+	}
+	function getStepStartTime(stepNumber) {
+		var key = {
+			1: ONBOARDING_STORAGE_KEYS.STEP1_START_TIME,
+			2: ONBOARDING_STORAGE_KEYS.STEP2_START_TIME,
+			3: ONBOARDING_STORAGE_KEYS.STEP3_START_TIME,
+			4: ONBOARDING_STORAGE_KEYS.STEP4_START_TIME
+		}[stepNumber];
+		return key ? getNumber(key) : null;
+	}
+	function setStepStartTime(stepNumber, timestamp) {
+		var key = {
+			1: ONBOARDING_STORAGE_KEYS.STEP1_START_TIME,
+			2: ONBOARDING_STORAGE_KEYS.STEP2_START_TIME,
+			3: ONBOARDING_STORAGE_KEYS.STEP3_START_TIME,
+			4: ONBOARDING_STORAGE_KEYS.STEP4_START_TIME
+		}[stepNumber];
+		if (key) {
+			setNumber(key, timestamp);
+			return true;
+		}
+		return false;
+	}
+	function clearStepStartTime(stepNumber) {
+		var key = {
+			1: ONBOARDING_STORAGE_KEYS.STEP1_START_TIME,
+			2: ONBOARDING_STORAGE_KEYS.STEP2_START_TIME,
+			3: ONBOARDING_STORAGE_KEYS.STEP3_START_TIME,
+			4: ONBOARDING_STORAGE_KEYS.STEP4_START_TIME
+		}[stepNumber];
+		if (key) remove(key);
+	}
+	var StorageManager = {
+		getString,
+		setString,
+		remove,
+		getObject,
+		setObject,
+		getArray,
+		appendToArray,
+		getNumber,
+		setNumber,
+		incrementNumber,
+		exists,
+		clearMultiple,
+		clearAllOnboardingData,
+		clearExperimentData,
+		getStepStartTime,
+		setStepStartTime,
+		clearStepStartTime
+	};
+
+//#endregion
+//#region app/modules/onboarding/assets/js/utils/modules/onboarding-event-names.js
+	init_defineProperty();
+	function ownKeys$7(e, r) {
+		var t = Object.keys(e);
+		if (Object.getOwnPropertySymbols) {
+			var o = Object.getOwnPropertySymbols(e);
+			r && (o = o.filter(function(r) {
+				return Object.getOwnPropertyDescriptor(e, r).enumerable;
+			})), t.push.apply(t, o);
+		}
+		return t;
+	}
+	__name(ownKeys$7, "ownKeys");
+	function _objectSpread$7(e) {
+		for (var r = 1; r < arguments.length; r++) {
+			var t = null != arguments[r] ? arguments[r] : {};
+			r % 2 ? ownKeys$7(Object(t), !0).forEach(function(r) {
+				_defineProperty(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$7(Object(t)).forEach(function(r) {
+				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+			});
+		}
+		return e;
+	}
+	__name(_objectSpread$7, "_objectSpread");
+	var ONBOARDING_EVENTS = {
+		INITIALIZED: "core_onboarding_initialized",
+		RESUME: "core_onboarding_resume",
+		STEP_VIEWED: "core_onboarding_step_viewed",
+		LOGIN_TYPE: "core_onboarding_login_type",
+		CONNECT: "core_onboarding_connect",
+		THEME_SELECTED: "core_onboarding_theme_selected",
+		THEME_UNSELECTED: "core_onboarding_theme_unselected",
+		PRO_FEATURES_SELECTED: "core_onboarding_pro_features_selected",
+		BACK_CLICKED: "core_onboarding_back_clicked",
+		SKIP_CLICKED: "core_onboarding_skip_clicked",
+		UPGRADE_CLICKED: "core_onboarding_upgrade_clicked",
+		EXIT_CLICKED: "core_onboarding_exit_clicked",
+		SITE_STARTER_SELECTED: "core_onboarding_site_starter_selected",
+		STEP_COMPLETED: "core_onboarding_step_completed",
+		SUMMARY: "core_onboarding_summary",
+		ERROR_REPORTED: "core_onboarding_error_reported",
+		EDITOR_LOADED: "core_onboarding_editor_loaded",
+		POST_CLICK: "core_onboarding_post_click",
+		SESSION_REPLAY_START: "core_onboarding_session_replay_start"
+	};
+	function createCoreOnboardingPayload(partial) {
+		return _objectSpread$7({ window_name: "core_onboarding" }, partial);
+	}
+	function createEditorPayload(partial) {
+		return _objectSpread$7({ window_name: "editor" }, partial);
+	}
+
+//#endregion
+//#region app/modules/onboarding/assets/js/utils/modules/event-dispatcher.js
+	init_toConsumableArray();
+	init_defineProperty();
+	function ownKeys$6(e, r) {
+		var t = Object.keys(e);
+		if (Object.getOwnPropertySymbols) {
+			var o = Object.getOwnPropertySymbols(e);
+			r && (o = o.filter(function(r) {
+				return Object.getOwnPropertyDescriptor(e, r).enumerable;
+			})), t.push.apply(t, o);
+		}
+		return t;
+	}
+	__name(ownKeys$6, "ownKeys");
+	function _objectSpread$6(e) {
+		for (var r = 1; r < arguments.length; r++) {
+			var t = null != arguments[r] ? arguments[r] : {};
+			r % 2 ? ownKeys$6(Object(t), !0).forEach(function(r) {
+				_defineProperty(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$6(Object(t)).forEach(function(r) {
+				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+			});
+		}
+		return e;
+	}
+	__name(_objectSpread$6, "_objectSpread");
+	var ONBOARDING_EVENTS_MAP = _objectSpread$6(_objectSpread$6({}, ONBOARDING_EVENTS), {}, { SESSION_REPLAY_START: ONBOARDING_EVENTS.SESSION_REPLAY_START });
+	function canSendEvents() {
+		var _elementorCommon;
+		return ((_elementorCommon = elementorCommon) === null || _elementorCommon === void 0 || (_elementorCommon = _elementorCommon.config) === null || _elementorCommon === void 0 || (_elementorCommon = _elementorCommon.editor_events) === null || _elementorCommon === void 0 ? void 0 : _elementorCommon.can_send_events) || false;
+	}
+	function isEventsManagerAvailable() {
+		var _elementorCommon2;
+		return ((_elementorCommon2 = elementorCommon) === null || _elementorCommon2 === void 0 ? void 0 : _elementorCommon2.eventsManager) && "function" === typeof elementorCommon.eventsManager.dispatchEvent;
+	}
+	function isMixpanelInitialized() {
+		var _elementorCommon3;
+		var _elementorCommon4;
+		var _elementorCommon4$isM;
+		var configuredInstance = (_elementorCommon3 = elementorCommon) === null || _elementorCommon3 === void 0 || (_elementorCommon3 = _elementorCommon3.config) === null || _elementorCommon3 === void 0 || (_elementorCommon3 = _elementorCommon3.editor_events) === null || _elementorCommon3 === void 0 ? void 0 : _elementorCommon3.mixpanelInstance;
+		if (configuredInstance !== null && configuredInstance !== void 0 && configuredInstance.isInitialized) return true;
+		if ((_elementorCommon4 = elementorCommon) !== null && _elementorCommon4 !== void 0 && (_elementorCommon4 = _elementorCommon4.eventsManager) !== null && _elementorCommon4 !== void 0 && (_elementorCommon4$isM = _elementorCommon4.isMixpanelReady) !== null && _elementorCommon4$isM !== void 0 && _elementorCommon4$isM.call(_elementorCommon4)) return true;
+		return false;
+	}
+	function isAnalyticsReady() {
+		var _elementorCommon$even;
+		var _elementorCommon$even2;
+		return isEventsManagerAvailable() && canSendEvents() && isMixpanelInitialized() && ((_elementorCommon$even = (_elementorCommon$even2 = elementorCommon.eventsManager).isMixpanelReady) === null || _elementorCommon$even === void 0 ? void 0 : _elementorCommon$even.call(_elementorCommon$even2));
+	}
+	function initializeAndEnableTracking(onReady) {
+		if (!isEventsManagerAvailable()) return;
+		var finishInitialization = function finishInitialization() {
+			if (!elementorCommon.eventsManager.trackingEnabled) elementorCommon.eventsManager.enableTracking();
+			if (onReady) onReady();
+		};
+		if (isMixpanelInitialized()) {
+			finishInitialization();
+			return;
+		}
+		try {
+			elementorCommon.eventsManager.initializeMixpanel(function() {
+				finishInitialization();
+			});
+		} catch (error) {
+			if (onReady) onReady();
+		}
+	}
+	function flushQueueInternal() {
+		var queued = _toConsumableArray(getEventQueue()).sort(function(a, b) {
+			return a.timestamp - b.timestamp;
+		});
+		var stillPending = [];
+		queued.forEach(function(event) {
+			if (!(event !== null && event !== void 0 && event.name) || !(event !== null && event !== void 0 && event.payload)) return;
+			if (true !== dispatch(event.name, event.payload)) stillPending.push(event);
+		});
+		if (0 === stillPending.length) {
+			clearEventQueue();
+			return;
+		}
+		try {
+			sessionStorage.setItem(STORAGE_KEY, JSON.stringify(stillPending));
+		} catch (error) {}
+	}
+	function dispatch(eventName) {
+		var payload = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+		if (!isEventsManagerAvailable()) return false;
+		if (!canSendEvents()) return false;
+		if (!isAnalyticsReady()) return false;
+		try {
+			elementorCommon.eventsManager.dispatchEvent(eventName, payload);
+			return true;
+		} catch (error) {
+			return false;
+		}
+	}
+	function trackEvent(eventName, payload) {
+		var dedupeKey = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : null;
+		var fullPayload = payload.window_name ? payload : createCoreOnboardingPayload(payload);
+		if (!canSendEvents()) {
+			enqueueEvent(eventName, fullPayload, dedupeKey);
+			return false;
+		}
+		if (!isAnalyticsReady()) {
+			enqueueEvent(eventName, fullPayload, dedupeKey);
+			initializeAndEnableTracking(function() {
+				flushQueueInternal();
+			});
+			return false;
+		}
+		var dispatchResult = false;
+		initializeAndEnableTracking(function() {
+			dispatchResult = dispatch(eventName, fullPayload);
+		});
+		return dispatchResult;
+	}
+	function flushQueue(afterFlush) {
+		if (!canSendEvents() || !isEventsManagerAvailable()) return;
+		initializeAndEnableTracking(function() {
+			flushQueueInternal();
+			if (afterFlush) afterFlush();
+		});
+	}
+	function dispatchIfAllowed(eventName) {
+		var payload = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+		if (canSendEvents()) return dispatch(eventName, payload);
+		return false;
+	}
+	function dispatchEditorEvent(eventName) {
+		return trackEvent(eventName, createEditorPayload(arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}));
+	}
+	function dispatchPostClickEvent(clickOrder, clickData) {
+		var formattedAction = formatClickAction(clickData.title, clickData.selector);
+		return trackEvent(ONBOARDING_EVENTS.POST_CLICK, createEditorPayload({
+			interaction_type: "click",
+			target_type: "element",
+			target_name: "post_onboarding_click",
+			interaction_result: "click_recorded",
+			target_value: String(clickOrder),
+			target_location: "editor",
+			location_l1: "editor",
+			metadata: { click_action: formattedAction }
+		}));
+	}
+	function formatClickAction(title, selector) {
+		if (!title && !selector) return "";
+		if (!title) return selector;
+		if (!selector) return title;
+		return "".concat(title, " / ").concat(selector);
+	}
+	var EventDispatcher = {
+		canSendEvents,
+		isEventsManagerAvailable,
+		initializeAndEnableTracking,
+		dispatch,
+		trackEvent,
+		flushQueue,
+		dispatchIfAllowed,
+		dispatchEditorEvent,
+		dispatchPostClickEvent,
+		formatClickAction,
+		ONBOARDING_EVENTS
+	};
+
+//#endregion
+//#region app/modules/onboarding/assets/js/utils/modules/click-tracker.js
+	init_defineProperty();
+	init_classCallCheck();
+	init_createClass();
+	function ownKeys$5(e, r) {
+		var t = Object.keys(e);
+		if (Object.getOwnPropertySymbols) {
+			var o = Object.getOwnPropertySymbols(e);
+			r && (o = o.filter(function(r) {
+				return Object.getOwnPropertyDescriptor(e, r).enumerable;
+			})), t.push.apply(t, o);
+		}
+		return t;
+	}
+	__name(ownKeys$5, "ownKeys");
+	function _objectSpread$5(e) {
+		for (var r = 1; r < arguments.length; r++) {
+			var t = null != arguments[r] ? arguments[r] : {};
+			r % 2 ? ownKeys$5(Object(t), !0).forEach(function(r) {
+				_defineProperty(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$5(Object(t)).forEach(function(r) {
+				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+			});
+		}
+		return e;
+	}
+	__name(_objectSpread$5, "_objectSpread");
+	var clickTracker = new (/* @__PURE__ */ function() {
+		function ClickTracker() {
+			_classCallCheck(this, ClickTracker);
+			this.DEDUPLICATION_WINDOW_MS = 150;
+			this.MAX_CLICKS = 3;
+			this.lastClickTime = 0;
+			this.lastClickElement = null;
+			this.clickHandler = null;
+			this.selectTimeoutWindow = 100;
+			this.lastSelectClickTime = 0;
+		}
+		return _createClass(ClickTracker, [
+			{
+				key: "setupClickTracking",
+				value: function setupClickTracking() {
+					var _this = this;
+					if ("undefined" === typeof document) return;
+					if (this.clickHandler) return;
+					this.clickHandler = function(event) {
+						_this.trackClick(event);
+					};
+					document.addEventListener("click", this.clickHandler, true);
+				}
+			},
+			{
+				key: "trackClick",
+				value: function trackClick(event) {
+					var _target$tagName;
+					if (StorageManager.getNumber(ONBOARDING_STORAGE_KEYS.POST_ONBOARDING_CLICK_COUNT) >= this.MAX_CLICKS) return;
+					var target = event.target;
+					if (!this.shouldTrackClick(target)) return;
+					var currentTime = Date.now();
+					var timeSinceLastClick = currentTime - this.lastClickTime;
+					if (this.isDuplicateClick(target, timeSinceLastClick)) return;
+					this.lastClickTime = currentTime;
+					this.lastClickElement = target;
+					if ("select" === ((_target$tagName = target.tagName) === null || _target$tagName === void 0 ? void 0 : _target$tagName.toLowerCase())) this.lastSelectClickTime = currentTime;
+					var newCount = StorageManager.incrementNumber(ONBOARDING_STORAGE_KEYS.POST_ONBOARDING_CLICK_COUNT);
+					var clickData = this.extractClickData(target);
+					this.storeClickData(newCount, clickData);
+					this.dispatchClickEvent(newCount);
+					if (newCount >= this.MAX_CLICKS) this.cleanup();
+				}
+			},
+			{
+				key: "shouldTrackClick",
+				value: function shouldTrackClick(element) {
+					var _element$tagName;
+					var _element$tagName2;
+					if ("option" === ((_element$tagName = element.tagName) === null || _element$tagName === void 0 ? void 0 : _element$tagName.toLowerCase())) return false;
+					if (element.closest("select") && "select" !== ((_element$tagName2 = element.tagName) === null || _element$tagName2 === void 0 ? void 0 : _element$tagName2.toLowerCase())) return false;
+					if (this.isWithinSelectTimeout(element)) return false;
+					if (this.isSelectRelatedRecentClick(element)) return false;
+					var excludedSelectors = [
+						".announcements-container",
+						".announcements-screen-overlay",
+						".announcements-screen",
+						".notifications-container",
+						".notifications-overlay",
+						".close-button"
+					];
+					for (var _i = 0, _excludedSelectors = excludedSelectors; _i < _excludedSelectors.length; _i++) {
+						var selector = _excludedSelectors[_i];
+						if (element.closest(selector)) return false;
+					}
+					return true;
+				}
+			},
+			{
+				key: "isWithinSelectTimeout",
+				value: function isWithinSelectTimeout(element) {
+					if (!this.lastSelectClickTime) return false;
+					if (Date.now() - this.lastSelectClickTime <= this.selectTimeoutWindow) {
+						var _element$tagName3;
+						var isSelectElement = "select" === ((_element$tagName3 = element.tagName) === null || _element$tagName3 === void 0 ? void 0 : _element$tagName3.toLowerCase());
+						var isInSelectControl = !!element.closest(".elementor-control-input-wrapper select");
+						if (isSelectElement || isInSelectControl) return true;
+					}
+					return false;
+				}
+			},
+			{
+				key: "isSelectRelatedRecentClick",
+				value: function isSelectRelatedRecentClick(element) {
+					var _this$lastClickElemen;
+					var _element$tagName4;
+					if (!this.lastClickElement || !this.lastClickTime) return false;
+					if (Date.now() - this.lastClickTime > 500) return false;
+					var wasLastClickSelect = "select" === ((_this$lastClickElemen = this.lastClickElement.tagName) === null || _this$lastClickElemen === void 0 ? void 0 : _this$lastClickElemen.toLowerCase());
+					var isCurrentClickSelect = "select" === ((_element$tagName4 = element.tagName) === null || _element$tagName4 === void 0 ? void 0 : _element$tagName4.toLowerCase());
+					if (wasLastClickSelect && isCurrentClickSelect) {
+						var lastSelectControl = this.lastClickElement.closest(".elementor-control");
+						var currentSelectControl = element.closest(".elementor-control");
+						if (lastSelectControl && currentSelectControl && lastSelectControl === currentSelectControl) return true;
+					}
+					return false;
+				}
+			},
+			{
+				key: "isDuplicateClick",
+				value: function isDuplicateClick(target, timeSinceLastClick) {
+					if (timeSinceLastClick > (this.shouldUseExtendedWindow(this.lastClickElement, target) ? this.DEDUPLICATION_WINDOW_MS * 3 : this.DEDUPLICATION_WINDOW_MS)) return false;
+					if (!this.lastClickElement) return false;
+					var isSameElement = this.lastClickElement === target;
+					var isRelatedElement = this.areElementsRelated(this.lastClickElement, target);
+					return isSameElement || isRelatedElement;
+				}
+			},
+			{
+				key: "shouldUseExtendedWindow",
+				value: function shouldUseExtendedWindow(element1, element2) {
+					var _element1$tagName;
+					var _element2$tagName;
+					if (!element1 || !element2) return false;
+					var isElement1Select = "select" === ((_element1$tagName = element1.tagName) === null || _element1$tagName === void 0 ? void 0 : _element1$tagName.toLowerCase());
+					var isElement2Select = "select" === ((_element2$tagName = element2.tagName) === null || _element2$tagName === void 0 ? void 0 : _element2$tagName.toLowerCase());
+					return isElement1Select || isElement2Select;
+				}
+			},
+			{
+				key: "areElementsRelated",
+				value: function areElementsRelated(element1, element2) {
+					if (!element1 || !element2) return false;
+					var isSelectRelated = this.areSelectRelated(element1, element2);
+					var isParentChild = element1.contains(element2) || element2.contains(element1);
+					var shareCommonParent = element1.parentElement === element2.parentElement;
+					var bothInSameControl = element1.closest(".elementor-control") === element2.closest(".elementor-control");
+					return isSelectRelated || isParentChild || shareCommonParent || bothInSameControl;
+				}
+			},
+			{
+				key: "areSelectRelated",
+				value: function areSelectRelated(element1, element2) {
+					var _element1$tagName2;
+					var _element2$tagName2;
+					var _element1$tagName3;
+					var _element2$tagName3;
+					var isElement1Select = "select" === ((_element1$tagName2 = element1.tagName) === null || _element1$tagName2 === void 0 ? void 0 : _element1$tagName2.toLowerCase());
+					var isElement2Select = "select" === ((_element2$tagName2 = element2.tagName) === null || _element2$tagName2 === void 0 ? void 0 : _element2$tagName2.toLowerCase());
+					var isElement1Option = "option" === ((_element1$tagName3 = element1.tagName) === null || _element1$tagName3 === void 0 ? void 0 : _element1$tagName3.toLowerCase());
+					var isElement2Option = "option" === ((_element2$tagName3 = element2.tagName) === null || _element2$tagName3 === void 0 ? void 0 : _element2$tagName3.toLowerCase());
+					if (isElement1Select && isElement2Select && element1 === element2) return true;
+					if (isElement1Select && isElement2Option || isElement1Option && isElement2Select) return true;
+					var element1SelectParent = element1.closest("select");
+					var element2SelectParent = element2.closest("select");
+					if (element1SelectParent && element2SelectParent && element1SelectParent === element2SelectParent) return true;
+					if (element1SelectParent && element1SelectParent === element2) return true;
+					if (element2SelectParent && element2SelectParent === element1) return true;
+					return false;
+				}
+			},
+			{
+				key: "extractClickData",
+				value: function extractClickData(element) {
+					var title = this.findMeaningfulTitle(element);
+					var selector = this.generateSelector(element);
+					return {
+						title: title.substring(0, 100),
+						selector
+					};
+				}
+			},
+			{
+				key: "findMeaningfulTitle",
+				value: function findMeaningfulTitle(element) {
+					var directTitle = this.extractTitleFromElement(element);
+					if (directTitle && directTitle.trim().length > 0) return directTitle.trim();
+					var currentElement = element.parentElement;
+					var attempts = 0;
+					var maxAttempts = 3;
+					while (currentElement && attempts < maxAttempts) {
+						var title = this.extractTitleFromElement(currentElement);
+						if (title && title.trim().length > 0) return title.trim();
+						currentElement = currentElement.parentElement;
+						attempts++;
+					}
+					return this.generateFallbackTitle(element);
+				}
+			},
+			{
+				key: "extractTitleFromElement",
+				value: function extractTitleFromElement(element) {
+					var _element$tagName5;
+					var _element$textContent;
+					var _element$tagName6;
+					var _element$innerText;
+					var _element$querySelecto;
+					var _element$querySelecto2;
+					var _element$querySelecto3;
+					var controlFieldContainer = element.closest(".elementor-control-field");
+					if (controlFieldContainer) {
+						var labelElement = controlFieldContainer.querySelector("label");
+						if (labelElement && labelElement.textContent) return labelElement.textContent.trim();
+					}
+					var sources = [
+						element.getAttribute("placeholder"),
+						element.getAttribute("aria-label"),
+						element.title,
+						element.getAttribute("data-title"),
+						"select" === ((_element$tagName5 = element.tagName) === null || _element$tagName5 === void 0 ? void 0 : _element$tagName5.toLowerCase()) ? "" : (_element$textContent = element.textContent) === null || _element$textContent === void 0 ? void 0 : _element$textContent.trim(),
+						"select" === ((_element$tagName6 = element.tagName) === null || _element$tagName6 === void 0 ? void 0 : _element$tagName6.toLowerCase()) ? "" : (_element$innerText = element.innerText) === null || _element$innerText === void 0 ? void 0 : _element$innerText.trim(),
+						(_element$querySelecto = element.querySelector(".elementor-widget-title")) === null || _element$querySelecto === void 0 || (_element$querySelecto = _element$querySelecto.textContent) === null || _element$querySelecto === void 0 ? void 0 : _element$querySelecto.trim(),
+						(_element$querySelecto2 = element.querySelector(".elementor-heading-title")) === null || _element$querySelecto2 === void 0 || (_element$querySelecto2 = _element$querySelecto2.textContent) === null || _element$querySelecto2 === void 0 ? void 0 : _element$querySelecto2.trim(),
+						(_element$querySelecto3 = element.querySelector(".elementor-button-text")) === null || _element$querySelecto3 === void 0 || (_element$querySelecto3 = _element$querySelecto3.textContent) === null || _element$querySelecto3 === void 0 ? void 0 : _element$querySelecto3.trim()
+					];
+					for (var _i2 = 0, _sources = sources; _i2 < _sources.length; _i2++) {
+						var source = _sources[_i2];
+						if (source && source.length > 0 && source !== "undefined") return source;
+					}
+					return "";
+				}
+			},
+			{
+				key: "generateFallbackTitle",
+				value: function generateFallbackTitle(element) {
+					var _element$tagName7;
+					var tagName = ((_element$tagName7 = element.tagName) === null || _element$tagName7 === void 0 ? void 0 : _element$tagName7.toLowerCase()) || "element";
+					var className = element.className || "";
+					if (className.includes("eicon-")) {
+						var iconClass = className.split(" ").find(function(cls) {
+							return cls.startsWith("eicon-");
+						});
+						if (iconClass) return iconClass.replace("eicon-", "").replace("-", " ");
+					}
+					if (className.includes("elementor-button")) return "Elementor Button";
+					if (className.includes("elementor-widget")) return "Elementor Widget";
+					return "".concat(tagName, " element");
+				}
+			},
+			{
+				key: "generateSelector",
+				value: function generateSelector(element) {
+					var selectorParts = [];
+					var currentElement = element;
+					for (var i = 0; i < 4 && currentElement && currentElement !== document.body; i++) {
+						var selector = currentElement.tagName.toLowerCase();
+						if (0 === i && currentElement.id) selector += "#".concat(currentElement.id);
+						else if (currentElement.classList.length > 0) {
+							var classes = Array.from(currentElement.classList).slice(0, 3);
+							selector += ".".concat(classes.join("."));
+						}
+						selectorParts.unshift(selector);
+						currentElement = currentElement.parentElement;
+					}
+					return selectorParts.join(" > ");
+				}
+			},
+			{
+				key: "storeClickData",
+				value: function storeClickData(clickCount, clickData) {
+					var dataKey = "elementor_onboarding_click_".concat(clickCount, "_data");
+					var dataToStore = _objectSpread$5(_objectSpread$5({}, clickData), {}, {
+						timestamp: Date.now(),
+						clickCount
+					});
+					StorageManager.setObject(dataKey, dataToStore);
+				}
+			},
+			{
+				key: "getStoredClickData",
+				value: function getStoredClickData(clickCount) {
+					var dataKey = "elementor_onboarding_click_".concat(clickCount, "_data");
+					return StorageManager.getObject(dataKey);
+				}
+			},
+			{
+				key: "dispatchClickEvent",
+				value: function dispatchClickEvent(clickCount) {
+					var storedClickData = this.getStoredClickData(clickCount);
+					if (!storedClickData) return;
+					EventDispatcher.dispatchPostClickEvent(clickCount, storedClickData);
+				}
+			},
+			{
+				key: "cleanup",
+				value: function cleanup() {
+					if (this.clickHandler) {
+						document.removeEventListener("click", this.clickHandler, true);
+						this.clickHandler = null;
+					}
+					this.lastSelectClickTime = 0;
+					StorageManager.clearAllOnboardingData();
+					StorageManager.clearExperimentData();
+				}
+			}
+		]);
+	}())();
+
+//#endregion
+//#region app/modules/onboarding/assets/js/utils/modules/post-onboarding-tracker.js
+	init_classCallCheck();
+	init_createClass();
+	var postOnboardingTracker = new (/* @__PURE__ */ function() {
+		function PostOnboardingTracker() {
+			_classCallCheck(this, PostOnboardingTracker);
+		}
+		return _createClass(PostOnboardingTracker, [
+			{
+				key: "checkAndSendEditorLoadedFromOnboarding",
+				value: function checkAndSendEditorLoadedFromOnboarding() {
+					if (!StorageManager.getString(ONBOARDING_STORAGE_KEYS.STEP4_SITE_STARTER_CHOICE)) return;
+					if (StorageManager.exists(ONBOARDING_STORAGE_KEYS.EDITOR_LOAD_TRACKED)) {
+						this.setupPostOnboardingClickTracking();
+						return;
+					}
+					this.sendEditorLoadedEvent();
+					StorageManager.setString(ONBOARDING_STORAGE_KEYS.EDITOR_LOAD_TRACKED, "true");
+					this.setupPostOnboardingClickTracking();
+				}
+			},
+			{
+				key: "sendEditorLoadedEvent",
+				value: function sendEditorLoadedEvent() {
+					var choiceData = StorageManager.getObject(ONBOARDING_STORAGE_KEYS.STEP4_SITE_STARTER_CHOICE);
+					var siteStarterChoice = choiceData === null || choiceData === void 0 ? void 0 : choiceData.site_starter;
+					if (!siteStarterChoice) return;
+					EventDispatcher.trackEvent(ONBOARDING_EVENTS.EDITOR_LOADED, {
+						window_name: "editor",
+						interaction_type: "load",
+						target_type: "loaded",
+						target_name: "editor_from_onboarding",
+						interaction_result: "editor_loaded",
+						target_value: siteStarterChoice,
+						target_location: "editor",
+						location_l1: "editor"
+					});
+				}
+			},
+			{
+				key: "setupPostOnboardingClickTracking",
+				value: function setupPostOnboardingClickTracking() {
+					if (!StorageManager.exists(ONBOARDING_STORAGE_KEYS.STEP4_SITE_STARTER_CHOICE)) return;
+					if (StorageManager.getNumber(ONBOARDING_STORAGE_KEYS.POST_ONBOARDING_CLICK_COUNT) >= clickTracker.MAX_CLICKS) return;
+					clickTracker.setupClickTracking();
+				}
+			},
+			{
+				key: "cleanupPostOnboardingTracking",
+				value: function cleanupPostOnboardingTracking() {
+					clickTracker.cleanup();
+				}
+			},
+			{
+				key: "clearAllOnboardingStorage",
+				value: function clearAllOnboardingStorage() {
+					StorageManager.clearAllOnboardingData();
+					StorageManager.clearExperimentData();
+				}
+			}
+		]);
+	}())();
+
+//#endregion
 //#region assets/dev/js/editor/data/globals/base/create-base.js
 	init_classCallCheck();
 	init_createClass();
@@ -40577,12 +41424,57 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				this.enqueuePreviewStylesheet(url);
 			},
 			fetchInlineSvg: function fetchInlineSvg(svgUrl) {
+				var _this = this;
 				var callback = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : false;
-				fetch(svgUrl).then(function(response) {
+				var done = function done(data) {
+					return callback && callback(data);
+				};
+				var url;
+				try {
+					url = new URL(svgUrl, window.location.href);
+				} catch (e) {
+					return done("");
+				}
+				if (!this.isAllowedInlineSvgUrl(url)) return done("");
+				fetch(url.href, { credentials: "same-origin" }).then(function(response) {
 					return response.ok ? response.text() : "";
-				}).then(function(data) {
-					if (callback) callback(data);
+				}).then(function(text) {
+					return done(_this.sanitizeInlineSvg(text));
+				}).catch(function() {
+					return done("");
 				});
+			},
+			isAllowedInlineSvgUrl: function isAllowedInlineSvgUrl(url) {
+				var _globalThis$elementor3;
+				if (!["http:", "https:"].includes(url.protocol)) return false;
+				if (url.origin === window.location.origin) return true;
+				var uploadsUrl = (_globalThis$elementor3 = globalThis.elementor) === null || _globalThis$elementor3 === void 0 || (_globalThis$elementor3 = _globalThis$elementor3.config) === null || _globalThis$elementor3 === void 0 || (_globalThis$elementor3 = _globalThis$elementor3.urls) === null || _globalThis$elementor3 === void 0 ? void 0 : _globalThis$elementor3.upload;
+				if (!uploadsUrl) return false;
+				try {
+					return url.origin === new URL(uploadsUrl, window.location.href).origin;
+				} catch (e) {
+					return false;
+				}
+			},
+			sanitizeInlineSvg: function sanitizeInlineSvg(text) {
+				if (!text) return "";
+				var root = purify.sanitize(text, {
+					USE_PROFILES: {
+						svg: true,
+						svgFilters: true
+					},
+					ADD_TAGS: ["use"],
+					RETURN_DOM_FRAGMENT: true
+				}).firstElementChild;
+				if (!root || "svg" !== root.nodeName.toLowerCase()) return "";
+				root.querySelectorAll("use").forEach(function(use) {
+					var href = use.getAttribute("href") || use.getAttributeNS("http://www.w3.org/1999/xlink", "href");
+					if (href && !href.startsWith("#")) {
+						use.removeAttribute("href");
+						use.removeAttributeNS("http://www.w3.org/1999/xlink", "href");
+					}
+				});
+				return root.outerHTML;
 			},
 			getInlineSvg: function getInlineSvg(value, view) {
 				if (!value.id) return;
@@ -40597,14 +41489,14 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				});
 			},
 			enqueueIconFonts: function enqueueIconFonts(iconType) {
-				var _this = this;
+				var _this2 = this;
 				if (-1 !== this._enqueuedIconFonts.indexOf(iconType) || !!elementor.config.icons_update_needed) return;
 				var iconSetting = this.getIconLibrarySettings(iconType);
 				if (!iconSetting) return;
 				if (iconSetting.enqueue) iconSetting.enqueue.forEach(function(assetURL) {
 					var versionAddedURL = "".concat(assetURL).concat(iconSetting !== null && iconSetting !== void 0 && iconSetting.ver ? "?ver=" + iconSetting.ver : "");
-					_this.enqueuePreviewStylesheet(versionAddedURL);
-					_this.enqueueEditorStylesheet(versionAddedURL);
+					_this2.enqueuePreviewStylesheet(versionAddedURL);
+					_this2.enqueueEditorStylesheet(versionAddedURL);
 				});
 				if (iconSetting.url) {
 					var versionAddedURL = "".concat(iconSetting.url).concat(iconSetting !== null && iconSetting !== void 0 && iconSetting.ver ? "?ver=" + iconSetting.ver : "");
@@ -40641,7 +41533,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				var iconType = icon.library;
 				var iconValue = icon.value;
 				if ("svg" === iconType) {
-					if ("panel" === returnType) return "<img src=\"" + iconValue.url + "\">";
+					if ("panel" === returnType) return "<img src=\"" + (iconValue && "string" === typeof iconValue.url ? _.escape(iconValue.url) : "") + "\">";
 					return {
 						rendered: true,
 						value: this.getInlineSvg(iconValue, view)
@@ -40650,7 +41542,10 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				var iconSettings = this.getIconLibrarySettings(iconType);
 				if (iconSettings && !Object.prototype.hasOwnProperty.call(iconSettings, "isCustom")) {
 					this.enqueueIconFonts(iconType);
-					if ("panel" === returnType) return "<" + tag + " class=\"" + iconValue + "\"></" + tag + ">";
+					if ("panel" === returnType) {
+						var iconClass = "string" === typeof iconValue ? _.escape(iconValue) : "";
+						return "<" + tag + " class=\"" + iconClass + "\"></" + tag + ">";
+					}
 					var tagUniqueID = tag + elementorCommon.helpers.getUniqueId();
 					view.addRenderAttribute(tagUniqueID, attributes);
 					view.addRenderAttribute(tagUniqueID, "class", iconValue);
@@ -40727,7 +41622,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				this._enqueuedIconFonts = [];
 			},
 			getElementChildType: function getElementChildType(elementType, container) {
-				var _this2 = this;
+				var _this3 = this;
 				if (!container) container = this.elementsHierarchy;
 				if (void 0 !== container[elementType]) {
 					if (jQuery.isPlainObject(container[elementType])) return Object.keys(container[elementType]);
@@ -40736,7 +41631,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				var result = null;
 				jQuery.each(container, function(index, type) {
 					if (!jQuery.isPlainObject(type)) return;
-					var childType = _this2.getElementChildType(elementType, type);
+					var childType = _this3.getElementChildType(elementType, type);
 					if (childType) {
 						result = childType;
 						return false;
@@ -40759,7 +41654,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				var icon = "";
 				if (fallbackControl && !migrated) {
 					social = fallbackControl.replace("fa fa-", "");
-					icon = "<i class=\"" + fallbackControl + "\"></i>";
+					icon = "<i class=\"" + _.escape(fallbackControl) + "\"></i>";
 				} else if (iconsControl.value && "svg" !== iconsControl.library) {
 					social = iconsControl.value.split(" ")[1];
 					if (!social) social = "";
@@ -48546,7 +49441,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 							_this5.ui.previewPlaceholder.html(data);
 						});
 						if ("media" === skin || "svg" !== iconType) {
-							var previewHTML = "<i class=\"" + iconValue + "\"></i>";
+							var previewHTML = "<i class=\"" + ("string" === typeof iconValue ? _.escape(iconValue) : "") + "\"></i>";
 							iconContainer.html(previewHTML);
 						}
 						this.enqueueIconFonts(iconType);
@@ -48555,7 +49450,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				{
 					key: "setDefaultIconLibraryLabel",
 					value: function setDefaultIconLibraryLabel(defaultIcon, iconContainer) {
-						if ("" !== defaultIcon.value && "svg" !== defaultIcon.library) iconContainer.html("<i class=\"" + defaultIcon.value + "\"></i>");
+						if ("" !== defaultIcon.value && "svg" !== defaultIcon.library) iconContainer.html("<i class=\"" + _.escape(defaultIcon.value) + "\"></i>");
 						else {
 							var skinOptions = this.model.get("skin_settings");
 							iconContainer.html("<i class=\"" + skinOptions.inline.icon.icon + "\"></i>");
@@ -54159,6 +55054,7 @@ get ControlsStack() {
 						var _eventsManager$config;
 						eventsManager.dispatchEvent((_eventsManager$config = eventsManager.config) === null || _eventsManager$config === void 0 || (_eventsManager$config = _eventsManager$config.names) === null || _eventsManager$config === void 0 || (_eventsManager$config = _eventsManager$config.elementorEditor) === null || _eventsManager$config === void 0 ? void 0 : _eventsManager$config.editorLoaded, {});
 					}
+					postOnboardingTracker.checkAndSendEditorLoadedFromOnboarding();
 				}
 			},
 			{

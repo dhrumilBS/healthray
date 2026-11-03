@@ -11,7 +11,7 @@ return array(
 		'path'    => $vendorDir . '/elementor/elementor-mcp-composer/runner.php'
 	),
 	'9db71c6726821ac61284818089584d23' => array(
-		'version' => '1.0.72.0',
+		'version' => '1.0.73.0',
 		'path'    => $vendorDir . '/elementor/wp-one-package/runner.php'
 	),
 );

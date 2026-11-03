@@ -57,11 +57,36 @@ class ManageWidgetState {
 		}
 
 		self::$resolved_cache = [
-			'state' => $state,
+			'state' => self::filter_state( $state ),
 			'isWidgetDelegated' => self::is_delegated_to_manage(),
 		];
 
 		return self::$resolved_cache;
+	}
+
+	/**
+	 * Allow a consumer (e.g. Manage) to override the resolved widget state,
+	 * for signals this package cannot evaluate on its own (e.g. Connect v3
+	 * user token). Falls back to the resolved state when the filtered value
+	 * isn't one of the known states.
+	 *
+	 * @param string $state
+	 * @return string
+	 */
+	private static function filter_state( string $state ): string {
+		$filtered_state = apply_filters( 'elementor_one/manage_dashboard_widget_state', $state );
+
+		return in_array( $filtered_state, self::get_states(), true ) ? $filtered_state : $state;
+	}
+
+	private static function get_states(): array {
+		return [
+			self::STATE_NOT_INSTALLED,
+			self::STATE_NOT_ACTIVATED,
+			self::STATE_NOT_CONNECTED,
+			self::STATE_UPDATE_REQUIRED,
+			self::STATE_ACTIVE,
+		];
 	}
 
 	private static function is_plugin_active( string $plugin_file ): bool {

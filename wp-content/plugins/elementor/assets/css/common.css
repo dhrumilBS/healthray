@@ -536,6 +536,35 @@ body.rtl {
   margin-inline-end: 0;
 }
 
+.elementor-app-backdrop {
+  position: fixed;
+  z-index: 99998;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.elementor-app-backdrop--visible {
+  opacity: 1;
+}
+
+.elementor-app-iframe {
+  position: fixed;
+  top: 30px;
+  left: 40px;
+  width: calc(100% - 80px);
+  height: calc(100% - 60px);
+  z-index: 100000;
+  border-radius: 12px;
+  box-shadow: 0 16px 64px rgba(0, 0, 0, 0.3);
+  background-color: transparent;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.elementor-app-iframe--visible {
+  opacity: 1;
+}
+
 /* Will select next element after last '.elementor-general-section' */
 #wpadminbar #wp-admin-bar-elementor_edit_page .elementor-general-section + .elementor-second-section {
   border-block-start: 1px solid #464b50;

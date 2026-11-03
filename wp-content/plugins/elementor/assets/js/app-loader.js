@@ -1746,6 +1746,19 @@ var import_module = /* @__PURE__ */ __toESM(require_module());
 		return _createClass(Open, [{
 			key: "apply",
 			value: function apply(args) {
+				var _elementorCommon;
+				var allFeatures = (_elementorCommon = elementorCommon) === null || _elementorCommon === void 0 || (_elementorCommon = _elementorCommon.config) === null || _elementorCommon === void 0 ? void 0 : _elementorCommon.allExperimentalFeatures;
+				if (allFeatures && "theme_builder_v2" in allFeatures && !allFeatures.theme_builder_v2) {
+					var menuUrl = elementorAppConfig.menu_url;
+					if ("string" === typeof menuUrl && menuUrl) {
+						var _args$url;
+						var isSiteEditorUrl = ((_args$url = args.url) === null || _args$url === void 0 ? void 0 : _args$url.includes("page=elementor-app")) && args.url.includes("site-editor");
+						if (!args.url || isSiteEditorUrl) {
+							window.top.location.href = menuUrl;
+							return true;
+						}
+					}
+				}
 				$e.route("app", args);
 				return true;
 			}

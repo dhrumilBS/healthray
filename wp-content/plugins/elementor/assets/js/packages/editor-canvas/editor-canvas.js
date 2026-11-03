@@ -7141,6 +7141,7 @@ var import_jsx_runtime = require_jsx_runtime();
 		const environment = (0, _elementor_twing.createEnvironment)(loader);
 		environment.registerEscapingStrategy(escapeHtmlTag, "html_tag");
 		environment.registerEscapingStrategy(escapeURL, "full_url");
+		environment.registerEscapingStrategy(escapeJsIdentifier, "js_identifier");
 		return {
 			register: loader.setTemplate,
 			render: environment.render
@@ -7153,6 +7154,11 @@ var import_jsx_runtime = require_jsx_runtime();
 		const allowedTags = getAllowedHtmlWrapperTags();
 		const normalizedTag = value?.toLowerCase?.() ?? "";
 		return allowedTags.includes(normalizedTag) ? value : "div";
+	}
+	var JS_IDENTIFIER_PATTERN = /^[A-Za-z0-9_]+$/;
+	function escapeJsIdentifier(value) {
+		const id = String(value ?? "");
+		return id.match(JS_IDENTIFIER_PATTERN)?.[0] === id ? id : "";
 	}
 	function escapeURL(value) {
 		const allowedProtocols = [

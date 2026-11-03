@@ -19,7 +19,8 @@
             "imageOptimization": "Image optimization",
             "emailDeliverability": "Email deliverability",
             "siteManagement": "Site Management",
-            "cookieConsent": "Cookie consent"
+            "cookieConsent": "Cookie consent",
+            "activityLog": "Activity log"
         },
         "cancel": "Cancel",
         "submit": "Submit",

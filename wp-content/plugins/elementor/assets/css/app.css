@@ -2761,6 +2761,18 @@ h6,
   text-align: center;
   max-width: 520px;
 }
+.e-kit-library__error-screen--upgrade .e-kit-library__error-screen-description {
+  max-width: 600px;
+}
+.e-kit-library__error-screen-note {
+  margin-block-start: 100px;
+  max-width: 600px;
+  color: #69727D;
+  font-size: 0.8125rem;
+  font-style: italic;
+  line-height: 1.5;
+  text-align: center;
+}
 
 .e-kit-library__kit-favorite-actions {
   padding: 0.3125rem;
