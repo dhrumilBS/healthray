@@ -36,6 +36,9 @@ require_once get_stylesheet_directory() . '/lib/blog-rewrites.php';
 require_once get_stylesheet_directory() . '/lib/blog-redirects.php';
 require_once get_stylesheet_directory() . '/lib/virtual-urls.php';
 require_once get_stylesheet_directory() . '/lib/header.php';
+require_once get_stylesheet_directory() . '/lib/speciality-helpers.php';
+require_once get_stylesheet_directory() . '/lib/acf-speciality.php';
+require_once get_stylesheet_directory() . '/lib/speciality-migrate.php';
 
 if (!defined('HR_LANDING_PAGE_IDS')) {
 	define('HR_LANDING_PAGE_IDS', [167, 32399, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468]);
@@ -373,6 +376,7 @@ function hr_get_inline_css($path)
 // =============================================================================
 
 add_action('wp_head', function () {
+	// Speciality pages skip this file: css/speciality-landing.css carries the container and section rules they share.
 	if (is_page(79713) || is_page(79691) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81468) || is_page(81773) || is_page(81775)) {
 		$common_css_path = get_stylesheet_directory() . '/css/common-landing.css';
 		if (file_exists($common_css_path)) {
@@ -825,6 +829,9 @@ function healthray_head()
 			array('q' => 'Where is the Healthray office, and can I visit?', 'a' => 'Healthray Technologies Pvt. Ltd. is at 1st Floor, A - Millenium Point, Opp. Gabani Kidney Hospital, Station Rd, Surat 395003, Gujarat, India. Visitors are welcome - call +91-971-487-4435 first so the right person is free when you arrive.',),
 		);
 	}
+
+	// Templates that keep their FAQ in fields (e.g. speciality pages) add it here.
+	$faqs = apply_filters('hr_head_faqs', $faqs);
 
 	$graph = array(
 		array(
