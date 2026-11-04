@@ -294,7 +294,8 @@ add_filter('body_class', function ($classes) {
 		79928 => 'pharmacy-landing',
 		81775 => 'hims-landing',
 		81124 => 'hims-landing',
-		81468 => 'login-landing'
+		81468 => 'login-landing',
+		82202 => 'hr-partner-landing',
 	];
 	foreach ($landing_pages as $page_id => $class) {
 		if (is_page($page_id)) {
@@ -311,7 +312,6 @@ add_filter('body_class', function ($classes) {
 	// Login Portal by template too, so it works whatever its page ID is.
 	if (hr_is_login_portal_page()) {
 		$classes[] = 'landing-page';
-		$classes[] = 'login-landing';
 	}
 
 	return array_unique($classes);
@@ -1621,7 +1621,7 @@ add_action('wp_footer', function () {
  */
 function hr_is_login_portal_page()
 {
-	return is_page(82169) || is_page(81468) || is_page(82198) || is_page(82196) || is_page(82183) || is_page_template('temp-login-landing.php');
+	return is_page(82169) || is_page(81468) || is_page(82198) || is_page(82196) || is_page(82183) || is_page(82202) || is_page(82251) || is_page_template('temp-login-landing.php');
 }
 
 function hr_ppc_page_key()
