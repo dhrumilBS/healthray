@@ -19,9 +19,12 @@
  * Nothing else is touched: only the listed page IDs change URL, and the
  * rewrite rule only matches /{prefix}/{one-segment}/.
  *
- * To add a page: add its ID to the prefix's list below. The URL segment is
- * the page's own slug (post_name), so set the slug to "erp", "emr" etc.
- * Rewrite rules flush automatically when this map changes.
+ * To add or remove a page: PPC Pages in the admin (lib/ppc-pages-admin.php).
+ * The page IDs are stored in the hr_virtual_url_map option; the prefixes
+ * themselves are fixed in hr_virtual_url_default_map(), which also holds the
+ * page list used until the option is first saved. The URL segment is the
+ * page's own slug (post_name), so set the slug to "erp", "emr" etc.
+ * Rewrite rules flush automatically when the prefix list changes.
  *
  * A listed page may reuse the slug of a normal page (e.g. both
  * /hospital-management-software/ and /ppc/hospital-management-software/):
@@ -38,11 +41,12 @@ if (! defined('ABSPATH')) {
 }
 
 define('HR_VIRTUAL_URLS_HASH_OPTION', 'hr_virtual_urls_rules_hash');
+define('HR_VIRTUAL_URLS_MAP_OPTION', 'hr_virtual_url_map');
 
 /**
- * prefix => list of page IDs served under it.
+ * The prefixes, with the page list used until the admin saves its own.
  */
-function hr_virtual_url_map()
+function hr_virtual_url_default_map()
 {
 	return array(
 		'ppc' => array(
@@ -55,6 +59,74 @@ function hr_virtual_url_map()
 			82198,
 		),
 	);
+}
+
+/**
+ * prefix => list of page IDs served under it. Prefixes come from code; the
+ * page IDs from the hr_virtual_url_map option once it is saved.
+ *
+ * @param bool $refresh Re-read the option (after hr_virtual_url_set_pages()).
+ */
+function hr_virtual_url_map($refresh = false)
+{
+	static $map = null;
+	if (null !== $map && ! $refresh) {
+		return $map;
+	}
+
+	$saved = get_option(HR_VIRTUAL_URLS_MAP_OPTION, null);
+	$map   = array();
+	foreach (hr_virtual_url_default_map() as $prefix => $ids) {
+		if (is_array($saved) && isset($saved[$prefix]) && is_array($saved[$prefix])) {
+			$ids = $saved[$prefix];
+		}
+		$map[$prefix] = array_values(array_unique(array_filter(array_map('intval', $ids))));
+	}
+
+	return $map;
+}
+
+/**
+ * Save the page IDs served under a prefix. Pages that moved in or out get
+ * their caches and Yoast indexable rebuilt, so canonical and og:url follow.
+ *
+ * @return bool False for an unknown prefix.
+ */
+function hr_virtual_url_set_pages($prefix, $ids)
+{
+	$map = hr_virtual_url_map(true);
+	if (! isset($map[$prefix])) {
+		return false;
+	}
+
+	$old          = $map[$prefix];
+	$map[$prefix] = array_values(array_unique(array_filter(array_map('intval', (array) $ids))));
+	update_option(HR_VIRTUAL_URLS_MAP_OPTION, $map, true);
+	hr_virtual_url_map(true);
+
+	foreach (array_unique(array_merge(array_diff($old, $map[$prefix]), array_diff($map[$prefix], $old))) as $page_id) {
+		clean_post_cache($page_id);
+		hr_virtual_url_rebuild_seo($page_id);
+	}
+
+	return true;
+}
+
+/**
+ * Rebuild a page's Yoast indexable: it stores the permalink, which Yoast
+ * otherwise refreshes only when the page is saved.
+ */
+function hr_virtual_url_rebuild_seo($page_id)
+{
+	if (! function_exists('YoastSEO') || ! class_exists('\Yoast\WP\SEO\Integrations\Watchers\Indexable_Post_Watcher')) {
+		return;
+	}
+	try {
+		YoastSEO()->classes->get(\Yoast\WP\SEO\Integrations\Watchers\Indexable_Post_Watcher::class)->build_indexable((int) $page_id);
+	} catch (\Throwable $e) {
+		// Yoast refreshes it on the next save of the page.
+		unset($e);
+	}
 }
 
 /**
