@@ -1,16 +1,6 @@
 <?php
 
-/**
- * Renders a WYSIWYG (TinyMCE) field value in a block context.
- *
- * ACF already runs wysiwyg values through wpautop, so the wpautop call here is
- * a no-op for them. It matters for values that were saved while the field was
- * still a textarea: those are stored as bare text with newlines, and this keeps
- * them rendering exactly as they did before the field type changed.
- *
- * @param string $raw Field value.
- * @return string Empty string when there is nothing to render.
- */
+// Renders a WYSIWYG field value as block HTML.
 function hr_alt_rich_text($raw)
 {
     $raw = (string) $raw;
@@ -22,20 +12,7 @@ function hr_alt_rich_text($raw)
     return wp_kses_post(wpautop($raw));
 }
 
-/**
- * Renders a WYSIWYG field value that sits inside an element the template
- * already provides — a <p> in a review quote, an <li> in a bullet list.
- *
- * The wrapping paragraph is stripped because a <p> inside a <p> is invalid and
- * would drop the spacing the surrounding element was designed with. A second
- * paragraph becomes a line break rather than a new block, for the same reason.
- * Fields using this are given the locked-down "Inline" toolbar in
- * lib/acf-alternatives.php, so the only markup expected here is emphasis and
- * links.
- *
- * @param string $raw Field value.
- * @return string
- */
+// Renders a WYSIWYG value inside an existing <p>/<li>, with the outer <p> stripped.
 function hr_alt_rich_inline($raw)
 {
     $html = hr_alt_rich_text($raw);
@@ -51,21 +28,7 @@ function hr_alt_rich_inline($raw)
     return trim($html);
 }
 
-/**
- * The generated blocks a profile's rich-text content can position with a token.
- *
- * A profile's prose — description, subheadings, bullet lists, Best For, Our
- * Experience — is one wysiwyg field, so its structure and order live in the
- * editor. The three things the editor cannot hand-write are the screenshot
- * (a media ID, or on the Healthray profile a video in the same slot, see
- * hr_alt_render_profile_media()), the star rating (generated markup) and the
- * pros/cons grid (generated markup, icons and review boxes). Those are dropped
- * in with a token, so the editor still owns where they sit.
- *
- * Slug => token. Slugs match what hr_alt_profile_parts() hands the template.
- *
- * @return array
- */
+// Tokens that place generated blocks inside profile content.
 function hr_alt_profile_tokens()
 {
     return array(
@@ -75,40 +38,13 @@ function hr_alt_profile_tokens()
     );
 }
 
-/**
- * The rendered rich-text content of one competitor profile.
- *
- * Tokens are left in place: hr_alt_profile_parts() splits on them so the
- * template can render the generated blocks itself rather than have them
- * concatenated into a string here.
- *
- * @param array $profile One row of the competitor_profiles repeater.
- * @return string
- */
+// Rendered rich-text content of one competitor profile.
 function hr_alt_profile_content(array $profile)
 {
     return hr_alt_rich_text($profile['content'] ?? '');
 }
 
-/**
- * Splits rendered profile content into an ordered list of renderable parts.
- *
- * Each part is one of:
- *   array('type' => 'html',  'value' => '<div class="alt-profile__…">…</div>')
- *   array('type' => 'block', 'value' => 'screenshot'|'rating'|'pros_cons')
- *
- * Two rules keep hand-written content forgiving:
- *
- * 1. wpautop wraps a token sitting on its own line in a <p>. That paragraph is
- *    unwrapped first, otherwise the block markup would land inside a <p> and
- *    lose the spacing its CSS was written for.
- * 2. A block whose token is missing still renders — screenshot above the prose,
- *    rating and pros/cons below it — so forgetting a token never silently drops
- *    content. A repeated token only renders the first time.
- *
- * @param string $html Content already passed through hr_alt_profile_content().
- * @return array
- */
+// Splits profile content into ordered html/block parts.
 function hr_alt_profile_parts($html)
 {
     $html = (string) $html;
@@ -145,8 +81,6 @@ function hr_alt_profile_parts($html)
         $parts[] = array('type' => 'block', 'value' => $slug);
     }
 
-    // The screenshot sits above the prose when it was not placed; everything
-    // else falls in after it.
     if (!in_array('screenshot', $used, true)) {
         array_unshift($parts, array('type' => 'block', 'value' => 'screenshot'));
         $used[] = 'screenshot';
@@ -161,39 +95,13 @@ function hr_alt_profile_parts($html)
     return $parts;
 }
 
-/**
- * Whether a competitor_profiles row is Healthray's own write-up.
- *
- * Matched on the name, case-insensitively, rather than on the row's position,
- * so "Healthray", "Healthray LIMS" and "Healthray HMIS" all count wherever the
- * row sits. The Video field in lib/acf-alternatives.php is shown on the same
- * rule (an ACF "==pattern" condition, which is case-insensitive too), so the
- * editor and the template agree on which row can carry a video.
- *
- * @param array $profile One row of the competitor_profiles repeater.
- * @return bool
- */
+// Whether a profile row is Healthray's own (matched by name).
 function hr_alt_is_healthray_profile(array $profile)
 {
     return false !== stripos((string) ($profile['name'] ?? ''), 'healthray');
 }
 
-/**
- * Renders the media block a profile opens with, wherever [alt-screenshot] sits.
- *
- * Competitor profiles show their screenshot. The Healthray profile can show a
- * video in the same slot instead: when one is set it takes the screenshot's
- * place, and the screenshot, if there is one, becomes the cover frame shown
- * until the video starts.
- *
- * The video has no controls. It is muted and loops, and js/alternatives.js
- * plays it while it is on screen. The frame is one transparent button so a
- * click or a key press can still pause it (WCAG 2.2.2); its play icon only
- * shows while the video is paused and waiting for the visitor.
- *
- * @param array $profile One row of the competitor_profiles repeater.
- * @return string Empty string when the row has neither.
- */
+// Renders a profile's screenshot, or its video on the Healthray profile.
 function hr_alt_render_profile_media(array $profile)
 {
     $screenshot = $profile['screenshot'] ?? '';
@@ -212,17 +120,9 @@ function hr_alt_render_profile_media(array $profile)
     $poster = empty($screenshot) ? '' : (string) wp_get_attachment_image_url($screenshot, 'large');
     $label = trim((string) $profile['name']) . ' video';
 
-    // Safari on iPhone paints no first frame without a poster; a start time a
-    // millisecond in makes it load one. The customer story video on the PPC
-    // pages uses the same trick (#t=0.5).
+    // iOS Safari needs a start offset to paint the first frame without a poster.
     $src = $video_url . ($poster === '' ? '#t=0.001' : '');
 
-    // With a cover to show, nothing is fetched until the video starts. Without
-    // one, the metadata loads so the browser can paint the first frame. Muted
-    // and inline is what lets browsers start it without a click. No
-    // picture-in-picture or casting, matching the walkthrough player on the PPC
-    // pages (templates/ppc-hims/player.php). Hidden from screen readers: the
-    // toggle below names it.
     $video = '<video class="alt-profile__video" muted loop playsinline'
         . ' preload="' . ($poster !== '' ? 'none' : 'metadata') . '"'
         . ' disablepictureinpicture disableremoteplayback'
@@ -232,8 +132,7 @@ function hr_alt_render_profile_media(array $profile)
         . '<source src="' . esc_url($src) . '" type="' . esc_attr(get_post_mime_type($video_id) ?: 'video/mp4') . '">'
         . '</video>';
 
-    // Pause/play toggle covering the frame. Hidden until js/alternatives.js
-    // runs; without JavaScript the video does not start and the still frame shows.
+    // Pause/play toggle, revealed by js/alternatives.js.
     $toggle = '<button type="button" class="alt-profile__video-toggle" aria-label="' . esc_attr('Play the ' . $label) . '" data-label="' . esc_attr($label) . '" hidden>'
         . '<span class="alt-profile__video-icon" aria-hidden="true">'
         . '<svg class="alt-profile__video-icon-play" width="30" height="30" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor" /></svg>'
@@ -244,34 +143,7 @@ function hr_alt_render_profile_media(array $profile)
     return '<div class="alt-profile__screenshot alt-profile__screenshot--video">' . $video . $toggle . '</div>';
 }
 
-/**
- * Builds profile content HTML from the section-per-field shape.
- *
- * This is the markup the template used to assemble from separate ACF fields, so
- * it is also the definition of "what a profile looks like by default". Two
- * callers:
- *
- *   - the lazy migration in lib/acf-alternatives.php, which fills the editor for
- *     posts saved before the fields were merged
- *   - tools/alternatives/import-alternatives.php, so a content JSON can keep
- *     supplying prose section by section instead of hand-written HTML
- *
- * Blocks are separated by blank lines because wpautop is what turns the tokens
- * into their own paragraphs, and hr_alt_profile_parts() relies on that.
- *
- * @param array $parts {
- *     @type string $description            Prose under the heading.
- *     @type array  $stands_out             Rows of array('title' => …, 'text' => …).
- *     @type string $stands_out_heading     Defaults to 'What Stands Out'.
- *     @type string $best_for               Prose for the tinted Best For box.
- *     @type string $our_experience_heading Defaults to 'Our Experience'.
- *     @type string $our_experience         Closing verdict prose.
- *     @type bool   $has_rating             Whether to emit the rating token.
- * }
- * @param array $order Section slugs in render order. Defaults to the order the
- *                     template used before the fields were merged.
- * @return string
- */
+// Builds profile content HTML from the old section-per-field shape.
 function hr_alt_profile_compose_content(array $parts, array $order = array())
 {
     if (!$order) {
@@ -313,9 +185,6 @@ function hr_alt_profile_compose_content(array $parts, array $order = array())
                         continue;
                     }
 
-                    // The colon belongs to the lead-in, not the text: source
-                    // documents sometimes write these bullets as one plain
-                    // sentence with no bold lead-in at all.
                     $items .= "\n" . '<li>';
                     if ($title !== '') {
                         $items .= '<strong>' . esc_html($title) . '</strong>' . ($text !== '' ? ': ' : '');
@@ -363,30 +232,13 @@ function hr_alt_profile_compose_content(array $parts, array $order = array())
     return implode("\n\n", $out);
 }
 
-/**
- * The section order the template rendered before the profile prose fields were
- * merged into one editor. Also the fallback for posts that never stored one.
- *
- * @return array
- */
+// Default profile section order.
 function hr_alt_profile_default_section_order()
 {
     return array('screenshot', 'description', 'stands_out', 'best_for', 'pros_cons', 'experience');
 }
 
-/**
- * Composes the content of a profile saved before the prose fields were merged.
- *
- * Read straight from post meta rather than through get_field(), because the
- * fields it reads no longer exist in the field group — the values are still in
- * the database, they just have no ACF definition to load them. Nothing is
- * written here; lib/acf-alternatives.php hands the result to the editor, and
- * saving the post is what migrates it.
- *
- * @param int $post_id
- * @param int $row_index Zero-based competitor_profiles row.
- * @return string Empty string when the row has no legacy prose at all.
- */
+// Composes legacy profile content from post meta (pre-merge fields).
 function hr_alt_profile_legacy_content($post_id, $row_index)
 {
     $prefix = 'competitor_profiles_' . (int) $row_index . '_';
@@ -417,13 +269,7 @@ function hr_alt_profile_legacy_content($post_id, $row_index)
     );
 }
 
-/**
- * The per-post section order stored by the retired "Profile Section Order"
- * repeater, read from meta for the same reason as the profile prose above.
- *
- * @param int $post_id
- * @return array Every section exactly once, in the stored order.
- */
+// Section order stored by the retired "Profile Section Order" repeater.
 function hr_alt_profile_legacy_section_order($post_id)
 {
     $default = hr_alt_profile_default_section_order();
@@ -492,21 +338,7 @@ function hr_alt_render_cell($raw)
     return '<span class="hr-cell-text">' . esc_html($raw) . '</span>';
 }
 
-/**
- * The verification line under a review quote, e.g. "Verified G2 Review".
- *
- * The writer types it, because the source is not always a review site — an app
- * store or Healthray's own reviews page needs its own wording. Posts saved
- * before the field existed have nothing stored, so those fall back to the label
- * the template used to build from the rating source and keep rendering
- * identically.
- *
- * Returns plain text; escape at the point of output.
- *
- * @param array  $profile One row of the competitor_profiles repeater.
- * @param string $slot    'pros' or 'cons'.
- * @return string
- */
+// Verification line under a review quote, e.g. "Verified G2 Review".
 function hr_alt_review_label(array $profile, $slot)
 {
     $label = trim((string) ($profile[$slot . '_review_label'] ?? ''));
@@ -515,9 +347,6 @@ function hr_alt_review_label(array $profile, $slot)
         return $label;
     }
 
-    // No reviewer means no third party to credit. Source documents put the
-    // writer's own observation in this box sometimes, and naming the rating
-    // source there would attribute a quote it never carried.
     if (trim((string) ($profile[$slot . '_review_author'] ?? '')) === '') {
         return 'Verified Review';
     }
@@ -527,9 +356,7 @@ function hr_alt_review_label(array $profile, $slot)
     return 'Verified ' . $source . ' Review';
 }
 
-/**
- * Renders a CSS-only star rating (supports halves), e.g. 4.5 out of 5.
- */
+// Renders a CSS-only star rating (supports halves).
 function hr_alt_render_stars($value)
 {
     $value = max(0, min(5, (float) $value));
@@ -541,9 +368,7 @@ function hr_alt_render_stars($value)
         . '</div>';
 }
 
-/**
- * Renders a glance-row value: a star rating, a yes/no icon, or plain/dash text, depending on $type.
- */
+// Renders a glance-row value: stars, yes/no icon or text.
 function hr_alt_render_glance_value($raw, $type)
 {
     $raw = trim((string) $raw);
@@ -570,35 +395,14 @@ function hr_alt_render_glance_value($raw, $type)
     return '<span class="hr-cell-text">' . esc_html($raw) . '</span>';
 }
 
-/**
- * Adds target="_blank" only when a CTA points off-site (e.g. an external
- * scheduling link), so in-page/internal links keep normal same-tab behavior.
- */
+// Adds target="_blank" only for off-site CTA links.
 function hr_alt_cta_target_attr($url, $site_host)
 {
     $host = wp_parse_url($url, PHP_URL_HOST);
     return ($host && $host !== $site_host) ? ' target="_blank" rel="noopener noreferrer"' : '';
 }
 
-/**
- * Renders a highlighted CTA box.
- *
- * Shared by both CTAs on an Alternatives post: the inline one after the first
- * profile and the one near the end of the article. Returns an empty string when
- * there is no heading, so callers can echo it unconditionally.
- *
- * @param array  $args {
- *     @type string $heading     Required. Nothing renders without it.
- *     @type string $text        Optional supporting line.
- *     @type string $button_text Defaults to 'Talk to an Expert'.
- *     @type string $url         Defaults to the contact page.
- *     @type string $modifier    Extra class on the wrapper, e.g. 'alt-mid-cta--inline'.
- *     @type bool   $wrap        Wrap in .container.narrow. Off when the caller is
- *                               already inside one.
- * }
- * @param string $site_host Host of this site, so off-site links get target="_blank".
- * @return string
- */
+// Renders a highlighted CTA box; empty when there is no heading.
 function hr_alt_render_cta(array $args, $site_host = '')
 {
     $heading = trim((string) ($args['heading'] ?? ''));
@@ -607,16 +411,12 @@ function hr_alt_render_cta(array $args, $site_host = '')
         return '';
     }
 
-    // The supporting line is a wysiwyg field, so it arrives as HTML. It is
-    // printed inside the box's second <p>, hence the inline renderer.
     $text = hr_alt_rich_inline($args['text'] ?? '');
     $button_text = trim((string) ($args['button_text'] ?? '')) ?: 'Talk to an Expert';
     $url = trim((string) ($args['url'] ?? '')) ?: 'https://healthray.com/contact/';
     $modifier = trim((string) ($args['modifier'] ?? ''));
     $wrap = !empty($args['wrap']);
 
-    // Alignment is owned by the CSS, not a utility class, so the box can stay
-    // left-aligned as designed.
     $classes = 'alt-mid-cta' . ($modifier !== '' ? ' ' . $modifier : '');
 
     $box = '<div class="alt-mid-cta__box">';
@@ -628,7 +428,7 @@ function hr_alt_render_cta(array $args, $site_host = '')
         . '<path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />'
         . '</svg>';
 
-    $box .= '<a href="' . esc_url($url) . '" class="alt-hero__cta-primary"' . hr_alt_cta_target_attr($url, $site_host) . '>'
+    $box .= '<a href="' . esc_url($url) . '" class="alt-hero__cta-primary hr-cta-btn"' . hr_alt_cta_target_attr($url, $site_host) . '>'
         . esc_html($button_text)
         . $arrow
         . '</a>';
@@ -641,9 +441,7 @@ function hr_alt_render_cta(array $args, $site_host = '')
     return '<div class="' . esc_attr($classes) . '">' . $box . '</div>';
 }
 
-/**
- * Renders the logo+name block used in the comparison table header row.
- */
+// Renders the logo + name block in the comparison table header.
 function hr_alt_render_glance_header($name, $logo_id, $is_healthray = false)
 {
     $classes = 'glance-table-top' . ($is_healthray ? ' glance-table-top--us' : '');

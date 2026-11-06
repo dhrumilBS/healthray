@@ -33,7 +33,10 @@
 .hr-meta-pills { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0; }
 .hr-date-reading { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--hr-ink-soft); }
 .hr-single-wrapper .hr-blog-title { margin: 10px 0 16px; font-size: var(--hr-hero-title-size); font-weight: 800; line-height: 1.25; letter-spacing: -0.02em; color: var(--hr-primary-color); text-transform: none; }
-.hr-author-row { margin-top: 26px; }
+.hr-author-row { margin-top: 26px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; }
+.hr-hero-grid--no-visual .hr-author-row { justify-content: center; }
+.hr-reviewer-wrap { padding-left: 28px; border-left: 1px solid var(--hr-line); }
+.hr-reviewer-label { font-size: 0.7rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--hr-ink-faint); }
 .hr-author-info-wrap { display: flex; align-items: center; gap: 10px; }
 .hr-author-avatar { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 2px solid var(--hr-line); flex-shrink: 0; }
 .hr-author-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -154,7 +157,6 @@
 .hr-post-content .wp-block-table a { color: var(--hr-brand, #2563eb); font-weight: 600; text-decoration: none; }
 .hr-post-content .wp-block-table a:hover { text-decoration: underline; }
 .hr-post-content .wp-block-table figcaption { margin: 10px 2px 0; color: var(--hr-ink-faint, #64748b); font-size: 13px; line-height: 1.5; text-align: left; }
-/* Mobile */
 @media (max-width: 767px) {
     .hr-post-content .wp-block-table { margin: 24px 0; border-radius: 10px; }
     .hr-post-content .wp-block-table table { min-width: 560px; font-size: 14px; }
@@ -230,7 +232,9 @@
     .hr-blog-row { padding: 24px 0 40px; }
     .hr-hero-section { padding: 40px 0 32px; margin-bottom: 24px; }
     .hr-single-wrapper .hr-blog-title { line-height: 1.22; }
-    .hr-author-row { margin-top: 20px; }
+    .hr-author-row { margin-top: 20px; flex-direction: column; align-items: flex-start; }
+    .hr-hero-grid--no-visual .hr-author-row { align-items: center; }
+    .hr-reviewer-wrap { padding-left: 0; border-left: 0; }
     .hr-author-bio-box { padding: 20px; gap: 14px; }
     .hr-bio-top { gap: 14px; }
     .hr-bio-img,

@@ -13,6 +13,7 @@ $author_initials = implode('', array_map(
 	fn($w) => strtoupper($w[0]),
 	preg_split('/\s+/', trim((string) $author_name), -1, PREG_SPLIT_NO_EMPTY) ?: array()
 ));
+$reviewer = hr_get_reviewer($post_id);
 $site_host = wp_parse_url(home_url(), PHP_URL_HOST);
 $why_look_content = get_field('why_look_content', $post_id);
 $methodology_content = get_field('methodology_content', $post_id);
@@ -81,6 +82,7 @@ if ($toc_heading_levels !== 'both') {
 						<h1><?php the_title(); ?></h1>
 					</div>
 
+					<div class="alt-hero__people">
 					<div class="alt-hero__author">
 						<?php if ($author_name): ?>
 							<a href="<?= esc_url($author_url); ?>" class="alt-hero__author-photo" tabindex="-1" aria-hidden="true">
@@ -100,6 +102,26 @@ if ($toc_heading_levels !== 'both') {
 							<?php endif; ?>
 							<time class="alt-hero__author-date" datetime="<?= esc_attr(get_the_date('c')); ?>"><?= esc_html(get_the_date('F j, Y')); ?></time>
 						</span>
+					</div>
+
+					<?php if ($reviewer): ?>
+						<div class="alt-hero__author alt-hero__author--reviewer">
+							<a href="<?= esc_url($reviewer['url']); ?>" class="alt-hero__author-photo" tabindex="-1" aria-hidden="true">
+								<?php if ($reviewer['avatar']): ?>
+									<img src="<?= esc_url($reviewer['avatar']); ?>" alt="" width="52" height="52" class="alt-hero__author-img">
+								<?php else: ?>
+									<span class="alt-hero__author-initials"><?= esc_html($reviewer['initials']); ?></span>
+								<?php endif; ?>
+							</a>
+							<span class="alt-hero__author-info">
+								<span class="alt-hero__author-label">Reviewed by</span>
+								<a href="<?= esc_url($reviewer['url']); ?>" class="alt-hero__author-name"><?= esc_html($reviewer['name']); ?></a>
+								<?php if ($reviewer['position']): ?>
+									<span class="alt-hero__author-position"><?= esc_html($reviewer['position']); ?></span>
+								<?php endif; ?>
+							</span>
+						</div>
+					<?php endif; ?>
 					</div>
 				</div>
 
@@ -152,7 +174,7 @@ if ($toc_heading_levels !== 'both') {
 
 			<?php
 			if (count($toc_items) > 1):
-				?>
+			?>
 				<div class="alt-toc-mobile" id="alt-toc-mobile">
 					<button class="alt-toc-mobile__toggle" type="button" aria-expanded="false" aria-controls="alt-toc-mobile-panel">
 						<span class="alt-toc-mobile__icon" aria-hidden="true">
@@ -199,7 +221,7 @@ if ($toc_heading_levels !== 'both') {
 
 			<?php if ($methodology_content):
 				$methodology_title = get_field('methodology_title', $post_id);
-				?>
+			?>
 				<section class="alt-intro" id="alt-methodology">
 					<div class="container narrow">
 						<?php if ($methodology_title): ?>
@@ -221,7 +243,7 @@ if ($toc_heading_levels !== 'both') {
 				$product_pct = round((100 - $feature_pct) / $product_count, 4);
 				$grid_template = $feature_pct . '% ' . implode(' ', array_fill(0, $product_count, $product_pct . '%'));
 				$matrix_style = '--alt-grid-cols:' . esc_attr($grid_template) . ';';
-				?>
+			?>
 				<section class="alt-comparison" id="alt-comparison">
 					<div class="container narrow">
 						<div class="heading">
@@ -254,7 +276,7 @@ if ($toc_heading_levels !== 'both') {
 									<?php if ($glance_rows):
 										foreach ($glance_rows as $row):
 											$comp_values = $row['competitor_values'] ?? array();
-											?>
+									?>
 											<tr class="alt-matrix__summary-row">
 												<td><?= esc_html($row['label']); ?></td>
 												<td class="is-us"><?= hr_alt_render_glance_value($row['healthray_value'], $row['value_type']); ?></td>
@@ -262,16 +284,16 @@ if ($toc_heading_levels !== 'both') {
 													<td><?= hr_alt_render_glance_value($comp_values[$i]['value'] ?? '', $row['value_type']); ?></td>
 												<?php endforeach; ?>
 											</tr>
-										<?php endforeach;
+									<?php endforeach;
 									endif; ?>
 
 									<?php if ($comparison_categories):
 										foreach ($comparison_categories as $cat_i => $cat):
 											if (empty($cat['features']))
 												continue;
-											$is_open = false; // All categories start collapsed for a consistent first view.
+											$is_open = false;
 											$panel_key = 'alt-cat-' . (int) $cat_i;
-											?>
+									?>
 											<tr class="alt-accordion__header<?= $is_open ? ' is-open' : ''; ?>" data-accordion="<?= esc_attr($panel_key); ?>">
 												<td colspan="<?= (int) $total_cols; ?>" class="alt-accordion__header-td">
 													<div class="alt-accordion__header-cell" role="button" tabindex="0" aria-expanded="<?= $is_open ? 'true' : 'false'; ?>">
@@ -288,7 +310,7 @@ if ($toc_heading_levels !== 'both') {
 														<div class="alt-accordion__collapse-inner">
 															<?php foreach ($cat['features'] as $feature):
 																$fc_values = $feature['competitor_values'] ?? array();
-																?>
+															?>
 																<div class="alt-matrix__row">
 																	<div class="alt-matrix__cell alt-matrix__cell--label"><?= esc_html($feature['feature_name']); ?></div>
 																	<div class="alt-matrix__cell is-us"><?= hr_alt_render_cell($feature['healthray_value']); ?></div>
@@ -301,12 +323,12 @@ if ($toc_heading_levels !== 'both') {
 													</div>
 												</td>
 											</tr>
-										<?php endforeach;
+									<?php endforeach;
 									endif; ?>
 
 									<tr class="alt-matrix__cta-row">
 										<td></td>
-										<td class="is-us"><a href="https://healthray.com/contact/" class="alt-matrix__cta-btn" <?= hr_alt_cta_target_attr('https://healthray.com/contact/', $site_host); ?>><?= esc_html($cta_label); ?></a></td>
+										<td class="is-us"><a href="https://healthray.com/contact/" class="alt-matrix__cta-btn hr-cta-btn"<?= hr_alt_cta_target_attr('https://healthray.com/contact/', $site_host); ?>><?= esc_html($cta_label); ?></a></td>
 										<?php foreach ($competitors as $c): ?>
 											<td></td>
 										<?php endforeach; ?>
@@ -336,7 +358,7 @@ if ($toc_heading_levels !== 'both') {
 								<?php
 								foreach (hr_alt_profile_parts(hr_alt_profile_content($p)) as $part):
 									$block = ($part['type'] === 'block') ? $part['value'] : '';
-									?>
+								?>
 
 									<?php if ($part['type'] === 'html'): ?>
 										<?= $part['value']; ?>
@@ -376,7 +398,7 @@ if ($toc_heading_levels !== 'both') {
 																	<div class="customer-feedback-dec__meta">
 																		<?php if (!empty($p['pros_review_author'])): ?>
 																			<p class="user-name"><?= esc_html($p['pros_review_author']); ?></p><?php endif; ?>
-																		<?php if ($pros_review_stars !== ''): ?> 								<?= hr_alt_render_stars((float) $pros_review_stars); ?> 							<?php endif; ?>
+																		<?php if ($pros_review_stars !== ''): ?> <?= hr_alt_render_stars((float) $pros_review_stars); ?> <?php endif; ?>
 																	</div>
 																<?php endif; ?>
 																<p><?= hr_alt_rich_inline($p['pros_review_quote']); ?></p>
@@ -411,7 +433,7 @@ if ($toc_heading_levels !== 'both') {
 																	<div class="customer-feedback-dec__meta">
 																		<?php if (!empty($p['cons_review_author'])): ?>
 																			<p class="user-name"><?= esc_html($p['cons_review_author']); ?></p><?php endif; ?>
-																		<?php if ($cons_review_stars !== ''): ?> 								<?= hr_alt_render_stars((float) $cons_review_stars); ?> 							<?php endif; ?>
+																		<?php if ($cons_review_stars !== ''): ?> <?= hr_alt_render_stars((float) $cons_review_stars); ?> <?php endif; ?>
 																	</div>
 																<?php endif; ?>
 																<p><?= hr_alt_rich_inline($p['cons_review_quote']); ?></p>
@@ -469,7 +491,6 @@ if ($toc_heading_levels !== 'both') {
 			<?php endif; ?>
 
 			<?php
-			// End-of-article CTA. Same renderer as the inline one above.
 			echo hr_alt_render_cta(
 				array(
 					'heading' => get_field('mid_cta_heading', $post_id),
@@ -501,15 +522,6 @@ if ($toc_heading_levels !== 'both') {
 			<?php endif; ?>
 
 			<div class="container">
-				<?php
-				/**
-				 * Author bio. Two rows: avatar + name on top, description at full
-				 * width below. .hr-bio-desc and .hr-bio-link are siblings of
-				 * .hr-bio-top rather than children of .hr-bio-info, so the
-				 * description can span the whole box instead of being squeezed
-				 * beside the avatar. Structure is identical in single.php.
-				 */
-				?>
 				<div class="hr-author-bio-box" aria-label="About the author">
 					<div class="hr-bio-top">
 						<div class="hr-bio-avatar">

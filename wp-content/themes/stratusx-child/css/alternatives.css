@@ -44,7 +44,11 @@ body { overflow-x: clip; }
 .alt-breadcrumb a:focus-visible { text-decoration: underline; }
 .alt-breadcrumb__current { display: block; overflow: hidden; max-width: 44ch; color: var(--hr-ink); opacity: .65; text-overflow: ellipsis; white-space: nowrap; }
 .alt-hero__grid--no-visual .alt-breadcrumb ol { justify-content: center; }
-.alt-hero__author { margin-top: 28px; display: inline-flex; align-items: center; gap: 14px; text-align: left; }
+.alt-hero__people { margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 18px 32px; }
+.alt-hero__grid--no-visual .alt-hero__people { justify-content: center; }
+.alt-hero__author { display: inline-flex; align-items: center; gap: 14px; text-align: left; }
+.alt-hero__author--reviewer { padding-left: 32px; border-left: 1px solid rgba(var(--hr-navy-rgb), .15); }
+.alt-hero__author-label { color: var(--hr-ink); opacity: .7; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
 .alt-hero__author-photo { flex-shrink: 0; display: block; line-height: 0; }
 .alt-hero__author-img,
 .alt-hero__author-initials { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 6px 16px rgba(var(--hr-navy-rgb), .18); }
@@ -228,10 +232,8 @@ body { overflow-x: clip; }
 .alt-profile__heading { font-size: 26px; font-weight: 800; color: var(--hr-ink-strong); }
 .alt-profile__screenshot { margin-bottom: 20px; }
 .alt-profile__screenshot img { width: 100%; height: auto; border-radius: var(--hr-radius-soft); border: 1px solid var(--hr-line); display: block; }
-/* Healthray profile video: same frame as a screenshot; muted, looping, no controls, playing while on screen (js/alternatives.js). */
 .alt-profile__screenshot--video { position: relative; overflow: hidden; border-radius: var(--hr-radius-soft); border: 1px solid var(--hr-line); background: var(--hr-tint); }
 .alt-profile__video { display: block; width: 100%; height: auto; object-fit: cover; background: var(--hr-tint); }
-/* The whole frame is the pause/play toggle. Its icon only shows while the video waits for the visitor, or on keyboard focus. */
 .alt-profile__video-toggle { position: absolute; inset: 0; display: grid; place-items: center; width: 100%; height: 100%; padding: 0; border: 0; border-radius: inherit; background: transparent; color: #fff; cursor: pointer; }
 .alt-profile__video-toggle[hidden] { display: none; }
 .alt-profile__video-toggle:focus-visible { outline: 3px solid var(--hr-blue); outline-offset: -6px; }
@@ -257,10 +259,11 @@ body { overflow-x: clip; }
 .alt-profile__experience .alt-profile__subheading { margin-top: 0; }
 .alt-profile__experience p { margin: 0 0 14px; color: var(--hr-ink-soft); font-size: 18px; line-height: 1.75; }
 .alt-profile__experience p:last-child { margin-bottom: 0; }
-.alt-mid-cta__box { padding: clamp(28px, 4vw, 40px); margin: 36px 0; border-radius: 16px; background: var(--hr-tint); border: 1px solid var(--hr-line-strong); box-shadow: 0 4px 18px rgba(var(--hr-ink-strong-rgb), .06); text-align: left; }
+.alt-mid-cta__box { padding: clamp(28px, 4vw, 40px); margin: 36px 0; border-radius: 16px; background: var(--hr-tint); border: 1px solid var(--hr-line-strong); box-shadow: 0 4px 18px rgba(var(--hr-ink-strong-rgb), .06); text-align: center; }
 .alt-mid-cta__box p:first-child { color: var(--hr-ink-strong); font-size: clamp(24px, 3vw, 32px); font-weight: 800; line-height: 1.25; letter-spacing: -.02em; margin: 0 0 12px; text-wrap: balance; }
 .alt-mid-cta__box p { color: var(--hr-ink-soft); margin: 0 0 26px; font-size: 17px; }
-.alt-mid-cta__box .alt-hero__cta-primary { border-radius: 12px; }
+.alt-mid-cta__box .alt-hero__cta-primary.hr-cta-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: auto; padding: 16px 32px; border-radius: 12px; background: var(--hr-blue); font-size: 16px; font-weight: 700; }
+.alt-single .alt-matrix__cta-btn.hr-cta-btn { display: inline-block; width: auto; padding: 8px; border-radius: 999px; background: var(--hr-blue); font-size: 14px; font-weight: 600; }
 .alt-mid-cta__box .alt-hero__cta-primary:hover { background: var(--hr-navy); color: #fff; box-shadow: 0 10px 22px rgba(var(--hr-navy-rgb), .26); }
 .alt-mid-cta--inline .alt-mid-cta__box { margin: 24px 0; padding: clamp(24px, 3vw, 34px); }
 .alt-mid-cta--inline .alt-mid-cta__box p:first-child { font-size: clamp(21px, 2.4vw, 26px); }
@@ -317,7 +320,11 @@ body { overflow-x: clip; }
 
 @media (max-width: 576px) {
 	.alt-hero__cta { flex-direction: column; gap: 16px; width: 100%; }
-	.alt-hero__cta-primary { width: 100%; justify-content: center; }
+	.alt-hero__people { flex-direction: column; align-items: flex-start; }
+	.alt-hero__grid--no-visual .alt-hero__people { align-items: center; }
+	.alt-hero__author--reviewer { padding-left: 0; border-left: 0; }
+	.alt-hero__cta-primary,
+	.alt-mid-cta__box .alt-hero__cta-primary.hr-cta-btn { width: 100%; justify-content: center; }
 	.fre-pros-box,
 	.fre-cons-box { padding: 18px; }
 	.alt-matrix { min-width: 560px; }

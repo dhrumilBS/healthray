@@ -28,6 +28,7 @@ require_once get_stylesheet_directory() . '/lib/cpt.php';
 require_once get_stylesheet_directory() . '/lib/fn-admin.php';
 require_once get_stylesheet_directory() . '/lib/alternatives-helpers.php';
 require_once get_stylesheet_directory() . '/lib/acf-alternatives.php';
+require_once get_stylesheet_directory() . '/lib/acf-reviewer.php';
 require_once get_stylesheet_directory() . '/lib/case-studies-helpers.php';
 require_once get_stylesheet_directory() . '/lib/acf-case-studies.php';
 require_once get_stylesheet_directory() . '/lib/events-helpers.php';
