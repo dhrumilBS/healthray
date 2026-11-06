@@ -4,6 +4,10 @@ $author_id = get_the_author_meta('ID');
 $author_name = get_the_author_meta('display_name');
 $author_bio = get_the_author_meta('description');
 $author_url = get_author_posts_url($author_id);
+$author_position = trim((string) get_the_author_meta('user_position', $author_id));
+$alt_archive_url = get_post_type_archive_link(get_post_type());
+$alt_post_type_obj = get_post_type_object(get_post_type());
+$alt_archive_label = $alt_post_type_obj ? $alt_post_type_obj->labels->name : 'Alternatives';
 $author_avatar = get_avatar_url($author_id, ['size' => 100]);
 $author_initials = implode('', array_map(
 	fn($w) => strtoupper($w[0]),
@@ -64,21 +68,38 @@ if ($toc_heading_levels !== 'both') {
 		<div class="container">
 			<div class="alt-hero__grid<?= has_post_thumbnail() ? '' : ' alt-hero__grid--no-visual'; ?>">
 				<div class="alt-hero__content">
-					<span class="alt-hero__eyebrow"><?= esc_html(get_the_date('F j, Y')); ?></span>
+					<nav class="alt-breadcrumb" aria-label="Breadcrumb">
+						<ol>
+							<?php if ($alt_archive_url): ?>
+								<li><a href="<?= esc_url($alt_archive_url); ?>"><?= esc_html($alt_archive_label); ?></a></li>
+							<?php endif; ?>
+							<li><span class="alt-breadcrumb__current" aria-current="page"><?= esc_html(ucwords(str_replace('-', ' ', get_post_field('post_name', $post_id)))); ?></span></li>
+						</ol>
+					</nav>
 
 					<div class="heading">
 						<h1><?php the_title(); ?></h1>
 					</div>
 
-					<div class="alt-hero__cta">
-						<?php if ($has_comparison): ?>
-							<a href="#alt-comparison" class="alt-hero__cta-secondary">
-								Compare Options
-								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-									<path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
-								</svg>
+					<div class="alt-hero__author">
+						<?php if ($author_name): ?>
+							<a href="<?= esc_url($author_url); ?>" class="alt-hero__author-photo" tabindex="-1" aria-hidden="true">
+								<?php if ($author_avatar): ?>
+									<img src="<?= esc_url($author_avatar); ?>" alt="" width="52" height="52" class="alt-hero__author-img">
+								<?php else: ?>
+									<span class="alt-hero__author-initials"><?= esc_html($author_initials); ?></span>
+								<?php endif; ?>
 							</a>
 						<?php endif; ?>
+						<span class="alt-hero__author-info">
+							<?php if ($author_name): ?>
+								<a href="<?= esc_url($author_url); ?>" class="alt-hero__author-name"><?= esc_html($author_name); ?></a>
+							<?php endif; ?>
+							<?php if ($author_position): ?>
+								<span class="alt-hero__author-position"><?= esc_html($author_position); ?></span>
+							<?php endif; ?>
+							<time class="alt-hero__author-date" datetime="<?= esc_attr(get_the_date('c')); ?>"><?= esc_html(get_the_date('F j, Y')); ?></time>
+						</span>
 					</div>
 				</div>
 
