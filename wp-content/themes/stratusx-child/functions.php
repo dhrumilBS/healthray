@@ -39,7 +39,6 @@ require_once get_stylesheet_directory() . '/lib/virtual-urls.php';
 require_once get_stylesheet_directory() . '/lib/header.php';
 require_once get_stylesheet_directory() . '/lib/speciality-helpers.php';
 require_once get_stylesheet_directory() . '/lib/acf-speciality.php';
-require_once get_stylesheet_directory() . '/lib/speciality-migrate.php';
 
 if (!defined('HR_LANDING_PAGE_IDS')) {
 	define('HR_LANDING_PAGE_IDS', [167, 32399, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468, 82361, 82363]);

@@ -11,7 +11,6 @@
  * Pages > Speciality Settings, and falls back to hr_sp_defaults().
  *
  * Fields:    lib/acf-speciality.php
- * Migration: lib/speciality-migrate.php (Elementor -> fields, Tools > Speciality Pages)
  * Assets:    css/speciality-landing.css (inlined), js/speciality-landing.js
  *
  * @package stratusx-child
@@ -29,9 +28,6 @@ const HR_SP_TEMPLATE = 'temp-speciality-landing.php';
  */
 const HR_SP_OPTIONS = 'hr_speciality';
 
-/**
- * Whether a page (or, with no ID, the current request) uses the template.
- */
 function hr_sp_is_page($post_id = 0)
 {
 	if ($post_id) {
@@ -41,20 +37,13 @@ function hr_sp_is_page($post_id = 0)
 	return is_page_template(HR_SP_TEMPLATE);
 }
 
-/**
- * Absolute URL of a file under wp-content/uploads, e.g. "2024/02/App-store.webp".
- */
 function hr_sp_upload_url($path)
 {
 	return wp_get_upload_dir()['baseurl'] . '/' . ltrim($path, '/');
 }
 
 /**
- * Shared content as it stood on the Elementor pages (global templates 64057,
- * 65894, 26968 and 26869). Used until the same field is saved under
- * Pages > Speciality Settings. Images are uploads-relative paths.
- *
- * @return array<string,mixed>
+ * Fallbacks for Speciality Settings fields left empty. Images are uploads-relative paths.
  */
 function hr_sp_defaults()
 {
@@ -90,9 +79,6 @@ function hr_sp_defaults()
 	);
 }
 
-/**
- * A Speciality Settings value, or its default while the field is empty.
- */
 function hr_sp_setting($name)
 {
 	$value = function_exists('get_field') ? get_field($name, HR_SP_OPTIONS) : null;
@@ -108,11 +94,6 @@ function hr_sp_setting($name)
 	return $value;
 }
 
-/**
- * Non-empty lines of a textarea value.
- *
- * @return string[]
- */
 function hr_sp_lines($text)
 {
 	return array_values(array_filter(array_map('trim', preg_split('/\R/', (string) $text)), 'strlen'));
@@ -137,9 +118,6 @@ function hr_sp_inline($text)
 	);
 }
 
-/**
- * Attachment ID for an image field value or an uploads-relative path, 0 if none.
- */
 function hr_sp_image_id($image)
 {
 	static $by_path = array();
@@ -197,9 +175,6 @@ function hr_sp_image($image, $size = 'full', $attr = array())
 	return $html . '>';
 }
 
-/**
- * Inline SVG icons used by the shared sections.
- */
 function hr_sp_icon($name)
 {
 	$lucide = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">%s</svg>';
@@ -216,11 +191,6 @@ function hr_sp_icon($name)
 	return $icons[$name] ?? '';
 }
 
-/**
- * The page's "Sections" rows, in order.
- *
- * @return array<int,array<string,mixed>>
- */
 function hr_sp_sections($post_id)
 {
 	$rows = function_exists('get_field') ? get_field('sp_sections', $post_id) : array();
@@ -228,12 +198,7 @@ function hr_sp_sections($post_id)
 	return is_array($rows) ? $rows : array();
 }
 
-/**
- * Hero values, with the page's featured image as the default hero image
- * (every Elementor speciality page used the featured image there).
- *
- * @return array<string,mixed>
- */
+// The hero image defaults to the page's featured image.
 function hr_sp_hero($post_id)
 {
 	$field = function_exists('get_field') ? 'get_field' : '__return_empty_string';
@@ -252,12 +217,7 @@ function hr_sp_hero($post_id)
 	);
 }
 
-/**
- * FAQ items of the page's first FAQ section: the visible accordion and the
- * FAQPage schema both read this, so they can never drift apart.
- *
- * @return array<int,array{q:string,a:string}>
- */
+// The FAQ accordion and the FAQPage schema both read this, so they stay in sync.
 function hr_sp_faq_items($post_id)
 {
 	foreach (hr_sp_sections($post_id) as $row) {
@@ -385,11 +345,6 @@ add_filter('hr_head_faqs', function ($faqs) {
 // Admin: start new speciality pages with the standard section order
 // -----------------------------------------------------------------------------
 
-/**
- * Section order of the standard speciality page, used to pre-fill a new page.
- *
- * @return string[]
- */
 function hr_sp_default_layouts()
 {
 	return array('key_points', 'workflow', 'feature_row', 'feature_row', 'feature_row', 'feature_row', 'feature_row', 'why_choose', 'testimonials', 'app', 'faq', 'data_protection', 'footer_cta');
