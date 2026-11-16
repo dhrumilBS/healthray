@@ -1,10 +1,15 @@
 <?php
 
-// Speciality pages - flat, alphabetical (see action item #1 above)
+// Speciality pages, alphabetical. Matches the ACF template and the old Elementor one.
 $speciality_args = [
 	'post_type'      => 'page',
-	'meta_key'       => '_wp_page_template',
-	'meta_value'     => 'templates/template-speciality.php',
+	'meta_query'     => [
+		[
+			'key'     => '_wp_page_template',
+			'value'   => ['temp-speciality-landing.php', 'templates/template-speciality.php'],
+			'compare' => 'IN',
+		],
+	],
 	'posts_per_page' => -1,
 	'orderby'        => 'title',
 	'order'          => 'ASC',
