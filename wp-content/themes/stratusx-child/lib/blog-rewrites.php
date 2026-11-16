@@ -52,6 +52,14 @@ function hr_blog_category_paged_rules()
 		return array();
 	}
 
+	// Only needed while categories are base-less root URLs (/%category%/...
+	// with an empty category base). Under /blog/%postname%/ + a category base,
+	// core already paginates /blog/category/<slug>/page/N/, and these rules
+	// would only create stray /<slug>/page/N/ duplicates.
+	if (0 !== strpos((string) get_option('permalink_structure'), '/%category%') || '' !== (string) get_option('category_base')) {
+		return array();
+	}
+
 	$pagination_base = $wp_rewrite->pagination_base ? $wp_rewrite->pagination_base : 'page';
 
 	$categories = get_categories(
@@ -130,3 +138,88 @@ function hr_blog_maybe_flush_rewrites()
 	update_option(HR_BLOG_REWRITES_HASH_OPTION, $hash, false);
 }
 add_action('wp_loaded', 'hr_blog_maybe_flush_rewrites');
+
+
+// =============================================================================
+// Keep non-blog URLs where they are when posts move under /blog/
+// =============================================================================
+
+/*
+ * The post permalink is /blog/%postname%/, so WordPress' "front" becomes
+ * "/blog/". By default core prepends the front to every custom post type,
+ * every taxonomy, author archives and date archives, which would move e.g.
+ * /alternatives/mocdoc/ to /blog/alternatives/mocdoc/.
+ *
+ * With a front of "/" (the old /%category%/%postname%/ structure) with_front
+ * made no difference, so turning it off below reproduces exactly the URLs
+ * these objects had before. Only posts and category archives use /blog/:
+ *
+ *   post              /blog/<post-slug>/
+ *   category archive  /blog/category/<slug>/   (Settings > Permalinks >
+ *                                                Category base "blog/category")
+ *
+ * Built-in post types (post, page, attachment, ...) are left alone: pages use
+ * the root, not the front.
+ */
+
+/**
+ * Custom post types: never prepend the post permalink front.
+ *
+ * @param array  $args      register_post_type() arguments.
+ * @param string $post_type Post type key.
+ * @return array
+ */
+function hr_blog_cpt_without_front($args, $post_type)
+{
+	if (! empty($args['_builtin']) || (array_key_exists('rewrite', $args) && false === $args['rewrite'])) {
+		return $args;
+	}
+
+	$rewrite               = (isset($args['rewrite']) && is_array($args['rewrite'])) ? $args['rewrite'] : array();
+	$rewrite['with_front'] = false;
+	$args['rewrite']       = $rewrite;
+
+	return $args;
+}
+add_filter('register_post_type_args', 'hr_blog_cpt_without_front', 99, 2);
+
+/**
+ * Taxonomies (tags, custom taxonomies): never prepend the front. "category" is
+ * excluded - its URL comes from the category base set in Settings > Permalinks.
+ *
+ * @param array  $args     register_taxonomy() arguments.
+ * @param string $taxonomy Taxonomy key.
+ * @return array
+ */
+function hr_blog_taxonomy_without_front($args, $taxonomy)
+{
+	if ('category' === $taxonomy || (array_key_exists('rewrite', $args) && false === $args['rewrite'])) {
+		return $args;
+	}
+
+	$rewrite               = (isset($args['rewrite']) && is_array($args['rewrite'])) ? $args['rewrite'] : array();
+	$rewrite['with_front'] = false;
+	$args['rewrite']       = $rewrite;
+
+	return $args;
+}
+add_filter('register_taxonomy_args', 'hr_blog_taxonomy_without_front', 99, 2);
+
+/**
+ * Author and date archives have no with_front switch: pin them to the root
+ * (/author/<name>/, /2026/11/) whenever the front is not "/".
+ * WP_Rewrite::init() clears these, so re-pin after every init.
+ */
+function hr_blog_pin_root_structures()
+{
+	global $wp_rewrite;
+
+	if (! $wp_rewrite instanceof WP_Rewrite || empty($wp_rewrite->permalink_structure) || '/' === $wp_rewrite->front || $wp_rewrite->using_index_permalinks()) {
+		return;
+	}
+
+	$wp_rewrite->author_structure = '/' . $wp_rewrite->author_base . '/%author%';
+	$wp_rewrite->date_structure   = '/%year%/%monthnum%/%day%';
+}
+add_action('init', 'hr_blog_pin_root_structures', 0);
+add_action('permalink_structure_changed', 'hr_blog_pin_root_structures');

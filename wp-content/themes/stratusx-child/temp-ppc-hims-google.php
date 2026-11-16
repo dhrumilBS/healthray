@@ -827,7 +827,7 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
   </div>
 </footer>
 
-<?php $ppc_wa_message = "Hi Healthray, I found you via Google Ads and want to see a demo of your hospital software. Please share pricing."; ?>
+<?php $ppc_wa_message = "Hi Healthray, I found you via Google and want to see a demo of your hospital software. Please share pricing."; ?>
 <?php include __DIR__ . '/templates/ppc-hims/whatsapp.php'; ?>
 
 <nav class="mbar" id="mbar" aria-label="Quick actions">

@@ -638,3 +638,240 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	});
 })();
+
+/*
+ * 8. Meta Ads page (temp-ppc-hims-meta.php). Runs when <body> has the class "hr-hms-meta", or when the page has
+ * the hero form slot (#formSlot) that only the Meta template prints.
+ * The videos, mobile bar, FAQ and doctor wall are handled by sections 1 to 5 above; the 2-step Contact Form 7
+ * form and the +91 field by the blocks above; the popup by the site-wide popup script (.hr-cta-btn), the same
+ * as on the Google and ChatGPT pages. This block adds what is only on the Meta page: GTM events, UTM, fbclid
+ * and the button location in the hidden fields of both forms (hero card and popup), and the thank-you panel
+ * shown in place of the hero form. Older markup (.js-to-form buttons + #sheet bottom sheet) still works.
+ */
+(function () {
+	'use strict';
+
+	if (!document.body.classList.contains('hr-hms-meta') && !document.getElementById('formSlot')) {
+		return;
+	}
+
+	var params = new URLSearchParams(window.location.search);
+	window.dataLayer = window.dataLayer || [];
+
+	// GTM: Meta Pixel "Lead" and the GA4 lead event fire on the dataLayer event "form_success".
+	// Event names are plain business words, never health terms, so Meta's data filters do not block them.
+	function track(event, data) {
+		window.dataLayer.push(Object.assign({ event: event, segment: 'hms', channel: 'meta', page_type: 'hms_meta' }, data || {}));
+	}
+
+	var card = document.getElementById('demo');
+	var slot = document.getElementById('formSlot');
+	var formArea = document.getElementById('formArea');
+	var doneArea = document.getElementById('doneArea');
+	var sheet = document.getElementById('sheet');
+	var panel = document.getElementById('sheetPanel');
+	if (!card || !slot || !formArea || !doneArea) {
+		return;
+	}
+
+	var activeLoc = 'hero';
+	var popupLoc = 'button';
+	var started = false;
+	var lastLoc = 'hero';
+	var lastLeadFocus = null;
+
+	// The site-wide popup (#myPopup) holds the second copy of the form.
+	function popup() {
+		return document.getElementById('myPopup');
+	}
+
+	// UTM, fbclid and the button location go into a form's hidden fields (only the ones the form has).
+	function fillHidden(root, loc) {
+		if (!root) {
+			return;
+		}
+		var vals = { cta_location: loc };
+		['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'fbclid', 'gclid'].forEach(function (k) {
+			var v = params.get(k);
+			if (v) {
+				vals[k] = v.slice(0, 200);
+			}
+		});
+		root.querySelectorAll('input[type="hidden"]').forEach(function (inp) {
+			if (Object.prototype.hasOwnProperty.call(vals, inp.name)) {
+				inp.value = vals[inp.name];
+			}
+		});
+	}
+	function setTracking(loc) {
+		activeLoc = loc || 'hero';
+		fillHidden(card, activeLoc);
+	}
+	setTracking('hero');
+	fillHidden(popup(), popupLoc);
+
+	// "Book free demo" buttons that open the site-wide popup: count the click and note where it came from.
+	// (The popup script itself opens the popup; nothing here stops it.)
+	document.querySelectorAll('.hr-cta-btn').forEach(function (a) {
+		a.addEventListener('click', function () {
+			popupLoc = a.getAttribute('data-from') || 'button';
+			track('cta_click', { cta_type: 'demo', cta_location: popupLoc });
+			fillHidden(popup(), popupLoc);
+			// In case the popup markup is filled in only when it opens.
+			setTimeout(function () {
+				fillHidden(popup(), popupLoc);
+			}, 0);
+		});
+	});
+
+	// Focus: the first bed-size button on step 1, else the first field on step 2.
+	function focusFirst() {
+		if (formArea.hidden) {
+			return;
+		}
+		var step1 = card.querySelector('.hr-step-1');
+		var f = step1 && step1.offsetParent !== null
+			? step1.querySelector('.hr-bed-option')
+			: card.querySelector('.hr-step-2 input:not([type="hidden"]):not([type="submit"])');
+		if (f) {
+			f.focus({ preventScroll: true });
+		}
+	}
+
+	// Form events (the bed-size buttons are the first, easy tap), in the hero form or the popup form.
+	document.addEventListener('click', function (e) {
+		var opt = e.target.closest && e.target.closest('.hr-bed-option');
+		if (!opt) {
+			return;
+		}
+		var pop = popup();
+		var inPopup = !!(pop && pop.contains(opt));
+		if (!inPopup && !card.contains(opt)) {
+			return;
+		}
+		var loc = inPopup ? popupLoc : activeLoc;
+		if (!started) {
+			started = true;
+			track('form_start', { cta_location: loc });
+		}
+		track('form_step', { step: 2, beds: opt.getAttribute('data-bed') || '', cta_location: loc });
+	});
+
+	// Lead sent: GTM "form_success" for both forms (Meta Pixel Lead fires on it). The hero form then shows the
+	// thank-you panel in its place; the popup form shows CF7's own message, as on the Google and ChatGPT pages.
+	// (If CF7 has a redirect set for this form, that page shows instead.)
+	document.addEventListener('wpcf7mailsent', function (e) {
+		var form = e.target && e.target.closest ? e.target.closest('.wpcf7') : null;
+		if (!form) {
+			return;
+		}
+		var pop = popup();
+		var inCard = card.contains(form);
+		if (!inCard && !(pop && pop.contains(form))) {
+			return;
+		}
+		var sent = {};
+		((e.detail && e.detail.inputs) || []).forEach(function (i) {
+			sent[i.name] = i.value;
+		});
+		var mobile = String(sent['your-number'] || '').replace(/\D/g, '').slice(-10);
+		track('form_success', { form: 'hms_meta', beds: sent.bed_size || '', cta_location: inCard ? activeLoc : popupLoc, form_place: inCard ? 'hero' : 'popup' });
+		if (!inCard) {
+			return;
+		}
+
+		var nm = String(sent['your-name'] || '').trim().split(/\s+/).slice(0, 2).join(' ');
+		var t = document.getElementById('doneTitle');
+		var x = document.getElementById('doneText');
+		if (t && nm) {
+			t.textContent = 'Thank you, ' + nm + '. We have got your request.';
+		}
+		if (x && /^\d{10}$/.test(mobile)) {
+			x.textContent = 'Our team will call you once on +91 ' + mobile.replace(/(\d{5})(\d{5})/, '$1 $2') + ' to fix a demo time.';
+		}
+		formArea.hidden = true;
+		doneArea.hidden = false;
+	});
+
+	// Every "Book free demo" button opens the same form.
+	// Near the top: focus the hero form. Further down: open it as a bottom sheet so the reader keeps their place.
+	function heroFormVisible() {
+		if (card.parentNode !== slot) {
+			return false;
+		}
+		var r = card.getBoundingClientRect();
+		return r.top < window.innerHeight * 0.55 && r.bottom > window.innerHeight * 0.3;
+	}
+
+	function openForm(from) {
+		setTracking(from);
+		lastLoc = from || 'button';
+		track('cta_click', { cta_type: 'demo', cta_location: lastLoc });
+		if (!sheet || !panel || heroFormVisible()) {
+			focusFirst();
+			return;
+		}
+		if (card.parentNode === slot) {
+			slot.style.minHeight = slot.offsetHeight + 'px';
+			panel.appendChild(card);
+		}
+		lastLeadFocus = document.activeElement;
+		sheet.hidden = false;
+		document.documentElement.classList.add('sheet-open');
+		void sheet.offsetWidth;
+		sheet.classList.add('open');
+		setTimeout(function () {
+			if (formArea.hidden) {
+				document.getElementById('sheetClose').focus({ preventScroll: true });
+			} else {
+				focusFirst();
+			}
+		}, 80);
+	}
+
+	function closeForm() {
+		if (!sheet || sheet.hidden) {
+			return;
+		}
+		sheet.classList.remove('open');
+		document.documentElement.classList.remove('sheet-open');
+		setTimeout(function () {
+			sheet.hidden = true;
+			// The slot keeps its height, so the page never jumps (works on iPhone too).
+			slot.appendChild(card);
+			setTracking('hero');
+			if (lastLeadFocus && lastLeadFocus.focus) {
+				lastLeadFocus.focus({ preventScroll: true });
+			}
+		}, 220);
+	}
+
+	document.querySelectorAll('.js-to-form').forEach(function (a) {
+		a.addEventListener('click', function (e) {
+			e.preventDefault();
+			openForm(a.getAttribute('data-from'));
+		});
+	});
+	if (sheet) {
+		document.getElementById('sheetClose').addEventListener('click', closeForm);
+		document.getElementById('sheetBg').addEventListener('click', closeForm);
+		document.addEventListener('keydown', function (e) {
+			if (e.key === 'Escape') {
+				closeForm();
+			}
+		});
+	}
+
+	// WhatsApp and call clicks (delegated, so the ones inside the thank-you panel count too).
+	document.addEventListener('click', function (e) {
+		var a = e.target.closest && e.target.closest('a');
+		if (!a) {
+			return;
+		}
+		if (a.classList.contains('wa-done') || (a.getAttribute('href') || '').indexOf('wa.me/') > -1) {
+			track('whatsapp_click');
+		} else if ((a.getAttribute('href') || '').indexOf('tel:') === 0) {
+			track('call_click');
+		}
+	});
+})();

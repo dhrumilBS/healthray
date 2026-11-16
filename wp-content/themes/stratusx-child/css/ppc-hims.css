@@ -3445,3 +3445,366 @@ body.ppc-hims {
 		display: inline-flex;
 	}
 }
+
+/* 33. Meta page (temp-ppc-hims-meta.php): hero kicker and ticks, thank-you panel in the hero card, section CTA rows,
+   problems, staff list, cost, owner tiles. Everything else on that page uses the sections above. */
+.ppc-hims .form-slot {
+	grid-area: form;
+	min-width: 0;
+}
+
+.ppc-hims .kicker {
+	margin: 0;
+	max-width: 44ch;
+	font-size: 17px;
+	font-weight: 700;
+	line-height: 1.4;
+	color: var(--hero-accent);
+}
+
+.ppc-hims .hero .kicker + h1 {
+	margin-top: 12px;
+}
+
+.ppc-hims .ticks {
+	list-style: none;
+	margin: 22px 0 0;
+	padding: 0;
+	display: grid;
+	gap: 10px;
+}
+
+.ppc-hims .ticks li {
+	display: flex;
+	gap: 10px;
+	align-items: flex-start;
+	font-size: 16px;
+	line-height: 1.45;
+	color: #d3def3;
+}
+
+.ppc-hims .ticks li svg {
+	flex: none;
+	margin-top: 3px;
+}
+
+.ppc-hims .ticks b,
+.ppc-hims .co b {
+	color: var(--white);
+}
+
+.ppc-hims .co {
+	margin-top: 16px;
+	font-size: 13px;
+	color: var(--hero-ink);
+}
+
+.ppc-hims .fc-sub b {
+	color: var(--navy);
+}
+
+@media (max-width: 600px) {
+	.ppc-hims .ticks {
+		display: none;
+	}
+
+	.ppc-hims .kicker {
+		font-size: 15px;
+	}
+}
+
+/* Thank-you panel (js/ppc-hims.js section 8 shows it in place of the hero form) */
+.ppc-hims .done .tick {
+	width: 52px;
+	height: 52px;
+	border-radius: 50%;
+	background: var(--green-pale);
+	display: grid;
+	place-items: center;
+	margin-bottom: 16px;
+}
+
+.ppc-hims .done h3 {
+	font-size: 22px;
+	font-weight: 800;
+	color: var(--navy);
+}
+
+.ppc-hims .done p {
+	margin-top: 10px;
+	font-size: 15px;
+}
+
+.ppc-hims .done ol {
+	margin: 16px 0 0;
+	padding-left: 20px;
+	font-size: 15px;
+	display: grid;
+	gap: 6px;
+}
+
+.ppc-hims .done .wa-done {
+	margin-top: 16px;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 15px;
+	font-weight: 800;
+	color: #128c4a;
+	text-decoration: none;
+}
+
+/* Button + one line under a section */
+.ppc-hims .sec-cta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 12px 20px;
+	margin-top: 36px;
+}
+
+.ppc-hims .sec-cta p {
+	max-width: 46ch;
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--ink-2);
+}
+
+.ppc-hims .sec-cta small {
+	display: block;
+	margin-top: 2px;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--muted);
+}
+
+.ppc-hims .sec-cta .or-wa {
+	font-size: 14px;
+	font-weight: 400;
+	color: var(--slate);
+}
+
+.ppc-hims .or-wa a {
+	font-weight: 800;
+	color: #128c4a;
+	text-decoration: none;
+}
+
+@media (max-width: 480px) {
+	.ppc-hims .sec-cta .btn {
+		width: 100%;
+	}
+}
+
+/* Problems: the problem in their words, then what Healthray does */
+.ppc-hims .probs {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 18px;
+}
+
+.ppc-hims .prob {
+	display: grid;
+	gap: 12px;
+	align-content: start;
+	padding: 22px;
+	background: var(--white);
+	border: 1px solid var(--line);
+	border-radius: var(--r-card);
+	box-shadow: var(--shadow-card);
+}
+
+.ppc-hims .prob .no,
+.ppc-hims .prob .yes {
+	display: flex;
+	gap: 10px;
+	align-items: flex-start;
+	margin: 0;
+}
+
+.ppc-hims .prob .no {
+	font-size: 17px;
+	font-weight: 800;
+	line-height: 1.35;
+	color: var(--ink);
+}
+
+.ppc-hims .prob .yes {
+	padding-top: 12px;
+	border-top: 1px solid var(--line);
+	font-size: 15.5px;
+	line-height: 1.55;
+	color: var(--slate);
+}
+
+.ppc-hims .prob .pi {
+	flex: none;
+	width: 24px;
+	height: 24px;
+	margin-top: 1px;
+	border-radius: 50%;
+	display: grid;
+	place-items: center;
+}
+
+.ppc-hims .prob .no .pi {
+	background: #fee4e2;
+}
+
+.ppc-hims .prob .yes .pi {
+	background: var(--green-pale);
+}
+
+@media (max-width: 900px) {
+	.ppc-hims .probs {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 600px) {
+	.ppc-hims .probs {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.ppc-hims .prob {
+		padding: 18px;
+	}
+}
+
+/* "Will my staff use it?": how we make sure they do */
+.ppc-hims .staff-list {
+	list-style: none;
+	margin: 26px 0 0;
+	padding: 0;
+	display: grid;
+	gap: 12px;
+}
+
+.ppc-hims .staff-list li {
+	display: grid;
+	grid-template-columns: 24px minmax(0, 1fr);
+	gap: 12px;
+	font-size: 16px;
+	line-height: 1.5;
+	color: var(--ink-2);
+}
+
+.ppc-hims .staff-list li svg {
+	margin-top: 3px;
+}
+
+.ppc-hims .staff-list b {
+	color: var(--navy);
+}
+
+/* Cost */
+.ppc-hims .cost-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 18px;
+}
+
+.ppc-hims .cost-col {
+	padding: 24px;
+	background: var(--white);
+	border: 1px solid var(--line-blue);
+	border-radius: var(--r-card);
+}
+
+.ppc-hims .cost-col h3 {
+	margin-bottom: 12px;
+	font-size: 14px;
+	font-weight: 800;
+	letter-spacing: .05em;
+	text-transform: uppercase;
+	color: var(--blue);
+}
+
+.ppc-hims .cost-col ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: 10px;
+}
+
+.ppc-hims .cost-col li {
+	display: grid;
+	grid-template-columns: 20px minmax(0, 1fr);
+	gap: 10px;
+	font-size: 15.5px;
+	line-height: 1.5;
+	color: var(--ink-2);
+}
+
+.ppc-hims .cost-col li svg {
+	margin-top: 3px;
+}
+
+@media (max-width: 900px) {
+	.ppc-hims .cost-grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+/* For the owner: numbers on the phone */
+.ppc-hims .owner {
+	display: grid;
+	grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+	gap: 48px;
+	align-items: center;
+}
+
+.ppc-hims .owner .h2 {
+	margin-top: 12px;
+}
+
+.ppc-hims .owner blockquote {
+	margin-top: 22px;
+}
+
+.ppc-hims .owner .big-quote {
+	font-size: 20px;
+}
+
+.ppc-hims .tiles {
+	display: grid;
+	gap: 12px;
+}
+
+.ppc-hims .tile {
+	display: grid;
+	grid-template-columns: 44px minmax(0, 1fr);
+	gap: 14px;
+	align-items: center;
+	padding: 14px 16px;
+	background: var(--white);
+	border: 1px solid var(--line-blue);
+	border-radius: var(--r);
+}
+
+.ppc-hims .tile .ti {
+	width: 44px;
+	height: 44px;
+	border-radius: 10px;
+	background: var(--tint);
+	display: grid;
+	place-items: center;
+}
+
+.ppc-hims .tile b {
+	display: block;
+	font-size: 16px;
+	color: var(--navy);
+}
+
+.ppc-hims .tile span:not(.ti) {
+	font-size: 14px;
+}
+
+@media (max-width: 860px) {
+	.ppc-hims .owner {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 28px;
+	}
+}

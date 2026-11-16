@@ -16,35 +16,35 @@ $hr_year = date('Y');
 
 <style>
 	.hr-home-footer {
-		--hrf-primary: #1b2374;
-		--hrf-tint: #f3f6ff;
-		--hrf-line: #e2e8f0;
-		--hrf-line-strong: #d9e2f2;
-		--hrf-ink-strong: #0f172a;
-		--hrf-ink-soft: #475569;
-		--hrf-ink-faint: #64748b;
-		position: relative; margin-top: 0; padding: 72px 0 32px; border-top: 1px solid var(--hrf-line); background: linear-gradient(180deg, #ffffff 0%, #f9faff 55%, #f4f7ff 100%); color: var(--hrf-ink-soft); font-size: 15px;
+		--hrf-bg: #0D2A40;
+		--hrf-ink: #C8D5E3;
+		--hrf-mute: #8FA5BC;
+		--hrf-white: #ffffff;
+		--hrf-line: rgba(200, 213, 227, .22);
+		--hrf-soft: rgba(255, 255, 255, .06);
+		position: relative; margin-top: 0; padding: 72px 0 32px; background: var(--hrf-bg); color: var(--hrf-ink); font-size: 15px;
 	}
 	.hr-home-footer .wrap { max-width: var(--maxw, 1284px); margin: 0 auto; padding: 0 24px; }
+	.hr-home-footer :focus-visible { outline: 2px solid var(--hrf-white); outline-offset: 2px; }
 	.hr-home-footer .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 44px 40px; margin-bottom: 40px; }
-	.hr-home-footer .foot-grid h3 { margin: 0 0 16px; font-family: var(--font-body); font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--hrf-ink-strong); }
+	.hr-home-footer .foot-grid h3 { margin: 0 0 16px; font-family: var(--font-body); font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--hrf-white); }
 	.hr-home-footer .foot-grid ul { list-style: none; display: grid; gap: 12px; margin: 0; padding: 0; }
-	.hr-home-footer .foot-grid a { color: var(--hrf-ink-soft); font-size: 15px; line-height: 1.5; text-decoration: none; transition: color .18s ease; }
-	.hr-home-footer .foot-grid a:hover { color: var(--hrf-primary); }
-	.hr-home-footer .foot-brand img { height: 70px; width: auto; }
-	.hr-home-footer .foot-brand p { margin-top: 16px; max-width: 300px; font-size: 15px; line-height: 1.7; color: var(--hrf-ink-soft); }
+	.hr-home-footer .foot-grid a { color: var(--hrf-ink); font-size: 15px; line-height: 1.5; text-decoration: none; transition: color .18s ease; }
+	.hr-home-footer .foot-grid a:hover { color: var(--hrf-white); }
+	.hr-home-footer .foot-brand img { height: 70px; width: auto; padding: 8px 12px; box-sizing: border-box; background: var(--hrf-white); border-radius: 10px; }
+	.hr-home-footer .foot-brand p { margin-top: 16px; max-width: 300px; font-size: 15px; line-height: 1.7; color: var(--hrf-ink); }
 	.hr-home-footer .foot-contact-list { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; margin-top: 22px; }
-	.hr-home-footer .foot-contact { display: inline-flex; align-items: center; gap: 10px; padding: 9px 15px; border: 1px solid var(--hrf-line-strong); border-radius: 999px; background: #fff; color: var(--hrf-ink-strong); font-size: 14.5px; font-weight: 700; text-decoration: none; transition: color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
-	.hr-home-footer .foot-contact svg { width: 18px; height: 18px; stroke: var(--hrf-primary); flex: none; }
+	.hr-home-footer .foot-contact { display: inline-flex; align-items: center; gap: 10px; padding: 9px 15px; border: 1px solid var(--hrf-line); border-radius: 999px; background: var(--hrf-soft); color: var(--hrf-white); font-size: 14.5px; font-weight: 700; text-decoration: none; transition: color .18s ease, border-color .18s ease, background .18s ease, transform .18s ease; }
+	.hr-home-footer .foot-contact svg { width: 18px; height: 18px; stroke: var(--hrf-ink); flex: none; }
 	.hr-home-footer .foot-contact .text { margin: 0; color: inherit; font: inherit; }
-	.hr-home-footer .foot-contact:hover { color: var(--hrf-primary); border-color: var(--hrf-primary); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(14, 33, 154, .10); }
-	.hr-home-footer .foot-contact:hover svg { stroke: var(--hrf-primary); }
+	.hr-home-footer .foot-contact:hover { color: var(--hrf-white); border-color: var(--hrf-ink); background: rgba(255, 255, 255, .10); transform: translateY(-1px); }
+	.hr-home-footer .foot-contact:hover svg { stroke: var(--hrf-white); }
 	.hr-home-footer .soc-widget { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
-	.hr-home-footer .soc-widget a { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; padding: 0; border: 1px solid var(--hrf-line-strong); border-radius: 10px; background: var(--hrf-tint); color: var(--hrf-primary); font-size: 18px; line-height: 1; text-align: center; transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease; }
-	.hr-home-footer .soc-widget a:hover { background: var(--hrf-primary); border-color: var(--hrf-primary); color: #fff; transform: translateY(-2px); box-shadow: 0 10px 22px rgba(14, 33, 154, .22); }
+	.hr-home-footer .soc-widget a { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; padding: 0; border: 1px solid var(--hrf-line); border-radius: 10px; background: var(--hrf-soft); color: var(--hrf-ink); font-size: 18px; line-height: 1; text-align: center; transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease; }
+	.hr-home-footer .soc-widget a:hover { background: var(--hrf-white); border-color: var(--hrf-white); color: var(--hrf-bg); transform: translateY(-2px); }
 	.hr-home-footer .soc-widget a svg { color: inherit; fill: currentColor; padding: 0 !important; width: 1em; height: 1em; font-size: 1em; }
-	.hr-home-footer .foot-bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 24px; border-top: 1px solid var(--hrf-line); color: var(--hrf-ink-faint); font-size: 13.5px; }
-	.hr-home-footer .foot-bottom a { color: var(--hrf-primary); font-weight: 600; text-decoration: none; }
+	.hr-home-footer .foot-bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 24px; border-top: 1px solid var(--hrf-line); color: var(--hrf-mute); font-size: 13.5px; }
+	.hr-home-footer .foot-bottom a { color: var(--hrf-white); font-weight: 600; text-decoration: none; }
 	.hr-home-footer .foot-bottom a:hover { text-decoration: underline; text-underline-offset: 3px; }
 	@media (max-width: 991px) {
 		.hr-home-footer { padding: 64px 0 28px; }

@@ -34,7 +34,7 @@
 .hr-blog-archive__search .search-form .search-group .btn-submit:hover { background-color: var(--hr-blue); }
 .blog-hero.hero-section .categories-list { margin-top: 30px; }
 .blog-hero.hero-section .categories-list>ul { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin: 0; padding: 0; list-style: none; }
-.blog-hero.hero-section .categories-list>ul>li.cat-item>.cat-link { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; padding: 7px 16px; border: 1px solid var(--hr-line-strong); border-radius: 999px; background-color: #fff; color: var(--hr-navy); font-size: 13px; font-weight: 700; letter-spacing: .04em; line-height: 1.4; text-transform: uppercase; text-decoration: none; overflow-wrap: anywhere; box-shadow: 0 2px 8px rgba(var(--hr-ink-strong-rgb), .05); transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .18s ease; }
+.blog-hero.hero-section .categories-list>ul>li.cat-item>.cat-link { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; padding: 7px 16px; border: 1px solid var(--hr-line-strong); border-radius: 999px; background-color: #fff; color: var(--hr-navy); font-size: 13px; font-weight: 700; letter-spacing: 0; line-height: 1.4; text-transform: capitalize; text-decoration: none; overflow-wrap: anywhere; box-shadow: 0 2px 8px rgba(var(--hr-ink-strong-rgb), .05); transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .18s ease; }
 .blog-hero.hero-section .categories-list>ul>li.cat-item>.cat-link:hover,
 .blog-hero.hero-section .categories-list>ul>li.cat-item.active>.cat-link { background-color: var(--hr-navy); border-color: var(--hr-navy); color: #fff; transform: translateY(-1px); }
 .blog-hero.hero-section .categories-list>ul>li.more-category>.blog-category-more-link[aria-expanded="true"],
@@ -43,6 +43,16 @@
 .blog-hero.hero-section .categories-list>ul>li.more-category>.blog-category-more-link[aria-expanded="true"] .blog-category-more-count,
 .blog-hero.hero-section .categories-list>ul>li.more-category.has-active>.blog-category-more-link .blog-category-more-count { background-color: rgba(255, 255, 255, .22); }
 .blog-hero.hero-section .more-category .blog-category-more-list { box-shadow: 0 18px 38px rgba(var(--hr-ink-strong-rgb), .14); }
+/* Desktop: keep every category chip on a single row. */
+@media screen and (min-width: 1200px) {
+	.blog-hero.hero-section .categories-list>ul { flex-wrap: nowrap; }
+	.blog-hero.hero-section .categories-list>ul>li.cat-item { flex: 0 0 auto; }
+	.blog-hero.hero-section .categories-list>ul>li.cat-item>.cat-link { white-space: nowrap; overflow-wrap: normal; }
+}
+@media screen and (min-width: 1200px) and (max-width: 1359px) {
+	.blog-hero.hero-section .categories-list>ul { gap: 6px; }
+	.blog-hero.hero-section .categories-list>ul>li.cat-item>.cat-link { padding: 6px 11px; font-size: 12px; }
+}
 @media screen and (max-width: 767px) {
 	.blog-hero.hero-section { padding: 48px 0 36px; }
 	.blog-hero.hero-section .heading h1 { line-height: 1.22; }

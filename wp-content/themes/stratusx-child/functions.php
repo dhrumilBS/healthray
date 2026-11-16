@@ -42,7 +42,7 @@ require_once get_stylesheet_directory() . '/lib/acf-speciality.php';
 require_once get_stylesheet_directory() . '/lib/speciality-migrate.php';
 
 if (!defined('HR_LANDING_PAGE_IDS')) {
-	define('HR_LANDING_PAGE_IDS', [167, 32399, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468]);
+	define('HR_LANDING_PAGE_IDS', [167, 32399, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468, 82361, 82363]);
 }
 
 
@@ -147,6 +147,16 @@ add_action('wp_enqueue_scripts', function () {
 		wp_enqueue_script('pharmacy-software', get_stylesheet_directory_uri() . '/js/pharmacy-software.js', array(), hr_asset_version('/js/pharmacy-software.js'), true);
 	}
 
+	if (is_page(82361)) {
+		wp_enqueue_script('ipd-software', get_stylesheet_directory_uri() . '/js/ipd-software.js', array(), hr_asset_version('/js/ipd-software.js'), true);
+	}
+	if (is_page(82363)) {
+		wp_enqueue_script('opd-software', get_stylesheet_directory_uri() . '/js/opd-software.js', array(), hr_asset_version('/js/opd-software.js'), true);
+	}
+	if (is_page(82372)) {
+		wp_enqueue_script('modules-hub', get_stylesheet_directory_uri() . '/js/modules-hub.js', array(), hr_asset_version('/js/modules-hub.js'), true);
+	}
+
 	wp_enqueue_script('child-script', get_stylesheet_directory_uri() . '/js/script.js', ['jquery'], hr_asset_version('/js/script.js'), true);
 	wp_localize_script('child-script', 'siteData', [
 		'ajaxUrl' => admin_url('admin-ajax.php'),
@@ -192,7 +202,7 @@ function remove_from_homepage()
 	);
 
 	// Remove only on the homepage.
-	if (is_page(79691) || is_page(79713) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81834) || is_page(167) || is_single() || is_page(28110) || hr_is_login_portal_page()) {
+	if (is_page(79691) || is_page(79713) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81834) || is_page(167) || is_single() || is_page(28110) || is_page(82361) || is_page(82363) || hr_is_modules_hub() || hr_is_login_portal_page()) {
 		$styles = array_merge($styles, array('abha-card', 'common-theme', 'owl.carousal', 'my-elements'));
 		$scripts = array_merge($scripts, array('abha-card', 'common-theme', 'owl.carousal', 'toggle-tabs', 'my-element'));
 	}
@@ -260,7 +270,7 @@ add_filter('wpseo_canonical', function ($canonical) {
 });
 
 add_filter('wpseo_opengraph_type', function ($type) {
-	if (is_page(HR_LANDING_PAGE_IDS) || is_page(43917) || is_page(81834) || hr_is_login_portal_page()) {
+	if (is_page(HR_LANDING_PAGE_IDS) || is_page(43917) || is_page(81834) || hr_is_login_portal_page() || hr_is_modules_hub()) {
 		return 'website';
 	}
 	return $type;
@@ -297,6 +307,10 @@ add_filter('body_class', function ($classes) {
 		81124 => 'hims-landing',
 		81468 => 'login-landing',
 		82202 => 'hr-partner-landing',
+		59820 => 'hr-partner-landing',
+		82361 => 'ipd-landing',
+		82363 => 'opd-landing',
+
 	];
 	foreach ($landing_pages as $page_id => $class) {
 		if (is_page($page_id)) {
@@ -306,6 +320,11 @@ add_filter('body_class', function ($classes) {
 			}
 			break;
 		}
+	}
+	// Modules hub: matched by template, so it works whatever its page ID is.
+	if (hr_is_modules_hub()) {
+		$classes[] = 'landing-page';
+		$classes[] = 'modules-landing';
 	}
 	if (is_single()) {
 		$classes[] = 'landing-page';
@@ -377,8 +396,8 @@ function hr_get_inline_css($path)
 // =============================================================================
 
 add_action('wp_head', function () {
-	// Speciality pages skip this file: css/speciality-landing.css carries the container and section rules they share.
-	if (is_page(79713) || is_page(79691) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81468) || is_page(81773) || is_page(81775)) {
+		// Speciality pages skip this file: css/speciality-landing.css carries the container and section rules they share.
+        if (is_page(79713) || is_page(79691) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81468) || is_page(81773) || is_page(81775)) {
 		$common_css_path = get_stylesheet_directory() . '/css/common-landing.css';
 		if (file_exists($common_css_path)) {
 			echo '<style id="common-landing-css-inline">' . file_get_contents($common_css_path) . '</style>' . "\n";
@@ -725,7 +744,369 @@ add_action('wp_head', function () {
 		);
 		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 	}
+
+	// IPD Page
+	if (is_page(82361)) {
+		$ipd_css_path = get_stylesheet_directory() . '/css/ipd-software.css';
+		if (file_exists($ipd_css_path)) {
+			echo '<style id="ipd-software-css-inline">' . file_get_contents($ipd_css_path) . '</style>' . "\n";
+		}
+
+		$page_url = get_permalink(82361);
+		$schema = array(
+			'@context' => 'https://schema.org',
+			'@graph'   => array(
+				array(
+					'@type'               => 'SoftwareApplication',
+					'@id'                 => $page_url . '#software',
+					'name'                => 'Healthray IPD Management Software',
+					'operatingSystem'     => 'Web browser',
+					'applicationCategory' => 'BusinessApplication',
+					'description'         => 'IPD management software for hospitals and nursing homes in India: bed board and admission, nurse\'s and doctor\'s notes, orders from the ward, IPD billing with deposits, TPA and cashless billing, discharge summary and reports.',
+					'url'                 => $page_url,
+					'publisher'           => array('@id' => home_url('/') . '#organization'),
+				),
+			),
+		);
+		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+	}
+
+	// OPD Page
+	if (is_page(82363)) {
+		$opd_css_path = get_stylesheet_directory() . '/css/opd-software.css';
+		if (file_exists($opd_css_path)) {
+			echo '<style id="opd-software-css-inline">' . file_get_contents($opd_css_path) . '</style>' . "\n";
+		}
+
+		$page_url = get_permalink(82363);
+		$schema = array(
+			'@context' => 'https://schema.org',
+			'@graph'   => array(
+				array(
+					'@type'               => 'SoftwareApplication',
+					'@id'                 => $page_url . '#software',
+					'name'                => 'Healthray OPD Management Software',
+					'operatingSystem'     => 'Web browser',
+					'applicationCategory' => 'BusinessApplication',
+					'description'         => 'OPD management software for clinics and hospitals in India: registration and token, waiting-area TV, online appointments, the doctor\'s prescription screen, OPD billing and day-end reports.',
+					'url'                 => $page_url,
+					'publisher'           => array('@id' => home_url('/') . '#organization'),
+				),
+			),
+		);
+		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+	}
+
+	// Modules hub: its CSS, and a list of the published module pages for search engines
+	if (hr_is_modules_hub()) {
+		$modules_css_path = get_stylesheet_directory() . '/css/modules-hub.css';
+		if (file_exists($modules_css_path)) {
+			echo '<style id="modules-hub-css-inline">' . file_get_contents($modules_css_path) . '</style>' . "\n";
+		}
+
+		$page_url = get_permalink();
+		$items    = array();
+		foreach (healthray_module_cards(get_queried_object_id()) as $n => $card) {
+			$items[] = array('@type' => 'ListItem', 'position' => $n + 1, 'name' => $card['title'], 'url' => $card['url']);
+		}
+		$schema = array(
+			'@context' => 'https://schema.org',
+			'@graph'   => array(
+				array(
+					'@type'      => 'CollectionPage',
+					'@id'        => $page_url . '#modules',
+					'url'        => $page_url,
+					'name'       => 'Healthray Modules for Hospitals and Clinics',
+					'about'      => array('@id' => home_url('/') . '#organization'),
+					'mainEntity' => array('@type' => 'ItemList', 'itemListElement' => $items),
+				),
+			),
+		);
+		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+	}
 }, 50);
+
+/**
+ * Is this the Modules hub page?
+ * Page 82372, or any page whose template is temp-modules-landing.php. Matches the template by its FILE NAME, wherever it sits in the theme (theme root or a subfolder such as
+ * templates/), and whatever the page ID is. is_page_template('temp-modules-landing.php') only matches a template
+ * in the theme root, which is why the hub's CSS, script and body class could be skipped.
+ */
+function hr_is_modules_hub()
+{
+	if (!is_page()) {
+		return false;
+	}
+	// The Modules page on the live site. Checked first, so its CSS, body class and schema never depend on the template check alone.
+	if (is_page(82372)) {
+		return true;
+	}
+	$template = (string) get_page_template_slug(get_queried_object_id());
+	return '' !== $template && 'temp-modules-landing.php' === basename($template);
+}
+
+function healthray_ipd_faq_items()
+{
+	return array(
+		array(
+			'q' => 'What is IPD management software?',
+			'a' => 'IPD means in-patient department: the patients who are admitted and stay in your hospital. IPD management software is one software that reception, nurses, doctors and the billing counter all use for each admitted patient. It keeps the bed, the daily notes, the charges, the deposit and the discharge papers in one place.',
+		),
+		array(
+			'q' => 'What is the difference between OPD and IPD software?',
+			'a' => 'OPD software is for patients who see the doctor and go home the same day: token, prescription and one bill. IPD software is for patients who are admitted: bed, nursing care, a bill that runs for many days, deposits, TPA and discharge. In Healthray both are parts of the same software, so an OPD patient is admitted without typing the details again.',
+			'more' => 'See the <a href="' . esc_url(get_permalink(82363)) . '">OPD software</a>.',
+		),
+		array(
+			'q' => 'What is the price?',
+			'a' => 'There is no one fixed price. It depends on how many beds you have, which departments you want and whether you want it on the internet (cloud) or on your own server. A 40-bed hospital pays less than a 300-bed hospital. Within 24 hours of the demo you get the price for your hospital in writing. Moving your old data and training your staff are included.',
+		),
+		array(
+			'q' => 'How long does it take to start?',
+			'a' => 'Even a 200-bed hospital usually starts in one to three weeks. Rainbow Hospital in Vapi, with 100 beds, started in 14 working days.',
+		),
+		array(
+			'q' => 'Will billing stop on the day we change over?',
+			'a' => 'No. You change one department at a time: OPD and registration first, then IPD billing, pharmacy and lab. If something goes wrong, it stays small and gets fixed before the next department starts.',
+		),
+		array(
+			'q' => 'Our nurses are not good with computers. Can they use it?',
+			'a' => 'Yes. Each team learns only its own screens, at your hospital. A nurse\'s work is mostly ticking: tick the dose that was given, fill the BP and sugar chart, copy the last reading when nothing has changed.',
+		),
+		array(
+			'q' => 'Does it handle TPA, cashless and Ayushman (PMJAY) patients?',
+			'a' => 'Yes. The TPA, insurance company and policy number are noted at admission. All cashless patients come in one list with claim number and bill status, and the bill prints in the cashless format. Ayushman (PMJAY) patients are billed in the same software.',
+		),
+		array(
+			'q' => 'Can we make package bills?',
+			'a' => 'Yes. Make your packages once, then give a package to the patient at admission or later. The package prints on the bill, and a report shows all package patients.',
+		),
+		array(
+			'q' => 'Who can give a discount or change a bill?',
+			'a' => 'Each staff member has their own login and sees only their own screens. Every discount comes in one report, and another report shows the billing work done by each staff member.',
+		),
+		array(
+			'q' => 'What if the internet stops?',
+			'a' => 'Connect a mobile hotspot and keep working. Your data stays safe. A hospital can also run Healthray on its own server inside the hospital.',
+		),
+		array(
+			'q' => 'Is our data safe? If we stop, do we get it back?',
+			'a' => 'Healthray is ISO 27001 certified for data security. Each staff member has their own login. Your hospital owns its data, and you can take your records out at any time.',
+		),
+		array(
+			'q' => 'Do we need to buy anything? Does it work with our lab and pharmacy?',
+			'a' => 'Nothing special. It runs on the computers you already have, in the internet browser. Healthray also has lab, pharmacy, OT and OPD parts, and they all join the same patient record.',
+			'more' => 'Together they make the full <a href="https://healthray.com/hospital-information-management-system/">hospital software</a>.',
+		),
+		array(
+			'q' => 'Is help available at night?',
+			'a' => 'Yes. Help is there 24 hours, all 7 days, on call, chat and screen share, in English, Hindi or Gujarati.',
+		),
+	);
+}
+
+function healthray_opd_faq_items()
+{
+	return array(
+		array(
+			'q' => 'What is the price of Healthray OPD software?',
+			'a' => 'It depends on how many doctors, counters and branches you have, and whether you also want lab, pharmacy or IPD. After the demo we send you the price in writing. Moving your old data and training your staff are free. WhatsApp and SMS messages are paid separately, bought in advance, for example 5,000 SMS for ₹1,500.',
+		),
+		array(
+			'q' => 'How long does it take to start?',
+			'a' => 'A clinic starts in a few days. Even a 200-bed hospital usually starts in one to three weeks. OPD and registration go live first, so the counter never stops.',
+		),
+		array(
+			'q' => 'My receptionist is not good with computers. Can they use it?',
+			'a' => 'Yes. If they can use WhatsApp, they can learn Healthray. Training is free, and each person learns only their own work: reception learns registration, token and appointments, the doctor learns the prescription screen, the billing person learns bills.',
+		),
+		array(
+			'q' => 'Will my doctors have to type?',
+			'a' => 'Very little. The doctor picks from their own templates, repeats the last prescription in one click and searches medicines by name. AI Scribe can write the notes from the consultation, and the doctor checks and saves. A consultation takes no longer than writing on paper.',
+		),
+		array(
+			'q' => 'Can you move our data from our current software?',
+			'a' => 'Yes, free. Tell us what you use today, a register, Excel or another software. Our team moves your patient data and trains your staff, so you can stop the old software.',
+		),
+		array(
+			'q' => 'What if the internet stops?',
+			'a' => 'Connect a mobile hotspot and keep working. Your data stays safe on the cloud. A hospital can also run Healthray on its own server inside the hospital.',
+		),
+		array(
+			'q' => 'Is our patients\' data safe? Who can see it?',
+			'a' => 'Healthray is ISO 27001 certified for data security, NABH certified, ABDM compliant and NHA approved. Each staff member has their own login and sees only their own screens. Every change in a patient\'s file is saved with the staff name and time.',
+		),
+		array(
+			'q' => 'If we stop using Healthray, do we get our data back?',
+			'a' => 'Yes. Your patient data is yours. Ask us and we give it to you.',
+		),
+		array(
+			'q' => 'What support do we get after we start?',
+			'a' => 'Call, chat and screen share, 24×7, in English, Hindi or Gujarati, from a team that knows OPD work. Doctors on our Reviews page say support picks up during OPD hours.',
+		),
+		array(
+			'q' => 'What do we need to buy? Does it work on mobile?',
+			'a' => 'Nothing special. It runs in the browser on any computer, tablet or mobile. For the waiting-area TV, any TV with internet. No server needed, unless a hospital wants one.',
+		),
+		array(
+			'q' => 'Can patients book an OPD appointment online?',
+			'a' => 'Yes. From your link on Google, Instagram, WhatsApp or your website. They get a reminder before the visit. Online bookings and walk-in patients come on the same list at reception.',
+		),
+		array(
+			'q' => 'Can the prescription be printed in Hindi or Gujarati?',
+			'a' => 'Yes. Medicine instructions print in Hindi, Gujarati, Marathi, Tamil, Telugu, Kannada, Malayalam, Bengali, Punjabi and Odia, and go to the patient\'s WhatsApp.',
+		),
+		array(
+			'q' => 'Does it make ABHA IDs?',
+			'a' => 'Yes. ABHA IDs are made or checked at registration, as part of the normal OPD work.',
+		),
+		array(
+			'q' => 'Does it connect to lab, pharmacy and IPD?',
+			'a' => 'Yes. The OPD is one part of Healthray\'s hospital software. A clinic can use the OPD part alone. A hospital adds IPD, lab, pharmacy and TPA in the same software when it needs them.',
+			'html' => 'Yes. The OPD is one part of Healthray\'s <a href="https://healthray.com/hospital-information-management-system/">hospital software</a>. A clinic can use the OPD part alone. A hospital adds IPD, lab, pharmacy and TPA in the same software when it needs them.',
+		),
+		array(
+			'q' => 'We have more than one branch. Will it work?',
+			'a' => 'Yes. All branches run in one software. Each doctor has their own login and templates, and the owner sees every branch\'s patients and collection in one report.',
+		),
+		array(
+			'q' => 'What happens in the demo?',
+			'a' => 'A short video call. We register a patient, give a token, show the waiting TV, write a prescription and make a bill, set up the way your OPD runs. No charge, no need to decide on the call.',
+		),
+	);
+}
+
+/**
+ * Modules hub (template temp-modules-landing.php): the cards it shows.
+ *
+ * healthray_modules_registry(): the modules with hand-written card text, in the order they show.
+ *   Add a line here when a new module page has its own card text. A module shows only when its page is published.
+ * healthray_module_cards():     the registry modules whose pages are published, then every other published child
+ *   page of the hub, automatically (title, Yoast meta description or excerpt, featured image). Drafts never show.
+ */
+function healthray_modules_registry()
+{
+	$up = 'https://healthray.com/wp-content/uploads/2026/11/';
+	return array(
+		array(
+			'id'      => 82363,
+			'key'     => 'opd',
+			'eyebrow' => 'OPD software for clinics and hospitals',
+			'title'   => 'OPD Management Software',
+			'summary' => 'Token, appointments, the doctor\'s prescription, billing and reports in one software. Less crowd at reception, old records in one click, and the day\'s collection on your WhatsApp at night.',
+			'points'  => array(
+				'Patients get a token and see their turn on the TV',
+				'Old reports and today\'s prescription on one screen',
+				'Patients book online and get reminders on WhatsApp',
+			),
+			'image'   => $up . 'token-tv.webp',
+			'cutout'  => true,
+			'cta'     => 'See OPD management software',
+		),
+		array(
+			'id'      => 82361,
+			'key'     => 'ipd',
+			'eyebrow' => 'For your admitted patients (IPD)',
+			'title'   => 'IPD Management Software',
+			'summary' => 'IPD means your admitted patients. This one software handles all their work, from giving the bed to the final bill: beds, nurse\'s notes, daily charges, deposits, TPA and discharge.',
+			'points'  => array(
+				'See every free bed without calling the ward',
+				'The bill is made every day, not on the last day',
+				'Send the patient home without a long wait',
+			),
+			'image'   => $up . 'beds-wash.webp',
+			'cutout'  => false,
+			'cta'     => 'See IPD management software',
+		),
+	);
+}
+
+function healthray_module_cards($hub_id = 0)
+{
+	static $cache = array();
+	$hub_id = (int) $hub_id;
+	if (isset($cache[$hub_id])) {
+		return $cache[$hub_id];
+	}
+
+	$cards = array();
+	$seen  = array($hub_id => true);
+
+	foreach (healthray_modules_registry() as $module) {
+		if ('publish' !== get_post_status($module['id'])) {
+			continue;
+		}
+		$module['url']        = get_permalink($module['id']);
+		$cards[]              = $module;
+		$seen[$module['id']] = true;
+	}
+
+	if ($hub_id) {
+		$children = get_pages(array(
+			'parent'      => $hub_id,
+			'post_status' => 'publish',
+			'sort_column' => 'menu_order,post_title',
+		));
+		foreach ((array) $children as $child) {
+			if (isset($seen[$child->ID])) {
+				continue;
+			}
+			$summary = has_excerpt($child->ID) ? get_the_excerpt($child->ID) : (string) get_post_meta($child->ID, '_yoast_wpseo_metadesc', true);
+			$title   = get_the_title($child->ID);
+			$cards[] = array(
+				'id'      => $child->ID,
+				'key'     => $child->post_name,
+				'eyebrow' => '',
+				'title'   => $title,
+				'summary' => wp_strip_all_tags($summary),
+				'points'  => array(),
+				'image'   => (string) get_the_post_thumbnail_url($child->ID, 'large'),
+				'cutout'  => false,
+				'cta'     => 'See ' . $title,
+				'url'     => get_permalink($child->ID),
+			);
+			$seen[$child->ID] = true;
+		}
+	}
+
+	return $cache[$hub_id] = $cards;
+}
+
+function healthray_modules_faq_items()
+{
+	return array(
+		array(
+			'q' => 'What is a Healthray module?',
+			'a' => 'A module is one part of Healthray\'s hospital software, made for one kind of work, like the OPD or the wards (IPD). All modules work on the same patient file, so a patient\'s visits, reports and bills stay together.',
+		),
+		array(
+			'q' => 'Can we start with just one module?',
+			'a' => 'Yes. A clinic can use the OPD part alone. A hospital adds IPD, lab, pharmacy and TPA in the same software when it needs them.',
+		),
+		array(
+			'q' => 'What is the price?',
+			'a' => 'There is no one fixed price. It depends on which modules you want, how many doctors or beds you have, and whether you want it on the internet (cloud) or on your own server. After the demo we send you the price in writing. Moving your old data and training your staff are included.',
+		),
+		array(
+			'q' => 'How long does it take to start?',
+			'a' => 'A clinic starts in a few days. Even a 200-bed hospital usually starts in one to three weeks. OPD and registration go live first, so the counter never stops.',
+		),
+	);
+}
+
+// FAQ schema for the IPD, OPD and Modules pages, through the hr_head_faqs filter in healthray_head().
+add_filter('hr_head_faqs', function ($faqs) {
+	if (is_page(82361)) {
+		return healthray_ipd_faq_items();
+	}
+	if (is_page(82363)) {
+		return healthray_opd_faq_items();
+	}
+	if (hr_is_modules_hub()) {
+		return healthray_modules_faq_items();
+	}
+	return $faqs;
+});
 
 // =============================================================================
 // 7. FAQ / ORGANIZATION SCHEMA (wp_head, priority 5)

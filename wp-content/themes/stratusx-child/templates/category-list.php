@@ -1,6 +1,18 @@
 <?php
-$hr_show_cat    = 6;
-$hr_blog_cat_id = 34; 
+$hr_show_cat    = 7; // All 7 blog categories in one row; "More" only appears if more are added.
+$hr_blog_cat_id = 34;
+
+// Display order of the category chips. Rearrange these lines to change the order.
+// Names must match the category name in WP admin; categories not listed here go after, oldest first (newest last).
+$hr_cat_order = array(
+	'Selection & Implementation',
+	'Hospital Operations',
+	'Clinical Records & Diagnostics',
+	'Pharmacy & Inventory',
+	'Billing & Claims',
+	'Finance & Reporting',
+	'Compliance & Security',
+);
 $hr_queried   = get_queried_object();
 $hr_active_id = (is_object($hr_queried) && isset($hr_queried->term_taxonomy_id))
 	? (int) $hr_queried->term_taxonomy_id
@@ -23,7 +35,22 @@ if (is_author()) {
 
 	$hr_chips = array_values($hr_author_cats);
 } else {
-	foreach (get_categories(array('orderby' => 'count', 'order' => 'DESC')) as $hr_term) {
+	$hr_all_cats = get_categories(array('orderby' => 'count', 'order' => 'DESC'));
+	$hr_rank     = array_flip(array_map('strtolower', $hr_cat_order));
+	$hr_rank_of  = static function ($term) use ($hr_rank) {
+		$key = strtolower(html_entity_decode($term->name, ENT_QUOTES, 'UTF-8'));
+		return isset($hr_rank[$key]) ? $hr_rank[$key] : PHP_INT_MAX;
+	};
+	usort($hr_all_cats, static function ($a, $b) use ($hr_rank_of) {
+		$ra = $hr_rank_of($a);
+		$rb = $hr_rank_of($b);
+		if ($ra !== $rb) {
+			return ($ra < $rb) ? -1 : 1;
+		}
+		return (int) $a->term_id - (int) $b->term_id; // unlisted: newest category goes last
+	});
+
+	foreach ($hr_all_cats as $hr_term) {
 		if ((int) $hr_term->term_id === $hr_blog_cat_id) {
 			continue;
 		}
