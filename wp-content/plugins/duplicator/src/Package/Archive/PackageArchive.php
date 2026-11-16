@@ -825,6 +825,10 @@ class PackageArchive
         //FILTER: CORE ITMES
         //Filters Duplicator free Backups & All pro local directories
         $storages = AbstractStorageEntity::getAll();
+        if ($storages === false) {
+            DupLog::infoTrace('Unable to load storages, local storage folders are not filtered');
+            $storages = [];
+        }
 
         foreach ($storages as $storage) {
             if ($storage->getSType() !== LocalStorage::getSType()) {

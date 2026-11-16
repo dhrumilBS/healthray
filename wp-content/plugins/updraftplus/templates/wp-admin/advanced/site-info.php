@@ -6,11 +6,11 @@
 	<table>
 	<?php
 	if (isset($site_info_data) && is_array($site_info_data)) {
-		foreach ($site_info_data as $info) {
-			if (isset($info['is_html']) && $info['is_html']) {
-				$updraftplus_admin->settings_debugrow($info['label'], $info['value']);
+		foreach ($site_info_data as $updraft_info) {
+			if (isset($updraft_info['is_html']) && $updraft_info['is_html']) {
+				$updraftplus_admin->settings_debugrow($updraft_info['label'], $updraft_info['value']);
 			} else {
-				$updraftplus_admin->settings_debugrow($info['label'], wp_kses($info['value'], $updraftplus_admin->kses_allow_tags()));
+				$updraftplus_admin->settings_debugrow($updraft_info['label'], wp_kses($updraft_info['value'], $updraftplus_admin->kses_allow_tags()));
 			}
 		}
 	}

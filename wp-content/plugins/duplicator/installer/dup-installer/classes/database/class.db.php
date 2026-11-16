@@ -124,7 +124,7 @@ class DUPX_DB
 
         return [
             $host,
-            $port,
+            $port === null ? null : (int) $port,
             $socket,
             $is_ipv6,
         ];

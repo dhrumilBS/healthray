@@ -525,13 +525,7 @@ class DupArchive
 
         $password = '';
         for ($i = 0; $i < $length; $i++) {
-            if (function_exists('random_int')) {
-                // phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.random_intFound
-                $cIndex = random_int(0, $maxRand);
-            } else {
-                mt_srand(time());
-                $cIndex = mt_rand(0, $maxRand);
-            }
+            $cIndex    = random_int(0, $maxRand);
             $password .= substr(self::PWD_SALT_CHARS, $cIndex, 1);
         }
 

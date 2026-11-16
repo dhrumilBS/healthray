@@ -21,6 +21,7 @@ final class MockPages
     public static function isCurrentMockUpsellPage(): bool
     {
         return ControllersManager::isCurrentPage(MockImportPageController::PAGE_SLUG)
+            || ControllersManager::isCurrentPage(MockIncrementalPageController::PAGE_SLUG)
             || ControllersManager::isCurrentPage(MockSchedulePageController::PAGE_SLUG)
             || ControllersManager::isCurrentPage(MockStagingPageController::PAGE_SLUG)
             || ControllersManager::isCurrentPage(ControllersManager::TOOLS_SUBMENU_SLUG, LiteToolsController::L2_SLUG_RECOVERY)

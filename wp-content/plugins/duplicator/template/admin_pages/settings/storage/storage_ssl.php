@@ -85,7 +85,8 @@ $global = GlobalEntity::getInstance();
     <p class="description">
         <?php
         esc_html_e(
-            "To use IPv4 only, which can help if your host has a broken IPv6 setup (currently only supported by Google Drive)",
+            "To use IPv4 only, which can help if your host has a broken IPv6 setup
+            (supported by Duplicator Cloud, Amazon S3 and S3-compatible storages, Dropbox and Google Drive)",
             'duplicator'
         );
         ?>

@@ -24,6 +24,7 @@ use Duplicator\Models\DynamicGlobalEntity;
 use Duplicator\Models\Storages\AbstractStorageEntity;
 use Duplicator\Models\Storages\StoragesUtil;
 use Duplicator\Models\FixesEntity;
+use Duplicator\Models\FullBackupTemplate;
 use Duplicator\Models\TemplateEntity;
 use Duplicator\Package\AbstractPackage;
 use Duplicator\Package\AutoTune\AutoTuneManager;
@@ -508,6 +509,7 @@ class Bootstrap
         FixesEntity::registerType();
         AutoTuneSessionEntity::registerType();
         TemplateEntity::registerType();
+        FullBackupTemplate::registerType();
         EmailSummary::registerType();
         AbstractStorageEntity::registerType();
         DupPackage::registerType();

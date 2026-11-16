@@ -21,8 +21,8 @@ if (!defined('ABSPATH')) die('No direct access allowed');
 			</li>
 		</ol>
 	</div>
-	<?php $panel = 'file-dir';?>
-	<div class="updraft-exclude-panel updraft-hidden" data-panel="<?php echo esc_attr($panel);?>" style="display:none;">
+	<?php $updraftplus_panel = 'file-dir';?>
+	<div class="updraft-exclude-panel updraft-hidden" data-panel="<?php echo esc_attr($updraftplus_panel);?>" style="display:none;">
 		<?php
 		$updraftplus_admin->include_template('wp-admin/settings/exclude-settings-modal/exclude-panel-heading.php', false, array('title' => __('File/directory', 'updraftplus')));
 		?>
@@ -38,37 +38,37 @@ if (!defined('ABSPATH')) die('No direct access allowed');
 				<div id="updraft_exclude_files_folders_jstree" class="updraft_jstree"></div>
 			</div>
 			<?php
-			$updraftplus_admin->include_template('wp-admin/settings/exclude-settings-modal/exclude-panel-submit.php', false, array('panel' => $panel));
+			$updraftplus_admin->include_template('wp-admin/settings/exclude-settings-modal/exclude-panel-submit.php', false, array('panel' => $updraftplus_panel));
 			?>
 		</div>
 	</div>
 	
-	<?php $panel = 'extension';?>
-	<div class="updraft-exclude-panel updraft-hidden" data-panel="<?php echo esc_attr($panel);?>" style="display:none;">
+	<?php $updraftplus_panel = 'extension';?>
+	<div class="updraft-exclude-panel updraft-hidden" data-panel="<?php echo esc_attr($updraftplus_panel);?>" style="display:none;">
 		<?php
 		$updraftplus_admin->include_template('wp-admin/settings/exclude-settings-modal/exclude-panel-heading.php', false, array('title' => __('All files with this extension', 'updraftplus')));
 		?>
 		<label for="updraft_exclude_extension_field"><?php esc_html_e('All files with this extension', 'updraftplus');?>: </label>
 		<input type="text" name="updraft_exclude_extension_field" id="updraft_exclude_extension_field" size="25" placeholder="<?php esc_html_e('Type an extension like zip', 'updraftplus');?>" />
 		<?php
-		$updraftplus_admin->include_template('wp-admin/settings/exclude-settings-modal/exclude-panel-submit.php', false, array('panel' => $panel));
+		$updraftplus_admin->include_template('wp-admin/settings/exclude-settings-modal/exclude-panel-submit.php', false, array('panel' => $updraftplus_panel));
 		?>
 	</div>
 	
-	<?php $panel = 'begin-with';?>
-	<div class="updraft-exclude-panel updraft-hidden" data-panel="<?php echo esc_attr($panel);?>" style="display:none;">
+	<?php $updraftplus_panel = 'begin-with';?>
+	<div class="updraft-exclude-panel updraft-hidden" data-panel="<?php echo esc_attr($updraftplus_panel);?>" style="display:none;">
 		<?php
 		$updraftplus_admin->include_template('wp-admin/settings/exclude-settings-modal/exclude-panel-heading.php', false, array('title' => __('All files beginning with these characters', 'updraftplus')));
 		?>
 		<label for="updraft_exclude_prefix_field"><?php esc_html_e('All files beginning with these characters', 'updraftplus');?>: </label>
 		<input type="text" name="updraft_exclude_prefix_field" id="updraft_exclude_prefix_field" size="25" placeholder="<?php esc_html_e('Type a file prefix', 'updraftplus');?>" />
 		<?php
-		$updraftplus_admin->include_template('wp-admin/settings/exclude-settings-modal/exclude-panel-submit.php', false, array('panel' => $panel));
+		$updraftplus_admin->include_template('wp-admin/settings/exclude-settings-modal/exclude-panel-submit.php', false, array('panel' => $updraftplus_panel));
 		?>
 	</div>
 
-	<?php $panel = 'contain-clause';?>
-	<div class="updraft-exclude-panel updraft-hidden" data-panel="<?php echo esc_attr($panel);?>" style="display:none;">
+	<?php $updraftplus_panel = 'contain-clause';?>
+	<div class="updraft-exclude-panel updraft-hidden" data-panel="<?php echo esc_attr($updraftplus_panel);?>" style="display:none;">
 		<?php
 		$updraftplus_admin->include_template('wp-admin/settings/exclude-settings-modal/exclude-panel-heading.php', false, array('title' => __('All files/directories containing the given characters in their names', 'updraftplus')));
 		?>
@@ -92,7 +92,7 @@ if (!defined('ABSPATH')) die('No direct access allowed');
 			</select>
 		</div>
 		<?php
-		$updraftplus_admin->include_template('wp-admin/settings/exclude-settings-modal/exclude-panel-submit.php', false, array('panel' => $panel, 'text_button' => __('Add exclusion rule', 'updraftplus')));
+		$updraftplus_admin->include_template('wp-admin/settings/exclude-settings-modal/exclude-panel-submit.php', false, array('panel' => $updraftplus_panel, 'text_button' => __('Add exclusion rule', 'updraftplus')));
 		?>
 	</div>
 </div>

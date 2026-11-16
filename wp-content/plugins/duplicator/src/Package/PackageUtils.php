@@ -645,20 +645,15 @@ class PackageUtils
         $global  = GlobalEntity::getInstance();
         $orphans = [];
 
-        $numPackages = DupPackage::countByStatus([], [DupPackage::getType()]);
+        // A Backup of any type owns its files, e.g. a downloaded incremental snapshot
+        $numPackages = AbstractPackage::countByStatus();
         $numPerPage  = 100;
         $pages       = floor($numPackages / $numPerPage) + 1;
 
         $skipStart = ['dup_pro'];
         for ($page = 0; $page < $pages; $page++) {
             $offset       = $page * $numPerPage;
-            $pagePackages = DupPackage::getRowByStatus(
-                [],
-                $numPerPage,
-                $offset,
-                '`id` ASC',
-                [DupPackage::getType()]
-            );
+            $pagePackages = AbstractPackage::getRowByStatus([], $numPerPage, $offset);
             foreach ($pagePackages as $cPack) {
                 $skipStart[] = $cPack->name . '_' . $cPack->hash;
             }

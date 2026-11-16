@@ -140,13 +140,19 @@ class UpdraftPlus_Backup_History {
 
 		// Reverse date sort - i.e. most recent first
 		krsort($backup_history);
+
+		$accept = apply_filters('updraftplus_accept_archivename', array());
+		if (!is_array($accept)) $accept = array();
 		
 		$pass_values = array(
-			'backup_history' => self::add_jobdata($backup_history),
+			'updraft_backup_history' => self::add_jobdata($backup_history),
 			'updraft_dir' => $updraftplus->backups_dir_location(),
 			'backupable_entities' => $updraftplus->get_backupable_file_entities(true, true),
 			'backup_count' => $backup_count,
-			'show_paging_actions' => false,
+			'updraft_show_paging_actions' => false,
+			'accept' => $accept,
+			'image_folder' => UPDRAFTPLUS_DIR.'/images/icons/',
+			'image_folder_url' => UPDRAFTPLUS_URL.'/images/icons/',
 		);
 		
 		return $updraftplus_admin->include_template('wp-admin/settings/existing-backups-table.php', true, $pass_values);

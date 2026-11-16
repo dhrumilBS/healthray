@@ -21,11 +21,16 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// Run only inside an extracted package
+if (!glob(__DIR__ . '/dup_descriptors_*', GLOB_ONLYDIR)) {
+    exit;
+}
+
 if (!defined('DUPXABSPATH')) {
     define('DUPXABSPATH', __DIR__);
 }
 
-define('DUPX_VERSION', '5.0.5');
+define('DUPX_VERSION', '5.1.1');
 define('DUPX_INIT', str_replace('\\', '/', __DIR__));
 define('DUPX_ROOT', preg_match('/^[\\\\\/]?$/', dirname(DUPX_INIT)) ? '/' : dirname(DUPX_INIT));
 

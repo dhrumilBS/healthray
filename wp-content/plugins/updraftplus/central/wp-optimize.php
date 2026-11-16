@@ -12,6 +12,7 @@ if (!class_exists('UpdraftCentral_Host')) {
 /**
  * This class is the basic bridge between UpdraftCentral and WP_Optimize.
  */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- This exact class name is required by UpdraftCentral's host-class factory (see central/factory.php's 'wp-optimize' => 'WP_Optimize_Host' mapping), which instantiates host classes by name.
 class WP_Optimize_Host extends UpdraftCentral_Host {
 
 	public $plugin_name = 'wp-optimize';

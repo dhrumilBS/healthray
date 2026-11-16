@@ -268,9 +268,9 @@ class DupCloudAddon extends AbstractAddonCore
             return;
         }
 
-        /** @var DupCloudStorage[] $dupCloudStorages */
+        /** @var DupCloudStorage[]|false $dupCloudStorages */
         $dupCloudStorages = AbstractStorageEntity::getAllBySType(DupCloudStorage::getSType());
-        if (count($dupCloudStorages) <= 0) {
+        if ($dupCloudStorages === false || count($dupCloudStorages) <= 0) {
             return;
         }
 

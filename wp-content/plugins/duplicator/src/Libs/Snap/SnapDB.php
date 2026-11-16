@@ -8,8 +8,6 @@ use mysqli_result;
 
 class SnapDB
 {
-    const CONN_MYSQL                      = 'mysql';
-    const CONN_MYSQLI                     = 'mysqli';
     const CACHE_PREFIX_PRIMARY_KEY_COLUMN = 'pkcol_';
     const DB_ENGINE_MYSQL                 = 'MySQL';
     const DB_ENGINE_MARIA                 = 'MariaDB';
@@ -25,9 +23,9 @@ class SnapDB
      * same key works for dumps and installer replacement. Prefer visible indexes, then the
      * fewest columns and the primary key on a tie.
      *
-     * @param mysqli|resource $dbh         database connection
-     * @param string          $tableName   table name
-     * @param null|callable   $logCallback log callback
+     * @param mysqli        $dbh         database connection
+     * @param string        $tableName   table name
+     * @param null|callable $logCallback log callback
      *
      * @return false|string|string[] index column, the columns in index order if composite, false if none
      */
@@ -125,9 +123,9 @@ class SnapDB
     /**
      * Run a SHOW query and return all its rows
      *
-     * @param mysqli|resource $dbh         database connection
-     * @param string          $query       query
-     * @param null|callable   $logCallback log callback
+     * @param mysqli        $dbh         database connection
+     * @param string        $query       query
+     * @param null|callable $logCallback log callback
      *
      * @return array<int, array<string, mixed>>
      */
@@ -287,13 +285,13 @@ class SnapDB
      * If there are no conditions, you still have to perform an always true condition, for example
      * SELECT * FROM `copy1_postmeta` WHERE 1
      *
-     * @param mysqli|resource $dbh           database connection
-     * @param string          $query         query string
-     * @param string          $table         table name
-     * @param int             $offset        row offset
-     * @param int             $limit         limit of query, 0 no limit
-     * @param mixed           $lastRowOffset last offset to use on next function call
-     * @param null|callable   $logCallback   log callback
+     * @param mysqli        $dbh           database connection
+     * @param string        $query         query string
+     * @param string        $table         table name
+     * @param int           $offset        row offset
+     * @param int           $limit         limit of query, 0 no limit
+     * @param mixed         $lastRowOffset last offset to use on next function call
+     * @param null|callable $logCallback   log callback
      *
      * @return mysqli_result
      */
@@ -332,45 +330,23 @@ class SnapDB
             call_user_func($logCallback, $dbh, $result, $query);
         }
 
-        if (self::dbConnTypeByResult($result) === self::CONN_MYSQLI) {
-            if ($primaryColumn == false) {
-                $lastRowOffset = $offset + $result->num_rows;
-            } else {
-                if ($result->num_rows == 0) {
-                    $lastRowOffset = $offset;
-                } else {
-                    $result->data_seek(($result->num_rows - 1));
-                    $row = $result->fetch_assoc();
-                    if (is_array($primaryColumn)) {
-                        $lastRowOffset = [];
-                        foreach ($primaryColumn as $col) {
-                            $lastRowOffset[$col] = $row[$col];
-                        }
-                    } else {
-                        $lastRowOffset = $row[$primaryColumn];
-                    }
-                    $result->data_seek(0);
-                }
-            }
+        if ($primaryColumn == false) {
+            $lastRowOffset = $offset + $result->num_rows;
         } else {
-            if ($primaryColumn == false) {
-                $lastRowOffset = $offset + mysql_num_rows($result); // @phpstan-ignore-line
+            if ($result->num_rows == 0) {
+                $lastRowOffset = $offset;
             } else {
-                if (mysql_num_rows($result) == 0) {  // @phpstan-ignore-line
-                    $lastRowOffset = $offset;
-                } else {
-                    mysql_data_seek($result, (mysql_num_rows($result) - 1));  // @phpstan-ignore-line
-                    $row = mysql_fetch_assoc($result);  // @phpstan-ignore-line
-                    if (is_array($primaryColumn)) {
-                        $lastRowOffset = [];
-                        foreach ($primaryColumn as $col) {
-                            $lastRowOffset[$col] = $row[$col];
-                        }
-                    } else {
-                        $lastRowOffset = $row[$primaryColumn];
+                $result->data_seek(($result->num_rows - 1));
+                $row = $result->fetch_assoc();
+                if (is_array($primaryColumn)) {
+                    $lastRowOffset = [];
+                    foreach ($primaryColumn as $col) {
+                        $lastRowOffset[$col] = $row[$col];
                     }
-                    mysql_data_seek($result, 0); // @phpstan-ignore-line
+                } else {
+                    $lastRowOffset = $row[$primaryColumn];
                 }
+                $result->data_seek(0);
             }
         }
 
@@ -380,7 +356,7 @@ class SnapDB
     /**
      * Depending on the structure type of the primary key returns the condition to position at the right offset
      *
-     * @param mysqli|resource $dbh           database connection
+     * @param mysqli          $dbh           database connection
      * @param string|string[] $primaryColumn primaricolumng index
      * @param mixed           $offset        offset
      *
@@ -424,7 +400,7 @@ class SnapDB
     /**
      * get current database engine (mysql, maria, percona)
      *
-     * @param mysqli|resource $dbh database connection
+     * @param mysqli $dbh database connection
      *
      * @return string
      */
@@ -463,24 +439,20 @@ class SnapDB
     /**
      * Escape string
      *
-     * @param resource|mysqli $dbh    database connection
-     * @param string          $string string to escape
+     * @param mysqli $dbh    database connection
+     * @param string $string string to escape
      *
      * @return string Returns an escaped string.
      */
     public static function realEscapeString($dbh, $string)
     {
-        if (self::dbConnType($dbh) === self::CONN_MYSQLI) {
-            return mysqli_real_escape_string($dbh, $string);
-        } else {
-            return mysql_real_escape_string($string, $dbh);  // @phpstan-ignore-line
-        }
+        return mysqli_real_escape_string($dbh, $string);
     }
 
     /**
      *
-     * @param resource|mysqli $dbh   database connection
-     * @param string          $query query string
+     * @param mysqli $dbh   database connection
+     * @param string $query query string
      *
      * @return mixed <p>Returns <b><code>FALSE</code></b> on failure. For successful <i>SELECT, SHOW, DESCRIBE</i> or
      *               <i>EXPLAIN</i> queries <b>mysqli_query()</b> will return a mysqli_result object.
@@ -489,11 +461,7 @@ class SnapDB
     public static function query($dbh, $query)
     {
         try {
-            if (self::dbConnType($dbh) === self::CONN_MYSQLI) {
-                return mysqli_query($dbh, $query);
-            } else {
-                return mysql_query($query, $dbh); // @phpstan-ignore-line
-            }
+            return mysqli_query($dbh, $query);
         } catch (Exception $e) {
             return false;
         }
@@ -501,39 +469,32 @@ class SnapDB
 
     /**
      *
-     * @param resource|mysqli_result $result query result
+     * @param mysqli_result $result query result
      *
      * @return int
      */
     public static function numRows($result)
     {
-        if (self::dbConnTypeByResult($result) === self::CONN_MYSQLI) {
-            return $result->num_rows;
-        } else {
-            return mysql_num_rows($result); // @phpstan-ignore-line
-        }
+        return $result->num_rows;
     }
 
     /**
      *
-     * @param resource|mysqli_result $result query result
+     * @param mysqli_result|mixed $result query result
      *
      * @return string[]|null|false Returns an array of strings that corresponds to the fetched row. NULL if there are no more rows in result set
      */
     public static function fetchRow($result)
     {
-        if (self::dbConnTypeByResult($result) === self::CONN_MYSQLI) {
+        if ($result instanceof mysqli_result) {
             return mysqli_fetch_row($result);
-        } elseif (is_resource($result)) {
-            return mysql_fetch_row($result); // @phpstan-ignore-line
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
      *
-     * @param resource|mysqli_result $result query result
+     * @param mysqli_result|mixed $result query result
      *
      * @return string[]|null|false Returns an associative array of values representing the fetched row in the result set,
      *               where each key in the array represents the name of one of the result set's
@@ -541,77 +502,38 @@ class SnapDB
      */
     public static function fetchAssoc($result)
     {
-        if (self::dbConnTypeByResult($result) === self::CONN_MYSQLI) {
+        if ($result instanceof mysqli_result) {
             return mysqli_fetch_assoc($result);
-        } elseif (is_resource($result)) {
-            return mysql_fetch_assoc($result); // @phpstan-ignore-line
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
      *
-     * @param resource|mysqli_result $result query result
+     * @param mysqli_result|mixed $result query result
      *
      * @return boolean
      */
     public static function freeResult($result)
     {
-        if (self::dbConnTypeByResult($result) === self::CONN_MYSQLI) {
+        if ($result instanceof mysqli_result) {
             $result->free();
-            return true;
-        } elseif (is_resource($result)) {
-            return mysql_free_result($result); // @phpstan-ignore-line
-        } else {
-            $result = null;
-            return true;
         }
+        return true;
     }
 
     /**
      *
-     * @param resource|mysqli $dbh database connection
+     * @param mysqli|mixed $dbh database connection
      *
      * @return string
      */
     public static function error($dbh): string
     {
-        if (self::dbConnType($dbh) === self::CONN_MYSQLI) {
-            if ($dbh instanceof mysqli) {
-                return mysqli_error($dbh);
-            } else {
-                return 'Unable to retrieve the error message from MySQL';
-            }
-        } else {
-            if (is_resource($dbh)) {
-                return mysql_error($dbh); // @phpstan-ignore-line
-            } else {
-                return 'Unable to retrieve the error message from MySQL';
-            }
+        if ($dbh instanceof mysqli) {
+            return mysqli_error($dbh);
         }
-    }
-
-    /**
-     *
-     * @param resource|mysqli $dbh database connection
-     *
-     * @return string // self::CONN_MYSQLI|self::CONN_MYSQL
-     */
-    public static function dbConnType($dbh): string
-    {
-        return (is_object($dbh) && get_class($dbh) == 'mysqli') ? self::CONN_MYSQLI : self::CONN_MYSQL;
-    }
-
-    /**
-     *
-     * @param resource|mysqli_result $result query resyult
-     *
-     * @return string Enum self::CONN_MYSQLI|self::CONN_MYSQL
-     */
-    public static function dbConnTypeByResult($result): string
-    {
-        return (is_object($result) && get_class($result) == 'mysqli_result') ? self::CONN_MYSQLI : self::CONN_MYSQL;
+        return 'Unable to retrieve the error message from MySQL';
     }
 
     /**
@@ -635,25 +557,36 @@ class SnapDB
         $result       = [];
         $isItemOpen   = false;
         $isStringOpen = false;
-        $char         = '';
-        $pChar        = '';
+        $queryLen     = strlen($query);
 
         $currentItem  = [];
         $currentValue = '';
 
-        for ($i = 0; $i < strlen($query); $i++) {
-            $pChar = $char;
-            $char  = $query[$i];
+        for ($i = 0; $i < $queryLen; $i++) {
+            $char = $query[$i];
+
+            if ($isStringOpen !== false) {
+                if ($char === '\\' && $i + 1 < $queryLen) {
+                    // The escaped byte is copied as is and never closes the string
+                    $char .= $query[++$i];
+                } elseif ($char === $isStringOpen) {
+                    $isStringOpen = false;
+                }
+                if ($isItemOpen) {
+                    $currentValue .= $char;
+                }
+                continue;
+            }
 
             switch ($char) {
                 case '(':
-                    if ($isItemOpen == false && !$isStringOpen) {
+                    if ($isItemOpen == false) {
                         $isItemOpen = true;
                         continue 2;
                     }
                     break;
                 case ')':
-                    if ($isItemOpen && !$isStringOpen) {
+                    if ($isItemOpen) {
                         $isItemOpen    = false;
                         $currentItem[] = trim($currentValue);
                         $currentValue  = '';
@@ -664,21 +597,15 @@ class SnapDB
                     break;
                 case '\'':
                 case '"':
-                    if ($isStringOpen === false && $pChar !== '\\') {
-                        $isStringOpen = $char;
-                    } elseif ($isStringOpen === $char && $pChar !== '\\') {
-                        $isStringOpen = false;
-                    }
+                    $isStringOpen = $char;
                     break;
                 case ',':
                     if ($isItemOpen == false) {
                         continue 2;
-                    } elseif ($isStringOpen === false) {
-                        $currentItem[] = trim($currentValue);
-                        $currentValue  = '';
-                        continue 2;
                     }
-                    break;
+                    $currentItem[] = trim($currentValue);
+                    $currentValue  = '';
+                    continue 2;
                 default:
                     break;
             }
@@ -773,7 +700,6 @@ class SnapDB
                 $flagsList[MYSQLI_CLIENT_SSL] = 'MYSQLI_CLIENT_SSL';
             }
             if (defined('MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT')) {
-                // phpcs:ignore PHPCompatibility.Constants.NewConstants.mysqli_client_ssl_dont_verify_server_certFound
                 $flagsList[MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT] = 'MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT';
             }
         }

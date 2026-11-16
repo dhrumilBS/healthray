@@ -162,7 +162,6 @@ class Dropbox_Curl extends Dropbox_ConsumerAbstract
             $options[CURLOPT_RETURNTRANSFER] = false;
             $options[CURLOPT_HEADER] = false;
             $options[CURLOPT_FILE] = $this->outFile;
-            $options[CURLOPT_BINARYTRANSFER] = true;
             $options[CURLOPT_FAILONERROR] = true;
             $this->outFile = null;
         }  elseif ($method == 'POST' && $this->outFile) { // POST
@@ -170,7 +169,6 @@ class Dropbox_Curl extends Dropbox_ConsumerAbstract
             $options[CURLOPT_RETURNTRANSFER] = false;
             $options[CURLOPT_HEADER] = false;
             $options[CURLOPT_FILE] = $this->outFile;
-            $options[CURLOPT_BINARYTRANSFER] = true;
             $options[CURLOPT_FAILONERROR] = true;
             $this->outFile = null;
         } elseif ($method == 'POST' && $this->inFile) { // POST

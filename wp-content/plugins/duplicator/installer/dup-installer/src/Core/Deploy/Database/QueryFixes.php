@@ -19,6 +19,13 @@ class QueryFixes extends AbstractJsonSerializable
     const USER_DEFINER_REMOVE_REPLACE  = '$1 $3';
     const SQL_SECURITY_INVOKER_PATTERN = "/^(\s*CREATE.+(?:PROCEDURE|FUNCTION)[\s\S]*)(BEGIN)([\s\S]*)$/";
     const SQL_SECURITY_INVOKER_REPLACE = "$1SQL SECURITY INVOKER\n$2$3";
+    // Skips leading whitespace and comments; version-conditional comment openers count as code
+    const LEADING_KEYWORD_PATTERN = '/^(?:\s+|(?:--|#)[^\n]*(?:\n|$)|\/\*!\d*|\/\*.*?\*\/)*+([a-z]+)/is';
+    const SCHEMA_KEYWORDS         = [
+        'CREATE',
+        'ALTER',
+        'SET',
+    ];
 
     /** @var array{search: mixed[], replace: mixed[]} */
     protected $globalRules = [
@@ -99,12 +106,32 @@ class QueryFixes extends AbstractJsonSerializable
      */
     public function applyFixes($query)
     {
-        $query = preg_replace($this->globalRules['search'], $this->globalRules['replace'], $query);
+        // Global rules rewrite schema clauses, on data statements they would rewrite stored values
+        if (self::isSchemaQuery($query)) {
+            $query = preg_replace($this->globalRules['search'], $this->globalRules['replace'], $query);
+        }
 
         foreach ($this->tablesPrefixRules as $ruleSet) {
             $query = preg_replace($ruleSet['search'], $ruleSet['replace'], $query);
         }
         return $query;
+    }
+
+    /**
+     * Check whether the query is a schema or session statement the global rules may rewrite
+     *
+     * Data statements and unrecognized statements are never rewritten.
+     *
+     * @param string $query query to check
+     *
+     * @return bool
+     */
+    public static function isSchemaQuery(string $query): bool
+    {
+        if (preg_match(self::LEADING_KEYWORD_PATTERN, $query, $matches) !== 1) {
+            return false;
+        }
+        return in_array(strtoupper($matches[1]), self::SCHEMA_KEYWORDS, true);
     }
 
     /**
@@ -172,38 +199,78 @@ class QueryFixes extends AbstractJsonSerializable
     {
         $invalidCharsets   = DUPX_ArchiveConfig::getInstance()->invalidCharsets();
         $invalidCollations = DUPX_ArchiveConfig::getInstance()->invalidCollations();
-        $defCharsetRegex   = addcslashes(DUPX_DB_Functions::getInstance()->getRealCharsetByParam(), '\\$');
-        $defCollateRegex   = addcslashes(DUPX_DB_Functions::getInstance()->getRealCollateByParam(), '\\$');
+
+        $rules = self::charsetAndCollationRules(
+            $invalidCharsets,
+            $invalidCollations,
+            DUPX_DB_Functions::getInstance()->getRealCharsetByParam(),
+            DUPX_DB_Functions::getInstance()->getRealCollateByParam()
+        );
+
+        $this->globalRules['search']  = array_merge($this->globalRules['search'], $rules['search']);
+        $this->globalRules['replace'] = array_merge($this->globalRules['replace'], $rules['replace']);
+
+        if (count($invalidCharsets) > 0) {
+            $this->generatorLog .= "GLOBAL RULES ADDED: INVALID CHARSETS\n";
+        }
+        if (count($invalidCollations) > 0) {
+            $this->generatorLog .= "GLOBAL RULES ADDED: INVALID COLLATIONS\n";
+        }
+    }
+
+    /**
+     * Build the rules replacing invalid charsets and collations with the default ones
+     *
+     * Captured names exclude the backslash, so an escape byte of a string literal is never replaced.
+     *
+     * @param string[] $invalidCharsets   charsets missing on the destination
+     * @param string[] $invalidCollations collations missing on the destination
+     * @param string   $defCharset        replacement charset
+     * @param string   $defCollate        replacement collation
+     *
+     * @return array{search: string[], replace: string[]}
+     */
+    public static function charsetAndCollationRules(
+        array $invalidCharsets,
+        array $invalidCollations,
+        string $defCharset,
+        string $defCollate
+    ): array {
+        $rules = [
+            'search'  => [],
+            'replace' => [],
+        ];
+
+        $defCharsetRegex = addcslashes($defCharset, '\\$');
+        $defCollateRegex = addcslashes($defCollate, '\\$');
 
         if (count($invalidCharsets) > 0) {
             $invalidChrRegex = '(?:' . implode('|', array_map(fn($val): string => preg_quote($val, '/'), $invalidCharsets)) . ')';
 
-            $this->globalRules['search'][]  = '/(^.*(?:CHARSET|CHARACTER SET)\s*[\s=]\s*[`\'"]?)(' .
-                $invalidChrRegex . ')([`\'"]?\s.*COLLATE\s*[\s=]\s*[`\'"]?)([^`\'"\s;,]+)([`\'"]?.*$)/m';
-            $this->globalRules['replace'][] = '$1' . $defCharsetRegex . '$3' . $defCollateRegex . '$5';
-            $this->globalRules['search'][]  = '/(^.*COLLATE\s*[\s=]\s*[`\'"]?)([^`\'"\s;,]+)([`\'"]?\s.*(?:CHARSET|CHARACTER SET)\s*[\s=]\s*[`\'"]?)(' .
+            $rules['search'][]  = '/(^.*(?:CHARSET|CHARACTER SET)\s*[\s=]\s*[`\'"]?)(' .
+                $invalidChrRegex . ')([`\'"]?\s.*COLLATE\s*[\s=]\s*[`\'"]?)([^`\'"\s;,\\\\]+)([`\'"]?.*$)/m';
+            $rules['replace'][] = '$1' . $defCharsetRegex . '$3' . $defCollateRegex . '$5';
+            $rules['search'][]  = '/(^.*COLLATE\s*[\s=]\s*[`\'"]?)([^`\'"\s;,\\\\]+)([`\'"]?\s.*(?:CHARSET|CHARACTER SET)\s*[\s=]\s*[`\'"]?)(' .
                 $invalidChrRegex . ')([`\'"]?[\s;,].*$)/m';
-            $this->globalRules['replace'][] = '$1' . $defCollateRegex . '$3' . $defCharsetRegex . '$5';
-            $this->globalRules['search'][]  = '/(^.*(?:CHARSET|CHARACTER SET)\s*[\s=]\s*[`\'"]?)(' . $invalidChrRegex . ')([`\'"]?[\s;,].*$)/m';
-            $this->globalRules['replace'][] = '$1' . $defCharsetRegex . '$3';
-
-            $this->generatorLog .= "GLOBAL RULES ADDED: INVALID CHARSETS\n";
+            $rules['replace'][] = '$1' . $defCollateRegex . '$3' . $defCharsetRegex . '$5';
+            $rules['search'][]  = '/(^.*(?:CHARSET|CHARACTER SET)\s*[\s=]\s*[`\'"]?)(' . $invalidChrRegex . ')([`\'"]?[\s;,].*$)/m';
+            $rules['replace'][] = '$1' . $defCharsetRegex . '$3';
         }
 
         if (count($invalidCollations) > 0) {
             $invalidColRegex = '(?:' . implode('|', array_map(fn($val): string => preg_quote($val, '/'), $invalidCollations)) . ')';
 
-            $this->globalRules['search'][]  = '/(^.*(?:CHARSET|CHARACTER SET)\s*[\s=]\s*[`\'"]?)([^`\'"\s;,]+)([`\'"]?\s.*COLLATE\s*[\s=]\s*[`\'"]?)(' .
+            $rules['search'][]  = '/(^.*(?:CHARSET|CHARACTER SET)\s*[\s=]\s*[`\'"]?)([^`\'"\s;,\\\\]+)([`\'"]?\s.*COLLATE\s*[\s=]\s*[`\'"]?)(' .
                 $invalidColRegex . ')([`\'"]?[\s;,].*$)/m';
-            $this->globalRules['replace'][] = '$1' . $defCharsetRegex . '$3' . $defCollateRegex . '$5';
-            $this->globalRules['search'][]  = '/(^.*COLLATE\s*[\s=]\s*[`\'"]?)(' .
-                $invalidColRegex . ')([`\'"]?\s.*(?:CHARSET|CHARACTER SET)\s*[\s=]\s*[`\'"]?)([^`\'"\s;,]+)([`\'"]?.*$)/m';
-            $this->globalRules['replace'][] = '$1' . $defCollateRegex . '$3' . $defCharsetRegex . '$5';
-            $this->globalRules['search'][]  = '/(^.*COLLATE\s*[\s=]\s*[`\'"]?)(' . $invalidColRegex . ')([`\'"]?[\s;,].*$)/m';
-            $this->globalRules['replace'][] = '$1' . $defCollateRegex . '$3';
-
-            $this->generatorLog .= "GLOBAL RULES ADDED: INVALID COLLATIONS\n";
+            $rules['replace'][] = '$1' . $defCharsetRegex . '$3' . $defCollateRegex . '$5';
+            $rules['search'][]  = '/(^.*COLLATE\s*[\s=]\s*[`\'"]?)(' .
+                $invalidColRegex . ')([`\'"]?\s.*(?:CHARSET|CHARACTER SET)\s*[\s=]\s*[`\'"]?)([^`\'"\s;,\\\\]+)([`\'"]?.*$)/m';
+            $rules['replace'][] = '$1' . $defCollateRegex . '$3' . $defCharsetRegex . '$5';
+            $rules['search'][]  = '/(^.*COLLATE\s*[\s=]\s*[`\'"]?)(' . $invalidColRegex . ')([`\'"]?[\s;,].*$)/m';
+            $rules['replace'][] = '$1' . $defCollateRegex . '$3';
         }
+
+        return $rules;
     }
 
     /**

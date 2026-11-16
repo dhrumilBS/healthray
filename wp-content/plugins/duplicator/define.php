@@ -2,7 +2,7 @@
 
 defined('ABSPATH') || exit;
 
-define('DUPLICATOR_VERSION', '5.0.5');
+define('DUPLICATOR_VERSION', '5.1.1');
 define('DUPLICATOR_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('DUPLICATOR_IMG_URL', DUPLICATOR_PLUGIN_URL . 'assets/img');
 

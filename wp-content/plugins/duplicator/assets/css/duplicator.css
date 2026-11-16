@@ -7848,6 +7848,9 @@ p + .dup-styles .stat {
 .dup-styles .dup-package-details-wrapper .dupli-kv-empty {
   color: #666666;
 }
+.dup-styles .dup-package-details-wrapper .dupli-kv-subline {
+  color: #666666;
+}
 .dup-styles .dup-package-details-wrapper .dup-link-data {
   display: none;
   margin: 6px 0 2px;

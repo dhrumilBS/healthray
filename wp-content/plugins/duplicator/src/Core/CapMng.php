@@ -663,8 +663,8 @@ class CapMng
         $userHasCap = self::realCanCheck($cap, false);
         $result     = $userHasCap;
 
-        // Environmental restriction: core does not support multisite backup creation.
-        // Without MultisiteAddon this ensures CAP_CREATE is always denied on multisite.
+        // Environmental restriction: core does not support multisite backup creation,
+        // so CAP_CREATE is denied on multisite unless the filter below re-enables it.
         if ($result && is_multisite() && $cap === self::CAP_CREATE) {
             $result = false;
         }
@@ -672,14 +672,13 @@ class CapMng
         /**
          * Filter to dynamically override any capability result.
          *
-         * Addons use this to disable capabilities in specific contexts (e.g., StagingAddon
-         * disables CAP_STORAGE on staging sites) or re-enable capabilities that core denies
-         * by default (e.g., MultisiteAddon re-enables CAP_CREATE on licensed multisite).
+         * Callbacks can disable capabilities in specific contexts or re-enable capabilities
+         * that core denies by default.
          *
          * @param bool   $result     Current capability check result (may be false due to environmental restriction)
          * @param string $cap        Capability being checked
          * @param bool   $userHasCap Whether the user passed the base WordPress capability check.
-         *                           Addons that re-enable capabilities should verify this is true
+         *                           Callbacks that re-enable capabilities should verify this is true
          *                           to avoid overriding explicit per-user capability denials.
          */
         $result = (bool) apply_filters('duplicator_cap_enabled', $result, $cap, $userHasCap);

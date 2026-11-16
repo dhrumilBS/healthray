@@ -34,7 +34,6 @@ namespace VendorDuplicator\phpseclib3\System\SSH;
 use VendorDuplicator\phpseclib3\Common\Functions\Strings;
 use VendorDuplicator\phpseclib3\Crypt\Common\PublicKey;
 use VendorDuplicator\phpseclib3\Crypt\PublicKeyLoader;
-use VendorDuplicator\phpseclib3\Crypt\RSA;
 use VendorDuplicator\phpseclib3\Exception\BadConfigurationException;
 use VendorDuplicator\phpseclib3\Net\SSH2;
 use VendorDuplicator\phpseclib3\System\SSH\Agent\Identity;

@@ -17,7 +17,7 @@ use Duplicator\Core\CapMng;
 use Duplicator\Core\Controllers\ControllersManager;
 use Duplicator\Core\Exceptions\DupliException;
 use Duplicator\Libs\Snap\SnapUtil;
-use Duplicator\Models\TemplateEntity;
+use Duplicator\Models\FullBackupTemplate;
 use Duplicator\Package\Create\BuildComponents;
 use Duplicator\Utils\Lock\LockUtil;
 use Duplicator\Utils\Logging\DupLog;
@@ -34,11 +34,16 @@ use WP_Error;
  *   message: string,
  *   details_url: string,
  *   is_full_backup: bool,
- *   exclusions: string[]
+ *   exclusions: string[],
+ *   warnings: array<int, array{code: int, label: string, message: string}>,
+ *   failure: array{reason: string, fixes: list<array{error: string, troubleshooting: string[], code_snippet: string}>}
  * }
  */
 class BackupRequestService
 {
+    /** @var int Contract revision */
+    const API_VERSION = 1;
+
     const REQUESTER_MAX_LENGTH = 64;
     const REASON_MAX_LENGTH    = 255;
 
@@ -49,6 +54,18 @@ class BackupRequestService
     const STATUS_CANCELLED  = 'cancelled';
     const STATUS_FAILED     = 'failed';
     const STATUS_COMPLETE   = 'complete';
+
+    /** @var int[] Warning codes that mean a file is absent from the archive */
+    const BLOCKING_WARNING_CODES = [
+        AbstractPackage::WARNING_ARCHIVE_SKIPPED_FILES,
+        AbstractPackage::WARNING_ARCHIVE_VANISHED_FILES,
+    ];
+
+    /** @var array{reason: string, fixes: array{}} The failure value of a Backup without failure detail */
+    private const NO_FAILURE = [
+        'reason' => '',
+        'fixes'  => [],
+    ];
 
     /** @var string[] Every value getStatusKey() can return; getStatus() adds STATUS_MISSING */
     const STATUS_KEYS = [
@@ -61,7 +78,8 @@ class BackupRequestService
     ];
 
     /**
-     * Start a background backup from the default template, scoped by the action.
+     * Start a background backup from the full-backup template derived from the default template,
+     * scoped by the action.
      *
      * @param string $requester Display identity of the calling plugin, stored as attribution
      * @param string $reason    Free text explaining why the backup was requested
@@ -109,15 +127,9 @@ class BackupRequestService
             );
         }
 
-        if (($template = TemplateEntity::getDefaultTemplate()) === null) {
-            return new WP_Error(
-                'duplicator_backup_failed',
-                __('The default backup template is missing. Deactivate and reactivate Duplicator to restore it.', 'duplicator'),
-                ['status' => 500]
-            );
-        }
-
         try {
+            $template = new FullBackupTemplate();
+
             if (LockUtil::lockProcessOrThrow() === false) {
                 return new WP_Error(
                     'duplicator_backup_conflict',
@@ -176,6 +188,8 @@ class BackupRequestService
                     'details_url'    => '',
                     'is_full_backup' => false,
                     'exclusions'     => [],
+                    'warnings'       => [],
+                    'failure'        => self::NO_FAILURE,
                 ];
             }
 
@@ -184,10 +198,11 @@ class BackupRequestService
             $hasExclusions = $package->Archive->hasEffectiveInstanceFilters();
             $isFull        = (new FullBackupStatus($package))->isFullBackup($reasons) && !$hasExclusions;
 
+            $warnings   = $package->getBuildWarningsDisplayList();
             $canProceed = $package->getExecutionType() === AbstractPackage::EXECUTION_TYPE_API
                 && $status === self::STATUS_COMPLETE
                 && $package->haveLocalStorage()
-                && !$package->hasBuildWarnings();
+                && array_intersect(self::BLOCKING_WARNING_CODES, array_column($warnings, 'code')) === [];
 
             return [
                 'status'         => $status,
@@ -206,6 +221,10 @@ class BackupRequestService
                 ),
                 'is_full_backup' => $isFull,
                 'exclusions'     => $isFull ? [] : self::exclusionMessages($reasons, $hasExclusions),
+                'warnings'       => $warnings,
+                'failure'        => in_array($status, [self::STATUS_FAILED, self::STATUS_CANCELLED], true)
+                    ? $package->getFailureDetails()
+                    : self::NO_FAILURE,
             ];
         } catch (Throwable $e) {
             return self::toWpError($e);

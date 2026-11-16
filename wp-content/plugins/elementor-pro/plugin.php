@@ -275,14 +275,6 @@ class Plugin {
 		$suffix = $this->get_assets_suffix();
 
 		wp_register_script(
-			'elementor-pro-webpack-runtime',
-			ELEMENTOR_PRO_URL . 'assets/js/webpack-pro.runtime' . $suffix . '.js',
-			[],
-			ELEMENTOR_PRO_VERSION,
-			true
-		);
-
-		wp_register_script(
 			'pro-elements-handlers',
 			ELEMENTOR_PRO_URL . 'assets/js/elements-handlers' . $suffix . '.js',
 			[
@@ -374,7 +366,6 @@ class Plugin {
 
 	private function get_frontend_depends() {
 		$frontend_depends = [
-			'elementor-pro-webpack-runtime',
 			'elementor-frontend-modules',
 		];
 

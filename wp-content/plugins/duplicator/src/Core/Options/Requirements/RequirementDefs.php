@@ -55,10 +55,12 @@ class RequirementDefs
         'fopen'               => 'https://www.php.net/manual/en/function.fopen.php',
         'fwrite'              => 'https://www.php.net/manual/en/function.fwrite.php',
         'fclose'              => 'https://www.php.net/manual/en/function.fclose.php',
+        'ftruncate'           => 'https://www.php.net/manual/en/function.ftruncate.php',
         'mb_strlen'           => 'https://www.php.net/manual/en/mbstring.installation.php',
         'mb_detect_encoding'  => 'https://www.php.net/manual/en/mbstring.installation.php',
         'mb_convert_encoding' => 'https://www.php.net/manual/en/mbstring.installation.php',
-        'gzopen'              => 'https://www.php.net/manual/en/function.gzopen.php',
+        'deflate_init'        => 'https://www.php.net/manual/en/function.deflate-init.php',
+        'deflate_add'         => 'https://www.php.net/manual/en/function.deflate-add.php',
     ];
 
     /**

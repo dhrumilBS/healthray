@@ -4,6 +4,8 @@
  * Activity Log toolbar template (filters and bulk actions)
  */
 
+use Duplicator\Core\Controllers\ControllersManager;
+
 defined("ABSPATH") || exit;
 
 /**
@@ -19,7 +21,7 @@ $totalPages     = $tplMng->getDataValueIntRequired('totalPages');
 $filters        = $tplMng->getDataValueArrayRequired('filters');
 $severityLevels = $tplMng->getDataValueArrayRequired('severityLevels');
 
-$currentUrl   = self_admin_url('admin.php?page=' . $_REQUEST['page']);
+$currentUrl   = self_admin_url('admin.php?page=' . ControllersManager::ACTIVITY_LOG_SUBMENU_SLUG);
 $showAllTitle =  __(
     'When enabled, shows a detailed view with all sub-events expanded. When disabled, shows a compact view with only main events.',
     'duplicator'
@@ -28,7 +30,7 @@ $showAllTitle =  __(
 <div class="tablenav top">
     <form method="get" class="dup-activity-log-filters float-left" action="<?php echo esc_url($currentUrl); ?>">
         <div class="dup-toolbar">
-            <input type="hidden" name="page" value="<?php echo esc_attr($_REQUEST['page']); ?>">
+            <input type="hidden" name="page" value="<?php echo esc_attr(ControllersManager::ACTIVITY_LOG_SUBMENU_SLUG); ?>">
             <input type="checkbox"
                 id="filter_show_all"
                 name="filter_show_all"

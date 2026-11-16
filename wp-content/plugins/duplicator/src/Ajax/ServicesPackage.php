@@ -6,14 +6,17 @@ namespace Duplicator\Ajax;
 
 use Duplicator\Utils\Logging\DupLog;
 use Duplicator\Package\DupPackage;
+use Duplicator\Models\FixesEntity;
 use Duplicator\Models\TemplateEntity;
 use Duplicator\Package\Storage\UploadInfo;
+use Duplicator\Controllers\PackagesPageController;
 use Duplicator\Controllers\ToolsPageController;
 use Duplicator\Core\CapMng;
 use Duplicator\Core\Controllers\ControllersManager;
 use Duplicator\Core\Exceptions\DupliException;
 use Duplicator\Core\Views\TplMng;
 use Duplicator\Libs\Snap\SnapNet;
+use Duplicator\Libs\Snap\SnapServer;
 use Duplicator\Libs\Snap\SnapUtil;
 use Duplicator\Libs\Snap\SnapWP;
 use Duplicator\Models\Storages\AbstractStorageEntity;
@@ -373,6 +376,10 @@ class ServicesPackage extends AbstractAjaxService
             if (!($package instanceof DupPackage)) {
                 throw new Exception("Invalid Backup ID.");
             }
+            if (!PackagesPageController::canDeleteBackup($package)) {
+                /* translators: %s: Backup name */
+                throw new Exception(sprintf(__('Backup %s cannot be deleted.', 'duplicator'), $package->getName()));
+            }
             AutoTuneManager::assertPackageDestructiveActionAllowed($package);
             $packages[] = $package;
         }
@@ -633,6 +640,14 @@ class ServicesPackage extends AbstractAjaxService
             exit();
         }
         DupLog::trace("Process worker request");
+        // LiteSpeed kills a worker some seconds after its loopback caller disconnects; an ended
+        // response avoids that. In client-side kickoff the browser waits, so nothing kills the worker.
+        if (!ClientSideKick::isClientSideKickoffMode() && SnapServer::canLiteSpeedEndResponseEarly()) {
+            SnapUtil::obCleanAll(false);
+            echo 'ok';
+            SnapServer::liteSpeedFinishRequest();
+            DupLog::trace("Worker response ended before processing");
+        }
         Runner::process();
         DupLog::trace("Exiting process worker request");
 
@@ -768,6 +783,7 @@ class ServicesPackage extends AbstractAjaxService
         $active_upload_info = null;
 
         $storages = AbstractStorageEntity::getAll();
+        $storages = ($storages === false ? [] : $storages);
 
         foreach ($package->upload_infos as &$upload_info) {
             if ($upload_info->getStorageId() === StoragesUtil::getDefaultStorageId()) {
@@ -936,6 +952,7 @@ class ServicesPackage extends AbstractAjaxService
                 }
             }
 
+            FixesEntity::getInstance()->clear();
             do_action('duplicator_manual_transfer_start', $package, $transferOffset);
             $package->timer_start = microtime(true);
             $package->setStatus(AbstractPackage::STATUS_STORAGE_PROCESSING);

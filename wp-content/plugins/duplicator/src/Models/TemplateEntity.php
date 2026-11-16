@@ -44,6 +44,7 @@ class TemplateEntity extends AbstractEntity implements UpdateFromInputInterface,
     public $archive_export_onlydb = false;
     /** @var bool */
     public $archive_filter_on = false;
+    // An exclusion added below must also be cleared in the FullBackupTemplate constructor
     /** @var string */
     public $archive_filter_dirs = '';
     /** @var string */
@@ -257,9 +258,7 @@ class TemplateEntity extends AbstractEntity implements UpdateFromInputInterface,
             if (!isset($data[$prop->getName()])) {
                 continue;
             }
-            if (PHP_VERSION_ID < 80100) {
-                $prop->setAccessible(true);
-            }
+            SnapUtil::setAccessible($prop);
             $prop->setValue($this, $data[$prop->getName()]);
         }
 
@@ -282,6 +281,11 @@ class TemplateEntity extends AbstractEntity implements UpdateFromInputInterface,
      */
     public static function createDefault(): void
     {
+        if (self::getAll() === false) {
+            DupLog::trace('Unable to load templates, default template not created');
+            return;
+        }
+
         if (self::getDefaultTemplate() == null) {
             $template = new self();
 
@@ -377,15 +381,34 @@ class TemplateEntity extends AbstractEntity implements UpdateFromInputInterface,
             throw new Exception('Can\'t get tempalte id' . $templateId);
         }
 
+        $currentName = $this->name;
+        $isNew       = $this->getId() < 0;
+
+        $this->copyFrom($source);
+
+        if ($isNew) {
+            $sourceName = $source->is_manual ? __("Active Build Settings", 'duplicator') : $source->name;
+            $this->name = sprintf(__('%1$s - Copy', 'duplicator'), $sourceName);
+        } else {
+            $this->name = $currentName;
+        }
+    }
+
+    /**
+     * Copy every setting of another template, including its name, keeping this
+     * template's id and role flags
+     *
+     * @param TemplateEntity $source template to copy from
+     *
+     * @return void
+     */
+    public function copyFrom(TemplateEntity $source): void
+    {
         $skipProps = [
             'id',
             'is_manual',
             'is_default',
         ];
-
-        if ($this->getId() > 0) {
-            $skipProps[] = 'name';
-        }
 
         $reflect = new ReflectionClass($this);
         $props   = $reflect->getProperties();
@@ -394,15 +417,8 @@ class TemplateEntity extends AbstractEntity implements UpdateFromInputInterface,
             if (in_array($prop->getName(), $skipProps)) {
                 continue;
             }
-            if (PHP_VERSION_ID < 80100) {
-                $prop->setAccessible(true);
-            }
+            SnapUtil::setAccessible($prop);
             $prop->setValue($this, $prop->getValue($source));
-        }
-
-        $source_template_name = $source->is_manual ? __("Active Build Settings", 'duplicator') : $source->name;
-        if ($this->getId() < 0) {
-            $this->name = sprintf(__('%1$s - Copy', 'duplicator'), $source_template_name);
         }
     }
 
@@ -473,6 +489,7 @@ class TemplateEntity extends AbstractEntity implements UpdateFromInputInterface,
     {
         if ($templates === null) {
             $templates = self::getAll();
+            $templates = ($templates === false ? [] : $templates);
         }
         $result = JsonSerialize::serialize($templates, JsonSerialize::JSON_SKIP_MAGIC_METHODS | JsonSerialize::JSON_SKIP_CLASS_NAME);
 
@@ -507,7 +524,9 @@ class TemplateEntity extends AbstractEntity implements UpdateFromInputInterface,
      */
     public static function getDefaultTemplate()
     {
-        $templates = self::getAll();
+        if (($templates = self::getAll()) === false) {
+            return null;
+        }
 
         foreach ($templates as $template) {
             if ($template->is_default) {
@@ -529,7 +548,7 @@ class TemplateEntity extends AbstractEntity implements UpdateFromInputInterface,
         if ($manualTemplate === null) {
             $templates = self::getAll();
 
-            foreach ($templates as $template) {
+            foreach (($templates === false ? [] : $templates) as $template) {
                 if ($template->is_manual) {
                     $manualTemplate = $template;
                     break;
@@ -537,7 +556,8 @@ class TemplateEntity extends AbstractEntity implements UpdateFromInputInterface,
             }
 
             if ($manualTemplate === null) {
-                $manualTemplate = self::createManual();
+                // Don't persist a new one when the existing templates can't be read
+                $manualTemplate = self::createManual($templates !== false);
             }
         }
 
@@ -547,9 +567,11 @@ class TemplateEntity extends AbstractEntity implements UpdateFromInputInterface,
     /**
      * Create manual mode template
      *
+     * @param bool $save Whether to persist the new template
+     *
      * @return self
      */
-    protected static function createManual(): self
+    protected static function createManual(bool $save = true): self
     {
         $template = new self();
 
@@ -557,8 +579,10 @@ class TemplateEntity extends AbstractEntity implements UpdateFromInputInterface,
         $template->notes     = '';
         $template->is_manual = true;
 
-        $template->save();
-        DupLog::trace('Created manual mode template');
+        if ($save) {
+            $template->save();
+            DupLog::trace('Created manual mode template');
+        }
         return $template;
     }
 }

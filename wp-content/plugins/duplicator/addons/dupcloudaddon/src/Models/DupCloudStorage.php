@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Duplicator\Addons\DupCloudAddon\Models;
 
 use Duplicator\Models\DynamicGlobalEntity;
+use Duplicator\Models\GlobalEntity;
 use Duplicator\Utils\Logging\DupLog;
 use Duplicator\Addons\DupCloudAddon\Utils\DupCloudClient;
 use Duplicator\Addons\DupCloudAddon\Utils\DupCloudStorageAdapter;
@@ -117,6 +118,18 @@ class DupCloudStorage extends AbstractStorageEntity implements StorageAuthInterf
         }
 
         return false;
+    }
+
+    /**
+     * Close an open upload that no backup runs any more
+     *
+     * @param string $uploadUuid The upload UUID
+     *
+     * @return bool True if closed or the cloud has no such upload any more, false otherwise
+     */
+    public function abandonUpload(string $uploadUuid): bool
+    {
+        return $this->getAdapter()->abandonUpload($uploadUuid);
     }
 
     /**
@@ -348,7 +361,12 @@ class DupCloudStorage extends AbstractStorageEntity implements StorageAuthInterf
      */
     public function authorize(string $token): bool
     {
-        $adapter = new DupCloudStorageAdapter($token);
+        $adapter = new DupCloudStorageAdapter(
+            $token,
+            0,
+            DupCloudClient::BACKUP_TYPE_STANDARD,
+            GlobalEntity::getInstance()->isIpv4Only()
+        );
 
         $userInfo = $adapter->getUserInfo();
 
@@ -384,7 +402,11 @@ class DupCloudStorage extends AbstractStorageEntity implements StorageAuthInterf
             // Check if this is a compound token (new method) or direct token (legacy)
             if (strpos($accessToken, '.') !== false && strpos($accessToken, '|') !== false) {
                 // New compound token authentication (contains both . and |)
-                $client = new DupCloudClient();
+                $client = new DupCloudClient(
+                    '',
+                    DupCloudClient::BACKUP_TYPE_STANDARD,
+                    GlobalEntity::getInstance()->isIpv4Only()
+                );
 
                 // Get site identifier
                 $siteIdentifier = UniqueId::getInstance()->getIdentifier();
@@ -528,7 +550,9 @@ class DupCloudStorage extends AbstractStorageEntity implements StorageAuthInterf
         if ($this->adapter === null) {
             $this->adapter = new DupCloudStorageAdapter(
                 (string) $this->config['accessToken'],
-                (int) $this->config['max_packages']
+                (int) $this->config['max_packages'],
+                DupCloudClient::BACKUP_TYPE_STANDARD,
+                GlobalEntity::getInstance()->isIpv4Only()
             );
         }
 
@@ -682,12 +706,25 @@ class DupCloudStorage extends AbstractStorageEntity implements StorageAuthInterf
                 throw new Exception('Archive file not found');
             }
 
-            $params = (new BackupPackage($archivePath, $package))->getOverwriteParams();
+            $params = $this->getRestoreDeployer($archivePath, $package)->getOverwriteParams();
             return PackageUtils::writeOverwriteParams(DUPLICATOR_SSDIR_PATH_TMP, $package->getPrimaryInternalHash(), $params);
         } catch (Throwable $e) {
             DupLog::infoTrace('Failed to create restore Backup config file: ' . $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Deployer that builds the restore params for the Backup
+     *
+     * @param string          $archivePath Archive path
+     * @param AbstractPackage $package     the Backup
+     *
+     * @return BackupPackage
+     */
+    protected function getRestoreDeployer(string $archivePath, AbstractPackage $package): BackupPackage
+    {
+        return new BackupPackage($archivePath, $package);
     }
 
     /**

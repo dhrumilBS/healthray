@@ -40,12 +40,12 @@ class Standalone
 
         if ($archiveConfig->mu_generation < 2) {
             $escapedOptionsTable = mysqli_real_escape_string($dbh, $optionsTable);
-            $uploadsPath         = $paramsManager->getValue(PrmMng::PARAM_PATH_UPLOADS_NEW); //upload_url_path','uploadPath
+            $uploadsPath         = mysqli_real_escape_string($dbh, $paramsManager->getValue(PrmMng::PARAM_PATH_UPLOADS_NEW)); //upload_url_path','uploadPath
             $sql                 = "UPDATE `$escapedOptionsTable` SET `option_value` = '$uploadsPath' " .
                 "WHERE `option_name` = 'uploadPath' AND `option_value` != ''";
             DUPX_DB::queryNoReturn($dbh, $sql);
 
-            $uploadsUrl = $paramsManager->getValue(PrmMng::PARAM_URL_UPLOADS_NEW);
+            $uploadsUrl = mysqli_real_escape_string($dbh, $paramsManager->getValue(PrmMng::PARAM_URL_UPLOADS_NEW));
             $sql        = "UPDATE `$escapedOptionsTable` SET `option_value` = '$uploadsUrl' WHERE `option_name` = 'upload_url_path' AND `option_value` != ''";
             DUPX_DB::queryNoReturn($dbh, $sql);
         }

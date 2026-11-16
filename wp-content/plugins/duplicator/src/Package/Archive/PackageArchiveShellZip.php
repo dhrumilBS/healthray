@@ -124,6 +124,10 @@ class PackageArchiveShellZip
         if ($contains_root == false) {
             // Only attempt to zip things up if root isn't in there since stderr indicates when it cant do anything
             $storages = AbstractStorageEntity::getAll();
+            if ($storages === false) {
+                DupLog::infoTrace('Unable to load storages, local storage folders are not excluded');
+                $storages = [];
+            }
             foreach ($storages as $storage) {
                 if ($storage->getSType() !== LocalStorage::getSType()) {
                     continue;

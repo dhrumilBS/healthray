@@ -3,15 +3,15 @@
 
 /*
 Plugin Name: UpdraftPlus - Backup/Restore
-Plugin URI: https://updraftplus.com
+Plugin URI: https://teamupdraft.com/updraftplus
 Description: Backup and restore: take backups locally, or backup to Amazon S3, Dropbox, Google Drive, Rackspace, (S)FTP, WebDAV & email, on automatic schedules.
 Author: TeamUpdraft, DavidAnderson
-Version: 1.26.8
+Version: 1.26.14
 Donate link: https://david.dw-perspective.org.uk/donate
 License: GPLv3 or later
 Text Domain: updraftplus
 Domain Path: /languages
-Author URI: https://updraftplus.com
+Author URI: https://teamupdraft.com/updraftplus
 */
 // @codingStandardsIgnoreEnd
 
@@ -74,16 +74,16 @@ if (!defined('UPDRAFTPLUS_SET_TIME_LIMIT')) define('UPDRAFTPLUS_SET_TIME_LIMIT',
 
 // Options to pass to the zip binary (if that method happens to be used). By default, we mark the extensions specified in UPDRAFTPLUS_ZIP_NOCOMPRESS for non-compression via the -n flag
 if (!defined('UPDRAFTPLUS_BINZIP_OPTS')) {
-	$zip_nocompress = array_map('trim', explode(',', UPDRAFTPLUS_ZIP_NOCOMPRESS));
-	$zip_binzip_opts = '';
-	foreach ($zip_nocompress as $ext) {
-		if (empty($zip_binzip_opts)) {
-			$zip_binzip_opts = "-n $ext:".strtoupper($ext);
+	$updraftplus_zip_nocompress = array_map('trim', explode(',', UPDRAFTPLUS_ZIP_NOCOMPRESS));
+	$updraftplus_zip_binzip_opts = '';
+	foreach ($updraftplus_zip_nocompress as $updraftplus_ext) {
+		if (empty($updraftplus_zip_binzip_opts)) {
+			$updraftplus_zip_binzip_opts = "-n $updraftplus_ext:".strtoupper($updraftplus_ext);
 		} else {
-			$zip_binzip_opts .= ':'.$ext.':'.strtoupper($ext);
+			$updraftplus_zip_binzip_opts .= ':'.$updraftplus_ext.':'.strtoupper($updraftplus_ext);
 		}
 	}
-	define('UPDRAFTPLUS_BINZIP_OPTS', $zip_binzip_opts);
+	define('UPDRAFTPLUS_BINZIP_OPTS', $updraftplus_zip_binzip_opts);
 }
 
 /**
@@ -178,7 +178,7 @@ function updraftplus_list_cron_schedules() {
 			'display' => apply_filters('updraftplus_cron_schedule_description', __('Fortnightly'), 'fortnightly'),
 		),
 		'monthly' => array(
-			'interval' => date('t')*86400, // Calculate the monthly interval based on the total days of the current month.
+			'interval' => gmdate('t')*86400, // Calculate the monthly interval based on the total days of the current month.
 			'display' => apply_filters('updraftplus_cron_schedule_description', __('Monthly'), 'monthly'),
 		),
 		// phpcs:enable
@@ -206,39 +206,39 @@ if (!is_admin() && (!defined('DOING_CRON') || !DOING_CRON) && (!defined('XMLRPC_
 	if (!defined('ALTERNATE_WP_CRON') || !ALTERNATE_WP_CRON || !empty($_POST) || defined('DOING_AJAX') || isset($_GET['doing_wp_cron'])) return; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- False positive: nonce verification not required here.
 
 	// The check below is the one used by spawn_cron() to decide whether cron events should be run
-	$gmt_time = microtime(true);
-	$lock = get_transient('doing_cron');
-	if ($lock > $gmt_time + 10 * 60) $lock = 0;
-	if ((defined('WP_CRON_LOCK_TIMEOUT') && $lock + WP_CRON_LOCK_TIMEOUT > $gmt_time) || (!defined('WP_CRON_LOCK_TIMEOUT') && $lock + 60 > $gmt_time)) return;
+	$updraftplus_gmt_time = microtime(true);
+	$updraftplus_lock = get_transient('doing_cron');
+	if ($updraftplus_lock > $updraftplus_gmt_time + 10 * 60) $updraftplus_lock = 0;
+	if ((defined('WP_CRON_LOCK_TIMEOUT') && $updraftplus_lock + WP_CRON_LOCK_TIMEOUT > $updraftplus_gmt_time) || (!defined('WP_CRON_LOCK_TIMEOUT') && $updraftplus_lock + 60 > $updraftplus_gmt_time)) return;
 	if (function_exists('_get_cron_array')) {
-		$crons = _get_cron_array();
+		$updraftplus_crons = _get_cron_array();
 	} else {
-		$crons = get_option('cron');
+		$updraftplus_crons = get_option('cron');
 	}
-	if (!is_array($crons)) return;
+	if (!is_array($updraftplus_crons)) return;
 
-	$keys = array_keys($crons);
-	if (isset($keys[0]) && $keys[0] > $gmt_time) return;
+	$updraftplus_keys = array_keys($updraftplus_crons);
+	if (isset($updraftplus_keys[0]) && $updraftplus_keys[0] > $updraftplus_gmt_time) return;
 	// If we got this far, then cron is going to be fired, so we do want to load all our hooks
 }
 
 $updraftplus_have_addons = 0;
-if (is_dir(UPDRAFTPLUS_DIR.'/addons') && $dir_handle = opendir(UPDRAFTPLUS_DIR.'/addons')) {
-	while (false !== ($e = readdir($dir_handle))) {
-		if (is_file(UPDRAFTPLUS_DIR.'/addons/'.$e) && preg_match('/\.php$/', $e)) {
+if (is_dir(UPDRAFTPLUS_DIR.'/addons') && $updraftplus_dir_handle = opendir(UPDRAFTPLUS_DIR.'/addons')) {
+	while (false !== ($updraftplus_e = readdir($updraftplus_dir_handle))) {
+		if (is_file(UPDRAFTPLUS_DIR.'/addons/'.$updraftplus_e) && preg_match('/\.php$/', $updraftplus_e)) {
 			// We used to have 1024 bytes here - but this meant that if someone's site was hacked and a lot of code added at the top, and if they were running a too-low PHP version, then they might just see the symptom rather than the cause - and raise the support request with us.
-			$header = file_get_contents(UPDRAFTPLUS_DIR.'/addons/'.$e, false, null, 0, 16384);
-			$phprequires = preg_match("/RequiresPHP: (\d[\d\.]+)/", $header, $matches) ? $matches[1] : false;
-			$phpinclude = preg_match("/IncludePHP: (\S+)/", $header, $matches) ? $matches[1] : false;
-			if (false === $phprequires || version_compare(PHP_VERSION, $phprequires, '>=')) {
+			$updraftplus_header = file_get_contents(UPDRAFTPLUS_DIR.'/addons/'.$updraftplus_e, false, null, 0, 16384);
+			$updraftplus_phprequires = preg_match("/RequiresPHP: (\d[\d\.]+)/", $updraftplus_header, $matches) ? $matches[1] : false;
+			$updraftplus_phpinclude = preg_match("/IncludePHP: (\S+)/", $updraftplus_header, $matches) ? $matches[1] : false;
+			if (false === $updraftplus_phprequires || version_compare(PHP_VERSION, $updraftplus_phprequires, '>=')) {
 				$updraftplus_have_addons++;
-				if ($phpinclude) updraft_try_include_file(''.$phpinclude, 'include_once');
-				updraft_try_include_file('addons/'.$e, 'include_once');
+				if ($updraftplus_phpinclude) updraft_try_include_file(''.$updraftplus_phpinclude, 'include_once');
+				updraft_try_include_file('addons/'.$updraftplus_e, 'include_once');
 			}
-			unset($header);
+			unset($updraftplus_header);
 		}
 	}
-	@closedir($dir_handle);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
+	@closedir($updraftplus_dir_handle);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
 }
 
 if (is_file(UPDRAFTPLUS_DIR.'/udaddons/updraftplus-addons.php')) updraft_try_include_file('udaddons/updraftplus-addons.php', 'require_once');
@@ -248,7 +248,7 @@ if (!file_exists(UPDRAFTPLUS_DIR.'/class-updraftplus.php') || !file_exists(UPDRA
 	 * Warn if they've not got the whole plugin - can happen if WP crashes (e.g. out of disk space) when upgrading the plugin
 	 */
 	function updraftplus_incomplete_install_warning() {
-		echo '<div class="updraftmessage error"><p><strong>'.esc_html(__('Error', 'updraftplus')).':</strong> '.esc_html(__('You do not have UpdraftPlus completely installed - please de-install and install it again.', 'updraftplus').' '.__('Most likely, WordPress malfunctioned when copying the plugin files.', 'updraftplus')).' <a href="https://updraftplus.com/faqs/wordpress-crashed-when-updating-updraftplus-what-can-i-do/">'.esc_html__('Go here for more information.', 'updraftplus').'</a></p></div>';
+		echo '<div class="updraftmessage error"><p><strong>'.esc_html(__('Error', 'updraftplus')).':</strong> '.esc_html(__('You do not have UpdraftPlus completely installed - please de-install and install it again.', 'updraftplus').' '.__('Most likely, WordPress malfunctioned when copying the plugin files.', 'updraftplus')).' <a href="https://teamupdraft.com/documentation/updraftplus/topics/general/troubleshooting/wordpress-crashed-when-updating-updraftplus-what-can-i-do/">'.esc_html__('Go here for more information.', 'updraftplus').'</a></p></div>';
 	}
 	add_action('all_admin_notices', 'updraftplus_incomplete_install_warning');
 } else {
@@ -262,9 +262,9 @@ if (!file_exists(UPDRAFTPLUS_DIR.'/class-updraftplus.php') || !file_exists(UPDRA
 	// Experience appears to show that the memory limit is only likely to be hit (unless it is very low) by single files that are larger than available memory (when compressed)
 		// Add sanity checks - found someone who'd set WP_MAX_MEMORY_LIMIT to 256K !
 		if (!$updraftplus->memory_check($updraftplus->memory_check_current(WP_MAX_MEMORY_LIMIT))) {
-			$new = absint($updraftplus->memory_check_current(WP_MAX_MEMORY_LIMIT));
-			if ($new>32 && $new<100000) {
-				@ini_set('memory_limit', $new.'M');// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged,Squiz.PHP.DiscouragedFunctions.Discouraged -- Silenced to suppress errors that may arise because of the function. Safely using discouraged function ini_set().
+			$updraftplus_new = absint($updraftplus->memory_check_current(WP_MAX_MEMORY_LIMIT));
+			if ($updraftplus_new>32 && $updraftplus_new<100000) {
+				@ini_set('memory_limit', $updraftplus_new.'M');// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged,Squiz.PHP.DiscouragedFunctions.Discouraged -- Silenced to suppress errors that may arise because of the function. Safely using discouraged function ini_set().
 			}
 		}
 	}

@@ -158,11 +158,10 @@ class DUPX_DB_Functions
                     $dbuser,
                     $dbpass,
                     $dbname,
-                    MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT // phpcs:ignore PHPCompatibility.Constants.NewConstants.mysqli_client_ssl_dont_verify_server_certFound
+                    MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT
                 )
             ) != false
         ) {
-            // phpcs:ignore PHPCompatibility.Constants.NewConstants.mysqli_client_ssl_dont_verify_server_certFound
             $dbflag                         = MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT;
             $wpConfigFalgsVal['inWpConfig'] = true;
             $wpConfigFalgsVal['value']      = [$dbflag];

@@ -1,10 +1,10 @@
 === Duplicator - Backups & Migration Plugin - Cloud Backups, Scheduled Backups, & More  ===
 Contributors: seedprod, smub, andreamk
 Tags: backup, database backup, wordpress backup, cloud backup, migration, staging site
-Requires at least: 5.3
+Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 5.0.5
+Stable tag: 5.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -173,7 +173,7 @@ Duplicator&reg; is a registered trademark of Snap Creek LLC. When writing about 
 3. Click on the Duplicator link in the admin menu
 4. Create your first backup from Duplicator > Backups, or open the help page for a guided start
 
-Duplicator requires PHP 7.4 or higher and WordPress 5.3 or higher.
+Duplicator requires PHP 7.4 or higher and WordPress 6.2 or higher.
 
 == Frequently Asked Questions ==
 

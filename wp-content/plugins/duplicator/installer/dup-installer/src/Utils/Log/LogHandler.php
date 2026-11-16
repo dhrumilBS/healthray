@@ -165,21 +165,17 @@ class LogHandler
                 return 'E_NOTICE';
             case E_USER_NOTICE:
                 return 'E_USER_NOTICE';
+            case E_RECOVERABLE_ERROR:
+                return 'E_RECOVERABLE_ERROR';
+            case E_DEPRECATED:
+                return 'E_DEPRECATED';
+            case E_USER_DEPRECATED:
+                return 'E_USER_DEPRECATED';
             case self::ERRNO_EXCEPTION:
                 return 'EXCEPTION';
             default:
-                break;
+                return 'E_UNKNOWN CODE: ' . $errno;
         }
-        if (defined('E_RECOVERABLE_ERROR') && $errno === E_RECOVERABLE_ERROR) {
-            return 'E_RECOVERABLE_ERROR';
-        }
-        if (defined('E_DEPRECATED') && $errno === E_DEPRECATED) {
-            return 'E_DEPRECATED';
-        }
-        if (defined('E_USER_DEPRECATED') && $errno === E_USER_DEPRECATED) {
-            return 'E_USER_DEPRECATED';
-        }
-        return 'E_UNKNOWN CODE: ' . $errno;
     }
 
     /**

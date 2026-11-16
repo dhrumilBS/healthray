@@ -792,7 +792,7 @@ class BootstrapRunner
             } else {
                 $this->log("SAPI: litespeed");
             }
-            if (version_compare(phpversion(), '5.5') >= 0 && (!$is_apache || 'litespeed' === $sapi_type)) {
+            if (!$is_apache || 'litespeed' === $sapi_type) {
                 $ini_data = [];
                 foreach ($php_ini_data as $php_ini_key => $php_ini_val) {
                     $ini_data[] = $php_ini_key . ' = ' . $php_ini_val;

@@ -8,6 +8,7 @@ use Exception;
 use ReflectionClass;
 use ReflectionObject;
 use wpdb;
+use Duplicator\Libs\Snap\SnapUtil;
 
 /**
  * Abstract Entity
@@ -50,9 +51,7 @@ abstract class AbstractEntity extends AbstractGenericModel
             } else {
                 $value = $data[$prop->getName()];
             }
-            if (PHP_VERSION_ID < 80100) {
-                $prop->setAccessible(true);
-            }
+            SnapUtil::setAccessible($prop);
             $prop->setValue($this, $value);
         }
     }
@@ -106,9 +105,7 @@ abstract class AbstractEntity extends AbstractGenericModel
             }
 
             $prop = $reflect->getProperty($propName);
-            if (PHP_VERSION_ID < 80100) {
-                $prop->setAccessible(true);
-            }
+            SnapUtil::setAccessible($prop);
             $prop->setValue($obj, $rowData[$dbKey]);
         }
 

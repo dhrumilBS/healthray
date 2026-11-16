@@ -127,7 +127,12 @@ class UpdraftCentral_Core_Commands extends UpdraftCentral_Commands {
 			if (!class_exists('wp_tempnam')) include_once(ABSPATH.'/wp-admin/includes/file.php');
 			$temp_img_file = wp_tempnam();
 			@file_put_contents($temp_img_file, $decoded_data); // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the call.
-			$mime_type = wp_get_image_mime($temp_img_file);
+			if (function_exists('wp_get_image_mime')) {
+				$mime_type = wp_get_image_mime($temp_img_file);
+			} else {
+				$image_info = @getimagesize($temp_img_file); // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the call.
+				$mime_type = !empty($image_info['mime']) ? $image_info['mime'] : false;
+			}
 			@unlink($temp_img_file); // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise if the file doesn't exist.
 			$allowed_ext = array('jpg', 'jpeg', 'png', 'gif', 'bmp', 'tif', 'webp', 'avif', 'heic');
 			if (false !== $mime_type && !empty($matches[1]) && strtolower($mime_type) === strtolower($matches[1]) && !empty($file_ext) && in_array(strtolower($file_ext), $allowed_ext)) {

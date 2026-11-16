@@ -1,12 +1,18 @@
 <?php
 
+// Run only inside an extracted package
+if (!glob(dirname(__DIR__) . '/dup_descriptors_*', GLOB_ONLYDIR)) {
+    exit;
+}
+
 if (!defined('DUPXABSPATH')) {
     define('DUPXABSPATH', __DIR__);
 }
 
 use Duplicator\Installer\Core\Bootstrap;
+use Duplicator\Installer\Core\Security;
 
-define('DUPX_VERSION', '5.0.5');
+define('DUPX_VERSION', '5.1.1');
 define('DUPX_INIT', str_replace('\\', '/', dirname(__DIR__)));
 define('DUPX_ROOT', preg_match('/^[\\\\\/]?$/', dirname(DUPX_INIT)) ? '/' : dirname(DUPX_INIT));
 
@@ -16,6 +22,11 @@ Duplicator\Installer\Utils\Autoloader::register();
  * init constants and include
  */
 Bootstrap::init(2);
+
+if (Security::getInstance()->getSecurityType() !== Security::SECURITY_NONE) {
+    dupxTplRender('page-security-error', ['message' => 'Installer security check required']);
+    die();
+}
 
 require_once('class.api.php');
 require_once('class.cpnl.base.php');

@@ -2,6 +2,7 @@
 
 namespace Duplicator\Core\Models;
 
+use Duplicator\Libs\Snap\SnapLog;
 use Duplicator\Utils\Logging\DupLog;
 use Exception;
 use Throwable;
@@ -12,6 +13,10 @@ use wpdb;
  */
 abstract class AbstractGenericModel
 {
+    protected const LOAD_SUCCESS        = 'success';
+    protected const LOAD_INVALID_DATA   = 'invalid_data';
+    protected const LOAD_DATABASE_ERROR = 'database_error';
+
     /** @var int */
     protected int $id = -1;
     /** @var string plugin version on update */
@@ -258,19 +263,15 @@ abstract class AbstractGenericModel
     /**
      * Get ids of current type
      *
-     * @param int<0, max>                   $page           current page, if $pageSize is 0 o 1 $pase is the offset
-     * @param int<0, max>                   $pageSize       page size, 0 return all entities
-     * @param ?callable                     $sortCallback   sort function on items result
-     * @param ?callable                     $filterCallback filter on items result
-     * @param array{col:string,mode:string} $orderby        query ordder by
+     * @param int<0, max>                   $page     Current page
+     * @param int<0, max>                   $pageSize Page size, 0 returns all IDs
+     * @param array{col:string,mode:string} $orderby  Query ordering
      *
      * @return int[]|false return entities list of false on failure
      */
     final protected static function getIdsFromDatabase(
         int $page = 0,
         int $pageSize = 0,
-        ?callable $sortCallback = null,
-        ?callable $filterCallback = null,
         array $orderby = [
             'col'  => 'id',
             'mode' => 'ASC',
@@ -300,16 +301,6 @@ abstract class AbstractGenericModel
             foreach ($rows as $row) {
                 $ids[] = (int) $row['id'];
             }
-
-            if (is_callable($filterCallback)) {
-                $ids = array_filter($ids, $filterCallback);
-            }
-
-            if (is_callable($sortCallback)) {
-                usort($ids, $sortCallback);
-            } else {
-                $ids = array_values($ids);
-            }
         } catch (Throwable $e) {
             DupLog::infoTraceException($e);
             return false;
@@ -319,26 +310,23 @@ abstract class AbstractGenericModel
     }
 
     /**
-     * Get entities of current type
+     * Load models, distinguishing database failures from unreadable stored data.
+     * Unreadable rows are skipped: items always holds the readable models.
      *
-     * @param int<0, max>                          $page           current page, if $pageSize is 0 o 1 $pase is the offset
-     * @param int<0, max>                          $pageSize       page size, 0 return all entities
-     * @param ?callable                            $sortCallback   sort function on items result
-     * @param ?callable                            $filterCallback filter on items result
-     * @param array{'col': string, 'mode': string} $orderby        query ordder by
+     * @param int<0, max>                   $page     Current page
+     * @param int<0, max>                   $pageSize Page size, 0 returns all models
+     * @param array{col:string,mode:string} $orderby  Query ordering
      *
-     * @return static[]|false return entities list of false on failure
+     * @return array{status:self::LOAD_SUCCESS|self::LOAD_INVALID_DATA|self::LOAD_DATABASE_ERROR,items:static[]}
      */
-    final protected static function getItemsFromDatabase(
+    final protected static function loadFromDatabase(
         int $page = 0,
         int $pageSize = 0,
-        ?callable $sortCallback = null,
-        ?callable $filterCallback = null,
         array $orderby = [
             'col'  => 'id',
             'mode' => 'ASC',
         ]
-    ) {
+    ): array {
         try {
             /** @var wpdb $wpdb */
             global $wpdb;
@@ -355,34 +343,38 @@ abstract class AbstractGenericModel
                 $offset
             );
 
-            if (($rows = $wpdb->get_results($query, ARRAY_A)) === null) {
+            if (($rows = $wpdb->get_results($query, ARRAY_A)) === null || $wpdb->last_error !== '') {
                 throw new Exception('Get item query fail');
-            }
-
-            $instances = [];
-            foreach ($rows as $row) {
-                $instance = static::getModelFromRow($row);
-                if ($instance === false) {
-                    continue;
-                }
-                $instances[] = $instance;
-            }
-
-            if (is_callable($filterCallback)) {
-                $instances = array_filter($instances, $filterCallback);
-            }
-
-            if (is_callable($sortCallback)) {
-                usort($instances, $sortCallback);
-            } else {
-                $instances = array_values($instances);
             }
         } catch (Throwable $e) {
             DupLog::infoTraceException($e);
-            return false;
+            return [
+                'status' => self::LOAD_DATABASE_ERROR,
+                'items'  => [],
+            ];
         }
 
-        return $instances;
+        $instances = [];
+        $status    = self::LOAD_SUCCESS;
+        foreach ($rows as $row) {
+            try {
+                $instance = static::getModelFromRow($row);
+            } catch (Throwable $e) {
+                // Primitive logging only: this path also loads singletons
+                SnapLog::phpErr('Unreadable stored data for ' . static::class . ' id ' . $row['id'] . ': ' . $e->getMessage());
+                $status = self::LOAD_INVALID_DATA;
+                continue;
+            }
+            if ($instance === false) {
+                continue;
+            }
+            $instances[] = $instance;
+        }
+
+        return [
+            'status' => $status,
+            'items'  => $instances,
+        ];
     }
 
     /**

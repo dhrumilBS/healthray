@@ -58,6 +58,15 @@ class PackInstaller extends AbstractJsonSerializable
     const CONFIG_ORIG_FILE_WPCONFIG_ID                    = 'wpconfig';
     const CONFIG_ORIG_FILE_PHPINI_ID                      = 'phpini';
     const CONFIG_ORIG_FILE_WEBCONFIG_ID                   = 'webconfig';
+    /**
+     * Extra file id of the per table dump folder: it selects the uncompressed
+     * storage and the per file integrity expansion of the folder entry
+     */
+    const EXTRA_FILE_ID_DB_DUMPS_DIR = 'db-dumps-dir';
+    /**
+     * Extra file id of the gzipped single dump file of the mysqldump mode
+     */
+    const EXTRA_FILE_ID_DB_DUMP_GZ = 'db-dump-gz';
 
     protected ?string $File;
     /** @var int<0,max> */
@@ -158,7 +167,7 @@ class PackInstaller extends AbstractJsonSerializable
      *
      * @return array<string,mixed>
      */
-    public function __serialize() // phpcs:ignore PHPCompatibility.FunctionNameRestrictions.NewMagicMethods.__serializeFound
+    public function __serialize()
     {
         $data = get_object_vars($this);
         foreach (['origFileManger', 'Package', 'configTransformer'] as $removeProp) {
@@ -624,6 +633,13 @@ HEADER;
         ];
 
         $result[] = [
+            'sourcePath'  => DUPLICATOR____PATH . '/src/Libs/SearchReplace',
+            'archivePath' => 'dup-installer/libs/SearchReplace',
+            'id'          => 'lib-searchreplace',
+            'isArtifact'  => false,
+        ];
+
+        $result[] = [
             'sourcePath'  => DUPLICATOR____PATH . '/src/Libs/Certificates',
             'archivePath' => 'dup-installer/libs/Certificates',
             'id'          => 'lib-certificates',
@@ -708,12 +724,22 @@ HEADER;
             ];
         }
 
-        $result[] = [
-            'sourcePath'  => $this->Package->Database->getCompressedStorePath(),
-            'archivePath' => 'dup-installer/' . $dscMng->getName(InstallerDescriptors::TYPE_DB_DUMP_GZ),
-            'id'          => 'db-dump-gz',
-            'isArtifact'  => true,
-        ];
+        if ($this->Package->Database->isPerTableDump()) {
+            $dumpFileMap = $this->Package->Database->getDumpFileMap();
+            $result[]    = [
+                'sourcePath'  => $dumpFileMap->getLocalDir(),
+                'archivePath' => $dumpFileMap->getArchiveDir(),
+                'id'          => self::EXTRA_FILE_ID_DB_DUMPS_DIR,
+                'isArtifact'  => true,
+            ];
+        } else {
+            $result[] = [
+                'sourcePath'  => $this->Package->Database->getCompressedStorePath(),
+                'archivePath' => 'dup-installer/' . $dscMng->getName(InstallerDescriptors::TYPE_DB_DUMP_GZ),
+                'id'          => self::EXTRA_FILE_ID_DB_DUMP_GZ,
+                'isArtifact'  => true,
+            ];
+        }
 
         foreach ($result as $index => $item) {
             $result[$index]['sourcePath'] = SnapIO::safePath($item['sourcePath']);
@@ -988,6 +1014,9 @@ HEADER;
     /**
      * Add extra files to index
      *
+     * The index lists the unfiltered entries; a consumer that has to list files
+     * the archive doesn't hold adds them through the action fired at the end.
+     *
      * @return void
      */
     public function addExtraFilesToIndex(): void
@@ -1030,6 +1059,8 @@ HEADER;
         }
         // Reset the static root path map so it can't leak into later index writes in the same request
         FileIndexManager::setRootPathMap();
+
+        do_action('duplicator_installer_extra_files_indexed', $indexManager, $this->Package);
 
         $indexManager->save();
     }
@@ -1125,10 +1156,11 @@ HEADER;
         DupLog::trace("Successfully opened zip");
 
         foreach ($this->getExtraFilesLists() as $extraItem) {
+            // Already compressed dump files are stored as they are, ZIP would only waste time on them
+            $saveUncompressed = in_array($extraItem['id'], [self::EXTRA_FILE_ID_DB_DUMPS_DIR, self::EXTRA_FILE_ID_DB_DUMP_GZ], true);
             if (is_dir($extraItem['sourcePath'])) {
-                $zipArchive->addDir($extraItem['sourcePath'], $extraItem['archivePath']);
+                $zipArchive->addDir($extraItem['sourcePath'], $extraItem['archivePath'], $saveUncompressed);
             } else {
-                $saveUncompressed = $extraItem['id'] === 'db-dump-gz';
                 $zipArchive->addFile($extraItem['sourcePath'], $extraItem['archivePath'], $saveUncompressed);
             }
         }
@@ -1236,6 +1268,10 @@ HEADER;
             }
 
             if (!SnapIO::rcopy($extraItem['sourcePath'], $destPath)) {
+                $error = error_get_last();
+                if (SnapIO::isDiskFullError($error !== null ? $error['message'] : '')) {
+                    throw DupliException::diskFull();
+                }
                 throw DupliException::fromLastError(
                     "Error copying an installer file to the temporary folder.\n" .
                     'From ' . $extraItem['sourcePath'] . ' to ' . $destPath,
@@ -1371,12 +1407,20 @@ HEADER;
         foreach ($this->getExtraFilesLists() as $extraItem) {
             if (is_file($extraItem['sourcePath'])) {
                 $filesToValidate[] = $extraItem['archivePath'];
-            } else {
-                if (file_exists(trailingslashit($extraItem['sourcePath']) . 'index.php')) {
-                    $filesToValidate[] = ltrim(trailingslashit($extraItem['archivePath']), '\\/') . 'index.php';
-                } else {
-                    // SKIP CHECK
-                }
+                continue;
+            }
+
+            // The dump folder has no index.php: every dump file is checked instead
+            if ($extraItem['id'] === self::EXTRA_FILE_ID_DB_DUMPS_DIR) {
+                $filesToValidate = array_merge(
+                    $filesToValidate,
+                    $this->Package->Database->getDumpFileMap()->getCompressedArchivePaths()
+                );
+                continue;
+            }
+
+            if (file_exists(trailingslashit($extraItem['sourcePath']) . 'index.php')) {
+                $filesToValidate[] = ltrim(trailingslashit($extraItem['archivePath']), '\\/') . 'index.php';
             }
         }
 

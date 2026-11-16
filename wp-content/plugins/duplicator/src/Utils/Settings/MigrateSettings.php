@@ -138,7 +138,7 @@ ERR;
         }
 
         $json_data   = CryptCustom::decrypt($encrypted_data, self::EXPORT_ENCRYPTION_KEY);
-        $import_data = JsonSerialize::unserialize($json_data);
+        $import_data = json_decode($json_data, true);
         if (!is_array($import_data)) {
             throw new Exception('Problem decoding JSON data');
         }

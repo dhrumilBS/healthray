@@ -683,14 +683,13 @@ final class DUPX_S3_Funcs
             if (InstState::isNewSiteIsMultisite()) {
                 $site_admins_query = DUPX_DB::mysqli_query($this->dbh, "SELECT meta_value FROM `" . $escapedTablePrefix . "sitemeta` WHERE meta_key = 'site_admins'");
                 $site_admins       = mysqli_fetch_row($site_admins_query);
-                $site_admins[0]    = stripslashes($site_admins[0]);
                 if (!SnapUtil::safeUnserialize($site_admins[0], $site_admins_array) || !is_array($site_admins_array)) {
                     throw new Exception('Invalid site_admins value: expected a serialized array, can\'t add super admin ' . $wpUserName);
                 }
 
                 array_push($site_admins_array, $wpUserName);
 
-                $site_admins_serialized = serialize($site_admins_array);
+                $site_admins_serialized = mysqli_real_escape_string($this->dbh, serialize($site_admins_array));
 
                 DUPX_DB::mysqli_query($this->dbh, "UPDATE `" . $escapedTablePrefix . "sitemeta` SET meta_value = '{$site_admins_serialized}' WHERE meta_key = 'site_admins'");
                 // Adding permission for each sub-site to the newly created user

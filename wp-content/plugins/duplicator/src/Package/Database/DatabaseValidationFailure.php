@@ -5,39 +5,27 @@ declare(strict_types=1);
 namespace Duplicator\Package\Database;
 
 use Duplicator\Core\Exceptions\DupliException;
-use Duplicator\Libs\Snap\SnapString;
 
 /**
  * Describes the structural checks that failed for a completed database export.
  */
 final class DatabaseValidationFailure
 {
-    private const MAX_REPORTED_TABLES = 20;
+    private const MAX_REPORTED_NAMES = 20;
 
     private bool $eofMarkerMissing;
 
     /** @var string[] */
-    private array $missingCreateTables;
-
-    private ?int $expectedSize;
-    private ?int $actualSize;
+    private array $mismatchedFiles;
 
     /**
-     * @param bool     $eofMarkerMissing    Whether the SQL end marker is missing
-     * @param string[] $missingCreateTables Tables without a CREATE statement
-     * @param int|null $expectedSize        Byte count tracked during export
-     * @param int|null $actualSize          SQL file size, null when unavailable
+     * @param bool     $eofMarkerMissing Whether a dump file is missing its end marker
+     * @param string[] $mismatchedFiles  Dump file names missing or whose size differs from the tracked one
      */
-    public function __construct(
-        bool $eofMarkerMissing,
-        array $missingCreateTables,
-        ?int $expectedSize,
-        ?int $actualSize
-    ) {
-        $this->eofMarkerMissing    = $eofMarkerMissing;
-        $this->missingCreateTables = array_values($missingCreateTables);
-        $this->expectedSize        = $expectedSize;
-        $this->actualSize          = $actualSize;
+    public function __construct(bool $eofMarkerMissing, array $mismatchedFiles)
+    {
+        $this->eofMarkerMissing = $eofMarkerMissing;
+        $this->mismatchedFiles  = array_values($mismatchedFiles);
     }
 
     /**
@@ -47,11 +35,7 @@ final class DatabaseValidationFailure
      */
     public function hasFailures(): bool
     {
-        return $this->eofMarkerMissing ||
-            $this->missingCreateTables !== [] ||
-            $this->expectedSize === null ||
-            $this->actualSize === null ||
-            $this->expectedSize !== $this->actualSize;
+        return $this->eofMarkerMissing || $this->mismatchedFiles !== [];
     }
 
     /**
@@ -81,23 +65,14 @@ final class DatabaseValidationFailure
         if ($this->eofMarkerMissing) {
             $checks[] = 'eof_marker_missing';
         }
-        if ($this->missingCreateTables !== []) {
-            $checks[]    = 'create_query_missing=' . count($this->missingCreateTables);
-            $tableReport = $this->getMissingCreateTablesReport();
-            $tableList   = implode(', ', $tableReport['tables']);
-            if ($tableReport['omitted'] > 0) {
-                $tableList .= sprintf(', and %d more', $tableReport['omitted']);
+        if ($this->mismatchedFiles !== []) {
+            $checks[]   = 'dump_file_size_mismatch=' . count($this->mismatchedFiles);
+            $fileReport = $this->getBoundedReport($this->mismatchedFiles);
+            $fileList   = implode(', ', $fileReport['names']);
+            if ($fileReport['omitted'] > 0) {
+                $fileList .= sprintf(', and %d more', $fileReport['omitted']);
             }
-            $lines[] = 'Tables without CREATE output: ' . $tableList;
-        }
-        if ($this->expectedSize === null || $this->actualSize === null || $this->expectedSize !== $this->actualSize) {
-            $checks[] = 'file_size_mismatch';
-            $lines[]  = sprintf(
-                'Tracked bytes: %s; SQL file bytes: %s; delta: %s.',
-                $this->expectedSize === null ? 'unavailable' : (string) $this->expectedSize,
-                $this->actualSize === null ? 'unavailable' : (string) $this->actualSize,
-                $this->getSignedDelta(false)
-            );
+            $lines[] = 'Dump files with an unexpected size: ' . $fileList;
         }
 
         array_splice($lines, 1, 0, ['Failed checks: ' . implode(', ', $checks)]);
@@ -114,36 +89,24 @@ final class DatabaseValidationFailure
         $reasons = [];
 
         if ($this->eofMarkerMissing) {
-            $reasons[] = __('The SQL file is missing its end marker.', 'duplicator');
+            $reasons[] = __('A database export file is missing its end marker.', 'duplicator');
         }
 
-        if ($this->missingCreateTables !== []) {
-            $tableReport = $this->getMissingCreateTablesReport();
-            $tableList   = implode(', ', array_map('wp_strip_all_tags', $tableReport['tables']));
-            if ($tableReport['omitted'] > 0) {
-                $tableList = sprintf(
-                    /* translators: 1: comma-separated database table names, 2: number of additional tables */
+        if ($this->mismatchedFiles !== []) {
+            $fileReport = $this->getBoundedReport($this->mismatchedFiles);
+            $fileList   = implode(', ', array_map('wp_strip_all_tags', $fileReport['names']));
+            if ($fileReport['omitted'] > 0) {
+                $fileList = sprintf(
+                    /* translators: 1: comma-separated file names, 2: number of additional files */
                     __('%1$s, and %2$d more', 'duplicator'),
-                    $tableList,
-                    $tableReport['omitted']
+                    $fileList,
+                    $fileReport['omitted']
                 );
             }
             $reasons[] = sprintf(
-                /* translators: %s: comma-separated database table names */
-                __('The export is missing CREATE TABLE output for: %s.', 'duplicator'),
-                $tableList
-            );
-        }
-
-        if ($this->expectedSize === null || $this->actualSize === null) {
-            $reasons[] = __('The SQL file size could not be compared with the byte count tracked during export.', 'duplicator');
-        } elseif ($this->expectedSize !== $this->actualSize) {
-            $reasons[] = sprintf(
-                /* translators: 1: expected size, 2: actual size, 3: signed size difference */
-                __('The SQL file size differs from the byte count tracked during export: expected %1$s, actual %2$s, delta %3$s.', 'duplicator'),
-                SnapString::byteSize($this->expectedSize),
-                SnapString::byteSize($this->actualSize),
-                $this->getSignedDelta(true)
+                /* translators: %s: comma-separated dump file names */
+                __('The size of these database export files differs from the bytes written: %s.', 'duplicator'),
+                $fileList
             );
         }
 
@@ -151,35 +114,19 @@ final class DatabaseValidationFailure
     }
 
     /**
-     * Bound the table names included in persisted diagnostics.
+     * Bound the names included in persisted diagnostics.
      *
-     * @return array{tables:string[],omitted:int}
+     * @param string[] $names Names to report
+     *
+     * @return array{names:string[],omitted:int}
      */
-    private function getMissingCreateTablesReport(): array
+    private function getBoundedReport(array $names): array
     {
-        $tables = array_slice($this->missingCreateTables, 0, self::MAX_REPORTED_TABLES);
+        $reported = array_slice($names, 0, self::MAX_REPORTED_NAMES);
 
         return [
-            'tables'  => $tables,
-            'omitted' => count($this->missingCreateTables) - count($tables),
+            'names'   => $reported,
+            'omitted' => count($names) - count($reported),
         ];
-    }
-
-    /**
-     * Signed difference between the SQL file and tracked byte count.
-     *
-     * @param bool $humanReadable Whether to format the absolute value as a byte size
-     *
-     * @return string
-     */
-    private function getSignedDelta(bool $humanReadable): string
-    {
-        if ($this->expectedSize === null || $this->actualSize === null) {
-            return 'unavailable';
-        }
-
-        $delta = $this->actualSize - $this->expectedSize;
-        $value = $humanReadable ? SnapString::byteSize(abs($delta)) : (string) abs($delta);
-        return ($delta >= 0 ? '+' : '-') . $value;
     }
 }

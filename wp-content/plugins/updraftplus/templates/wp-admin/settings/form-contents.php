@@ -1,21 +1,4 @@
-<?php
-
-if (!defined('ABSPATH')) die('No direct access allowed');
-
-$updraft_dir = $updraftplus->backups_dir_location();
-$really_is_writable = UpdraftPlus_Filesystem_Functions::really_is_writable($updraft_dir);
-
-// $options is passed through
-$default_options = array(
-	'include_database_decrypter' => true,
-	'include_adverts' => true,
-	'include_save_button' => true
-);
-
-foreach ($default_options as $k => $v) {
-	if (!isset($options[$k])) $options[$k] = $v;
-}
-?>
+<?php if (!defined('ABSPATH')) die('No direct access allowed'); ?>
 <table class="form-table backup-schedule">
 	<tr>
 		<th><?php esc_html_e('Files backup schedule', 'updraftplus'); ?>:</th>
@@ -23,12 +6,10 @@ foreach ($default_options as $k => $v) {
 			<div>
 				<select title="<?php esc_attr_e('Files backup interval', 'updraftplus'); ?>" class="updraft_interval" name="updraft_interval">
 				<?php
-				$intervals = $updraftplus_admin->get_intervals('files');
-				$selected_interval = UpdraftPlus_Options::get_updraft_option('updraft_interval', 'manual');
-				foreach ($intervals as $cronsched => $descrip) {
-					echo '<option value="'.esc_attr($cronsched).'" ';
-					if ($cronsched == $selected_interval) echo 'selected="selected"';
-					echo ">".esc_html($descrip)."</option>\n";
+				foreach ($intervals as $updraft_cronsched => $updraft_descrip) {
+					echo '<option value="'.esc_attr($updraft_cronsched).'" ';
+					if ($updraft_cronsched == $selected_interval) echo 'selected="selected"';
+					echo ">".esc_html($updraft_descrip)."</option>\n";
 				}
 				?>
 				</select> <span class="updraft_files_timings">
@@ -40,9 +21,9 @@ foreach ($default_options as $k => $v) {
 
 					$updraft_retain = max((int) UpdraftPlus_Options::get_updraft_option('updraft_retain', 2), 1);
 
-					$retain_files_config = __('and retain this many scheduled backups', 'updraftplus').': <input type="number" min="1" step="1" title="'.__('Retain this many scheduled file backups', 'updraftplus').'" name="updraft_retain" value="'.$updraft_retain.'" class="retain-files" />';
+					$updraft_retain_files_config = __('and retain this many scheduled backups', 'updraftplus').': <input type="number" min="1" step="1" title="'.__('Retain this many scheduled file backups', 'updraftplus').'" name="updraft_retain" value="'.$updraft_retain.'" class="retain-files" />';
 
-					echo wp_kses($retain_files_config, $updraftplus_admin->kses_allow_tags());
+					echo wp_kses($updraft_retain_files_config, $updraftplus_admin->kses_allow_tags());
 
 				?>
 			</div>
@@ -62,12 +43,10 @@ foreach ($default_options as $k => $v) {
 		<div>
 			<select class="updraft_interval_database" title="<?php esc_attr_e('Database backup interval', 'updraftplus'); ?>" name="updraft_interval_database">
 			<?php
-			$intervals = $updraftplus_admin->get_intervals('db');
-			$selected_interval_db = UpdraftPlus_Options::get_updraft_option('updraft_interval_database', UpdraftPlus_Options::get_updraft_option('updraft_interval'));
-			foreach ($intervals as $cronsched => $descrip) {
-				echo '<option value="'.esc_attr($cronsched).'" ';
-				if ($cronsched == $selected_interval_db) echo 'selected="selected"';
-				echo ">".esc_html($descrip)."</option>\n";
+			foreach ($intervals_db as $updraft_cronsched => $updraft_descrip) {
+				echo '<option value="'.esc_attr($updraft_cronsched).'" ';
+				if ($updraft_cronsched == $selected_interval_db) echo 'selected="selected"';
+				echo ">".esc_html($updraft_descrip)."</option>\n";
 			}
 			?>
 			</select> <span class="updraft_same_schedules_message"><?php echo esc_html(apply_filters('updraftplus_schedule_sametimemsg', ''));?></span><span class="updraft_db_timings">
@@ -78,9 +57,9 @@ foreach ($default_options as $k => $v) {
 
 			<?php
 				$updraft_retain_db = max((int) UpdraftPlus_Options::get_updraft_option('updraft_retain_db', $updraft_retain), 1);
-				$retain_dbs_config = __('and retain this many scheduled backups', 'updraftplus').': <input type="number" min="1" step="1" title="'.__('Retain this many scheduled database backups', 'updraftplus').'" name="updraft_retain_db" value="'.$updraft_retain_db.'" class="retain-files" />';
+				$updraft_retain_dbs_config = __('and retain this many scheduled backups', 'updraftplus').': <input type="number" min="1" step="1" title="'.__('Retain this many scheduled database backups', 'updraftplus').'" name="updraft_retain_db" value="'.$updraft_retain_db.'" class="retain-files" />';
 
-				echo wp_kses($retain_dbs_config, $updraftplus_admin->kses_allow_tags());
+				echo wp_kses($updraft_retain_dbs_config, $updraftplus_admin->kses_allow_tags());
 			?>
 			</div>
 			<?php do_action('updraftplus_after_dbconfig'); ?>
@@ -99,41 +78,32 @@ foreach ($default_options as $k => $v) {
 
 <h2 class="updraft_settings_sectionheading"><?php esc_html_e('Sending Your Backup To Remote Storage', 'updraftplus');?></h2>
 
-<?php
-$debug_mode = UpdraftPlus_Options::get_updraft_option('updraft_debug_mode') ? 'checked="checked"' : "";
-$active_service = UpdraftPlus_Options::get_updraft_option('updraft_service');
-if (is_array($active_service)) $active_service = $updraftplus->just_one($active_service);
-		
-// Change this to give a class that we can exclude
-$multi = apply_filters('updraftplus_storage_printoptions_multi', '');
-?>
-
 <table id="remote-storage-holder" class="form-table width-900">
-	<tr class="updraft-background-white">
+	<tr>
 		<th><?php
-			echo esc_html__('Select your preferred remote storage location', 'updraftplus').'<br>'.wp_kses_post(apply_filters('updraftplus_after_remote_storage_heading_message', '<em>'.__('(tap on an icon to select or unselect)', 'updraftplus').'</em>'));
+			echo esc_html__('Select your remote storage location', 'updraftplus').'<br>'.wp_kses_post(apply_filters('updraftplus_after_remote_storage_heading_message', '<em>'.__('(tap on an icon to select or unselect)', 'updraftplus').'</em>'));
 		?>:</th>
 		<td>
 		<div id="remote-storage-container" class="available-remote-storages">
 			<?php
-			$non_existent_backup_methods = array();
+			$updraft_non_existent_backup_methods = array();
 
-			foreach ($updraftplus->backup_methods as $method => $description) {
-				if (!class_exists('UpdraftPlus_BackupModule_'.$method)) updraft_try_include_file('methods/'.$method.'.php', 'include_once');
-				if (is_subclass_of('UpdraftPlus_BackupModule_'.$method, 'UpdraftPlus_BackupModule_AddonNotYetPresent')) {
-					$non_existent_backup_methods[$method] = $description;
+			foreach ($updraftplus->backup_methods as $updraft_method => $updraft_description) {
+				if (!class_exists('UpdraftPlus_BackupModule_'.$updraft_method)) updraft_try_include_file('methods/'.$updraft_method.'.php', 'include_once');
+				if (is_subclass_of('UpdraftPlus_BackupModule_'.$updraft_method, 'UpdraftPlus_BackupModule_AddonNotYetPresent')) {
+					$updraft_non_existent_backup_methods[$updraft_method] = $updraft_description;
 					continue;
 				}
-				/* translators: 1: String 'UpdraftPlus', 2: String 'AWS S3' */
-				if ('updraftvault' == $method) $description = '<strong>'.$description.'</strong> ('.sprintf(__('integrated with %1$s and based on %2$s', 'updraftplus'), 'UpdraftPlus', 'AWS S3').')';
-				$updraftplus->show_remote_storage($description, $method, $multi, $active_service, $description);
+				/* translators: %s: String 'UpdraftPlus' */
+				if ('updraftvault' == $updraft_method) $updraft_description = '<strong>'.$updraft_description.'</strong> ('.sprintf(__('integrated with %s', 'updraftplus'), 'UpdraftPlus').')';
+				$updraftplus->show_remote_storage($updraft_description, $updraft_method, $multi, $active_service, $updraft_description);
 			}
 		?>
 		</div>
 		</td>
 	</tr>
 	
-	<?php if (count($non_existent_backup_methods) > 0) { ?>
+	<?php if (count($updraft_non_existent_backup_methods) > 0) { ?>
 	<tr class="updraft-empty-tr">
 		<td colspan="2"></td>
 	</tr>
@@ -143,22 +113,22 @@ $multi = apply_filters('updraftplus_storage_printoptions_multi', '');
 		<td>
 			<p>
 				<strong><?php
-					/* translators: %s: String 'UpdraftPlus Premium' */
-					echo sprintf(esc_html__('Get these additional storage locations when you upgrade to %s', 'updraftplus'), 'UpdraftPlus Premium').': ';
-					echo wp_kses_post('<a href="'.esc_url($updraftplus->get_url('premium')).'" target="_blank">'.__('Get Premium', 'updraftplus').'</a>');
+					/* translators: %s: 'UpdraftPlus Premium' link */
+					echo wp_kses_post(sprintf(__('Unlock even more storage options with %s.', 'updraftplus'), '<a href="'.esc_url($updraftplus->get_url('premium')).'" target="_blank">'.__('UpdraftPlus Premium', 'updraftplus').'</a>'));
 				?></strong>
 			</p>
 		<div id="remote-storage-container">
 		<?php
-			foreach ($non_existent_backup_methods as $method => $description) {
-				$updraftplus->show_remote_storage($description, $method, $multi, $active_service, $description, true);
+			foreach ($updraft_non_existent_backup_methods as $updraft_method => $updraft_description) {
+				$updraftplus->show_remote_storage($updraft_description, $updraft_method, $multi, $active_service, $updraft_description, true);
 			}
 		?>
 		</div>
 
 		<?php
 		if (false === apply_filters('updraftplus_storage_printoptions', false, $active_service)) {
-			echo '<p style="padding: 10px 20px">'.esc_html__('You can also choose more than one location i.e. backup your backups with', 'updraftplus').' <a href="'.esc_url($updraftplus->get_url('premium')).'" target="_blank">UpdraftPlus Premium</a>.</p>';
+			/* translators: %s: 'UpdraftPlus Premium' link */
+			echo '<p style="padding: 10px 20px">'.wp_kses_post(sprintf(__('You can also save your backups to multiple locations for added assurance, only with %s.', 'updraftplus'), '<a href="'.esc_url($updraftplus->get_url('premium')).'" target="_blank">UpdraftPlus Premium</a>')).'</p>';
 		}
 		?>
 		
@@ -170,7 +140,7 @@ $multi = apply_filters('updraftplus_storage_printoptions_multi', '');
 
 	<tr class="updraftplusmethod none ud_nostorage">
 		<td></td>
-		<td><em><?php echo esc_html(__('If you choose no remote storage, then the backups remain on the web-server.', 'updraftplus').' '.__('This is not recommended (unless you plan to manually copy them to your computer), as losing the web-server would mean losing both your website and the backups in one event.', 'updraftplus'));?></em></td>
+		<td><em><?php echo esc_html(__("If you don't select storage, your backups will be saved to your web-server (please don't do this - if the server ever goes down, you lose it all).", 'updraftplus').' '.__('We recommend choosing at least one storage option, but multiple is the ideal.', 'updraftplus').' '.__('Only leave the storage selection blank if you intend to manually copy the files to your computer.', 'updraftplus'));?></em></td>
 	</tr>
 </table>
 
@@ -178,7 +148,7 @@ $multi = apply_filters('updraftplus_storage_printoptions_multi', '');
 
 <h2 class="updraft_settings_sectionheading"><?php esc_html_e('File Options', 'updraftplus');?></h2>
 
-<table class="form-table js-tour-settings-more width-900" >
+<table class="form-table width-900" >
 	<tr>
 		<th><?php esc_html_e('Include in files backup', 'updraftplus');?>:</th>
 		<td>
@@ -262,24 +232,11 @@ $multi = apply_filters('updraftplus_storage_printoptions_multi', '');
 			</div>
 			
 			<?php
-				$plugins = get_plugins();
-				$wp_optimize_file = false;
-
-				foreach ($plugins as $key => $value) {
-					if ('wp-optimize' == $value['TextDomain']) {
-						$wp_optimize_file = $key;
-						break;
-					}
-				}
-				
 				if (!$wp_optimize_file) {
 					?><br><a href="https://wordpress.org/plugins/wp-optimize/" target="_blank"><?php esc_html_e('Recommended: optimize your database with WP-Optimize.', 'updraftplus');?></a>
 					<?php
 				}
 			?>
-			
-
-
 
 			</td>
 		</tr>
@@ -287,7 +244,6 @@ $multi = apply_filters('updraftplus_storage_printoptions_multi', '');
 	<?php
 		}
 
-		$moredbs_config = apply_filters('updraft_database_moredbs_config', '');
 		if (!empty($moredbs_config)) {
 		?>
 			<tr>
@@ -306,7 +262,6 @@ $multi = apply_filters('updraftplus_storage_printoptions_multi', '');
 <table class="form-table width-900">
 
 <?php
-	$report_rows = apply_filters('updraftplus_report_form', false);
 	if (is_string($report_rows)) {
 		echo $report_rows; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped HTML.
 	} else {
@@ -316,13 +271,7 @@ $multi = apply_filters('updraftplus_storage_printoptions_multi', '');
 		<th><?php esc_html_e('Email', 'updraftplus'); ?>:</th>
 		<td>
 			<?php
-				$updraft_email = UpdraftPlus_Options::get_updraft_option('updraft_email');
 				// in case that premium users doesn't have the reporting addon, then the same email report setting's functionality will be applied to the premium version
-				// since the free version allows only one service at a time, $active_service contains just a string name of particular service, in this case 'email'
-				// so we need to make the checking a bit more universal by transforming it into an array of services in which we can check whether email is the only service (free onestorage) or one of the services (premium multistorage)
-				$temp_services = $active_service;
-				if (is_string($temp_services)) $temp_services = (array) $temp_services;
-				$is_email_storage = !empty($temp_services) && in_array('email', $temp_services);
 			?>
 			<label for="updraft_email" class="updraft_checkbox email_report">
 				<input type="checkbox" id="updraft_email" name="updraft_email" value="<?php echo esc_attr(get_bloginfo('admin_email')); ?>"<?php if ($is_email_storage || !empty($updraft_email)) echo ' checked="checked"';?> <?php if ($is_email_storage) echo 'disabled onclick="return false"'; ?>> 
@@ -350,14 +299,13 @@ $multi = apply_filters('updraftplus_storage_printoptions_multi', '');
 
 <script>
 <?php
-	$storage_objects_and_ids = UpdraftPlus_Storage_Methods_Interface::get_storage_objects_and_ids(array_keys($updraftplus->backup_methods));
 	// In PHP 5.5+, there's array_column() for this
-	$method_objects = array();
-	foreach ($storage_objects_and_ids as $method => $method_information) {
-		$method_objects[$method] = $method_information['object'];
+	$updraft_method_objects = array();
+	foreach ($storage_objects_and_ids as $updraft_method => $updraft_method_information) {
+		$updraft_method_objects[$updraft_method] = $updraft_method_information['object'];
 	}
 
-	$updraftplus_admin->get_settings_js($method_objects, $really_is_writable, $updraft_dir, $active_service);
+	$updraftplus_admin->get_settings_js($updraft_method_objects, $really_is_writable, $updraft_dir, $active_service);
 ?>
 </script>
 <table class="form-table width-900">
@@ -369,12 +317,6 @@ $multi = apply_filters('updraftplus_storage_printoptions_multi', '');
 		<th><?php esc_html_e('Expert settings', 'updraftplus');?>:</th>
 		<td><a class="enableexpertmode" href="<?php echo esc_url(UpdraftPlus::get_current_clean_url());?>#enableexpertmode"><?php esc_html_e('Show expert settings', 'updraftplus');?></a> - <?php esc_html_e("open this to show some further options; don't bother with this unless you have a problem or are curious.", 'updraftplus');?> <?php do_action('updraftplus_expertsettingsdescription'); ?></td>
 	</tr>
-	<?php
-	$delete_local = UpdraftPlus_Options::get_updraft_option('updraft_delete_local', 1);
-	$split_every_mb = UpdraftPlus_Options::get_updraft_option('updraft_split_every', 400);
-	if (!is_numeric($split_every_mb)) $split_every_mb = 400;
-	if ($split_every_mb < UPDRAFTPLUS_SPLIT_MIN) $split_every_mb = UPDRAFTPLUS_SPLIT_MIN;
-	?>
 
 	<tr class="expertmode updraft-hidden" style="display:none;">
 		<th><?php esc_html_e('Debug mode', 'updraftplus');?>:</th>

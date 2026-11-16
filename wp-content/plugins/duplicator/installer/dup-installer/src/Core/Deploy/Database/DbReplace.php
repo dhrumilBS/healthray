@@ -7,12 +7,12 @@ use Duplicator\Installer\Core\Params\Models\SiteOwrMap;
 use Duplicator\Installer\Core\Params\PrmMng;
 use Duplicator\Installer\Utils\Log\Log;
 use Duplicator\Libs\Snap\SnapIO;
+use Duplicator\Libs\Snap\SnapURL;
 use DUPX_ArchiveConfig;
 use DUPX_DB_Tables;
 use Duplicator\Installer\Core\InstState;
 use Duplicator\Installer\Utils\ReplaceEngine\ReplaceItem;
 use Duplicator\Installer\Utils\ReplaceEngine\ReplaceMng;
-use DUPX_U;
 use DUPX_UpdateEngine;
 use Exception;
 
@@ -143,9 +143,9 @@ class DbReplace
 
         // Replace email address (xyz@oldomain.com to xyz@newdomain.com).
         if ($paramsManager->getValue(PrmMng::PARAM_EMAIL_REPLACE)) {
-            $at_old_domain = '@' . DUPX_U::getDomain($this->mainUrlOld);
-            $at_new_domain = '@' . DUPX_U::getDomain($this->mainUrlNew);
-            $srManager->addItem($at_old_domain, $at_new_domain, ReplaceItem::TYPE_STRING, DUPX_UpdateEngine::SR_PRORITY_LOW);
+            $at_old_domain = '@' . SnapURL::getDomain($this->mainUrlOld);
+            $at_new_domain = '@' . SnapURL::getDomain($this->mainUrlNew);
+            $srManager->addItem($at_old_domain, $at_new_domain, ReplaceItem::TYPE_EMAIL_DOMAIN, DUPX_UpdateEngine::SR_PRORITY_LOW);
         }
     }
 
@@ -309,22 +309,10 @@ class DbReplace
 
             // Replace email address (xyz@oldomain.com to xyz@newdomain.com).
             if ($prmMng->getValue(PrmMng::PARAM_EMAIL_REPLACE)) {
-                $at_old_domain = '@' . DUPX_U::getDomain($search);
-                $at_new_domain = '@' . DUPX_U::getDomain($replace);
-                $srManager->addItem($at_old_domain, $at_new_domain, ReplaceItem::TYPE_STRING, DUPX_UpdateEngine::SR_PRORITY_LOW, $tables);
+                $at_old_domain = '@' . SnapURL::getDomain($search);
+                $at_new_domain = '@' . SnapURL::getDomain($replace);
+                $srManager->addItem($at_old_domain, $at_new_domain, ReplaceItem::TYPE_EMAIL_DOMAIN, DUPX_UpdateEngine::SR_PRORITY_LOW, $tables);
             }
-
-            // for domain host and path priority is on main site
-            $sUrlInfo = parse_url($search);
-            $sHost    = $sUrlInfo['host'] ?? '';
-            $sPath    = $sUrlInfo['path'] ?? '';
-            $rUrlInfo = parse_url($replace);
-            $rHost    = $rUrlInfo['host'] ?? '';
-            $rPath    = $rUrlInfo['path'] ?? '';
-
-            // add path and host scope for custom columns in database
-            $srManager->addItem($sHost, $rHost, ReplaceItem::TYPE_URL, $priority, 'domain_host');
-            $srManager->addItem($sPath, $rPath, ReplaceItem::TYPE_STRING, $priority, 'domain_path');
         }
     }
 
@@ -462,12 +450,12 @@ class DbReplace
 
             // Replace email address (xyz@oldomain.com to xyz@newdomain.com).
             if ($prmMng->getValue(PrmMng::PARAM_EMAIL_REPLACE)) {
-                $at_old_domain = '@' . DUPX_U::getDomain($sourceInfo['fullUploadUrl']);
-                $at_new_domain = '@' . DUPX_U::getDomain($targetInfo['fullUploadUrl']);
+                $at_old_domain = '@' . SnapURL::getDomain($sourceInfo['fullUploadUrl']);
+                $at_new_domain = '@' . SnapURL::getDomain($targetInfo['fullUploadUrl']);
                 $srManager->addItem(
                     $at_old_domain,
                     $at_new_domain,
-                    ReplaceItem::TYPE_STRING,
+                    ReplaceItem::TYPE_EMAIL_DOMAIN,
                     DUPX_UpdateEngine::SR_PRORITY_LOW,
                     $scope
                 );

@@ -10,7 +10,7 @@ defined("ABSPATH") or die("");
  * Variables
  *
  * @var \Duplicator\Core\Views\TplMng $tplMng
- * @var array<int, array{label: string, message: string}> $warnings
+ * @var array<int, array{code: int, label: string, message: string}> $warnings
  */
 
 $warnings = $tplMng->getDataValueArrayRequired('warnings');

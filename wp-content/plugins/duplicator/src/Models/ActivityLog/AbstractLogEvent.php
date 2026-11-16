@@ -11,6 +11,7 @@ use Exception;
 use ReflectionClass;
 use VendorDuplicator\Amk\JsonSerialize\JsonSerialize;
 use wpdb;
+use Duplicator\Libs\Snap\SnapUtil;
 
 abstract class AbstractLogEvent extends AbstractGenericModel
 {
@@ -257,9 +258,7 @@ abstract class AbstractLogEvent extends AbstractGenericModel
 
         foreach ($dbValuesToProps as $propName => $value) {
             $prop = $reflect->getProperty($propName);
-            if (PHP_VERSION_ID < 80100) {
-                $prop->setAccessible(true);
-            }
+            SnapUtil::setAccessible($prop);
             $prop->setValue($obj, $value);
         }
 
@@ -323,6 +322,47 @@ SQL;
         }
 
         return $allowedTypes;
+    }
+
+    /**
+     * Child logs of a parent log, without capability filtering.
+     *
+     * Children share the parent's type and capability, and background or API callers may have no user.
+     *
+     * @param int    $parentId Parent log ID
+     * @param string $order    Sort order: 'ASC' or 'DESC' (default: 'ASC')
+     * @param int    $limit    Maximum number of logs to return (default: 100)
+     *
+     * @return static[] Array of child log instances
+     */
+    public static function getChildLogsByParentId(int $parentId, string $order = 'ASC', int $limit = 100): array
+    {
+        global $wpdb;
+
+        $table = self::getTableName(true);
+        $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
+
+        $sql     = "SELECT * FROM `{$table}` WHERE parent_id = %d AND type = %s ORDER BY created_at {$order}, id {$order} LIMIT %d";
+        $results = $wpdb->get_results($wpdb->prepare($sql, $parentId, static::getType(), $limit), ARRAY_A);
+
+        if (!is_array($results)) {
+            return [];
+        }
+
+        $logs = [];
+        foreach ($results as $row) {
+            try {
+                $log = self::getModelFromRow($row);
+                if ($log instanceof static) {
+                    $logs[] = $log;
+                }
+            } catch (Exception $e) {
+                DupLog::traceException($e, "Child log query error");
+                continue;
+            }
+        }
+
+        return $logs;
     }
 
     /**

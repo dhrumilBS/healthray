@@ -15,14 +15,19 @@ use Duplicator\Core\Controllers\PageAction;
 use Duplicator\Core\Controllers\SubMenuItem;
 use Duplicator\Core\Views\TplMng;
 use Duplicator\Libs\Snap\SnapIO;
+use Duplicator\Libs\Snap\SnapUtil;
+use Duplicator\Libs\Snap\SnapWP;
 use Duplicator\Models\ActivityLog\LogEventOrphanCleanup;
 use Duplicator\Models\DynamicGlobalEntity;
+use Duplicator\Models\StaticGlobal;
 use Duplicator\Package\ClientSideKick;
 use Duplicator\Package\DupPackage;
 use Duplicator\Package\PackageUtils;
 use Duplicator\Utils\AsyncSetupActions;
 use Duplicator\Utils\Lock\LockUtil;
 use Duplicator\Utils\Logging\DupLog;
+use Duplicator\Utils\Logging\PhpLogMng;
+use Duplicator\Utils\Logging\TraceLogMng;
 use Duplicator\Views\AdminNotices;
 use Duplicator\Views\AutoTunePageData;
 use Exception;
@@ -45,6 +50,12 @@ class ToolsPageController extends AbstractMenuPageController
     const ACTION_CLEAN_CACHE     = 'tmp-cache';
     const ACTION_INSTALLER       = 'installer';
     const ACTION_REDETECT_SERVER = 'redetect-server';
+    const ACTION_CLEAR_PHP_LOG   = 'clear-php-log';
+
+    const PHP_LOG_LINES = 200;
+
+    const LOGS_LIST_LIMIT = 20;
+    const LOGS_FILE_REGEX = '/(\.log|_log\.txt)$/';
 
     /**
      * Class constructor
@@ -188,6 +199,19 @@ class ToolsPageController extends AbstractMenuPageController
             ],
             [$this->pageSlug]
         );
+        $actions[] = new PageAction(
+            self::ACTION_CLEAR_PHP_LOG,
+            [
+                $this,
+                'actionClearPhpLog',
+            ],
+            [
+                $this->pageSlug,
+                self::L2_SLUG_PHP_LOGS,
+            ],
+            '',
+            CapMng::CAP_SETTINGS
+        );
         return $actions;
     }
 
@@ -292,6 +316,16 @@ class ToolsPageController extends AbstractMenuPageController
         } finally {
             LockUtil::unlockProcess();
         }
+    }
+
+    /**
+     * Clear the PHP error log
+     *
+     * @return array<string,mixed>
+     */
+    public function actionClearPhpLog(): array
+    {
+        return ['phpLogCleared' => PhpLogMng::clearLog()];
     }
 
     /**
@@ -409,12 +443,14 @@ class ToolsPageController extends AbstractMenuPageController
                 break;
             case self::L2_SLUG_LOGS:
                 TplMng::getInstance()->render(
-                    'admin_pages/tools/duplicator_logs'
+                    'admin_pages/tools/duplicator_logs',
+                    self::getLogsPageData()
                 );
                 break;
             case self::L2_SLUG_PHP_LOGS:
                 TplMng::getInstance()->render(
-                    'admin_pages/tools/php_logs'
+                    'admin_pages/tools/php_logs',
+                    self::getPhpLogsPageData()
                 );
                 break;
             case self::L2_SLUG_AI:
@@ -424,6 +460,86 @@ class ToolsPageController extends AbstractMenuPageController
                 );
                 break;
         }
+    }
+
+    /**
+     * Return the data of the Duplicator logs tab
+     *
+     * @return array<string,mixed>
+     */
+    private static function getLogsPageData(): array
+    {
+        $traceFilepath = DupLog::getTraceFilepath();
+        $traceFilename = basename($traceFilepath);
+        $logs          = self::getLogsList(self::LOGS_LIST_LIMIT);
+
+        $logSelected = SnapUtil::sanitizeTextInput(INPUT_GET, 'logname');
+        if (
+            $logSelected !== basename($logSelected) ||
+            preg_match(self::LOGS_FILE_REGEX, $logSelected) !== 1 ||
+            !is_readable(DUPLICATOR_LOGS_PATH . '/' . $logSelected)
+        ) {
+            $logSelected = isset($logs[0]) ? basename($logs[0]) : '';
+        }
+
+        $backupLogs = [];
+        foreach ($logs as $path) {
+            $name         = basename($path);
+            $backupLogs[] = [
+                'name' => $name,
+                'time' => date('m/d/y h:i:s', (int) filemtime($path)),
+                'url'  => self::getLogViewerURL($name),
+            ];
+        }
+
+        $isTraceOn = StaticGlobal::getTraceLogEnabledOption();
+
+        return [
+            'logSelected'    => $logSelected,
+            'logUrl'         => (strlen($logSelected) > 0 ? DUPLICATOR_LOGS_URL . '/' . $logSelected . '?' . date('ymdHis') : ''),
+            'refresh'        => SnapUtil::sanitizeBoolInput(INPUT_POST, 'refresh'),
+            'auto'           => SnapUtil::sanitizeBoolInput(INPUT_POST, 'auto'),
+            'traceLogTime'   => (file_exists($traceFilepath)
+                ? date('m/d/y h:i:s', (int) filemtime($traceFilepath))
+                : __('No trace log found', 'duplicator')),
+            'traceLogUrl'    => ControllersManager::getMenuLink(
+                ControllersManager::TOOLS_SUBMENU_SLUG,
+                self::L2_SLUG_LOGS,
+                null,
+                ['logname' => $traceFilename]
+            ),
+            'traceFilename'  => $traceFilename,
+            'isTraceOn'      => $isTraceOn,
+            'traceToggleUrl' => (CapMng::can(CapMng::CAP_SETTINGS, false)
+                ? SettingsPageController::getInstance()->getTraceActionUrl(!$isTraceOn)
+                : ''),
+            'canClearTrace'  => CapMng::can(CapMng::CAP_CREATE, false),
+            'backupLogs'     => $backupLogs,
+        ];
+    }
+
+    /**
+     * Return the data of the PHP logs tab
+     *
+     * @return array<string,mixed>
+     */
+    private static function getPhpLogsPageData(): array
+    {
+        $logPath    = PhpLogMng::getPath(null, true);
+        $logEntries = PhpLogMng::getLog(self::PHP_LOG_LINES, "M d, H:i:s");
+
+        return [
+            'auto'          => SnapUtil::sanitizeBoolInput(INPUT_POST, 'auto'),
+            'filter'        => SnapUtil::sanitizeTextInput(INPUT_POST, 'filter'),
+            'logPath'       => ($logPath === false ? '' : $logPath),
+            'logFilename'   => ($logPath === false ? '' : (string) PhpLogMng::getFilename($logPath)),
+            'isLogReadable' => ($logPath !== false && is_readable($logPath)),
+            'isLogParsed'   => is_array($logEntries),
+            'logEntries'    => (is_array($logEntries) ? $logEntries : []),
+            'logLines'      => self::PHP_LOG_LINES,
+            'homePath'      => SnapWP::getHomePath(true),
+            'canClearLog'   => CapMng::can(CapMng::CAP_SETTINGS, false),
+        ];
     }
 
     /**
@@ -475,25 +591,32 @@ class ToolsPageController extends AbstractMenuPageController
     }
 
     /**
-     * Get logs list
+     * Get readable backup logs list, trace logs excluded, most recent first
+     *
+     * @param int $limit max number of logs returned
      *
      * @return string[]
      */
-    public static function getLogsList(): array
+    public static function getLogsList(int $limit): array
     {
-        $result = [];
-
-        // Check logs directory
-        if (file_exists(DUPLICATOR_LOGS_PATH)) {
-            $result = SnapIO::regexGlob(DUPLICATOR_LOGS_PATH, [
-                'regexFile'   => '/(\.log|_log\.txt)$/',
-                'regexFolder' => false,
-            ]);
+        if (!file_exists(DUPLICATOR_LOGS_PATH)) {
+            return [];
         }
 
-        // Sort by modification time
-        usort($result, fn($a, $b): int => filemtime($b) - filemtime($a));
-        return $result;
+        $mtimes = [];
+        foreach (
+            SnapIO::regexGlob(DUPLICATOR_LOGS_PATH, [
+                'regexFile'   => self::LOGS_FILE_REGEX,
+                'regexFolder' => false,
+            ]) as $path
+        ) {
+            if (is_readable($path) && strpos(basename($path), TraceLogMng::NAME_PREFIX) !== 0) {
+                $mtimes[$path] = (int) filemtime($path);
+            }
+        }
+
+        arsort($mtimes);
+        return array_slice(array_keys($mtimes), 0, $limit);
     }
 
     /**

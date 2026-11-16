@@ -15,6 +15,16 @@ final class ErrorHandler
     // put php errors in $varModeLog static var
     const SHUTDOWN_TIMEOUT = 'tm';
 
+    private const DEPRECATION_LEVELS       = E_DEPRECATED | E_USER_DEPRECATED;
+    private const WP_DEPRECATION_FUNCTIONS = [
+        '_deprecated_argument',
+        '_deprecated_class',
+        '_deprecated_constructor',
+        '_deprecated_file',
+        '_deprecated_function',
+        '_deprecated_hook',
+    ];
+
     /** @var array<string,mixed> */
     private static $shutdownReturns = ['tm' => 'timeout'];
     /** @var int */
@@ -49,11 +59,15 @@ final class ErrorHandler
      * @param string $errfile Error file
      * @param int    $errline Error line
      *
-     * @return bool
+     * @return bool false hands the error back to PHP
      */
     public static function error(int $errno, string $errstr, string $errfile, int $errline): bool
     {
         try {
+            if (self::isForeignDeprecation($errno, $errfile)) {
+                return false;
+            }
+
             switch (self::$handlerMode) {
                 case self::MODE_OFF:
                     if ($errno == E_ERROR) {
@@ -89,6 +103,61 @@ final class ErrorHandler
             @error_log('Duplicator could not log a PHP error because its logger is unavailable.');
         }
         return true;
+    }
+
+    /**
+     * Deprecations from bundled vendors or from code outside the plugin are left to PHP,
+     * so @, error_reporting and debug.log apply to them.
+     *
+     * @param int    $errno   Error level
+     * @param string $errfile Error file
+     *
+     * @return bool
+     */
+    private static function isForeignDeprecation(int $errno, string $errfile): bool
+    {
+        if (!($errno & self::DEPRECATION_LEVELS)) {
+            return false;
+        }
+
+        $file = self::normalizePath($errfile);
+        if (strpos($file, self::normalizePath(ABSPATH . 'wp-includes/')) === 0) {
+            $file = self::wpDeprecationCaller() ?? $file;
+        }
+
+        $pluginPath = self::normalizePath(DUPLICATOR____PATH) . '/';
+        if (strpos($file, $pluginPath) !== 0) {
+            return true;
+        }
+
+        return preg_match('#^(addons/[^/]+/)?vendor-prefixed/#', substr($file, strlen($pluginPath))) === 1;
+    }
+
+    /**
+     * WordPress reports its _deprecated_*() notices from wp-includes, so find the code that used the deprecated item.
+     *
+     * @return ?string Caller file, null if no _deprecated_*() call is on the stack
+     */
+    private static function wpDeprecationCaller(): ?string
+    {
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10);
+        foreach ($trace as $i => $frame) {
+            if (in_array($frame['function'], self::WP_DEPRECATION_FUNCTIONS, true)) {
+                // No file when the deprecated item runs from an internal callback, e.g. array_map()
+                return isset($trace[$i + 1]['file']) ? self::normalizePath($trace[$i + 1]['file']) : null;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param string $path Path
+     *
+     * @return string Path with forward slashes
+     */
+    private static function normalizePath(string $path): string
+    {
+        return str_replace('\\', '/', $path);
     }
 
     /**

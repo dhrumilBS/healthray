@@ -255,7 +255,12 @@ class StoragesUtil
      */
     public static function beforeCryptUpdateSettings(): void
     {
-        self::$storagesForCryptUpdate = AbstractStorageEntity::getAll();
+        $storages = AbstractStorageEntity::getAll();
+        if ($storages === false) {
+            DupLog::trace('Unable to load storages before the encryption settings update');
+            $storages = [];
+        }
+        self::$storagesForCryptUpdate = $storages;
     }
 
     /**
@@ -331,7 +336,7 @@ class StoragesUtil
 
         if ($class::isUnique()) {
             $storages = AbstractStorageEntity::getAllBySType($class::getSType());
-            if (count($storages) > 0) {
+            if ($storages !== false && count($storages) > 0) {
                 $reason = sprintf(
                     __('Only one %s storage can be created at a time', 'duplicator'),
                     $class::getStypeName()
@@ -436,7 +441,10 @@ class StoragesUtil
         try {
             $doubleStorageIds = [];
             $defaultStorageId = self::getDefaultStorageId();
-            foreach (AbstractStorageEntity::getAll() as $storage) {
+            if (($storages = AbstractStorageEntity::getAll()) === false) {
+                throw new Exception('Unable to load storages');
+            }
+            foreach ($storages as $storage) {
                 if (!$storage->isDefault() || $storage->getId() === $defaultStorageId) {
                     continue;
                 }
@@ -474,6 +482,7 @@ class StoragesUtil
         array $disabledStorageIds = []
     ): array {
         $storageList       = AbstractStorageEntity::getAll(0, 0, [self::class, 'sortByPriority']);
+        $storageList       = ($storageList === false ? [] : $storageList);
         $hasInvalidStorage = false;
         $storageRows       = [];
 

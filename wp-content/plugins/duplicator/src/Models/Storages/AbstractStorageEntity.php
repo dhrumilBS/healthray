@@ -25,6 +25,7 @@ use Duplicator\Utils\Settings\ModelMigrateSettingsInterface;
 use Duplicator\Package\Storage\StorageTransferChunkFiles;
 use Exception;
 use Duplicator\Core\Exceptions\DupliException;
+use Duplicator\Core\Exceptions\StorageTransferAbortException;
 use Throwable;
 use ReflectionClass;
 use VendorDuplicator\Amk\JsonSerialize\JsonSerialize;
@@ -802,7 +803,7 @@ abstract class AbstractStorageEntity extends AbstractEntity implements ModelMigr
             case StorageTransferChunkFiles::CHUNK_ERROR:
             default:
                 DupLog::infoTrace('Local upload in chunks, upload error: ' . $storageUpload->getLastErrorMessage());
-                $upload_info->increaseFailureCount($storageUpload->getFailure());
+                $this->handleChunkFailure($upload_info, $storageUpload->getFailure());
         }
         $package->update();
     }
@@ -907,9 +908,28 @@ abstract class AbstractStorageEntity extends AbstractEntity implements ModelMigr
             case StorageTransferChunkFiles::CHUNK_ERROR:
             default:
                 DupLog::infoTrace('Local download in chunks, download error: ' . $storageDownload->getLastErrorMessage());
-                $upload_info->increaseFailureCount($storageDownload->getFailure());
+                $this->handleChunkFailure($upload_info, $storageDownload->getFailure());
         }
         $package->update();
+    }
+
+    /**
+     * Count a failed chunk towards the retry limit, or fail the transfer at once when the adapter aborted it
+     *
+     * @param UploadInfo $upload_info the upload info
+     * @param ?Throwable $failure     the exception the chunk threw, null when it only returned false
+     *
+     * @return void
+     */
+    private function handleChunkFailure(UploadInfo $upload_info, ?Throwable $failure): void
+    {
+        if ($failure instanceof StorageTransferAbortException) {
+            DupLog::infoTrace("Transfer aborted without retry [Storage Id: $this->id]");
+            $upload_info->uploadFailed($failure);
+            return;
+        }
+
+        $upload_info->increaseFailureCount($failure);
     }
 
     /**
@@ -1590,9 +1610,7 @@ abstract class AbstractStorageEntity extends AbstractEntity implements ModelMigr
             if ($prop->isStatic()) {
                 continue;
             }
-            if (PHP_VERSION_ID < 80100) {
-                $prop->setAccessible(true);
-            }
+            SnapUtil::setAccessible($prop);
             if ($prop->getName() == 'name') {
                 $newName = sprintf(__('%1$s - Copy', 'duplicator'), $prop->getValue($source));
                 $prop->setValue($target, $newName);
@@ -1651,9 +1669,7 @@ abstract class AbstractStorageEntity extends AbstractEntity implements ModelMigr
             if (!isset($data[$prop->getName()])) {
                 continue;
             }
-            if (PHP_VERSION_ID < 80100) {
-                $prop->setAccessible(true);
-            }
+            SnapUtil::setAccessible($prop);
             if (is_array($data[$prop->getName()])) {
                 $value = array_merge($prop->getValue($this), $data[$prop->getName()]);
                 $prop->setValue($this, $value);
@@ -1674,6 +1690,9 @@ abstract class AbstractStorageEntity extends AbstractEntity implements ModelMigr
     {
         if (static::isUnique()) {
             $storages = static::getAllBySType(static::getSType());
+            if ($storages === false) {
+                throw new Exception('Unable to verify that no other ' . static::getSTypeName() . ' storage exists');
+            }
             if (count($storages) > 0) {
                 throw new Exception('Only one ' . static::getSTypeName() . ' storage can exist');
             }

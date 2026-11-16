@@ -26,9 +26,6 @@ $archiveFilterPaths      = strlen($archiveFilterDirs) > 0 && strlen($archiveFilt
 $archiveFilterPaths      = str_replace(';', ";\n", $archiveFilterPaths);
 $archiveFilterExtensions = $tplMng->getDataValueString('archiveFilterExtensions');
 
-$pathFiltersTooltip     = __('File filters allow you to exclude files and folders from the Backup.', 'duplicator') . ' ' .
-    __('To enable path and extension filters check the checkbox.', 'duplicator') . ' ' .
-    __('Enter the full path of the files and folders you want to exclude from the backup as a semicolon (;) separated list.', 'duplicator');
 $extensionFilterTooltip = __(
     "File extension filters allow you to exclude files with certain file extensions from the backup e.g. zip;rar;pdf etc.",
     'duplicator'
@@ -112,6 +109,7 @@ $componentsTooltip = $tplMng->render('parts/packages/filters/package_components_
             <span id="components_error_container" class="duplicator-error-container"></span>
         </div>
     </div>
+    <?php if (!$tplMng->getDataValueBool('hideFileFilters')) : ?>
     <div class="files-filter-section">
         <hr>
         <label class="lbl-larger">
@@ -133,7 +131,7 @@ $componentsTooltip = $tplMng->render('parts/packages/filters/package_components_
             <label class="lbl-larger">
                 <?php
                 esc_html_e('Filters:', 'duplicator');
-                $tooltip = __(
+                $tooltip = __('Files and folders listed here are excluded from the backup.', 'duplicator') . '<br><br>' . __(
                     '- Use full path for directories or specific files.<br>
                     - Use filenames without paths to filter same-named files across multiple directories.<br>
                     - Use semicolons to separate all items.<br>
@@ -191,6 +189,7 @@ $componentsTooltip = $tplMng->render('parts/packages/filters/package_components_
             </div>
         </div>
     </div>
+    <?php endif; ?>
 </div>
 <script>
     (function($) {

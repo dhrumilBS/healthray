@@ -3,11 +3,18 @@
 namespace  Duplicator\Installer\Core\Deploy\Database;
 
 use Duplicator\Libs\Snap\SnapIO;
+use DUPX_ArchiveConfig;
 use DUPX_Package;
+use Exception;
 use Iterator;
 
 /**
- *  @implements Iterator<mixed,mixed>
+ * The SQL dump files of the package, in execution order.
+ *
+ * The order comes from the dump file list of the archive descriptor; archives
+ * built with a single dump file carry no list and are read from the dump folder.
+ *
+ * @implements Iterator<mixed,mixed>
  */
 class DbDumpIterator implements Iterator
 {
@@ -23,23 +30,25 @@ class DbDumpIterator implements Iterator
     /**
      * Initialize iterator
      *
+     * @param ?string   $dbDumpDirPath   dump folder, the package one when null
+     * @param ?string[] $descriptorFiles dump file names in execution order, the archive descriptor list when null
+     *
      * @return void
      */
-    public function __construct()
+    public function __construct($dbDumpDirPath = null, $descriptorFiles = null)
     {
-        $dbDumpDirPath = DUPX_Package::getSqlDumpDirPath();
-        if (($tmpFiles = scandir($dbDumpDirPath)) === false) {
-            throw new \Exception('Can\'t read sql dump dir.');
+        $dbDumpDirPath = $dbDumpDirPath ?? DUPX_Package::getSqlDumpDirPath();
+        if ($descriptorFiles === null) {
+            $descriptorFiles = DUPX_ArchiveConfig::getInstance()->dbInfo->dumpFiles;
+        }
+        $files = self::filesFromDescriptor($dbDumpDirPath, is_array($descriptorFiles) ? $descriptorFiles : [])
+            ?? self::filesFromFolder($dbDumpDirPath);
+
+        if (count($files) < 1) {
+            throw new Exception('Couldn\'t find any SQL dump files.');
         }
 
-        $tmpFiles = array_values(array_filter($tmpFiles, fn($file) => preg_match('/\.sql$/', $file)));
-
-        if (count($tmpFiles) < 1) {
-            throw new \Exception('Couldn\'t find any SQL dump files.');
-        }
-
-        foreach ($tmpFiles as $i => $file) {
-            $path                   = SnapIO::trailingslashit($dbDumpDirPath) . $file;
+        foreach ($files as $i => $path) {
             $size                   = filesize($path);
             $this->sqlDumpFiles[$i] = [
                 $path,
@@ -50,6 +59,73 @@ class DbDumpIterator implements Iterator
         }
 
         $this->rewind();
+    }
+
+    /**
+     * Dump files in the order of the descriptor list, null when the list is empty
+     *
+     * @param string   $dbDumpDirPath dump folder
+     * @param string[] $names         dump file names in execution order
+     *
+     * @return ?string[]
+     *
+     * @throws Exception if a listed file is missing or the folder holds a file that isn't listed
+     */
+    private static function filesFromDescriptor($dbDumpDirPath, array $names)
+    {
+        if (count($names) === 0) {
+            return null;
+        }
+
+        $names = array_map(fn($name) => basename((string) $name), $names);
+        $paths = [];
+        foreach ($names as $name) {
+            $path = SnapIO::trailingslashit($dbDumpDirPath) . $name;
+            if (!is_file($path)) {
+                throw new Exception('SQL dump file listed in the descriptor is missing: ' . $name);
+            }
+            $paths[] = $path;
+        }
+
+        $unlisted = array_diff(self::sqlFileNames($dbDumpDirPath), $names);
+        if (count($unlisted) > 0) {
+            throw new Exception('SQL dump folder holds files not listed in the descriptor: ' . implode(', ', $unlisted));
+        }
+
+        return $paths;
+    }
+
+    /**
+     * Dump files in name order, for archives without a descriptor list
+     *
+     * @param string $dbDumpDirPath dump folder
+     *
+     * @return string[]
+     */
+    private static function filesFromFolder($dbDumpDirPath)
+    {
+        return array_map(
+            fn($name) => SnapIO::trailingslashit($dbDumpDirPath) . $name,
+            self::sqlFileNames($dbDumpDirPath)
+        );
+    }
+
+    /**
+     * Names of the .sql files in the dump folder, in name order
+     *
+     * @param string $dbDumpDirPath dump folder
+     *
+     * @return string[]
+     *
+     * @throws Exception if the folder can't be read
+     */
+    private static function sqlFileNames($dbDumpDirPath)
+    {
+        if (($files = @scandir($dbDumpDirPath)) === false) {
+            throw new Exception('Can\'t read sql dump dir.');
+        }
+
+        return array_values(array_filter($files, fn($file) => preg_match('/\.sql$/', $file)));
     }
 
     /**

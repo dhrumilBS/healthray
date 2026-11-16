@@ -9,6 +9,7 @@ use Duplicator\Addons\LiteBase\Controllers\AboutUsPageController;
 use Duplicator\Addons\LiteBase\Controllers\LiteToolsController;
 use Duplicator\Addons\LiteBase\Controllers\WelcomePageController;
 use Duplicator\Addons\LiteBase\Controllers\Mocks\MockImportPageController;
+use Duplicator\Addons\LiteBase\Controllers\Mocks\MockIncrementalPageController;
 use Duplicator\Addons\LiteBase\Controllers\Mocks\MockSchedulePageController;
 use Duplicator\Addons\LiteBase\Controllers\Mocks\MockStagingPageController;
 use Duplicator\Addons\LiteBase\Controllers\Mocks\Settings\MockCapabilitiesSettingsController;
@@ -99,8 +100,8 @@ class LiteBase extends AbstractAddonCore
     }
 
     /**
-     * Register the top-level mock pages (Import, Schedule, Staging) into the
-     * Duplicator menu. Storage is intentionally not mocked: core's
+     * Register the top-level mock pages (Import, Incremental Backups, Schedule,
+     * Staging) into the Duplicator menu. Storage is intentionally not mocked: core's
      * StoragePageController is always active.
      *
      * @param AbstractMenuPageController[] $pages menu pages
@@ -111,6 +112,7 @@ class LiteBase extends AbstractAddonCore
     {
         $mocks = [
             MockImportPageController::getInstance(),
+            MockIncrementalPageController::getInstance(),
             MockSchedulePageController::getInstance(),
             MockStagingPageController::getInstance(),
         ];

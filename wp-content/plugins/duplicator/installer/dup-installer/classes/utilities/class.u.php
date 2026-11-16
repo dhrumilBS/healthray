@@ -240,7 +240,7 @@ class DUPX_U
                 $size /= 1024;
             }
             return round($size, 2) . $units[$i];
-        } catch (Exception $e) {
+        } catch (Throwable $e) { // @phpstan-ignore catch.neverThrown (defensive guard kept on purpose)
             return "n/a";
         }
     }
@@ -261,45 +261,6 @@ class DUPX_U
         return str_replace("\\", "/", $path);
     }
 
-
-    /**
-     *  Check PHP version
-     *
-     *  @param string $version PHP version we looking for
-     *
-     *  @return boolean Returns true if version is same or above.
-     */
-    public static function isVersion($version): bool
-    {
-        return (version_compare(PHP_VERSION, $version) >= 0);
-    }
-
-    /**
-     * The domain part of the given URL
-     *                     www.myurl.co.uk     => myurl.co.uk
-     *                     www.google.com      => google.com
-     *                     my.test.myurl.co.uk => myurl.co.uk
-     *                     www.myurl.localweb  => myurl.localweb
-     *
-     * @param string $url string The URL whichs domain you want to get
-     *
-     * @return string
-     */
-    public static function getDomain($url)
-    {
-        $pieces = parse_url($url);
-        $domain = $pieces['host'] ?? '';
-        if (strpos($domain, ".") !== false) {
-            if (preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $domain, $regs)) {
-                return $regs['domain'];
-            } else {
-                $exDomain = explode('.', $domain);
-                return implode('.', array_slice($exDomain, -2, 2));
-            }
-        } else {
-            return $domain;
-        }
-    }
 
     /**
      *
@@ -1348,34 +1309,6 @@ class DUPX_U
                 Log::info('CAN\'T REMOVE MAINTENANCE INDEX FILE \"' . $indexFile . "\"");
             }
         }
-    }
-
-    /**
-     * Check if string is base64 encoded
-     *
-     * @param string $str input string
-     *
-     * @return false|string return false if isn't base64 string or decoded string
-     */
-    public static function is_base64($str)
-    {
-        // Check if there are valid base64 characters
-        if (!preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $str)) {
-            return false;
-        }
-
-        // Decode the string in strict mode and check the results
-        $decoded = base64_decode($str, true);
-        if (false === $decoded) {
-            return false;
-        }
-
-        // Encode the string again
-        if (base64_encode($decoded) != $str) {
-            return false;
-        }
-
-        return $decoded;
     }
 
     /**

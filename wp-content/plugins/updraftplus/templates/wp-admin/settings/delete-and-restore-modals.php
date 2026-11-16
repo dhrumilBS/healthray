@@ -69,22 +69,46 @@ if (!defined('ABSPATH')) die('No direct access allowed');
 									echo wp_kses_post("<p><em>".__("Your web server has PHP's so-called safe_mode active.", 'updraftplus').' '.__('This makes time-outs much more likely.', 'updraftplus').' '.__('You are recommended to turn safe_mode off, or to restore only one entity at a time', 'updraftplus').' <a href="'.esc_url(apply_filters('updraftplus_com_link', "https://teamupdraft.com/documentation/updraftplus/topics/restoration/troubleshooting/i-cant-restore-from-wp-admin-console-can-i-restore-manually/")).'" target="_blank">'.__('or to restore manually', 'updraftplus').'.</a></em></p>');
 								}
 							?>
-							<p><strong><?php esc_html_e('Choose the components to restore:', 'updraftplus'); ?></strong></p> 
+							<?php if (!$file_mods_allowed) : ?>
+							<div class="updraftplus-restore-disabled-notice">
+									<strong><?php esc_html_e('Restore operations are disabled', 'updraftplus'); ?></strong><br>
+									<?php
+									echo wp_kses(
+										sprintf(
+											/* translators: %s: DISALLOW_FILE_MODS constant name, wrapped in a <code> tag */
+											__('The %s constant is currently active on this site.', 'updraftplus'),
+											'<code>DISALLOW_FILE_MODS</code>'
+										).' '.__('All restore operations (including database) are disabled.', 'updraftplus'),
+										array('code' => array())
+									);
+									?>
+									<br>
+									<?php
+									echo wp_kses(
+										sprintf(
+											/* translators: %s: Filename (wp-config.php) */
+											__('To restore this site, temporarily remove or set this constant to false in %s, perform the restore, then re-enable the constant.', 'updraftplus'),
+											'<code>wp-config.php</code>'
+										),
+										array('code' => array())
+									);
+									?>
+							</div>
+							<?php else : ?>
+								<p><strong><?php esc_html_e('Choose the components to restore:', 'updraftplus'); ?></strong></p>
 							<?php
-								$backupable_entities = $updraftplus->get_backupable_file_entities(true, true);
-
-								foreach ($backupable_entities as $type => $info) {
-									if (!isset($info['restorable']) || true == $info['restorable']) {
-										$sdescrip = isset($info['shortdescription']) ? $info['shortdescription'] : $info['description'];
-										echo '<div class="updraft-restore-item"><input id="updraft_restore_'.esc_attr($type).'" type="checkbox" name="updraft_restore[]" value="'.esc_attr($type).'"> <label id="updraft_restore_label_'.esc_attr($type).'" for="updraft_restore_'.esc_attr($type).'">'.esc_html($sdescrip).'</label><br>';
-										do_action("updraftplus_restore_form_$type");
+								foreach ($backupable_entities as $updraft_type => $updraft_info) {
+									if (!isset($updraft_info['restorable']) || true == $updraft_info['restorable']) {
+										$updraft_sdescrip = isset($updraft_info['shortdescription']) ? $updraft_info['shortdescription'] : $updraft_info['description'];
+										echo '<div class="updraft-restore-item"><input id="updraft_restore_'.esc_attr($updraft_type).'" type="checkbox" name="updraft_restore[]" value="'.esc_attr($updraft_type).'"> <label id="updraft_restore_label_'.esc_attr($updraft_type).'" for="updraft_restore_'.esc_attr($updraft_type).'">'.esc_html($updraft_sdescrip).'</label><br>';
+										do_action("updraftplus_restore_form_$updraft_type");
 										echo '</div>';
 									} else {
-										$sdescrip = isset($info['shortdescription']) ? $info['shortdescription'] : $info['description'];
+										$updraft_sdescrip = isset($updraft_info['shortdescription']) ? $updraft_info['shortdescription'] : $updraft_info['description'];
 										echo "<div class=\"updraft-restore-item cannot-restore\"><em>".
 										/* translators: %s: Entity that cannot be restored */
-										esc_html(sprintf(__('The following entity cannot be restored automatically: "%s".', 'updraftplus'), $sdescrip))." ".
-										esc_html__('You will need to restore it manually.', 'updraftplus')."</em><br>".'<input id="updraft_restore_'.esc_attr($type).'" type="hidden" name="updraft_restore[]" value="'.esc_attr($type).'">';
+										esc_html(sprintf(__('The following entity cannot be restored automatically: "%s".', 'updraftplus'), $updraft_sdescrip))." ".
+										esc_html__('You will need to restore it manually.', 'updraftplus')."</em><br>".'<input id="updraft_restore_'.esc_attr($updraft_type).'" type="hidden" name="updraft_restore[]" value="'.esc_attr($updraft_type).'">';
 										echo '</div>';
 									}
 								}
@@ -103,6 +127,7 @@ if (!defined('ABSPATH')) die('No direct access allowed');
 								<?php do_action("updraftplus_restore_form_db"); ?>
 								</div>
 							</div>
+							<?php endif; ?>
 						</fieldset>
 					</form>
 				</div>

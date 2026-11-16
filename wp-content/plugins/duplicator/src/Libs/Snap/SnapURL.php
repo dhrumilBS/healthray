@@ -4,6 +4,22 @@ namespace Duplicator\Libs\Snap;
 
 class SnapURL
 {
+    // Second level labels of country domains longer than two letters, like com.au: two letter ones, like co.uk, always are
+    const SECOND_LEVEL_LABELS = [
+        'com',
+        'edu',
+        'gen',
+        'gob',
+        'gov',
+        'ltd',
+        'mil',
+        'net',
+        'nom',
+        'org',
+        'plc',
+        'sch',
+    ];
+
     /** @var array<string, scalar> */
     protected static $DEF_ARRAY_PARSE_URL = [
         'scheme'   => false,
@@ -254,5 +270,41 @@ class SnapURL
     {
         $hex = unpack('H*', urldecode($url));
         return (string) preg_replace('~..~', '%$0', strtoupper($hex[1]));
+    }
+
+    /**
+     * Return the registrable domain of the url host
+     *
+     * @param string $url string The URL whichs domain you want to get
+     *
+     * @return string The domain part of the given URL
+     *                  www.myurl.co.uk     => myurl.co.uk
+     *                  www.google.com      => google.com
+     *                  my.test.myurl.co.uk => myurl.co.uk
+     *                  www.myurl.localweb  => myurl.localweb
+     *                  192.168.1.10        => 192.168.1.10
+     */
+    public static function getDomain($url)
+    {
+        $host = strtolower((string) parse_url($url, PHP_URL_HOST));
+        if (strpos($host, '.') === false || filter_var($host, FILTER_VALIDATE_IP) !== false) {
+            return $host;
+        }
+
+        $labels = explode('.', $host);
+        if ($labels[0] === 'www') {
+            array_shift($labels);
+        }
+        $count  = count($labels);
+        $length = 2;
+        if (
+            $count > 2 &&
+            strlen($labels[$count - 1]) === 2 &&
+            (strlen($labels[$count - 2]) === 2 || in_array($labels[$count - 2], self::SECOND_LEVEL_LABELS, true))
+        ) {
+            $length = 3;
+        }
+
+        return implode('.', array_slice($labels, -$length));
     }
 }

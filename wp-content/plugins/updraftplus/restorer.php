@@ -665,6 +665,17 @@ class Updraft_Restorer {
 	public function perform_restore($entities_to_restore, $restore_options) {
 		global $updraftplus;
 		
+		// Block all restore operations when DISALLOW_FILE_MODS is active. This is the final enforcement point (the UI and WP-CLI checks are early conveniences); a resumed restore re-enters this method and is re-checked.
+		if (defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS) {
+			$error_message = sprintf(
+				/* translators: %s: Constant name (DISALLOW_FILE_MODS) */
+				__('Restore operations are disabled by the %s constant.', 'updraftplus'),
+				'DISALLOW_FILE_MODS'
+			).' '.__('To restore this site, temporarily remove the constant from wp-config.php or set it to false.', 'updraftplus');
+			$updraftplus->log($error_message, 'error');
+			return new WP_Error('restore_disallowed', $error_message);
+		}
+
 		$updraftplus->log_restore_update(array('type' => 'state', 'stage' => 'verifying', 'data' => implode(', ', array_flip($entities_to_restore))));
 
 		// Now log. We first remove any encryption passphrase from the log data.
@@ -702,6 +713,10 @@ class Updraft_Restorer {
 		
 		$updraftplus->jobdata_set('second_loop_entities', $second_loop);
 		$updraftplus->jobdata_set('backup_timestamp', $timestamp);
+
+		// The timestamp when the restoration process started
+		$restore_timestamp = $updraftplus->jobdata_get('restore_timestamp', false);
+		if (!$restore_timestamp) $updraftplus->jobdata_set('restore_timestamp', time());
 		
 		// Use a site option, as otherwise on multisite when all the array of options is updated via UpdraftPlus_Options::update_site_option(), it will over-write any restored UD options from the backup
 		update_site_option('updraft_restore_in_progress', $updraftplus->nonce);
@@ -780,6 +795,14 @@ class Updraft_Restorer {
 
 				do_action('updraft_restored_archive', $file, $type, $restore_result, $fkey, $timestamp);
 
+			}
+
+			// Scan and delete leftover files in the "uploads" directory that are not part of the backup file or don't exist in the backup file
+			if ('uploads' == $type && apply_filters('updraftplus_restore_uploads_in_one_go', !class_exists('UpdraftPlusAddOn_MultiSite')) && (!defined('UPDRAFTPLUS_RESTORE_DELETE_OLD_UPLOAD_FILES') || UPDRAFTPLUS_RESTORE_DELETE_OLD_UPLOAD_FILES)) {
+				$working_dir = $info['path'];
+				$restore_timestamp = $updraftplus->jobdata_get('restore_timestamp');
+				$updraftplus->log('Scan and delete old files that are not presented in the restored backup...');
+				UpdraftPlus_Filesystem_Functions::delete_files_by_age($working_dir, $restore_timestamp, apply_filters('updraftplus_restore_uploads_paths_to_keep', array(), $working_dir, $this->ud_backup_is_multisite, $this->ud_multisite_selective_restore));
 			}
 			
 			// Update the job data each time we go round the loop, so that if it aborts, it can be resumed from the correct point
@@ -932,12 +955,13 @@ class Updraft_Restorer {
 	 *
 	 * In the 'ordinary' case of unzipping a UD zip backup, this method basically does some preparation, and then calls UpdraftPlus_Filesystem_Functions::unzip_file() for the actual unzipping
 	 *
-	 * @param  String		  $package - specify package - relative to UpdraftPlus::backups_dir_location()
-	 * @param  String|Boolean $type    - type of archive e.g. db.
+	 * @param string         $package             - specify package - relative to UpdraftPlus::backups_dir_location()
+	 * @param string|boolean $type                - type of archive e.g. db.
+	 * @param boolean        $use_fast_extraction - whether or not to use the fast extraction. If this is true, then files will be directly extracted to the designated location. Otherwise, they will be extracted to the 'upgrade' directory first.
 	 *
-	 * @return String|WP_Error If successful, then this indicates the working directory that the archive was unpacked in; a WP_Filesystem path
+	 * @return string|WP_Error If successful, then this indicates the working directory that the archive was unpacked in; a WP_Filesystem path
 	 */
-	private function unpack_package_archive($package, $type = false) {
+	private function unpack_package_archive($package, $type = false, $use_fast_extraction = false) {
 
 		global $wp_filesystem, $updraftplus;
 
@@ -963,7 +987,7 @@ class Updraft_Restorer {
 		// We need a working directory. This has a change from the WP core version - minimise path length
 		// N.B. It is deterministic; the same package file will get the same working directory
 		// $working_dir = $upgrade_folder . basename($package, '.zip');
-		$working_dir = $upgrade_folder.substr(md5($package), 0, 8);
+		$working_dir = ($use_fast_extraction) ? $wp_filesystem->wp_content_dir() : $upgrade_folder.substr(md5($package), 0, 8);
 		
 		if (preg_match('#\.zip$#i', $package)) {
 		
@@ -984,7 +1008,7 @@ class Updraft_Restorer {
 			
 		}
 
-		if (0 == $zip_starting_index) {
+		if (0 == $zip_starting_index && !$use_fast_extraction) {
 			// Clean up contents of upgrade directory beforehand.
 			$upgrade_files = $wp_filesystem->dirlist($upgrade_folder);
 			if (!empty($upgrade_files)) {
@@ -1006,12 +1030,17 @@ class Updraft_Restorer {
 		// Unzip package to working directory
 		if (preg_match('#\.zip$#i', $package)) {
 
-			$folders_to_include = array();
+			$folders_to_look = array();
+			$extract_matched_folders = 'extract_only';
 			
-			if ('themes' == $type && !$this->include_unspecified_themes) $folders_to_include = $this->themes_to_restore;
-			if ('plugins' == $type && !$this->include_unspecified_plugins) $folders_to_include = $this->plugins_to_restore;
+			if ('themes' == $type && !$this->include_unspecified_themes) $folders_to_look = $this->themes_to_restore;
+			if ('plugins' == $type && !$this->include_unspecified_plugins) $folders_to_look = $this->plugins_to_restore;
+			if ('uploads' == $type && apply_filters('updraftplus_restore_uploads_in_one_go', !class_exists('UpdraftPlusAddOn_MultiSite'))) {
+				$folders_to_look = apply_filters('updraftplus_restore_uploads_folders_to_look', $folders_to_look, $this->ud_multisite_selective_restore);
+				$extract_matched_folders = apply_filters('updraftplus_restore_uploads_extract_matched_folders', $extract_matched_folders, $this->ud_multisite_selective_restore);
+			}
 
-			$result = UpdraftPlus_Filesystem_Functions::unzip_file($package, $working_dir, $zip_starting_index, $folders_to_include);
+			$result = UpdraftPlus_Filesystem_Functions::unzip_file($package, $working_dir, $zip_starting_index, $folders_to_look, $extract_matched_folders);
 			
 		} elseif (preg_match('#\.tar(\.(gz|bz2))?$#i', $package)) {
 			
@@ -1676,6 +1705,14 @@ class Updraft_Restorer {
 
 		$updraftplus->log("restore_backup(backup_file=$backup_file, type=$type, info=".serialize($info).", last_one=$last_one)");
 
+		if (function_exists('set_time_limit')) @set_time_limit(1800);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
+
+		// Perform an improved restoration process for the 'uploads' entity which directly extracts the files to the 'wp-content/uploads' directory.
+		if (apply_filters('updraftplus_restore_uploads_in_one_go', !class_exists('UpdraftPlusAddOn_MultiSite')) && empty($this->ud_foreign) && 'uploads' == $type) {
+			$working_dir = $this->unpack_package_archive($backup_file, $type, true);
+			return is_wp_error($working_dir) ? $working_dir : true;
+		}
+
 		if ('db' == $type) {
 			$get_dir = '';
 		} else {
@@ -1696,8 +1733,6 @@ class Updraft_Restorer {
 		
 		$this->import_table_prefix = $import_table_prefix;
 		$this->final_import_table_prefix = $updraftplus->get_table_prefix(false);
-		
-		if (function_exists('set_time_limit')) @set_time_limit(1800);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
 
 		// Based upon how WP updates work, the following code unpacks the "package" (the backup archive) and then later its contents are moved to their destination.
 
@@ -2929,9 +2964,15 @@ class Updraft_Restorer {
 			}
 		}
 
-		UpdraftPlus_Database_Utility::set_sql_mode(array('NO_AUTO_VALUE_ON_ZERO'), array(), $this->use_wpdb() ? null : $this->mysql_dbh);
+		// NO_BACKSLASH_ESCAPES is also in the default list, but it's good to make it explicit
+		$set_sql_mode = UpdraftPlus_Database_Utility::set_sql_mode(array('NO_AUTO_VALUE_ON_ZERO'), array('NO_BACKSLASH_ESCAPES'), $this->use_wpdb() ? null : $this->mysql_dbh);
+		if (false === $set_sql_mode) {
+			return new WP_Error('set_sql_mode_failed', __('At least one incompatible SQL mode remains set; the  restore cannot continue', 'updraftplus'));
+		} elseif (null === $set_sql_mode && (!defined('UPDRAFTPLUS_ALLOW_SQL_MODE_FAILURE') || !UPDRAFTPLUS_ALLOW_SQL_MODE_FAILURE)) {
+			return new WP_Error('set_sql_mode_failed', __('It is not known whether the SQL mode could be correctly set; to continue the restore you must define UPDRAFTPLUS_ALLOW_SQL_MODE_FAILURE as true.', 'updraftplus'));
+		}
 
-		// register restoration shutdown event so that we can set some mysql's global variable back to its original value
+		// Register restoration shutdown event so that we can set some MySQL global variables back to their original values
 		register_shutdown_function(array($this, 'on_shutdown'));
 
 		// Find the supported engines - in case the dump had something else (case seen: saved from MariaDB with engine Aria; imported into plain MySQL without)
@@ -2948,6 +2989,22 @@ class Updraft_Restorer {
 
 		$sql_line = "";
 		$sql_type = -1;
+		
+		// This array has been created for clarity, to be able to refer to names and not numbers
+		$sql_types = array(
+			'DROP_TABLE' => 1,
+			'CREATE_TABLE' => 2,
+			'INSERT' => 3,
+			'ALTER_OR_LOCK_TABLE' => 4,
+			'CREATE_OR_DROP_DATABASE' => 6,
+			'USE' => 7,
+			'SET_NAMES' => 8,
+			'CREATE_TRIGGER' => 9,
+			'DELIMITER' => 10,
+			'CREATE_FUNCTION' => 12,
+			'LOCK_OR_UNLOCK_TABLE' => 15,
+			'DROP_VIEW' => 16,
+		);
 
 		$this->start_time = microtime(true);
 
@@ -3219,7 +3276,7 @@ class Updraft_Restorer {
 			if (preg_match('/^\s*(insert\s\s*into(?:\s*`(.+?)`|[^\(]+)(?:\s*\(.+?\))?\s*(?:values|\())/i', $sql_line.$buffer, $matches)) {
 				// https://regex101.com/r/zrQquQ/2
 				$this->table_name = $matches[2];
-				$sql_type = 3;
+				$sql_type = $sql_types['INSERT'];
 				$insert_prefix = $matches[1];
 
 				// if the current table is a generated columns table, that means at this stage the table creation is being postponed and the block of code below will get executed first to filter the create statement
@@ -3271,7 +3328,7 @@ class Updraft_Restorer {
 
 			// Deal with case where adding this line will take us over the MySQL max_allowed_packet limit - must split, if we can (if it looks like consecutive rows)
 			// Allow a 100-byte margin for error (including searching/replacing table prefix)
-			if (3 == $sql_type && $sql_line && strlen($sql_line.$buffer) > ($this->max_allowed_packet - 100) && preg_match('/,\s*$/', $sql_line) && preg_match('/^\s*\(/', $buffer)) {
+			if ($sql_type == $sql_types['INSERT'] && $sql_line && strlen($sql_line.$buffer) > ($this->max_allowed_packet - 100) && preg_match('/,\s*$/', $sql_line) && preg_match('/^\s*\(/', $buffer) && UpdraftPlus_Database_Utility::sql_statement_is_finished($sql_line)) {
 				
 				if ($this->table_should_be_skipped($this->table_name)) {
 					// Reset - we need the insert prefix so following lines get detected correctly
@@ -3299,7 +3356,7 @@ class Updraft_Restorer {
 				$sql_line = $insert_prefix." ";
 			}
 
-			$sql_line .= (9 == $sql_type && '' != $sql_line) ? ' '.$buffer : $buffer;
+			$sql_line .= ($sql_types['CREATE_TRIGGER'] == $sql_type && '' != $sql_line) ? ' '.$buffer : $buffer;
 			
 			// Do we have a complete line yet? We used to just test the final character for ';' here (up to 1.8.12), but that was too unsophisticated
 			// From 1.16.16, we don't hard-code the delimiter here, and we also add the knowledge that CREATE TRIGGER statements finish with END
@@ -3307,8 +3364,13 @@ class Updraft_Restorer {
 			//
 			// $wpdb->query("CREATE TRIGGER `civicrm_acl_after_insert` AFTER INSERT ON `civicrm_acl` FOR EACH ROW BEGIN IF (@civicrm_disable_logging IS NULL OR @civicrm_disable_logging = 0 ) THEN INSERT INTO log_civicrm_acl (`id`, `name`, `deny`, `entity_table`, `entity_id`, `operation`, `object_table`, `object_id`, `acl_table`, `acl_id`, `is_active`, log_conn_id, log_user_id, log_action) VALUES ( NEW.`id`, NEW.`name`, NEW.`deny`, NEW.`entity_table`, NEW.`entity_id`, NEW.`operation`, NEW.`object_table`, NEW.`object_id`, NEW.`acl_table`, NEW.`acl_id`, NEW.`is_active`, COALESCE(@uniqueID, LEFT(CONCAT('c_', unix_timestamp()/3600, CONNECTION_ID()), 17)), @civicrm_user_id, 'insert'); END IF; END"));
 
-			if ((3 == $sql_type && !preg_match('/\)\s*'.$delimiter_regex.'$/', substr($sql_line, -5, 5))) || (!in_array($sql_type, array(3, 9, 10, 12)) && substr($sql_line, -strlen($delimiter), strlen($delimiter)) != $delimiter) || (9 == $sql_type && !preg_match('/(?:END)?\s*'.$delimiter_regex.'\s*$/', $sql_line))) continue;
+			if (($sql_types['INSERT'] == $sql_type && !preg_match('/\)\s*'.$delimiter_regex.'$/', substr($sql_line, -5, 5)))
+				|| (!in_array($sql_type, array($sql_types['INSERT'], $sql_types['CREATE_TRIGGER'], $sql_types['CREATE_FUNCTION'], $sql_types['DELIMITER'])) && substr($sql_line, -strlen($delimiter), strlen($delimiter)) != $delimiter)
+				|| ($sql_types['CREATE_TRIGGER'] == $sql_type && !preg_match('/(?:END)?\s*'.$delimiter_regex.'\s*$/', $sql_line))
+			) continue;
 
+			if (!UpdraftPlus_Database_Utility::sql_statement_is_finished($sql_line)) continue;
+			
 			$this->line++;
 
 			// We now have a complete line - process it
@@ -3405,7 +3467,7 @@ class Updraft_Restorer {
 				$sql_line = $this->prepare_create_table($sql_line, $import_table_prefix, $supported_engines, $supported_charsets, $supported_collations);
 
 			} elseif (preg_match('/^\s*insert(?:\s\s*ignore)?\s\s*into(?:\s*`(.+?)`|[^\(]+)(?:\s*\(.+?\))?\s*(?:values|\()/i', $sql_line, $matches)) {
-				$sql_type = 3;
+				$sql_type = $sql_types['INSERT'];
 				$this->table_name = $matches[1];
 				if ($this->table_should_be_skipped($this->table_name)) {
 					// Reset
@@ -3654,7 +3716,7 @@ class Updraft_Restorer {
 			// mysqldump doesn't include all of the columns/fields value into the insert statement but instead it specifies only non generated-columns to be included in the insert statement (i.e insert into `table`(`non-generated-column1`,`non-generated-column2`) values('value','value2'))
 			// UDP includes all the columns (i.e insert into `table` values ('non-generated-column-value1', 'non-generated-column-value2', 'virtual-column-value', 'stored-column-value'))
 			// the code below will only get executed if the running DB server is MySQL and the insert statement has all the columns included. If we change the way UDP backup the generated columns to be the same as mysqldump then the code below is no longer necessary and can be removed
-			if (3 == $sql_type && !empty($this->generated_columns[$this->table_name])) {
+			if ($sql_types['INSERT'] == $sql_type && !empty($this->generated_columns[$this->table_name])) {
 				// MySQL doesn't allow the "generated columns" value takes its place in the insert statement, and because of that the only solution is to change the generated columns to standard columns which have been done previously
 				// now we need to change it back to generated columns but unfortunately changing it to virtual type wont work, it can only be changed to stored type
 				if (!isset($this->supported_generated_column_engines[strtolower($this->table_engine)])) $this->supported_generated_column_engines[strtolower($this->table_engine)] = UpdraftPlus_Database_Utility::is_generated_column_supported($this->table_engine);
@@ -3686,6 +3748,23 @@ class Updraft_Restorer {
 			$sql_line = '';
 			$sql_type = -1;
 
+		}
+		
+		// This ought to only be possible with a corrupted backup file - if the above loop finally exited via a 'continue' which did not also reset $sql_line
+		if ('' !== $sql_line) {
+			
+			$logit = substr($sql_line, 0, 100);
+			$updraftplus->log(sprintf("SQL remained at the end of the backup that was not executed: %s", '('.strlen($sql_line).', '.$logit.' ...)'));
+			
+			$updraftplus->log(
+				__('Warning:', 'updraftplus').' '.
+				sprintf(
+					/* translators: %s: SQL line */
+					__("SQL remained at the end of the backup that could not be executed: %s", 'updraftplus'),
+					'('.strlen($sql_line).', '.$logit.' ...)'
+				),
+			'notice-restore');
+			
 		}
 
 		if (is_array($this->stored_routine_supported) && $this->stored_routine_supported['is_binary_logging_enabled']) {
@@ -3727,7 +3806,6 @@ class Updraft_Restorer {
 			$final_table_name = $this->maybe_rename_restored_table();
 			$this->restored_table($final_table_name, $this->final_import_table_prefix, $this->old_table_prefix, $this->table_engine);
 		}
-
 
 		// drop the dummy restored tables
 		if ($this->is_dummy_db_restore) $this->drop_tables($this->restored_table_names);

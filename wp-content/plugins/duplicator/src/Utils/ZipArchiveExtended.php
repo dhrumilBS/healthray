@@ -78,12 +78,13 @@ class ZipArchiveExtended
     /**
      * Add full dir in archive
      *
-     * @param string $dirPath     dir path
-     * @param string $archivePath local archive path
+     * @param string $dirPath         dir path
+     * @param string $archivePath     local archive path
+     * @param bool   $forceUncompress if true the files of the dir will be stored uncompressed
      *
      * @return bool TRUE on success or FALSE on failure.
      */
-    public function addDir($dirPath, $archivePath)
+    public function addDir($dirPath, $archivePath, $forceUncompress = false)
     {
         if (!is_dir($dirPath) || !is_readable($dirPath)) {
             return false;
@@ -95,13 +96,13 @@ class ZipArchiveExtended
 
         return SnapIO::regexGlobCallback(
             $dirPath,
-            function ($path) use ($dirPath, $archivePath, $thisObj): void {
+            function ($path) use ($dirPath, $archivePath, $thisObj, $forceUncompress): void {
                 $newPath = $archivePath . SnapIO::getRelativePath($path, $dirPath);
 
                 if (is_dir($path)) {
                     $thisObj->addEmptyDir($newPath);
                 } else {
-                    $thisObj->addFile($path, $newPath);
+                    $thisObj->addFile($path, $newPath, $forceUncompress);
                 }
             },
             ['recursive' => true]
@@ -270,8 +271,7 @@ class ZipArchiveExtended
     protected function getLastStatusString(): string
     {
         try {
-            $statusString = $this->zipArchive->getStatusString();
-            return is_string($statusString) ? $statusString : '';
+            return $this->zipArchive->getStatusString();
         } catch (Throwable $e) {
             return '';
         }

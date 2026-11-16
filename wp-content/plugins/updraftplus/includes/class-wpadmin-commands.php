@@ -345,6 +345,16 @@ class UpdraftPlus_WPAdmin_Commands extends UpdraftPlus_Commands {
 	}
 
 	/**
+	 * This function is called via AJAX and updates the social media notice dismissal time to 84 days from when it was dismissed
+	 *
+	 * @return array - an empty array
+	 */
+	public function dismiss_social_media() {
+		UpdraftPlus_Options::update_updraft_option('updraftplus_dismissed_social_media_notice', time() + 84*86400);
+		return array();
+	}
+
+	/**
 	 * This function is called via ajax and will update the clone php notice dismiss time
 	 *
 	 * @return array - an empty array
@@ -829,25 +839,6 @@ class UpdraftPlus_WPAdmin_Commands extends UpdraftPlus_Commands {
 			$action_data['similar_type_collate'] = $similar_type_collate;
 		}
 		return $action_data;
-	}
-
-	/**
-	 * Set the Tour status
-	 *
-	 * @param array $params - the $_REQUEST. We're looking for 'current_step'
-	 * @return bool
-	 */
-	public function set_tour_status($params) {
-		return class_exists('UpdraftPlus_Tour') ? UpdraftPlus_Tour::get_instance()->set_tour_status($params) : false;
-	}
-
-	/**
-	 * Resets the tour status
-	 *
-	 * @return bool
-	 */
-	public function reset_tour_status() {
-		return class_exists('UpdraftPlus_Tour') ? UpdraftPlus_Tour::get_instance()->reset_tour_status() : false;
 	}
 
 	/**

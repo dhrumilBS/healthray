@@ -144,6 +144,62 @@ class SnapServer
     }
 
     /**
+     * Whether litespeed_finish_request() can end the response without LiteSpeed killing the process.
+     *
+     * Safe only for a process forked by an lsphp parent: LiteSpeed kills a PHP process it started
+     * for the connection as soon as the response ends.
+     *
+     * @return bool
+     */
+    public static function canLiteSpeedEndResponseEarly(): bool
+    {
+        // Apache mod_lsapi also provides the function; its behavior there is untested
+        if (
+            self::getWebServer() !== self::WEBSERVER_LITESPEED ||
+            !SnapUtil::functionExists('litespeed_finish_request')
+        ) {
+            return false;
+        }
+
+        if (!preg_match('/^PPid:\s*(\d+)/m', self::readProcFile('/proc/self/status'), $matches)) {
+            return false;
+        }
+
+        return strpos(self::readProcFile('/proc/' . $matches[1] . '/comm'), 'lsphp') === 0;
+    }
+
+    /**
+     * End the LiteSpeed response while the script keeps running.
+     *
+     * @return bool False when litespeed_finish_request() is unavailable or fails
+     */
+    public static function liteSpeedFinishRequest(): bool
+    {
+        if (!SnapUtil::functionExists('litespeed_finish_request')) {
+            return false;
+        }
+
+        return litespeed_finish_request();
+    }
+
+    /**
+     * Read a /proc file without raising warnings.
+     *
+     * @param string $path File path
+     *
+     * @return string Empty when open_basedir, a hidden process or a host without /proc blocks the read
+     */
+    private static function readProcFile(string $path): string
+    {
+        if (!SnapOpenBasedir::isPathValid($path) || !is_readable($path)) {
+            return '';
+        }
+        $content = file_get_contents($path);
+
+        return $content === false ? '' : $content;
+    }
+
+    /**
      * Get PHP memory usage
      *
      * @param bool $peak If true, returns peak memory usage

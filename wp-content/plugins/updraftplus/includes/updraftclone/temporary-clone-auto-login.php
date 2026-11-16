@@ -25,7 +25,7 @@ class UpdraftPlus_Temporary_Clone_Auto_Login {
 		wp_set_auth_cookie($user->ID);
 		try {
 			// WooCommerce (3.4.4) dies here. We catch and carry on to avoid confusing the user about something that nothing can be done about / is a one-time issue.
-			do_action('wp_login', $user->user_login);
+			do_action('wp_login', $user->user_login); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- False positive: this is a core WordPress hook.
 			if (wp_safe_redirect(admin_url())) exit;
 		} catch (Exception $e) {
 			$log_message = 'Exception ('.get_class($e).') occurred during the wp_login action call: '.$e->getMessage().' (Code: '.$e->getCode().', line '.$e->getLine().' in '.$e->getFile().')';
@@ -76,7 +76,7 @@ class UpdraftPlus_Temporary_Clone_Auto_Login {
 					$login_user = get_user_by('login', $uc_login);
 					$allow_autolink = get_user_meta($login_user->ID, 'uc_allow_auto_login');
 
-					if ($allow_autolink) {
+					if ($allow_autolink && ((1 == $allow_autolink && time() < 1793311891) || time() < $allow_autolink)) {
 						$this->autologin_user($login_user);
 					}
 				}
@@ -97,7 +97,7 @@ class UpdraftPlus_Temporary_Clone_Auto_Login {
 		$login_user = get_user_by('login', $user_login);
 		if (is_a($login_user, 'WP_User')) {
 			$time_now = time();
-			for ($i=0; $i <= apply_filters('uc_autologinexpirydays', 3); $i++) {
+			for ($i=0; $i <= apply_filters('uc_autologinexpirydays', 3); $i++) { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- The 'uc_' is the prefix.
 				$key = $this->get_autologin_key($login_user, $time_now - 86400*$i);
 				if ($key && $key == $check_key) {
 					return true;

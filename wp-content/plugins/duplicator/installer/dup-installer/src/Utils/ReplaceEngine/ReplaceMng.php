@@ -102,7 +102,7 @@ final class ReplaceMng
      *
      * @param string               $search  search string
      * @param string               $replace replace string
-     * @param string               $type    item type ReplaceItem::[TYPE_STRING|TYPE_URL|TYPE_URL_NORMALIZE_DOMAIN|TYPE_PATH]
+     * @param string               $type    item type ReplaceItem::TYPE_*
      * @param int                  $prority lower first
      * @param bool|string|string[] $scope   true = global scope | false = never | string signle scope | string[] scope list
      *
@@ -172,12 +172,11 @@ final class ReplaceMng
     /**
      * get all search and reaple items by scpoe
      *
-     * @param null|string $scope       if scope is empty get only global scope
-     * @param bool        $globalScope if true get global scope
+     * @param null|string $scope if scope is empty get only global scope
      *
      * @return ReplaceItem[]
      */
-    private function getSearchReplaceItems($scope = null, $globalScope = true): array
+    private function getSearchReplaceItems($scope = null): array
     {
         $items_list = [];
         foreach ($this->prorityScopeItems as $priority => $priority_list) {
@@ -189,7 +188,7 @@ final class ReplaceMng
             }
 
             // get global scope
-            if ($globalScope && isset($priority_list[self::GLOBAL_SCOPE_KEY])) {
+            if (isset($priority_list[self::GLOBAL_SCOPE_KEY])) {
                 foreach ($priority_list[self::GLOBAL_SCOPE_KEY] as $item) {
                     $items_list[] = $item;
                 }
@@ -209,15 +208,14 @@ final class ReplaceMng
      *
      * @param null|string $scope         if scope is empty get only global scope
      * @param bool        $unique_search If true it eliminates the double searches leaving the one with lower priority.
-     * @param bool        $globalScope   if true get global scope
      *
      * @return array<array{search:string,replace:string}> pairs search and replace
      */
-    public function getSearchReplaceList($scope = null, $unique_search = true, $globalScope = true): array
+    public function getSearchReplaceList($scope = null, $unique_search = true): array
     {
         Log::info('-- SEARCH LIST -- SCOPE: ' . Log::v2str($scope), Log::LV_DEBUG);
 
-        $items_list = $this->getSearchReplaceItems($scope, $globalScope);
+        $items_list = $this->getSearchReplaceItems($scope);
         if (Log::isLevel(Log::LV_HARD_DEBUG)) {
             Log::info('-- SEARCH LIST ITEMS --' . "\n" . print_r($items_list, true), Log::LV_HARD_DEBUG);
         }

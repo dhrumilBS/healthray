@@ -73,7 +73,7 @@ class UpdraftPlus_Deactivation {
 		$enqueue_version = $updraftplus->use_unminified_scripts() ? $updraftplus->version.'.'.time() : $updraftplus->version;
 		$updraft_min_or_not = $updraftplus->get_updraftplus_file_version();
 		wp_enqueue_style('updraft-deactivation-popup', UPDRAFTPLUS_URL.'/css/updraftplus-deactivation'.$updraft_min_or_not.'.css', array('updraft-jquery-ui'), $enqueue_version);
-		wp_enqueue_script('udp-deactivation-js', UPDRAFTPLUS_URL.'/js/updraftplus-deactivation'.$updraft_min_or_not.'.js', array('jquery'), $enqueue_version);
+		wp_enqueue_script('udp-deactivation-js', UPDRAFTPLUS_URL.'/js/updraftplus-deactivation'.$updraft_min_or_not.'.js', array('jquery'), $enqueue_version, false);
 		wp_localize_script('udp-deactivation-js', 'upraftplusdialog', array(
 			'deactivate' => esc_html__('Deactivate', 'updraftplus'),
 			'remove' => esc_html__('Remove and deactivate', 'updraftplus'),

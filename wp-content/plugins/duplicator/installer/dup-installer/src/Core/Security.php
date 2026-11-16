@@ -261,10 +261,8 @@ class Security
                 throw new Exception('Security Check Validation - No Token Found');
             }
         } catch (Exception $e) {
-            if (function_exists('error_clear_last')) {
-                // comment error_clear_last if you want see te exception html on shutdown
-                error_clear_last(); // phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.error_clear_lastFound
-            }
+            // comment error_clear_last if you want see te exception html on shutdown
+            error_clear_last();
 
             Log::logException($e, Log::LV_DEFAULT, 'SECURITY CHECK: ');
             dupxTplRender('page-security-error', [

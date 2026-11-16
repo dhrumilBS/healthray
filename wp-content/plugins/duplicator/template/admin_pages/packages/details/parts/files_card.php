@@ -50,6 +50,7 @@ $unreadable   = __('Unreadable', 'duplicator');
                 <span class="dupli-archive-dir-count">
                     <?php echo esc_html(sprintf(_n('%s folder', '%s folders', $dirCount, 'duplicator'), number_format($dirCount))); ?>
                 </span>
+                <?php do_action('duplicator_details_page_count_after', $package, 'files'); ?>
             <?php } ?>
         </div>
     </header>

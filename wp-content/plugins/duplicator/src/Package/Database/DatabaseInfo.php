@@ -4,6 +4,7 @@ namespace Duplicator\Package\Database;
 
 use Duplicator\Installer\Package\DescriptorDBInfo;
 use Duplicator\Installer\Package\DescriptorDBTableInfo;
+use Duplicator\Libs\Snap\SnapUtil;
 use Duplicator\Utils\Logging\DupLog;
 use ReflectionClass;
 
@@ -94,9 +95,7 @@ class DatabaseInfo extends DescriptorDBInfo
         $props   = $relcect->getProperties();
         $result  = new DescriptorDBInfo();
         foreach ($props as $prop) {
-            if (PHP_VERSION_ID < 80100) {
-                $prop->setAccessible(true);
-            }
+            SnapUtil::setAccessible($prop);
             $prop->setValue($result, $prop->getValue($this));
         }
         return $result;

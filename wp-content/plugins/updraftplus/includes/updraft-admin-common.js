@@ -295,9 +295,20 @@ function updraft_remote_storage_tabs_setup() {
 	var servicecheckbox = jQuery('.updraft_servicecheckbox');
 	if (typeof servicecheckbox.labelauty === 'function') {
 		servicecheckbox.labelauty();
-		var $vault_label = jQuery('label[for=updraft_servicecheckbox_updraftvault] .labelauty-unchecked');
-		var $vault_info = jQuery('<div class="udp-info"><span class="info-trigger">?</span><div class="info-content-wrapper"><div class="info-content">'+updraftlion.updraftvault_info+'</div></div></div>');
-		$vault_label.append($vault_info);
+		var $vault_info = jQuery('label[for=updraft_servicecheckbox_updraftvault]').find('.labelauty-unchecked, .labelauty-checked').append('<div class="udp-info"><span class="info-trigger">?</span><div class="info-content-wrapper"><div class="info-content">'+updraftlion.updraftvault_info+'</div></div></div>').find('.udp-info');
+
+		// Tooltip is normally shown on hover, which has no equivalent on touch devices; toggle it on tap instead.
+		$vault_info.on('click touchend', '.info-trigger', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			$vault_info.toggleClass('udp-info-active');
+		});
+
+		jQuery(document).on('click', function(e) {
+			if (!jQuery(e.target).closest('.udp-info').length) {
+				$vault_info.removeClass('udp-info-active');
+			}
+		});
 	}
 	
 }
@@ -3752,6 +3763,11 @@ jQuery(function($) {
 			return;
 		}
 
+		if (updraftlion.hosting_restriction && updraftlion.hosting_restriction.includes('monthly_backup_quota_constraint') && !incremental) {
+			alert(updraftlion.hosting_restriction_monthly_backup_quota_constraint);
+			return;
+		}
+
 		if ('' == onlythesetableentities && 0 == backupnow_nodb) {
 			alert(updraftlion.notableschosen);
 			jQuery('#backupnow_database_moreoptions').show();
@@ -3808,12 +3824,7 @@ jQuery(function($) {
 			$(this).dialog('option', 'height', 472);
 		},
 		modal: true,
-		buttons: backupnow_modal_buttons,
-		create: function () {
-			$(this).closest(".ui-dialog")
-				.find(".ui-dialog-buttonpane .ui-button").first() // the first button
-				.addClass("js-tour-backup-now-button");
-		}
+		buttons: backupnow_modal_buttons
 	});
 
 	jQuery("#updraft-poplog").dialog({
@@ -5238,6 +5249,13 @@ jQuery(function($) {
 			// Displays warning to the user of their mistake if they try to enter a URL in the OneDrive settings and saved
 			$('#remote-storage-holder .updraftplus_onedrive_folder_input').trigger('keyup');
 			initialize_remote_storage_select2_elements(jQuery('#remote-storage-holder'));
+			// Move the premium storage upsell block after the configuration block.
+			var $storage_holder = $('#remote-storage-holder');
+			var $premium_row = $storage_holder.find('tr.updraft-background-white');
+			if ($premium_row.length) {
+				var $premium_tbody = $('<tbody>').append($premium_row.prev('tr.updraft-empty-tr'), $premium_row);
+				$storage_holder.children().last().after($premium_tbody);
+			}
 		});
 	}
 
@@ -5280,16 +5298,11 @@ jQuery(function($) {
 			updraft_handle_page_updates(resp, response);
 			
 			$('#updraft-wrap .fade').delay(6000).fadeOut(2000);
-			if (window.updraft_main_tour && !window.updraft_main_tour.canceled) {
-				window.updraft_main_tour.show('settings_saved');
-				check_cloud_authentication();
-			} else {
-				$('html, body').animate({
-					scrollTop: $("#updraft-wrap").offset().top
-				}, 1000, function() {
-				  check_cloud_authentication()
-				});
-			}
+			$('html, body').animate({
+				scrollTop: $("#updraft-wrap").offset().top
+			}, 1000, function() {
+				check_cloud_authentication()
+			});
 			$.unblockUI();
 			$(document).trigger('wp-notice-added');
 		}, { action: 'updraft_savesettings', error_callback: function(response, status, error_code, resp) {
@@ -6520,6 +6533,9 @@ function updraft_process_status_check(resp, response_raw, original_parameters) {
 				}
 				if (resp.hosting_restriction && resp.hosting_restriction.includes('only_one_incremental_per_day')) {
 					updraftlion.hosting_restriction.push('only_one_incremental_per_day');
+				}
+				if (resp.hosting_restriction && resp.hosting_restriction.includes('monthly_backup_quota_constraint')) {
+					updraftlion.hosting_restriction.push('monthly_backup_quota_constraint');
 				}
 			}
 		}

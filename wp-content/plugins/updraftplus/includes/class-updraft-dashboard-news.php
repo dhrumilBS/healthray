@@ -181,7 +181,7 @@ class Updraft_Dashboard_News {
 				'link' => $this->link,
 				'url' => $this->feed_url,
 				'title' => $this->translations['product_title'],
-				'items' => apply_filters($this->slug.'_dashboard_news_items_count', 2),
+				'items' => apply_filters($this->slug.'_dashboard_news_items_count', 2), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound -- $this->slug is derived via sanitize_title() from the consuming product's own title (see constructor); this is a shared/reusable class, so a fixed prefix can't be hardcoded here.
 				'show_summary' => 0,
 				'show_author' => 0,
 				'show_date' => 0,

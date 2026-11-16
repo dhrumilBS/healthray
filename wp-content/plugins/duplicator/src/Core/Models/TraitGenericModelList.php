@@ -7,6 +7,9 @@ use Exception;
 use Throwable;
 use wpdb;
 
+/**
+ * @phpstan-require-extends AbstractGenericModel
+ */
 trait TraitGenericModelList
 {
     /**
@@ -100,7 +103,7 @@ trait TraitGenericModelList
     }
 
     /**
-     * Get entities of current type
+     * Get entities of current type, skipping entities with unreadable stored data
      *
      * @param int<0, max>                          $page           current page, if $pageSize is 0 o 1 $pase is the offset
      * @param int<0, max>                          $pageSize       page size, 0 return all entities
@@ -120,7 +123,26 @@ trait TraitGenericModelList
             'mode' => 'ASC',
         ]
     ) {
-        return parent::getItemsFromDatabase($page, $pageSize, $sortCallback, $filterCallback, $orderby);
+        $result = parent::loadFromDatabase($page, $pageSize, $orderby);
+        if ($result['status'] === self::LOAD_DATABASE_ERROR) {
+            return false;
+        }
+
+        try {
+            $instances = $result['items'];
+            if (is_callable($filterCallback)) {
+                $instances = array_filter($instances, $filterCallback);
+            }
+            if (is_callable($sortCallback)) {
+                usort($instances, $sortCallback);
+            } else {
+                $instances = array_values($instances);
+            }
+            return $instances;
+        } catch (Throwable $e) {
+            DupLog::infoTraceException($e);
+            return false;
+        }
     }
 
     /**
@@ -144,7 +166,25 @@ trait TraitGenericModelList
             'mode' => 'ASC',
         ]
     ) {
-        return parent::getIdsFromDatabase($page, $pageSize, $sortCallback, $filterCallback, $orderby);
+        $ids = parent::getIdsFromDatabase($page, $pageSize, $orderby);
+        if ($ids === false) {
+            return false;
+        }
+
+        try {
+            if (is_callable($filterCallback)) {
+                $ids = array_filter($ids, $filterCallback);
+            }
+            if (is_callable($sortCallback)) {
+                usort($ids, $sortCallback);
+            } else {
+                $ids = array_values($ids);
+            }
+            return $ids;
+        } catch (Throwable $e) {
+            DupLog::infoTraceException($e);
+            return false;
+        }
     }
 
     /**

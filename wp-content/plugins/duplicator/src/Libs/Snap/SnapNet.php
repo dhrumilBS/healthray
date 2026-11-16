@@ -141,36 +141,6 @@ class SnapNet
     }
 
     /**
-     * Download a remote file directly to disk via streaming (no memory buffering)
-     *
-     * @param string $url      The remote URL to download from
-     * @param string $destPath Local file path to write to
-     * @param int    $timeout  Request timeout in seconds
-     *
-     * @return void
-     * @throws Exception If the download or write fails
-     */
-    public static function downloadFileStreamed(string $url, string $destPath, int $timeout = 300): void
-    {
-        $response = wp_remote_get($url, [
-            'timeout'  => $timeout,
-            'stream'   => true,
-            'filename' => $destPath,
-        ]);
-
-        if (is_wp_error($response)) {
-            SnapIO::unlink($destPath);
-            throw new Exception('Failed to download file: ' . $response->get_error_message());
-        }
-
-        $code = (int) wp_remote_retrieve_response_code($response);
-        if ($code !== 200) {
-            SnapIO::unlink($destPath);
-            throw new Exception('Failed to download file (HTTP ' . $code . ')');
-        }
-    }
-
-    /**
      * Get outbound IP
      *
      * @return string Return outbound IP or empty string if not found

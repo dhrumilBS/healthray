@@ -262,13 +262,31 @@ trait TraitPackageBuild
                 }
 
                 if (file_exists($file)) {
-                    unlink($file);
+                    // Build artifacts include the dump folder, so directories must be removed too
+                    SnapIO::rrmdir($file);
                 }
             }
         }
         $this->setStatus(AbstractPackage::STATUS_COPIEDPACKAGE);
     }
 
+
+    /**
+     * Check that every gzipped dump file of the Backup exists and isn't empty
+     *
+     * @return bool
+     */
+    private function compressedDumpFilesArePresent(): bool
+    {
+        foreach ($this->Database->getCompressedDumpFiles() as $file) {
+            if (!is_file($file) || @filesize($file) <= 0) {
+                DupLog::infoTrace('INTEGRITY CHECK: missing or empty compressed dump file ' . $file);
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     /**
      * Integrity check for the build process
@@ -285,15 +303,14 @@ trait TraitPackageBuild
         DupLog::info("********************************************************************************");
         //------------------------
         //SQL CHECK:  File should be at minimum 5K.  A base WP install with only Create tables is about 9K.
-        //The raw .sql was validated pre-compression (EOF marker + size); here we verify the gzipped
+        //The raw dump was validated pre-compression (EOF marker + size); here we verify every gzipped
         //artifact exists and the captured uncompressed size still meets the threshold.
-        $gz_temp_path  = $this->Database->getCompressedStorePath();
         $sql_temp_size = (int) $this->Database->Size;
         $sql_easy_size = SnapString::byteSize($sql_temp_size);
 
         if (
             in_array(BuildComponents::COMP_DB, $this->components) &&
-            (!is_file($gz_temp_path) || @filesize($gz_temp_path) <= 0 ||
+            (!$this->compressedDumpFilesArePresent() ||
                 (!$this->Database->FilterOn && $sql_temp_size < DUPLICATOR_MIN_SIZE_DBFILE_WITHOUT_FILTERS) ||
                 ($this->Database->FilterOn && $this->Database->info->tablesFinalCount > 0 && $sql_temp_size < DUPLICATOR_MIN_SIZE_DBFILE_WITH_FILTERS))
         ) {
@@ -437,9 +454,11 @@ trait TraitPackageBuild
     /**
      * Build step handler: Database
      *
-     * Builds the database script using either chunked or single-request mode
-     * based on global settings. Always stops the build loop since this step
-     * may use chunking across multiple requests.
+     * The PHP modes run the phases of the database build: the chunked mode gets
+     * a deadline and yields between requests until the build is finished, the
+     * single-thread mode runs every phase in the current request. The mysqldump
+     * mode writes its single dump file in one pass. Always stops the build loop
+     * since this step may span multiple requests.
      *
      * @param string          $step         Current step name
      * @param AbstractPackage $package      The package being built
@@ -453,20 +472,50 @@ trait TraitPackageBuild
             return;
         }
 
-        if ($package->requireBuildOptions()->getDbBuildMode() === WpDbUtils::BUILD_MODE_PHP_MULTI_THREAD) {
-            $package->Database->buildInChunks();
-        } else {
+        if ($package->requireBuildOptions()->getDbBuildMode() === WpDbUtils::BUILD_MODE_MYSQLDUMP) {
             $package->Database->build();
-            $package->build_progress->database_script_built = true;
-            $package->update();
+            $finished = true;
+        } else {
+            $deadline = self::isDatabaseBuildChunked($package) ? microtime(true) + DatabasePkg::DUMP_CHUNK_WORKER_TIME : null;
+            $finished = self::runDatabaseBuildLoop($package, $deadline);
         }
 
-        DupLog::trace("Done building database");
-        if ($package->build_progress->database_script_built) {
-            DupLog::trace("Set db built for Backup $package->ID");
+        if ($finished) {
+            $package->build_progress->database_script_built = true;
+            $package->update();
+            DupLog::trace("Done building database, set db built for Backup $package->ID");
         }
 
         $stopCallback();
+    }
+
+    /**
+     * Run the database build phases until the build is finished or the deadline passes
+     *
+     * @param AbstractPackage $package  The package being built
+     * @param ?float          $deadline microtime the request yields at, null to run every phase
+     *
+     * @return bool true when the database build is finished
+     */
+    private static function runDatabaseBuildLoop(AbstractPackage $package, ?float $deadline): bool
+    {
+        do {
+            $finished = $package->Database->buildStep($deadline);
+        } while (!$finished && ($deadline === null || microtime(true) < $deadline));
+
+        return $finished;
+    }
+
+    /**
+     * Whether the database build of the package yields between requests
+     *
+     * @param AbstractPackage $package The package being built
+     *
+     * @return bool
+     */
+    private static function isDatabaseBuildChunked(AbstractPackage $package): bool
+    {
+        return $package->requireBuildOptions()->getDbBuildMode() === WpDbUtils::BUILD_MODE_PHP_MULTI_THREAD;
     }
 
     /**
@@ -489,10 +538,7 @@ trait TraitPackageBuild
             return;
         }
 
-        $chunked = ($package->requireBuildOptions()->getDbBuildMode() === WpDbUtils::BUILD_MODE_PHP_MULTI_THREAD);
-        $timeout = $chunked ? DatabasePkg::PHP_DUMP_CHUNK_WORKER_TIME : -1;
-
-        $package->Database->compressDump($timeout);
+        $package->Database->compressDump(self::isDatabaseBuildChunked($package) ? DatabasePkg::DUMP_CHUNK_WORKER_TIME : -1);
 
         if ($package->db_build_progress->compressionDone) {
             $package->build_progress->database_compressed = true;

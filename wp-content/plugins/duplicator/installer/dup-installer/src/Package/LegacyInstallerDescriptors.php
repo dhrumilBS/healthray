@@ -21,6 +21,8 @@ class LegacyInstallerDescriptors extends InstallerDescriptors
             self::TYPE_FILE_LIST             => 'dup-scanned-files__' . $this->hash . '.txt',
             self::TYPE_DIR_LIST              => 'dup-scanned-dirs__' . $this->hash . '.txt',
             self::TYPE_MANUAL_EXTRACT        => 'dup-manual-extract__' . $this->hash,
+            // Legacy archives hold the dump next to the descriptors, in the extraction root
+            self::TYPE_DB_DUMPS_DIR          => '.',
             self::TYPE_DB_DUMP               => 'dup-database__' . $this->hash . '.sql',
             self::TYPE_DB_DUMP_GZ            => 'dup-database__' . $this->hash . '.sql.gz',
             self::TYPE_INST_CHUNK_DATA       => 'dup-installer-chunk__' . $this->hash . '.json',

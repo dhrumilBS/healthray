@@ -34,14 +34,18 @@ class ScanNodeInfo extends FileNodeInfo
                 $nodes = 0;
             }
         } elseif (is_file($path)) {
-            $type  = self::TYPE_FILE;
-            $size  = (int) @filesize($path);
-            $mtime = filemtime($path);
+            $type = self::TYPE_FILE;
         } elseif (is_dir($path)) {
             $type = self::TYPE_DIR;
         } else {
             $type  = self::TYPE_UNKNOWN;
             $nodes = 0;
+        }
+
+        // filesize and filemtime follow links, so a file link records the values of its target
+        if ($type === self::TYPE_FILE || $type === self::TYPE_LINK_FILE) {
+            $size  = (int) @filesize($path);
+            $mtime = filemtime($path);
         }
 
         parent::__construct($path, $type, $size, $nodes, $mtime, $hash);

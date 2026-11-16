@@ -9,7 +9,7 @@ use Duplicator\Models\DynamicGlobalEntity;
 
 final class LogUtils
 {
-    const DEFAULT_RETENTION_MONTHS = 6 * MONTH_IN_SECONDS;
+    const DEFAULT_RETENTION_MONTHS = 3 * MONTH_IN_SECONDS;
     const BULK_DELETE_LIMIT_CHUNK  = 1000;
 
     /** @var array<string,class-string<AbstractLogEvent>> Associative array of log type => class name */

@@ -1,13 +1,5 @@
 <?php
 
-use Duplicator\Models\GlobalEntity;
-use Duplicator\Controllers\SettingsPageController;
-use Duplicator\Core\Controllers\ControllersManager;
-use Duplicator\Controllers\ToolsPageController;
-use Duplicator\Core\CapMng;
-use Duplicator\Models\StaticGlobal;
-use Duplicator\Utils\Logging\DupLog;
-
 defined("ABSPATH") or die("");
 
 /**
@@ -17,32 +9,18 @@ defined("ABSPATH") or die("");
  * @var Duplicator\Core\Views\TplMng $tplMng
  */
 
-
-$trace_log_filepath = DupLog::getTraceFilepath();
-$trace_filename     = basename($trace_log_filepath);
-$logs               = ToolsPageController::getLogsList();
-$global             = GlobalEntity::getInstance();
-$logname            = (isset($_GET['logname'])) ? trim($_GET['logname']) : "";
-$refresh            = (isset($_POST['refresh']) && $_POST['refresh'] == 1) ? 1 : 0;
-$auto               = (isset($_POST['auto']) && $_POST['auto'] == 1) ? 1 : 0;
-
-//Check for invalid file
-if (isset($_GET['logname'])) {
-    $validFiles = array_map('basename', $logs);
-    if (validate_file($logname, $validFiles) > 0) {
-        unset($logname);
-    }
-    unset($validFiles);
-}
-
-if (!isset($logname) || !$logname) {
-    $logname = (count($logs) > 0) ? basename($logs[0]) : "";
-}
-
-$nocache     = @date("ymdHis");
-$logurl      = DUPLICATOR_LOGS_URL . "/{$logname}?{$nocache}";
-$logurl_base = DUPLICATOR_LOGS_URL . "/{$logname}";
-$logfound    = strlen($logname) > 0;
+$logSelected    = $tplMng->getDataValueStringRequired('logSelected');
+$logUrl         = $tplMng->getDataValueStringRequired('logUrl');
+$refresh        = $tplMng->getDataValueBoolRequired('refresh');
+$auto           = $tplMng->getDataValueBoolRequired('auto');
+$traceLogTime   = $tplMng->getDataValueStringRequired('traceLogTime');
+$traceLogUrl    = $tplMng->getDataValueStringRequired('traceLogUrl');
+$traceFilename  = $tplMng->getDataValueStringRequired('traceFilename');
+$isTraceOn      = $tplMng->getDataValueBoolRequired('isTraceOn');
+$traceToggleUrl = $tplMng->getDataValueStringRequired('traceToggleUrl');
+$canClearTrace  = $tplMng->getDataValueBoolRequired('canClearTrace');
+$backupLogs     = $tplMng->getDataValueArrayRequired('backupLogs');
+$logfound       = strlen($logSelected) > 0;
 ?>
 <script>
     jQuery(document).ready(function($) {
@@ -197,14 +175,14 @@ $logfound    = strlen($logname) > 0;
         <table id="dupli-log-pnls">
             <tr>
                 <td id="dupli-log-pnl-left">
-                    <div class="name"><i class="fas fa-file-contract fa-fw"></i> <?php echo basename($logurl); ?></div>
+                    <div class="name"><i class="fas fa-file-contract fa-fw"></i> <?php echo esc_html($logSelected); ?></div>
                     <div class="opts">
                         <a href="javascript:void(0)" id="dup-options">
                             <?php esc_html_e("Options", 'duplicator') ?> <i class="fa fa-angle-double-right"></i>
                         </a> &nbsp;
                     </div>
                     <br style="clear:both" />
-                    <iframe id="dupli-log-content" src="<?php echo esc_url($logurl); ?>"></iframe>
+                    <iframe id="dupli-log-content" src="<?php echo esc_url($logUrl); ?>"></iframe>
                 </td>
                 <td id="dupli-log-pnl-right">
                     <h2><?php esc_html_e("Options", 'duplicator') ?></h2>
@@ -226,51 +204,22 @@ $logfound    = strlen($logname) > 0;
                     <div class="dupli-log-hdr">
                         <?php esc_html_e('Trace Log:', 'duplicator') ?> &nbsp;
                         <span style="font-size:11px; font-weight: normal">
-                            <?php
-                            $trace_on        = StaticGlobal::getTraceLogEnabledOption();
-                            $txt_clear_trace = esc_html__('Clear', 'duplicator');
-                            $txt_profile     = '';
-                            $html            = "";
-
-                            if (CapMng::can(CapMng::CAP_SETTINGS, false)) {
-                                if (!$trace_on) {
-                                    $url  = SettingsPageController::getInstance()->getTraceActionUrl(true);
-                                    $html = '<a href="' . esc_url($url) . '" target="_blank">' . __("Turn On", 'duplicator') . $txt_profile . '</a>';
-                                } else {
-                                    $url  = SettingsPageController::getInstance()->getTraceActionUrl(false);
-                                    $html = '<a href="' . esc_url($url) . '" target="_blank">' . __("Turn Off", 'duplicator') . $txt_profile . '</a>';
-                                }
-                                $html .= " | ";
-                            }
-                            if (CapMng::can(CapMng::CAP_CREATE, false)) {
-                                $html .= "<a href='javascript:void(0)' onclick='DupliJs.UI.ClearTraceLog(1);'>{$txt_clear_trace}</a>";
-                            }
-
-                            echo $html;
-                            ?>
+                            <?php if (strlen($traceToggleUrl) > 0) : ?>
+                                <a href="<?php echo esc_url($traceToggleUrl); ?>" target="_blank"><?php
+                                    echo esc_html($isTraceOn ? __('Turn Off', 'duplicator') : __('Turn On', 'duplicator'));
+                                ?></a> |
+                            <?php endif; ?>
+                            <?php if ($canClearTrace) : ?>
+                                <a href="javascript:void(0)" onclick="DupliJs.UI.ClearTraceLog(1);"><?php esc_html_e('Clear', 'duplicator'); ?></a>
+                            <?php endif; ?>
                         </span>
                     </div>
                     <div class="dupli-log-file-list">
-                        <?php
-                        $trace_log_filepath = DupLog::getTraceFilepath();
-                        if (file_exists($trace_log_filepath)) {
-                            $time = date('m/d/y h:i:s', @filemtime($trace_log_filepath));
-                        } else {
-                            $time = __('No trace log found', 'duplicator');
-                        }
-                        $active_filename = basename($logurl_base);
-                        $trace_log_url   = ControllersManager::getMenuLink(
-                            ControllersManager::TOOLS_SUBMENU_SLUG,
-                            ToolsPageController::L2_SLUG_LOGS,
-                            null,
-                            ['logname' => $trace_filename]
-                        );
-                        $is_trace_active = ($active_filename == $trace_filename);
-
-                        echo ($is_trace_active)
-                            ? '<div class="dupli-trace-log-link-green"><i class="fa fa-caret-right"></i> ' . $time . '</div>'
-                            : '<a href="' . esc_url($trace_log_url) . '">' . $time . '</a>';
-                        ?>
+                        <?php if ($logSelected === $traceFilename) : ?>
+                            <div class="dupli-trace-log-link-green"><i class="fa fa-caret-right"></i> <?php echo esc_html($traceLogTime); ?></div>
+                        <?php else : ?>
+                            <a href="<?php echo esc_url($traceLogUrl); ?>"><?php echo esc_html($traceLogTime); ?></a>
+                        <?php endif; ?>
                     </div>
 
                     <br />
@@ -281,27 +230,11 @@ $logfound    = strlen($logname) > 0;
 
                     <div class="dupli-log-file-list" style="white-space: nowrap">
                         <?php
-                        $count  = 0;
-                        $active = basename($logurl_base);
-                        foreach ($logs as $log) {
-                            $time = date('m/d/y h:i:s', filemtime($log));
-                            $name = sanitize_text_field(basename($log));
-                            $url  = ControllersManager::getMenuLink(
-                                ControllersManager::TOOLS_SUBMENU_SLUG,
-                                ToolsPageController::L2_SLUG_LOGS,
-                                null,
-                                ['logname' => $name]
-                            );
-                            if ($name !== $trace_filename) {
-                                $shortname = substr($name, 0, 15) . '***.log';
-                                echo ($active == $name)
-                                    ? '<span title="' . esc_attr($name) . '"><i class="fa fa-caret-right"></i> ' . $time . '-' . $shortname . '</span><br/>'
-                                    : '<a href="' . esc_url($url) . '" title="' . esc_attr($name) . '">' . $time . '-' . $shortname . '</a><br/>';
-                                if ($count > 20) {
-                                    break;
-                                }
-                                $count++;
-                            }
+                        foreach ($backupLogs as $log) {
+                            $label = $log['time'] . '-' . substr($log['name'], 0, 15) . '***.log';
+                            echo ($log['name'] === $logSelected)
+                                ? '<span title="' . esc_attr($log['name']) . '"><i class="fa fa-caret-right"></i> ' . esc_html($label) . '</span><br/>'
+                                : '<a href="' . esc_url($log['url']) . '" title="' . esc_attr($log['name']) . '">' . esc_html($label) . '</a><br/>';
                         }
                         ?>
                     </div>

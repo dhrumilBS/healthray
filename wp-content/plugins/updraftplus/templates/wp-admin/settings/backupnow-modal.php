@@ -1,11 +1,4 @@
-<?php
-	if (!defined('ABSPATH')) die('No direct access allowed');
-
-	global $updraftplus;
-	
-	$free_ret = '<em>'.__('All WordPress tables will be backed up.', 'updraftplus').' <a href="'.esc_url($updraftplus->get_url('premium_new_backup')).'">'. __('With UpdraftPlus Premium, you can choose to backup non-WordPress tables, backup only specified tables, and backup other databases too.', 'updraftplus').'</a></em>'."\n";
-?>
-
+<?php if (!defined('ABSPATH')) die('No direct access allowed'); ?>
 <p>
 	<h3 class="new-backups-only"><?php esc_html_e('Take a new backup', 'updraftplus');?></h3>
 	<h3 class="incremental-backups-only"><?php esc_html_e('Take an incremental backup', 'updraftplus');?></h3>
@@ -32,7 +25,7 @@
 	<div id="backupnow_database_moreoptions" class="updraft-hidden" style="display:none;">
 
 		<?php
-		echo apply_filters('updraft_backupnow_database_showmoreoptions', $free_ret, '');// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- needs to be presented in html
+		echo wp_kses(apply_filters('updraft_backupnow_database_showmoreoptions', $free_ret, ''), $updraftplus_admin->kses_allow_tags());
 		?>
 
 	</div>

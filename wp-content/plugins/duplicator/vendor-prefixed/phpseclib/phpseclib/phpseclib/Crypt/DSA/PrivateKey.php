@@ -13,8 +13,8 @@ namespace VendorDuplicator\phpseclib3\Crypt\DSA;
 use VendorDuplicator\phpseclib3\Crypt\Common;
 use VendorDuplicator\phpseclib3\Crypt\DSA;
 use VendorDuplicator\phpseclib3\Crypt\DSA\Formats\Signature\ASN1 as ASN1Signature;
-use VendorDuplicator\phpseclib3\Math\BigInteger;
 use VendorDuplicator\phpseclib3\Exception\BadConfigurationException;
+use VendorDuplicator\phpseclib3\Math\BigInteger;
 /**
  * DSA Private Key
  *

@@ -60,7 +60,7 @@ abstract class AbstractIndexComparator
                 if (
                     $newCurrent->getSize() !== $oldCurrent->getSize() ||
                     $newCurrent->getMTime() !== $oldCurrent->getMTime() ||
-                    ($newCurrent->getHash() !== '' && ($newCurrent->getHash() !== $oldCurrent->getHash()))
+                    ($newCurrent->hasHash() && $oldCurrent->hasHash() && $newCurrent->getHash() !== $oldCurrent->getHash())
                 ) {
                     $this->handleModified($newCurrent, $oldCurrent);
                 } else {

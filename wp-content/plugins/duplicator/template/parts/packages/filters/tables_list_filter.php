@@ -87,8 +87,8 @@ $toolTipTablesFilters = __(
                 <?php checked($dbPrefixFilter); ?>
                 <?php disabled(!$dbFilterOn || $prefixFilterForced); ?>
                 <?php
-                // data-force-checked guards the JS in ToggleDBFiltersRedIcon below and in
-                // the TemplateAddon selector against re-enabling/unchecking a forced filter
+                // data-force-checked guards ToggleDBFiltersRedIcon below and any other script
+                // that toggles DB filters against re-enabling/unchecking a forced filter
                 echo $prefixFilterForced ? 'data-force-checked="1"' : '';
                 ?>
                 data-prefix-value="<?php echo esc_attr($dbPrefix); ?>" />

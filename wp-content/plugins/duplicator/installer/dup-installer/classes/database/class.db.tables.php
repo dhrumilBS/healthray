@@ -298,7 +298,8 @@ final class DUPX_DB_Tables
 
         foreach ($mapping as $oldPrefix => $newMapping) {
             foreach ($newMapping as $newPrefix => $commons) {
-                for ($pos = 0; /* break inside */; $pos++) {
+                $pos = 0;
+                while (true) {
                     for ($current = 0; $current < count($commons); $current++) {
                         if (strlen($commons[$current]) <= $pos) {
                             break 2;
@@ -313,6 +314,7 @@ final class DUPX_DB_Tables
                             break 2;
                         }
                     }
+                    $pos++;
                 }
 
                 $optOldPrefix = $oldPrefix . substr($commons[0], 0, $pos);

@@ -505,7 +505,7 @@ class UpdraftCentral_Updates_Commands extends UpdraftCentral_Commands {
 		// updates. Thus, we're making sure here that if for some reason, those plugins or themes didn't get through
 		// and added to the "update_plugins" or "update_themes" transients when calling the get_site_transient('update_plugins')
 		// or get_site_transient('update_themes') we add them here manually.
-		$filters = apply_filters("pre_set_site_transient_update_{$type}s", $transient, "update_{$type}s");
+		$filters = apply_filters("pre_set_site_transient_update_{$type}s", $transient, "update_{$type}s"); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- False positive: this is a core WordPress hook.
 
 
 		$all_items = array();

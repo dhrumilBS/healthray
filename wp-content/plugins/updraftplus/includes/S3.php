@@ -1,6 +1,7 @@
 <?php 
 // phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fclose, WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite, WordPress.WP.AlternativeFunctions.file_system_operations_fgets, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPress.WP.AlternativeFunctions.file_system_operations_mkdir, WordPress.WP.AlternativeFunctions.file_system_operations_fread, WordPress.WP.AlternativeFunctions.file_system_operations_chmod, WordPress.WP.AlternativeFunctions.file_system_operations_fputs, WordPress.WP.AlternativeFunctions.file_system_operations_is_writeable, WordPress.WP.AlternativeFunctions.file_system_operations_chown, WordPress.WP.AlternativeFunctions.file_system_operations_chgrp, WordPress.WP.AlternativeFunctions.file_system_operations_touch, WordPress.WP.AlternativeFunctions.file_system_operations_rmdir, WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- Native PHP fileystem function is used for direct control and performance because it can bypass additional layers of abstraction so that no overhead from the WordPress filesystem API's internal handling
 // phpcs:disable WordPress.WP.AlternativeFunctions.curl_curl_setopt_array, WordPress.WP.AlternativeFunctions.curl_curl_setopt, WordPress.WP.AlternativeFunctions.curl_curl_init, WordPress.WP.AlternativeFunctions.curl_curl_exec, WordPress.WP.AlternativeFunctions.curl_curl_getinfo, WordPress.WP.AlternativeFunctions.curl_curl_multi_init, WordPress.WP.AlternativeFunctions.curl_curl_multi_add_handle, WordPress.WP.AlternativeFunctions.curl_curl_multi_exec, WordPress.WP.AlternativeFunctions.curl_curl_multi_select, WordPress.WP.AlternativeFunctions.curl_curl_multi_getcontent, WordPress.WP.AlternativeFunctions.curl_curl_multi_remove_handle, WordPress.WP.AlternativeFunctions.curl_curl_multi_close, WordPress.WP.AlternativeFunctions.curl_curl_error, WordPress.WP.AlternativeFunctions.curl_curl_close, WordPress.WP.AlternativeFunctions.curl_curl_errno -- Direct cURL usage is intentional to leverage specific low-level options not available via the WordPress HTTP API.
+// phpcs:disable PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- This file is an Amazon S3/IAM API client; amazonaws.com references are API endpoints and ACL/XML-namespace URIs used by the remote storage backend, not offloaded plugin assets (JS/CSS/images).
 /**
  * $Id$
  *
@@ -1287,8 +1288,8 @@ class UpdraftPlus_S3 {
 		$type = false;
 		// Fileinfo documentation says fileinfo_open() will use the
 		// MAGIC env var for the magic file
-		$env_magic = UpdraftPlus_Manipulation_Functions::fetch_superglobal('env', 'MAGIC');
-		if (extension_loaded('fileinfo') && isset($env_magic) &&
+		$env_magic = !empty($_ENV['MAGIC']) ? $_ENV['MAGIC'] : getenv('MAGIC');// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Server environment variable, not user input; only used as the magic file path for finfo_open().
+		if (extension_loaded('fileinfo') && false !== $env_magic &&
 		false !== ($finfo = finfo_open(FILEINFO_MIME, $env_magic))) {// phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.finfo_openFound -- The function finfo_open() is not present in PHP version 5.2 or earlier
 			if (false !== ($type = finfo_file($finfo, $file))) {// phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.finfo_fileFound -- The function finfo_file() is not present in PHP version 5.2 or earlier
 				// Remove the charset and grab the last content-type

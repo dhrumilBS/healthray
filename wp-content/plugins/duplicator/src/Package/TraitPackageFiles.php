@@ -103,26 +103,15 @@ trait TraitPackageFiles
     /**
      * Generate a unique hash for the package
      *
-     * IMPORTANT: Be VERY careful in changing this format - the FTP delete logic
-     * requires 3 segments with the last segment to be the date in YmdHis format.
+     * Keep the <random>_<creation date> format: storage purge sorts archives by the
+     * trailing date and getSecondaryInternalHash() splits on the separator.
      *
      * @return string A unique hashkey
      */
     protected function makeHash(): string
     {
-        try {
-            $date = date(AbstractPackage::PACKAGE_HASH_DATE_FORMAT, strtotime($this->created));
-            if (function_exists('random_bytes')) {
-                // phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.random_bytesFound
-                $rand = (string) random_bytes(8);
-                return bin2hex($rand) . mt_rand(1000, 9999) . '_' . $date;
-            } else {
-                return strtolower(md5(uniqid((string) random_int(0, mt_getrandmax()), true))) . '_' . $date;
-            }
-        } catch (Exception $exc) {
-            $date = date(AbstractPackage::PACKAGE_HASH_DATE_FORMAT, strtotime($this->created));
-            return strtolower(md5(uniqid((string) random_int(0, mt_getrandmax()), true))) . '_' . $date;
-        }
+        $date = date(AbstractPackage::PACKAGE_HASH_DATE_FORMAT, strtotime($this->created));
+        return bin2hex(random_bytes(8)) . mt_rand(1000, 9999) . '_' . $date;
     }
 
     /**

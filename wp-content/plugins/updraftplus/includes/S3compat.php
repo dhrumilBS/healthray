@@ -74,7 +74,7 @@ class UpdraftPlus_S3_Compat {
 
 	private $__ssl_key = null;
 
-	public $endpoint = 's3.amazonaws.com';
+	public $endpoint = 's3.amazonaws.com'; // phpcs:ignore PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- AWS S3 API endpoint used by the remote storage backend, not an offloaded plugin asset.
 
 	public $proxy = null;
 
@@ -316,7 +316,7 @@ class UpdraftPlus_S3_Compat {
 		if (!$host) return;
 
 		$wp_proxy = new WP_HTTP_Proxy();
-		if ($wp_proxy->send_through_proxy('https://s3.amazonaws.com')) {
+		if ($wp_proxy->send_through_proxy('https://s3.amazonaws.com')) { // phpcs:ignore PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- AWS S3 API endpoint used by the remote storage backend, not an offloaded plugin asset.
 
 			global $updraftplus;
 			$updraftplus->log("setProxy: host=$host, user=$user, port=$port");
@@ -358,7 +358,7 @@ class UpdraftPlus_S3_Compat {
 	public function useDNSBucketName($use = true, $bucket = '') {
 		$this->use_dns_bucket_name = $use;
 		if ($use && $bucket) {
-			$this->setEndpoint($bucket.'.s3.amazonaws.com', $this->region);
+			$this->setEndpoint($bucket.'.s3.amazonaws.com', $this->region); // phpcs:ignore PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- AWS S3 API endpoint used by the remote storage backend, not an offloaded plugin asset.
 		}
 		return true;
 	}

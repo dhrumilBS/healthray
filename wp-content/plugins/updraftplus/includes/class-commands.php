@@ -1099,7 +1099,7 @@ class UpdraftPlus_Commands {
 		if (!UpdraftPlus_Options::user_can_manage()) return new WP_Error('updraftplus_permission_denied');
 
 		if (!defined('UPDRAFTPLUS_DO_NOT_USE_IPINFO') || !UPDRAFTPLUS_DO_NOT_USE_IPINFO) {
-			// Try to get the users region code we can then use this to find their closest clone region
+			// Try to get this website's hosting region code (from the server's outbound IP via IPInfo), so we can find the closest clone region.
 			$response = wp_remote_get('https://ipinfo.io/json', array(
 				'timeout' => 3,
 				// The API always returns 429 rate limit unless this header is passed
@@ -1448,5 +1448,330 @@ class UpdraftPlus_Commands {
 		}
 
 		return new WP_Error('invalid_tool_type', __('Invalid tool type', 'updraftplus'));
+	}
+
+	/**
+	 * Pre-check before sending request and delegates login request to the appropriate service
+	 *
+	 * @param array $params - The submitted form data
+	 * @return array - the result of the call
+	 */
+	public function process_updraftplus_migration_login($params) {
+		if (false === ($updraftplus_admin = $this->_load_ud_admin()) || false === ($updraftplus = $this->_load_ud())) return new WP_Error('no_updraftplus');
+		if (!UpdraftPlus_Options::user_can_manage()) return new WP_Error('updraftplus_permission_denied');
+
+		if (class_exists('WC_Geolocation')) {
+			// Prefer WooCommerce's geolocation - no external ipinfo.io call needed
+			$ip_response = WC_Geolocation::geolocate_ip();
+			if (!empty($ip_response['country'])) {
+				$params['form_data']['country_code'] = $ip_response['country'];
+			}
+		} elseif (!defined('UPDRAFTPLUS_DO_NOT_USE_IPINFO') || !UPDRAFTPLUS_DO_NOT_USE_IPINFO) {
+			// Try to get this website's hosting region code (from the server's outbound IP via IPInfo), so we can find the closest clone region.
+			$ip_response = wp_remote_get('https://ipinfo.io/json', array(
+				'timeout' => 3,
+				// The API always returns 429 rate limit unless this header is passed
+				'headers' => array(
+					'Referer' => network_site_url()
+				)
+			));
+
+			if (200 === wp_remote_retrieve_response_code($ip_response)) {
+				$body = wp_remote_retrieve_body($ip_response);
+				$ip_data = json_decode($body, true);
+				if (isset($ip_data['country'])) $params['form_data']['country_code'] = $ip_data['country'];
+			}
+		}
+
+		$response = $updraftplus->get_updraftplus_migration()->ajax_process_login($params, false);
+
+		// Only continue if authentication succeeded
+		if (empty($response['status']) || 'authenticated' !== $response['status']) {
+			// A '2FA_checked' response is not an error: the JS will ask for the TFA code and resubmit.
+			if (empty($response['tfa_enabled'])) {
+				$response['message'] = $this->get_migration_login_error_message(isset($response['code']) ? $response['code'] : '');
+			}
+			return $response;
+		}
+
+		// Validate token data
+		if (empty($response['token_data']['migration_id']) || empty($response['token_data']['user_id']) || empty($response['token_data']['secret_token'])) {
+			$response['message'] = wp_kses($response['message'], array(
+				'strong' => array(),
+				'a' => array('href' => array()),
+			));
+			return $response;
+		}
+
+		$content = '<div class="updraftclone-main-row">';
+		$content .= '<div class="updraftclone_action_box">';
+		$content .= $updraftplus_admin->updraftplus_simple_migration_fields_ui($response['token_data']);
+		$content .= '<div class="updraftplus-migration-processing-section"></div>';
+		$content .= '<div class="updraft_migration_progress_container"></div>';
+		$content .= '<p class="updraftplus-migration-process-notice">' . esc_html__('Important: Migration time depends on the size of the site.', 'updraftplus') . ' ' . esc_html__('Larger sites may take longer to complete.', 'updraftplus') . '</p>';
+		$content .= '</div>';
+		$content .= '</div>';
+
+		$response['html'] = $content;
+
+		return $response;
+	}
+
+	/**
+	 * Starts the migration process by preparing request parameters and
+	 * passing them to the migration API (TeamUpdraft migration service).
+	 *
+	 * Handles both:
+	 * - Import (remote > this site)
+	 * - Export (this site > remote)
+	 *
+	 * @param array $params Data submitted from the JS migration form.
+	 * @return array|WP_Error API response or WP_Error on failure.
+	 */
+	public function process_updraftplus_migration_start($params) {
+		if (false === ($updraftplus = $this->_load_ud())) return new WP_Error('no_updraftplus');
+		if (!UpdraftPlus_Options::user_can_manage()) return new WP_Error('updraftplus_permission_denied');
+
+		if (empty($params['form_data']) || !is_array($params['form_data'])) {
+			return new WP_Error('invalid_params', __('Invalid or missing migration request data.', 'updraftplus'));
+		}
+
+		$migrate_type = isset($params['form_data']['migrate_type']) ? sanitize_text_field($params['form_data']['migrate_type']) : '';
+		$remote_site_url = !empty($params['form_data']['site_url']) ? trailingslashit(esc_url_raw($params['form_data']['site_url'])) : '';
+		$remote_email = isset($params['form_data']['admin_email']) ? sanitize_text_field($params['form_data']['admin_email']) : '';
+		$remote_pass = isset($params['form_data']['admin_password']) ? $params['form_data']['admin_password'] : '';
+		$migration_id = isset($params['form_data']['migration_id']) ? sanitize_text_field($params['form_data']['migration_id']) : '';
+		$user_id = isset($params['form_data']['user_id']) ? sanitize_text_field($params['form_data']['user_id']) : '';
+		$secret_token = isset($params['form_data']['secret_token']) ? sanitize_text_field($params['form_data']['secret_token']) : '';
+		$current_site_login_url = !empty($params['form_data']['current_site_login_url']) ? trailingslashit(esc_url_raw($params['form_data']['current_site_login_url'])) : '';
+		$remote_site_login_url = !empty($params['form_data']['remote_site_login_url']) ? trailingslashit(esc_url_raw($params['form_data']['remote_site_login_url'])) : '';
+
+		$current_user = wp_get_current_user();
+		$current_url = network_site_url();
+
+		if (UpdraftPlus_Manipulation_Functions::normalise_url($current_url) == UpdraftPlus_Manipulation_Functions::normalise_url($remote_site_url)) {
+			return array(
+				'message' => __('The remote site cannot be the same as the current site.', 'updraftplus') . ' ' . __('Please check the site URL and try again.', 'updraftplus'),
+			);
+		}
+
+		$temp_password = $this->generate_migration_temp_password();
+
+		$current_site_url_validation = $current_url;
+		$remote_site_url_validation = $remote_site_url;
+
+		$current_site_has_custom_login_url = 'no';
+		$remote_site_has_custom_login_url = 'no';
+
+		$param_data = array(
+			'migration_id' => $migration_id,
+			'user_id' => $user_id,
+			'secret_token' => $secret_token,
+			'strategy' => 'p2p', // Possible value: p2p (Peer to Peer (via migrator addon)) or s3 (S3(via AWS S3 bucket))
+		);
+
+		if ('import' === $migrate_type) {
+			// Remote > Local migration.
+			$param_data['source_site_url'] = $remote_site_url;
+			$param_data['source_site_username'] = $remote_email;
+			$param_data['source_site_password'] = $remote_pass;
+
+			$param_data['destination_site_url'] = $current_url;
+			$param_data['destination_site_username'] = $current_user->user_login;
+			$param_data['destination_site_password'] = $temp_password;
+
+			if (!empty($current_site_login_url)) {
+				$param_data['destination_site_custom_login_url'] = $current_site_login_url;
+				$current_site_url_validation = $current_site_login_url;
+				$current_site_has_custom_login_url = 'yes';
+			}
+
+			if (!empty($remote_site_login_url)) {
+				$param_data['source_site_custom_login_url'] = $remote_site_login_url;
+				$remote_site_url_validation = $remote_site_login_url;
+				$remote_site_has_custom_login_url = 'yes';
+			}
+		} else {
+			// Local > Remote migration.
+			$param_data['destination_site_url'] = $remote_site_url;
+			$param_data['destination_site_username'] = $remote_email;
+			$param_data['destination_site_password'] = $remote_pass;
+
+			$param_data['source_site_url'] = $current_url;
+			$param_data['source_site_username'] = $current_user->user_login;
+			$param_data['source_site_password'] = $temp_password;
+
+			if (!empty($current_site_login_url)) {
+				$param_data['source_site_custom_login_url'] = $current_site_login_url;
+				$current_site_url_validation = $current_site_login_url;
+				$current_site_has_custom_login_url = 'yes';
+			}
+
+			if (!empty($remote_site_login_url)) {
+				$param_data['destination_site_custom_login_url'] = $remote_site_login_url;
+				$remote_site_url_validation = $remote_site_login_url;
+				$remote_site_has_custom_login_url = 'yes';
+			}
+		}
+
+		// Extendify migration flow
+		if (!empty($params['form_data']['is_extendify_migration_active'])) {
+			// These params are part of the shared migration payload. They are ignored for Extendify-based migrations.
+			unset($_POST['migration_id'], $_POST['user_id'], $_POST['secret_token']);
+
+			$param_data['extendify_access_token'] = apply_filters('updraftplus_get_migration_access_token', null);
+
+			// Validate current before starting migration against 2FA/ Captcha issue for login.
+			$current_site_validation_response = $updraftplus->get_updraftplus_migration()->process_migration_extendify_site_validation_url($current_site_url_validation, $param_data['extendify_access_token'], $current_site_has_custom_login_url);
+			if ('success' !== $current_site_validation_response['status']) {
+				$validation_error_message = $this->get_site_validation_error_message($current_site_validation_response['response'], 'current site');
+				$current_site_validation_response['message'] = ('' !== $validation_error_message) ? $validation_error_message : $current_site_validation_response['message'];
+				return $current_site_validation_response;
+			}
+
+			// Validate remote site before starting migration against 2FA/ Captcha issue for login.
+			$remote_site_validation_response = $updraftplus->get_updraftplus_migration()->process_migration_extendify_site_validation_url($remote_site_url_validation, $param_data['extendify_access_token'], $remote_site_has_custom_login_url);
+			if ('success' !== $remote_site_validation_response['status']) {
+				$validation_error_message = $this->get_site_validation_error_message($remote_site_validation_response['response'], 'remote site');
+				$remote_site_validation_response['message'] = ('' !== $validation_error_message) ? $validation_error_message : $remote_site_validation_response['message'];
+				return $remote_site_validation_response;
+			}
+
+			return $updraftplus->get_updraftplus_migration()->process_extendify_migration($param_data);
+		} else {
+			// Validate current before starting migration against 2FA/ Captcha issue for login.
+			$current_site_validation_response = $updraftplus->get_updraftplus_migration()->process_migration_site_validation_url($current_site_url_validation, $current_site_has_custom_login_url);
+			if ('success' !== $current_site_validation_response['status']) {
+				$validation_error_message = $this->get_site_validation_error_message($current_site_validation_response['response'], 'current site');
+				$current_site_validation_response['message'] = ('' !== $validation_error_message) ? $validation_error_message : $current_site_validation_response['message'];
+				return $current_site_validation_response;
+			}
+
+			// Validate remote site before starting migration against 2FA/ Captcha issue for login.
+			$remote_site_validation_response = $updraftplus->get_updraftplus_migration()->process_migration_site_validation_url($remote_site_url_validation, $remote_site_has_custom_login_url);
+			if ('success' !== $remote_site_validation_response['status']) {
+				$validation_error_message = $this->get_site_validation_error_message($remote_site_validation_response['response'], 'remote site');
+				$remote_site_validation_response['message'] = ('' !== $validation_error_message) ? $validation_error_message : $remote_site_validation_response['message'];
+				return $remote_site_validation_response;
+			}
+		}
+
+		$response = $updraftplus->get_updraftplus_migration()->process_migration($param_data, $migrate_type);
+
+		return $response;
+	}
+
+	/**
+	 * Retrieves the migration job status from the migration API.
+	 *
+	 * @param array $params Must include 'identifier' (migration job ID).
+	 * @return array|WP_Error API response or WP_Error on failure.
+	 */
+	public function process_updraftplus_migration_status($params) {
+		if (false === ($updraftplus = $this->_load_ud())) return new WP_Error('no_updraftplus');
+		if (!UpdraftPlus_Options::user_can_manage()) return new WP_Error('updraftplus_permission_denied');
+
+		$response = $updraftplus->get_updraftplus_migration()->process_migration_status($params);
+
+		return $response;
+	}
+
+	/**
+	 * Generates and stores a temporary password used exclusively for migration authentication.
+	 *
+	 * WordPress does NOT allow us to retrieve the real password of the current logged-in user.
+	 * But the migration service requires valid credentials for the "source site" in order to
+	 * log in and perform a migration. To solve this, we create a temporary password with a
+	 * known prefix, valid for 5 minutes.
+	 *
+	 * During migration, the external migration service uses this temporary password to log in.
+	 * The login attempt is validated inside the 'authenticate' filter, which checks:
+	 * - the temporary password matches the stored one
+	 * - it has the correct prefix `updraftplustemppwd-`
+	 * - it has not expired (older than 5 minutes)
+	 *
+	 * @return string The generated temporary migration password.
+	 */
+	private function generate_migration_temp_password() {
+		$temp_password = 'updraftplustemppwd-' . wp_generate_password();
+
+		$temp_password_data = array(
+			'password_hash' => wp_hash_password($temp_password),
+			'created' => time(),
+			'user_id' => get_current_user_id(),
+		);
+
+		update_site_option('updraftplus_migration_temp_password', $temp_password_data, false);
+
+		return $temp_password;
+	}
+
+	/**
+	 * Convert migration site validation API errors into user-friendly messages.
+	 *
+	 * @param array  $error_response Parsed API error response.
+	 * @param string $site_label     Site context: 'current site' or 'remote site'.
+	 * @return string Human-readable error message.
+	 */
+	private function get_site_validation_error_message($error_response, $site_label = 'current site') {
+
+		if (empty($error_response['data']['type'])) {
+			return '';
+		}
+
+		switch ($error_response['data']['type']) {
+
+			case 'https://errors.updraftplus.com/api/site-validations/login-page-not-found':
+				return sprintf(
+					/* translators: %s: site label */
+					__('The %s login URL is invalid.', 'updraftplus') . ' ' .
+					__('If the site uses a custom login URL, please enter the correct one in the Advanced options.', 'updraftplus'),
+					$site_label
+				);
+
+			case 'https://errors.updraftplus.com/api/site-validations/two-factor-authentication-detected':
+				return sprintf(
+					/* translators: %s: site label */
+					__('Two-factor authentication was detected on the login page of the %s.', 'updraftplus') .' ' .
+					__('Please temporarily disable it, complete the migration, and then re-enable it.', 'updraftplus'),
+					$site_label
+				);
+
+			case 'https://errors.updraftplus.com/api/site-validations/captcha-detected':
+				return sprintf(
+					/* translators: %s: site label */
+					__('A CAPTCHA or security challenge was detected on the login page of the %s.', 'updraftplus') . ' ' .
+					__('Please temporarily disable it so the migration can proceed.', 'updraftplus'),
+					$site_label
+				);
+
+			default:
+				return '';
+		}
+	}
+
+	/**
+	 * Map a login error code from the migration API to our own plain-text message.
+	 *
+	 * The API relays WordPress core's WP_Error message, which contains HTML and the
+	 * submitted email. We return our own text instead so nothing untrusted reaches
+	 * the frontend, which renders this with .text().
+	 *
+	 * @param string $code - The error code returned by the login API.
+	 * @return string - A translated, plain-text message.
+	 */
+	private function get_migration_login_error_message($code) {
+		$messages = array(
+			'empty_username' => __('Please enter your username.', 'updraftplus'),
+			'empty_email' => __('Please enter your email address.', 'updraftplus'),
+			'empty_password' => __('Please enter your password.', 'updraftplus'),
+			'invalid_email' => __('No account was found for that email address.', 'updraftplus'),
+			'incorrect_password' => __('The password you entered is incorrect.', 'updraftplus'),
+			'no_an_email_address' => __('Please enter an email address.', 'updraftplus'),
+			'email_not_registered' => __('There is no account with this email address at teamupdraft.com.', 'updraftplus') . ' ' . __('Please check your email address and try again.', 'updraftplus'),
+			'invalidcombo' => __('There is no account with that username or email address.', 'updraftplus')
+		);
+
+		return isset($messages[$code]) ? $messages[$code] : __('Login failed.', 'updraftplus') . ' ' . __('Please try again.', 'updraftplus');
 	}
 }

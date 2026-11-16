@@ -24,8 +24,9 @@ $archiveDownloadURL   = $package->getLocalPackageFileURL(AbstractPackage::FILE_T
 $installerDownloadURL = $package->getLocalPackageFileURL(AbstractPackage::FILE_TYPE_INSTALLER);
 $global               = GlobalEntity::getInstance();
 
-$txt_NotLocal      = __('Not available in local storage.', 'duplicator');
-$showLocalDownload = (!$archive_exists || !$installer_exists) && $package->haveRemoteStorage();
+$txt_NotLocal = __('Not available in local storage.', 'duplicator');
+// Without a local archive the row's Download button already fetches the Backup
+$showLocalDownload = $archive_exists && !$installer_exists && $package->haveRemoteStorage();
 
 switch ($global->getInstallerNameMode()) {
     case GlobalEntity::INSTALLER_NAME_MODE_SIMPLE:
@@ -149,6 +150,8 @@ ARCHIVE INSTALLER: -->
         </small>
     </div>
 <?php endif; ?>
-<small class="xsmall dark-gray-color dupli-row-res-note">
-    <i><?php esc_html_e('Links are sensitive. Keep them safe!', 'duplicator'); ?></i>
-</small>
+<?php if ($archive_exists || $installer_exists) : ?>
+    <small class="xsmall dark-gray-color dupli-row-res-note">
+        <i><?php esc_html_e('Links are sensitive. Keep them safe!', 'duplicator'); ?></i>
+    </small>
+<?php endif; ?>

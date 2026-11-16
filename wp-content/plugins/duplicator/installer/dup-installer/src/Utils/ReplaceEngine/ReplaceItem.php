@@ -4,24 +4,28 @@ namespace Duplicator\Installer\Utils\ReplaceEngine;
 
 use Duplicator\Libs\Snap\SnapIO;
 use Duplicator\Libs\Snap\SnapJson;
+use Duplicator\Libs\Snap\SnapPunycode;
+use Duplicator\Libs\Snap\SnapURL;
 
 /**
  * search and replace item use in manager to creat the search and replace list.
  */
 class ReplaceItem
 {
-    const PATH_SEPARATOR_REGEX_NORMAL   = '[\/\\\\]';
-    const PATH_SEPARATOR_REGEX_JSON     = '(?:\\\\\/|\\\\\\\\)';
-    const PATH_END_REGEX_MATCH_NORMAL   = '([\/\\\\"\'\n\r]|$)';
-    const PATH_END_REGEX_MATCH_JSON     = '(\\\\\/|\\\\\\\\|["\'\n\r]|$)';
-    const URL_END_REGEX_MATCH_NORMAL    = '([\/?"\'\n\r]|$)';
-    const URL_END_REGEX_MATCH_JSON      = '(\\\\\/|[?"\'\n\r]|$)';
-    const URL_END_REGEX_MATCH_URLENCODE = '(%2F|%3F|["\'\n\r]|$)';
+    const PATH_SEPARATOR_REGEX_NORMAL = '[\/\\\\]';
+    const PATH_SEPARATOR_REGEX_JSON   = '(?:\\\\\/|\\\\\\\\)';
+    // The match ends where the next char cannot extend the host, the folder or the file name,
+    // non ASCII chars included in their raw, JSON escaped and percent encoded forms
+    const END_REGEX_MATCH_NORMAL    = '(?![A-Za-z0-9\-_~+\x80-\xFF]|[.:][A-Za-z0-9]|%[89A-Fa-f][0-9A-Fa-f]|\\\\u(?!00[0-7])[0-9A-Fa-f]{4})';
+    const END_REGEX_MATCH_URLENCODE = '(?![A-Za-z0-9\-_~]|\.[A-Za-z0-9]|%3A[0-9]|%[89A-Fa-f][0-9A-Fa-f])';
+    const URL_SCHEME_REGEX          = '[hH][tT][tT][pP][sS]?';
+    const URL_SCHEME_LOOKBEHIND     = '(?<![hH][tT][tT][pP][sS]%1$s|[hH][tT][tT][pP]%1$s)';
 
     const TYPE_STRING               = 'str';
     const TYPE_URL                  = 'url';
     const TYPE_URL_NORMALIZE_DOMAIN = 'urlnd';
     const TYPE_PATH                 = 'path';
+    const TYPE_EMAIL_DOMAIN         = 'email';
 
     /** @var int */
     private static $uniqueIdCount = 0;
@@ -121,11 +125,17 @@ class ReplaceItem
     {
         switch ($this->type) {
             case self::TYPE_URL:
-                return self::searchReplaceUrl($this->search, $this->replace);
             case self::TYPE_URL_NORMALIZE_DOMAIN:
-                return self::searchReplaceUrl($this->search, $this->replace, true, true);
+                $normalizeWww = ($this->type === self::TYPE_URL_NORMALIZE_DOMAIN);
+                $result       = self::searchReplaceUrl($this->search, $this->replace, true, $normalizeWww);
+                foreach (self::getIdnVariants($this->search) as $variant) {
+                    $result = array_merge($result, self::searchReplaceUrl($variant, $this->replace, true, $normalizeWww));
+                }
+                return $result;
             case self::TYPE_PATH:
                 return self::searchReplacePath($this->search, $this->replace);
+            case self::TYPE_EMAIL_DOMAIN:
+                return self::searchReplaceWithEncodings($this->search, $this->replace, true, true, self::END_REGEX_MATCH_NORMAL, 'mi');
             case self::TYPE_STRING:
             default:
                 return self::searchReplaceWithEncodings($this->search, $this->replace);
@@ -146,15 +156,17 @@ class ReplaceItem
      * @param string $replace   replace string
      * @param bool   $json      add json encode string
      * @param bool   $urlencode add urlencode string
+     * @param string $endRegex  regex the match must be followed by, empty for none
+     * @param string $modifiers regex modifiers
      *
      * @return array<array{search:string,replace:string}> pairs search and replace
      */
-    public static function searchReplaceWithEncodings($search, $replace, $json = true, $urlencode = true): array
+    public static function searchReplaceWithEncodings($search, $replace, $json = true, $urlencode = true, $endRegex = '', $modifiers = 'm'): array
     {
         $result = [];
         if ($search != $replace) {
             $result[] = [
-                'search'  => '/' . preg_quote($search, '/') . '/m',
+                'search'  => '/' . preg_quote($search, '/') . $endRegex . '/' . $modifiers,
                 'replace' => addcslashes($replace, '\\$'),
             ];
         } else {
@@ -168,7 +180,7 @@ class ReplaceItem
 
             if ($search != $search_json && $search_json != $replace_json) {
                 $result[] = [
-                    'search'  => '/' . preg_quote($search_json, '/') . '/m',
+                    'search'  => '/' . preg_quote($search_json, '/') . $endRegex . '/' . $modifiers,
                     'replace' => addcslashes($replace_json, '\\$'),
                 ];
             }
@@ -181,7 +193,7 @@ class ReplaceItem
 
             if ($search != $search_urlencode && $search_urlencode != $replace_urlencode) {
                 $result[] = [
-                    'search'  => '/' . preg_quote($search_urlencode, '/') . '/m',
+                    'search'  => '/' . preg_quote($search_urlencode, '/') . $endRegex . '/' . $modifiers,
                     'replace' => addcslashes($replace_urlencode, '\\$'),
                 ];
             }
@@ -194,6 +206,9 @@ class ReplaceItem
      * Add replace strings to substitute old url to new url
      * 1) no protocol old url to no protocol new url (es. //www.hold.url  => //www.new.url)
      * 2) wrong protocol new url to right protocol new url (es. http://www.new.url => https://www.new.url)
+     *
+     * Every pair is generated for the plain, JSON, URL encoded and HTML entity forms of the url.
+     * Scheme and host are matched case-insensitively, the path is case-sensitive.
      *
      * result
      * [
@@ -226,66 +241,68 @@ class ReplaceItem
         }
         $replace_url_raw = trim($replace_url_raw, '/');
 
-        // (?<!https:|http:)\/\/(?:www\.|)aaaa\.it([?\/'"]|$)
         if ($normalizeWww && self::domainCanNormalized($search_url)) {
-            $baseSearchUrl = self::isWww($search_url_raw) ? substr($search_url_raw, strlen('www.')) : $search_url_raw;
-
-            $regExSearchUrlNormal = '\/\/(?:www\.)?' . preg_quote($baseSearchUrl, '/');
-            $regExSearchUrlJson   = '\\\\\/\\\\\/(?:www\.)?' . preg_quote(SnapJson::getJsonWithoutQuotes($baseSearchUrl), '/');
-            $regExSearchUrlEncode = '%2F%2F(?:www\.)?' . preg_quote(urlencode($baseSearchUrl), '/');
-            //'/https?:\/\/(?:www\.|)aaaa\.it(?<end>[?\/\'"]|$)/m'
-            //$searchRawRegEx = '/(?<!https:|http:)\/\/(?:www\.|)'.preg_quote($baseSearchUrl, '/').'([?\/\'"]|$)/m';
+            $baseSearchUrl = self::isWww($search_url) ? substr($search_url_raw, strlen('www.')) : $search_url_raw;
+            $wwwRegex      = '(?:www\.)?';
         } else {
-            $regExSearchUrlNormal = '\/\/' . preg_quote($search_url_raw, '/');
-            $regExSearchUrlJson   = '\\\\\/\\\\\/' . preg_quote(SnapJson::getJsonWithoutQuotes($search_url_raw), '/');
-            $regExSearchUrlEncode = '%2F%2F' . preg_quote(urlencode($search_url_raw), '/');
+            $baseSearchUrl = $search_url_raw;
+            $wwwRegex      = '';
         }
 
-        // NORMALIZE source protocol
-        if ($force_new_protocol && $parse_replace_url !== false && isset($parse_replace_url['scheme'])) {
-            $result[] = [
-                'search'  => '/(?<!https:|http:)' . $regExSearchUrlNormal . self::URL_END_REGEX_MATCH_NORMAL . '/m',
-                'replace' => addcslashes('//' . $replace_url_raw, '\\$') . '$1',
-            ];
-
-            $result[] = [
-                'search'  => '/https?:' . $regExSearchUrlNormal . self::URL_END_REGEX_MATCH_NORMAL . '/m',
-                'replace' => addcslashes($replace_url, '\\$') . '$1',
-            ];
-
-            $result[] = [
-                'search'  => '/(?<!https:|http:)' . $regExSearchUrlJson . self::URL_END_REGEX_MATCH_JSON . '/m',
-                'replace' => addcslashes(SnapJson::getJsonWithoutQuotes('//' . $replace_url_raw), '\\$') . '$1',
-            ];
-
-            $result[] = [
-                'search'  => '/https?:' . $regExSearchUrlJson . self::URL_END_REGEX_MATCH_JSON . '/m',
-                'replace' => addcslashes(SnapJson::getJsonWithoutQuotes($replace_url), '\\$') . '$1',
-            ];
-
-            $result[] = [
-                'search'  => '/(?<!https%3A|http%3A)' . $regExSearchUrlEncode . self::URL_END_REGEX_MATCH_URLENCODE . '/m',
-                'replace' => addcslashes(urlencode('//' . $replace_url_raw), '\\$') . '$1',
-            ];
-
-            $result[] = [
-                'search'  => '/https?%3A' . $regExSearchUrlEncode . self::URL_END_REGEX_MATCH_URLENCODE . '/m',
-                'replace' => addcslashes(urlencode($replace_url), '\\$') . '$1',
-            ];
+        if (($pathPos = strpos($baseSearchUrl, '/')) === false) {
+            $searchHost = $baseSearchUrl;
+            $searchPath = '';
         } else {
-            $result[] = [
-                'search'  => '/' . $regExSearchUrlNormal . self::URL_END_REGEX_MATCH_NORMAL . '/m',
-                'replace' => addcslashes('//' . $replace_url_raw, '\\$') . '$1',
-            ];
+            $searchHost = substr($baseSearchUrl, 0, $pathPos);
+            $searchPath = substr($baseSearchUrl, $pathPos);
+        }
 
-            $result[] = [
-                'search'  => '/' . $regExSearchUrlJson . self::URL_END_REGEX_MATCH_JSON . '/m',
-                'replace' => addcslashes(SnapJson::getJsonWithoutQuotes('//' . $replace_url_raw), '\\$') . '$1',
-            ];
+        $forceProtocol = $force_new_protocol && $parse_replace_url !== false && isset($parse_replace_url['scheme']);
 
+        $encodings = [
+            [
+                'encode' => fn(string $value): string => $value,
+                'end'    => self::END_REGEX_MATCH_NORMAL,
+            ],
+            [
+                'encode' => fn(string $value): string => SnapJson::getJsonWithoutQuotes($value),
+                'end'    => self::END_REGEX_MATCH_NORMAL,
+            ],
+            [
+                'encode' => fn(string $value): string => urlencode($value),
+                'end'    => self::END_REGEX_MATCH_URLENCODE,
+            ],
+            [
+                'encode' => fn(string $value): string => str_replace('/', '&#x2F;', $value),
+                'end'    => self::END_REGEX_MATCH_NORMAL,
+            ],
+        ];
+
+        foreach ($encodings as $encoding) {
+            $encode    = $encoding['encode'];
+            $urlRegex  = preg_quote($encode('//'), '/') .
+                '(?i:' . $wwwRegex . preg_quote($encode($searchHost), '/') . ')' .
+                preg_quote($encode($searchPath), '/') .
+                $encoding['end'];
+            $colon     = preg_quote($encode(':'), '/');
+            $noSchemes = addcslashes($encode('//' . $replace_url_raw), '\\$');
+
+            if (!$forceProtocol) {
+                $result[] = [
+                    'search'  => '/' . $urlRegex . '/m',
+                    'replace' => $noSchemes,
+                ];
+                continue;
+            }
+
+            // NORMALIZE source protocol
             $result[] = [
-                'search'  => '/' . $regExSearchUrlEncode . self::URL_END_REGEX_MATCH_URLENCODE . '/m',
-                'replace' => addcslashes(urlencode('//' . $replace_url_raw), '\\$') . '$1',
+                'search'  => '/' . sprintf(self::URL_SCHEME_LOOKBEHIND, $colon) . $urlRegex . '/m',
+                'replace' => $noSchemes,
+            ];
+            $result[] = [
+                'search'  => '/' . self::URL_SCHEME_REGEX . $colon . $urlRegex . '/m',
+                'replace' => addcslashes($encode($replace_url), '\\$'),
             ];
         }
 
@@ -314,17 +331,17 @@ class ReplaceItem
         $explodeSearch = explode('/', $search_path);
 
         $normaSearchArray = array_map(fn($val): string => preg_quote(SnapJson::getJsonWithoutQuotes($val), '/'), $explodeSearch);
-        $normalPathSearch = '/' . implode(self::PATH_SEPARATOR_REGEX_NORMAL, $normaSearchArray) . self::PATH_END_REGEX_MATCH_NORMAL . '/m';
+        $normalPathSearch = '/' . implode(self::PATH_SEPARATOR_REGEX_NORMAL, $normaSearchArray) . self::END_REGEX_MATCH_NORMAL . '/m';
         $result[]         = [
             'search'  => $normalPathSearch,
-            'replace' => addcslashes($replace_path, '\\$') . '$1',
+            'replace' => addcslashes($replace_path, '\\$'),
         ];
 
         $jsonSearchArray = array_map(fn($val): string => preg_quote(SnapJson::getJsonWithoutQuotes($val), '/'), $explodeSearch);
-        $jsonPathSearch  = '/' . implode(self::PATH_SEPARATOR_REGEX_JSON, $jsonSearchArray) . self::PATH_END_REGEX_MATCH_JSON . '/m';
+        $jsonPathSearch  = '/' . implode(self::PATH_SEPARATOR_REGEX_JSON, $jsonSearchArray) . self::END_REGEX_MATCH_NORMAL . '/m';
         $result[]        = [
             'search'  => $jsonPathSearch,
-            'replace' => addcslashes(SnapJson::getJsonWithoutQuotes($replace_path), '\\$') . '$1',
+            'replace' => addcslashes(SnapJson::getJsonWithoutQuotes($replace_path), '\\$'),
         ];
 
         return $result;
@@ -341,29 +358,29 @@ class ReplaceItem
     }
 
     /**
-     * @param string $url string The URL whichs domain you want to get
+     * Return the url with its host in the other international domain form, unicode or punycode
      *
-     * @return string The domain part of the given URL
-     *                  www.myurl.co.uk     => myurl.co.uk
-     *                  www.google.com      => google.com
-     *                  my.test.myurl.co.uk => myurl.co.uk
-     *                  www.myurl.localweb  => myurl.localweb
+     * @param string $url url
+     *
+     * @return string[] empty if the host has a single form
      */
-    public static function getDomain($url)
+    protected static function getIdnVariants($url): array
     {
-        $pieces = parse_url($url);
-        $domain = $pieces['host'] ?? '';
-        $regs   = null;
-        if (strpos($domain, ".") !== false) {
-            if (preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $domain, $regs)) {
-                return $regs['domain'];
-            } else {
-                $exDomain = explode('.', $domain);
-                return implode('.', array_slice($exDomain, -2, 2));
-            }
+        $host = (string) parse_url($url, PHP_URL_HOST);
+        if (preg_match('/[^\x00-\x7F]/', $host) === 1) {
+            $variant = SnapPunycode::encodeHost($host);
+        } elseif (stripos($host, 'xn--') !== false) {
+            $variant = SnapPunycode::decodeHost($host);
         } else {
-            return $domain;
+            return [];
         }
+
+        if ($variant === null || $variant === $host) {
+            return [];
+        }
+
+        $hostPos = (int) strpos($url, $host);
+        return [substr_replace($url, $variant, $hostPos, strlen($host))];
     }
 
     /**
@@ -375,34 +392,17 @@ class ReplaceItem
      */
     public static function domainCanNormalized($url)
     {
-        $pieces = parse_url($url);
+        $host = strtolower((string) parse_url($url, PHP_URL_HOST));
 
-        if (!isset($pieces['host'])) {
+        if (strpos($host, '.') === false || filter_var($host, FILTER_VALIDATE_IP) !== false) {
             return false;
         }
 
-        if (strpos($pieces['host'], ".") === false) {
-            return false;
-        }
-
-        $dLevels = explode('.', $pieces['host']);
-        if ($dLevels[0] == 'www') {
+        if (strpos($host, 'www.') === 0) {
             return true;
         }
 
-        switch (count($dLevels)) {
-            case 1:
-                return false;
-            case 2:
-                return true;
-            case 3:
-                if (preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $pieces['host'], $regs)) {
-                    return $regs['domain'] == $pieces['host'];
-                }
-                return false;
-            default:
-                return false;
-        }
+        return $host === SnapURL::getDomain($url);
     }
 
     /**

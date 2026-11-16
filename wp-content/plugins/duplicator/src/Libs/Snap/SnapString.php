@@ -2,7 +2,7 @@
 
 namespace Duplicator\Libs\Snap;
 
-use Exception;
+use Throwable;
 
 class SnapString
 {
@@ -187,7 +187,7 @@ class SnapString
                 $size /= 1024;
             }
             return round($size, 2) . $units[$i];
-        } catch (Exception $e) {
+        } catch (Throwable $e) { // @phpstan-ignore catch.neverThrown (defensive guard kept on purpose)
             return "n/a";
         }
     }
@@ -353,5 +353,26 @@ class SnapString
             |[\xF1-\xF3][\x80-\xBF]{3}                  # planes 4-15
             |\xF4[\x80-\x8F][\x80-\xBF]{2}    # plane 16
             )+%xs', $string) === 1);
+    }
+
+    /**
+     * Decodes a string only when it is entirely valid base64 that encodes back to itself
+     *
+     * @param string $string The string to decode
+     *
+     * @return ?string decoded string, null if the string is not base64
+     */
+    public static function decodeBase64(string $string): ?string
+    {
+        if (preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $string) !== 1) {
+            return null;
+        }
+
+        $decoded = base64_decode($string, true);
+        if ($decoded === false || base64_encode($decoded) !== $string) {
+            return null;
+        }
+
+        return $decoded;
     }
 }

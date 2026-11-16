@@ -34,7 +34,7 @@ class UpdraftCentral_Analytics_Commands extends UpdraftCentral_Commands {
 	 */
 	public function __construct() {
 		$this->auth_endpoint = defined('UPDRAFTPLUS_GOOGLE_ANALYTICS_CALLBACK_URL') ? UPDRAFTPLUS_GOOGLE_ANALYTICS_CALLBACK_URL : 'https://auth.updraftplus.com/auth/googleanalytics';
-		$this->client_id = defined('UPDRAFTPLUS_GOOGLE_ANALYTICS_CLIENT_ID') ? UPDRAFTPLUS_GOOGLE_ANALYTICS_CLIENT_ID : '306245874349-6s896c3tjpra26ns3dpplhqcl6rv6qlb.apps.googleusercontent.com';
+		$this->client_id = defined('UPDRAFTPLUS_GOOGLE_ANALYTICS_CLIENT_ID') ? UPDRAFTPLUS_GOOGLE_ANALYTICS_CLIENT_ID : '306245874349-6s896c3tjpra26ns3dpplhqcl6rv6qlb.apps.googleusercontent.com'; // phpcs:ignore PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- Default Google OAuth client ID for the Google Analytics integration, not an offloaded asset URL.
 
 		// Set transient expiration - default for 24 hours
 		$this->expiration = 86400;
@@ -110,7 +110,7 @@ class UpdraftCentral_Analytics_Commands extends UpdraftCentral_Commands {
 
 		// Retrieve header content
 		ob_start();
-		do_action('wp_head');
+		do_action('wp_head'); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- False positive: this is a core WordPress hook.
 		$header_content = ob_get_clean();
 		
 		// Extract analytics information if available.
@@ -122,7 +122,7 @@ class UpdraftCentral_Analytics_Commands extends UpdraftCentral_Commands {
 		if (empty($result['tracking_id'])) {
 			// Retrieve footer content
 			ob_start();
-			do_action('wp_footer');
+			do_action('wp_footer'); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- False positive: this is a core WordPress hook.
 			$footer_content = ob_get_clean();
 			$output = $this->parse_content($footer_content);
 			$result['installed'] = $output['installed'];

@@ -15,11 +15,11 @@ use Duplicator\Installer\Core\Deploy\Multisite;
 use Duplicator\Installer\Core\InstState;
 use Duplicator\Installer\Core\Params\Models\SiteOwrMap;
 use Duplicator\Installer\Utils\Log\Log;
-use Duplicator\Installer\Utils\Log\LogHandler;
 use Duplicator\Installer\Core\Params\PrmMng;
 use Duplicator\Installer\Utils\ReplaceEngine\ReplaceMng;
 use Duplicator\Libs\Snap\SnapDB;
-use Duplicator\Libs\Snap\SnapUtil;
+use Duplicator\Libs\SearchReplace\SerializedData;
+use Duplicator\Libs\SearchReplace\ValueReplacer;
 
 class DUPX_UpdateEngine
 {
@@ -34,12 +34,6 @@ class DUPX_UpdateEngine
     const SR_PRORITY_GENERIC_SUBST_P3     = 12;
     const SR_PRORITY_GENERIC_SUBST_P4     = 13;
     const SR_PRORITY_CUSTOM               = 20;
-    const SERIALIZE_OPEN_STR_REGEX        = '/^(s:\d+:")/';
-    const SERIALIZE_OPEN_SUBSTR_LEN       = 25;
-    const SERIALIZE_CLOSE_STR_REGEX       = '/^";}*(?:"|a:|s:|S:|b:|d:|i:|o:|O:|C:|r:|R:|N;|$)/';
-    const SERIALIZE_CLOSE_SUBSTR_LEN      = 50;
-    const SERIALIZE_CLOSE_STR             = '";';
-    const SERIALIZE_CLOSE_STR_LEN         = 2;
 
     /**
      * Used to report on all log errors into the installer-txt.log
@@ -227,7 +221,7 @@ class DUPX_UpdateEngine
             'columnsMaxLen' => [],
             'colList'       => '*',
             'colMsg'        => 'every column',
-            'columnsSRList' => [],
+            'srList'        => [],
             'pages'         => 0,
             'page_size'     => 0,
             'page'          => 0,
@@ -301,7 +295,7 @@ class DUPX_UpdateEngine
             return null;
         } else {
             // PREPARE SEARCH AN REPLACE LISF FOR TABLES
-            $rowsParams['columnsSRList'] = self::getColumnsSearchReplaceList($rowsParams['table'], $rowsParams['columns']);
+            $rowsParams['srList'] = ReplaceMng::getInstance()->getSearchReplaceList($rowsParams['table']);
             return $rowsParams;
         }
     }
@@ -493,10 +487,9 @@ MSG;
      */
     private static function evaluateRow(&$rowsParams, array $row)
     {
-        $nManager             = DUPX_NOTICE_MANAGER::getInstance();
-        $s3Funcs              = DUPX_S3_Funcs::getInstance();
-        $dbh                  = $s3Funcs->getDbConnection();
-        $maxSerializeLenCheck = self::getMaxSerializeLen();
+        $nManager = DUPX_NOTICE_MANAGER::getInstance();
+        $s3Funcs  = DUPX_S3_Funcs::getInstance();
+        $dbh      = $s3Funcs->getDbConnection();
 
         $s3Funcs->report['scan_rows']++;
         $rowsParams['current_row']++;
@@ -517,10 +510,8 @@ MSG;
                 continue;
             }
 
-            $safe_column     = '`' . mysqli_real_escape_string($dbh, $column) . '`';
-            $edited_data     = $originalData    = $row[$column];
-            $base64converted = false;
-            $txt_found       = false;
+            $safe_column = '`' . mysqli_real_escape_string($dbh, $column) . '`';
+            $edited_data = $originalData = $row[$column];
 
             //Unkeyed table code
             //Added this here to add all columns to $where_sql
@@ -531,96 +522,31 @@ MSG;
 
             //Only replacing string values
             if (!empty($row[$column]) && !is_numeric($row[$column]) && $primary_key != 1) {
-                // get search and reaplace list for column
-                $tColList        = &$rowsParams['columnsSRList'][$column]['list'];
-                $tColSearchList  = &$rowsParams['columnsSRList'][$column]['sList'];
-                $tColreplaceList = &$rowsParams['columnsSRList'][$column]['rList'];
-                $tColExactMatch  = $rowsParams['columnsSRList'][$column]['exactMatch'];
-
-                // skip empty search col
-                if (empty($tColSearchList)) {
-                    continue;
-                }
-
-                // Search strings in data
-                foreach ($tColList as $item) {
-                    if (preg_match($item['search'], $edited_data)) {
-                        $txt_found = true;
-                        break;
-                    }
-                }
-
-                if (!$txt_found) {
-                    //if not found decetc Base 64
-                    if (($decoded = DUPX_U::is_base64($row[$column])) !== false) {
-                        $edited_data     = $decoded;
-                        $base64converted = true;
-
-                        // Search strings in data decoded
-                        foreach ($tColList as $item) {
-                            if (preg_match($item['search'], $edited_data)) {
-                                $txt_found = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    //Skip table cell if match not found
-                    if (!$txt_found) {
-                        continue;
-                    }
-                }
-
-                // 0 no limit
-                if ($maxSerializeLenCheck > 0 && self::is_serialized_string($edited_data) && strlen($edited_data) > $maxSerializeLenCheck) {
-                    $serial_err          = true;
-                    $substrData          = substr($edited_data, 0, Log::isLevel(Log::LV_DEBUG) ? 20000 : 1000);
-                    $rowErrors[$column]  = 'ENGINE: serialize data too big to convert; data len:' . strlen($edited_data) . ' Max size:' . $maxSerializeLenCheck;
-                    $rowErrors[$column] .= "\n\tDATA: " . $substrData;
-                    continue;
-                }
-
-                //Replace logic - level 1: simple check on any string or serlized strings
-                if ($tColExactMatch) {
-                    // if is exact match search and replace the itentical string
-                    if (($rIndex = array_search($edited_data, $tColSearchList)) !== false) {
-                        Log::info("ColExactMatch " . $column . ' search:' . $edited_data . ' replace:' . $tColreplaceList[$rIndex] . ' index:' . $rIndex, Log::LV_DEBUG);
-                        $edited_data = $tColreplaceList[$rIndex];
-                    }
+                // skip tables with no search and replace list
+                if (empty($rowsParams['srList'])) {
                     continue;
                 }
 
                 // SEARCH AND REPLACE
-                $edited_data = self::searchAndReplaceItems($tColSearchList, $tColreplaceList, $edited_data);
+                $replaced = self::getTableReplacer($rowsParams)->replace((string) $originalData);
+                if ($replaced->isRejected()) {
+                    $substrData = substr((string) $originalData, 0, Log::isLevel(Log::LV_DEBUG) ? 20000 : 1000);
+                    $message    = 'ENGINE: ' . $replaced->getError() .
+                        "\n\tDATA: " . $substrData;
 
-                // Replace logic - level 2: repair serialized strings that have become broken
-                // check value without unserialize it
-                if (self::is_serialized_string($edited_data)) {
-                    $serial_check = self::fixSerializedAndCheck($edited_data);
-                    if ($serial_check['fixed']) {
-                        $edited_data = $serial_check['data'];
-                    } else {
-                        $substrData = substr($edited_data, 0, Log::isLevel(Log::LV_DEBUG) ? 20000 : 1000);
-                        $message    = 'ENGINE: serialize data serial check error' .
-                            "\n\tDATA: " . $substrData;
-
-                        Log::info($message);
-                        $serial_err         = true;
-                        $rowErrors[$column] = $message;
-                    }
+                    Log::info($message);
+                    $serial_err         = true;
+                    $rowErrors[$column] = $message;
+                    continue;
                 }
-            }
-
-            //Base 64 encode
-            if ($base64converted) {
-                $edited_data = base64_encode($edited_data);
+                $edited_data = $replaced->getValue();
             }
 
             //Change was made
             if ($serial_err == false && $edited_data != $originalData) {
                 // Truncate if value exceeds varchar/char column limit (skip serialized data to avoid corruption)
                 if (isset($rowsParams['columnsMaxLen'][$column]) && strlen($edited_data) > $rowsParams['columnsMaxLen'][$column]) {
-                    if (self::is_serialized_string($edited_data)) {
+                    if (SerializedData::isSerialized((string) $edited_data)) {
                         Log::info(
                             'ENGINE: Skipping column ' . $column . ' - serialized data (' .
                             strlen($edited_data) . ' chars) exceeds column limit (' .
@@ -694,392 +620,22 @@ MSG;
     }
 
     /**
-     * Get column search and replace list
+     * Returns the replacer of a table, built once per table
      *
-     * @param string             $table   table name
-     * @param array<string,bool> $columns table columns
+     * @param array<string,mixed> $rowsParams table params
      *
-     * @return array<string,array{sList:string[],rList:string[]}> column search and replace list
+     * @return ValueReplacer
      */
-    private static function getColumnsSearchReplaceList($table, $columns): array
+    private static function getTableReplacer(array $rowsParams): ValueReplacer
     {
-        // PREPARE SEARCH AN REPLACE LISF FOR TABLES
-        $srManager   = ReplaceMng::getInstance();
-        $searchList  = [];
-        $replaceList = [];
-        $list        = $srManager->getSearchReplaceList($table);
-        foreach ($list as $item) {
-            $searchList[]  = $item['search'];
-            $replaceList[] = $item['replace'];
+        static $table    = null;
+        static $replacer = null;
+
+        if ($replacer === null || $table !== $rowsParams['table']) {
+            $table    = $rowsParams['table'];
+            $replacer = new ValueReplacer($rowsParams['srList'], self::getMaxSerializeLen());
         }
-
-        $columnsSRList = [];
-        foreach ($columns as $column => $primary_key) {
-            if (($cScope = self::getSearchReplaceCustomScope($table, $column)) === false) {
-                // if don't have custom scope get normal search and reaplce table list
-                $columnsSRList[$column] = [
-                    'list'       => &$list,
-                    'sList'      => &$searchList,
-                    'rList'      => &$replaceList,
-                    'exactMatch' => false,
-                ];
-            } else {
-                // if column have custom scope overvrite default table search/replace list
-                $columnsSRList[$column] = [
-                    'list'       => $srManager->getSearchReplaceList($cScope, true, false),
-                    'sList'      => [],
-                    'rList'      => [],
-                    'exactMatch' => self::isExactMatch($table, $column),
-                ];
-                foreach ($columnsSRList[$column]['list'] as $item) {
-                    $columnsSRList[$column]['sList'][] = $item['search'];
-                    $columnsSRList[$column]['rList'][] = $item['replace'];
-                }
-            }
-        }
-
-        return $columnsSRList;
-    }
-
-    /**
-     * Searches and replaces strings without deserializing
-     * recursion for arrays
-     *
-     * @param string[] $search  Search strings
-     * @param string[] $replace Replace strings
-     * @param mixed    $data    Data to search and replace
-     *
-     * @return scalar|scalar[]
-     */
-    public static function searchAndReplaceItems($search, $replace, $data)
-    {
-        if (empty($data) || is_numeric($data) || is_bool($data) || is_callable($data)) {
-            /* do nothing */
-        } elseif (is_string($data)) {
-            foreach ($search as $index => $cs) {
-                //  Multiple replace string. If the string is serialized will fixed with fixSerialString
-                $data = preg_replace($cs, $replace[$index], $data);
-            }
-        } elseif (is_array($data)) {
-            $_tmp = [];
-            foreach ($data as $key => $value) {
-                // prevent recursion overhead
-                if (empty($value) || is_numeric($value) || is_bool($value) || is_callable($value)) {
-                    $_tmp[$key] = $value;
-                } else {
-                    $_tmp[$key] = self::searchAndReplaceItems($search, $replace, $value);
-                }
-            }
-
-            $data = $_tmp;
-            unset($_tmp);
-        } elseif (is_object($data)) {
-            // it can never be an object type
-            Log::info("OBJECT DATA IMPOSSIBLE\n");
-        }
-        return $data;
-    }
-
-    /**
-     * FROM WORDPRESS
-     * Check value to find if it was serialized.
-     *
-     * If $data is not an string, then returned value will always be false.
-     * Serialized data is always a string.
-     *
-     * @since 2.0.5
-     *
-     * @param string $data   Value to check to see if was serialized.
-     * @param bool   $strict Optional. Whether to be strict about the end of the string. Default true.
-     *
-     * @return bool False if not serialized and true if it was.
-     */
-    public static function is_serialized_string($data, $strict = true)
-    {
-        // if it isn't a string, it isn't serialized.
-        if (!is_string($data)) {
-            return false;
-        }
-        $data = trim($data);
-        if ('N;' == $data) {
-            return true;
-        }
-        if (strlen($data) < 4) {
-            return false;
-        }
-        if (':' !== $data[1]) {
-            return false;
-        }
-        if ($strict) {
-            $lastc = substr($data, -1);
-            if (';' !== $lastc && '}' !== $lastc) {
-                return false;
-            }
-        } else {
-            $semicolon = strpos($data, ';');
-            $brace     = strpos($data, '}');
-            // Either ; or } must exist.
-            if (false === $semicolon && false === $brace) {
-                return false;
-            }
-            // But neither must be in the first X characters.
-            if (false !== $semicolon && $semicolon < 3) {
-                return false;
-            }
-            if (false !== $brace && $brace < 4) {
-                return false;
-            }
-        }
-        $token = $data[0];
-        switch ($token) {
-            case 's':
-                if ($strict) {
-                    if ('"' !== substr($data, -2, 1)) {
-                        return false;
-                    }
-                } elseif (false === strpos($data, '"')) {
-                    return false;
-                }
-            // or else fall through
-            case 'a':
-            case 'O':
-                return (bool) preg_match("/^{$token}:[0-9]+:/s", $data);
-            case 'b':
-            case 'i':
-            case 'd':
-                $end = $strict ? '$' : '';
-                return (bool) preg_match("/^{$token}:[0-9.E-]+;$end/", $data);
-        }
-        return false;
-    }
-
-    /**
-     * Test if a string in properly serialized
-     *
-     * @param string $data Any string type
-     *
-     * @todo The serialized string fix handles layers recursively in case there is a serialization of a serialized string.
-     *       As an example if an array is serialized that contains to its turn the list of serialized strings.
-     *       For this reason in order to make a working test in all the cases we should recursively test all the values of the serialized object.
-     *       Note: since the fix works well I'm fine with running a superficial test like this given the implementation effort to improve it.
-     *
-     * @return bool Is the string a serialized string
-     */
-    public static function unserializeTest($data)
-    {
-        if (!is_string($data)) {
-            return false;
-        }
-
-        LogHandler::setMode(LogHandler::MODE_OFF);
-        $isValid = SnapUtil::safeUnserialize($data);
-        LogHandler::setMode();
-
-        return $isValid;
-    }
-    /**
-     * custom columns list
-     * if the table / column pair exists in this array then the search scope will be overwritten with that contained in the array
-     *
-     * @var array<string,array<string,array{scope:string,exact:bool}>>
-     */
-    private static $customScopes = [
-        'signups' => [
-            'domain' => [
-                'scope' => 'domain_host',
-                'exact' => true,
-            ],
-            'path'   => [
-                'scope' => 'domain_path',
-                'exact' => true,
-            ],
-        ],
-        'site'    => [
-            'domain' => [
-                'scope' => 'domain_host',
-                'exact' => true,
-            ],
-            'path'   => [
-                'scope' => 'domain_path',
-                'exact' => true,
-            ],
-        ],
-    ];
-
-    /**
-     *
-     * @param string $table  table name
-     * @param string $column column name
-     *
-     * @return bool|string false if custom scope not found or return custom scoper for table/column
-     */
-    private static function getSearchReplaceCustomScope($table, $column)
-    {
-        $tablePrefix = PrmMng::getInstance()->getValue(PrmMng::PARAM_DB_TABLE_PREFIX);
-        if (strpos($table, (string) $tablePrefix) !== 0) {
-            return false;
-        }
-
-        $table_key = substr($table, strlen($tablePrefix));
-
-        if (!array_key_exists($table_key, self::$customScopes)) {
-            return false;
-        }
-
-        if (!array_key_exists($column, self::$customScopes[$table_key])) {
-            return false;
-        }
-
-        return self::$customScopes[$table_key][$column]['scope'];
-    }
-
-    /**
-     *
-     * @param string $table  table name
-     * @param string $column column name
-     *
-     * @return bool if true search a exact match in column if false search as LIKE
-     */
-    private static function isExactMatch($table, $column)
-    {
-        $tablePrefix = PrmMng::getInstance()->getValue(PrmMng::PARAM_DB_TABLE_PREFIX);
-
-        if (strpos($table, (string) $tablePrefix) !== 0) {
-            return false;
-        }
-
-        $table_key = substr($table, strlen($tablePrefix));
-
-        if (!array_key_exists($table_key, self::$customScopes)) {
-            return false;
-        }
-
-        if (!array_key_exists($column, self::$customScopes[$table_key])) {
-            return false;
-        }
-
-        return self::$customScopes[$table_key][$column]['exact'];
-    }
-
-    /**
-     *  Fixes the string length of a string object that has been serialized but the length is broken
-     *
-     * @param string $data The string object to recalculate the size on.
-     *
-     * @return array{data: ?string, fixed: bool}  A serialized string that fixes and string length types
-     */
-    private static function fixSerializedAndCheck($data): array
-    {
-        $result = [
-            'data'  => null,
-            'fixed' => false,
-        ];
-
-        $serialized_fixed = self::recursiveFixSerialString($data);
-        if (self::unserializeTest($serialized_fixed)) {
-            $result['data']  = $serialized_fixed;
-            $result['fixed'] = true;
-        } else {
-            $result['fixed'] = false;
-        }
-
-        return $result;
-    }
-
-    /**
-     *  Fixes the string length of a string object that has been serialized but the length is broken
-     *  Work on nested serialized string recursively.
-     *
-     *  @param string $data The string ojbect to recalculate the size on.
-     *
-     *  @return string  A serialized string that fixes and string length types
-     */
-    private static function recursiveFixSerialString($data)
-    {
-
-        if (!self::is_serialized_string($data)) {
-            return $data;
-        }
-
-        $result  = '';
-        $matches = null;
-
-        $openLevel     = 0;
-        $openContent   = '';
-        $openContentL2 = '';
-
-        // parse every char
-        for ($i = 0; $i < strlen($data); $i++) {
-            $cChar   = $data[$i];
-            $addChar = true;
-
-            if ($cChar == 's') {
-                // test if is a open string
-                if (preg_match(self::SERIALIZE_OPEN_STR_REGEX, substr($data, $i, self::SERIALIZE_OPEN_SUBSTR_LEN), $matches)) {
-                    if ($openLevel > 1) {
-                        $openContentL2 .= $matches[0];
-                    }
-
-                    $addChar = false;
-                    $openLevel++;
-                    $i += strlen($matches[0]) - 1;
-                }
-            } elseif ($openLevel > 0 && $cChar == '"') {
-                // test if is a close string
-                if (preg_match(self::SERIALIZE_CLOSE_STR_REGEX, substr($data, $i, self::SERIALIZE_CLOSE_SUBSTR_LEN))) {
-                    $addChar = false;
-
-                    switch ($openLevel) {
-                        case 1:
-                            // level 1
-                            // flush string content
-                            $result     .= 's:' . strlen($openContent) . ':"' . $openContent . '";';
-                            $openContent = '';
-                            break;
-                        case 2:
-                            // level 2
-                            // fix serial string level2
-                            $sublevelstr = self::recursiveFixSerialString($openContentL2);
-                            // flush content on level 1
-                            $openContent  .= 's:' . strlen($sublevelstr) . ':"' . $sublevelstr . '";';
-                            $openContentL2 = '';
-                            break;
-                        default:
-                            // level > 2
-                            // keep writing at level 2; it will be corrected with recursion
-                            $openContentL2 .= self::SERIALIZE_CLOSE_STR;
-                            break;
-                    }
-                    $openLevel--;
-                    $i += self::SERIALIZE_CLOSE_STR_LEN - 1;
-                }
-            }
-
-            if ($addChar) {
-                switch ($openLevel) {
-                    case 0:
-                        // level 0
-                        // add char on result
-                        $result .= $cChar;
-
-                        break;
-                    case 1:
-                        // level 1
-                        // add char on content level1
-                        $openContent .= $cChar;
-
-                        break;
-                    default:
-                        // level > 1
-                        // add char on content level2
-                        $openContentL2 .= $cChar;
-
-                        break;
-                }
-            }
-        }
-
-        return $result;
+        return $replacer;
     }
 
     /**

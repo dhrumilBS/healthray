@@ -502,8 +502,8 @@ class BuildComponents extends PComponents
      * Return the single AbstractPackage::FLAG_* constant that describes the shape of a package
      * with the given component set. Exactly one shape per package.
      *
-     * Logic is self-contained and does not depend on addons, so the shape flag is computed
-     * consistently even when ProBase is disabled.
+     * Logic is self-contained and does not depend on addons, so the shape flag is the same
+     * whichever addons are active.
      *
      * @param string[] $components active components
      *

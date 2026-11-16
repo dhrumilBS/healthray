@@ -458,7 +458,11 @@ class UpgradeFunctions
 
         foreach ($listEntityClasses as $class) {
             try {
-                foreach ($class::getAll() as $entity) {
+                if (($entities = $class::getAll()) === false) {
+                    $errors[] = "{$class}: unable to load entities";
+                    continue;
+                }
+                foreach ($entities as $entity) {
                     $entity->save();
                     $savedCount++;
                 }

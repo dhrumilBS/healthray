@@ -1,7 +1,11 @@
 <?php if (!defined('ABSPATH')) die('No direct access.'); ?>
 
 <div id="updraft_migrate_tab_main">
-	<?php $updraftplus_admin->include_template('wp-admin/settings/temporary-clone.php'); ?>
+	<?php
+		$updraftplus_admin->include_template('wp-admin/settings/temporary-clone.php', false, array(
+			'checkout_clone_token_attributes' => 'href="'.esc_url($updraftplus->get_url('buy_clone_tokens')).'" target="_blank"'
+		));
+	?>
 
 	<h2><?php esc_html_e('Migrate (create a copy of a site on hosting you control)', 'updraftplus'); ?></h2>
 	<div id="updraft_migrate" class="postbox">

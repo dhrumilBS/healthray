@@ -2,6 +2,7 @@
 
 namespace Duplicator\Installer\Core\Params\Items;
 
+use Duplicator\Libs\Snap\SnapUtil;
 use DUPX_U;
 use Exception;
 
@@ -218,9 +219,7 @@ class ParamForm extends ParamItem
         $reflect = new \ReflectionObject($copy);
 
         $formAttrProp = $reflect->getProperty('formAttr');
-        if (PHP_VERSION_ID < 80100) {
-            $formAttrProp->setAccessible(true);
-        }
+        SnapUtil::setAccessible($formAttrProp);
 
         $newAttr              = $formAttrProp->getValue($copy);
         $newAttr['id']        = 'param_item_' . $newName;

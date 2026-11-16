@@ -648,7 +648,7 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 			if (empty($menu_items) || !isset($menu_items['plugins'])) {
 				$plugins = array();
 			} else {
-				$show_network_active = apply_filters('show_network_active_plugins', current_user_can('manage_network_plugins'));
+				$show_network_active = apply_filters('show_network_active_plugins', current_user_can('manage_network_plugins')); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- False positive: this is a core WordPress hook.
 
 				$filtered_plugins = array();
 				foreach ($plugins as $file => $data) {

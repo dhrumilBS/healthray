@@ -7,6 +7,7 @@
 defined("ABSPATH") or die("");
 
 use Duplicator\Controllers\ActivityLogPageController;
+use Duplicator\Controllers\PackagesPageController;
 use Duplicator\Controllers\StoragePageController;
 use Duplicator\Core\CapMng;
 use Duplicator\Installer\Package\ArchiveDescriptor;
@@ -44,8 +45,9 @@ switch ($package->Installer->OptsSecureOn) {
 
 $logDownloadURL  = $package->getLocalPackageFileURL(AbstractPackage::FILE_TYPE_LOG);
 $logFileExists   = file_exists($package->getSafeLogFilepath());
-$canExport       = CapMng::can(CapMng::CAP_EXPORT, false) && $package->getStatus() != AbstractPackage::STATUS_ERROR;
-$activityLogId   = $package->getMainActivityLogId();
+$canExport       = PackagesPageController::detailsPageCanDownload($package);
+$canDelete       = PackagesPageController::canDeleteBackup($package);
+$activityLogId   = $package->getActivityLogEventId();
 $showActivityLog = $activityLogId > 0 && CapMng::can(CapMng::CAP_BASIC, false);
 
 $tooltopCreatedContent = __(
@@ -103,7 +105,7 @@ $warnings = $package->hasBuildWarnings() ? $package->getBuildWarningsDisplayList
                     <i class="fas fa-clock-rotate-left fa-sm"></i> <?php esc_html_e('Activity Log', 'duplicator'); ?>
                 </a>
             <?php } ?>
-            <?php if (CapMng::can(CapMng::CAP_CREATE, false)) { ?>
+            <?php if ($canDelete) { ?>
                 <button class="button hollow alert small dupli-delete-backup" onclick="DupliJs.Pack.ConfirmDeleteCurrent();return false;">
                     <i class="fas fa-trash-alt fa-sm"></i> <?php esc_html_e('Delete', 'duplicator'); ?>
                 </button>
@@ -224,6 +226,10 @@ $warnings = $package->hasBuildWarnings() ? $package->getBuildWarningsDisplayList
                 <span class="dupli-kv-value">
                     <i class="<?php echo esc_attr($origin['icon']); ?> fa-fw dupli-kv-icon"></i>
                     <?php echo wp_kses($origin['label'], KsesHelper::RICH_TAGS); ?>
+                    <?php if ($package->getExecutionReason() !== null) { ?>
+                        <br />
+                        <span class="dupli-kv-subline"><?php echo esc_html($package->getExecutionReason()); ?></span>
+                    <?php } ?>
                 </span>
             </div>
             <div class="dupli-kv">
@@ -248,7 +254,7 @@ $warnings = $package->hasBuildWarnings() ? $package->getBuildWarningsDisplayList
                             <li>
                                 <span class="dupli-list-name">
                                     <?php echo wp_kses($storage->getSTypeIcon(), KsesHelper::getStorageIconAllowedTags()); ?>
-                                    <?php if (CapMng::can(CapMng::CAP_STORAGE, false)) { ?>
+                                    <?php if (CapMng::can(CapMng::CAP_STORAGE, false) && !$storage->isHidden()) { ?>
                                         <a href="<?php echo esc_url(StoragePageController::getEditUrl($storage)); ?>" target="_blank">
                                             <?php echo esc_html($storage->getName()); ?>
                                         </a>
@@ -264,7 +270,7 @@ $warnings = $package->hasBuildWarnings() ? $package->getBuildWarningsDisplayList
             </span>
         </div>
         <?php
-        // Shared upsell surface: sanitized with the storages-footer allow-list like every consumer of this filter
+        // Sanitized with the storages-footer allow-list like every consumer of this filter
         $extraStoragesFooter = (string) apply_filters('duplicator_storages_table_footer_content', '');
         if ($extraStoragesFooter !== '') { ?>
             <div class="dupli-kv dupli-general-storages-footer">

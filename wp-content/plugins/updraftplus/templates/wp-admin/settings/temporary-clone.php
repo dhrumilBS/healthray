@@ -6,10 +6,6 @@ if (!defined('ABSPATH')) die('No direct access.');
 if (defined('UPDRAFTPLUS_TEMPORARY_CLONE') && !UPDRAFTPLUS_TEMPORARY_CLONE) return;
 
 UpdraftPlus::load_checkout_embed();
-
-global $updraftplus_checkout_embed, $updraftplus;
-$checkout_url = $updraftplus->get_url('buy_clone_tokens');
-$checkout_clone_token_attributes = 'href="'.esc_url($checkout_url).'" target="_blank"';
 ?>
 
 <h2><?php esc_html_e('Create a temporary clone on our servers (UpdraftClone)', 'updraftplus'); ?></h2>

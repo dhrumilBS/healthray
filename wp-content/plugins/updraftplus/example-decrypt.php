@@ -5,13 +5,13 @@ if (!defined('ABSPATH')) die('No direct access allowed');
 /*
 To dump the decrypted file using the given key on stdout, call:
 
-rijndael_decrypt_file('../path/to/file.crypt' , 'mykey');
+updraftplus_rijndael_decrypt_file('../path/to/file.crypt' , 'mykey');
 
 Thus, here are the easy instructions:
 
 1) Add a line like the above into this PHP file (not inside these comments, but outside)
 e.g.
-rijndael_decrypt_file('/home/myself/myfile.crypt' , 'MYKEY');
+updraftplus_rijndael_decrypt_file('/home/myself/myfile.crypt' , 'MYKEY');
 
 2) Run this file (and make sure that includes/Rijndael.php is available, if you are moving this file around)
 e.g. 
@@ -30,7 +30,7 @@ gunzip output.sql.gz
  * @param String $file Full path to file to decrypt
  * @param String $key  Key or salting to be used
  */
-function rijndael_decrypt_file($file, $key) {
+function updraftplus_rijndael_decrypt_file($file, $key) {
 
 	include_once(dirname(__FILE__).'/vendor/phpseclib/phpseclib/phpseclib/Crypt/Rijndael.php');
 

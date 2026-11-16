@@ -263,8 +263,8 @@ abstract class UpdraftPlus_RemoteSend {
 			
 			$signal_ready_for_restore_now = true;
 			
-			if (class_exists('UpdraftPlus_Remote_Communications_V2')) {
-				$test_udrpc = new UpdraftPlus_Remote_Communications_V2();
+			if (class_exists('UpdraftPlus_Remote_Communications_V3')) {
+				$test_udrpc = new UpdraftPlus_Remote_Communications_V3();
 				if (version_compare($test_udrpc->version, '1.4.21', '>=')) {
 					$signal_ready_for_restore_now = false;
 					$this->job_id = $job_id;
@@ -532,7 +532,7 @@ abstract class UpdraftPlus_RemoteSend {
 	}
 
 	/**
-	 * Called upon the WP action updraft_s3_newuser. Dies.
+	 * Called upon the WP action updraft_migrate_key_create. Dies.
 	 *
 	 * @param array $data - the posted data
 	 *
@@ -543,7 +543,7 @@ abstract class UpdraftPlus_RemoteSend {
 		if (empty($data['name'])) die;
 		$name = stripslashes($data['name']);
 		
-		$size = (empty($data['size']) || !is_numeric($data['size']) || $data['size'] < 1024) ? 2048 : (int) $data['size'];
+		$size = (empty($data['size']) || !is_numeric($data['size']) || $data['size'] < 2048) ? 2048 : (int) $data['size'];
 
 		$name_hash = md5($name); // 32 characters
 		$indicator_name = $name_hash.'.migrator.updraftplus.com';
@@ -599,6 +599,13 @@ abstract class UpdraftPlus_RemoteSend {
 		die;
 	}
 
+	/**
+	 * Called upon the WP action updraft_migrate_newdestination. Dies.
+	 *
+	 * @param array $data - the posted data
+	 *
+	 * @return void
+	 */
 	public function updraft_migrate_newdestination($data) {
 
 		global $updraftplus;

@@ -508,6 +508,9 @@ class LocalStorage extends AbstractStorageEntity
     protected function isPathRepeated(): bool
     {
         $storages = self::getAll();
+        if ($storages === false) {
+            return false;
+        }
         foreach ($storages as $storage) {
             if (
                 !$storage->isLocal() ||

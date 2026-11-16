@@ -35,6 +35,8 @@ class DescriptorDBInfo
     public $tablesSizeOnDisk = 0;
     /** @var DescriptorDBTableInfo[] */
     public $tablesList = [];
+    /** @var string[] Dump file names in execution order, relative to the dump folder; empty in archives built with a single dump file */
+    public $dumpFiles = [];
     /** @var string The database engine (MySQL/MariaDB/Percona) */
     public $dbEngine = '';
     /** @var string The simple numeric version number of the database server @exmaple: 5.5 */

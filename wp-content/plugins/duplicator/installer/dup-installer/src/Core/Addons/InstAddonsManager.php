@@ -238,7 +238,7 @@ final class InstAddonsManager
                 'description'       => '',
                 'author'            => '',
                 'authorURI'         => '',
-                'requiresWP'        => '5.3',
+                'requiresWP'        => '6.2',
                 'requiresPHP'       => '7.4',
                 'requiresDuplcator' => '4.5.20',
                 'requiresAddons'    => [],

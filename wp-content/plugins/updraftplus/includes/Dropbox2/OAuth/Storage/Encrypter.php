@@ -40,7 +40,7 @@ class Dropbox_Encrypter
         if (preg_match('/^[A-Za-z0-9]+$/', $key) && $length = strlen($key) === self::KEY_SIZE) {
             # Short-cut so that the mbstring extension is not required
             $this->key = $key;
-        } elseif (($length = mb_strlen($key, '8bit')) !== self::KEY_SIZE) {
+        } elseif (function_exists('mb_strlen') && ($length = mb_strlen($key, '8bit')) !== self::KEY_SIZE) {
             throw new Dropbox_Exception('Expecting a ' .  self::KEY_SIZE . ' byte key, got ' . $length); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- The escaping should happen when the exception is caught and printed
         } else {
             // Set the encryption key

@@ -183,7 +183,7 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_3 {
 					$this->url_start(true, 'linkedin.com/company/teamupdraft', true).__('LinkedIn', 'updraftplus').$this->url_end(true, 'linkedin.com/company/teamupdraft', true).' - '.
 					$this->url_start(true, 'youtube.com/@TeamUpdraftWP', true).__('YouTube', 'updraftplus').$this->url_end(true, 'youtube.com/@TeamUpdraftWP', true),
 				'image' => 'notices/teamupdraft_logo.png',
-				'dismiss_time' => false,
+				'dismiss_time' => 'dismiss_social_media',
 				'supported_positions' => $this->anywhere,
 			),
 			'autobackup' => array(
@@ -324,6 +324,7 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_3 {
 		$review_dismiss = ($time_now < UpdraftPlus_Options::get_updraft_option('dismissed_review_notice', 0));
 		$seasonal_dismiss = ($time_now < UpdraftPlus_Options::get_updraft_option('dismissed_season_notices_until', 0));
 		$autobackup_dismiss = ($time_now < UpdraftPlus_Options::get_updraft_option('updraftplus_dismissedautobackup', 0));
+		$social_media_dismiss = ($time_now < UpdraftPlus_Options::get_updraft_option('updraftplus_dismissed_social_media_notice', 0));
 
 		$dismiss = false;
 
@@ -331,6 +332,7 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_3 {
 		if ('dismiss_review_notice' == $dismiss_time) $dismiss = $review_dismiss;
 		if ('dismiss_season' == $dismiss_time) $dismiss = $seasonal_dismiss;
 		if ('dismissautobackup' == $dismiss_time) $dismiss = $autobackup_dismiss;
+		if ('dismiss_social_media' == $dismiss_time) $dismiss = $social_media_dismiss;
 
 		return $dismiss;
 	}

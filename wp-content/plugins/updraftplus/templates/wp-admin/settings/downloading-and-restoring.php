@@ -2,22 +2,6 @@
 
 if (!defined('ABSPATH')) die('No direct access allowed');
 
-// $options is passed in
-$default_options = array(
-	'include_uploader' => true,
-	'include_opera_warning' => false,
-	'will_immediately_calculate_disk_space' => true,
-	'include_whitespace_warning' => true,
-	'include_header' => false,
-);
-
-foreach ($default_options as $k => $v) {
-	if (!isset($options[$k])) $options[$k] = $v;
-}
-
-// $backup_history is passed in
-if (false === $backup_history) $backup_history = UpdraftPlus_Backup_History::get_history();
-
 if (!empty($options['include_header'])) echo '<h2>'.esc_html__('Existing backups', 'updraftplus').' ('.count($backup_history).')</h2>';
 
 ?>
@@ -27,7 +11,6 @@ if (!empty($options['include_header'])) echo '<h2>'.esc_html__('Existing backups
 			<?php echo wp_kses_post('<strong>'.__('Warning', 'updraftplus').':</strong> '.__('Your WordPress installation has a problem with outputting extra whitespace.', 'updraftplus').' '.__('This can corrupt backups that you download from here.', 'updraftplus').' <a href="'.esc_url(apply_filters('updraftplus_com_link', "https://teamupdraft.com/documentation/updraftplus/topics/general/troubleshooting/problems-with-extra-white-space/?utm_source=udp-plugin&utm_medium=referral&utm_campaign=paac&utm_content=unknown&utm_creative_format=unknown")).'" target="_blank">'.__('Follow this link for more information', 'updraftplus').'</a>');?>
 		</p>
 	<?php }
-	$bom_warning = $updraftplus_admin->get_bom_warning_text();
 	if (!empty($bom_warning)) {
 	?>
 		<p class="ud-bom-warning">

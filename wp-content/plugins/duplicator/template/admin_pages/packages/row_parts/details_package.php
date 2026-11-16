@@ -23,6 +23,8 @@ $txt_DBOnly          = __('DB Only', 'duplicator');
 $archive_exists      = ($package->getLocalPackageFilePath(AbstractPackage::FILE_TYPE_ARCHIVE) != false);
 $environmentSnapshot = $package->getEnvironmentSnapshot();
 $environmentDialogId = 'dupli-backup-environment-' . $package->getId();
+$canTransfer         = PackagesPageController::detailsSectionCanTransfer($package);
+$canDelete           = PackagesPageController::canDeleteBackup($package);
 
 ?>
 <td colspan="11">
@@ -50,20 +52,20 @@ $environmentDialogId = 'dupli-backup-environment-' . $package->getId();
                     href="<?php echo esc_url($packageDetailsURL); ?>">
                     <i class="fas fa-search"></i> <?php esc_html_e("View Details", 'duplicator') ?>
                 </a>
-                <?php if (CapMng::can(CapMng::CAP_STORAGE, false)) { ?>
-                    <?php if ($archive_exists) : ?>
-                        <button type="button" class="button hollow secondary small dup-transfer"
-                            aria-label="<?php esc_attr_e('Go to Backup transfer screen', 'duplicator') ?>"
-                            onclick="DupliJs.Pack.OpenPackTransfer(<?php echo (int) $package->getId(); ?>); return false;">
+                <?php if ($canTransfer && $archive_exists) : ?>
+                    <button type="button" class="button hollow secondary small dup-transfer"
+                        aria-label="<?php esc_attr_e('Go to Backup transfer screen', 'duplicator') ?>"
+                        onclick="DupliJs.Pack.OpenPackTransfer(<?php echo (int) $package->getId(); ?>); return false;">
+                        <i class="fa fa-exchange-alt fa-fw"></i> <?php esc_html_e("Transfer Backup", 'duplicator') ?>
+                    </button>
+                <?php elseif ($canTransfer) : ?>
+                    <span title="<?php esc_attr_e('Transfer Backups requires the use of built-in default storage!', 'duplicator') ?>">
+                        <button type="button" class="button hollow secondary small dup-transfer disabled">
                             <i class="fa fa-exchange-alt fa-fw"></i> <?php esc_html_e("Transfer Backup", 'duplicator') ?>
                         </button>
-                    <?php else : ?>
-                        <span title="<?php esc_attr_e('Transfer Backups requires the use of built-in default storage!', 'duplicator') ?>">
-                            <button type="button" class="button hollow secondary small dup-transfer disabled">
-                                <i class="fa fa-exchange-alt fa-fw"></i> <?php esc_html_e("Transfer Backup", 'duplicator') ?>
-                            </button>
-                        </span>
-                    <?php endif; ?>
+                    </span>
+                <?php endif; ?>
+                <?php if (CapMng::can(CapMng::CAP_STORAGE, false)) { ?>
                     <button type="button" class="button hollow secondary small dupli-row-storages-btn"
                         aria-label="<?php esc_attr_e('Show the storage locations of this Backup', 'duplicator') ?>"
                         onclick="DupliJs.Pack.ShowRemote(<?php echo (int) $package->getId(); ?>, '<?php echo esc_js($package->getNameHash()); ?>');">
@@ -73,7 +75,7 @@ $environmentDialogId = 'dupli-backup-environment-' . $package->getId();
 
                 <?php do_action('duplicator_package_detail_actions', $package); ?>
 
-                <?php if (CapMng::can(CapMng::CAP_CREATE, false)) { ?>
+                <?php if ($canDelete) { ?>
                     <button type="button" class="button hollow alert small dupli-delete-backup"
                         aria-label="<?php esc_attr_e('Delete Backup', 'duplicator') ?>"
                         onclick="DupliJs.Pack.ConfirmDeleteRow(<?php echo (int) $package->getId(); ?>); return false;">
@@ -133,6 +135,7 @@ $environmentDialogId = 'dupli-backup-environment-' . $package->getId();
                 <div class="dupli-row-kv">
                     <span class="dupli-row-kv-label"><?php esc_html_e('Files', 'duplicator'); ?></span>
                     <span class="dupli-row-kv-value">
+                        <?php do_action('duplicator_details_section_count_before', $package, 'files'); ?>
                         <?php echo ($pack_dbonly)
                             ? '<i>' . esc_html($txt_DBOnly) . '</i>'
                             : esc_html(number_format($package->Archive->FileCount)); ?>
@@ -149,6 +152,7 @@ $environmentDialogId = 'dupli-backup-environment-' . $package->getId();
                 <div class="dupli-row-kv">
                     <span class="dupli-row-kv-label"><?php esc_html_e('Tables', 'duplicator'); ?></span>
                     <span class="dupli-row-kv-value">
+                        <?php do_action('duplicator_details_section_count_before', $package, 'tables'); ?>
                         <?php
                         printf(
                             esc_html_x(

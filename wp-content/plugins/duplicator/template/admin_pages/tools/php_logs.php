@@ -1,9 +1,6 @@
 <?php
 
-use Duplicator\Libs\Snap\SnapString;
-use Duplicator\Libs\Snap\SnapUtil;
-use Duplicator\Libs\Snap\SnapWP;
-use Duplicator\Utils\Logging\PhpLogMng;
+use Duplicator\Controllers\ToolsPageController;
 use Duplicator\Views\UI\UiDialog;
 
 defined("ABSPATH") or die("");
@@ -15,27 +12,21 @@ defined("ABSPATH") or die("");
  * @var Duplicator\Core\Views\TplMng $tplMng
  */
 
-if (isset($_POST['clear_log']) && $_POST['clear_log'] == 'true') {
-    check_admin_referer('dup_clear_php_log', '_wpnonce_clear_log');
-    PhpLogMng::clearLog();
-}
-
-$refresh = SnapUtil::sanitizeIntInput(INPUT_POST, 'refresh', 0) === 1 ? 1 : 0;
-$auto    = SnapUtil::sanitizeIntInput(INPUT_POST, 'auto', 0) === 1 ? 1 : 0;
-$filter  = SnapUtil::sanitizeTextInput(INPUT_POST, 'filter', '');
+$auto            = $tplMng->getDataValueBoolRequired('auto');
+$filter          = $tplMng->getDataValueStringRequired('filter');
+$log_path        = $tplMng->getDataValueStringRequired('logPath');
+$log_filename    = $tplMng->getDataValueStringRequired('logFilename');
+$is_log_readable = $tplMng->getDataValueBoolRequired('isLogReadable');
+$is_log_parsed   = $tplMng->getDataValueBoolRequired('isLogParsed');
+$error_log       = $tplMng->getDataValueArrayRequired('logEntries');
+$lines           = $tplMng->getDataValueIntRequired('logLines');
+$home_path       = $tplMng->getDataValueStringRequired('homePath');
+$can_clear_log   = $tplMng->getDataValueBoolRequired('canClearLog');
 
 $error = false;
 
-$lines = 200;
-
-$log_path  = PhpLogMng::getPath(null, true);
-$error_log = PhpLogMng::getLog($lines, "M d, H:i:s");
-
-$log_path_size = 0;
-if ($log_path !== false) {
-    $log_path_size = @filesize($log_path);
-
-    if (!is_readable($log_path)) {
+if (strlen($log_path) > 0) {
+    if (!$is_log_readable) {
         $error = sprintf(
             __(
                 "PHP error log is available on location %s but is not readable. Try setting the permissions to 755.",
@@ -43,26 +34,15 @@ if ($log_path !== false) {
             ),
             '<b>' . esc_html($log_path) . '</b>'
         );
-    } elseif ($error_log === false) {
-        if ($log_path > (PHP_INT_MAX / 2)) {
-            $error = sprintf(
-                __(
-                    "PHP error log is available on location %1\$s but can't be read because file size is over %2\$s. You must open this file manually.",
-                    'duplicator'
-                ),
-                '<b>' . esc_html($log_path) . '</b>',
-                '<b>' . SnapString::byteSize($log_path_size) . '</b>'
-            );
-        } else {
-            $error = sprintf(
-                __(
-                    "PHP error log is available on location %s but can't be read because some unexpected error. 
+    } elseif (!$is_log_parsed) {
+        $error = sprintf(
+            __(
+                "PHP error log is available on location %s but can't be read because some unexpected error. 
                     Try to open file manually and investigate all problems what can cause this error.",
-                    'duplicator'
-                ),
-                '<b>' . esc_html($log_path) . '</b>'
-            );
-        }
+                'duplicator'
+            ),
+            '<b>' . esc_html($log_path) . '</b>'
+        );
     } else {
     }
 } else {
@@ -88,7 +68,7 @@ if ($log_path !== false) {
             installation ( %1$s ) and name of file to be %2$s. That will solve this problem.',
             'duplicator'
         ),
-        '<i><b>' . SnapWP::getHomePath(true) . '</b></i>',
+        '<i><b>' . esc_html($home_path) . '</b></i>',
         '<b>error.log</b>'
     );
 }
@@ -96,13 +76,23 @@ if ($log_path !== false) {
 <div id="dup-tool-php-logs-wrapper">
     <?php if ($error) : ?>
         <h2><?php
-        if ($log_path !== false) {
+        if (strlen($log_path) > 0) {
             esc_html_e("Log file is found but have error or is unreadable", 'duplicator');
         } else {
             esc_html_e("PHP error log not found", 'duplicator');
         }
         ?></h2>
-        <?php echo $error; ?>
+        <?php
+        echo wp_kses(
+            $error,
+            [
+                'b'    => [],
+                'i'    => [],
+                'br'   => [],
+                'code' => [],
+            ]
+        );
+        ?>
     <?php else : ?>
         <table id="dupli-log-pnls">
             <tr>
@@ -135,7 +125,7 @@ if ($log_path !== false) {
                                     <?php foreach ($error_log as $line => $log) : ?>
                                         <tr>
                                             <td scope="col">
-                                                <b class="info" title="<?php echo date("Y-m-d H:i:s T (P)", strtotime($log['dateTime'])); ?>">
+                                                <b class="info" title="<?php echo esc_attr(date("Y-m-d H:i:s T (P)", strtotime($log['dateTime']))); ?>">
                                                     <?php echo esc_html($log['dateTime']); ?>
                                                 </b>
                                             </td>
@@ -202,18 +192,18 @@ if ($log_path !== false) {
                                 <i class="fa fa-info-circle"></i>
                                 <?php
                                 printf(
-                                    _x(
+                                    esc_html_x(
                                         'You see only last %1$s logs inside %2$s file.',
                                         '1 stands for the number of lines, 2 stands for the log file name',
                                         'duplicator'
                                     ),
-                                    $line,
-                                    esc_html(PhpLogMng::getFilename($log_path))
+                                    (int) $line,
+                                    esc_html($log_filename)
                                 );
                                 ?>
                             </div>
                         <?php endif; ?>
-                        <?php if (isset($line)) : ?>
+                        <?php if (isset($line) && $can_clear_log) : ?>
                             <br>
                             <button class="button secondary hollow small" type="button" onclick="return DupliJs.Tools.ClearLog();">
                                 <?php esc_html_e('Clear Log', 'duplicator'); ?>
@@ -223,10 +213,11 @@ if ($log_path !== false) {
                 </td>
             </tr>
         </table>
-        <form id="dup-form-clear-log" method="post" action="">
-            <?php wp_nonce_field('dup_clear_php_log', '_wpnonce_clear_log'); ?>
-            <input type="hidden" id="clear_log" name="clear_log" value="true" />
-        </form>
+        <?php if ($can_clear_log) : ?>
+            <form id="dup-form-clear-log" method="post" action="">
+                <?php $tplMng->getAction(ToolsPageController::ACTION_CLEAR_PHP_LOG)->getActionNonceFileds(); ?>
+            </form>
+        <?php endif; ?>
 </div>
         <?php
         $confirm1               = new UiDialog();

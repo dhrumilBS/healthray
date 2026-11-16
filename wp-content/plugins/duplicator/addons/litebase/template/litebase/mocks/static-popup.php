@@ -13,6 +13,7 @@ $title       = $tplMng->getDataValueStringRequired('title');
 $warningText = $tplMng->getDataValueStringRequired('warningText');
 $upgradeUrl  = $tplMng->getDataValueStringRequired('upgradeUrl');
 $paragraphs  = $tplMng->getDataValueArrayRequired('paragraphs');
+$ctaText     = $tplMng->getDataValueString('ctaText', __('Upgrade to Duplicator Pro Now', 'duplicator'));
 if (!is_array($paragraphs)) {
     $paragraphs = [(string) $paragraphs];
 }
@@ -37,7 +38,7 @@ if (!is_array($paragraphs)) {
             target="_blank"
             rel="noopener noreferrer"
         >
-            <?php esc_html_e('Upgrade to Duplicator Pro Now', 'duplicator'); ?>
+            <?php echo esc_html($ctaText); ?>
         </a>
     </div>
 </div>

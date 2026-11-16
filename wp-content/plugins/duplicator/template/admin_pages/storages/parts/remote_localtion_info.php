@@ -66,9 +66,11 @@ if (!$packageExists) {
     <div class="dup-dlg-store-links">
         <?php echo wp_kses_post($storage->getLocationHtml()); ?>
     </div>
-    <div class="dup-dlg-store-test">
-        <a href="<?php echo esc_url(StoragePageController::getEditUrl($storage)); ?>" target='_blank'>
-            [ <?php esc_html_e('Test Storage', 'duplicator'); ?> ]
-        </a>
-    </div>
+    <?php if (!$storage->isHidden()) { ?>
+        <div class="dup-dlg-store-test">
+            <a href="<?php echo esc_url(StoragePageController::getEditUrl($storage)); ?>" target='_blank'>
+                [ <?php esc_html_e('Test Storage', 'duplicator'); ?> ]
+            </a>
+        </div>
+    <?php } ?>
 </div>

@@ -43,6 +43,7 @@ use ReflectionObject;
 use Throwable;
 use VendorDuplicator\Amk\JsonSerialize\JsonSerialize;
 use VendorDuplicator\Amk\JsonSerialize\JsonUnserializeMap;
+use Duplicator\Libs\Snap\SnapUtil;
 
 /**
  * Trait TraitPackagePersistence
@@ -274,7 +275,8 @@ trait TraitPackagePersistence
                 continue;
             }
 
-            if (SnapIO::unlink($globFile)) {
+            // The dump folder is a Backup artifact like the other files, so directories are purged too
+            if (SnapIO::rrmdir($globFile)) {
                 DupLog::trace("Successful purge of $globFile.");
             } else {
                 DupLog::trace("Failed purge of $globFile.");
@@ -512,9 +514,7 @@ SQL;
                 }
 
                 $prop = $reflect->getProperty($propName);
-                if (PHP_VERSION_ID < 80100) {
-                    $prop->setAccessible(true);
-                }
+                SnapUtil::setAccessible($prop);
                 $prop->setValue($package, $rowData->{$dbKey});
             }
         }
@@ -628,6 +628,9 @@ SQL;
      */
     protected function cleanObjectBeforeSave(): void
     {
+        // Derived from the hash and the creation date, so it is rebuilt on demand instead of stored
+        $this->descriptorsMng = null;
+
         if ($this->status == AbstractPackage::STATUS_COMPLETE || $this->status < AbstractPackage::STATUS_PRE_PROCESS) {
             // If complete or error, clean build progress to remove temp data
             $this->build_progress->reset();

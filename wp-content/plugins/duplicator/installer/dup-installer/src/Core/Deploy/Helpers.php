@@ -130,7 +130,8 @@ class Helpers
             $superAdminsList = self::getSuperAdminUsernames($dbh, $basePrefix);
 
             if (!empty($superAdminsList)) {
-                $sql = "SELECT ID FROM {$usersTableName} WHERE user_login IN ('" . implode("','", $superAdminsList) . "')";
+                $escapedLogins = array_map(fn($login): string => mysqli_real_escape_string($dbh, (string) $login), $superAdminsList);
+                $sql           = "SELECT ID FROM {$usersTableName} WHERE user_login IN ('" . implode("','", $escapedLogins) . "')";
 
                 $queryResult = DUPX_DB::queryToArray($dbh, $sql);
                 foreach ($queryResult as $superAdminsResult) {

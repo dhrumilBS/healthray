@@ -68,7 +68,7 @@ class RC2 extends BlockCipher
     /**
      * Key Length (in bytes)
      *
-     * @see \VendorDuplicator\phpseclib3\Crypt\RC2::setKeyLength()
+     * @see RC2::setKeyLength()
      * @var int
      */
     protected $key_length = 16;

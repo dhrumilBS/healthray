@@ -314,7 +314,7 @@ abstract class AbstractPackageDeployer
                 if (!$isEncrypt) {
                     $result = true;
                 } else {
-                    DupLog::trace('Zip archive password check ' . $password);
+                    DupLog::trace('Zip archive password check');
                     $zip->setPassword($password);
                     if ($result = ($zip->getFromIndex($stats['index']) !== false)) {
                         DupLog::trace('ZIP ARCHIVE PASSWORD OK ');

@@ -364,4 +364,15 @@ abstract class UpdraftCentral_Commands {
 			return $this->_response(array('in_progress' => true));
 		}
 	}
+
+	/**
+	 * Revoke all UpdraftCentral keys issued before the specified datetime.
+	 *
+	 * @param integer $timestamp The cutoff datetime.
+	 * @return void
+	 */
+	final public function revoke_keys_issued_before($timestamp) {
+		if (!is_a($this->ud, 'UpdraftPlus')) return;
+		$this->ud->udcentral_keys_revocation($timestamp, true);
+	}
 }

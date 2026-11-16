@@ -201,7 +201,7 @@ class UpdraftCentral_Listener {
 			add_filter('auth_cookie', array($this, 'set_global_logged_in_cookie'), 10, 4);
 			wp_set_auth_cookie($user->ID);
 			remove_filter('auth_cookie', array($this, 'set_global_logged_in_cookie'), 10, 4);
-			do_action('wp_login', $user->user_login, $user);
+			do_action('wp_login', $user->user_login, $user); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- False positive: this is a core WordPress hook.
 		}
 		if ($redirect_url) {
 			// the wp_set_auth_cookie() above uses setcookie() function but the corresponding LOGGED_IN_COOKIE variable is visible and can only be accessible on the next page load

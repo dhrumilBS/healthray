@@ -83,9 +83,7 @@ class TestsErrorHandler
 
         self::$errors[] = $newError;
 
-        if (function_exists('error_clear_last')) {
-            error_clear_last(); // phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.error_clear_lastFound
-        }
+        error_clear_last();
     }
 
     /**
@@ -223,26 +221,20 @@ class TestsErrorHandler
             case E_USER_ERROR:
             case self::ERRNO_EXCEPTION:
                 return self::ERR_TYPE_ERROR;
-            case E_WARNING:
-            case E_USER_WARNING:
-            case E_COMPILE_WARNING:
-                return self::ERR_TYPE_WARNING;
             case E_NOTICE:
             case E_USER_NOTICE:
                 return self::ERR_TYPE_NOTICE;
+            case E_DEPRECATED:
+            case E_USER_DEPRECATED:
+                return self::ERR_TYPE_DEPRECATED;
+            case E_WARNING:
+            case E_USER_WARNING:
+            case E_COMPILE_WARNING:
+            case E_RECOVERABLE_ERROR:
+                return self::ERR_TYPE_WARNING;
             default:
-                break;
+                return self::ERR_TYPE_WARNING;
         }
-        if (defined('E_RECOVERABLE_ERROR') && $errno === E_RECOVERABLE_ERROR) {
-            return self::ERR_TYPE_WARNING;
-        }
-        if (defined('E_DEPRECATED') && $errno === E_DEPRECATED) {
-            return self::ERR_TYPE_DEPRECATED;
-        }
-        if (defined('E_USER_DEPRECATED') && $errno === E_USER_DEPRECATED) {
-            return self::ERR_TYPE_DEPRECATED;
-        }
-        return self::ERR_TYPE_WARNING;
     }
 
     /**
@@ -274,20 +266,16 @@ class TestsErrorHandler
                 return 'E_NOTICE';
             case E_USER_NOTICE:
                 return 'E_USER_NOTICE';
+            case E_RECOVERABLE_ERROR:
+                return 'E_RECOVERABLE_ERROR';
+            case E_DEPRECATED:
+                return 'E_DEPRECATED';
+            case E_USER_DEPRECATED:
+                return 'E_USER_DEPRECATED';
             case self::ERRNO_EXCEPTION:
                 return 'EXCEPTION';
             default:
-                break;
+                return 'E_UNKNOWN CODE: ' . $errno;
         }
-        if (defined('E_RECOVERABLE_ERROR') && $errno === E_RECOVERABLE_ERROR) {
-            return 'E_RECOVERABLE_ERROR';
-        }
-        if (defined('E_DEPRECATED') && $errno === E_DEPRECATED) {
-            return 'E_DEPRECATED';
-        }
-        if (defined('E_USER_DEPRECATED') && $errno === E_USER_DEPRECATED) {
-            return 'E_USER_DEPRECATED';
-        }
-        return 'E_UNKNOWN CODE: ' . $errno;
     }
 }

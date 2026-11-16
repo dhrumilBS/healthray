@@ -100,9 +100,10 @@ class DupliException extends Exception
 
     const CODE_AUTOTUNE_SESSION_SAVE_FAILED = 200;
 
-    const CODE_STORAGE_RETRY_LIMIT     = 210;
-    const CODE_STORAGE_FINALIZE_FAILED = 211;
-    const CODE_STORAGE_TRANSFER_FAILED = 212;
+    const CODE_STORAGE_RETRY_LIMIT      = 210;
+    const CODE_STORAGE_FINALIZE_FAILED  = 211;
+    const CODE_STORAGE_TRANSFER_FAILED  = 212;
+    const CODE_STORAGE_TRANSFER_ABORTED = 213;
 
     /** @var int[] Core codes for expected, recognized conditions classified as handled severity */
     private const HANDLED_CODES = [

@@ -211,8 +211,9 @@ two options you can use to perform the database setup:
 
             <b>Skip Database Extraction</b><br/>
             This option requires that you manually run your own SQL import to an existing database before running the installer. When this action is
-            selected the <?php echo $descMng->getGenericName(InstDescMng::TYPE_DB_DUMP); ?> file found inside the dup-installer folder of 
-            the archive.zip file will NOT be processed. The database you're connecting to should already be a valid WordPress installed database.
+            selected the SQL dump files found in the <?php echo $descMng->getGenericName(InstDescMng::TYPE_DB_DUMPS_DIR); ?> folder inside the
+            dup-installer folder of the archive.zip file will NOT be processed. The database you're connecting to should already be a valid
+            WordPress installed database.
             This option is viable when you need to perform custom SQL work or advanced installs.
             <br/><br/>
             

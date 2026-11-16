@@ -97,9 +97,11 @@ class UpdraftPlus_Onboarding {
 	public function init() {
 		global $updraftplus, $pagenow;
 
+		$page = UpdraftPlus_Manipulation_Functions::fetch_superglobal('request', 'page');
+
 		if (!$this->is_onboarding_rest_ajax() && !$this->is_onboarding_rest_request() && !Updraftplus\Updraftplus\Wizard\Onboarding\Onboarding::is_onboarding_active(self::PLUGIN_SLUG, self::PLUGIN_SLUG)) return;
 
-		if (!$this->is_onboarding_rest_ajax() && !$this->is_onboarding_rest_request() && (UpdraftPlus_Options::admin_page() != $pagenow || empty($_REQUEST['page']) || 'updraftplus' != $_REQUEST['page'])) return;
+		if (!$this->is_onboarding_rest_ajax() && !$this->is_onboarding_rest_request() && (UpdraftPlus_Options::admin_page() != $pagenow || empty($page) || 'updraftplus' != $page)) return;
 
 		if (!UpdraftPlus_Options::user_can_manage()) return;
 
@@ -236,7 +238,8 @@ class UpdraftPlus_Onboarding {
 	 * @return void
 	 */
 	public function should_save_remote_storage_settings_during_onboarding($option, $value) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Unused parameter is present because the method is called from action.
-		if (isset($_REQUEST['action']) && 'updraftplus_onboarding_rest_api_fallback' === $_REQUEST['action']) {
+		$action = UpdraftPlus_Manipulation_Functions::fetch_superglobal('request', 'action');
+		if (isset($action) && 'updraftplus_onboarding_rest_api_fallback' === $action) {
 			// AJAX request
 			$data = json_decode(file_get_contents('php://input'), true);
 			$target = isset($data['path']) ? $data['path'] : '';
@@ -375,8 +378,7 @@ class UpdraftPlus_Onboarding {
 		$remote_storage_fields = array($select_destination_field);
 
 		// This line was added because the onboarding wizard library always requires a step to exist, even though a step is not necessarily needed when running in the REST or AJAX context.
-		if ((defined('REST_REQUEST') && REST_REQUEST) || wp_doing_ajax()) return $remote_storage_fields;
-
+		if ((defined('REST_REQUEST') && REST_REQUEST) || (defined('DOING_AJAX') && DOING_AJAX)) return $remote_storage_fields;
 		if (!is_array($service) && !empty($service)) $service = array($service);
 
 		foreach ($updraftplus->backup_methods as $method => $method_friendly_name) {
@@ -869,8 +871,9 @@ class UpdraftPlus_Onboarding {
 	 */
 	private function is_onboarding_rest_ajax() {
 		global $pagenow;
+		$action = UpdraftPlus_Manipulation_Functions::fetch_superglobal('request', 'action');
 		// This was added to prevent issues during plugin installations performed through admin-ajax.php. When onboarding is completed and the completion flag is set, the rest_api_fallback is no longer registered. This check ensures that the rest_api_fallback remains available for AJAX requests when needed.
-		return ((defined('DOING_AJAX') && DOING_AJAX) || 'admin-ajax.php' === $pagenow) && isset($_REQUEST['action']) && 'updraftplus_onboarding_rest_api_fallback' === $_REQUEST['action'];
+		return ((defined('DOING_AJAX') && DOING_AJAX) || 'admin-ajax.php' === $pagenow) && isset($action) && 'updraftplus_onboarding_rest_api_fallback' === $action;
 	}
 
 	/**

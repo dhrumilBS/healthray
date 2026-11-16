@@ -1,7 +1,6 @@
 <?php
 
 use Duplicator\Controllers\PackagesPageController;
-use Duplicator\Core\CapMng;
 use Duplicator\Core\Controllers\SubMenuItem;
 use Duplicator\Package\AbstractPackage;
 use Duplicator\Package\DupPackage;
@@ -30,7 +29,7 @@ $item         = new SubMenuItem(
     '',
     true
 );
-$item->link   = PackagesPageController::getInstance()->getMenuLink();
+$item->link   = PackagesPageController::getDetailsPageBackupsTabUrl($package);
 $item->active = ($innerPage == PackagesPageController::LIST_INNER_PAGE_LIST);
 $items[]      = $item;
 
@@ -44,15 +43,17 @@ $item->link   = PackagesPageController::getInstance()->getPackageDetailsUrl($pac
 $item->active = ($innerPage == PackagesPageController::LIST_INNER_PAGE_DETAILS);
 $items[]      = $item;
 
-$item         = new SubMenuItem(
-    PackagesPageController::LIST_INNER_PAGE_TRANSFER,
-    __('Transfer', 'duplicator'),
-    '',
-    CapMng::can(CapMng::CAP_CREATE, false)
-);
-$item->link   = PackagesPageController::getInstance()->getPackageTransferUrl($package->getId());
-$item->active = ($innerPage == PackagesPageController::LIST_INNER_PAGE_TRANSFER);
-$items[]      = $item;
+if (PackagesPageController::detailsPageCanTransfer($package)) {
+    $item         = new SubMenuItem(
+        PackagesPageController::LIST_INNER_PAGE_TRANSFER,
+        __('Transfer', 'duplicator'),
+        '',
+        true
+    );
+    $item->link   = PackagesPageController::getInstance()->getPackageTransferUrl($package->getId());
+    $item->active = ($innerPage == PackagesPageController::LIST_INNER_PAGE_TRANSFER);
+    $items[]      = $item;
+}
 ?>
 
 <div class="dup-body-header">

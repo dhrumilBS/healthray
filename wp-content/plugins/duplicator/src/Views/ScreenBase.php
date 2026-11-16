@@ -3,7 +3,6 @@
 namespace Duplicator\Views;
 
 use Duplicator\Core\Controllers\ControllersManager;
-use Duplicator\Libs\Snap\SnapUtil;
 use WP_Screen;
 
 /**
@@ -157,7 +156,7 @@ class ScreenBase
             return $_wp_admin_css_colors[$colorScheme];
         } else {
             if (is_array($_wp_admin_css_colors) && count($_wp_admin_css_colors) > 0) {
-                return $_wp_admin_css_colors[SnapUtil::arrayKeyFirst($_wp_admin_css_colors)];
+                return $_wp_admin_css_colors[array_key_first($_wp_admin_css_colors)];
             } else {
                 return (object) [
                     'name'   => 'default',

@@ -23,6 +23,7 @@ $perPage     = $tplMng->getDataValueInt('perPage', 10);
 $offset      = $tplMng->getDataValueInt('offset', 0);
 $currentPage = $tplMng->getDataValueInt('currentPage', 1);
 $statiiType  = $tplMng->getDataValueStringRequired('stattiBackupType');
+$isFiltered  = $tplMng->getDataValueBool('isFilteredList');
 
 $tplMng->render('admin_pages/packages/remote_download/scripts');
 
@@ -368,6 +369,7 @@ $baseStorageEditURL = StoragePageController::getInstance()->getMenuLink(
         }
 
         DupliJs.Pack.setIntervalID = -1;
+        const isFilteredList = <?php echo $isFiltered ? 'true' : 'false'; ?>;
 
         DupliJs.Pack.SetUpdateInterval = function(period) {
             if (DupliJs.Pack.setIntervalID != -1) {
@@ -403,7 +405,7 @@ $baseStorageEditURL = StoragePageController::getInstance()->getMenuLink(
                         statiiFistPackageId = statusInfo[0].ID;
                     }
 
-                    if (currentFirstPackageId != statiiFistPackageId) {
+                    if (!isFilteredList && currentFirstPackageId != statiiFistPackageId) {
                         window.location = <?php echo wp_json_encode($reloadPackagesURL); ?>;
                     }
 
@@ -417,6 +419,14 @@ $baseStorageEditURL = StoragePageController::getInstance()->getMenuLink(
                         let sizeNode = packagesTable.find('#dup-row-pack-id-' + package_info.ID + ' .dup-size-column');
                         let packageNode = packagesTable.find('#dup-row-pack-id-' + package_info.ID);
                         let currentStatus = parseInt(packageNode.data('status'));
+
+                        // Backups the filter hides only drive the button state below
+                        if (isFilteredList && !packageNode.length) {
+                            if ((package_info.status >= 0 && package_info.status < 100) || package_info.status == -3) {
+                                activePackagePresent = true;
+                            }
+                            continue;
+                        }
 
                         if ((currentStatus >= 0 && currentStatus < 100) || currentStatus == -3) {
                             activePackagePresent = true;

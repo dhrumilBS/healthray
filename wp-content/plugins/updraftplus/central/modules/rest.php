@@ -63,7 +63,7 @@ class UpdraftCentral_REST_API_Access_Commands extends UpdraftCentral_Commands {
 			));
 		}
 
-		if (!class_exists('WP_REST_Request')) {
+		if (!class_exists('WP_REST_Request') || !function_exists('rest_do_request')) {
 			return $this->_generic_error_response('rest_api_not_available_on_this_wordpress_version', array(
 				'prefix' => 'updraftcentral',
 				'command' => 'handle_request',

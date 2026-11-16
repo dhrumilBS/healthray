@@ -7,6 +7,7 @@ use Duplicator\Core\Models\AbstractEntity;
 use Duplicator\Core\Models\TraitEntitySerializationEncryption;
 use Duplicator\Core\Models\TraitGenericModelSingleton;
 use Duplicator\Libs\Snap\SnapLog;
+use Duplicator\Libs\Snap\SnapUtil;
 use Duplicator\Utils\Crypt\CryptBlowfish;
 use Duplicator\Utils\Settings\ModelMigrateSettingsInterface;
 use Duplicator\Views\AdminNotices;
@@ -591,9 +592,7 @@ class DynamicGlobalEntity extends AbstractEntity implements ModelMigrateSettings
             if (!isset($data[$prop->getName()])) {
                 continue;
             }
-            if (PHP_VERSION_ID < 80100) {
-                $prop->setAccessible(true);
-            }
+            SnapUtil::setAccessible($prop);
             $prop->setValue($this, $data[$prop->getName()]);
         }
 

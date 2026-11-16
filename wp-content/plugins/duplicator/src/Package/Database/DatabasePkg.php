@@ -3,40 +3,39 @@
 namespace Duplicator\Package\Database;
 
 use Duplicator\Core\Exceptions\DupliException;
+use Duplicator\Installer\Package\InstallerDescriptors;
 use Exception;
 use Duplicator\Models\GlobalEntity;
 use Duplicator\Utils\Logging\DupLog;
 use Duplicator\Core\Constants;
+use Duplicator\Libs\Shell\Shell;
 use Duplicator\Libs\Snap\SnapGzip;
 use Duplicator\Libs\Snap\SnapIO;
-use Duplicator\Libs\Snap\SnapLog;
 use Duplicator\Libs\Snap\SnapUtil;
-use Duplicator\Libs\Snap\SnapDB;
-use Duplicator\Libs\Shell\Shell;
 use Duplicator\Libs\Snap\SnapServer;
 use Duplicator\Libs\Snap\SnapString;
-use Duplicator\Libs\Snap\SnapWP;
 use Duplicator\Libs\WpUtils\WpDbUtils;
 use Duplicator\Package\AbstractPackage;
 use Duplicator\Package\Create\BuildComponents;
 use Duplicator\Package\Database\DatabaseInfo;
-use Duplicator\Package\Database\DbBuildIterator;
+use Duplicator\Package\Database\Dump\AbstractDumpEngine;
+use Duplicator\Package\Database\Dump\DumpFileMap;
+use Duplicator\Package\Database\Dump\PhpDumpEngine;
+use Duplicator\Package\Database\Dump\TableDumpCheckpoint;
+use Duplicator\Package\Database\Dump\TableDumpWriter;
 use Duplicator\Package\PackageUtils;
 use Duplicator\Utils\GroupOptions;
 use wpdb;
 
 /**
- * Class used to do the actual working of building the database file
- * There are currently three modes: PHP, MYSQLDUMP, PHPCHUNKING
- * PHPCHUNKING and PHP will eventually be combined as one routine
+ * Builds the database dump of a Backup.
+ *
+ * The PHP build modes write one schema file plus one data file per table
+ * through the dump engine phases; the mysqldump build mode keeps writing its
+ * single dump file in one pass.
  */
 class DatabasePkg
 {
-    /**
-     * Marks the end of the CREATEs in the SQL file which have to be
-     * run together in one chunk during install
-     */
-    const TABLE_CREATION_END_MARKER = "/***** TABLE CREATION END *****/\n";
     /**
      * The mysqldump allowed size difference to memory limit in bytes. Run musqldump only on DBs smaller than memory_limit minus this value.
      */
@@ -45,8 +44,10 @@ class DatabasePkg
      * prefix of the file used to save the offsets of the inserted tables
      */
     const STORE_DB_PROGRESS_FILE_PREFIX = 'duplicator_db_export_progress_';
-    const CLOSE_INSERT_QUERY            = ";\n\n";
-    const PHP_DUMP_CHUNK_WORKER_TIME    = 5;
+    /**
+     * Seconds a chunked build request spends on the dump before yielding
+     */
+    const DUMP_CHUNK_WORKER_TIME = 5;
 
     /**
      * Whitelist of valid mysqldump --compatible mode values.
@@ -114,13 +115,14 @@ class DatabasePkg
     /**
      * @var string
      *
-     * @deprecated Retained only for backwards-compatible.
-     *             Use {@see self::getStorePath()} instead.
+     * @deprecated Retained only for backwards-compatible serialization of saved Backups.
      */
     public $dbStorePathPublic = '';
     private AbstractPackage $Package;
     /** @var int */
     private $throttleDelayInUs = 0;
+    /** @var ?AbstractDumpEngine lazily created for the build mode, never serialized */
+    private ?AbstractDumpEngine $engine = null;
 
     /**
      * Class constructor
@@ -130,7 +132,7 @@ class DatabasePkg
     public function __construct(AbstractPackage $package)
     {
         $this->Package           = $package;
-        $this->File              = $package->getNameHash() . '_database.sql';
+        $this->File              = $package->getDatabaseFilename();
         $this->DBMode            = WpDbUtils::getBuildMode();
         $this->info              = new DatabaseInfo();
         $global                  = GlobalEntity::getInstance();
@@ -151,7 +153,7 @@ class DatabasePkg
     public function __sleep()
     {
         $props = array_keys(get_object_vars($this));
-        return array_diff($props, ['traceLogEnabled', 'Package', 'throttleDelayInUs']);
+        return array_diff($props, ['traceLogEnabled', 'Package', 'throttleDelayInUs', 'engine']);
     }
 
     /**
@@ -212,58 +214,40 @@ class DatabasePkg
      */
     public function __clone()
     {
-        $this->info = clone $this->info;
+        $this->info   = clone $this->info;
+        $this->engine = null;
     }
 
     /**
-     * Runs the build process for the database
+     * Names and paths of the dump files this build writes and keeps
      *
-     * @return void
+     * @return DumpFileMap
      */
-    public function build(): void
+    public function getDumpFileMap(): DumpFileMap
     {
-        DupLog::trace("BUILDING DATABASE");
-        do_action('duplicator_build_database_before_start', $this->Package);
-        $global = GlobalEntity::getInstance();
-        $this->Package->db_build_progress->startTime = microtime(true);
-        $this->Package->setStatus(AbstractPackage::STATUS_DBSTART);
-        $this->dbStorePathPublic = "{$this->Package->StorePath}/{$this->File}";
-        $mode                    = $this->Package->requireBuildOptions()->getDbBuildMode();
-        $mysqlDumpPath           = ($mode === WpDbUtils::BUILD_MODE_MYSQLDUMP) ? WpDbUtils::getMySqlDumpPath() : false;
-
-        $log  = "\n********************************************************************************\n";
-        $log .= "DATABASE:\n";
-        $log .= "********************************************************************************\n";
-        $log .= "BUILD MODE:   {$mode} ";
-        if (($mode === WpDbUtils::BUILD_MODE_MYSQLDUMP) && strlen($this->Compatible)) {
-            $log .= " (Legacy SQL)";
-        }
-
-        $log .= '(query limit - ' . $global->getMysqldumpQueryLimit() . ")\n";
-        $log .= "MYSQLTIMEOUT: " . DUPLICATOR_DB_MAX_TIME;
-        DupLog::info($log);
-        $log = null;
-        do_action('duplicator_build_database_start', $this->Package);
-        switch ($mode) {
-            case 'MYSQLDUMP':
-                $this->runMysqlDump($mysqlDumpPath);
-                break;
-            case 'PHP':
-                $this->runPHPDump();
-                $this->validateStage1();
-                // Reset only after validation so a kill anywhere in the step fails fast on retry.
-                $this->Package->db_build_progress->wasInterrupted = false;
-                $this->Package->update();
-                break;
-        }
-
-        $this->doFinish();
+        return $this->createDumpFileMap($this->Package->db_build_progress->tablesToDump);
     }
 
     /**
-     * Gets the database.sql file path and name
+     * Names and paths of the dump files of the given tables
      *
-     * @return string   Returns the full file path and file name of the database.sql file
+     * @param string[] $tables tables in execution order
+     *
+     * @return DumpFileMap
+     */
+    private function createDumpFileMap(array $tables): DumpFileMap
+    {
+        return new DumpFileMap(
+            SnapIO::trailingslashit($this->Package->StorePath) . $this->Package->getNameHash() . '_dbdump',
+            'dup-installer/' . $this->Package->getDescriptorMng()->getName(InstallerDescriptors::TYPE_DB_DUMPS_DIR),
+            $tables
+        );
+    }
+
+    /**
+     * Gets the file path and name of the single dump file of the mysqldump mode
+     *
+     * @return string
      */
     public function getSafeFilePath(): string
     {
@@ -271,7 +255,7 @@ class DatabasePkg
     }
 
     /**
-     * Get package store path
+     * Get the store path of the single dump file of the mysqldump mode
      *
      * @return string
      */
@@ -281,7 +265,7 @@ class DatabasePkg
     }
 
     /**
-     * Get the store path of the gzip-compressed dump
+     * Get the store path of the gzipped single dump file of the mysqldump mode
      *
      * @return string
      */
@@ -291,11 +275,21 @@ class DatabasePkg
     }
 
     /**
-     * @return string Returns the URL to the sql file
+     * @return string Returns the URL to the single dump file of the mysqldump mode
      */
     public function getURL(): string
     {
         return DUPLICATOR_SSDIR_URL . "/{$this->File}";
+    }
+
+    /**
+     * Check if the dump of this Backup is split in one file per table
+     *
+     * @return bool
+     */
+    public function isPerTableDump(): bool
+    {
+        return $this->Package->requireBuildOptions()->getDbBuildMode() !== WpDbUtils::BUILD_MODE_MYSQLDUMP;
     }
 
     /**
@@ -358,8 +352,6 @@ class DatabasePkg
                 }
             }
 
-            //$table["Data_length"] + $table["Index_length"] $table["Rows"] $table["Name"]
-
             $size                              = $table["size"];
             $info['Size']                     += $size;
             $info['Rows']                     += ($table["rows"]);
@@ -408,13 +400,654 @@ class DatabasePkg
     }
 
     /**
-     * Runs the mysqldump process to build the database.sql script
+     * Checks if database size is within the mysqldump size limit
      *
-     * @param string $exePath The path to the mysqldump executable
+     * @param int $dbSize Size of the database to check
+     *
+     * @return bool Returns true if DB size is within the mysqldump size limit, otherwise false
+     */
+    protected static function mysqldumpMemoryCheck(int $dbSize): bool
+    {
+        $mem        = SnapUtil::phpIniGet('memory_limit', false);
+        $memInBytes = SnapUtil::convertToBytes($mem);
+
+        // If the memory limit is unknown or unlimited (-1), return true
+        if ($mem === false || $memInBytes <= 0) {
+            return true;
+        }
+
+        return (self::requiredMysqlDumpLimit($dbSize) <= $memInBytes);
+    }
+
+    /**
+     * Return mysql required limit
+     *
+     * @param int $dbSize Size of the database to check
+     *
+     * @return int
+     */
+    protected static function requiredMysqlDumpLimit(int $dbSize): int
+    {
+        return $dbSize + self::MYSQLDUMP_ALLOWED_SIZE_DIFFERENCE;
+    }
+
+    /**
+     * Return the tables included in the backup after applying all filters.
+     *
+     * @return string[]
+     */
+    private function getIncludedTables(): array
+    {
+        // TABLES AFTER THE PREFIX FILTERS AND THE TABLES-LIST HOOK
+        $allTables = WpDbUtils::getTablesList(true, $this->isPrefixFilterEnabled(), (bool) $this->prefixSubFilter);
+        // MANUAL FILTER TABLE
+        $filterTables = ($this->FilterOn ? explode(',', $this->FilterTables) : []);
+        // SUB SITE FILTER TABLE
+        $muFilterTables = $this->Package->Multisite->getTablesToFilter();
+        //COMPONENT FILTER TABLE
+        $componentFilterTables = BuildComponents::isDBExcluded($this->Package->components) ? $allTables : [];
+        // TOTAL FILTER TABLES
+        $allFilterTables = !empty($componentFilterTables)
+            ? $componentFilterTables
+            : array_unique(array_merge($filterTables, $muFilterTables));
+        $allTablesCount  = count($allTables);
+        $allFilterCount  = count($allFilterTables);
+        $createCount     = $allTablesCount - $allFilterCount;
+        DupLog::trace("TABLES: total: " . $allTablesCount . " | filtered:" . $allFilterCount . " | create:" . $createCount);
+        if (!empty($filterTables)) {
+            DupLog::infoTrace("MANUAL FILTER TABLES: \n\t" . implode("\n\t", $filterTables));
+        }
+        if (!empty($muFilterTables)) {
+            DupLog::infoTrace("MU SITE FILTER TABLES: \n\t" . implode("\n\t", $muFilterTables));
+        }
+        $includedTables = [];
+        foreach ($allTables as $val) {
+            if (!in_array($val, $allFilterTables)) {
+                $includedTables[] = $val;
+            }
+        }
+
+        return $includedTables;
+    }
+
+    /**
+     * Return every base table in the database that is not included in the backup.
+     *
+     * @return string[]
+     */
+    private function getExcludedTables(): array
+    {
+        $includedTables = $this->getIncludedTables();
+
+        return array_values(array_diff(WpDbUtils::getAllTableNames(), $includedTables));
+    }
+
+    /**
+     * Return whether the WordPress users and usermeta tables are included in the backup.
+     *
+     * @return array{user:bool,usermeta:bool}
+     */
+    private function isUsersTablesIncluded(): array
+    {
+        /** @var wpdb $wpdb */
+        global $wpdb;
+
+        $included = array_map([WpDbUtils::class, 'updateCaseSensitivePrefix'], $this->getIncludedTables());
+
+        return [
+            'user'     => in_array($wpdb->prefix . 'users', $included, true),
+            'usermeta' => in_array($wpdb->prefix . 'usermeta', $included, true),
+        ];
+    }
+
+    /**
+     * Run the whole database export in one pass: the single-file mysqldump mode.
+     *
+     * The PHP build modes never use this entry point, they run the resumable
+     * phases through buildStep().
      *
      * @return void
      *
-     * @throws DupliException
+     * @throws DupliException when the export was interrupted or mysqldump failed
+     */
+    public function build(): void
+    {
+        $this->doInit();
+        $this->dbStorePathPublic = "{$this->Package->StorePath}/{$this->File}";
+        $this->runMysqlDump(WpDbUtils::getMySqlDumpPath());
+        $this->doFinish();
+    }
+
+    /**
+     * Run one phase of the database build.
+     *
+     * The phases follow the flags of the build progress: init, table filtering,
+     * schema, data files, validation, finish. Each call runs the first phase
+     * still pending and returns whether the build is finished, so the caller
+     * decides whether to go on in the same request or yield.
+     *
+     * @param ?float $deadline microtime after which the data files phase yields, null to write every table
+     *
+     * @return bool true when the database build is finished
+     *
+     * @throws DupliException when the build failed too many times in a row or a phase failed
+     */
+    public function buildStep(?float $deadline): bool
+    {
+        $progress = $this->Package->db_build_progress;
+        if ($progress->wasInterrupted) {
+            $progress->failureCount++;
+            DupLog::trace('Database: build failure count increased to ' . $progress->failureCount);
+        }
+
+        if ($progress->failureCount > DUPLICATOR_SQL_SCRIPT_PHP_CODE_MULTI_THREADED_MAX_RETRIES) {
+            throw new DupliException(
+                'Database build did not progress after the maximum number of retries.',
+                DupliException::CODE_DB_RETRY_EXHAUSTED,
+                __(
+                    'Your hosting provider repeatedly stopped the database export process,
+                    usually due to server resource limits.',
+                    'duplicator'
+                )
+            );
+        }
+
+        $progress->wasInterrupted = true;
+        $this->Package->update();
+
+        $finished = false;
+        if (!$progress->doneInit) {
+            $this->doInit();
+        } elseif (!$progress->doneFiltering) {
+            $this->doFiltering();
+        } elseif (!$progress->doneCreates) {
+            $this->writeSchema();
+        } elseif (!$progress->completed) {
+            $this->writeTables($deadline);
+        } elseif (!$progress->validationStage1) {
+            $this->validateStage1();
+        } else {
+            $this->doFinish();
+            $finished = true;
+        }
+
+        // A phase that completed resets the count: a single recovered failure isn't held against the build
+        $progress->failureCount   = 0;
+        $progress->wasInterrupted = false;
+        $this->Package->update();
+
+        return $finished;
+    }
+
+    /**
+     * Log the build header and mark the database build started
+     *
+     * @return void
+     */
+    private function doInit(): void
+    {
+        $global   = GlobalEntity::getInstance();
+        $progress = $this->Package->db_build_progress;
+        $mode     = $this->Package->requireBuildOptions()->getDbBuildMode();
+
+        do_action('duplicator_build_database_before_start', $this->Package);
+        $progress->startTime = microtime(true);
+        $this->Package->setStatus(AbstractPackage::STATUS_DBSTART);
+
+        $log  = "\n********************************************************************************\n";
+        $log .= "DATABASE:\n";
+        $log .= "********************************************************************************\n";
+        $log .= "BUILD MODE:   {$mode} ";
+        if ($mode === WpDbUtils::BUILD_MODE_MYSQLDUMP && strlen($this->Compatible)) {
+            $log .= " (Legacy SQL)";
+        }
+        $log .= '(query size limit - ' . $global->getMysqldumpQueryLimit() . ")\n";
+        $log .= "MYSQLTIMEOUT: " . DUPLICATOR_DB_MAX_TIME;
+        DupLog::info($log);
+
+        do_action('duplicator_build_database_start', $this->Package);
+        $progress->doneInit = true;
+    }
+
+    /**
+     * Resolve the tables of the dump and the ones that get a data file
+     *
+     * @return void
+     */
+    private function doFiltering(): void
+    {
+        /** @var wpdb */
+        global $wpdb;
+        $query = $wpdb->prepare("SET session wait_timeout = %d", DUPLICATOR_DB_MAX_TIME);
+        $wpdb->query($query);
+
+        $tables          = $this->getIncludedTables();
+        $tablesToProcess = array_map([WpDbUtils::class, 'updateCaseSensitivePrefix'], $tables);
+
+        // The users tables are restored first: the installer runs the data files in this order
+        $tablesOnTop = [
+            $wpdb->prefix . 'users',
+            $wpdb->prefix . 'usermeta',
+        ];
+
+        foreach (array_reverse($tablesOnTop) as $tableOnTop) {
+            if (($index = array_search($tableOnTop, $tablesToProcess)) !== false) {
+                unset($tablesToProcess[$index]);
+                array_unshift($tablesToProcess, $tableOnTop);
+            }
+        }
+
+        $progress                  = $this->Package->db_build_progress;
+        $progress->tablesToProcess = array_values($tablesToProcess);
+        $progress->tablesToDump    = $this->filterTablesToDump($progress->tablesToProcess);
+        $progress->dumpTableIndex  = 0;
+        // Read once: the chaining costs a hash over every row written, and every request of the build must agree on it
+        $progress->trackChecksums = (bool) apply_filters('duplicator_database_track_table_checksums', false, $this->Package);
+        $progress->countCheckSetStart();
+        $progress->doneFiltering = true;
+    }
+
+    /**
+     * Tables whose data file is written by this build.
+     *
+     * The schema always covers every table of the dump; a consumer able to
+     * supply the data file of a table from elsewhere can drop it from the list.
+     *
+     * @param string[] $tablesToProcess tables of the dump, in dump order
+     *
+     * @return string[]
+     *
+     * @throws DupliException if the filtered list isn't a subset of the tables of the dump
+     */
+    private function filterTablesToDump(array $tablesToProcess): array
+    {
+        /** @var mixed $filtered */
+        $filtered = apply_filters('duplicator_database_tables_to_dump', $tablesToProcess, $this->Package);
+        if (!is_array($filtered) || count(array_filter($filtered, 'is_string')) !== count($filtered)) {
+            throw new DupliException(
+                'The tables to dump filter must return a subset of the tables to process.',
+                DupliException::CODE_DB_VALIDATION_FAILED,
+                __('The list of database tables to export is not valid.', 'duplicator')
+            );
+        }
+
+        $keep         = array_flip($filtered);
+        $tablesToDump = array_values(array_filter($tablesToProcess, fn(string $table): bool => isset($keep[$table])));
+
+        if (count($tablesToDump) !== count($filtered)) {
+            throw new DupliException(
+                'The tables to dump filter must return a subset of the tables to process.',
+                DupliException::CODE_DB_VALIDATION_FAILED,
+                __('The list of database tables to export is not valid.', 'duplicator')
+            );
+        }
+
+        return $tablesToDump;
+    }
+
+    /**
+     * Write the schema file
+     *
+     * @return void
+     */
+    private function writeSchema(): void
+    {
+        $progress                 = $this->Package->db_build_progress;
+        $progress->schemaFileSize = $this->getEngine()->writeSchema(
+            $this->getDumpFileMap()->getSchemaFile(),
+            $progress->tablesToProcess,
+            !BuildComponents::isDBExcluded($this->Package->components)
+        );
+        $progress->doneCreates    = true;
+    }
+
+    /**
+     * Write the data files, one table at a time, from the table the previous request reached
+     *
+     * @param ?float $deadline microtime after which the phase yields, null to write every table
+     *
+     * @return void
+     */
+    private function writeTables(?float $deadline): void
+    {
+        $progress   = $this->Package->db_build_progress;
+        $engine     = $this->getEngine();
+        $map        = $this->getDumpFileMap();
+        $tables     = $progress->tablesToDump;
+        $count      = count($tables);
+        $lastUpdate = microtime(true);
+
+        for ($index = $progress->dumpTableIndex; $index < $count; $index++) {
+            $table = $tables[$index];
+            DupLog::trace("DB DUMP TABLE {$table} (" . ($index + 1) . " of {$count})");
+            $progress->tableCountStart($table);
+
+            $result = $engine->writeTable($table, $map->getTableFile($table), $deadline);
+            if ($result === null) {
+                return;
+            }
+
+            $progress->recordTableDump($table, $result);
+            $progress->dumpTableIndex = $index + 1;
+
+            if ($deadline !== null && microtime(true) >= $deadline) {
+                return;
+            }
+            if ((microtime(true) - $lastUpdate) >= AbstractPackage::PROGRESS_UPDATE_INTERVAL_SEC) {
+                $this->Package->update();
+                $lastUpdate = microtime(true);
+            }
+        }
+
+        $progress->completed = true;
+    }
+
+    /**
+     * Performs validation of the values entered based on build progress counts
+     *
+     * @return void
+     */
+    protected function validateStage1(): void
+    {
+        DupLog::trace("DB VALIDATION 1");
+        $progress = $this->Package->db_build_progress;
+        $dumped   = array_flip($progress->tablesToDump);
+
+        foreach ($progress->countCheckData['tables'] as $table => $tableInfo) {
+            if (!isset($dumped[$table]) || $tableInfo['count'] === null || $tableInfo['start'] === null) {
+                // No data file, or no counts to compare: the engine can't count the rows it
+                // wrote, or the dump of the table never started
+                continue;
+            }
+
+            $skipValidation = in_array($table, self::getTablesFilteredFromValidation());
+            $minVal         = min($tableInfo['start'], $tableInfo['end']);
+            $maxVal         = max($tableInfo['start'], $tableInfo['end']);
+            $delta          = $maxVal - $minVal;
+            // The rows entered must be between the start value of the dump on the table and the end value.
+            // The more difference there is between the initial and final count (delta), the less accurate the validation is.
+            if (
+                $skipValidation == false &&
+                (
+                    $tableInfo['count'] < ($minVal - $delta) ||
+                    $tableInfo['count'] > ($maxVal + $delta)
+                )
+            ) {
+                DupLog::infoTrace(
+                    'DB VALIDATION ROW COUNT DRIFT: count check table "' . $table . '"' .
+                        ' START: ' . $tableInfo['start'] .
+                        ' END: ' . $tableInfo['end'] .
+                        ' DELTA: ' . $delta .
+                        ' COUNT: ' . $tableInfo['count']
+                );
+                // Row drift on a write-active table isn't corruption: warn at the event.
+                // The structural checks (EOF marker, file size) are the ones that fail the
+                // build. The identical entry is deduplicated, so any number of drifted
+                // tables produces a single warning; per-table data is in the log line above.
+                $this->Package->addBuildWarning(
+                    AbstractPackage::WARNING_DB_ROW_COUNT_DRIFT,
+                    __(
+                        'The content of one or more database tables kept changing while the Backup was
+                        running, which is normal on an active site. The database was exported completely;
+                        if you need a snapshot with no changes at all, create the Backup when the site
+                        is less active.',
+                        'duplicator'
+                    )
+                );
+            } else {
+                $this->info->addInsertedRowsInTableList($table, $tableInfo['count']);
+                $message = 'DB VALIDATION ' . ($skipValidation ? 'SKIPPED FROM WP-CONFIG' : 'SUCCESS') . ': ';
+                DupLog::trace(
+                    $message . 'count check table "' . $table . '"' .
+                        ' START: ' . $tableInfo['start'] .
+                        ' END: ' . $tableInfo['end'] .
+                        ' DELTA: ' . $delta .
+                        ' COUNT: ' . $tableInfo['count']
+                );
+            }
+        }
+
+        $fileChecks = $this->checkDumpFiles();
+        TableDumpCheckpoint::removeStoreFile($this->getStoreProgressFile());
+
+        $validationFailure = new DatabaseValidationFailure($fileChecks['eofMarkerMissing'], $fileChecks['mismatchedFiles']);
+        if ($validationFailure->hasFailures()) {
+            DupLog::infoTrace("DB VALIDATION 1: failed to validate");
+            throw $validationFailure->toException();
+        }
+
+        DupLog::trace("DB VALIDATION 1: successful");
+        $progress->validationStage1 = true;
+    }
+
+    /**
+     * Check every dump file for its end of file marker and its expected size
+     *
+     * @return array{eofMarkerMissing:bool,mismatchedFiles:string[]}
+     */
+    private function checkDumpFiles(): array
+    {
+        $eofMarkerMissing = false;
+        $mismatchedFiles  = [];
+        clearstatcache();
+
+        foreach ($this->getExpectedDumpFileSizes() as $file => $expectedSize) {
+            $lastLines = SnapIO::tailFile($file, 3);
+            if ($lastLines === false || strpos($lastLines, (string) DUPLICATOR_DB_EOF_MARKER) === false) {
+                DupLog::infoTrace('DB VALIDATION 1: can\'t find SQL EOF MARKER in ' . basename($file));
+                $eofMarkerMissing = true;
+            }
+
+            $fileSize = is_file($file) ? filesize($file) : false;
+            if ($fileSize === false) {
+                DupLog::infoTrace('SQL FILE SIZE CHECK FAILED, SIZE UNAVAILABLE OF FILE ' . $file);
+                $mismatchedFiles[] = basename($file);
+                continue;
+            }
+
+            if ($fileSize !== $expectedSize) {
+                DupLog::infoTrace(
+                    'SQL FILE SIZE CHECK FAILED, EXPECTED: ' . $expectedSize .
+                        ' FILE SIZE: ' . $fileSize . ' OF FILE ' . $file
+                );
+                $mismatchedFiles[] = basename($file);
+                continue;
+            }
+
+            DupLog::trace('SQL FILE SIZE CHECK OK, SIZE: ' . $fileSize . ' OF FILE ' . basename($file));
+        }
+
+        return [
+            'eofMarkerMissing' => $eofMarkerMissing,
+            'mismatchedFiles'  => $mismatchedFiles,
+        ];
+    }
+
+    /**
+     * Size recorded while writing each dump file, by file path
+     *
+     * @return array<string,int>
+     */
+    private function getExpectedDumpFileSizes(): array
+    {
+        $progress = $this->Package->db_build_progress;
+        $map      = $this->getDumpFileMap();
+        $sizes    = [$map->getSchemaFile() => $progress->schemaFileSize];
+
+        foreach ($progress->tablesToDump as $table) {
+            $sizes[$map->getTableFile($table)] = $progress->getTableDumpSize($table);
+        }
+
+        return $sizes;
+    }
+
+    /**
+     * Returns an array of table names that have been filtered from validation via constant
+     *
+     * @return string[]
+     */
+    private static function getTablesFilteredFromValidation(): array
+    {
+        static $tableList = null;
+        if (is_null($tableList)) {
+            $tableList = [];
+            if (!is_array(DUPLICATOR_TABLE_VALIDATION_FILTER_LIST)) { // @phpstan-ignore-line function.alreadyNarrowedType
+                $list = (strlen((string) DUPLICATOR_TABLE_VALIDATION_FILTER_LIST) > 0 ? [DUPLICATOR_TABLE_VALIDATION_FILTER_LIST] : []);
+            } else {
+                $list = DUPLICATOR_TABLE_VALIDATION_FILTER_LIST;
+            }
+            foreach ($list as $table) {
+                $table = trim($table);
+                if (strlen($table) == 0) {
+                    continue;
+                }
+                $tableList[] = $table;
+            }
+        }
+        return $tableList;
+    }
+
+    /**
+     * Called when the build is complete
+     *
+     * @return void
+     */
+    private function doFinish(): void
+    {
+        $progress = $this->Package->db_build_progress;
+        if ($this->isPerTableDump()) {
+            $this->discardTables();
+        }
+
+        $elapsed  = SnapString::formattedElapsedTime(microtime(true), $progress->startTime);
+        $dumpSize = $this->isPerTableDump() ? $this->getDumpSize() : $this->getSingleDumpSize();
+        DupLog::info("SQL FILE SIZE: " . SnapString::byteSize($dumpSize));
+        DupLog::info("SQL FILE TIME: " . date("Y-m-d H:i:s"));
+        DupLog::info("SQL RUNTIME: {$elapsed}");
+        DupLog::info("MEMORY STACK: " . SnapServer::getPHPMemory());
+
+        $this->Size = $dumpSize;
+        if ($this->isPerTableDump()) {
+            // The descriptor lists the whole set, the installer of a Backup that reuses files needs them all
+            $this->info->dumpFiles = $this->createDumpFileMap($progress->tablesToProcess)->getFileNames();
+        }
+        $this->Package->setStatus(AbstractPackage::STATUS_DBDONE);
+        do_action('duplicator_build_database_completed', $this->Package);
+    }
+
+    /**
+     * Remove the data files a consumer can supply from elsewhere
+     *
+     * The consumer names the tables, core removes the files and takes them out
+     * of the dumped list; row counts, sizes and checksums stay recorded.
+     *
+     * @return void
+     *
+     * @throws DupliException if the filter return isn't an array or names a table without a data file
+     */
+    private function discardTables(): void
+    {
+        /** @var mixed $discard */
+        $discard = apply_filters('duplicator_database_dumped_tables_to_discard', [], $this->Package);
+        if (!is_array($discard) || count(array_filter($discard, 'is_string')) !== count($discard)) {
+            throw new DupliException(
+                'The tables to discard filter must return a subset of the dumped tables.',
+                DupliException::CODE_DB_VALIDATION_FAILED,
+                __('The list of database tables to leave out of the Backup is not valid.', 'duplicator')
+            );
+        }
+        if (count($discard) === 0) {
+            return;
+        }
+
+        $progress = $this->Package->db_build_progress;
+        $discard  = array_values(array_unique($discard));
+        $dumped   = array_flip($progress->tablesToDump);
+        foreach ($discard as $table) {
+            if (!isset($dumped[$table])) {
+                throw new DupliException(
+                    'The tables to discard filter must return a subset of the dumped tables.',
+                    DupliException::CODE_DB_VALIDATION_FAILED,
+                    __('The list of database tables to leave out of the Backup is not valid.', 'duplicator')
+                );
+            }
+        }
+
+        $map = $this->getDumpFileMap();
+        foreach ($discard as $table) {
+            SnapIO::rm($map->getTableFile($table));
+        }
+        $progress->tablesToDump = array_values(array_diff($progress->tablesToDump, $discard));
+        DupLog::infoTrace('DB DUMP: ' . count($discard) . ' data files left out of the Backup by a consumer');
+    }
+
+    /**
+     * Total size of the dump files
+     *
+     * @return int
+     *
+     * @throws DupliException if a dump file is missing or the schema file is empty
+     */
+    private function getDumpSize(): int
+    {
+        $map   = $this->getDumpFileMap();
+        $total = 0;
+        clearstatcache();
+
+        foreach ($map->getFiles() as $file) {
+            if (!is_file($file)) {
+                throw new DupliException(
+                    "SQL dump file missing at [{$file}].",
+                    DupliException::CODE_DB_EMPTY_FILE,
+                    __('One of the database export files was not created. Check file and directory permissions.', 'duplicator')
+                );
+            }
+            $total += (int) filesize($file);
+        }
+
+        DupLog::info("SQL CREATED: " . count($map->getFiles()) . " files in " . basename($map->getLocalDir()));
+        if (filesize($map->getSchemaFile()) <= 0) {
+            throw new DupliException(
+                "SQL schema file generated zero bytes at [{$map->getSchemaFile()}].",
+                DupliException::CODE_DB_EMPTY_FILE,
+                __('No data was written to the database export file. Check file and directory permissions.', 'duplicator')
+            );
+        }
+
+        return $total;
+    }
+
+    /**
+     * Total size of the single dump file of the mysqldump mode
+     *
+     * @return int
+     *
+     * @throws DupliException if the dump file is empty
+     */
+    private function getSingleDumpSize(): int
+    {
+        DupLog::info("SQL CREATED: {$this->File}");
+        clearstatcache();
+        $size = (int) filesize($this->getStorePath());
+        if ($size <= 0) {
+            throw new DupliException(
+                "SQL file generated zero bytes at [{$this->getStorePath()}].",
+                DupliException::CODE_DB_EMPTY_FILE,
+                __('No data was written to the database export file. Check file and directory permissions.', 'duplicator')
+            );
+        }
+
+        return $size;
+    }
+
+    /**
+     * Run the two mysqldump passes writing the single dump file
+     *
+     * @param string|false $exePath The path to the mysqldump executable
+     *
+     * @return void
+     *
+     * @throws DupliException if a previous run of this export was interrupted
      */
     private function runMysqlDump($exePath): void
     {
@@ -499,7 +1132,7 @@ class DatabasePkg
         $mysqlResult  = $this->mysqlDumpWriteCmd($exePath, $extraFlags, '', $excluded);
 
         $storePath = $this->getStorePath();
-        if (file_put_contents($storePath, self::TABLE_CREATION_END_MARKER . "\n", FILE_APPEND) === false) {
+        if (file_put_contents($storePath, AbstractDumpEngine::TABLE_CREATION_END_MARKER . "\n", FILE_APPEND) === false) {
             throw self::buildWriteException("CREATE markers", $storePath);
         }
         $this->mysqlDumpEvaluateResult($mysqlResult);
@@ -851,38 +1484,6 @@ class DatabasePkg
     }
 
     /**
-     * Checks if database size is within the mysqldump size limit
-     *
-     * @param int $dbSize Size of the database to check
-     *
-     * @return bool Returns true if DB size is within the mysqldump size limit, otherwise false
-     */
-    protected static function mysqldumpMemoryCheck(int $dbSize): bool
-    {
-        $mem        = SnapUtil::phpIniGet('memory_limit', false);
-        $memInBytes = SnapUtil::convertToBytes($mem);
-
-        // If the memory limit is unknown or unlimited (-1), return true
-        if ($mem === false || $memInBytes <= 0) {
-            return true;
-        }
-
-        return (self::requiredMysqlDumpLimit($dbSize) <= $memInBytes);
-    }
-
-    /**
-     * Return mysql required limit
-     *
-     * @param int $dbSize Size of the database to check
-     *
-     * @return int
-     */
-    protected static function requiredMysqlDumpLimit(int $dbSize): int
-    {
-        return $dbSize + self::MYSQLDUMP_ALLOWED_SIZE_DIFFERENCE;
-    }
-
-    /**
      * Get mysql dump command
      *
      * @param string   $exePath           mysqldump exec path
@@ -1027,870 +1628,6 @@ class DatabasePkg
     }
 
     /**
-     * Return the tables included in the backup after applying all filters.
-     *
-     * @return string[]
-     */
-    private function getIncludedTables(): array
-    {
-        // TABLES AFTER THE PREFIX FILTERS AND THE TABLES-LIST HOOK
-        $allTables = WpDbUtils::getTablesList(true, $this->isPrefixFilterEnabled(), (bool) $this->prefixSubFilter);
-        // MANUAL FILTER TABLE
-        $filterTables = ($this->FilterOn ? explode(',', $this->FilterTables) : []);
-        // SUB SITE FILTER TABLE
-        $muFilterTables = $this->Package->Multisite->getTablesToFilter();
-        //COMPONENT FILTER TABLE
-        $componentFilterTables = BuildComponents::isDBExcluded($this->Package->components) ? $allTables : [];
-        // TOTAL FILTER TABLES
-        $allFilterTables = !empty($componentFilterTables)
-            ? $componentFilterTables
-            : array_unique(array_merge($filterTables, $muFilterTables));
-        $allTablesCount  = count($allTables);
-        $allFilterCount  = count($allFilterTables);
-        $createCount     = $allTablesCount - $allFilterCount;
-        DupLog::trace("TABLES: total: " . $allTablesCount . " | filtered:" . $allFilterCount . " | create:" . $createCount);
-        if (!empty($filterTables)) {
-            DupLog::infoTrace("MANUAL FILTER TABLES: \n\t" . implode("\n\t", $filterTables));
-        }
-        if (!empty($muFilterTables)) {
-            DupLog::infoTrace("MU SITE FILTER TABLES: \n\t" . implode("\n\t", $muFilterTables));
-        }
-        $includedTables = [];
-        foreach ($allTables as $val) {
-            if (!in_array($val, $allFilterTables)) {
-                $includedTables[] = $val;
-            }
-        }
-
-        return $includedTables;
-    }
-
-    /**
-     * Return every base table in the database that is not included in the backup.
-     *
-     * @return string[]
-     */
-    private function getExcludedTables(): array
-    {
-        $includedTables = $this->getIncludedTables();
-
-        return array_values(array_diff(WpDbUtils::getAllTableNames(), $includedTables));
-    }
-
-    /**
-     * Return whether the WordPress users and usermeta tables are included in the backup.
-     *
-     * @return array{user:bool,usermeta:bool}
-     */
-    private function isUsersTablesIncluded(): array
-    {
-        /** @var wpdb $wpdb */
-        global $wpdb;
-
-        $included = array_map([WpDbUtils::class, 'updateCaseSensitivePrefix'], $this->getIncludedTables());
-
-        return [
-            'user'     => in_array($wpdb->prefix . 'users', $included, true),
-            'usermeta' => in_array($wpdb->prefix . 'usermeta', $included, true),
-        ];
-    }
-
-    /**
-     * Callback called in the insert iterator at the beginning of the current table dump.
-     *
-     * @param DbBuildIterator $iterator The iterator
-     *
-     * @return void
-     */
-    public function startTableIteratorCallback(DbBuildIterator $iterator): void
-    {
-        $this->Package->db_build_progress->tableCountStart($iterator->current());
-    }
-
-    /**
-     * Callback called in the insert iterator at the end of the current table dump.
-     *
-     * @param DbBuildIterator $iterator The iterator
-     *
-     * @return void
-     */
-    public function endTableIteratorCallback(DbBuildIterator $iterator): void
-    {
-        $this->Package->db_build_progress->tableCountEnd($iterator->current(), $iterator->getCurrentOffset());
-    }
-
-    /**
-     * Creates the database.sql script using PHP code
-     *
-     * @return void
-     */
-    private function runPHPDump(): void
-    {
-        DupLog::trace("RUN PHP DUMP");
-        if ($this->Package->db_build_progress->wasInterrupted) {
-            throw new DupliException(
-                'PHP single-thread dump process was killed; database build did not complete.',
-                DupliException::CODE_DB_PHP_DUMP_INTERRUPTED,
-                __(
-                    'Your hosting provider stopped the database export process before it could finish,
-                    usually due to server resource limits.
-                    Switching to a different SQL engine is recommended for better stability.',
-                    'duplicator'
-                )
-            );
-        }
-
-        $this->Package->db_build_progress->wasInterrupted = true;
-        $this->Package->update();
-
-        /** @var wpdb $wpdb */
-        global $wpdb;
-
-        $global         = GlobalEntity::getInstance();
-        $querySizeLimit = $global->getMysqldumpQueryLimit();
-        $dbConn         = WpDbUtils::getDbConn();
-        $query          = $wpdb->prepare("SET session wait_timeout = %d", DUPLICATOR_DB_MAX_TIME);
-        $wpdb->query($query);
-        $this->doFiltering();
-        $this->writeCreates();
-        $storePath = $this->getStorePath();
-        $handle    = SnapIO::callWithPhpErrorCapture(fn () => fopen($storePath, 'a'));
-        if ($handle === false) {
-            throw DupliException::fromLastError(
-                "FILE OPEN ERROR: Could not open the database export file.\nPath: {$storePath}",
-                DupliException::CODE_DB_FILE_OPEN_FAILED,
-                __('Could not open the database export file.', 'duplicator')
-            );
-        }
-
-        $dbInsertIterator   = $this->getDbBuildIterator();
-        $lastProgressUpdate = microtime(true);
-
-        //BUILD INSERTS:
-        for (; $dbInsertIterator->valid(); $dbInsertIterator->next()) {
-            if ($dbInsertIterator->getCurrentRows() <= 0) {
-                continue;
-            }
-
-            $table = $dbInsertIterator->current();
-            $dbInsertIterator->addFileSize(SnapIO::fwrite($handle, "\n/* INSERT TABLE DATA: {$table} */\n"));
-            $row_offset       = 0;
-            $currentQuerySize = 0;
-            $firstInsert      = true;
-            $insertQueryLine  = true;
-
-            do {
-                $result = SnapDB::selectUsingPrimaryKeyAsOffset(
-                    $dbConn,
-                    'SELECT * FROM `' . $table . '` WHERE 1',
-                    $table,
-                    $row_offset,
-                    Constants::PHP_DUMP_READ_PAGE_SIZE,
-                    $row_offset
-                );
-                if (($lastSelectNumRows = SnapDB::numRows($result)) > 0) {
-                    while (($row = SnapDB::fetchAssoc($result))) {
-                        if ($currentQuerySize >= $querySizeLimit) {
-                            $insertQueryLine = true;
-                        }
-
-                        if ($insertQueryLine) {
-                            $line             = ($firstInsert ? '' : self::CLOSE_INSERT_QUERY) . 'INSERT IGNORE INTO `' . $table . '` VALUES ' . "\n";
-                            $insertQueryLine  = $firstInsert      = false;
-                            $currentQuerySize = 0;
-                        } else {
-                            $line = ",\n";
-                        }
-                        $line             .= '(' . implode(',', array_map([WpDbUtils::class, 'escSqlAndQuote'], $row)) . ')';
-                        $lineSize          = SnapIO::fwriteChunked($handle, $line);
-                        $totalCount        = $dbInsertIterator->nextRow(0, $lineSize);
-                        $currentQuerySize += $lineSize;
-                        if ((microtime(true) - $lastProgressUpdate) >= AbstractPackage::PROGRESS_UPDATE_INTERVAL_SEC) {
-                            $this->Package->update();
-                            $lastProgressUpdate = microtime(true);
-                        }
-                    }
-
-                    if ($this->throttleDelayInUs > 0) {
-                        usleep($this->throttleDelayInUs * Constants::PHP_DUMP_READ_PAGE_SIZE);
-                    }
-                } elseif ($insertQueryLine == false) {
-                    // if false exists a insert to close
-                    $dbInsertIterator->addFileSize(SnapIO::fwrite($handle, self::CLOSE_INSERT_QUERY));
-                }
-
-                SnapDB::freeResult($result);
-            } while ($lastSelectNumRows > 0);
-        }
-
-        $this->writeSQLFooter($handle);
-        $wpdb->flush();
-        SnapIO::fclose($handle);
-    }
-
-    /**
-     * Initialize the build iterator, based on the phpdumpmode, the storeprogress file is used or not.
-     *
-     * @return DbBuildIterator
-     */
-    private function getDbBuildIterator(): DbBuildIterator
-    {
-        static $iterator = null;
-
-        if (is_null($iterator)) {
-            $iterator = new DbBuildIterator(
-                $this->Package->db_build_progress->tablesToProcess,
-                ($this->Package->requireBuildOptions()->getDbBuildMode() === WpDbUtils::BUILD_MODE_PHP_MULTI_THREAD ? $this->getStoreProgressFile() : null),
-                [
-                    $this,
-                    'startTableIteratorCallback',
-                ],
-                [
-                    $this,
-                    'endTableIteratorCallback',
-                ]
-            );
-        }
-        return $iterator;
-    }
-
-
-    /**
-     * Uses PHP to build the SQL file in chunks over multiple http requests
-     *
-     * @return void
-     */
-    public function buildInChunks(): void
-    {
-        DupLog::trace("Database: buildInChunks Start");
-        if ($this->Package->db_build_progress->wasInterrupted) {
-            $this->Package->db_build_progress->failureCount++;
-            $log_msg = 'Database: buildInChunks failure count increased to  ' . $this->Package->db_build_progress->failureCount;
-            DupLog::trace($log_msg);
-        }
-
-        if ($this->Package->db_build_progress->failureCount > DUPLICATOR_SQL_SCRIPT_PHP_CODE_MULTI_THREADED_MAX_RETRIES) {
-            throw new DupliException(
-                'Database build did not progress after the maximum number of retries.',
-                DupliException::CODE_DB_RETRY_EXHAUSTED,
-                __(
-                    'Your hosting provider repeatedly stopped the database export process,
-                    usually due to server resource limits.',
-                    'duplicator'
-                )
-            );
-        }
-
-        $this->Package->db_build_progress->wasInterrupted = true;
-        $this->Package->update();
-        if (!$this->Package->db_build_progress->doneInit) {
-            DupLog::trace("Database: buildInChunks Init");
-            $this->doInit();
-            $this->Package->db_build_progress->doneInit = true;
-        } elseif (!$this->Package->db_build_progress->doneFiltering) {
-            DupLog::trace("Database: buildInChunks Filtering");
-            $this->doFiltering();
-            $this->Package->db_build_progress->doneFiltering = true;
-        } elseif (!$this->Package->db_build_progress->doneCreates) {
-            DupLog::trace("Database: buildInChunks WriteCreates");
-            $this->writeCreates();
-            $this->Package->db_build_progress->doneCreates = true;
-        } elseif (!$this->Package->db_build_progress->completed) {
-            DupLog::trace("Database: buildInChunks WriteInsertChunk");
-            $this->writeInsertChunk();
-        }
-
-        $this->Package->build_progress->database_script_built = false;
-        if ($this->Package->db_build_progress->completed) {
-            if (!$this->Package->db_build_progress->validationStage1) {
-                $this->validateStage1();
-            } else {
-                DupLog::trace("Database: buildInChunks completed");
-                $this->Package->build_progress->database_script_built = true;
-                $this->doFinish();
-            }
-        }
-
-        DupLog::trace("Database: buildInChunks End");
-        // Resetting failure count since we if it recovers after a single failure we won't count it against it.
-        $this->Package->db_build_progress->failureCount   = 0;
-        $this->Package->db_build_progress->wasInterrupted = false;
-        $this->Package->update();
-    }
-
-    /**
-     * Performs validation of the values entered based on build progress counts
-     *
-     * @return void
-     */
-    protected function validateStage1(): void
-    {
-        DupLog::trace("DB VALIDATION 1");
-        $eofMarkerMissing    = false;
-        $missingCreateTables = [];
-        // SEARCH END MARKER
-        $lastLines = SnapIO::tailFile($this->getStorePath(), 3);
-        if ($lastLines === false || strpos($lastLines, (string) DUPLICATOR_DB_EOF_MARKER) === false) {
-            DupLog::infoTrace('DB VALIDATION 1: can\'t find SQL EOR MARKER in sql file');
-            $eofMarkerMissing = true;
-        }
-
-        foreach ($this->Package->db_build_progress->countCheckData['tables'] as $table => $tableInfo) {
-            if ($tableInfo['create'] === false) {
-                DupLog::infoTrace("DB VALIDATION STAGE 1 FAILED: CREATE query for the table {$table} does not exist");
-                $missingCreateTables[] = $table;
-            }
-
-            $skipValidation = in_array($table, self::getTablesFilteredFromValidation());
-            $minVal         = min($tableInfo['start'], $tableInfo['end']);
-            $maxVal         = max($tableInfo['start'], $tableInfo['end']);
-            $delta          = $maxVal - $minVal;
-            // The rows entered must be between the start value of the dump on the table and the end value.
-            // The more difference there is between the initial and final count (delta), the less accurate the validation is.
-            if (
-                $skipValidation == false &&
-                (
-                    $tableInfo['count'] < ($minVal - $delta) ||
-                    $tableInfo['count'] > ($maxVal + $delta)
-                )
-            ) {
-                DupLog::infoTrace(
-                    'DB VALIDATION ROW COUNT DRIFT: count check table "' . $table . '"' .
-                        ' START: ' . $tableInfo['start'] .
-                        ' END: ' . $tableInfo['end'] .
-                        ' DELTA: ' . $delta .
-                        ' COUNT: ' . $tableInfo['count']
-                );
-                // Row drift on a write-active table isn't corruption: warn at the event.
-                // The structural checks (EOF marker, CREATE queries, file size) are the
-                // ones that fail the build. The identical entry is deduplicated, so any
-                // number of drifted tables produces a single warning; per-table data is
-                // in the log line above.
-                $this->Package->addBuildWarning(
-                    AbstractPackage::WARNING_DB_ROW_COUNT_DRIFT,
-                    __(
-                        'The content of one or more database tables kept changing while the Backup was
-                        running, which is normal on an active site. The database was exported completely;
-                        if you need a snapshot with no changes at all, create the Backup when the site
-                        is less active.',
-                        'duplicator'
-                    )
-                );
-            } else {
-                $this->info->addInsertedRowsInTableList($table, $tableInfo['count']);
-                $message = 'DB VALIDATION ' . ($skipValidation ? 'SKIPPED FROM WP-CONFIG' : 'SUCCESS') . ': ';
-                DupLog::trace(
-                    $message . 'count check table "' . $table . '"' .
-                        ' START: ' . $tableInfo['start'] .
-                        ' END: ' . $tableInfo['end'] .
-                        ' DELTA: ' . $delta .
-                        ' COUNT: ' . $tableInfo['count']
-                );
-            }
-        }
-
-        $dbInsertIterator = $this->getDbBuildIterator();
-        $expectedFileSize = $dbInsertIterator->getFileSize();
-        clearstatcache();
-        $fileSizeResult = filesize($this->getStorePath());
-        $actualFileSize = is_int($fileSizeResult) ? $fileSizeResult : null;
-        if ($actualFileSize !== $expectedFileSize) {
-            DupLog::infoTrace(
-                'SQL FILE SIZE CHECK FAILED, EXPECTED: ' . $expectedFileSize .
-                    ' FILE SIZE: ' . ($actualFileSize === null ? 'unavailable' : $actualFileSize) .
-                    ' OF FILE ' . $this->getStorePath()
-            );
-        } else {
-            DupLog::infoTrace('SQL FILE SIZE CHECK OK, SIZE: ' . $expectedFileSize);
-        }
-
-        $dbInsertIterator->removeCounterFile();
-        $validationFailure = new DatabaseValidationFailure(
-            $eofMarkerMissing,
-            $missingCreateTables,
-            $expectedFileSize,
-            $actualFileSize
-        );
-        if ($validationFailure->hasFailures()) {
-            DupLog::infoTrace("DB VALIDATION 1: failed to validate");
-            throw $validationFailure->toException();
-        }
-
-        DupLog::trace("DB VALIDATION 1: successful");
-        $this->Package->db_build_progress->validationStage1 = true;
-        $this->Package->update();
-    }
-
-    /**
-     * Returns an array of table names that have been filtered from validation via constant
-     *
-     * @return string[]
-     */
-    private static function getTablesFilteredFromValidation(): array
-    {
-        static $tableList = null;
-        if (is_null($tableList)) {
-            $tableList = [];
-            if (!is_array(DUPLICATOR_TABLE_VALIDATION_FILTER_LIST)) { // @phpstan-ignore-line function.alreadyNarrowedType
-                $list = (strlen((string) DUPLICATOR_TABLE_VALIDATION_FILTER_LIST) > 0 ? [DUPLICATOR_TABLE_VALIDATION_FILTER_LIST] : []);
-            } else {
-                $list = DUPLICATOR_TABLE_VALIDATION_FILTER_LIST;
-            }
-            foreach ($list as $table) {
-                $table = trim($table);
-                if (strlen($table) == 0) {
-                    continue;
-                }
-                $tableList[] = $table;
-            }
-        }
-        return $tableList;
-    }
-
-    /**
-     * Used to initialize the PHP chunking logic
-     *
-     * @return void
-     */
-    private function doInit(): void
-    {
-        $global = GlobalEntity::getInstance();
-        do_action('duplicator_build_database_before_start', $this->Package);
-        $this->Package->db_build_progress->startTime = microtime(true);
-        $this->Package->setStatus(AbstractPackage::STATUS_DBSTART);
-        $log  = "\n********************************************************************************\n";
-        $log .= "DATABASE:\n";
-        $log .= "********************************************************************************\n";
-        $log .= "BUILD MODE:   PHP + CHUNKING ";
-        $log .= '(query size limit - ' . $global->getMysqldumpQueryLimit() . " )\n";
-        DupLog::info($log);
-        do_action('duplicator_build_database_start', $this->Package);
-        $this->Package->update();
-    }
-
-    /**
-     * Initialize the table to be processed for the dump.
-     *
-     * @return void
-     */
-    private function doFiltering(): void
-    {
-        /** @var wpdb */
-        global $wpdb;
-        $query = $wpdb->prepare("SET session wait_timeout = %d", DUPLICATOR_DB_MAX_TIME);
-        $wpdb->query($query);
-
-        $tables          = $this->getIncludedTables();
-        $tablesToProcess = array_map([WpDbUtils::class, 'updateCaseSensitivePrefix'], $tables);
-
-        // PUT TABLES ON TOP, the ored is important
-        $tablesOnTop = [
-            $wpdb->prefix . 'users',
-            $wpdb->prefix . 'usermeta',
-        ];
-
-        foreach (array_reverse($tablesOnTop) as $tableOnTop) {
-            if (($index = array_search($tableOnTop, $tablesToProcess)) !== false) {
-                unset($tablesToProcess[$index]);
-                array_unshift($tablesToProcess, $tableOnTop);
-            }
-        }
-        $this->Package->db_build_progress->tablesToProcess = array_values($tablesToProcess);
-
-        $this->Package->db_build_progress->countCheckSetStart();
-        $this->Package->db_build_progress->doneFiltering = true;
-        $this->Package->update();
-        // MAKE SURE THE ITERATOR IS RESET
-        $dbInsertIterator = $this->getDbBuildIterator();
-        $dbInsertIterator->rewind();
-    }
-
-    /**
-     * Dumps the structure of the view table and procedures.
-     *
-     * @return void
-     */
-    private function writeCreates(): void
-    {
-        global $wpdb;
-        $storePath = $this->getStorePath();
-        $handle    = SnapIO::callWithPhpErrorCapture(fn () => fopen($storePath, 'a'));
-        if ($handle === false) {
-            throw DupliException::fromLastError(
-                "FILE OPEN ERROR: Could not open the database export file.\nPath: {$storePath}",
-                DupliException::CODE_DB_FILE_OPEN_FAILED,
-                __('Could not open the database export file.', 'duplicator')
-            );
-        }
-
-        // Added 'NO_AUTO_VALUE_ON_ZERO' at plugin version 3.4.8 to fix :
-        //**ERROR** database error write 'Invalid default value for for older mysql versions
-        $sql_header  = "/* DUPLICATOR-PRO (";
-        $sql_header .= (
-            $this->Package->requireBuildOptions()->getDbBuildMode() === WpDbUtils::BUILD_MODE_PHP_MULTI_THREAD ?
-            'PHP MULTI-THREADED BUILD MODE' :
-            'PHP SINGLE-THREAD BUILD MODE'
-        );
-        $sql_header .= ") MYSQL SCRIPT CREATED ON : " . date("Y-m-d H:i:s") . " */\n\n";
-        $sql_header .= "/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;\n";
-        $sql_header .= "/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;\n";
-        $sql_header .= "/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;\n\n";
-        SnapIO::fwrite($handle, $sql_header);
-        // BUILD CREATES:
-        // All creates must be created before inserts do to foreign key constraints
-        foreach ($this->Package->db_build_progress->tablesToProcess as $table) {
-            $create = $this->getCreateTableRow($table);
-
-            // UPDATE CASE SENSITIVE TABLE PREFIX NAME
-            $create_table_query = str_ireplace($table, $table, $create[1]);
-            $create_table_query = preg_replace('/^(\s*CREATE\s+TABLE\s+(?!IF NOT EXISTS))(`.+?`)/m', '$1IF NOT EXISTS $2', $create_table_query);
-            if (SnapIO::fwrite($handle, "{$create_table_query};\n\n") > 0) {
-                $this->Package->db_build_progress->countCheckData['tables'][$table]['create'] = true;
-                DupLog::trace("DATABASE CREATE TABLE: " . $table . " OK");
-            }
-        }
-
-        if (!BuildComponents::isDBExcluded($this->Package->components)) {
-            $query      = $wpdb->prepare("SHOW PROCEDURE STATUS WHERE `Db` = %s", $wpdb->dbname);
-            $procedures = $wpdb->get_col($query, 1);
-            if (count($procedures)) {
-                foreach ($procedures as $procedure) {
-                    SnapIO::fwrite($handle, "DELIMITER ;;\n");
-                    $create = $wpdb->get_row("SHOW CREATE PROCEDURE `{$procedure}`", ARRAY_N);
-                    SnapIO::fwrite($handle, "{$create[2]} ;;\n");
-                    SnapIO::fwrite($handle, "DELIMITER ;\n\n");
-                }
-            }
-
-            $query     = $wpdb->prepare("SHOW FUNCTION STATUS WHERE `Db` = %s", $wpdb->dbname);
-            $functions = $wpdb->get_col($query, 1);
-            if (count($functions)) {
-                foreach ($functions as $function) {
-                    SnapIO::fwrite($handle, "DELIMITER ;;\n");
-                    $create = $wpdb->get_row("SHOW CREATE FUNCTION `{$function}`", ARRAY_N);
-                    SnapIO::fwrite($handle, "{$create[2]} ;;\n");
-                    SnapIO::fwrite($handle, "DELIMITER ;\n\n");
-                }
-            }
-
-            $views = $wpdb->get_col("SHOW FULL TABLES WHERE Table_Type = 'VIEW'");
-            if (count($views)) {
-                foreach ($views as $view) {
-                    $create = $wpdb->get_row("SHOW CREATE VIEW `{$view}`", ARRAY_N);
-                    SnapIO::fwrite($handle, "{$create[1]};\n\n");
-                }
-            }
-        }
-
-        SnapIO::fwrite($handle, self::TABLE_CREATION_END_MARKER);
-        $dbInsertIterator = $this->getDbBuildIterator();
-        $fileStat         = fstat($handle);
-        $dbInsertIterator->addFileSize($fileStat['size']);
-        SnapIO::fclose($handle);
-        $this->Package->db_build_progress->doneCreates = true;
-        $this->Package->update();
-    }
-
-    /**
-     * Fetches the SHOW CREATE TABLE row for a table, retrying once after a
-     * connection check. When the query still fails it throws with a distinct
-     * raw message per condition (existing table that cannot be read, vanished
-     * core table, vanished table) so telemetry can separate them.
-     *
-     * @param string $table table name
-     *
-     * @return string[] SHOW CREATE TABLE numeric row
-     *
-     * @throws DupliException when the query fails after the retry
-     */
-    private function getCreateTableRow(string $table): array
-    {
-        /** @var wpdb $wpdb */
-        global $wpdb;
-
-        $connectionAvailable = true;
-        for ($attempt = 0; $attempt < 2; $attempt++) {
-            if ($attempt > 0) {
-                DupLog::infoTrace("DB: SHOW CREATE TABLE failed for the table {$table}, retrying once. " . $wpdb->last_error);
-                if (!$wpdb->check_connection(false)) {
-                    $connectionAvailable = false;
-                    break;
-                }
-            }
-            if (($create = $wpdb->get_row("SHOW CREATE TABLE `{$table}`", ARRAY_N)) !== null) {
-                return $create;
-            }
-        }
-
-        DupLog::infoTrace("DB ERROR: Could not get the CREATE query for the table {$table}. " . $wpdb->last_error);
-        $tableExists = $connectionAvailable
-            ? $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $wpdb->esc_like($table)))
-            : null;
-        if (!$connectionAvailable || $wpdb->last_error !== '' || $tableExists !== null) {
-            throw new DupliException(
-                'DB ERROR: Could not get the CREATE query for a table.',
-                DupliException::CODE_DB_CREATE_QUERY_FAILED,
-                sprintf(
-                    __('Could not read the structure of the database table "%1$s" during export.', 'duplicator'),
-                    $table
-                )
-            );
-        }
-
-        if (SnapWP::getTableInfoByName($table, $wpdb->prefix)['isCore']) {
-            throw new DupliException(
-                'DB ERROR: A WordPress core table was removed during the export.',
-                DupliException::CODE_DB_CREATE_QUERY_FAILED,
-                sprintf(
-                    __(
-                        'The WordPress core table "%1$s" was removed while the Backup was running,
-                        so the Backup cannot continue.',
-                        'duplicator'
-                    ),
-                    $table
-                )
-            );
-        }
-
-        throw new DupliException(
-            'DB ERROR: A table was removed during the export.',
-            DupliException::CODE_DB_CREATE_QUERY_FAILED,
-            sprintf(
-                __(
-                    'The database table "%1$s" was removed by another process while the Backup was running.
-                    If it is a temporary or cache table, exclude it from the Backup or create the Backup
-                    when the site is less active.',
-                    'duplicator'
-                ),
-                $table
-            )
-        );
-    }
-
-    /**
-     *
-     * @global wpdb $wpdb
-     * @return void
-     *
-     * @throws DupliException
-     */
-    private function writeInsertChunk(): void
-    {
-        $dbConn             = WpDbUtils::getDbConn();
-        $startTime          = microtime(true);
-        $elapsedTime        = 0;
-        $totalCount         = 0;
-        $global             = GlobalEntity::getInstance();
-        $querySizeLimit     = $global->getMysqldumpQueryLimit();
-        $dbInsertIterator   = $this->getDbBuildIterator();
-        $dbBuildProgress    = $this->Package->db_build_progress;
-        $lastProgressUpdate = microtime(true);
-        $this->truncateSqlFileOnExpectedSize($dbInsertIterator->getFileSize());
-        $storePath = $this->getStorePath();
-        $handle    = SnapIO::callWithPhpErrorCapture(fn () => fopen($storePath, 'a'));
-        if ($handle === false) {
-            throw DupliException::fromLastError(
-                "FILE OPEN ERROR: Could not open the database export file.\nPath: {$storePath}",
-                DupliException::CODE_DB_FILE_OPEN_FAILED,
-                __('Could not open the database export file.', 'duplicator')
-            );
-        }
-
-        if (!$dbInsertIterator->lastIsCompleteInsert()) {
-            $dbInsertIterator->setLastIsCompleteInsert(SnapIO::fwrite($handle, self::CLOSE_INSERT_QUERY));
-        }
-
-        $traceLogEnabled = DupLog::isTraceEnabled();
-
-        for (; $dbInsertIterator->valid(); $dbInsertIterator->next()) {
-            $table        = $dbInsertIterator->current();
-            $indexColumns = SnapDB::getUniqueIndexColumn($dbConn, $table);
-            if ($traceLogEnabled) {
-                $table_number = $dbInsertIterator->key() + 1;
-                DupLog::trace("------------ DB SCAN CHUNK LOOP ------------");
-                DupLog::trace("table: " . $table . " (" . $table_number . " of " . $dbInsertIterator->count() . ")");
-                DupLog::trace("worker_time: " . $elapsedTime . " Max worker time: " . self::PHP_DUMP_CHUNK_WORKER_TIME);
-                DupLog::trace("row_offset: " . $dbInsertIterator->getCurrentOffset() . " of " . $dbInsertIterator->getCurrentRows());
-                if ($indexColumns === false) {
-                    DupLog::trace("no key column found, use normal offset ");
-                } else {
-                    DupLog::trace("primary column for offset system: " . SnapLog::v2str($indexColumns));
-                }
-                DupLog::trace("last_index_offset: " . SnapLog::v2str($dbInsertIterator->getLastIndexOffset()));
-                DupLog::trace("query size limit: " . $global->getMysqldumpQueryLimit());
-            }
-
-            if ($dbInsertIterator->getCurrentRows() <= 0) {
-                continue;
-            }
-
-            $currentQuerySize = 0;
-            $firstInsert      = true;
-            $insertQueryLine  = true;
-
-            do {
-                $result = SnapDB::selectUsingPrimaryKeyAsOffset(
-                    $dbConn,
-                    'SELECT * FROM `' . $table . '` WHERE 1',
-                    $table,
-                    $dbInsertIterator->getLastIndexOffset(),
-                    Constants::PHP_DUMP_READ_PAGE_SIZE
-                );
-                if (($lastSelectNumRows = SnapDB::numRows($result)) > 0) {
-                    while (($row = SnapDB::fetchAssoc($result))) {
-                        if ($currentQuerySize >= $querySizeLimit) {
-                            $insertQueryLine = true;
-                        }
-
-                        if ($insertQueryLine) {
-                            $line             = ($firstInsert ? '' : self::CLOSE_INSERT_QUERY) . 'INSERT IGNORE INTO `' . $table . '` VALUES ' . "\n";
-                            $insertQueryLine  = $firstInsert      = false;
-                            $currentQuerySize = 0;
-                        } else {
-                            $line = ",\n";
-                        }
-                        $line    .= '(' . implode(',', array_map([WpDbUtils::class, 'escSqlAndQuote'], $row)) . ')';
-                        $lineSize = SnapIO::fwriteChunked($handle, $line);
-                        /* TEST INTERRUPTION START *** */
-                        /* mt_srand((double) microtime() * 1000000);
-                          if (mt_rand(1, 1000) > 997) {
-                          die();
-                          } */
-                        /* TEST INTERRUPTION END *** */
-
-                        $totalCount        = $dbInsertIterator->nextRow(
-                            SnapDB::getOffsetFromRowAssoc(
-                                $row,
-                                $indexColumns,
-                                $dbInsertIterator->getLastIndexOffset()
-                            ),
-                            $lineSize
-                        );
-                        $currentQuerySize += $lineSize;
-                        if ((microtime(true) - $lastProgressUpdate) >= AbstractPackage::PROGRESS_UPDATE_INTERVAL_SEC) {
-                            $this->Package->update();
-                            $lastProgressUpdate = microtime(true);
-                        }
-
-                        if (($elapsedTime = microtime(true) - $startTime) >= self::PHP_DUMP_CHUNK_WORKER_TIME) {
-                            break;
-                        }
-                    }
-
-                    if ($this->throttleDelayInUs > 0) {
-                        usleep($this->throttleDelayInUs * Constants::PHP_DUMP_READ_PAGE_SIZE);
-                    }
-
-                    if ($elapsedTime >= self::PHP_DUMP_CHUNK_WORKER_TIME) {
-                        break 2;
-                    }
-                } elseif ($insertQueryLine == false) {
-                    // if false exists a insert to close
-                    $dbInsertIterator->setLastIsCompleteInsert(SnapIO::fwrite($handle, self::CLOSE_INSERT_QUERY));
-                }
-
-                SnapDB::freeResult($result);
-            } while ($lastSelectNumRows > 0);
-        }
-
-        // make sure file is updated, wait 0.01 sec to prevent file corruption
-        usleep(10000);
-        $dbInsertIterator->addFileSize(0);
-        if (($dbBuildProgress->completed = !$dbInsertIterator->valid())) {
-            $this->writeSQLFooter($handle);
-        }
-        $this->Package->update();
-
-        SnapIO::fclose($handle);
-    }
-
-    /**
-     * Truncates the sql file to the expected size
-     *
-     * @param int $size The expected size
-     *
-     * @return boolean
-     */
-    private function truncateSqlFileOnExpectedSize(int $size): bool
-    {
-        clearstatcache();
-        $currentSize = filesize($this->getStorePath());
-        if ($currentSize === $size) {
-            return true;
-        }
-
-        DupLog::infoTrace("[CHUNK RECOVERY] DB SQL dump misaligned, trying to realign ({$currentSize} -> {$size} bytes)");
-
-        $storePath = $this->getStorePath();
-        $handle    = SnapIO::callWithPhpErrorCapture(fn () => fopen($storePath, 'r+'));
-        if ($handle === false) {
-            throw DupliException::fromLastError(
-                "FILE OPEN ERROR: Could not open the database export file.\nPath: {$storePath}",
-                DupliException::CODE_DB_FILE_OPEN_FAILED,
-                __('Could not open the database export file.', 'duplicator')
-            );
-        }
-
-        if (ftruncate($handle, $size)) {
-            DupLog::infoTrace("[CHUNK RECOVERY] DB SQL dump realigned, resuming export");
-        } else {
-            DupLog::infoTrace("[CHUNK RECOVERY] DB SQL FAILED, Could not truncate the sql file.");
-            throw new DupliException(
-                "FILE TRUNCATE ERROR: Could not truncate to file size " . $size,
-                DupliException::CODE_DB_FILE_TRUNCATE_FAILED,
-                __('Could not realign the database export file during chunk recovery.', 'duplicator')
-            );
-        }
-        SnapIO::fclose($handle);
-        return true;
-    }
-
-    /**
-     * Writes the footer of the SQL file
-     *
-     * @param resource $fileHandle The file handle
-     *
-     * @return void
-     */
-    private function writeSQLFooter($fileHandle): void
-    {
-        $sql_footer       = "\n/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;\n";
-        $sql_footer      .= "/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;\n";
-        $sql_footer      .= "/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;\n\n";
-        $sql_footer      .= "/* Duplicator WordPress Timestamp: " . date("Y-m-d H:i:s") . "*/\n";
-        $sql_footer      .= "/* " . DUPLICATOR_DB_EOF_MARKER . " */\n";
-        $dbInsertIterator = $this->getDbBuildIterator();
-        $dbInsertIterator->addFileSize(SnapIO::fwrite($fileHandle, $sql_footer));
-    }
-
-    /**
-     * Called when the build is complete
-     *
-     * @return void
-     */
-    private function doFinish(): void
-    {
-        DupLog::info("SQL CREATED: {$this->File}");
-        $time_end      = microtime(true);
-        $elapsed_time  = SnapString::formattedElapsedTime($time_end, $this->Package->db_build_progress->startTime);
-        $sql_file_size = filesize($this->getStorePath());
-        if ($sql_file_size <= 0) {
-            throw new DupliException(
-                "SQL file generated zero bytes at [{$this->getStorePath()}].",
-                DupliException::CODE_DB_EMPTY_FILE,
-                __('No data was written to the database export file. Check file and directory permissions.', 'duplicator')
-            );
-        }
-        DupLog::info("SQL FILE SIZE: " . SnapString::byteSize($sql_file_size));
-        DupLog::info("SQL FILE TIME: " . date("Y-m-d H:i:s"));
-        DupLog::info("SQL RUNTIME: {$elapsed_time}");
-        DupLog::info("MEMORY STACK: " . SnapServer::getPHPMemory());
-        $this->Size = (int) $sql_file_size;
-        $this->Package->setStatus(AbstractPackage::STATUS_DBDONE);
-        do_action('duplicator_build_database_completed', $this->Package);
-    }
-
-    /**
      * @param string $label    Short label for what was being written
      * @param string $filePath The file path that failed
      *
@@ -1914,10 +1651,99 @@ class DatabasePkg
     }
 
     /**
-     * Advance the gzip compression of the SQL dump by one chunk and finalize when complete
+     * Gzipped dump files of the Backup: the files of the map, or the single file of the mysqldump mode
      *
-     * Resumable: reads db_build_progress->compressedOffset, advances it via SnapGzip, and
-     * persists progress back. On completion unlinks the source .sql and sets db_build_progress->compressionDone.
+     * @return string[]
+     */
+    public function getCompressedDumpFiles(): array
+    {
+        return $this->isPerTableDump() ? $this->getDumpFileMap()->getCompressedFiles() : [$this->getCompressedStorePath()];
+    }
+
+    /**
+     * The dump engine of the build mode, created on first use
+     *
+     * @return AbstractDumpEngine
+     */
+    private function getEngine(): AbstractDumpEngine
+    {
+        if ($this->engine === null) {
+            $this->engine = $this->createEngine();
+        }
+
+        return $this->engine;
+    }
+
+    /**
+     * Create the dump engine of the PHP build modes
+     *
+     * The mysqldump mode never reaches this: it runs through build(), outside
+     * the engine phases.
+     *
+     * @return AbstractDumpEngine
+     *
+     * @throws DupliException if called for a build mode without a dump engine
+     */
+    protected function createEngine(): AbstractDumpEngine
+    {
+        /** @var wpdb $wpdb */
+        global $wpdb;
+        $global   = GlobalEntity::getInstance();
+        $progress = $this->Package->db_build_progress;
+        $mode     = $this->Package->requireBuildOptions()->getDbBuildMode();
+
+        if ($mode === WpDbUtils::BUILD_MODE_MYSQLDUMP) {
+            throw new DupliException(
+                'The mysqldump build mode has no dump engine.',
+                DupliException::CODE_ERROR,
+                __('The backup failed because of an invalid database export configuration.', 'duplicator')
+            );
+        }
+
+        $chunked    = ($mode === WpDbUtils::BUILD_MODE_PHP_MULTI_THREAD);
+        $checkpoint = new TableDumpCheckpoint($chunked ? $this->getStoreProgressFile() : null, $progress->trackChecksums);
+        $writer     = new TableDumpWriter(
+            $checkpoint,
+            $this->makeThrottledProgressCallback(),
+            WpDbUtils::getDbConn(),
+            $global->getMysqldumpQueryLimit(),
+            $this->throttleDelayInUs
+        );
+
+        return new PhpDumpEngine(
+            $wpdb,
+            $checkpoint,
+            $writer,
+            $chunked ? 'PHP MULTI-THREADED BUILD MODE' : 'PHP SINGLE-THREAD BUILD MODE'
+        );
+    }
+
+    /**
+     * A progress callback persisting the Backup at most once per update interval
+     *
+     * @return callable
+     */
+    private function makeThrottledProgressCallback(): callable
+    {
+        $lastUpdate = microtime(true);
+
+        return function () use (&$lastUpdate): void {
+            if ((microtime(true) - $lastUpdate) < AbstractPackage::PROGRESS_UPDATE_INTERVAL_SEC) {
+                return;
+            }
+
+            $this->Package->update();
+            $lastUpdate = microtime(true);
+        };
+    }
+
+    /**
+     * Advance the gzip compression of the dump by one chunk and finalize when complete
+     *
+     * Resumable: the dump files are gzipped one at a time, db_build_progress keeps the
+     * index of the file being compressed and the byte offset reached in it. Each source
+     * file is unlinked as soon as its gzipped copy is verified, so the gzipped copy of
+     * the whole dump is never held next to the uncompressed one.
      *
      * Designed to be invoked from a dedicated build step rather than from the DB build flow.
      *
@@ -1927,15 +1753,64 @@ class DatabasePkg
      *
      * @throws DupliException On any I/O or compression failure
      */
-    public function compressDump(int $timeout = self::PHP_DUMP_CHUNK_WORKER_TIME): void
+    public function compressDump(int $timeout = self::DUMP_CHUNK_WORKER_TIME): void
     {
         $progress = $this->Package->db_build_progress;
         if ($progress->compressionDone) {
             return;
         }
 
-        $sourcePath = $this->getStorePath();
-        $targetPath = $this->getCompressedStorePath();
+        if (!$this->isPerTableDump()) {
+            if ($this->compressDumpFile($this->getStorePath(), $this->getCompressedStorePath(), $timeout)) {
+                $progress->compressionDone = true;
+            }
+            return;
+        }
+
+        $map        = $this->getDumpFileMap();
+        $sources    = $map->getFiles();
+        $targets    = $map->getCompressedFiles();
+        $deadline   = $timeout < 0 ? INF : microtime(true) + $timeout;
+        $fileNumber = count($sources);
+
+        while ($progress->compressedFileIndex < $fileNumber) {
+            $index     = $progress->compressedFileIndex;
+            $remaining = $timeout < 0 ? -1 : (int) max(0, $deadline - microtime(true));
+            if (!$this->compressDumpFile($sources[$index], $targets[$index], $remaining)) {
+                return;
+            }
+
+            $progress->compressedFileIndex++;
+            $progress->compressedOffset = 0;
+            $progress->compressedSize   = 0;
+            if (microtime(true) >= $deadline) {
+                return;
+            }
+        }
+
+        $progress->compressionDone = true;
+    }
+
+    /**
+     * Advance the gzip compression of one dump file, unlinking the source once complete
+     *
+     * @param string $sourcePath dump file to compress
+     * @param string $targetPath gzipped copy to write
+     * @param int    $timeout    Soft deadline in seconds for the SnapGzip loop, -1 for no limit
+     *
+     * @return bool true when the file is fully compressed and its source removed
+     *
+     * @throws DupliException On any I/O or compression failure
+     */
+    private function compressDumpFile(string $sourcePath, string $targetPath, int $timeout): bool
+    {
+        $progress = $this->Package->db_build_progress;
+
+        if ($progress->compressedOffset > 0 && !self::realignCompressedDump($targetPath, $progress->compressedSize)) {
+            DupLog::infoTrace('SQL DUMP COMPRESSION: ' . basename($targetPath) . ' does not match the saved progress, restarting it');
+            $progress->compressedOffset = 0;
+            $progress->compressedSize   = 0;
+        }
 
         try {
             $progress->compressedOffset = SnapGzip::compressFile(
@@ -1952,14 +1827,14 @@ class DatabasePkg
                 $ex
             );
         }
+        // Saved together with the offset: both describe the end of the gzip member written by this call
+        $progress->compressedSize = SnapIO::filesize($targetPath, true);
 
         if ($progress->compressedOffset < filesize($sourcePath)) {
-            return;
+            return false;
         }
 
-        clearstatcache(true, $targetPath);
-        $targetSize = filesize($targetPath);
-        if ($targetSize === false || $targetSize <= 0) {
+        if ($progress->compressedSize <= 0) {
             throw new DupliException(
                 "Compressed SQL dump is empty: {$targetPath}",
                 DupliException::CODE_DB_COMPRESSION_FAILED,
@@ -1975,9 +1850,63 @@ class DatabasePkg
             );
         }
 
-        $progress->compressionDone = true;
-
         DupLog::info("SQL DUMP COMPRESSED: " . basename($targetPath));
-        DupLog::info("SQL DUMP COMPRESSED SIZE: " . $targetSize);
+        DupLog::info("SQL DUMP COMPRESSED SIZE: " . $progress->compressedSize);
+        return true;
+    }
+
+    /**
+     * Bring the gzipped file back to the size saved with the compression offset
+     *
+     * A worker that dies after writing to the gzipped file but before the progress is saved leaves
+     * bytes past the saved boundary: they are truncated so the chunk is compressed again cleanly.
+     *
+     * @param string $targetPath   Gzipped file path
+     * @param int    $expectedSize Size saved together with the compression offset
+     *
+     * @return bool false when the file is missing or shorter than the saved size, or no size was saved,
+     *              so the saved offset can't be trusted and the file must be compressed from the beginning
+     *
+     * @throws DupliException When the truncation fails
+     */
+    private static function realignCompressedDump(string $targetPath, int $expectedSize): bool
+    {
+        if ($expectedSize <= 0 || !is_file($targetPath)) {
+            return false;
+        }
+
+        $handle = SnapIO::callWithPhpErrorCapture(static fn() => fopen($targetPath, 'r+b'));
+        try {
+            if ($handle === false) {
+                throw DupliException::fromLastError(
+                    "Can't open the compressed SQL dump to resume it: {$targetPath}",
+                    DupliException::CODE_DB_COMPRESSION_FAILED,
+                    __('The backup failed while resuming the database export compression. Check the backup log for details.', 'duplicator')
+                );
+            }
+
+            // Measured on the open handle: on a network filesystem the open refreshes the size another node may have changed
+            $stat = fstat($handle);
+            if ($stat === false || $stat['size'] < $expectedSize) {
+                return false;
+            }
+            if ($stat['size'] === $expectedSize) {
+                return true;
+            }
+
+            if (!SnapIO::callWithPhpErrorCapture(static fn(): bool => ftruncate($handle, $expectedSize))) {
+                throw DupliException::fromLastError(
+                    "Can't truncate the compressed SQL dump to the saved progress: {$targetPath}",
+                    DupliException::CODE_DB_COMPRESSION_FAILED,
+                    __('The backup failed while resuming the database export compression. Check the backup log for details.', 'duplicator')
+                );
+            }
+            DupLog::infoTrace('SQL DUMP COMPRESSION: realigned ' . basename($targetPath) . " ({$stat['size']} -> {$expectedSize} bytes)");
+            return true;
+        } finally {
+            if (is_resource($handle)) {
+                fclose($handle);
+            }
+        }
     }
 }

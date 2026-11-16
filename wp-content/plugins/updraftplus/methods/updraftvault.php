@@ -342,6 +342,20 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 		}
 
 		$config['server_side_encryption'] = 'AES256';
+
+		static $is_checking_folder = false;
+
+		if (isset($opts['last_config']['checked_path'])) {
+			$config['path'] = $opts['last_config']['checked_path'];
+		} elseif (!$is_checking_folder) {
+			$is_checking_folder = true;
+			$path = $this->check_folder($config);
+			if (!is_wp_error($path) && !empty($path)) {
+				$config['path'] = $opts['last_config']['checked_path'] = $path;
+				$this->set_options($opts, true);
+			}
+		}
+
 		$this->vault_config = $config;
 		if ($cache_in_job) $this->jobdata_set('config', $config);
 		// N.B. This isn't multi-server compatible
@@ -1407,5 +1421,82 @@ class UpdraftPlus_BackupModule_updraftvault extends UpdraftPlus_BackupModule_s3 
 			),
 			'plans' => $plans,
 		);
+	}
+
+	/**
+	 * Checks existence of UpdraftVault folder and update the path if necessary.
+	 *
+	 * This method verifies that the configured S3 bucket exists and that the
+	 * subdirectory derived from the site hostname is accessible. If the exact
+	 * hostname-based directory does not exist, it attempts to resolve common
+	 * variations by toggling the presence of the `www.` prefix (e.g. `example.com`
+	 * to `www.example.com`).
+	 *
+	 * If a matching directory is found, the method returns an updated path using
+	 * the resolved hostname variant. If neither variant exists, the original
+	 * configured path is returned unchanged (e.g. first-time Vault usage).
+	 *
+	 * This logic exists to handle site migrations or configuration changes where
+	 * the hostname may differ from the directory already created in the bucket.
+	 *
+	 * @param  Array $config Config to check
+	 *
+	 * @return string|WP_Error Updated folder path or WP_Error on failure.
+	 */
+	private function check_folder($config) {
+		$storage = $this->getS3(
+			$config['accesskey'],
+			$config['secretkey'],
+			UpdraftPlus_Options::get_updraft_option('updraft_ssl_useservercerts'),
+			UpdraftPlus_Options::get_updraft_option('updraft_ssl_disableverify'),
+			UpdraftPlus_Options::get_updraft_option('updraft_ssl_nossl'),
+			null,
+			$config['server_side_encryption'],
+			$config['sessiontoken']
+		);
+
+		if (is_wp_error($storage)) return $storage;
+		
+		$bucket_name = untrailingslashit($config['path']);
+		$bucket_path = '';
+
+		if (preg_match("#^([^/]+)/(.*)$#", $bucket_name, $bmatches)) {
+			$bucket_name = $bmatches[1];
+			$bucket_path = $bmatches[2]."/";
+		}
+
+		list($storage, $config, $bucket_exists) = $this->get_bucket_access($storage, $config, $bucket_name, $bucket_path);
+
+		// return the config since this method act as a filter
+		if (!$bucket_exists) {
+			global $updraftplus;
+			$msg_log = "Couldn't access $bucket_name bucket";
+			$updraftplus->log_wp_error($msg_log, false, true);
+			return new WP_Error('bucket_not_exist', $msg_log);
+		}
+
+		$check_folder = $storage->getBucket($bucket_name, $bucket_path);
+
+		if (!empty($check_folder)) {
+			// the directory name which is considered as the hostname (with or without www) in the config['path'] already exists
+			return $config['path'];
+		}
+
+		// the hostname in the $config['path'] doesn't seem to already exist, we should check the hostname if it doesn't contain www then we add the www, but if it contains www then we remove it
+		if (preg_match('#/www\.([^/]+)/$#i', $bucket_path)) {
+			$bucket_path = preg_replace('#/www\.([^/]+)/$#i', '/$1/', $bucket_path);
+		} else {
+			$bucket_path = preg_replace('#/([^/]+)/$#', '/www.$1/', $bucket_path);
+		}
+
+		$check_folder = $storage->getBucket($bucket_name, $bucket_path);
+
+		if (!empty($check_folder)) {
+			// we found one that is either with www or without www, so we stick with the one we found
+			return untrailingslashit($bucket_name.'/'.$bucket_path);
+		}
+
+		// possibly a new Vault user and it's the first time (no directory labeled with the hostname with or without www has been created so far)
+		return $config['path'];
 	}
 }

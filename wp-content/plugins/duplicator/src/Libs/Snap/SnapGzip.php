@@ -47,7 +47,7 @@ final class SnapGzip
      * @return int New source offset — caller compares against filesize($sourcePath)
      *             to detect completion
      *
-     * @throws Exception On I/O or gzip failure
+     * @throws Exception On I/O or gzip failure, a SnapException marked as disk full when a write fails for space or quota
      */
     public static function compressFile(
         string $sourcePath,
@@ -58,6 +58,8 @@ final class SnapGzip
     ): int {
         self::assertNonNegative($offset, 'offset');
 
+        // The source can grow within the request that compresses it, so its size must not come from the stat cache
+        clearstatcache(true, $sourcePath);
         if (!is_file($sourcePath)) {
             throw new Exception("Source file does not exist: {$sourcePath}");
         }
@@ -73,48 +75,50 @@ final class SnapGzip
             return $offset;
         }
 
-        $source = @fopen($sourcePath, 'rb');
-        if ($source === false) {
-            throw new Exception("Can't open source for compression: {$sourcePath}");
-        }
-
-        if ($offset > 0 && fseek($source, $offset) !== 0) {
-            fclose($source);
-            throw new Exception("Can't seek source to offset {$offset}: {$sourcePath}");
-        }
-
-        $level  = self::clampLevel($compressionLevel);
-        $mode   = ($offset === 0 ? 'wb' : 'ab') . $level;
-        $target = @gzopen($targetPath, $mode);
-        if ($target === false) {
-            fclose($source);
-            throw new Exception("Can't open gzip target: {$targetPath}");
-        }
-
+        $source    = null;
+        $target    = null;
         $deadline  = $timeout < 0 ? INF : microtime(true) + $timeout;
         $processed = 0;
         try {
-            while (!feof($source) && ($processed === 0 || microtime(true) < $deadline)) {
+            $source = @fopen($sourcePath, 'rb');
+            if ($source === false) {
+                throw new Exception("Can't open source for compression: {$sourcePath}");
+            }
+            if ($offset > 0 && fseek($source, $offset) !== 0) {
+                throw new Exception("Can't seek source to offset {$offset}: {$sourcePath}");
+            }
+
+            // Plain file writes instead of a gzopen() stream, which drops the failure reason of a write
+            $target = @fopen($targetPath, $offset === 0 ? 'wb' : 'ab');
+            if ($target === false) {
+                throw new Exception("Can't open gzip target: {$targetPath}");
+            }
+            $deflate = deflate_init(ZLIB_ENCODING_GZIP, ['level' => self::clampLevel($compressionLevel)]);
+            if ($deflate === false) {
+                throw new Exception("Can't initialize gzip compression for {$targetPath}");
+            }
+
+            do {
                 $data = fread($source, self::READ_BUFFER_SIZE);
                 if ($data === false) {
                     throw new Exception("Read error while compressing {$sourcePath} at offset " . ($offset + $processed));
                 }
-                if ($data === '') {
-                    break;
+                // Each call closes its own gzip member, so a resumed call appends a new one
+                $isLast     = feof($source) || microtime(true) >= $deadline;
+                $compressed = deflate_add($deflate, $data, $isLast ? ZLIB_FINISH : ZLIB_NO_FLUSH);
+                if ($compressed === false) {
+                    throw new Exception("Gzip error while compressing {$sourcePath} at offset " . ($offset + $processed));
                 }
-                // A failed write (for example a full disk) returns fewer bytes, not false
-                if (gzwrite($target, $data) !== strlen($data)) {
-                    throw new Exception("Write error while compressing to {$targetPath} at offset " . ($offset + $processed));
-                }
+                SnapIO::fwrite($target, $compressed, "Write error while compressing to {$targetPath} at offset " . ($offset + $processed));
                 $processed += strlen($data);
-            }
-            // gzclose() reports success even when writing the buffered data fails
-            if (!fflush($target)) {
-                throw new Exception("Write error while compressing to {$targetPath} at offset " . ($offset + $processed));
-            }
+            } while (!$isLast);
         } finally {
-            fclose($source);
-            gzclose($target);
+            if (is_resource($source)) {
+                fclose($source);
+            }
+            if (is_resource($target)) {
+                fclose($target);
+            }
         }
 
         return $offset + $processed;

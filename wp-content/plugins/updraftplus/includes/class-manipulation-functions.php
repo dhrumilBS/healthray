@@ -59,7 +59,7 @@ class UpdraftPlus_Manipulation_Functions {
 	 */
 	public static function wp_unslash($value, $force_unslash = true) {
 		if (!$force_unslash && (!did_action('plugins_loaded') || !isset($GLOBALS['wp_the_query']))) return $value;
-		return function_exists('wp_unslash') ? wp_unslash($value) : stripslashes_deep($value);
+		return function_exists('wp_unslash') ? wp_unslash($value) : stripslashes_deep($value);// phpcs:ignore wp_function_not_compatible_with_requires_wp -- False positive: we've already checked whether the 'wp_unslash()' function exists using 'function_exists()' before calling it.
 	}
 
 	/**
@@ -442,7 +442,7 @@ class UpdraftPlus_Manipulation_Functions {
 	 */
 	public static function wp_normalize_path($path) {
 		// wp_normalize_path is not present before WP 3.9
-		if (function_exists('wp_normalize_path')) return wp_normalize_path($path);
+		if (function_exists('wp_normalize_path')) return wp_normalize_path($path);// phpcs:ignore wp_function_not_compatible_with_requires_wp -- False positive: we've already checked whether the 'wp_normalize_path()' function exists using 'function_exists()' before calling it.
 		// Taken from WP 4.6
 		$path = str_replace('\\', '/', $path);
 		$path = preg_replace('|(?<=.)/+|', '/', $path);

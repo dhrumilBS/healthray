@@ -13,7 +13,6 @@ use Duplicator\Package\DupPackage;
 use Duplicator\Utils\Lock\LockUtil;
 use Duplicator\Utils\Logging\DupLog;
 use Duplicator\Libs\Snap\SnapString;
-use Exception;
 use Throwable;
 
 /**
@@ -129,6 +128,12 @@ class LogEventBackupCreate extends AbstractLogEvent
         $this->data['storageNames']      = $this->getStorageNames($package);
         $this->data['clientSideKickoff'] = $package->isClientSideKickoff();
 
+        $requester = $this->getRequesterName($package);
+        if ($requester !== null) {
+            $this->data['execSource'] = $requester;
+            $this->data['execReason'] = $package->getExecutionReason();
+        }
+
         // Real process-lock state of the current worker: which engines hold the
         // lock and which failed to acquire (users must see acquisition problems)
         $lockInfo                    = LockUtil::getProcessLockInfo();
@@ -189,6 +194,22 @@ class LogEventBackupCreate extends AbstractLogEvent
     }
 
     /**
+     * Name of the plugin that requested the Backup, null when it wasn't requested through the API
+     *
+     * @param AbstractPackage $package Package
+     *
+     * @return ?string
+     */
+    private function getRequesterName(AbstractPackage $package): ?string
+    {
+        if ($package->getExecutionType() !== AbstractPackage::EXECUTION_TYPE_API) {
+            return null;
+        }
+
+        return $package->getExecutionSource();
+    }
+
+    /**
      * Set properties based on package status
      *
      * @param AbstractPackage $package   Package
@@ -199,7 +220,7 @@ class LogEventBackupCreate extends AbstractLogEvent
     private function setStatusBasedProperties(AbstractPackage $package, ?Throwable $exception = null): void
     {
         $status    = $package->getStatus();
-        $titleBase = PackageUtils::getTypeString($package) . ': ' . $package->getName();
+        $titleBase = ($this->getRequesterName($package) ?? PackageUtils::getTypeString($package)) . ': ' . $package->getName();
 
         if ($status == AbstractPackage::STATUS_BUILD_CANCELLED) {
             $this->subType  = self::SUB_TYPE_CANCELLED;
@@ -279,55 +300,6 @@ class LogEventBackupCreate extends AbstractLogEvent
     public function updateTimingData(array $stateTimes): void
     {
         $this->data['stateTimes'] = $stateTimes;
-    }
-
-    /**
-     * Get child logs by parent ID
-     *
-     * This method retrieves child activity logs for a given parent log ID without
-     * applying capability filtering. It should ONLY be used internally.
-     *
-     * Use `getList()` for user-facing queries and admin interface display.
-     *
-     * Why this exists:
-     * During package execution (background/cron context), there's no authenticated user,
-     * so capability filtering in getList() returns empty results even though child logs
-     * exist. This method bypasses capability checks for legitimate internal operations.
-     *
-     * @param int    $parentId Parent log ID
-     * @param string $order    Sort order: 'ASC' or 'DESC' (default: 'ASC')
-     * @param int    $limit    Maximum number of logs to return (default: 100)
-     *
-     * @return self[] Array of child log instances
-     */
-    public static function getChildLogsByParentId(int $parentId, string $order = 'ASC', int $limit = 100): array
-    {
-        global $wpdb;
-
-        $table = self::getTableName(true);
-        $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
-
-        $sql     = "SELECT * FROM `{$table}` WHERE parent_id = %d AND type = %s ORDER BY created_at {$order}, id {$order} LIMIT %d";
-        $results = $wpdb->get_results($wpdb->prepare($sql, $parentId, self::getType(), $limit), ARRAY_A);
-
-        if (!is_array($results)) {
-            return [];
-        }
-
-        $logs = [];
-        foreach ($results as $row) {
-            try {
-                $log = self::getModelFromRow($row);
-                if ($log instanceof self) {
-                    $logs[] = $log;
-                }
-            } catch (Exception $e) {
-                DupLog::traceException($e, "Child log query error");
-                continue;
-            }
-        }
-
-        return $logs;
     }
 
     /**
@@ -682,6 +654,22 @@ class LogEventBackupCreate extends AbstractLogEvent
                     <?php echo esc_html($this->data['execType'] ?? ''); ?>
                 </span>
             </div>
+            <?php if (!empty($this->data['execSource'])) : ?>
+            <div class="dup-log-type-wrapper">
+                <strong><?php esc_html_e('Requested by:', 'duplicator'); ?></strong>
+                <span class="dup-log-type">
+                    <?php echo esc_html($this->data['execSource']); ?>
+                </span>
+            </div>
+            <?php endif; ?>
+            <?php if (!empty($this->data['execReason'])) : ?>
+            <div class="dup-log-type-wrapper">
+                <strong><?php esc_html_e('Request Reason:', 'duplicator'); ?></strong>
+                <span class="dup-log-type">
+                    <?php echo esc_html($this->data['execReason']); ?>
+                </span>
+            </div>
+            <?php endif; ?>
             <?php if ($failureReason !== '') : ?>
             <div class="dup-log-type-wrapper">
                 <strong><?php esc_html_e('Failure Message:', 'duplicator'); ?></strong>
@@ -974,51 +962,6 @@ class LogEventBackupCreate extends AbstractLogEvent
         ?>
         </div>
         <?php
-    }
-
-    /**
-     * Fetch captured error-data keys from this event, or from the first error child if this is a parent row.
-     *
-     * @param string ...$keys Data keys (e.g. 'backupLogContext', 'quickFixes')
-     *
-     * @return array<string, array<mixed>> Keyed by the requested key; missing keys return [].
-     */
-    private function getErrorDataForDisplay(string ...$keys): array
-    {
-        $result = array_fill_keys($keys, []);
-
-        if ($this->subType === self::SUB_TYPE_ERROR) {
-            foreach ($keys as $key) {
-                if (!empty($this->data[$key])) {
-                    $result[$key] = (array) $this->data[$key];
-                }
-            }
-            return $result;
-        }
-
-        if ($this->parentId === 0 && $this->severity === self::SEVERITY_ERROR) {
-            $childEvents = self::getList([
-                'parent_id' => $this->getId(),
-                'order'     => 'DESC',
-                'orderby'   => 'created_at',
-            ]);
-
-            foreach ($childEvents as $childEvent) {
-                if ($childEvent->subType !== self::SUB_TYPE_ERROR) {
-                    continue;
-                }
-                foreach ($keys as $key) {
-                    if (empty($result[$key]) && !empty($childEvent->data[$key])) {
-                        $result[$key] = (array) $childEvent->data[$key];
-                    }
-                }
-                if (!in_array([], $result, true)) {
-                    break;
-                }
-            }
-        }
-
-        return $result;
     }
 
     /**

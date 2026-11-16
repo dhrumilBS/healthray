@@ -6,6 +6,7 @@ namespace Duplicator\Models\ActivityLog;
 
 use Duplicator\Controllers\ToolsPageController;
 use Duplicator\Core\Views\TplMng;
+use Duplicator\Libs\WpUtils\WpArchiveUtils;
 use Duplicator\Models\Fix;
 use Duplicator\Models\FixesEntity;
 use Duplicator\Package\AbstractPackage;
@@ -99,6 +100,97 @@ trait TraitLogEventErrorContext
         }
 
         return $normalized;
+    }
+
+    /**
+     * Failure reason and fixes captured on this error event, or on the error children of an error parent row, as plain text with relative paths.
+     *
+     * @return array{reason:string,fixes:list<array{error:string,troubleshooting:string[],code_snippet:string}>}
+     */
+    public function getFailureDetails(): array
+    {
+        $errorData = $this->getErrorDataForDisplay('quickFixes', 'failureReason');
+
+        $fixes = [];
+        foreach ($errorData['quickFixes'] as $fix) {
+            $fix     = self::readLegacyQuickFix((array) $fix);
+            $fixes[] = [
+                'error'           => self::htmlToPlainText($fix['errorText']),
+                'troubleshooting' => array_map([self::class, 'htmlToPlainText'], $fix['troubleshooting']),
+                'code_snippet'    => $fix['codeSnippet'],
+            ];
+        }
+
+        return [
+            'reason' => self::toPlainText(implode(' ', $errorData['failureReason'])),
+            'fixes'  => $fixes,
+        ];
+    }
+
+    /**
+     * Fix text is stored as HTML, some of it with escaped names.
+     *
+     * @param string $html Stored text
+     *
+     * @return string
+     */
+    private static function htmlToPlainText(string $html): string
+    {
+        return self::toPlainText(html_entity_decode(wp_strip_all_tags($html), ENT_QUOTES, 'UTF-8'));
+    }
+
+    /**
+     * Text with the site's base paths made relative and its whitespace collapsed.
+     *
+     * @param string $text Text
+     *
+     * @return string
+     */
+    private static function toPlainText(string $text): string
+    {
+        // Source strings wrap across indented lines, which HTML collapses and plain text does not.
+        return trim((string) preg_replace('/\s+/u', ' ', WpArchiveUtils::stripOriginalBasePaths($text)));
+    }
+
+    /**
+     * Fetch captured error-data keys from this event, or per key from the newest error children of an error parent row.
+     *
+     * @param string ...$keys Data keys (e.g. 'backupLogContext', 'quickFixes')
+     *
+     * @return array<string, array<mixed>> Keyed by the requested key; missing keys return [].
+     */
+    private function getErrorDataForDisplay(string ...$keys): array
+    {
+        $result = array_fill_keys($keys, []);
+
+        if ($this->subType === self::SUB_TYPE_ERROR) {
+            foreach ($keys as $key) {
+                if (!empty($this->data[$key])) {
+                    $result[$key] = (array) $this->data[$key];
+                }
+            }
+            return $result;
+        }
+
+        if ($this->parentId === 0 && $this->severity === self::SEVERITY_ERROR) {
+            $childEvents = self::getChildLogsByParentId($this->getId(), 'DESC');
+
+            foreach ($childEvents as $childEvent) {
+                if ($childEvent->subType !== self::SUB_TYPE_ERROR) {
+                    continue;
+                }
+                foreach ($keys as $key) {
+                    if (empty($result[$key]) && !empty($childEvent->data[$key])) {
+                        $result[$key] = (array) $childEvent->data[$key];
+                    }
+                }
+                if (!in_array([], $result, true)) {
+                    break;
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**

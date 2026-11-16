@@ -1,0 +1,368 @@
+$dupli-inc-danger: get-color('red');
+
+$dupli-inc-control-height: 30px;
+
+$dupli-inc-gap: rem-calc(20);
+$dupli-inc-card-padding: rem-calc(20);
+$dupli-inc-side-col: 340px;
+
+.dupli-inc-page {
+    padding: rem-calc(16) 0 rem-calc(40);
+}
+
+.dupli-inc-card {
+    background: $white;
+    border: 1px solid $light-gray;
+    border-radius: $global-radius;
+}
+
+.dupli-inc-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: rem-calc(12) $dupli-inc-gap;
+    flex-wrap: wrap;
+    padding: rem-calc(14) $dupli-inc-card-padding;
+    border-bottom: 1px solid $light-gray;
+
+    &.dupli-inc-card-head-stacked {
+        display: block;
+    }
+}
+
+.dupli-inc-card-title-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: rem-calc(10);
+    flex-wrap: wrap;
+}
+
+.dupli-inc-card-title {
+    font-size: rem-calc(18);
+    font-weight: 600;
+    color: $black;
+    margin: 0;
+}
+
+.dupli-inc-card-section {
+    padding: $dupli-inc-card-padding;
+    border-bottom: 1px solid $light-gray;
+
+    &:last-child {
+        border-bottom: 0 none;
+    }
+}
+
+.dupli-inc-hr {
+    height: 1px;
+    border: 0 none;
+    background: $light-gray;
+    margin: rem-calc(14) 0;
+}
+
+.dupli-inc-head-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: rem-calc(14);
+    flex-wrap: wrap;
+}
+
+.dupli-inc-status-pill {
+    display: inline-block;
+    font-size: $xsmall-font-size;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: rem-calc(3) rem-calc(10);
+
+    &.dupli-inc-status-pill-active {
+        color: scale-color($success-color, $lightness: -35%);
+        background: scale-color($success-color, $lightness: 88%);
+    }
+}
+
+.dupli-inc-dashboard-link {
+    display: inline-flex;
+    align-items: center;
+    gap: rem-calc(5);
+    font-size: $small-font-size;
+
+    i {
+        font-size: $xsmall-font-size;
+    }
+}
+
+.dupli-inc-connected {
+    display: inline-flex;
+    align-items: center;
+    gap: rem-calc(7);
+    font-size: $small-font-size;
+    color: $body-font-color;
+}
+
+.dupli-inc-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $success-color;
+    display: inline-block;
+    flex: none;
+}
+
+.dupli-inc-divider {
+    width: 1px;
+    height: rem-calc(20);
+    background: $light-gray;
+}
+
+.dupli-inc-meter {
+    height: 8px;
+    border-radius: 999px;
+    background: $light-gray;
+    overflow: hidden;
+
+    &.dupli-inc-meter-thin {
+        height: 6px;
+        margin-top: rem-calc(8);
+    }
+}
+
+.dupli-inc-meter-fill {
+    display: block;
+    height: 100%;
+    width: 0;
+
+    &.dupli-inc-meter-fill-success {
+        background: $success-color;
+    }
+
+    &.dupli-inc-meter-sixth {
+        width: 17%;
+    }
+}
+
+.dupli-inc-btn-danger {
+    color: $dupli-inc-danger;
+    border-color: $dupli-inc-danger;
+}
+
+.dupli-inc-grid {
+    display: grid;
+    gap: $dupli-inc-gap;
+    align-items: stretch;
+    grid-template-columns: minmax(0, 1fr);
+
+    @include breakpoint(large) {
+        grid-template-columns: minmax(0, 1fr) $dupli-inc-side-col;
+    }
+}
+
+.dupli-inc-stats {
+    display: grid;
+    gap: 1px;
+    background: $light-gray;
+    border-bottom: 1px solid $light-gray;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    @include breakpoint(medium) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.dupli-inc-stat {
+    background: $white;
+    padding: rem-calc(16) $dupli-inc-card-padding;
+}
+
+.dupli-inc-stat-label {
+    font-size: rem-calc(12);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: $dark-gray;
+}
+
+.dupli-inc-stat-value {
+    font-size: rem-calc(20);
+    font-weight: 600;
+    color: $black;
+    margin-top: rem-calc(4);
+    line-height: 1.25;
+}
+
+.dupli-inc-stat-sub {
+    font-size: $small-font-size;
+    font-weight: normal;
+    color: $dark-gray;
+}
+
+.dupli-inc-schedule-form {
+    margin: 0;
+}
+
+.dupli-inc-schedule-row {
+    display: flex;
+    align-items: center;
+    gap: rem-calc(14);
+    flex-wrap: wrap;
+}
+
+.dupli-inc-schedule-text {
+    font-size: rem-calc(15);
+    color: $black;
+    display: flex;
+    align-items: center;
+    gap: rem-calc(8);
+    flex-wrap: wrap;
+    flex: 1 1 auto;
+    min-width: 0;
+
+    label {
+        margin: 0;
+        font-size: inherit;
+        color: inherit;
+    }
+}
+
+.dupli-inc-hours-select {
+    width: auto;
+    min-width: rem-calc(72);
+    height: $dupli-inc-control-height;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.dupli-inc-max-backups-input {
+    width: rem-calc(72);
+    height: $dupli-inc-control-height;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.dupli-inc-schedule-activate {
+    flex: none;
+    margin-left: auto;
+}
+
+.dupli-inc-schedule-meta {
+    display: flex;
+    gap: rem-calc(18);
+    flex-wrap: wrap;
+    margin-top: rem-calc(12);
+    font-size: $small-font-size;
+    color: $dark-gray;
+
+    strong {
+        color: $body-font-color;
+    }
+}
+
+.dupli-inc-snapshots-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem-calc(12) $dupli-inc-gap;
+    flex-wrap: wrap;
+    margin-bottom: rem-calc(10);
+}
+
+.dupli-inc-snapshots-actions {
+    display: flex;
+    gap: rem-calc(10);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.dupli-inc-snapshot-filter {
+    display: flex;
+    gap: rem-calc(6);
+    align-items: center;
+}
+
+.dupli-inc-changes {
+    display: flex;
+    flex-direction: column;
+
+    .dupli-inc-card-section {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.dupli-inc-changes-title {
+    font-size: rem-calc(15);
+    font-weight: 600;
+    color: $black;
+}
+
+.dupli-inc-changes-checked {
+    font-size: rem-calc(12);
+    color: $dark-gray;
+    margin-top: rem-calc(2);
+}
+
+.dupli-inc-changes-rows {
+    display: grid;
+    gap: rem-calc(14);
+    flex: 1 1 auto;
+    align-content: center;
+}
+
+.dupli-inc-changes-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: rem-calc(10);
+}
+
+.dupli-inc-changes-key {
+    font-size: $small-font-size;
+    color: $body-font-color;
+}
+
+.dupli-inc-changes-val {
+    font-size: rem-calc(14);
+    font-weight: 600;
+    color: $black;
+    text-align: right;
+}
+
+.dupli-inc-changes-actions {
+    display: flex;
+    gap: rem-calc(10);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.dupli-inc-snapshots-table {
+    .dup-check-column {
+        width: 10px;
+    }
+
+    .dup-download-column {
+        width: 75px;
+    }
+
+    .dup-restore-column {
+        width: 25px;
+    }
+
+    .dup-size-column {
+        width: 135px;
+    }
+
+    .dupli-inc-local-column {
+        width: 120px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    th.dup-size-column {
+        white-space: nowrap;
+    }
+
+    .dup-cell-btns .full-cell-button {
+        width: 100%;
+    }
+}

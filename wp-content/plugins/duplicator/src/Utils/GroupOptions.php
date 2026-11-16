@@ -2,6 +2,7 @@
 
 namespace Duplicator\Utils;
 
+use Duplicator\Libs\Snap\SnapUtil;
 use ReflectionClass;
 
 class GroupOptions
@@ -194,9 +195,7 @@ class GroupOptions
             if (!isset($data[$prop->getName()])) {
                 continue;
             }
-            if (PHP_VERSION_ID < 80100) {
-                $prop->setAccessible(true);
-            }
+            SnapUtil::setAccessible($prop);
             $prop->setValue($obj, $data[$prop->getName()]);
         }
         return $obj;

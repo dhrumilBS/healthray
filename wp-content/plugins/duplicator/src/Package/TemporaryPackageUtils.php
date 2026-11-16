@@ -12,6 +12,7 @@ use InvalidArgumentException;
 use ReflectionClass;
 use RuntimeException;
 use ReflectionObject;
+use Duplicator\Libs\Snap\SnapUtil;
 
 class TemporaryPackageUtils
 {
@@ -26,9 +27,7 @@ class TemporaryPackageUtils
     {
         $reflect       = new ReflectionObject($package);
         $flagsProperty = $reflect->getProperty('flags');
-        if (PHP_VERSION_ID < 80100) {
-            $flagsProperty->setAccessible(true);
-        }
+        SnapUtil::setAccessible($flagsProperty);
         $flags = $flagsProperty->getValue($package);
         if (!in_array(AbstractPackage::FLAG_TEMPORARY, $flags)) {
             $flags[] = AbstractPackage::FLAG_TEMPORARY;
@@ -47,9 +46,7 @@ class TemporaryPackageUtils
     {
         $reflect       = new ReflectionObject($package);
         $flagsProperty = $reflect->getProperty('flags');
-        if (PHP_VERSION_ID < 80100) {
-            $flagsProperty->setAccessible(true);
-        }
+        SnapUtil::setAccessible($flagsProperty);
         $flags = $flagsProperty->getValue($package);
         $flags = array_values(array_diff($flags, [AbstractPackage::FLAG_TEMPORARY]));
         $flagsProperty->setValue($package, $flags);
@@ -188,9 +185,7 @@ class TemporaryPackageUtils
         // Set ID using reflection
         $reflection = new ReflectionClass($package);
         $idProperty = $reflection->getProperty('ID');
-        if (PHP_VERSION_ID < 80100) {
-            $idProperty->setAccessible(true);
-        }
+        SnapUtil::setAccessible($idProperty);
         $idProperty->setValue($package, -1);
 
         // The clone inherits the scan-time timer: restart it so the time spent

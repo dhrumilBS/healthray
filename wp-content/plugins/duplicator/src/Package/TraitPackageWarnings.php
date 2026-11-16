@@ -143,15 +143,16 @@ trait TraitPackageWarnings
     }
 
     /**
-     * Generate the descriptive display list of the build warnings:
-     * one row per warning with the code label and the stored message.
+     * Generate the descriptive list of the build warnings: one row per warning
+     * with its code, the code label and the stored message.
      *
-     * @return array<int, array{label: string, message: string}>
+     * @return array<int, array{code: int, label: string, message: string}>
      */
     public function getBuildWarningsDisplayList(): array
     {
         return array_map(
             fn(array $entry): array => [
+                'code'    => $entry['code'],
                 'label'   => self::getWarningLabel($entry['code']),
                 'message' => $entry['message'],
             ],

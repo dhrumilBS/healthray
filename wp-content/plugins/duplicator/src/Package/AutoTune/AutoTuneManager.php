@@ -723,12 +723,20 @@ final class AutoTuneManager
             if (TelemetryEvents::resolveFailurePhase($status) === 'cancelled') {
                 $session->recordAttemptCancellation($attempt->getPackageId());
             } else {
+                // The requirements gate sets its status without firing the build-fail hook.
+                $message = $status === AbstractPackage::STATUS_REQUIREMENTS_FAILED
+                    ? __(
+                        'The test Backup could not start because the configuration does not meet the build requirements.
+                        Check the Backup log for the failed requirements.',
+                        'duplicator'
+                    )
+                    : __('The test Backup failed without reporting the cause.', 'duplicator');
                 $session->recordAttemptFailure(
                     $attempt->getPackageId(),
                     DupliException::CODE_ERROR,
                     DupliException::SEVERITY_ERROR,
                     $status,
-                    __('The test Backup failed without reporting the cause.', 'duplicator')
+                    $message
                 );
             }
         }

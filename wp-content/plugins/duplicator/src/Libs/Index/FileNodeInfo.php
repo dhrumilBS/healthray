@@ -103,6 +103,16 @@ class FileNodeInfo extends AbstractBinaryEncodable
     }
 
     /**
+     * Whether the node carries a hash, without computing one
+     *
+     * @return bool
+     */
+    public function hasHash(): bool
+    {
+        return $this->hash !== '';
+    }
+
+    /**
      * Get hash
      *
      * @return string

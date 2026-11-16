@@ -3,6 +3,7 @@
 namespace Duplicator\Core\Models;
 
 use Duplicator\Libs\Snap\SnapLog;
+use Duplicator\Libs\Snap\SnapUtil;
 use Exception;
 use ReflectionClass;
 use Throwable;
@@ -10,6 +11,8 @@ use wpdb;
 
 /**
  * Trait for generic model singleton
+ *
+ * @phpstan-require-extends AbstractGenericModel
  */
 trait TraitGenericModelSingleton
 {
@@ -33,22 +36,29 @@ trait TraitGenericModelSingleton
         $prevSuppress = $wpdb->suppress_errors(true);
         ob_start();
         try {
-            $items = static::getItemsFromDatabase();
-            if ($items === false) {
-                throw new Exception('Failed to load items for ' . $class);
-            }
-            if (empty($items)) {
-                self::$instances[$class] = new static(); // @phpstan-ignore-line Unsafe usage of new static() is false positive
-                self::$instances[$class]->firstIstanceInit();
-                // I save the instance before initializing the values in case they require ajax calls
-                // that would otherwise re-initialize the singletom object
-                self::deleteExcessRows(self::$instances[$class]->getId()); // Make sure to delete all duplicate rows
-                self::$instances[$class]->save();
-            } else {
-                if (count($items) > 1) {
-                    self::deleteExcessRows($items[0]->getId());
-                }
-                self::$instances[$class] = $items[0];
+            $result = static::loadFromDatabase();
+            switch ($result['status']) {
+                case self::LOAD_SUCCESS:
+                    $items = $result['items'];
+                    if (empty($items)) {
+                        self::initializeSingleton();
+                    } else {
+                        if (count($items) > 1) {
+                            self::deleteExcessRows($items[0]->getId());
+                        }
+                        self::$instances[$class] = $items[0];
+                    }
+                    break;
+                case self::LOAD_INVALID_DATA:
+                    if (!self::deleteExcessRows(-1)) {
+                        throw new Exception('Failed to delete unreadable singleton rows for ' . $class);
+                    }
+                    self::initializeSingleton();
+                    break;
+                case self::LOAD_DATABASE_ERROR:
+                    throw new Exception('Failed to load items for ' . $class);
+                default:
+                    throw new Exception('Unexpected load status for ' . $class);
             }
         } catch (Throwable $e) {
             self::$instances[$class] = new static(); // @phpstan-ignore-line Unsafe usage of new static() is false positive
@@ -59,6 +69,21 @@ trait TraitGenericModelSingleton
         }
 
         return self::$instances[$class];
+    }
+
+    /**
+     * Initialize the default singleton, remove duplicate rows and persist it.
+     *
+     * @return void
+     */
+    private static function initializeSingleton(): void
+    {
+        $class = static::class;
+        // Register before initialization, which may resolve this singleton again.
+        self::$instances[$class] = new static(); // @phpstan-ignore-line Unsafe usage of new static() is false positive
+        self::$instances[$class]->firstIstanceInit();
+        self::deleteExcessRows(self::$instances[$class]->getId());
+        self::$instances[$class]->save();
     }
 
     /**
@@ -165,9 +190,7 @@ trait TraitGenericModelSingleton
             if (in_array($prop->getName(), $skipProps)) {
                 continue;
             }
-            if (PHP_VERSION_ID < 80100) {
-                $prop->setAccessible(true);
-            }
+            SnapUtil::setAccessible($prop);
             $newVal = (
                 is_callable($setCallback) ?
                 call_user_func($setCallback, $prop->getName(), $prop->getValue($newIstance)) :

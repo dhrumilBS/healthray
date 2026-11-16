@@ -425,7 +425,7 @@ class WpDbUtils
      *
      * @return ?string mysql query create table, null if unavailable (e.g. table missing or unreadable)
      */
-    private static function getCreateTableQuery(string $table): ?string
+    public static function getCreateTableQuery(string $table): ?string
     {
         $row = $GLOBALS['wpdb']->get_row('SHOW CREATE TABLE `' . esc_sql($table) . '`', ARRAY_N);
         if (!is_array($row) || !isset($row[1])) {
@@ -433,6 +433,36 @@ class WpDbUtils
             return null;
         }
         return $row[1];
+    }
+
+    /**
+     * Rows of SHOW TABLE STATUS for the current database
+     *
+     * MySQL 8.0+ caches the information_schema statistics for 24 hours by default,
+     * so the row counts and sizes can be a day stale unless the cache is bypassed.
+     *
+     * @param bool $freshStats True to bypass the statistics cache of MySQL 8.0+
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public static function getTableStatusRows(bool $freshStats = false): array
+    {
+        /** @var wpdb $wpdb */
+        global $wpdb;
+
+        $mysqlVersion = self::getVersion();
+        if (
+            $freshStats &&
+            self::getDbEngine() === SnapDB::DB_ENGINE_MYSQL &&
+            is_string($mysqlVersion) &&
+            version_compare($mysqlVersion, '8.0', '>=')
+        ) {
+            $wpdb->query('SET SESSION information_schema_stats_expiry = 0');
+        }
+
+        $rows = $wpdb->get_results('SHOW TABLE STATUS', ARRAY_A);
+
+        return is_array($rows) ? $rows : [];
     }
 
     /**

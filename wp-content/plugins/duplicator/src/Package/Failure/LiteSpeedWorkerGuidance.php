@@ -35,6 +35,7 @@ HTACCESS;
         DupliException::CODE_SHELL_ZIP_RETRY_EXHAUSTED,
         DupliException::CODE_DUP_ARCHIVE_RETRY_EXHAUSTED,
         DupliException::CODE_STUCK,
+        DupliException::CODE_STORAGE_RETRY_LIMIT,
     ];
 
     /**

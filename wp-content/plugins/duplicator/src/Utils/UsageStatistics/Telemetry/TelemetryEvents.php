@@ -606,8 +606,8 @@ class TelemetryEvents
     }
 
     /**
-     * Strip the wpcontent, abs and home base paths — in both their configured
-     * and symlink-resolved forms — from a file path so no absolute prefix leaks.
+     * Make a file path relative to the site, falling back to a wp-content cut
+     * or the basename so no absolute prefix leaks.
      *
      * @param string $subject The file path to sanitize
      *
@@ -615,21 +615,7 @@ class TelemetryEvents
      */
     private static function stripBasePaths(string $subject): string
     {
-        $subject = str_replace('\\', '/', $subject);
-
-        $paths = WpArchiveUtils::getOriginalPaths();
-        $bases = [];
-        foreach ([$paths['wpcontent'], $paths['abs'], $paths['home']] as $original) {
-            $bases[] = SnapIO::safePathTrailingslashit($original, false);
-            $bases[] = SnapIO::safePathTrailingslashit($original, true);
-        }
-
-        $bases = array_unique($bases);
-        usort($bases, static fn(string $a, string $b): int => strlen($b) <=> strlen($a));
-
-        foreach ($bases as $base) {
-            $subject = str_ireplace($base, '', $subject);
-        }
+        $subject = WpArchiveUtils::stripOriginalBasePaths($subject);
 
         // Last resort when no base matches the reported file: cut at the
         // content dir so no absolute prefix leaks.

@@ -120,13 +120,19 @@ class AbilitiesRegistrar
             ],
             'meta'                => [
                 'show_in_rest' => true,
+                'mcp'          => ['public' => true],
                 'annotations'  => ['readonly' => true],
             ],
         ]);
 
         wp_register_ability('duplicator/create-backup', [
             'label'               => __('Create Backup', 'duplicator'),
-            'description'         => __('Starts a new backup using the default template. Returns an id for polling with get-backup-status.', 'duplicator'),
+            'description'         => __(
+                'Starts a new backup using the default template, ignoring its file and table filters.
+                Returns an id for polling with get-backup-status. When the backup completes, the storage
+                retention setting may remove the oldest backups.',
+                'duplicator'
+            ),
             'category'            => self::CATEGORY_SLUG,
             'execute_callback'    => [
                 $this,
@@ -168,7 +174,11 @@ class AbilitiesRegistrar
             ],
             'meta'                => [
                 'show_in_rest' => true,
-                'annotations'  => ['readonly' => false],
+                'mcp'          => ['public' => true],
+                'annotations'  => [
+                    'readonly'    => false,
+                    'destructive' => false,
+                ],
             ],
         ]);
 
@@ -209,7 +219,8 @@ class AbilitiesRegistrar
                     ],
                     'can_proceed'    => [
                         'type'        => 'boolean',
-                        'description' => 'True when a usable backup created through this API exists locally with no build warnings.',
+                        'description' => 'True when a usable backup created through this API exists locally and no warning '
+                            . 'reports files missing from the archive. Other build warnings do not clear it.',
                     ],
                     'message'        => [
                         'type'        => 'string',
@@ -228,10 +239,66 @@ class AbilitiesRegistrar
                         'items'       => ['type' => 'string'],
                         'description' => 'What the backup does not contain; empty when is_full_backup is true.',
                     ],
+                    'warnings'       => [
+                        'type'        => 'array',
+                        'description' => 'Non-critical conditions detected during the build. The backup completed; '
+                            . 'report them to the user rather than treating them as a failure.',
+                        'items'       => [
+                            'type'       => 'object',
+                            'properties' => [
+                                'code'    => [
+                                    'type'        => 'integer',
+                                    'description' => 'Duplicator warning code, matching an AbstractPackage::WARNING_* constant.',
+                                ],
+                                'label'   => [
+                                    'type'        => 'string',
+                                    'description' => 'Short summary of the condition.',
+                                ],
+                                'message' => [
+                                    'type'        => 'string',
+                                    'description' => 'Full explanation for the user.',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'failure'        => [
+                        'type'        => 'object',
+                        'description' => 'Why a failed or cancelled backup stopped and how to fix it, as shown in the Activity Log. '
+                            . 'Relay the reason and the fixes to the user; a fix may belong to an earlier failure, so present the fixes '
+                            . 'as suggestions. Empty when no failure was recorded.',
+                        'properties'  => [
+                            'reason' => [
+                                'type'        => 'string',
+                                'description' => 'Failure cause; may be empty even when fixes are listed.',
+                            ],
+                            'fixes'  => [
+                                'type'  => 'array',
+                                'items' => [
+                                    'type'       => 'object',
+                                    'properties' => [
+                                        'error'           => [
+                                            'type'        => 'string',
+                                            'description' => 'What went wrong.',
+                                        ],
+                                        'troubleshooting' => [
+                                            'type'        => 'array',
+                                            'items'       => ['type' => 'string'],
+                                            'description' => 'Steps the user can take to fix it.',
+                                        ],
+                                        'code_snippet'    => [
+                                            'type'        => 'string',
+                                            'description' => 'Configuration example for the fix; empty when none.',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
             'meta'                => [
                 'show_in_rest' => true,
+                'mcp'          => ['public' => true],
                 'annotations'  => ['readonly' => true],
             ],
         ]);

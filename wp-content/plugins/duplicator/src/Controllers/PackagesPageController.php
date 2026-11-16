@@ -590,6 +590,98 @@ class PackagesPageController extends AbstractMenuPageController
     }
 
     /**
+     * Whether the current user can delete the Backup
+     *
+     * @param AbstractPackage $package The Backup
+     *
+     * @return bool
+     */
+    public static function canDeleteBackup(AbstractPackage $package): bool
+    {
+        /**
+         * Filter whether the Backup screens offer Delete and the delete endpoint accepts the Backup
+         *
+         * @param bool            $allowed Whether the current user has CAP_CREATE
+         * @param AbstractPackage $package The Backup
+         */
+        return (bool) apply_filters('duplicator_package_allow_user_delete', CapMng::can(CapMng::CAP_CREATE, false), $package);
+    }
+
+    /**
+     * Whether the details section offers the Transfer button
+     *
+     * @param AbstractPackage $package The Backup
+     *
+     * @return bool
+     */
+    public static function detailsSectionCanTransfer(AbstractPackage $package): bool
+    {
+        /**
+         * Filter whether the details section shows the Transfer button
+         *
+         * @param bool            $show    Whether the current user has CAP_STORAGE
+         * @param AbstractPackage $package The Backup
+         */
+        return (bool) apply_filters('duplicator_details_section_show_transfer', CapMng::can(CapMng::CAP_STORAGE, false), $package);
+    }
+
+    /**
+     * Whether the details page offers the Transfer tab
+     *
+     * @param AbstractPackage $package The Backup
+     *
+     * @return bool
+     */
+    public static function detailsPageCanTransfer(AbstractPackage $package): bool
+    {
+        /**
+         * Filter whether the details page shows the Transfer tab
+         *
+         * @param bool            $show    Whether the current user has CAP_CREATE
+         * @param AbstractPackage $package The Backup
+         */
+        return (bool) apply_filters('duplicator_details_page_show_transfer', CapMng::can(CapMng::CAP_CREATE, false), $package);
+    }
+
+    /**
+     * Whether the details page offers the Download menu
+     *
+     * @param AbstractPackage $package The Backup
+     *
+     * @return bool
+     */
+    public static function detailsPageCanDownload(AbstractPackage $package): bool
+    {
+        $result = CapMng::can(CapMng::CAP_EXPORT, false) && $package->getStatus() != AbstractPackage::STATUS_ERROR;
+
+        /**
+         * Filter whether the details page shows the Download menu
+         *
+         * @param bool            $show    Whether the current user has CAP_EXPORT and the Backup is not in error
+         * @param AbstractPackage $package The Backup
+         */
+        return (bool) apply_filters('duplicator_details_page_show_download', $result, $package);
+    }
+
+    /**
+     * Target of the details page Backups tab
+     *
+     * @param AbstractPackage $package The Backup
+     *
+     * @return string
+     */
+    public static function getDetailsPageBackupsTabUrl(AbstractPackage $package): string
+    {
+        /**
+         * Filter the target of the details page Backups tab
+         *
+         * @param string          $url     The Backups list
+         * @param AbstractPackage $package The Backup
+         */
+        return (string) apply_filters('duplicator_details_page_backups_tab_url', self::getInstance()->getMenuLink(), $package);
+    }
+
+    /**
      * Get Backups inner page
      *
      * @return string

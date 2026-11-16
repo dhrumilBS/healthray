@@ -3,13 +3,13 @@
  * Plugin Name: Elementor Pro
  * Description: Elevate your designs and unlock the full power of the Atomic Editor. Gain access to dozens of Pro widgets, Website Templates, Theme Builder, Pop Ups, Forms, reusable Components, and WooCommerce building capabilities.
  * Plugin URI: https://go.elementor.com/wp-dash-wp-plugins-author-uri/
- * Version: 4.2.3
+ * Version: 4.3.2
  * Author: Elementor.com
  * Author URI: https://go.elementor.com/wp-dash-wp-plugins-author-uri/
  * Requires PHP: 7.4
  * Requires at least: 6.8
  * Requires Plugins: elementor
- * Elementor tested up to: 4.2.3-ga
+ * Elementor tested up to: 4.3.2-ga
  * Text Domain: elementor-pro
  */
 
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'ELEMENTOR_PRO_VERSION', '4.2.3' );
+define( 'ELEMENTOR_PRO_VERSION', '4.3.2' );
 
 /**
  * All versions should be `major.minor`, without patch, in order to compare them properly.
@@ -26,7 +26,7 @@ define( 'ELEMENTOR_PRO_VERSION', '4.2.3' );
  * requiring 3.15.2 is not allowed)
  */
 define( 'ELEMENTOR_PRO_REQUIRED_CORE_VERSION', '4.0' );
-define( 'ELEMENTOR_PRO_RECOMMENDED_CORE_VERSION', '4.2' );
+define( 'ELEMENTOR_PRO_RECOMMENDED_CORE_VERSION', '4.3' );
 
 define( 'ELEMENTOR_PRO__FILE__', __FILE__ );
 define( 'ELEMENTOR_PRO_PLUGIN_BASE', plugin_basename( ELEMENTOR_PRO__FILE__ ) );
@@ -36,6 +36,10 @@ define( 'ELEMENTOR_PRO_MODULES_PATH', ELEMENTOR_PRO_PATH . 'modules/' );
 define( 'ELEMENTOR_PRO_URL', plugins_url( '/', ELEMENTOR_PRO__FILE__ ) );
 define( 'ELEMENTOR_PRO_ASSETS_URL', ELEMENTOR_PRO_URL . 'assets/' );
 define( 'ELEMENTOR_PRO_MODULES_URL', ELEMENTOR_PRO_URL . 'modules/' );
+
+require_once ELEMENTOR_PRO_MODULES_PATH . 'core-upgrade-recommendation/classes/upgrade-recommendation-dismissal.php';
+
+\ElementorPro\Modules\CoreUpgradeRecommendation\Classes\Upgrade_Recommendation_Dismissal::register_dismiss_handlers();
 
 /**
  * Load gettext translate for our text domain.
@@ -152,10 +156,51 @@ function elementor_pro_admin_notice_upgrade_recommendation() {
 		return;
 	}
 
+	$recommended_version = ELEMENTOR_PRO_RECOMMENDED_CORE_VERSION;
+	$core_version = ELEMENTOR_VERSION;
+
+	if ( ! \ElementorPro\Modules\CoreUpgradeRecommendation\Classes\Upgrade_Recommendation_Dismissal::should_show_notice(
+		$recommended_version,
+		$core_version
+	) ) {
+		return;
+	}
+
 	$file_path = 'elementor/elementor.php';
-
 	$upgrade_link = wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $file_path, 'upgrade-plugin_' . $file_path );
+	$notice_id = \ElementorPro\Modules\CoreUpgradeRecommendation\Classes\Upgrade_Recommendation_Dismissal::get_notice_id( $recommended_version );
 
+	$notice_options = [
+		'id' => $notice_id,
+		'title' => esc_html__( 'Don’t miss out on the new version of Elementor', 'elementor-pro' ),
+		'description' => esc_html__( 'Update to the latest version of Elementor to enjoy new features, better performance and compatibility.', 'elementor-pro' ),
+		'button' => [
+			'text' => esc_html__( 'Update Now', 'elementor-pro' ),
+			'url' => $upgrade_link,
+			'type' => 'cta',
+		],
+		'dismissible' => true,
+	];
+
+	if ( ! did_action( 'elementor/loaded' ) || ! isset( \Elementor\Plugin::$instance->admin ) ) {
+		elementor_pro_print_upgrade_recommendation_legacy_notice( $upgrade_link );
+
+		return;
+	}
+
+	/** @var \Elementor\Core\Admin\Admin_Notices|null $admin_notices */
+	$admin_notices = \Elementor\Plugin::$instance->admin->get_component( 'admin-notices' );
+
+	if ( ! $admin_notices ) {
+		elementor_pro_print_upgrade_recommendation_legacy_notice( $upgrade_link );
+
+		return;
+	}
+
+	$admin_notices->print_admin_notice( $notice_options, [] );
+}
+
+function elementor_pro_print_upgrade_recommendation_legacy_notice( string $upgrade_link ): void {
 	$message = sprintf(
 		'<h3>%1$s</h3><p>%2$s <a href="%3$s" class="button-primary">%4$s</a></p>',
 		esc_html__( 'Don’t miss out on the new version of Elementor', 'elementor-pro' ),

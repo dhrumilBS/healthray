@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:disable PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- This file configures the Amazon S3 remote storage backend (UpdraftPlus_S3 / UpdraftPlus_S3_Compat). The amazonaws.com strings flagged below are AWS S3 API region endpoints used to connect to the user's own configured storage bucket for backups, not JS/CSS/images/fonts offloaded from this plugin to a remote server.
 if (!defined('ABSPATH')) die('No direct access allowed');
 
 // Converted to multi-options (Feb 2017-) and previous options conversion removed: Yes

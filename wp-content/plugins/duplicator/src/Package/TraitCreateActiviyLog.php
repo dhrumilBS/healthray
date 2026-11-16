@@ -46,6 +46,50 @@ trait TraitCreateActiviyLog
     }
 
     /**
+     * Get the id of the event that represents this Backup in the Activity Log: the main build event,
+     * or the main scan event when the Backup stopped before building; 0 when none was created
+     *
+     * @return int
+     */
+    public function getActivityLogEventId(): int
+    {
+        return $this->mainActivityLogId > 0 ? $this->mainActivityLogId : $this->mainScanLogId;
+    }
+
+    /**
+     * Failure reason and fixes recorded in this Backup's activity log, as plain text; empty when none were recorded.
+     *
+     * @return array{reason:string,fixes:list<array{error:string,troubleshooting:string[],code_snippet:string}>}
+     */
+    public function getFailureDetails(): array
+    {
+        $details = [
+            'reason' => '',
+            'fixes'  => [],
+        ];
+        // Failures are logged on the build event, or on the scan event when the scan failed.
+        $eventIds = [
+            LogEventBackupCreate::class => $this->mainActivityLogId,
+            LogEventWebsitesScan::class => $this->mainScanLogId,
+        ];
+        foreach ($eventIds as $class => $eventId) {
+            if ($eventId <= 0) {
+                continue;
+            }
+            $event = $class::getById($eventId);
+            if (!$event instanceof $class) {
+                continue;
+            }
+            $details = $event->getFailureDetails();
+            if ($details['reason'] !== '' || $details['fixes'] !== []) {
+                break;
+            }
+        }
+
+        return $details;
+    }
+
+    /**
      * Update log with current timing data and save
      *
      * @param LogEventBackupCreate $log Log to update
@@ -193,6 +237,8 @@ trait TraitCreateActiviyLog
         }
         if ($updateMainScanLogId) {
             $this->mainScanLogId = $activityLog->getId();
+            // Assigned after the status save, so it would otherwise wait for the next one
+            $this->update(false);
         } else {
             // Update the parent scan log with current timing data and severity
             $mainLog = LogEventWebsitesScan::getById($this->mainScanLogId);
@@ -267,6 +313,8 @@ trait TraitCreateActiviyLog
         if ($updateMainActivityLogId) {
             // Update the main activity log id only if it is not already set
             $this->mainActivityLogId = $activityLog->getId();
+            // Assigned after the status save, so it would otherwise wait for the next one
+            $this->update(false);
         } else {
             // Update the parent log with current timing data and severity
             $mainLog = LogEventBackupCreate::getById($this->mainActivityLogId);

@@ -10,13 +10,9 @@ if (!defined('ABSPATH')) die('No direct access allowed');
 			<input type="hidden" name="backup_nonce" value="0" id="updraft_upload_nonce">
 
 			<?php
-				global $updraftplus;
-				
-				$service = (array) $updraftplus->just_one($updraftplus->get_canonical_service_list());
-
-				foreach ($service as $value) {
-					if ('' == $value) continue;
-					echo '<input class="updraft_remote_storage_destination" id="updraft_remote_'.esc_attr($value).'" checked="checked" type="checkbox" name="updraft_remote_storage_destination_'. esc_attr($value) . '" value="'.esc_attr($value).'"> <label for="updraft_remote_'.esc_attr($value).'">'.esc_html($updraftplus->backup_methods[$value]).' <span style="display: none">('.esc_html__('already uploaded', 'updraftplus').')</span></label><br>';
+				foreach ($service as $updraft_value) {
+					if ('' == $updraft_value) continue;
+					echo '<input class="updraft_remote_storage_destination" id="updraft_remote_'.esc_attr($updraft_value).'" checked="checked" type="checkbox" name="updraft_remote_storage_destination_'. esc_attr($updraft_value) . '" value="'.esc_attr($updraft_value).'"> <label for="updraft_remote_'.esc_attr($updraft_value).'">'.esc_html($updraftplus->backup_methods[$updraft_value]).' <span style="display: none">('.esc_html__('already uploaded', 'updraftplus').')</span></label><br>';
 				}
 			?>
 		</fieldset>

@@ -38,6 +38,7 @@ $filterTables  = strlen($database->FilterTables) > 0 ? explode(',', $database->F
                     '<span class="dupli-db-tables-total">' . (int) $database->info->tablesBaseCount . '</span>'
                 );
                 ?>
+                <?php do_action('duplicator_details_page_count_after', $package, 'tables'); ?>
             </div>
         <?php } ?>
     </header>

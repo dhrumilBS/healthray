@@ -872,8 +872,8 @@ class UpdraftCentral_Theme_Commands extends UpdraftCentral_Commands {
 
 		// Sort themes
 		global $current_theme_slug, $sort_direction;
-		$current_theme_slug = $current_theme_slug;
-		$sort_direction = $sort_direction;
+		$current_theme_slug = $current_theme_slug; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Intentional global used to pass this value to the uasort() callback below, which cannot accept extra arguments.
+		$sort_direction = $sort_direction; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Intentional global used to pass this value to the uasort() callback below, which cannot accept extra arguments.
 		uasort($all_themes, array($this, '_sort_themes_with_active'));
 		
 		// Get paginated results for all themes

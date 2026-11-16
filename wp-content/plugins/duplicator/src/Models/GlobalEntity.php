@@ -885,9 +885,7 @@ class GlobalEntity extends AbstractEntity implements ModelMigrateSettingsInterfa
             if (!isset($data[$prop->getName()])) {
                 continue;
             }
-            if (PHP_VERSION_ID < 80100) {
-                $prop->setAccessible(true);
-            }
+            SnapUtil::setAccessible($prop);
             $prop->setValue($this, $data[$prop->getName()]);
         }
         return true;
@@ -950,9 +948,7 @@ class GlobalEntity extends AbstractEntity implements ModelMigrateSettingsInterfa
             if (in_array($prop->getName(), $skipProps)) {
                 continue;
             }
-            if (PHP_VERSION_ID < 80100) {
-                $prop->setAccessible(true);
-            }
+            SnapUtil::setAccessible($prop);
             $prop->setValue($this, $prop->getValue($global_data));
         }
     }

@@ -112,7 +112,7 @@ final class DUPX_Package
     {
         static $path = null;
         if (is_null($path)) {
-            $path = DUPX_INIT . '/' . dirname(InstDescMng::getInstance()->getName(InstDescMng::TYPE_DB_DUMP));
+            $path = DUPX_INIT . '/' . InstDescMng::getInstance()->getName(InstDescMng::TYPE_DB_DUMPS_DIR);
         }
         return $path;
     }

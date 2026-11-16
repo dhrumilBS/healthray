@@ -3299,7 +3299,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /**!
 
  @license
- handlebars v4.7.9
+ handlebars v4.7.10
 
 Copyright (C) 2011-2019 by Yehuda Katz
 
@@ -3333,7 +3333,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	var installedModules = {};
 
 /******/ 	// The require function
-/******/ 	function __nested_webpack_require_1638__(moduleId) {
+/******/ 	function __nested_webpack_require_1639__(moduleId) {
 
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
@@ -3347,7 +3347,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		};
 
 /******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __nested_webpack_require_1638__);
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __nested_webpack_require_1639__);
 
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
@@ -3358,51 +3358,51 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__nested_webpack_require_1638__.m = modules;
+/******/ 	__nested_webpack_require_1639__.m = modules;
 
 /******/ 	// expose the module cache
-/******/ 	__nested_webpack_require_1638__.c = installedModules;
+/******/ 	__nested_webpack_require_1639__.c = installedModules;
 
 /******/ 	// __webpack_public_path__
-/******/ 	__nested_webpack_require_1638__.p = "";
+/******/ 	__nested_webpack_require_1639__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __nested_webpack_require_1638__(0);
+/******/ 	return __nested_webpack_require_1639__(0);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __nested_webpack_require_2839__) {
+/***/ (function(module, exports, __nested_webpack_require_2840__) {
 
 	'use strict';
 
-	var _interopRequireDefault = __nested_webpack_require_2839__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_2840__(1)['default'];
 
 	exports.__esModule = true;
 
-	var _handlebarsRuntime = __nested_webpack_require_2839__(2);
+	var _handlebarsRuntime = __nested_webpack_require_2840__(2);
 
 	var _handlebarsRuntime2 = _interopRequireDefault(_handlebarsRuntime);
 
 	// Compiler imports
 
-	var _handlebarsCompilerAst = __nested_webpack_require_2839__(83);
+	var _handlebarsCompilerAst = __nested_webpack_require_2840__(83);
 
 	var _handlebarsCompilerAst2 = _interopRequireDefault(_handlebarsCompilerAst);
 
-	var _handlebarsCompilerBase = __nested_webpack_require_2839__(84);
+	var _handlebarsCompilerBase = __nested_webpack_require_2840__(84);
 
-	var _handlebarsCompilerCompiler = __nested_webpack_require_2839__(89);
+	var _handlebarsCompilerCompiler = __nested_webpack_require_2840__(90);
 
-	var _handlebarsCompilerJavascriptCompiler = __nested_webpack_require_2839__(90);
+	var _handlebarsCompilerJavascriptCompiler = __nested_webpack_require_2840__(91);
 
 	var _handlebarsCompilerJavascriptCompiler2 = _interopRequireDefault(_handlebarsCompilerJavascriptCompiler);
 
-	var _handlebarsCompilerVisitor = __nested_webpack_require_2839__(87);
+	var _handlebarsCompilerVisitor = __nested_webpack_require_2840__(87);
 
 	var _handlebarsCompilerVisitor2 = _interopRequireDefault(_handlebarsCompilerVisitor);
 
-	var _handlebarsNoConflict = __nested_webpack_require_2839__(82);
+	var _handlebarsNoConflict = __nested_webpack_require_2840__(82);
 
 	var _handlebarsNoConflict2 = _interopRequireDefault(_handlebarsNoConflict);
 
@@ -3455,40 +3455,40 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __nested_webpack_require_5051__) {
+/***/ (function(module, exports, __nested_webpack_require_5052__) {
 
 	'use strict';
 
-	var _interopRequireWildcard = __nested_webpack_require_5051__(3)['default'];
+	var _interopRequireWildcard = __nested_webpack_require_5052__(3)['default'];
 
-	var _interopRequireDefault = __nested_webpack_require_5051__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_5052__(1)['default'];
 
 	exports.__esModule = true;
 
-	var _handlebarsBase = __nested_webpack_require_5051__(4);
+	var _handlebarsBase = __nested_webpack_require_5052__(4);
 
 	var base = _interopRequireWildcard(_handlebarsBase);
 
 	// Each of these augment the Handlebars object. No need to setup here.
 	// (This is done to easily share code between commonjs and browse envs)
 
-	var _handlebarsSafeString = __nested_webpack_require_5051__(76);
+	var _handlebarsSafeString = __nested_webpack_require_5052__(76);
 
 	var _handlebarsSafeString2 = _interopRequireDefault(_handlebarsSafeString);
 
-	var _handlebarsException = __nested_webpack_require_5051__(6);
+	var _handlebarsException = __nested_webpack_require_5052__(6);
 
 	var _handlebarsException2 = _interopRequireDefault(_handlebarsException);
 
-	var _handlebarsUtils = __nested_webpack_require_5051__(5);
+	var _handlebarsUtils = __nested_webpack_require_5052__(5);
 
 	var Utils = _interopRequireWildcard(_handlebarsUtils);
 
-	var _handlebarsRuntime = __nested_webpack_require_5051__(77);
+	var _handlebarsRuntime = __nested_webpack_require_5052__(77);
 
 	var runtime = _interopRequireWildcard(_handlebarsRuntime);
 
-	var _handlebarsNoConflict = __nested_webpack_require_5051__(82);
+	var _handlebarsNoConflict = __nested_webpack_require_5052__(82);
 
 	var _handlebarsNoConflict2 = _interopRequireDefault(_handlebarsNoConflict);
 
@@ -3547,32 +3547,32 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports, __nested_webpack_require_7277__) {
+/***/ (function(module, exports, __nested_webpack_require_7278__) {
 
 	'use strict';
 
-	var _interopRequireDefault = __nested_webpack_require_7277__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_7278__(1)['default'];
 
 	exports.__esModule = true;
 	exports.HandlebarsEnvironment = HandlebarsEnvironment;
 
-	var _utils = __nested_webpack_require_7277__(5);
+	var _utils = __nested_webpack_require_7278__(5);
 
-	var _exception = __nested_webpack_require_7277__(6);
+	var _exception = __nested_webpack_require_7278__(6);
 
 	var _exception2 = _interopRequireDefault(_exception);
 
-	var _helpers = __nested_webpack_require_7277__(10);
+	var _helpers = __nested_webpack_require_7278__(10);
 
-	var _decorators = __nested_webpack_require_7277__(70);
+	var _decorators = __nested_webpack_require_7278__(70);
 
-	var _logger = __nested_webpack_require_7277__(72);
+	var _logger = __nested_webpack_require_7278__(72);
 
 	var _logger2 = _interopRequireDefault(_logger);
 
-	var _internalProtoAccess = __nested_webpack_require_7277__(73);
+	var _internalProtoAccess = __nested_webpack_require_7278__(73);
 
-	var VERSION = '4.7.9';
+	var VERSION = '4.7.10';
 	exports.VERSION = VERSION;
 	var COMPILER_REVISION = 8;
 	exports.COMPILER_REVISION = COMPILER_REVISION;
@@ -3746,8 +3746,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function escapeExpression(string) {
 	  if (typeof string !== 'string') {
-	    // don't escape SafeStrings, since they're already safe
-	    if (string && string.toHTML) {
+	    // don't escape SafeStrings, since they're already safe. Other values with a
+	    // "toHTML" key, e.g. from JSON context data, are escaped like any object.
+	    if (string && typeof string.toHTML === 'function') {
 	      return string.toHTML();
 	    } else if (string == null) {
 	      return '';
@@ -3794,11 +3795,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports, __nested_webpack_require_13814__) {
+/***/ (function(module, exports, __nested_webpack_require_13939__) {
 
 	'use strict';
 
-	var _Object$defineProperty = __nested_webpack_require_13814__(7)['default'];
+	var _Object$defineProperty = __nested_webpack_require_13939__(7)['default'];
 
 	exports.__esModule = true;
 	var errorProps = ['description', 'fileName', 'lineNumber', 'endLineNumber', 'message', 'name', 'number', 'stack'];
@@ -3810,11 +3811,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      column = undefined,
 	      endColumn = undefined;
 
-	  if (loc) {
+	  // Hand-built ASTs may carry a partial loc; never let the location
+	  // bookkeeping mask the actual error message.
+	  if (loc && loc.start) {
 	    line = loc.start.line;
-	    endLineNumber = loc.end.line;
 	    column = loc.start.column;
-	    endColumn = loc.end.column;
+	    if (loc.end) {
+	      endLineNumber = loc.end.line;
+	      endColumn = loc.end.column;
+	    }
 
 	    message += ' - ' + line + ':' + column;
 	  }
@@ -3864,15 +3869,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports, __nested_webpack_require_15674__) {
+/***/ (function(module, exports, __nested_webpack_require_15962__) {
 
-	module.exports = { "default": __nested_webpack_require_15674__(8), __esModule: true };
+	module.exports = { "default": __nested_webpack_require_15962__(8), __esModule: true };
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports, __nested_webpack_require_15825__) {
+/***/ (function(module, exports, __nested_webpack_require_16113__) {
 
-	var $ = __nested_webpack_require_15825__(9);
+	var $ = __nested_webpack_require_16113__(9);
 	module.exports = function defineProperty(it, key, desc){
 	  return $.setDesc(it, key, desc);
 	};
@@ -3897,41 +3902,41 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 10 */
-/***/ (function(module, exports, __nested_webpack_require_16519__) {
+/***/ (function(module, exports, __nested_webpack_require_16807__) {
 
 	'use strict';
 
-	var _interopRequireDefault = __nested_webpack_require_16519__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_16807__(1)['default'];
 
 	exports.__esModule = true;
 	exports.registerDefaultHelpers = registerDefaultHelpers;
 	exports.moveHelperToHooks = moveHelperToHooks;
 
-	var _helpersBlockHelperMissing = __nested_webpack_require_16519__(11);
+	var _helpersBlockHelperMissing = __nested_webpack_require_16807__(11);
 
 	var _helpersBlockHelperMissing2 = _interopRequireDefault(_helpersBlockHelperMissing);
 
-	var _helpersEach = __nested_webpack_require_16519__(12);
+	var _helpersEach = __nested_webpack_require_16807__(12);
 
 	var _helpersEach2 = _interopRequireDefault(_helpersEach);
 
-	var _helpersHelperMissing = __nested_webpack_require_16519__(65);
+	var _helpersHelperMissing = __nested_webpack_require_16807__(65);
 
 	var _helpersHelperMissing2 = _interopRequireDefault(_helpersHelperMissing);
 
-	var _helpersIf = __nested_webpack_require_16519__(66);
+	var _helpersIf = __nested_webpack_require_16807__(66);
 
 	var _helpersIf2 = _interopRequireDefault(_helpersIf);
 
-	var _helpersLog = __nested_webpack_require_16519__(67);
+	var _helpersLog = __nested_webpack_require_16807__(67);
 
 	var _helpersLog2 = _interopRequireDefault(_helpersLog);
 
-	var _helpersLookup = __nested_webpack_require_16519__(68);
+	var _helpersLookup = __nested_webpack_require_16807__(68);
 
 	var _helpersLookup2 = _interopRequireDefault(_helpersLookup);
 
-	var _helpersWith = __nested_webpack_require_16519__(69);
+	var _helpersWith = __nested_webpack_require_16807__(69);
 
 	var _helpersWith2 = _interopRequireDefault(_helpersWith);
 
@@ -3957,13 +3962,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 11 */
-/***/ (function(module, exports, __nested_webpack_require_18251__) {
+/***/ (function(module, exports, __nested_webpack_require_18539__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _utils = __nested_webpack_require_18251__(5);
+	var _utils = __nested_webpack_require_18539__(5);
 
 	exports['default'] = function (instance) {
 	  instance.registerHelper('blockHelperMissing', function (context, options) {
@@ -4000,27 +4005,47 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 12 */
-/***/ (function(module, exports, __nested_webpack_require_19348__) {
+/***/ (function(module, exports, __nested_webpack_require_19636__) {
 
 	'use strict';
 
-	var _Symbol = __nested_webpack_require_19348__(13)['default'];
+	var _Symbol = __nested_webpack_require_19636__(13)['default'];
 
-	var _Symbol$iterator = __nested_webpack_require_19348__(43)['default'];
+	var _Symbol$iterator = __nested_webpack_require_19636__(43)['default'];
 
-	var _getIterator = __nested_webpack_require_19348__(55)['default'];
+	var _getIterator = __nested_webpack_require_19636__(55)['default'];
 
-	var _Object$keys = __nested_webpack_require_19348__(60)['default'];
+	var _Object$keys = __nested_webpack_require_19636__(60)['default'];
 
-	var _interopRequireDefault = __nested_webpack_require_19348__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_19636__(1)['default'];
 
 	exports.__esModule = true;
 
-	var _utils = __nested_webpack_require_19348__(5);
+	var _utils = __nested_webpack_require_19636__(5);
 
-	var _exception = __nested_webpack_require_19348__(6);
+	var _exception = __nested_webpack_require_19636__(6);
 
 	var _exception2 = _interopRequireDefault(_exception);
+
+	/**
+	 * Close an unfinished iterator after the block body threw, like for...of does,
+	 * so that generators can run their cleanup code.
+	 *
+	 * Errors thrown while closing, including by a `return` getter, are ignored:
+	 * the block's error is the cause and is the one the caller must see.
+	 *
+	 * @param {Iterator} iterator the iterator that was being consumed
+	 */
+	function closeIterator(iterator) {
+	  try {
+	    var _close = iterator['return'];
+	    if (_utils.isFunction(_close)) {
+	      _close.call(iterator);
+	    }
+	  } catch (closeError) {
+	    // NOP
+	  }
+	}
 
 	exports['default'] = function (instance) {
 	  instance.registerHelper('each', function (context, options) {
@@ -4047,7 +4072,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      data = _utils.createFrame(options.data);
 	    }
 
-	    function execIteration(field, index, last) {
+	    function execIteration(field, index, last, value) {
 	      if (data) {
 	        data.key = field;
 	        data.index = index;
@@ -4059,9 +4084,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 
-	      ret = ret + fn(context[field], {
+	      ret = ret + fn(value, {
 	        data: data,
-	        blockParams: _utils.blockParams([context[field], field], [contextPath + field, null])
+	        blockParams: _utils.blockParams([value, field], [contextPath + field, null])
 	      });
 	    }
 
@@ -4069,18 +4094,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (_utils.isArray(context)) {
 	        for (var j = context.length; i < j; i++) {
 	          if (i in context) {
-	            execIteration(i, i, i === context.length - 1);
+	            execIteration(i, i, i === context.length - 1, context[i]);
 	          }
 	        }
 	      } else if (typeof _Symbol === 'function' && context[_Symbol$iterator]) {
-	        var newContext = [];
 	        var iterator = _getIterator(context);
-	        for (var it = iterator.next(); !it.done; it = iterator.next()) {
-	          newContext.push(it.value);
-	        }
-	        context = newContext;
-	        for (var j = context.length; i < j; i++) {
-	          execIteration(i, i, i === context.length - 1);
+	        var current = iterator.next();
+	        while (!current.done) {
+	          var next = iterator.next();
+	          try {
+	            execIteration(i, i, next.done, current.value);
+	          } catch (e) {
+	            if (!next.done) {
+	              closeIterator(iterator);
+	            }
+	            throw e;
+	          }
+	          current = next;
+	          i++;
 	        }
 	      } else {
 	        (function () {
@@ -4091,13 +4122,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // the last iteration without have to scan the object twice and create
 	            // an itermediate keys array.
 	            if (priorKey !== undefined) {
-	              execIteration(priorKey, i - 1);
+	              execIteration(priorKey, i - 1, false, context[priorKey]);
 	            }
 	            priorKey = key;
 	            i++;
 	          });
 	          if (priorKey !== undefined) {
-	            execIteration(priorKey, i - 1, true);
+	            execIteration(priorKey, i - 1, true, context[priorKey]);
 	          }
 	        })();
 	      }
@@ -4115,42 +4146,42 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 13 */
-/***/ (function(module, exports, __nested_webpack_require_22504__) {
+/***/ (function(module, exports, __nested_webpack_require_23494__) {
 
-	module.exports = { "default": __nested_webpack_require_22504__(14), __esModule: true };
+	module.exports = { "default": __nested_webpack_require_23494__(14), __esModule: true };
 
 /***/ }),
 /* 14 */
-/***/ (function(module, exports, __nested_webpack_require_22657__) {
+/***/ (function(module, exports, __nested_webpack_require_23647__) {
 
-	__nested_webpack_require_22657__(15);
-	__nested_webpack_require_22657__(42);
-	module.exports = __nested_webpack_require_22657__(21).Symbol;
+	__nested_webpack_require_23647__(15);
+	__nested_webpack_require_23647__(42);
+	module.exports = __nested_webpack_require_23647__(21).Symbol;
 
 /***/ }),
 /* 15 */
-/***/ (function(module, exports, __nested_webpack_require_22836__) {
+/***/ (function(module, exports, __nested_webpack_require_23826__) {
 
 	'use strict';
 	// ECMAScript 6 symbols shim
-	var $              = __nested_webpack_require_22836__(9)
-	  , global         = __nested_webpack_require_22836__(16)
-	  , has            = __nested_webpack_require_22836__(17)
-	  , DESCRIPTORS    = __nested_webpack_require_22836__(18)
-	  , $export        = __nested_webpack_require_22836__(20)
-	  , redefine       = __nested_webpack_require_22836__(24)
-	  , $fails         = __nested_webpack_require_22836__(19)
-	  , shared         = __nested_webpack_require_22836__(27)
-	  , setToStringTag = __nested_webpack_require_22836__(28)
-	  , uid            = __nested_webpack_require_22836__(30)
-	  , wks            = __nested_webpack_require_22836__(29)
-	  , keyOf          = __nested_webpack_require_22836__(31)
-	  , $names         = __nested_webpack_require_22836__(36)
-	  , enumKeys       = __nested_webpack_require_22836__(37)
-	  , isArray        = __nested_webpack_require_22836__(38)
-	  , anObject       = __nested_webpack_require_22836__(39)
-	  , toIObject      = __nested_webpack_require_22836__(32)
-	  , createDesc     = __nested_webpack_require_22836__(26)
+	var $              = __nested_webpack_require_23826__(9)
+	  , global         = __nested_webpack_require_23826__(16)
+	  , has            = __nested_webpack_require_23826__(17)
+	  , DESCRIPTORS    = __nested_webpack_require_23826__(18)
+	  , $export        = __nested_webpack_require_23826__(20)
+	  , redefine       = __nested_webpack_require_23826__(24)
+	  , $fails         = __nested_webpack_require_23826__(19)
+	  , shared         = __nested_webpack_require_23826__(27)
+	  , setToStringTag = __nested_webpack_require_23826__(28)
+	  , uid            = __nested_webpack_require_23826__(30)
+	  , wks            = __nested_webpack_require_23826__(29)
+	  , keyOf          = __nested_webpack_require_23826__(31)
+	  , $names         = __nested_webpack_require_23826__(36)
+	  , enumKeys       = __nested_webpack_require_23826__(37)
+	  , isArray        = __nested_webpack_require_23826__(38)
+	  , anObject       = __nested_webpack_require_23826__(39)
+	  , toIObject      = __nested_webpack_require_23826__(32)
+	  , createDesc     = __nested_webpack_require_23826__(26)
 	  , getDesc        = $.getDesc
 	  , setDesc        = $.setDesc
 	  , _create        = $.create
@@ -4290,7 +4321,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  $.getNames   = $names.get = $getOwnPropertyNames;
 	  $.getSymbols = $getOwnPropertySymbols;
 
-	  if(DESCRIPTORS && !__nested_webpack_require_22836__(41)){
+	  if(DESCRIPTORS && !__nested_webpack_require_23826__(41)){
 	    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
 	  }
 	}
@@ -4379,10 +4410,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 18 */
-/***/ (function(module, exports, __nested_webpack_require_31403__) {
+/***/ (function(module, exports, __nested_webpack_require_32393__) {
 
 	// Thank's IE8 for his funny defineProperty
-	module.exports = !__nested_webpack_require_31403__(19)(function(){
+	module.exports = !__nested_webpack_require_32393__(19)(function(){
 	  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
 	});
 
@@ -4400,11 +4431,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 20 */
-/***/ (function(module, exports, __nested_webpack_require_31829__) {
+/***/ (function(module, exports, __nested_webpack_require_32819__) {
 
-	var global    = __nested_webpack_require_31829__(16)
-	  , core      = __nested_webpack_require_31829__(21)
-	  , ctx       = __nested_webpack_require_31829__(22)
+	var global    = __nested_webpack_require_32819__(16)
+	  , core      = __nested_webpack_require_32819__(21)
+	  , ctx       = __nested_webpack_require_32819__(22)
 	  , PROTOTYPE = 'prototype';
 
 	var $export = function(type, name, source){
@@ -4458,10 +4489,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 22 */
-/***/ (function(module, exports, __nested_webpack_require_33864__) {
+/***/ (function(module, exports, __nested_webpack_require_34854__) {
 
 	// optional / simple context binding
-	var aFunction = __nested_webpack_require_33864__(23);
+	var aFunction = __nested_webpack_require_34854__(23);
 	module.exports = function(fn, that, length){
 	  aFunction(fn);
 	  if(that === undefined)return fn;
@@ -4492,17 +4523,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 24 */
-/***/ (function(module, exports, __nested_webpack_require_34647__) {
+/***/ (function(module, exports, __nested_webpack_require_35637__) {
 
-	module.exports = __nested_webpack_require_34647__(25);
+	module.exports = __nested_webpack_require_35637__(25);
 
 /***/ }),
 /* 25 */
-/***/ (function(module, exports, __nested_webpack_require_34767__) {
+/***/ (function(module, exports, __nested_webpack_require_35757__) {
 
-	var $          = __nested_webpack_require_34767__(9)
-	  , createDesc = __nested_webpack_require_34767__(26);
-	module.exports = __nested_webpack_require_34767__(18) ? function(object, key, value){
+	var $          = __nested_webpack_require_35757__(9)
+	  , createDesc = __nested_webpack_require_35757__(26);
+	module.exports = __nested_webpack_require_35757__(18) ? function(object, key, value){
 	  return $.setDesc(object, key, createDesc(1, value));
 	} : function(object, key, value){
 	  object[key] = value;
@@ -4524,9 +4555,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 27 */
-/***/ (function(module, exports, __nested_webpack_require_35387__) {
+/***/ (function(module, exports, __nested_webpack_require_36377__) {
 
-	var global = __nested_webpack_require_35387__(16)
+	var global = __nested_webpack_require_36377__(16)
 	  , SHARED = '__core-js_shared__'
 	  , store  = global[SHARED] || (global[SHARED] = {});
 	module.exports = function(key){
@@ -4535,11 +4566,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 28 */
-/***/ (function(module, exports, __nested_webpack_require_35672__) {
+/***/ (function(module, exports, __nested_webpack_require_36662__) {
 
-	var def = __nested_webpack_require_35672__(9).setDesc
-	  , has = __nested_webpack_require_35672__(17)
-	  , TAG = __nested_webpack_require_35672__(29)('toStringTag');
+	var def = __nested_webpack_require_36662__(9).setDesc
+	  , has = __nested_webpack_require_36662__(17)
+	  , TAG = __nested_webpack_require_36662__(29)('toStringTag');
 
 	module.exports = function(it, tag, stat){
 	  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
@@ -4547,11 +4578,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 29 */
-/***/ (function(module, exports, __nested_webpack_require_36026__) {
+/***/ (function(module, exports, __nested_webpack_require_37016__) {
 
-	var store  = __nested_webpack_require_36026__(27)('wks')
-	  , uid    = __nested_webpack_require_36026__(30)
-	  , Symbol = __nested_webpack_require_36026__(16).Symbol;
+	var store  = __nested_webpack_require_37016__(27)('wks')
+	  , uid    = __nested_webpack_require_37016__(30)
+	  , Symbol = __nested_webpack_require_37016__(16).Symbol;
 	module.exports = function(name){
 	  return store[name] || (store[name] =
 	    Symbol && Symbol[name] || (Symbol || uid)('Symbol.' + name));
@@ -4569,10 +4600,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 31 */
-/***/ (function(module, exports, __nested_webpack_require_36597__) {
+/***/ (function(module, exports, __nested_webpack_require_37587__) {
 
-	var $         = __nested_webpack_require_36597__(9)
-	  , toIObject = __nested_webpack_require_36597__(32);
+	var $         = __nested_webpack_require_37587__(9)
+	  , toIObject = __nested_webpack_require_37587__(32);
 	module.exports = function(object, el){
 	  var O      = toIObject(object)
 	    , keys   = $.getKeys(O)
@@ -4584,21 +4615,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 32 */
-/***/ (function(module, exports, __nested_webpack_require_36990__) {
+/***/ (function(module, exports, __nested_webpack_require_37980__) {
 
 	// to indexed object, toObject with fallback for non-array-like ES3 strings
-	var IObject = __nested_webpack_require_36990__(33)
-	  , defined = __nested_webpack_require_36990__(35);
+	var IObject = __nested_webpack_require_37980__(33)
+	  , defined = __nested_webpack_require_37980__(35);
 	module.exports = function(it){
 	  return IObject(defined(it));
 	};
 
 /***/ }),
 /* 33 */
-/***/ (function(module, exports, __nested_webpack_require_37291__) {
+/***/ (function(module, exports, __nested_webpack_require_38281__) {
 
 	// fallback for non-array-like ES3 and non-enumerable old V8 strings
-	var cof = __nested_webpack_require_37291__(34);
+	var cof = __nested_webpack_require_38281__(34);
 	module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
 	  return cof(it) == 'String' ? it.split('') : Object(it);
 	};
@@ -4625,11 +4656,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 36 */
-/***/ (function(module, exports, __nested_webpack_require_37999__) {
+/***/ (function(module, exports, __nested_webpack_require_38989__) {
 
 	// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-	var toIObject = __nested_webpack_require_37999__(32)
-	  , getNames  = __nested_webpack_require_37999__(9).getNames
+	var toIObject = __nested_webpack_require_38989__(32)
+	  , getNames  = __nested_webpack_require_38989__(9).getNames
 	  , toString  = {}.toString;
 
 	var windowNames = typeof window == 'object' && Object.getOwnPropertyNames
@@ -4650,10 +4681,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 37 */
-/***/ (function(module, exports, __nested_webpack_require_38708__) {
+/***/ (function(module, exports, __nested_webpack_require_39698__) {
 
 	// all enumerable object keys, includes symbols
-	var $ = __nested_webpack_require_38708__(9);
+	var $ = __nested_webpack_require_39698__(9);
 	module.exports = function(it){
 	  var keys       = $.getKeys(it)
 	    , getSymbols = $.getSymbols;
@@ -4669,19 +4700,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 38 */
-/***/ (function(module, exports, __nested_webpack_require_39193__) {
+/***/ (function(module, exports, __nested_webpack_require_40183__) {
 
 	// 7.2.2 IsArray(argument)
-	var cof = __nested_webpack_require_39193__(34);
+	var cof = __nested_webpack_require_40183__(34);
 	module.exports = Array.isArray || function(arg){
 	  return cof(arg) == 'Array';
 	};
 
 /***/ }),
 /* 39 */
-/***/ (function(module, exports, __nested_webpack_require_39419__) {
+/***/ (function(module, exports, __nested_webpack_require_40409__) {
 
-	var isObject = __nested_webpack_require_39419__(40);
+	var isObject = __nested_webpack_require_40409__(40);
 	module.exports = function(it){
 	  if(!isObject(it))throw TypeError(it + ' is not an object!');
 	  return it;
@@ -4709,27 +4740,27 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 43 */
-/***/ (function(module, exports, __nested_webpack_require_39956__) {
+/***/ (function(module, exports, __nested_webpack_require_40946__) {
 
-	module.exports = { "default": __nested_webpack_require_39956__(44), __esModule: true };
+	module.exports = { "default": __nested_webpack_require_40946__(44), __esModule: true };
 
 /***/ }),
 /* 44 */
-/***/ (function(module, exports, __nested_webpack_require_40109__) {
+/***/ (function(module, exports, __nested_webpack_require_41099__) {
 
-	__nested_webpack_require_40109__(45);
-	__nested_webpack_require_40109__(51);
-	module.exports = __nested_webpack_require_40109__(29)('iterator');
+	__nested_webpack_require_41099__(45);
+	__nested_webpack_require_41099__(51);
+	module.exports = __nested_webpack_require_41099__(29)('iterator');
 
 /***/ }),
 /* 45 */
-/***/ (function(module, exports, __nested_webpack_require_40293__) {
+/***/ (function(module, exports, __nested_webpack_require_41283__) {
 
 	'use strict';
-	var $at  = __nested_webpack_require_40293__(46)(true);
+	var $at  = __nested_webpack_require_41283__(46)(true);
 
 	// 21.1.3.27 String.prototype[@@iterator]()
-	__nested_webpack_require_40293__(48)(String, 'String', function(iterated){
+	__nested_webpack_require_41283__(48)(String, 'String', function(iterated){
 	  this._t = String(iterated); // target
 	  this._i = 0;                // next index
 	// 21.1.5.2.1 %StringIteratorPrototype%.next()
@@ -4745,10 +4776,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 46 */
-/***/ (function(module, exports, __nested_webpack_require_40908__) {
+/***/ (function(module, exports, __nested_webpack_require_41898__) {
 
-	var toInteger = __nested_webpack_require_40908__(47)
-	  , defined   = __nested_webpack_require_40908__(35);
+	var toInteger = __nested_webpack_require_41898__(47)
+	  , defined   = __nested_webpack_require_41898__(35);
 	// true  -> String#at
 	// false -> String#codePointAt
 	module.exports = function(TO_STRING){
@@ -4778,19 +4809,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 48 */
-/***/ (function(module, exports, __nested_webpack_require_41836__) {
+/***/ (function(module, exports, __nested_webpack_require_42826__) {
 
 	'use strict';
-	var LIBRARY        = __nested_webpack_require_41836__(41)
-	  , $export        = __nested_webpack_require_41836__(20)
-	  , redefine       = __nested_webpack_require_41836__(24)
-	  , hide           = __nested_webpack_require_41836__(25)
-	  , has            = __nested_webpack_require_41836__(17)
-	  , Iterators      = __nested_webpack_require_41836__(49)
-	  , $iterCreate    = __nested_webpack_require_41836__(50)
-	  , setToStringTag = __nested_webpack_require_41836__(28)
-	  , getProto       = __nested_webpack_require_41836__(9).getProto
-	  , ITERATOR       = __nested_webpack_require_41836__(29)('iterator')
+	var LIBRARY        = __nested_webpack_require_42826__(41)
+	  , $export        = __nested_webpack_require_42826__(20)
+	  , redefine       = __nested_webpack_require_42826__(24)
+	  , hide           = __nested_webpack_require_42826__(25)
+	  , has            = __nested_webpack_require_42826__(17)
+	  , Iterators      = __nested_webpack_require_42826__(49)
+	  , $iterCreate    = __nested_webpack_require_42826__(50)
+	  , setToStringTag = __nested_webpack_require_42826__(28)
+	  , getProto       = __nested_webpack_require_42826__(9).getProto
+	  , ITERATOR       = __nested_webpack_require_42826__(29)('iterator')
 	  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
 	  , FF_ITERATOR    = '@@iterator'
 	  , KEYS           = 'keys'
@@ -4855,16 +4886,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 50 */
-/***/ (function(module, exports, __nested_webpack_require_44663__) {
+/***/ (function(module, exports, __nested_webpack_require_45653__) {
 
 	'use strict';
-	var $              = __nested_webpack_require_44663__(9)
-	  , descriptor     = __nested_webpack_require_44663__(26)
-	  , setToStringTag = __nested_webpack_require_44663__(28)
+	var $              = __nested_webpack_require_45653__(9)
+	  , descriptor     = __nested_webpack_require_45653__(26)
+	  , setToStringTag = __nested_webpack_require_45653__(28)
 	  , IteratorPrototype = {};
 
 	// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-	__nested_webpack_require_44663__(25)(IteratorPrototype, __nested_webpack_require_44663__(29)('iterator'), function(){ return this; });
+	__nested_webpack_require_45653__(25)(IteratorPrototype, __nested_webpack_require_45653__(29)('iterator'), function(){ return this; });
 
 	module.exports = function(Constructor, NAME, next){
 	  Constructor.prototype = $.create(IteratorPrototype, {next: descriptor(1, next)});
@@ -4873,27 +4904,27 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 51 */
-/***/ (function(module, exports, __nested_webpack_require_45276__) {
+/***/ (function(module, exports, __nested_webpack_require_46266__) {
 
-	__nested_webpack_require_45276__(52);
-	var Iterators = __nested_webpack_require_45276__(49);
+	__nested_webpack_require_46266__(52);
+	var Iterators = __nested_webpack_require_46266__(49);
 	Iterators.NodeList = Iterators.HTMLCollection = Iterators.Array;
 
 /***/ }),
 /* 52 */
-/***/ (function(module, exports, __nested_webpack_require_45487__) {
+/***/ (function(module, exports, __nested_webpack_require_46477__) {
 
 	'use strict';
-	var addToUnscopables = __nested_webpack_require_45487__(53)
-	  , step             = __nested_webpack_require_45487__(54)
-	  , Iterators        = __nested_webpack_require_45487__(49)
-	  , toIObject        = __nested_webpack_require_45487__(32);
+	var addToUnscopables = __nested_webpack_require_46477__(53)
+	  , step             = __nested_webpack_require_46477__(54)
+	  , Iterators        = __nested_webpack_require_46477__(49)
+	  , toIObject        = __nested_webpack_require_46477__(32);
 
 	// 22.1.3.4 Array.prototype.entries()
 	// 22.1.3.13 Array.prototype.keys()
 	// 22.1.3.29 Array.prototype.values()
 	// 22.1.3.30 Array.prototype[@@iterator]()
-	module.exports = __nested_webpack_require_45487__(48)(Array, 'Array', function(iterated, kind){
+	module.exports = __nested_webpack_require_46477__(48)(Array, 'Array', function(iterated, kind){
 	  this._t = toIObject(iterated); // target
 	  this._i = 0;                   // next index
 	  this._k = kind;                // kind
@@ -4934,25 +4965,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 55 */
-/***/ (function(module, exports, __nested_webpack_require_46959__) {
+/***/ (function(module, exports, __nested_webpack_require_47949__) {
 
-	module.exports = { "default": __nested_webpack_require_46959__(56), __esModule: true };
+	module.exports = { "default": __nested_webpack_require_47949__(56), __esModule: true };
 
 /***/ }),
 /* 56 */
-/***/ (function(module, exports, __nested_webpack_require_47112__) {
+/***/ (function(module, exports, __nested_webpack_require_48102__) {
 
-	__nested_webpack_require_47112__(51);
-	__nested_webpack_require_47112__(45);
-	module.exports = __nested_webpack_require_47112__(57);
+	__nested_webpack_require_48102__(51);
+	__nested_webpack_require_48102__(45);
+	module.exports = __nested_webpack_require_48102__(57);
 
 /***/ }),
 /* 57 */
-/***/ (function(module, exports, __nested_webpack_require_47284__) {
+/***/ (function(module, exports, __nested_webpack_require_48274__) {
 
-	var anObject = __nested_webpack_require_47284__(39)
-	  , get      = __nested_webpack_require_47284__(58);
-	module.exports = __nested_webpack_require_47284__(21).getIterator = function(it){
+	var anObject = __nested_webpack_require_48274__(39)
+	  , get      = __nested_webpack_require_48274__(58);
+	module.exports = __nested_webpack_require_48274__(21).getIterator = function(it){
 	  var iterFn = get(it);
 	  if(typeof iterFn != 'function')throw TypeError(it + ' is not iterable!');
 	  return anObject(iterFn.call(it));
@@ -4960,12 +4991,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 58 */
-/***/ (function(module, exports, __nested_webpack_require_47655__) {
+/***/ (function(module, exports, __nested_webpack_require_48645__) {
 
-	var classof   = __nested_webpack_require_47655__(59)
-	  , ITERATOR  = __nested_webpack_require_47655__(29)('iterator')
-	  , Iterators = __nested_webpack_require_47655__(49);
-	module.exports = __nested_webpack_require_47655__(21).getIteratorMethod = function(it){
+	var classof   = __nested_webpack_require_48645__(59)
+	  , ITERATOR  = __nested_webpack_require_48645__(29)('iterator')
+	  , Iterators = __nested_webpack_require_48645__(49);
+	module.exports = __nested_webpack_require_48645__(21).getIteratorMethod = function(it){
 	  if(it != undefined)return it[ITERATOR]
 	    || it['@@iterator']
 	    || Iterators[classof(it)];
@@ -4973,11 +5004,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 59 */
-/***/ (function(module, exports, __nested_webpack_require_48047__) {
+/***/ (function(module, exports, __nested_webpack_require_49037__) {
 
 	// getting tag from 19.1.3.6 Object.prototype.toString()
-	var cof = __nested_webpack_require_48047__(34)
-	  , TAG = __nested_webpack_require_48047__(29)('toStringTag')
+	var cof = __nested_webpack_require_49037__(34)
+	  , TAG = __nested_webpack_require_49037__(29)('toStringTag')
 	  // ES3 wrong here
 	  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
 
@@ -4994,25 +5025,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 60 */
-/***/ (function(module, exports, __nested_webpack_require_48715__) {
+/***/ (function(module, exports, __nested_webpack_require_49705__) {
 
-	module.exports = { "default": __nested_webpack_require_48715__(61), __esModule: true };
+	module.exports = { "default": __nested_webpack_require_49705__(61), __esModule: true };
 
 /***/ }),
 /* 61 */
-/***/ (function(module, exports, __nested_webpack_require_48868__) {
+/***/ (function(module, exports, __nested_webpack_require_49858__) {
 
-	__nested_webpack_require_48868__(62);
-	module.exports = __nested_webpack_require_48868__(21).Object.keys;
+	__nested_webpack_require_49858__(62);
+	module.exports = __nested_webpack_require_49858__(21).Object.keys;
 
 /***/ }),
 /* 62 */
-/***/ (function(module, exports, __nested_webpack_require_49026__) {
+/***/ (function(module, exports, __nested_webpack_require_50016__) {
 
 	// 19.1.2.14 Object.keys(O)
-	var toObject = __nested_webpack_require_49026__(63);
+	var toObject = __nested_webpack_require_50016__(63);
 
-	__nested_webpack_require_49026__(64)('keys', function($keys){
+	__nested_webpack_require_50016__(64)('keys', function($keys){
 	  return function keys(it){
 	    return $keys(toObject(it));
 	  };
@@ -5020,22 +5051,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 63 */
-/***/ (function(module, exports, __nested_webpack_require_49297__) {
+/***/ (function(module, exports, __nested_webpack_require_50287__) {
 
 	// 7.1.13 ToObject(argument)
-	var defined = __nested_webpack_require_49297__(35);
+	var defined = __nested_webpack_require_50287__(35);
 	module.exports = function(it){
 	  return Object(defined(it));
 	};
 
 /***/ }),
 /* 64 */
-/***/ (function(module, exports, __nested_webpack_require_49511__) {
+/***/ (function(module, exports, __nested_webpack_require_50501__) {
 
 	// most Object methods by ES6 should accept primitives
-	var $export = __nested_webpack_require_49511__(20)
-	  , core    = __nested_webpack_require_49511__(21)
-	  , fails   = __nested_webpack_require_49511__(19);
+	var $export = __nested_webpack_require_50501__(20)
+	  , core    = __nested_webpack_require_50501__(21)
+	  , fails   = __nested_webpack_require_50501__(19);
 	module.exports = function(KEY, exec){
 	  var fn  = (core.Object || {})[KEY] || Object[KEY]
 	    , exp = {};
@@ -5045,15 +5076,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 65 */
-/***/ (function(module, exports, __nested_webpack_require_49979__) {
+/***/ (function(module, exports, __nested_webpack_require_50969__) {
 
 	'use strict';
 
-	var _interopRequireDefault = __nested_webpack_require_49979__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_50969__(1)['default'];
 
 	exports.__esModule = true;
 
-	var _exception = __nested_webpack_require_49979__(6);
+	var _exception = __nested_webpack_require_50969__(6);
 
 	var _exception2 = _interopRequireDefault(_exception);
 
@@ -5073,17 +5104,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 66 */
-/***/ (function(module, exports, __nested_webpack_require_50742__) {
+/***/ (function(module, exports, __nested_webpack_require_51732__) {
 
 	'use strict';
 
-	var _interopRequireDefault = __nested_webpack_require_50742__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_51732__(1)['default'];
 
 	exports.__esModule = true;
 
-	var _utils = __nested_webpack_require_50742__(5);
+	var _utils = __nested_webpack_require_51732__(5);
 
-	var _exception = __nested_webpack_require_50742__(6);
+	var _exception = __nested_webpack_require_51732__(6);
 
 	var _exception2 = _interopRequireDefault(_exception);
 
@@ -5172,17 +5203,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 69 */
-/***/ (function(module, exports, __nested_webpack_require_53388__) {
+/***/ (function(module, exports, __nested_webpack_require_54378__) {
 
 	'use strict';
 
-	var _interopRequireDefault = __nested_webpack_require_53388__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_54378__(1)['default'];
 
 	exports.__esModule = true;
 
-	var _utils = __nested_webpack_require_53388__(5);
+	var _utils = __nested_webpack_require_54378__(5);
 
-	var _exception = __nested_webpack_require_53388__(6);
+	var _exception = __nested_webpack_require_54378__(6);
 
 	var _exception2 = _interopRequireDefault(_exception);
 
@@ -5218,16 +5249,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 70 */
-/***/ (function(module, exports, __nested_webpack_require_54570__) {
+/***/ (function(module, exports, __nested_webpack_require_55560__) {
 
 	'use strict';
 
-	var _interopRequireDefault = __nested_webpack_require_54570__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_55560__(1)['default'];
 
 	exports.__esModule = true;
 	exports.registerDefaultDecorators = registerDefaultDecorators;
 
-	var _decoratorsInline = __nested_webpack_require_54570__(71);
+	var _decoratorsInline = __nested_webpack_require_55560__(71);
 
 	var _decoratorsInline2 = _interopRequireDefault(_decoratorsInline);
 
@@ -5237,13 +5268,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 71 */
-/***/ (function(module, exports, __nested_webpack_require_55038__) {
+/***/ (function(module, exports, __nested_webpack_require_56028__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _utils = __nested_webpack_require_55038__(5);
+	var _utils = __nested_webpack_require_56028__(5);
 
 	exports['default'] = function (instance) {
 	  instance.registerDecorator('inline', function (fn, props, container, options) {
@@ -5270,13 +5301,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 72 */
-/***/ (function(module, exports, __nested_webpack_require_55863__) {
+/***/ (function(module, exports, __nested_webpack_require_56853__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _utils = __nested_webpack_require_55863__(5);
+	var _utils = __nested_webpack_require_56853__(5);
 
 	var logger = {
 	  methodMap: ['debug', 'info', 'warn', 'error'],
@@ -5321,24 +5352,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 73 */
-/***/ (function(module, exports, __nested_webpack_require_57190__) {
+/***/ (function(module, exports, __nested_webpack_require_58180__) {
 
 	'use strict';
 
-	var _Object$create = __nested_webpack_require_57190__(74)['default'];
+	var _Object$create = __nested_webpack_require_58180__(74)['default'];
 
-	var _Object$keys = __nested_webpack_require_57190__(60)['default'];
+	var _Object$keys = __nested_webpack_require_58180__(60)['default'];
 
-	var _interopRequireDefault = __nested_webpack_require_57190__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_58180__(1)['default'];
 
 	exports.__esModule = true;
 	exports.createProtoAccessControl = createProtoAccessControl;
 	exports.resultIsAllowed = resultIsAllowed;
+	exports.isPrototypeConstructor = isPrototypeConstructor;
 	exports.resetLoggedProperties = resetLoggedProperties;
 
-	var _utils = __nested_webpack_require_57190__(5);
+	var _utils = __nested_webpack_require_58180__(5);
 
-	var _logger = __nested_webpack_require_57190__(72);
+	var _logger = __nested_webpack_require_58180__(72);
 
 	var _logger2 = _interopRequireDefault(_logger);
 
@@ -5380,6 +5412,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
+	/**
+	 * Detect a prototype object's own "constructor" back-reference, e.g.
+	 * `Function.prototype.constructor === Function`. Because "constructor" is an
+	 * "own" property of such objects, it would otherwise bypass the prototype-access
+	 * checks and expose dangerous constructors (allowing arbitrary code execution).
+	 *
+	 * Only functions can be constructors, so other values are never treated as one
+	 * and their `prototype` is never read.
+	 *
+	 * @param {*} parent the object the property is being read from
+	 * @param {string} propertyName the property being looked up
+	 * @param {*} result the already-resolved value of `parent[propertyName]`
+	 * @returns {boolean} true if the lookup resolves `parent`'s own constructor
+	 */
+
+	function isPrototypeConstructor(parent, propertyName, result) {
+	  return propertyName === 'constructor' && typeof result === 'function' && parent === result.prototype;
+	}
+
 	function checkWhiteList(protoAccessControlForType, propertyName) {
 	  if (protoAccessControlForType.whitelist[propertyName] !== undefined) {
 	    return protoAccessControlForType.whitelist[propertyName] === true;
@@ -5406,15 +5457,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 74 */
-/***/ (function(module, exports, __nested_webpack_require_60188__) {
+/***/ (function(module, exports, __nested_webpack_require_62146__) {
 
-	module.exports = { "default": __nested_webpack_require_60188__(75), __esModule: true };
+	module.exports = { "default": __nested_webpack_require_62146__(75), __esModule: true };
 
 /***/ }),
 /* 75 */
-/***/ (function(module, exports, __nested_webpack_require_60341__) {
+/***/ (function(module, exports, __nested_webpack_require_62299__) {
 
-	var $ = __nested_webpack_require_60341__(9);
+	var $ = __nested_webpack_require_62299__(9);
 	module.exports = function create(P, D){
 	  return $.create(P, D);
 	};
@@ -5440,17 +5491,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 77 */
-/***/ (function(module, exports, __nested_webpack_require_60904__) {
+/***/ (function(module, exports, __nested_webpack_require_62862__) {
 
 	'use strict';
 
-	var _Object$seal = __nested_webpack_require_60904__(78)['default'];
+	var _Object$seal = __nested_webpack_require_62862__(78)['default'];
 
-	var _Object$keys = __nested_webpack_require_60904__(60)['default'];
+	var _Object$keys = __nested_webpack_require_62862__(60)['default'];
 
-	var _interopRequireWildcard = __nested_webpack_require_60904__(3)['default'];
+	var _interopRequireWildcard = __nested_webpack_require_62862__(3)['default'];
 
-	var _interopRequireDefault = __nested_webpack_require_60904__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_62862__(1)['default'];
 
 	exports.__esModule = true;
 	exports.checkRevision = checkRevision;
@@ -5460,21 +5511,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.invokePartial = invokePartial;
 	exports.noop = noop;
 
-	var _utils = __nested_webpack_require_60904__(5);
+	var _utils = __nested_webpack_require_62862__(5);
 
 	var Utils = _interopRequireWildcard(_utils);
 
-	var _exception = __nested_webpack_require_60904__(6);
+	var _exception = __nested_webpack_require_62862__(6);
 
 	var _exception2 = _interopRequireDefault(_exception);
 
-	var _base = __nested_webpack_require_60904__(4);
+	var _base = __nested_webpack_require_62862__(4);
 
-	var _helpers = __nested_webpack_require_60904__(10);
+	var _helpers = __nested_webpack_require_62862__(10);
 
-	var _internalWrapHelper = __nested_webpack_require_60904__(81);
+	var _internalWrapHelper = __nested_webpack_require_62862__(81);
 
-	var _internalProtoAccess = __nested_webpack_require_60904__(73);
+	var _internalProtoAccess = __nested_webpack_require_62862__(73);
 
 	function checkRevision(compilerInfo) {
 	  var compilerRevision = compilerInfo && compilerInfo[0] || 1,
@@ -5526,7 +5577,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var result = env.VM.invokePartial.call(this, partial, context, options);
 
+	    // An empty result normally means the partial is template source that still
+	    // has to be compiled. A function partial has already been invoked, so an
+	    // empty result from it is a bug in that partial.
+	    if (result == null && Utils.isFunction(partial)) {
+	      throw new _exception2['default']('The partial ' + options.name + ' returned no output: partials must return a string');
+	    }
+
 	    if (result == null && env.compile) {
+	      // Only template source registered as a partial may be compiled here.
+	      // Anything else (e.g. an AST-shaped object) must not become code.
+	      if (typeof partial !== 'string') {
+	        throw new _exception2['default']('The partial ' + options.name + ' could not be compiled: partials must be strings or functions returning strings');
+	      }
 	      options.partials[options.name] = env.compile(partial, templateSpec.compilerOptions, env);
 	      result = options.partials[options.name](context, options);
 	    }
@@ -5563,7 +5626,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (result == null) {
 	        return result;
 	      }
-	      if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+	      // Own properties are trusted context data and returned as-is, except for
+	      // a prototype's own "constructor" back-reference (e.g.
+	      // Function.prototype.constructor === Function): that must still pass the
+	      // prototype-access deny list, otherwise the Function constructor becomes
+	      // reachable and arbitrary code can be executed.
+	      if (Object.prototype.hasOwnProperty.call(parent, propertyName) && !_internalProtoAccess.isPrototypeConstructor(parent, propertyName, result)) {
 	        return result;
 	      }
 
@@ -5731,8 +5799,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else {
 	      partial = lookupOwnProperty(options.partials, options.name);
 	    }
-	  } else if (!partial.call && !options.name) {
-	    // This is a dynamic partial that returned a string
+	  } else if (typeof partial !== 'function' && !options.name) {
+	    // This is a dynamic partial that returned a name rather than a compiled
+	    // partial. Only functions are accepted as partials here; any other value
+	    // (including an object with a "call" property) is treated as a name, so
+	    // that context data can never be compiled as a template.
 	    options.name = partial;
 	    partial = lookupOwnProperty(options.partials, partial);
 	  }
@@ -5824,25 +5895,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 78 */
-/***/ (function(module, exports, __nested_webpack_require_74187__) {
+/***/ (function(module, exports, __nested_webpack_require_77608__) {
 
-	module.exports = { "default": __nested_webpack_require_74187__(79), __esModule: true };
+	module.exports = { "default": __nested_webpack_require_77608__(79), __esModule: true };
 
 /***/ }),
 /* 79 */
-/***/ (function(module, exports, __nested_webpack_require_74340__) {
+/***/ (function(module, exports, __nested_webpack_require_77761__) {
 
-	__nested_webpack_require_74340__(80);
-	module.exports = __nested_webpack_require_74340__(21).Object.seal;
+	__nested_webpack_require_77761__(80);
+	module.exports = __nested_webpack_require_77761__(21).Object.seal;
 
 /***/ }),
 /* 80 */
-/***/ (function(module, exports, __nested_webpack_require_74498__) {
+/***/ (function(module, exports, __nested_webpack_require_77919__) {
 
 	// 19.1.2.17 Object.seal(O)
-	var isObject = __nested_webpack_require_74498__(40);
+	var isObject = __nested_webpack_require_77919__(40);
 
-	__nested_webpack_require_74498__(64)('seal', function($seal){
+	__nested_webpack_require_77919__(64)('seal', function($seal){
 	  return function seal(it){
 	    return $seal && isObject(it) ? $seal(it) : it;
 	  };
@@ -5942,37 +6013,31 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 84 */
-/***/ (function(module, exports, __nested_webpack_require_77451__) {
+/***/ (function(module, exports, __nested_webpack_require_80872__) {
 
 	'use strict';
 
-	var _Object$keys = __nested_webpack_require_77451__(60)['default'];
+	var _interopRequireDefault = __nested_webpack_require_80872__(1)['default'];
 
-	var _interopRequireDefault = __nested_webpack_require_77451__(1)['default'];
-
-	var _interopRequireWildcard = __nested_webpack_require_77451__(3)['default'];
+	var _interopRequireWildcard = __nested_webpack_require_80872__(3)['default'];
 
 	exports.__esModule = true;
 	exports.parseWithoutProcessing = parseWithoutProcessing;
 	exports.parse = parse;
 
-	var _parser = __nested_webpack_require_77451__(85);
+	var _parser = __nested_webpack_require_80872__(85);
 
 	var _parser2 = _interopRequireDefault(_parser);
 
-	var _whitespaceControl = __nested_webpack_require_77451__(86);
+	var _whitespaceControl = __nested_webpack_require_80872__(86);
 
 	var _whitespaceControl2 = _interopRequireDefault(_whitespaceControl);
 
-	var _helpers = __nested_webpack_require_77451__(88);
+	var _helpers = __nested_webpack_require_80872__(89);
 
 	var Helpers = _interopRequireWildcard(_helpers);
 
-	var _exception = __nested_webpack_require_77451__(6);
-
-	var _exception2 = _interopRequireDefault(_exception);
-
-	var _utils = __nested_webpack_require_77451__(5);
+	var _utils = __nested_webpack_require_80872__(5);
 
 	exports.parser = _parser2['default'];
 
@@ -5982,9 +6047,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	function parseWithoutProcessing(input, options) {
 	  // Just return if an already-compiled AST was passed in.
 	  if (input.type === 'Program') {
-	    // When a pre-parsed AST is passed in, validate all node values to prevent
-	    // code injection via type-confused literals.
-	    validateInputAst(input);
 	    return input;
 	  }
 
@@ -6005,58 +6067,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var strip = new _whitespaceControl2['default'](options);
 
 	  return strip.accept(ast);
-	}
-
-	function validateInputAst(ast) {
-	  validateAstNode(ast);
-	}
-
-	function validateAstNode(node) {
-	  if (node == null) {
-	    return;
-	  }
-
-	  if (Array.isArray(node)) {
-	    node.forEach(validateAstNode);
-	    return;
-	  }
-
-	  if (typeof node !== 'object') {
-	    return;
-	  }
-
-	  if (node.type === 'PathExpression') {
-	    if (!isValidDepth(node.depth)) {
-	      throw new _exception2['default']('Invalid AST: PathExpression.depth must be an integer');
-	    }
-	    if (!Array.isArray(node.parts)) {
-	      throw new _exception2['default']('Invalid AST: PathExpression.parts must be an array');
-	    }
-	    for (var i = 0; i < node.parts.length; i++) {
-	      if (typeof node.parts[i] !== 'string') {
-	        throw new _exception2['default']('Invalid AST: PathExpression.parts must only contain strings');
-	      }
-	    }
-	  } else if (node.type === 'NumberLiteral') {
-	    if (typeof node.value !== 'number' || !isFinite(node.value)) {
-	      throw new _exception2['default']('Invalid AST: NumberLiteral.value must be a number');
-	    }
-	  } else if (node.type === 'BooleanLiteral') {
-	    if (typeof node.value !== 'boolean') {
-	      throw new _exception2['default']('Invalid AST: BooleanLiteral.value must be a boolean');
-	    }
-	  }
-
-	  _Object$keys(node).forEach(function (propertyName) {
-	    if (propertyName === 'loc') {
-	      return;
-	    }
-	    validateAstNode(node[propertyName]);
-	  });
-	}
-
-	function isValidDepth(depth) {
-	  return typeof depth === 'number' && isFinite(depth) && Math.floor(depth) === depth && depth >= 0;
 	}
 
 /***/ }),
@@ -6845,15 +6855,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 86 */
-/***/ (function(module, exports, __nested_webpack_require_130256__) {
+/***/ (function(module, exports, __nested_webpack_require_131817__) {
 
 	'use strict';
 
-	var _interopRequireDefault = __nested_webpack_require_130256__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_131817__(1)['default'];
 
 	exports.__esModule = true;
 
-	var _visitor = __nested_webpack_require_130256__(87);
+	var _visitor = __nested_webpack_require_131817__(87);
 
 	var _visitor2 = _interopRequireDefault(_visitor);
 
@@ -6899,7 +6909,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // If we are on a standalone node, save the indent info for partials
 	        if (current.type === 'PartialStatement') {
 	          // Pull out the whitespace from the final line
-	          current.indent = /([ \t]+$)/.exec(body[i - 1].original)[1];
+	          current.indent = /(?:^|[^ \t])([ \t]+)$/.exec(body[i - 1].original)[1];
 	        }
 	      }
 	    }
@@ -7007,7 +7017,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  if (prev.type === 'ContentStatement') {
-	    return (sibling || !isRoot ? /\r?\n\s*?$/ : /(^|\r?\n)\s*?$/).test(prev.original);
+	    // Matches when the trailing whitespace contains a newline (or, for the
+	    // root's first node, is the whole string). See omitLeft for the anchoring.
+	    return (sibling || !isRoot ? /(?:^|\S)[^\S\n]*\n\s*$/ : /^\s*$|(?:^|\S)[^\S\n]*\n\s*$/).test(prev.original);
 	  }
 	}
 	function isNextWhitespace(body, i, isRoot) {
@@ -7059,7 +7071,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // We omit the last node if it's whitespace only and not preceded by a non-content node.
 	  var original = current.value;
-	  current.value = current.value.replace(multiple ? /\s+$/ : /[ \t]+$/, '');
+	  // The match must start after a non-whitespace character (or at the start):
+	  // a plain /\s+$/ is retried at every position of a whitespace run, which
+	  // takes quadratic time on long runs.
+	  current.value = current.value.replace(multiple ? /(^|\S)\s+$/ : /(^|[^ \t])[ \t]+$/, '$1');
 	  current.leftStripped = current.value !== original;
 	  return current.leftStripped;
 	}
@@ -7069,20 +7084,44 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 87 */
-/***/ (function(module, exports, __nested_webpack_require_137041__) {
+/***/ (function(module, exports, __nested_webpack_require_139013__) {
 
 	'use strict';
 
-	var _interopRequireDefault = __nested_webpack_require_137041__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_139013__(1)['default'];
 
 	exports.__esModule = true;
 
-	var _exception = __nested_webpack_require_137041__(6);
+	var _exception = __nested_webpack_require_139013__(6);
 
 	var _exception2 = _interopRequireDefault(_exception);
 
+	var _utils = __nested_webpack_require_139013__(5);
+
+	var _nodeTypes = __nested_webpack_require_139013__(88);
+
 	function Visitor() {
 	  this.parents = [];
+	}
+
+	/**
+	 * Whether a visitor may dispatch on a node type.
+	 *
+	 * A type is dispatchable if the parser produces it, or if the visitor
+	 * (typically a subclass) defines a handler for it that is not a method of
+	 * Visitor itself. `in` is used for the latter so that accept, acceptKey and
+	 * everything inherited from Object.prototype (constructor, __proto__, ...)
+	 * can never be reached through a crafted `type`.
+	 *
+	 * Subclasses that visit untrusted ASTs, such as WhitespaceControl, must
+	 * therefore define nothing but node handlers as function properties.
+	 *
+	 * @param {Visitor} visitor the visitor that would handle the node
+	 * @param {*} type the untrusted `type` of the node
+	 * @returns {boolean} true if the visitor may call its `type` method
+	 */
+	function isDispatchable(visitor, type) {
+	  return _utils.indexOf(_nodeTypes.NODE_TYPES, type) !== -1 || !(type in Visitor.prototype) && typeof visitor[type] === 'function';
 	}
 
 	Visitor.prototype = {
@@ -7093,9 +7132,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  acceptKey: function acceptKey(node, name) {
 	    var value = this.accept(node[name]);
 	    if (this.mutating) {
-	      // Hacky sanity check: This may have a few false positives for type for the helper
-	      // methods but will generally do the right thing without a lot of overhead.
-	      if (value && !Visitor.prototype[value.type]) {
+	      if (value && !isDispatchable(this, value.type)) {
 	        throw new _exception2['default']('Unexpected node type "' + value.type + '" found when accepting ' + name + ' on ' + node.type);
 	      }
 	      node[name] = value;
@@ -7131,8 +7168,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return;
 	    }
 
-	    /* istanbul ignore next: Sanity code */
-	    if (!this[object.type]) {
+	    // Dispatching on an unknown type could call an arbitrary method of the
+	    // visitor (e.g. `accept` itself) with an untrusted AST node.
+	    if (!isDispatchable(this, object.type) || !this[object.type]) {
 	      throw new _exception2['default']('Unknown type: ' + object.type, object);
 	    }
 
@@ -7212,11 +7250,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 88 */
-/***/ (function(module, exports, __nested_webpack_require_140897__) {
+/***/ (function(module, exports) {
+
+	// AST node types produced by the parser. Visitor#accept and Compiler#accept
+	// dispatch on the untrusted `node.type`, so they must never call any other
+	// method of the visiting object. The Compiler only accepts these types; a
+	// Visitor also accepts types for which a subclass defines its own handler.
+	'use strict';
+
+	exports.__esModule = true;
+	var NODE_TYPES = ['Program', 'BlockStatement', 'DecoratorBlock', 'PartialStatement', 'PartialBlockStatement', 'Decorator', 'MustacheStatement', 'ContentStatement', 'CommentStatement', 'SubExpression', 'PathExpression', 'StringLiteral', 'NumberLiteral', 'BooleanLiteral', 'UndefinedLiteral', 'NullLiteral', 'Hash', 'HashPair'];
+	exports.NODE_TYPES = NODE_TYPES;
+
+/***/ }),
+/* 89 */
+/***/ (function(module, exports, __nested_webpack_require_144631__) {
 
 	'use strict';
 
-	var _interopRequireDefault = __nested_webpack_require_140897__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_144631__(1)['default'];
 
 	exports.__esModule = true;
 	exports.SourceLocation = SourceLocation;
@@ -7230,7 +7282,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.prepareProgram = prepareProgram;
 	exports.preparePartialBlock = preparePartialBlock;
 
-	var _exception = __nested_webpack_require_140897__(6);
+	var _exception = __nested_webpack_require_144631__(6);
 
 	var _exception2 = _interopRequireDefault(_exception);
 
@@ -7442,31 +7494,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ }),
-/* 89 */
-/***/ (function(module, exports, __nested_webpack_require_146492__) {
+/* 90 */
+/***/ (function(module, exports, __nested_webpack_require_150226__) {
 
 	/* eslint-disable new-cap */
 
 	'use strict';
 
-	var _Object$create = __nested_webpack_require_146492__(74)['default'];
+	var _Object$create = __nested_webpack_require_150226__(74)['default'];
 
-	var _interopRequireDefault = __nested_webpack_require_146492__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_150226__(1)['default'];
 
 	exports.__esModule = true;
 	exports.Compiler = Compiler;
 	exports.precompile = precompile;
 	exports.compile = compile;
 
-	var _exception = __nested_webpack_require_146492__(6);
+	var _exception = __nested_webpack_require_150226__(6);
 
 	var _exception2 = _interopRequireDefault(_exception);
 
-	var _utils = __nested_webpack_require_146492__(5);
+	var _utils = __nested_webpack_require_150226__(5);
 
-	var _ast = __nested_webpack_require_146492__(83);
+	var _ast = __nested_webpack_require_150226__(83);
 
 	var _ast2 = _interopRequireDefault(_ast);
+
+	var _nodeTypes = __nested_webpack_require_150226__(88);
 
 	var slice = [].slice;
 
@@ -7547,8 +7601,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  accept: function accept(node) {
-	    /* istanbul ignore next: Sanity code */
-	    if (!this[node.type]) {
+	    // Dispatching on an unknown type could call an arbitrary Compiler method.
+	    if (_utils.indexOf(_nodeTypes.NODE_TYPES, node.type) === -1 || !this[node.type]) {
 	      throw new _exception2['default']('Unknown type: ' + node.type, node);
 	    }
 
@@ -7559,6 +7613,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  Program: function Program(program) {
+	    validateBlockParams(program);
 	    this.options.blockParams.unshift(program.blockParams);
 
 	    var body = program.body,
@@ -7674,6 +7729,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  ContentStatement: function ContentStatement(content) {
+	    if (content.value != null && typeof content.value !== 'string') {
+	      throw invalidAst(content, 'value must be a string');
+	    }
 	    if (content.value) {
 	      this.opcode('appendContent', content.value);
 	    }
@@ -7698,7 +7756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        name = path.parts[0],
 	        isBlock = program != null || inverse != null;
 
-	    this.opcode('getContext', path.depth);
+	    this.opcode('getContext', validateDepth(path));
 
 	    this.opcode('pushProgram', program);
 	    this.opcode('pushProgram', inverse);
@@ -7735,35 +7793,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  PathExpression: function PathExpression(path) {
-	    this.addDepth(path.depth);
-	    this.opcode('getContext', path.depth);
+	    // Validate AST values at the compiler boundary: javascript-compiler.js
+	    // trusts all opcode arguments to be safe.
+	    var depth = validateDepth(path);
+	    var parts = validateParts(path);
 
-	    var name = path.parts[0],
+	    this.addDepth(depth);
+	    this.opcode('getContext', depth);
+
+	    var name = parts[0],
 	        scoped = _ast2['default'].helpers.scopedId(path),
-	        blockParamId = !path.depth && !scoped && this.blockParamIndex(name);
+	        blockParamId = !depth && !scoped && this.blockParamIndex(name);
 
 	    if (blockParamId) {
-	      this.opcode('lookupBlockParam', blockParamId, path.parts);
+	      this.opcode('lookupBlockParam', blockParamId, parts);
 	    } else if (!name) {
 	      // Context reference, i.e. `{{foo .}}` or `{{foo ..}}`
 	      this.opcode('pushContext');
 	    } else if (path.data) {
 	      this.options.data = true;
-	      this.opcode('lookupData', path.depth, path.parts, path.strict);
+	      this.opcode('lookupData', depth, parts, path.strict);
 	    } else {
-	      this.opcode('lookupOnContext', path.parts, path.falsy, path.strict, scoped);
+	      this.opcode('lookupOnContext', parts, path.falsy, path.strict, scoped);
 	    }
 	  },
 
 	  StringLiteral: function StringLiteral(string) {
+	    validateLiteral(string);
 	    this.opcode('pushString', string.value);
 	  },
 
 	  NumberLiteral: function NumberLiteral(number) {
+	    validateLiteral(number);
 	    this.opcode('pushLiteral', number.value);
 	  },
 
 	  BooleanLiteral: function BooleanLiteral(bool) {
+	    validateLiteral(bool);
 	    this.opcode('pushLiteral', bool.value);
 	  },
 
@@ -7778,7 +7844,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  Hash: function Hash(hash) {
 	    var pairs = hash.pairs,
 	        i = 0,
-	        l = pairs.length;
+	        l = undefined;
+
+	    if (!_utils.isArray(pairs)) {
+	      throw invalidAst(hash, 'pairs must be an array');
+	    }
+	    l = pairs.length;
+	    for (var j = 0; j < l; j++) {
+	      if (!pairs[j] || typeof pairs[j].key !== 'string') {
+	        throw invalidAst(hash, 'pair keys must be strings');
+	      }
+	    }
 
 	    this.opcode('pushHash');
 
@@ -7809,6 +7885,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  classifySexpr: function classifySexpr(sexpr) {
+	    // The first part is used as a helper name below, e.g. for known helpers,
+	    // before the PathExpression handler gets to validate the parts.
+	    validateParts(sexpr.path);
 	    var isSimple = _ast2['default'].helpers.simpleId(sexpr.path);
 
 	    var isBlockParam = isSimple && !!this.blockParamIndex(sexpr.path.parts[0]);
@@ -7850,17 +7929,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  pushParam: function pushParam(val) {
+	    // Literal params are not visited by their node handlers in stringParams
+	    // mode, so their values must be validated here as well.
+	    validateLiteral(val);
 	    var value = val.value != null ? val.value : val.original || '';
+	    var depth = validateDepth(val);
 
 	    if (this.stringParams) {
+	      // pushStringParam emits non-string values as raw JavaScript literals.
+	      // Literal values are validated above, but `original` is not, so
+	      // anything that is not a number or boolean is stringified.
+	      if (typeof value !== 'number' && typeof value !== 'boolean') {
+	        value = String(value);
+	      }
 	      if (value.replace) {
 	        value = value.replace(/^(\.?\.\/)*/g, '').replace(/\//g, '.');
 	      }
-
-	      if (val.depth) {
-	        this.addDepth(val.depth);
+	      if (depth) {
+	        this.addDepth(depth);
 	      }
-	      this.opcode('getContext', val.depth || 0);
+	      this.opcode('getContext', depth);
 	      this.opcode('pushStringParam', value, val.type);
 
 	      if (val.type === 'SubExpression') {
@@ -7871,8 +7959,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else {
 	      if (this.trackIds) {
 	        var blockParamIndex = undefined;
-	        if (val.parts && !_ast2['default'].helpers.scopedId(val) && !val.depth) {
-	          blockParamIndex = this.blockParamIndex(val.parts[0]);
+	        if (val.parts && !_ast2['default'].helpers.scopedId(val) && !depth) {
+	          // The parts are read here before the PathExpression handler,
+	          // invoked by accept() below, gets to validate them.
+	          blockParamIndex = this.blockParamIndex(validateParts(val)[0]);
 	        }
 	        if (blockParamIndex) {
 	          var blockParamChild = val.parts.slice(1).join('.');
@@ -7981,6 +8071,111 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return ret;
 	}
 
+	/**
+	 * Create the exception thrown for an AST node that fails validation.
+	 *
+	 * @param {Object} node the offending AST node; its `type` is included in the
+	 *   message and its `loc`, if present, in the error location
+	 * @param {string} message what is wrong with the node
+	 * @returns {Exception} the exception to throw
+	 */
+	function invalidAst(node, message) {
+	  return new _exception2['default']('Invalid AST: ' + node.type + ' ' + message, node);
+	}
+
+	/**
+	 * Validate the `depth` of a path or param node.
+	 *
+	 * A missing depth is treated as 0, because ASTs built by hand or by other
+	 * tools commonly omit it. Any depth that is present must be a non-negative
+	 * integer, since it is written into the generated code.
+	 *
+	 * @param {Object} node the AST node whose `depth` is validated
+	 * @returns {number} the validated depth, or 0 if the node has none
+	 * @throws {Exception} if the depth is present but not a non-negative integer
+	 */
+	function validateDepth(node) {
+	  var depth = node.depth;
+	  if (depth == null) {
+	    return 0;
+	  }
+	  if (typeof depth !== 'number' || !isFinite(depth) || Math.floor(depth) !== depth || depth < 0) {
+	    throw invalidAst(node, 'depth must be a non-negative integer');
+	  }
+	  return depth;
+	}
+
+	/**
+	 * Validate the `value` of a StringLiteral, NumberLiteral or BooleanLiteral.
+	 *
+	 * Literal values are written into the generated code, so they must have
+	 * exactly the type their node promises. Nodes of any other type pass through
+	 * unchanged.
+	 *
+	 * Numbers need not be finite: the parser produces Infinity for very long
+	 * number literals, and Infinity and NaN are emitted as the read-only globals
+	 * of the same name.
+	 *
+	 * @param {Object} node the AST node to validate
+	 * @throws {Exception} if the value does not match the literal type
+	 */
+	function validateLiteral(node) {
+	  var value = node.value;
+	  if (node.type === 'StringLiteral' && typeof value !== 'string') {
+	    throw invalidAst(node, 'value must be a string');
+	  } else if (node.type === 'NumberLiteral' && typeof value !== 'number') {
+	    throw invalidAst(node, 'value must be a number');
+	  } else if (node.type === 'BooleanLiteral' && typeof value !== 'boolean') {
+	    throw invalidAst(node, 'value must be a boolean');
+	  }
+	}
+
+	/**
+	 * Validate that a node property is an array containing only strings.
+	 *
+	 * @param {Object} node the AST node the property belongs to, for the error
+	 * @param {*} value the property value to validate
+	 * @param {string} name the property name, used in the error message
+	 * @returns {string[]} the validated array
+	 * @throws {Exception} if the value is not an array or contains non-strings
+	 */
+	function validateStringArray(node, value, name) {
+	  if (!_utils.isArray(value)) {
+	    throw invalidAst(node, name + ' must be an array');
+	  }
+	  for (var i = 0; i < value.length; i++) {
+	    if (typeof value[i] !== 'string') {
+	      throw invalidAst(node, name + ' must only contain strings');
+	    }
+	  }
+	  return value;
+	}
+
+	/**
+	 * Validate the `parts` of a PathExpression node.
+	 *
+	 * @param {Object} path the PathExpression node
+	 * @returns {string[]} the validated parts
+	 * @throws {Exception} if `parts` is not an array of strings
+	 */
+	function validateParts(path) {
+	  return validateStringArray(path, path.parts, 'parts');
+	}
+
+	/**
+	 * Validate the optional `blockParams` of a Program node. Its length is
+	 * written into the generated code, so it must be an array of strings when
+	 * present.
+	 *
+	 * @param {Object} program the Program node
+	 * @throws {Exception} if `blockParams` is present and not an array of strings
+	 */
+	function validateBlockParams(program) {
+	  if (program.blockParams != null) {
+	    validateStringArray(program, program.blockParams, 'blockParams');
+	  }
+	}
+
 	function argEquals(a, b) {
 	  if (a === b) {
 	    return true;
@@ -8013,26 +8208,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ }),
-/* 90 */
-/***/ (function(module, exports, __nested_webpack_require_162909__) {
+/* 91 */
+/***/ (function(module, exports, __nested_webpack_require_172128__) {
 
 	'use strict';
 
-	var _Object$keys = __nested_webpack_require_162909__(60)['default'];
+	var _Object$keys = __nested_webpack_require_172128__(60)['default'];
 
-	var _interopRequireDefault = __nested_webpack_require_162909__(1)['default'];
+	var _interopRequireDefault = __nested_webpack_require_172128__(1)['default'];
 
 	exports.__esModule = true;
 
-	var _base = __nested_webpack_require_162909__(4);
+	var _base = __nested_webpack_require_172128__(4);
 
-	var _exception = __nested_webpack_require_162909__(6);
+	var _exception = __nested_webpack_require_172128__(6);
 
 	var _exception2 = _interopRequireDefault(_exception);
 
-	var _utils = __nested_webpack_require_162909__(5);
+	var _utils = __nested_webpack_require_172128__(5);
 
-	var _codeGen = __nested_webpack_require_162909__(91);
+	var _codeGen = __nested_webpack_require_172128__(92);
 
 	var _codeGen2 = _interopRequireDefault(_codeGen);
 
@@ -8049,7 +8244,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return this.internalNameLookup(parent, name);
 	  },
 	  depthedLookup: function depthedLookup(name) {
-	    return [this.aliasable('container.lookup'), '(depths, ', JSON.stringify(name), ')'];
+	    return [this.aliasable('container.lookup'), '(depths, ', this.quotedString(name), ')'];
 	  },
 
 	  compilerInfo: function compilerInfo() {
@@ -8084,7 +8279,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // END PUBLIC API
 	  internalNameLookup: function internalNameLookup(parent, name) {
 	    this.lookupPropertyFunctionIsUsed = true;
-	    return ['lookupProperty(', parent, ',', JSON.stringify(name), ')'];
+	    return ['lookupProperty(', parent, ',', this.quotedString(name), ')'];
 	  },
 
 	  lookupPropertyFunctionIsUsed: false,
@@ -8759,7 +8954,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    if (indent) {
-	      options.indent = JSON.stringify(indent);
+	      options.indent = this.quotedString(indent);
 	    }
 	    options.helpers = 'helpers';
 	    options.partials = 'partials';
@@ -8815,7 +9010,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  pushId: function pushId(type, name, child) {
 	    if (type === 'BlockParam') {
-	      this.pushStackLiteral('blockParams[' + name[0] + '].path[' + name[1] + ']' + (child ? ' + ' + JSON.stringify('.' + child) : ''));
+	      this.pushStackLiteral('blockParams[' + name[0] + '].path[' + name[1] + ']' + (child ? ' + ' + this.quotedString('.' + child) : ''));
 	    } else if (type === 'PathExpression') {
 	      this.pushString(name);
 	    } else if (type === 'SubExpression') {
@@ -9130,7 +9325,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  setupHelperArgs: function setupHelperArgs(helper, paramSize, params, useRegister) {
 	    var options = this.setupParams(helper, paramSize, params);
-	    options.loc = JSON.stringify(this.source.currentLocation);
+	    options.loc = locationLiteral(this);
 	    options = this.objectLiteral(options);
 	    if (useRegister) {
 	      this.useRegister('options');
@@ -9162,6 +9357,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return !JavaScriptCompiler.RESERVED_WORDS[name] && /^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(name);
 	};
 
+	/**
+	 * The compiler's current source location as a JavaScript literal.
+	 *
+	 * Hand-built ASTs may omit `loc`; emitting the literal `undefined` then
+	 * keeps the generated code valid and drops the key from object literals.
+	 * The location's `source` is the `srcName` option, so it is escaped like
+	 * every other string in the generated code.
+	 *
+	 * @param {JavaScriptCompiler} compiler the compiler whose location is emitted
+	 * @returns {string} a JSON object literal, or the string "undefined"
+	 */
+	function locationLiteral(compiler) {
+	  var loc = compiler.source.currentLocation;
+	  return loc ? _codeGen.safeJsonLiteral(loc) : 'undefined';
+	}
+
 	function strictLookup(requireTerminal, compiler, parts, startPartIndex, type) {
 	  var stack = compiler.popStack(),
 	      len = parts.length;
@@ -9174,7 +9385,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  if (requireTerminal) {
-	    return [compiler.aliasable('container.strict'), '(', stack, ', ', compiler.quotedString(parts[len]), ', ', JSON.stringify(compiler.source.currentLocation), ' )'];
+	    return [compiler.aliasable('container.strict'), '(', stack, ', ', compiler.quotedString(parts[len]), ', ', locationLiteral(compiler), ' )'];
 	  } else {
 	    return stack;
 	  }
@@ -9184,17 +9395,70 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ }),
-/* 91 */
-/***/ (function(module, exports, __nested_webpack_require_199397__) {
+/* 92 */
+/***/ (function(module, exports, __nested_webpack_require_209240__) {
 
 	/* global define, require */
 	'use strict';
 
-	var _Object$keys = __nested_webpack_require_199397__(60)['default'];
+	var _Object$keys = __nested_webpack_require_209240__(60)['default'];
 
 	exports.__esModule = true;
+	exports.safeJsonLiteral = safeJsonLiteral;
 
-	var _utils = __nested_webpack_require_199397__(5);
+	var _utils = __nested_webpack_require_209240__(5);
+
+	// Matches any character that quotedString may have to escape: quotes,
+	// backslashes, control characters, line separators, surrogates and "<". Most
+	// strings, e.g. lookup names, contain none of them and can skip the escaping.
+	// eslint-disable-next-line no-control-regex
+	var NEEDS_ESCAPING = /[\x00-\x1f\\"\u2028\u2029<\ud800-\udfff]/;
+
+	// Per HTML "Restrictions for contents of script elements": "<!--", "<script"
+	// and "</script" can end or change the parsing of an enclosing <script>
+	// element.
+	var SCRIPT_DELIMITERS = /<(?=!--|\/?script)/gi;
+
+	/**
+	 * Escape the "<" of every sequence that could end or change the parsing of
+	 * an enclosing <script> element.
+	 *
+	 * Only pass JavaScript or JSON code in which "<" can only occur inside string
+	 * literals, where "\u003C" has the same value.
+	 *
+	 * @param {string} code the code to escape
+	 * @returns {string} the escaped code
+	 */
+	function escapeScriptDelimiters(code) {
+	  return code.replace(SCRIPT_DELIMITERS, '\\u003C');
+	}
+
+	/**
+	 * Escape a UTF-16 surrogate code unit as a "\uXXXX" escape sequence.
+	 *
+	 * @param {string} surrogate a single surrogate code unit
+	 * @returns {string} the escape sequence
+	 */
+	function escapeSurrogate(surrogate) {
+	  return '\\u' + surrogate.charCodeAt(0).toString(16);
+	}
+
+	/**
+	 * Convert a value to a JSON literal that is safe to write into generated
+	 * code: valid in ES5, where line and paragraph separators end string literals,
+	 * encodable as UTF-8 on every engine, and safe inside an enclosing <script>
+	 * element.
+	 *
+	 * @param {*} value the value to convert
+	 * @returns {string} the JavaScript literal
+	 */
+
+	function safeJsonLiteral(value) {
+	  return escapeScriptDelimiters(JSON.stringify(value).replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029')
+	  // Engines before ES2019 leave lone surrogates unescaped, and those cannot
+	  // be encoded as UTF-8. Escaping paired ones as well keeps the value.
+	  .replace(/[\ud800-\udfff]/g, escapeSurrogate));
+	}
 
 	var SourceNode = undefined;
 
@@ -9303,8 +9567,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  quotedString: function quotedString(str) {
-	    return '"' + (str + '').replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\u2028/g, '\\u2028') // Per Ecma-262 7.3 + 7.8.4
-	    .replace(/\u2029/g, '\\u2029') + '"';
+	    str = str + '';
+	    // Fast path: quotedString runs for every lookup name and content string,
+	    // and the chain of replacements below is much slower than a single test.
+	    if (!NEEDS_ESCAPING.test(str)) {
+	      return '"' + str + '"';
+	    }
+
+	    // JSON.stringify escapes quotes, backslashes and control characters;
+	    // safeJsonLiteral adds line separators, surrogates and script delimiters.
+	    return safeJsonLiteral(str);
 	  },
 
 	  objectLiteral: function objectLiteral(obj) {
@@ -9351,7 +9623,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	exports['default'] = CodeGen;
-	module.exports = exports['default'];
 
 /***/ })
 /******/ ])

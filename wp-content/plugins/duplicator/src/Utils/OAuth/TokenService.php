@@ -118,6 +118,15 @@ class TokenService
             throw new \Exception($message);
         }
 
+        $code = (int) wp_remote_retrieve_response_code($response);
+        if ($code < 200 || $code > 299) {
+            throw new \Exception("Token refresh request failed with HTTP status {$code}");
+        }
+
+        if (!is_array($data)) {
+            throw new \Exception('Could not decode token refresh response body');
+        }
+
         $token->updateProperties($data);
     }
 

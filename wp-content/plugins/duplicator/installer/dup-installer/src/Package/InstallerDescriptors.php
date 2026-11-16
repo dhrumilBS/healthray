@@ -6,6 +6,8 @@ class InstallerDescriptors
 {
     const FIRST_VERSION_NEW_ARCHIVE_FILES = '4.5.20';
     const DESCRIPTORS_FOLDER_PREFIX       = 'dup_descriptors_';
+    /** @var string Folder holding the database dump files, inside the descriptors folder */
+    const DB_DUMPS_FOLDER = 'db_dumps';
 
     const TYPE_ORIG_FILES            = 'orig_files';
     const TYPE_ARCHIVE_CONFIG        = 'archive_config';
@@ -16,6 +18,7 @@ class InstallerDescriptors
     const TYPE_MANUAL_EXTRACT        = 'manual_extract';
     const TYPE_DB_DUMP               = 'db_dump';
     const TYPE_DB_DUMP_GZ            = 'db_dump_gz';
+    const TYPE_DB_DUMPS_DIR          = 'db_dumps_dir';
     const TYPE_PARAMS                = 'params';
     const TYPE_INST_CHUNK_DATA       = 'inst_chunk_data';
     const TYPE_INST_NOTICES          = 'inst_notices';
@@ -81,8 +84,9 @@ class InstallerDescriptors
             self::TYPE_DIR_LIST              => 'scanned-dirs.txt',
             self::TYPE_INDEX                 => 'index.txt',
             self::TYPE_MANUAL_EXTRACT        => 'manual-extract',
-            self::TYPE_DB_DUMP               => 'db_dumps/' . $this->date . '-dump.sql',
-            self::TYPE_DB_DUMP_GZ            => 'db_dumps/' . $this->date . '-dump.sql.gz',
+            self::TYPE_DB_DUMPS_DIR          => self::DB_DUMPS_FOLDER,
+            self::TYPE_DB_DUMP               => self::DB_DUMPS_FOLDER . '/' . $this->date . '-dump.sql',
+            self::TYPE_DB_DUMP_GZ            => self::DB_DUMPS_FOLDER . '/' . $this->date . '-dump.sql.gz',
             self::TYPE_INST_CHUNK_DATA       => 'installer-chunk-data.json',
             self::TYPE_INST_NOTICES          => 'installer-notices.json',
             self::TYPE_INST_DB_DATA          => 'installer-db-data.json',

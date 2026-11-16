@@ -1,20 +1,4 @@
-<?php
-
-if (!defined('ABSPATH')) die('No direct access allowed');
-
-global $updraftplus, $updraftplus_checkout_embed;
-$tick = UPDRAFTPLUS_URL.'/images/updraft_tick.png';
-$cross = UPDRAFTPLUS_URL.'/images/updraft_cross.png';
-$freev = UPDRAFTPLUS_URL.'/images/updraft_freev.png';
-$premv = UPDRAFTPLUS_URL.'/images/updraft_premv.png';
-
-$checkout_embed_premium_attribute = '';
-
-if ($updraftplus_checkout_embed) {
-	$checkout_embed_premium_attribute = $updraftplus_checkout_embed->get_product('updraftpremium') ? 'data-embed-checkout="'.apply_filters('updraftplus_com_link', $updraftplus_checkout_embed->get_product('updraftpremium', UpdraftPlus_Options::admin_page_url().'?page=updraftplus&tab=addons')).'"' : '';
-}
-
-?>
+<?php if (!defined('ABSPATH')) die('No direct access allowed'); ?>
 <div class="updraft_premium">
 <?php if ('1' === $updraftplus->version[0] && !defined('UDADDONS2_DIR')) : ?>
 	<section>
@@ -32,18 +16,15 @@ if ($updraftplus_checkout_embed) {
 				</div>
 				<div class="updraft_premium_cta__action">
 					<?php
-					$updraftplus_product = UpdraftPlus_Manipulation_Functions::fetch_superglobal('request', 'updraftplus_product');
-					$status = UpdraftPlus_Manipulation_Functions::fetch_superglobal('request', 'status');
-					$user_bought_udp = isset($updraftplus_product) && 'updraftpremium' === $updraftplus_product && isset($status) && 'complete' === $status;
 					if (!$user_bought_udp) {
-						$aria_label = sprintf(
+						$updraft_aria_label = sprintf(
 							/* translators: %s: UpdraftPlus product name */
 							__('Get %s here', 'updraftplus'),
 							'UpdraftPlus Premium'
 						);
-						$aria_label .= ' '.__('Goes to the teamupdraft.com checkout page', 'updraftplus');
+						$updraft_aria_label .= ' '.__('Goes to the teamupdraft.com checkout page', 'updraftplus');
 					?>
-						<a aria-label="<?php echo esc_attr($aria_label); ?>" target="_blank" class="button button-primary button-hero" href="<?php echo esc_url(apply_filters('updraftplus_com_link', $updraftplus->get_url('shop_premium')));?>" <?php echo wp_kses($checkout_embed_premium_attribute, array()); ?>><?php esc_html_e('Get it here', 'updraftplus');?></a>
+						<a aria-label="<?php echo esc_attr($updraft_aria_label); ?>" target="_blank" class="button button-primary button-hero" href="<?php echo esc_url(apply_filters('updraftplus_com_link', $updraftplus->get_url('shop_premium')));?>" <?php echo wp_kses($checkout_embed_premium_attribute, array()); ?>><?php esc_html_e('Get it here', 'updraftplus');?></a>
 						<small><span class="dashicons dashicons-external dashicons-adapt-size"></span> <?php esc_html_e('Goes to teamupdraft.com checkout page', 'updraftplus'); ?></small>
 					<?php
 					}

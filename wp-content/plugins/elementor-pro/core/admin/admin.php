@@ -274,8 +274,6 @@ class Admin extends App {
 	 * Admin constructor.
 	 */
 	public function __construct() {
-		$this->add_component( 'canary-deployment', new Canary_Deployment() );
-
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_styles' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 		add_action( 'admin_menu', [ $this, 'remove_go_pro_menu' ], 0 );

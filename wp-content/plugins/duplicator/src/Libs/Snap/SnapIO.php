@@ -899,7 +899,8 @@ class SnapIO
             }
         }
 
-        return false;
+        // ENOSPC and EDQUOT: the errno is matched too because the description can be localized
+        return preg_match('/errno=(28|122)\b/', $errorMessage) === 1;
     }
 
     /**

@@ -2,6 +2,8 @@
 
 use Duplicator\Installer\Core\InstState;
 
+defined('ABSPATH') || defined('DUPXABSPATH') || exit;
+
 $overwriteMode = (InstState::getInstance()->getMode() === InstState::MODE_OVR_INSTALL);
 ?>
 

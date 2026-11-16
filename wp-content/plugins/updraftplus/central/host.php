@@ -183,8 +183,8 @@ abstract class UpdraftCentral_Host {
 		global $updraftplus;
 		if ($updraftplus && is_a($updraftplus, 'UpdraftPlus')) $updraftplus->ensure_phpseclib();
 
-		if (!class_exists('UpdraftPlus_Remote_Communications_V2')) include_once($this->get_host_dir().'/vendor/team-updraft/common-libs/src/updraft-rpc/class-udrpc2.php');
-		$ud_rpc = new UpdraftPlus_Remote_Communications_V2($indicator_name);
+		if (!class_exists('UpdraftPlus_Remote_Communications_V3')) include_once($this->get_host_dir().'/vendor/team-updraft/common-libs/src/updraft-rpc/class-udrpc3.php');
+		$ud_rpc = new UpdraftPlus_Remote_Communications_V3($indicator_name);
 		$ud_rpc->set_can_generate(true);
 		return $ud_rpc;
 	}
@@ -302,7 +302,7 @@ abstract class UpdraftCentral_Host {
 	 * @return bool
 	 */
 	public function php_error($errno, $errstr, $errfile, $errline) {
-		if (0 == error_reporting()) return true; // phpcs:ignore WordPress.PHP.DevelopmentFunctions.prevent_path_disclosure_error_reporting -- The error_reporting() function is used to get the current PHP error level.
+		if (0 == error_reporting()) return true; // phpcs:ignore WordPress.PHP.DevelopmentFunctions.prevent_path_disclosure_error_reporting, PluginCheck.CodeAnalysis.PHPErrorReporting.DirectErrorReportingCall -- The error_reporting() function is used to get the current PHP error level.
 		$logline = $this->php_error_to_logline($errno, $errstr, $errfile, $errline);
 		if (false !== $logline) $this->log($logline, 'notice', 'php_event');
 		// Pass it up the chain

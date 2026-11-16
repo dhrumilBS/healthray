@@ -80,6 +80,7 @@ final class Autoloader extends AbstractAutoloader
                 '/symfony/polyfill-mbstring/bootstrap.php',
                 '/symfony/polyfill-iconv/bootstrap.php',
                 '/symfony/polyfill-php80/bootstrap.php',
+                '/symfony/deprecation-contracts/function.php',
                 '/guzzlehttp/guzzle/src/functions_include.php',
             ] as $file
         ) {

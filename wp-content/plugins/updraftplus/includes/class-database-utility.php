@@ -182,8 +182,166 @@ class UpdraftPlus_Database_Utility {
 	}
 
 	/**
+	 * Whether the SQL is well-formed and complete in relation to balanced quotes, brackets, backticks and comments. This is *not* a complete SQL parser; its aim is to detect and fail unfinished SQL statements. It does not look at delimiters.
 	 *
-	 * This function is adapted from the set_sql_mode() method in WordPress wpdb class but with few modifications applied, this can be used to switch between different sets of SQL modes.
+	 * @param String $sql - the SQL to  check
+	 *
+	 * @return Boolean
+	 */
+	public static function sql_statement_is_finished($sql) {
+		
+		$bracket_open_levels = 0;
+		
+		$open = false;
+		
+		$comment_open = false;
+		
+		$is_backslash_active = false;
+		
+		$rest_of_line_is_comment = false;
+		
+		$sequence = '';
+		
+		$sql_length = strlen($sql);
+		
+		for ($i = 0; $i < $sql_length; $i++) {
+			
+			// if ($i > 0) echo "$char($i) : open=$open, sequence=$sequence, bracket_open_levels=$bracket_open_levels, is_backslash_active=$is_backslash_active,  comment_open=$comment_open, rest_of_line_is_comment=$rest_of_line_is_comment\n";
+			
+			$char = $sql[$i];
+			$char_before = $i > 0 ? $sql[$i-1] : false;
+			$char_after = $i < $sql_length-1 ? $sql[$i+1] : false;
+			
+			if ($rest_of_line_is_comment) {
+				if ("\n" === $char || "\r" === $char) $rest_of_line_is_comment = false;
+				continue;
+			}
+			
+			if ($is_backslash_active) {
+				// Previous character was a backslash; thus, this character is to be treated literally
+				$is_backslash_active = false;
+				continue;
+			}
+			
+			if ('\\' == $char) {
+				$is_backslash_active = true;
+				continue;
+			}
+			
+			// N.B. Nested comments are not allowed in future MySQL - https://dev.mysql.com/doc/refman/8.4/en/comments.html
+			// Note that given the assumptions of this function, comment handling should not be necessary (only an admin attack could introduce comment-based confusion, where $open is false).
+			if (false === $open && $comment_open && (('*' === $char && '/' === $char_after) || ('*' === $char_before && '/' === $char))) {
+				$comment_open = false;
+				continue;
+			}
+			
+			if ($comment_open) continue;
+			
+			if (false === $open && (('/' === $char && '*' === $char_after) || ('/' === $char_before && '*' === $char))) {
+				$comment_open = true;
+				continue;
+			}
+			
+			// All further parsing of the line ends
+			if (false === $open && ('#' == $char || ('-' === $char && '-' === $char_after))) {
+				if ('#'  == $char || ($i < strlen($sql) - 2 && (' ' == $sql[$i+2] || ord($sql[$i+2]) < 32))) {
+					$rest_of_line_is_comment = true;
+					continue;
+				}
+			}
+			
+			if ('(' === $char && false === $open) {
+				$bracket_open_levels++;
+				continue;
+			}
+			
+			if (')' === $char && false === $open) {
+				// Immediate abort: a bracket that was never open has been closed
+				if ($bracket_open_levels < 1) return false;
+				$bracket_open_levels--;
+				continue;
+			}
+			
+			// Single quote, double quote or backtick. Inside this, the same character doubled means a literal. Otherwise, it closes the opened entity.
+			if (in_array($char, array("'", '"', '`'))) {
+				
+				// Something other than the current entity is open; in this context, the entity has no special meaning
+				if ($char !== $open && false !== $open) {
+					continue;
+				}
+				
+				// Nothing is open
+				if (false === $open) {
+					$open = $char;
+					$sequence = '';
+					continue;
+				}
+				
+				// A doubled entity
+				if ($char === $open) {
+					if ($char === $char_after && '' === $sequence) {
+						// Another of the same entity is coming after: it's a literal
+						$sequence = $char;
+					} elseif ($char === $sequence) {
+						// Here is the entity "after"
+						$sequence = '';
+					} else {
+						// The entity is being closed
+						$open = false;
+					}
+				}
+				continue;
+			}
+			
+		}
+		
+		// echo "$char : open=$open, sequence=$sequence, bracket_open_levels=$bracket_open_levels, is_backslash_active=$is_backslash_active, comment_open=$comment_open, rest_of_line_is_comment=$rest_of_line_is_comment (END)\n";
+		
+		if ($is_backslash_active) return false;
+		
+		if (false !== $open) return false;
+		
+		if (0 !== $bracket_open_levels) return false;
+		
+		if ($comment_open) return false;
+		
+		// This condition should not be possible, as it is only set if we know that the next character will fulfil the condition to reset it to empty. However, the check is harmless.
+		if ('' !== $sequence) return false;
+		
+		return true;
+		
+	}
+	
+	/**
+	 * Get a list of current SQL modes set, in upper case
+	 *
+	 * @param Resource|Object|NULL $db_handle - Optional. If specified, it should either the valid database link identifier(resource) given by mysql(i) or null to instead use the global WPDB object, or a WPDB-compatible object.
+	 *
+	 * @uses $GLOBALS['wpdb']
+	 *
+	 * @return Array|Boolean
+	 */
+	public static function get_sql_modes($db_handle = null) {
+
+		if (is_null($db_handle)) {
+			$modes = $GLOBALS['wpdb']->get_var('SELECT @@SESSION.sql_mode');
+		} elseif (is_a($db_handle, 'WPDB')) {
+			$modes = $db_handle->get_var('SELECT @@SESSION.sql_mode');
+		} else {
+			$modes = call_user_func_array(array(__CLASS__, 'get_system_variable'), array('sql_mode', $db_handle));
+		}
+		
+		if (is_scalar($modes) && !is_bool($modes)) {
+			return array_map('strtoupper', explode(',', $modes));
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	 *
+	 * This function is adapted from the set_sql_mode() method in WordPress wpdb class but with a few modifications applied, this can be used to switch between different sets of SQL modes.
 	 *
 	 * @see https://developer.wordpress.org/reference/classes/wpdb/set_sql_mode/
 	 * @see https://dev.mysql.com/doc/refman/5.6/en/sql-mode.html
@@ -198,6 +356,8 @@ class UpdraftPlus_Database_Utility {
 	 * @param Array				   $modes		 - Optional. A list of SQL modes to set.
 	 * @param Array				   $remove_modes - modes to remove if they are currently active
 	 * @param Resource|Object|NULL $db_handle	 - Optional. If specified, it should either the valid database link identifier(resource) given by mysql(i) or null to instead use the global WPDB object, or a WPDB-compatible object.
+	 *
+	 * @return Boolean|Null - true if no unwanted modes remain, false if some do, null if indeterminate.
 	 */
 	public static function set_sql_mode($modes = array(), $remove_modes = array(), $db_handle = null) {
 
@@ -206,36 +366,25 @@ class UpdraftPlus_Database_Utility {
 		$wpdb_handle_if_used = (null !== $db_handle && is_a($db_handle, 'WPDB')) ? $db_handle : $wpdb;
 		
 		// If any of these are set, they will be unset
-		$strict_modes = array(
-			// according to mariadb and mysql docs, strict mode can be one of these or both
-			'STRICT_TRANS_TABLES',
-			'STRICT_ALL_TABLES',
-		);
-
-		$incompatible_modes = array_unique(array_merge(array(
+		$unwanted_modes = array_merge(array_map('strtoupper', $remove_modes), array(
 			'NO_ZERO_DATE',
 			'ONLY_FULL_GROUP_BY',
 			'TRADITIONAL',
-		), $strict_modes));
+			'NO_BACKSLASH_ESCAPES',
+			// according to mariadb and mysql docs, strict mode can be one of these or both
+			'STRICT_TRANS_TABLES',
+			'STRICT_ALL_TABLES',
+		));
 
-		$class = __CLASS__;
-
-		if (is_null($db_handle) || is_a($db_handle, 'WPDB')) {
-			$initial_modes_str = $wpdb_handle_if_used->get_var('SELECT @@SESSION.sql_mode');
-		} else {
-			$initial_modes_str = call_user_func_array(array($class, 'get_system_variable'), array('sql_mode', $db_handle));
-		}
-		if (is_scalar($initial_modes_str) && !is_bool($initial_modes_str)) {
-			$modes = array_unique(array_merge($modes, array_change_key_case(explode(',', $initial_modes_str), CASE_UPPER)));
-		} else {
-			$updraftplus->log("Couldn't get the sql_mode value (".serialize($initial_modes_str)."); will not attempt any adjustment");
-			return;
-		}
-
-		$modes = array_change_key_case($modes, CASE_UPPER);
-
-		$unwanted_modes = array_merge($incompatible_modes, $remove_modes);
+		$initial_modes = self::get_sql_modes();
 		
+		if (!is_array($initial_modes)) {
+			$updraftplus->log("Couldn't get the sql_mode value (".serialize($initial_modes)."); will not attempt any adjustment");
+			return null;
+		}
+
+		$modes = array_unique(array_merge($initial_modes, array_map('strtoupper', $modes)));
+
 		foreach ($modes as $i => $mode) {
 			if (in_array($mode, $unwanted_modes)) {
 				unset($modes[$i]);
@@ -244,17 +393,27 @@ class UpdraftPlus_Database_Utility {
 
 		$modes_str = implode(',', $modes);
 
+		// We don't examine the return code, because we re-check status afterwards
 		if (is_null($db_handle) || is_a($db_handle, 'WPDB')) {
-			$res = $wpdb_handle_if_used->query($wpdb_handle_if_used->prepare("SET SESSION sql_mode = %s", $modes_str));
+			$wpdb_handle_if_used->query($wpdb_handle_if_used->prepare("SET SESSION sql_mode = %s", $modes_str));
 		} else {
-			$res = call_user_func_array(array($class, 'set_system_variable'), array('sql_mode', $modes_str, $db_handle));
+			call_user_func_array(array(__CLASS__, 'set_system_variable'), array('sql_mode', $modes_str, $db_handle));
 		}
 
-		if (isset($initial_modes_str) && false == array_diff(explode(',', $initial_modes_str), $modes)) {
-			$updraftplus->log("SQL compatibility mode is: $modes_str");
-		} else {
-			$updraftplus->log("SQL compatibility mode".((false === $res) ? " not" : "")." successfully changed".(isset($initial_modes_str) ? " from $initial_modes_str" : "")." to $modes_str");
+		$after_modes = self::get_sql_modes();
+		
+		if (is_array($after_modes)) {
+			$remaining_unwanted_modes = array_intersect($after_modes, $unwanted_modes);
+			if (empty($remaining_unwanted_modes)) {
+				$updraftplus->log("SQL compatibility mode is now: ".implode(',', $after_modes));
+				return true;
+			}
+			
+			$updraftplus->log("SQL compatibility mode has unwanted modes remaining: ".implode(', ', $unwanted_modes)." members present in: ".implode(', ', $after_modes));
+			return false;
 		}
+		
+		return null;
 	}
 
 	/**

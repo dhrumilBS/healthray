@@ -118,14 +118,14 @@ class BuildFailureRemedies
     }
 
     /**
-     * Run all registered guidance providers through the generated fix.
+     * Run all registered guidance providers through a generated failure fix.
      *
      * @param Fix $fix         Generated failure fix
      * @param int $failureCode DupliException::CODE_* value
      *
      * @return Fix
      */
-    private static function applyGuidance(Fix $fix, int $failureCode): Fix
+    public static function applyGuidance(Fix $fix, int $failureCode): Fix
     {
         foreach (self::GUIDANCE_PROVIDERS as $provider) {
             if ($provider::supports($failureCode)) {

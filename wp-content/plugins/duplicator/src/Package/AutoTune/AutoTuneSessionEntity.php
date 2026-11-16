@@ -80,7 +80,7 @@ final class AutoTuneSessionEntity extends AbstractEntity
     /**
      * @return array<string, mixed>
      */
-    public function __serialize(): array // phpcs:ignore PHPCompatibility.FunctionNameRestrictions.NewMagicMethods.__serializeFound
+    public function __serialize(): array
     {
         $data             = JsonSerialize::serializeToData(
             $this,

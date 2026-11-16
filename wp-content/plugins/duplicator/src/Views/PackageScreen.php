@@ -507,7 +507,7 @@ class PackageScreen extends ScreenBase
             $storageRows[] = [
                 'icon_html' => $iconHtml,
                 'text'      => $storage->getName(),
-                'url'       => StoragePageController::getEditUrl($storage),
+                'url'       => $storage::isHidden() ? '' : StoragePageController::getEditUrl($storage),
             ];
         }
         if ($storageRows !== []) {

@@ -3,6 +3,8 @@
 use Duplicator\Libs\Snap\FunctionalityCheck;
 use Duplicator\Libs\Snap\SnapUtil;
 
+defined('ABSPATH') || defined('DUPXABSPATH') || exit;
+
 $archiveConfig = DUPX_ArchiveConfig::getInstance();
 ?>
 <div id="dialog-server-details" title="Setup Information" style="display:none">

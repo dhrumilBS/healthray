@@ -2,6 +2,7 @@
 
 if (!defined('ABSPATH')) die('No direct access.');
 
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- This class intentionally matches WordPress core's own 'Automatic_Upgrader_Skin' class name; it's a compatibility shim, only loaded (see class-automatic-upgrader-skin.php) when the core class isn't already defined.
 class Automatic_Upgrader_Skin extends Automatic_Upgrader_Skin_Main {
 
 	public function feedback($string, ...$args) { // phpcs:ignore PHPCompatibility.LanguageConstructs.NewLanguageConstructs.t_ellipsisFound, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- spread operator is not supported in PHP < 5.5 but WP 5.3 supports PHP 5.6 minimum

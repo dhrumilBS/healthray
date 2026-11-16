@@ -2,32 +2,44 @@
 
 if (!defined('ABSPATH')) die('No direct access allowed.');
 
-if (class_exists('UpdraftPlus_Addons_RemoteStorage_sftp')) {
+if (version_compare(PHP_VERSION, '5.6.1', '>=')) {
+	if (class_exists('UpdraftPlus_Addons_RemoteStorage_sftp')) {
 
-	// Migrate options to standard-style - April 2017. This then enables them to get picked up by the multi-options settings translation code
-	if (!is_array(UpdraftPlus_Options::get_updraft_option('updraft_sftp')) && '' != UpdraftPlus_Options::get_updraft_option('updraft_sftp_settings', '')) {
-		$opts = UpdraftPlus_Options::get_updraft_option('updraft_sftp_settings');
-		UpdraftPlus_Options::update_updraft_option('updraft_sftp', $opts);
-		UpdraftPlus_Options::delete_updraft_option('updraft_sftp_settings');
-	}
-
-	class UpdraftPlus_BackupModule_sftp extends UpdraftPlus_Addons_RemoteStorage_sftp {
-		public function __construct() {
-			parent::__construct('sftp', 'SFTP/SCP');
+		// Migrate options to standard-style - April 2017. This then enables them to get picked up by the multi-options settings translation code
+		if (!is_array(UpdraftPlus_Options::get_updraft_option('updraft_sftp')) && '' != UpdraftPlus_Options::get_updraft_option('updraft_sftp_settings', '')) {
+			$updraftplus_opts = UpdraftPlus_Options::get_updraft_option('updraft_sftp_settings');
+			UpdraftPlus_Options::update_updraft_option('updraft_sftp', $updraftplus_opts);
+			UpdraftPlus_Options::delete_updraft_option('updraft_sftp_settings');
 		}
+
+		class UpdraftPlus_BackupModule_sftp extends UpdraftPlus_Addons_RemoteStorage_sftp {
+			public function __construct() {
+				parent::__construct('sftp', 'SFTP/SCP');
+			}
+		}
+		
+	} else {
+
+		updraft_try_include_file('methods/addon-not-yet-present.php', 'include_once');
+		
+		/**
+		 * N.B. UpdraftPlus_BackupModule_AddonNotYetPresent extends UpdraftPlus_BackupModule
+		 */
+		class UpdraftPlus_BackupModule_sftp extends UpdraftPlus_BackupModule_AddonNotYetPresent {
+			public function __construct() {
+				parent::__construct('sftp', 'SFTP and SCP');
+			}
+		}
+
 	}
-	
 } else {
-
-	updraft_try_include_file('methods/addon-not-yet-present.php', 'include_once');
-	
+	updraft_try_include_file('methods/insufficient.php', 'include_once');
 	/**
-	 * N.B. UpdraftPlus_BackupModule_AddonNotYetPresent extends UpdraftPlus_BackupModule
+	 * N.B. UpdraftPlus_BackupModule_insufficientphp extends UpdraftPlus_BackupModule
 	 */
-	class UpdraftPlus_BackupModule_sftp extends UpdraftPlus_BackupModule_AddonNotYetPresent {
+	class UpdraftPlus_BackupModule_sftp extends UpdraftPlus_BackupModule_insufficientphp {
 		public function __construct() {
-			parent::__construct('sftp', 'SFTP and SCP');
+			parent::__construct('sftp', 'SFTP/SCP', '5.6.1');
 		}
 	}
-
 }

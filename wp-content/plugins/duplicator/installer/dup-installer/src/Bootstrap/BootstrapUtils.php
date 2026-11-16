@@ -5,6 +5,7 @@ namespace Duplicator\Installer\Bootstrap;
 use Duplicator\Installer\Bootstrap\BootstrapRunner;
 use Duplicator\Libs\Shell\Shell;
 use Exception;
+use Throwable;
 use ZipArchive;
 
 class BootstrapUtils
@@ -582,7 +583,7 @@ class BootstrapUtils
                 $size /= 1024;
             }
             return round($size, 2) . $units[$i];
-        } catch (Exception $e) {
+        } catch (Throwable $e) { // @phpstan-ignore catch.neverThrown (defensive guard kept on purpose)
             return "n/a";
         }
     }

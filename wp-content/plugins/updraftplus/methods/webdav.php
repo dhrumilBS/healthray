@@ -6,7 +6,7 @@ if (class_exists('UpdraftPlus_Addons_RemoteStorage_webdav')) {
 
 	// Migrate options to new-style storage - April 2017
 	if (!is_array(UpdraftPlus_Options::get_updraft_option('updraft_webdav')) && '' != UpdraftPlus_Options::get_updraft_option('updraft_webdav_settings', '')) {
-		$opts = UpdraftPlus_Options::get_updraft_option('updraft_webdav_settings');
+		$opts = UpdraftPlus_Options::get_updraft_option('updraft_webdav_settings'); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- This file is only ever loaded via include_once()/require_once() from inside a function or method, so this variable is locally scoped to that call, not a true global.
 		UpdraftPlus_Options::update_updraft_option('updraft_webdav', $opts);
 		UpdraftPlus_Options::delete_updraft_option('updraft_webdav_settings');
 	}

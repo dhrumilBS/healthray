@@ -7,7 +7,6 @@ use VendorDuplicator\GuzzleHttp\HandlerStack;
 use VendorDuplicator\GuzzleHttp\Promise as P;
 use VendorDuplicator\GuzzleHttp\Promise\PromiseInterface;
 use VendorDuplicator\GuzzleHttp\TransferStats;
-use VendorDuplicator\GuzzleHttp\Utils;
 use VendorDuplicator\Psr\Http\Message\RequestInterface;
 use VendorDuplicator\Psr\Http\Message\ResponseInterface;
 use VendorDuplicator\Psr\Http\Message\StreamInterface;
@@ -131,7 +130,7 @@ class MockHandler implements \Countable
             if ($value instanceof ResponseInterface || $value instanceof \Throwable || $value instanceof PromiseInterface || \is_callable($value)) {
                 $this->queue[] = $value;
             } else {
-                throw new \TypeError('Expected a Response, Promise, Throwable or callable. Found ' . Utils::describeType($value));
+                throw new \TypeError('Expected a Response, Promise, Throwable or callable. Found ' . \get_debug_type($value));
             }
         }
     }

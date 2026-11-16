@@ -62,8 +62,6 @@ return array(
 	'bits' => __('%s bits', 'updraftplus'),
 	/* translators: %s: Number of bytes */
 	'bytes' => __('%s bytes', 'updraftplus'),
-	'easy_to_break' => __('easy to break, fastest', 'updraftplus'),
-	'faster' => __('faster (possibility for slow PHP installs)', 'updraftplus'),
 	'recommended' => __('recommended', 'updraftplus'),
 	'slower' => __('slower, strongest', 'updraftplus'),
 	'use_alternative_method' => __('Use the alternative method for making a connection with the dashboard.', 'updraftplus'),

@@ -31,6 +31,9 @@ class RemoteStorageInfo
     /** @var string Website UUID */
     private string $websiteUuid = '';
 
+    /** @var bool Whether the storage has an active license */
+    private bool $active = true;
+
     /**
      * Constructor
      *
@@ -42,6 +45,7 @@ class RemoteStorageInfo
      * @param string $userName    User name associated with the storage
      * @param string $userEmail   User email associated with the storage
      * @param string $websiteUuid Website UUID
+     * @param bool   $active      Whether the storage has an active license
      */
     public function __construct(
         bool $success = false,
@@ -51,7 +55,8 @@ class RemoteStorageInfo
         int $freeSpace = 0,
         string $userName = '',
         string $userEmail = '',
-        string $websiteUuid = ''
+        string $websiteUuid = '',
+        bool $active = true
     ) {
         $this->success     = $success;
         $this->authorized  = $authorized;
@@ -61,6 +66,7 @@ class RemoteStorageInfo
         $this->userName    = $userName;
         $this->userEmail   = $userEmail;
         $this->websiteUuid = $websiteUuid;
+        $this->active      = $active;
     }
 
     /**
@@ -141,5 +147,15 @@ class RemoteStorageInfo
     public function getWebsiteUuid(): string
     {
         return $this->websiteUuid;
+    }
+
+    /**
+     * Get whether the storage has an active license
+     *
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->active;
     }
 }

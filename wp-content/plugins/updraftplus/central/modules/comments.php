@@ -346,7 +346,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 	 */
 	public function get_comment_filters() {
 		// Options for comment_types field
-		$comment_types = apply_filters('admin_comment_types_dropdown', array(
+		$comment_types = apply_filters('admin_comment_types_dropdown', array( // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- False positive: this is a core WordPress hook.
 			'comment' => __('Comments'),// phpcs:ignore WordPress.WP.I18n.MissingArgDomain -- The string exists within the WordPress core.
 			'pings' => __('Pings'),// phpcs:ignore WordPress.WP.I18n.MissingArgDomain -- The string exists within the WordPress core.
 		));
@@ -854,6 +854,6 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 		if (function_exists('current_user_can_for_site')) {
 			return current_user_can_for_site($blog_id, $capability);
 		}
-		return current_user_can_for_blog($blog_id, $capability);
+		return current_user_can_for_blog($blog_id, $capability); // phpcs:ignore WordPress.WP.DeprecatedFunctions.current_user_can_for_blogFound -- This function is used as a fallback for WordPress versions below 6.7 that don't have current_user_can_for_site() yet.
 	}
 }

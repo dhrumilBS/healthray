@@ -99,6 +99,34 @@ class WpArchiveUtils
     }
 
     /**
+     * Remove the wp-content, root and home base paths, in their configured and symlink-resolved forms, from a text.
+     *
+     * @param string $text Text that may contain absolute paths
+     *
+     * @return string The text with backslashes normalized and those paths made relative
+     */
+    public static function stripOriginalBasePaths(string $text): string
+    {
+        $text = str_replace('\\', '/', $text);
+
+        $paths = self::getOriginalPaths();
+        $bases = [];
+        foreach ([$paths['wpcontent'], $paths['abs'], $paths['home']] as $original) {
+            $bases[] = SnapIO::safePathTrailingslashit($original, false);
+            $bases[] = SnapIO::safePathTrailingslashit($original, true);
+        }
+
+        $bases = array_unique($bases);
+        usort($bases, static fn(string $a, string $b): int => strlen($b) <=> strlen($a));
+
+        foreach ($bases as $base) {
+            $text = str_ireplace($base, '', $text);
+        }
+
+        return $text;
+    }
+
+    /**
      * Return the wordpress original dir paths.
      *
      * @param string|null $pathKey path key

@@ -12,6 +12,7 @@ button styles.
 
 .dup-styles {
     @import "mocks";
+    @import "mock_incremental";
     @import "support";
     @import "settings_feature_box";
     @import "extra_plugin_item";

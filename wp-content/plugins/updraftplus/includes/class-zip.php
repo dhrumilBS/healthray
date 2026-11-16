@@ -39,7 +39,7 @@ class UpdraftPlus_PclZip {
 		$this->adddirs = array();
 		// Put this in a non-backed-up, writeable location, to make sure that huge temporary files aren't created and then added to the backup - and that we have somewhere writable
 		global $updraftplus;
-		if (!defined('PCLZIP_TEMPORARY_DIR')) define('PCLZIP_TEMPORARY_DIR', trailingslashit($updraftplus->backups_dir_location()));
+		if (!defined('PCLZIP_TEMPORARY_DIR')) define('PCLZIP_TEMPORARY_DIR', trailingslashit($updraftplus->backups_dir_location())); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- PCLZIP_TEMPORARY_DIR is a fixed constant name read by the third-party PclZip library (bundled in WordPress core) to override its temp directory; it cannot be prefixed.
 	}
 
 	/**

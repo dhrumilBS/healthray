@@ -6,7 +6,7 @@
     "author": "Duplicator",
     "authorURI": "https://duplicator.com/",
     "addonURI": "",
-    "requiresWP": "5.3",
+    "requiresWP": "6.2",
     "requiresPHP": "7.4",
     "requiresDuplcator": "5.0.0-RC1",
     "requiresAddons": ["LiteBase"]

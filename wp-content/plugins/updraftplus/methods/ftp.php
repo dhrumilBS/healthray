@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) die('No direct access allowed.');
 
 // Migrate options to new-style storage - May 2014
 if (!is_array(UpdraftPlus_Options::get_updraft_option('updraft_ftp')) && '' != UpdraftPlus_Options::get_updraft_option('updraft_server_address', '')) {
-	$opts = array(
+	$opts = array( // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- This file is only ever loaded via include_once()/require_once() from inside a function or method, so this variable is locally scoped to that call, not a true global.
 		'user' => UpdraftPlus_Options::get_updraft_option('updraft_ftp_login'),
 		'pass' => UpdraftPlus_Options::get_updraft_option('updraft_ftp_pass'),
 		'host' => UpdraftPlus_Options::get_updraft_option('updraft_server_address'),

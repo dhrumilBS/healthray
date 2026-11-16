@@ -263,7 +263,7 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 		$block_styles = class_exists('WP_Block_Styles_Registry') ? WP_Block_Styles_Registry::get_instance()->get_all_registered() : array();
 
 		$block_data = array(
-			'block_categories' => get_block_categories($context),
+			'block_categories' => function_exists('get_block_categories') ? get_block_categories($context) : array(),
 			'block_definitions' => get_block_editor_server_block_settings(),
 			'block_types' => $block_types,
 			'block_patterns' => $block_patterns,
@@ -299,7 +299,7 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 				$file = ABSPATH.WPINC.substr_replace($style, '/', 0, $pos);
 			} else {
 				// Styles that resides in "wp-content/themes" (coming from $editor_styles global var)
-				$file = get_theme_file_path($style);
+				$file = function_exists('get_theme_file_path') ? get_theme_file_path($style) : '';
 			}
 
 			$is_valid = (function_exists('is_file')) ? is_file($file) : file_exists($file);
@@ -427,6 +427,9 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 	 * @return string
 	 */
 	protected function get_iframed_editor_assets() {
+		// wp_json_encode() introduced in 4.1.0, wp_styles()/wp_scripts() in 4.2.0
+		if (!function_exists('wp_styles') || !function_exists('wp_scripts') || !function_exists('wp_json_encode')) return '';
+
 		$script_handles = array();
 		$style_handles  = array(
 			'wp-block-editor',
@@ -507,9 +510,9 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 			$editing_styles[] = array('css' => $result['content'], 'inline' => '');
 		};
 
-		do_action('enqueue_block_assets');
-		do_action('enqueue_block_editor_assets');
-		do_action('wp_enqueue_scripts');
+		do_action('enqueue_block_assets'); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- False positive: this is a core WordPress hook.
+		do_action('enqueue_block_editor_assets'); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- False positive: this is a core WordPress hook.
+		do_action('wp_enqueue_scripts'); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- False positive: this is a core WordPress hook.
 
 		// Checking for editor styles support since styles may vary from theme to theme
 		if ($editor_styles) {
@@ -803,7 +806,7 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 			'echo'			   => false
 		);
 
-		$parent_dropdown_args = apply_filters('post_edit_category_parent_dropdown_args', $parent_dropdown_args);
+		$parent_dropdown_args = apply_filters('post_edit_category_parent_dropdown_args', $parent_dropdown_args); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- False positive: this is a core WordPress hook.
 		$parent_dropdown = wp_dropdown_categories($parent_dropdown_args);
 
 		if (!function_exists('wp_popular_terms_checklist')) {
@@ -1096,12 +1099,12 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 			$response = array(
 				'post' => $encode ? json_encode($post) : $post,
 				'misc' => array(
-					'guid_rendered' => apply_filters('get_the_guid', $post->guid, $post->ID),
+					'guid_rendered' => apply_filters('get_the_guid', $post->guid, $post->ID), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- False positive: this is a core WordPress hook.
 					'link' => $permalink,
 					'slug' => $slug,
 					'site_url' => site_url('/'),
 					'title_rendered' => get_the_title($post->ID),
-					'content_rendered' => apply_filters('the_content', $post->post_content),
+					'content_rendered' => apply_filters('the_content', $post->post_content), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- False positive: this is a core WordPress hook.
 					'excerpt' => $post->post_excerpt,
 					'featured_media' => 0,
 					'sticky' => is_sticky($post->ID),
@@ -1779,7 +1782,7 @@ class UpdraftCentral_Posts_Commands extends UpdraftCentral_Commands {
 			'posts_per_page' => $per_page,
 			'paged' => $page,
 			'offset' => $offset,
-			'post__not_in' => $exclude,
+			'post__not_in' => $exclude, // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- $exclude holds page IDs supplied by the caller of this UpdraftCentral endpoint that should be left out of the results; this exclusion is the intended feature, and the result set is already bounded by posts_per_page/pagination above.
 			'order' => $order,
 			'orderby' => $orderby,
 			'post_type' => 'page',

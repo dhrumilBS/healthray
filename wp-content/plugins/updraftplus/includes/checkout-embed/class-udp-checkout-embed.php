@@ -96,7 +96,7 @@ if (!class_exists('Updraft_Checkout_Embed')) {
 				$return_url = add_query_arg($this->plugin_name.'_product', $product_slug, $return_url);
 
 				return apply_filters(
-					$this->plugin_name.'_return_url',
+					$this->plugin_name.'_return_url', // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound -- $this->plugin_name is a sanitize_key()'d prefix supplied by whichever plugin instantiates this shared/reusable class (see constructor); it can't be a hardcoded literal here.
 					add_query_arg(
 						array(
 							$this->plugin_name.'_return_url' => urlencode($return_url),
@@ -118,7 +118,7 @@ if (!class_exists('Updraft_Checkout_Embed')) {
 		 * @return array|object
 		 */
 		private function get_products() {
-			return apply_filters($this->plugin_name.'_checkout_embed_get_products', $this->products_list ? $this->products_list : array());
+			return apply_filters($this->plugin_name.'_checkout_embed_get_products', $this->products_list ? $this->products_list : array()); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound -- $this->plugin_name is a sanitize_key()'d prefix supplied by whichever plugin instantiates this shared/reusable class; it can't be a hardcoded literal here.
 		}
 
 		/**

@@ -212,7 +212,7 @@ abstract class AbstractPackage
     protected int $status = self::STATUS_PRE_PROCESS;
     // Chunking progress through build and storage uploads
 
-    /** @var InstallerDescriptors */
+    /** @var ?InstallerDescriptors Built on demand from the hash and the creation date, never saved with the Backup */
     protected $descriptorsMng;
     /** @var BuildProgress */
     public $build_progress;
@@ -719,7 +719,7 @@ abstract class AbstractPackage
      */
     public function getDescriptorMng()
     {
-        if (is_null($this->descriptorsMng)) {
+        if (!$this->descriptorsMng instanceof InstallerDescriptors) {
             $this->descriptorsMng = new InstallerDescriptors(
                 $this->getPrimaryInternalHash(),
                 date(self::PACKAGE_HASH_DATE_FORMAT, strtotime($this->created))
@@ -902,18 +902,14 @@ abstract class AbstractPackage
             );
         }
 
-        //FILTER_VALIDATE_DOMAIN throws notice message on PHP 5.6
-        if (defined('FILTER_VALIDATE_DOMAIN')) {
-            // phpcs:ignore PHPCompatibility.Constants.NewConstants.filter_validate_domainFound
-            $validator->filterVar($this->Installer->OptsDBHost, FILTER_VALIDATE_DOMAIN, [
-                'valkey'   => 'OptsDBHost',
-                'errmsg'   => __('MySQL Server Host: <b>%1$s</b> isn\'t a valid host', 'duplicator'),
-                'acc_vals' => [
-                    '',
-                    'localhost',
-                ],
-            ]);
-        }
+        $validator->filterVar($this->Installer->OptsDBHost, FILTER_VALIDATE_DOMAIN, [
+            'valkey'   => 'OptsDBHost',
+            'errmsg'   => __('MySQL Server Host: <b>%1$s</b> isn\'t a valid host', 'duplicator'),
+            'acc_vals' => [
+                '',
+                'localhost',
+            ],
+        ]);
 
         return $validator;
     }

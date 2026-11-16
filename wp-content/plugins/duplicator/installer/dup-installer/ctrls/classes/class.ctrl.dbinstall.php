@@ -44,6 +44,9 @@ class DUPX_DBInstall extends AbstractJsonSerializable
     const SQL_CREATE_VIEW_PROC_FUNC_PATTERN = "/^\s*(?:\/\*!\d+\s)?\s*CREATE\s.*?(?:VIEW|PROCEDURE|FUNCTION).*$/ms";
     const BUILD_MODE_MYSQLDUMP              = 'MYSQLDUMP';
     const TABLES_REGEX_CHUNK_SIZE           = 100;
+    const CHUNK_FILE_ERROR                  = 0;
+    const CHUNK_FILE_INCOMPLETE             = 1;
+    const CHUNK_FILE_DONE                   = 2;
 
     /** @var ?mysqli */
     private $dbh;
@@ -271,7 +274,7 @@ class DUPX_DBInstall extends AbstractJsonSerializable
                 $readable_size = DUPX_U::readableByteSize($this->dbDumpIterator->currentSize());
                 $msg           = "\nWARNING: The database script is '{$readable_size}' in size.  The PHP memory allocation is set\n";
                 $msg          .= "at '{$GLOBALS['PHP_MEMORY_LIMIT']}'.  There is a high possibility that the installer script will fail with\n";
-                $msg          .= "a memory allocation error when trying to load the database.sql file.  It is\n";
+                $msg          .= "a memory allocation error when trying to load the SQL dump file.  It is\n";
                 $msg          .= "recommended to increase the 'memory_limit' setting in the php.ini config file.\n";
                 $msg          .= "see: " . DUPX_Constants::FAQ_URL . "how-to-manage-server-resources-cpu-memory-disk/ \n";
                 Log::info($msg);
@@ -944,6 +947,9 @@ class DUPX_DBInstall extends AbstractJsonSerializable
     /**
      * Deploy database in chunk mode
      *
+     * Executes as many dump files as fit in the request time budget; the next
+     * request resumes from the file and the offset reached by this one.
+     *
      * @return boolean
      */
     protected function deployDatabaseChunkMode()
@@ -957,18 +963,93 @@ class DUPX_DBInstall extends AbstractJsonSerializable
             Log::info("DATABASE CHUNK RETRY COUNT: " . Log::v2str($this->post['dbchunk_retry']));
         }
 
-        $delimiter    = $this->post['delimiter'];
-        $query_offset = 0;
-
         if (!$this->dbDumpIterator->valid()) {
             Log::info('DATABASE CHUNK: No more sql files to process');
             return false;
         }
 
+        $this->thread_start_time = DUPX_U::getMicrotime();
+        $this->setupChunkRequestSession();
+
+        while (($status = $this->executeCurrentDumpFile()) === self::CHUNK_FILE_DONE) {
+            if (!$this->post['continue_chunking'] || $this->isChunkTimeExpired()) {
+                break;
+            }
+            Log::info("DATABASE CHUNK: time left in this request, going on with " . basename($this->dbDumpIterator->current()));
+        }
+
+        if (@mysqli_autocommit($this->dbh, true)) {
+            Log::info('Auto Commit set to true successfully');
+        } else {
+            Log::info('Failed to set Auto Commit to true');
+        }
+
+        if ($status === self::CHUNK_FILE_ERROR) {
+            return false;
+        }
+
+        Log::info("--------------------------------------");
+        Log::info("** DATABASE CHUNK install end");
+        Log::info("--------------------------------------");
+
+        ob_flush();
+        flush();
+        return true;
+    }
+
+    /**
+     * Check if the current request used up the time budget of the database chunk
+     *
+     * @return bool
+     */
+    protected function isChunkTimeExpired()
+    {
+        return (microtime(true) - $this->thread_start_time) > DUPX_Constants::CHUNK_DBINSTALL_TIMEOUT_TIME;
+    }
+
+    /**
+     * Prepare the connection session once per chunk request, reusing it across
+     * the dump files executed by that request.
+     *
+     * @return void
+     */
+    protected function setupChunkRequestSession()
+    {
+        DUPX_DB::setCharset($this->dbh, $this->dbcharset, $this->dbcollate);
+        $this->setSQLSessionMode();
+        $this->pingAndReconnect();
+
+        if (@mysqli_autocommit($this->dbh, false)) {
+            Log::info('Auto Commit set to false successfully');
+        } else {
+            Log::info('Failed to set Auto Commit to false');
+        }
+
+        if (!$this->post['first_chunk'] && !empty($this->setQueries)) {
+            Log::info("SET QUERIES FROM FIRST CHUNK", Log::LV_DETAILED);
+            foreach ($this->setQueries as $setQuery) {
+                Log::info("\tSET QUERY " . Log::v2str($setQuery), Log::LV_DEBUG);
+                $this->writeQueryInDB($setQuery);
+            }
+        }
+    }
+
+    /**
+     * Execute the dump file the iterator is on, from the stored offset until the
+     * end of the file or the end of the request time budget
+     *
+     * @return int one of the CHUNK_FILE_* statuses
+     */
+    protected function executeCurrentDumpFile()
+    {
+        $delimiter    = $this->post['delimiter'];
+        $query_offset = 0;
+        $status       = self::CHUNK_FILE_INCOMPLETE;
+
         $sqlFilePath = $this->dbDumpIterator->current();
         $handle      = fopen($sqlFilePath, 'rb');
         if ($handle === false) {
-            return false;
+            return self::CHUNK_FILE_ERROR;
         }
 
         Log::info("PROCESSING SQL FILE " . basename($sqlFilePath) . " (" . ($this->dbDumpIterator->key() + 1) .
@@ -976,33 +1057,17 @@ class DUPX_DBInstall extends AbstractJsonSerializable
         Log::info("OFFSET " . Log::v2str($this->post['pos']) . " OF " . $this->dbDumpIterator->currentSize());
 
         if (-1 !== fseek($handle, $this->post['pos'])) {
-            DUPX_DB::setCharset($this->dbh, $this->dbcharset, $this->dbcollate);
-
-            $this->setSQLSessionMode();
-
-            $this->thread_start_time = DUPX_U::getMicrotime();
-
             Log::info('DATABASE CHUNK START FILE: ' . basename($sqlFilePath) . ' POS:' . Log::v2str($this->post['pos']), Log::LV_DETAILED);
-            $this->pingAndReconnect();
-
-            if (@mysqli_autocommit($this->dbh, false)) {
-                Log::info('Auto Commit set to false successfully');
-            } else {
-                Log::info('Failed to set Auto Commit to false');
-            }
-
             Log::info("DATABASE CHUNK: Iterating query loop", Log::LV_DEBUG);
 
-            if (!$this->post['first_chunk'] && !empty($this->setQueries)) {
-                Log::info("SET QUERIES FROM FIRST CHUNK", Log::LV_DETAILED);
-                foreach ($this->setQueries as $setQuery) {
-                    Log::info("\tSET QUERY " . Log::v2str($setQuery), Log::LV_DEBUG);
-                    $this->writeQueryInDB($setQuery);
-                }
-            }
-
-            $query                 = '';
-            $skipChunkTimeoutCheck = $this->dbsplit_creates && $this->post['first_chunk'];
+            $query = '';
+            // Only the first file of the execution order holds the session queries and the CREATE section
+            $isFirstFileOfInstall  = $this->post['first_chunk'] && $this->dbDumpIterator->key() === 0;
+            $skipChunkTimeoutCheck = DbUtils::isChunkTimeoutExemptFile(
+                $this->dbsplit_creates,
+                $this->post['first_chunk'],
+                (int) $this->dbDumpIterator->key()
+            );
 
             while (($line = fgets($handle)) !== false) {
                 if (($res = self::isDelimiterLine($line)) !== false) {
@@ -1011,7 +1076,7 @@ class DUPX_DBInstall extends AbstractJsonSerializable
                     continue;
                 }
 
-                if ($this->post['first_chunk']) {
+                if ($isFirstFileOfInstall) {
                     //Matches ordinary set queries e.g "SET @saved_cs_client = @@character_set_client;"
                     //and version dependent set queries e.g. "/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;"
                     if (preg_match('/^[\s\t]*(?:\/\*!\d+)?[\s\t]*SET[\s\t]*@.+;/', $line)) {
@@ -1055,16 +1120,10 @@ class DUPX_DBInstall extends AbstractJsonSerializable
                     }
 
                     //Only stop first chunk if all CREATE queries have been run
-                    if (!$skipChunkTimeoutCheck && $elapsed_time > DUPX_Constants::CHUNK_DBINSTALL_TIMEOUT_TIME) {
+                    if (!$skipChunkTimeoutCheck && $this->isChunkTimeExpired()) {
                         break;
                     }
                 }
-            }
-
-            if (@mysqli_autocommit($this->dbh, true)) {
-                Log::info('Auto Commit set to true successfully');
-            } else {
-                Log::info('Failed to set Auto Commit to true');
             }
 
             $query_offset = ftell($handle);
@@ -1076,6 +1135,7 @@ class DUPX_DBInstall extends AbstractJsonSerializable
             if (feof($handle)) {
                 if ($this->seekIntegrityCheck()) {
                     Log::info('DATABASE CHUNK: DB install chunk process integrity check has been just passed successfully.', Log::LV_DETAILED);
+                    $status = self::CHUNK_FILE_DONE;
                     $this->dbDumpIterator->next();
                     if ($this->dbDumpIterator->valid()) {
                         $this->post['pos']               = 0;
@@ -1108,13 +1168,7 @@ class DUPX_DBInstall extends AbstractJsonSerializable
 
         fclose($handle);
 
-        Log::info("--------------------------------------");
-        Log::info("** DATABASE CHUNK install end");
-        Log::info("--------------------------------------");
-
-        ob_flush();
-        flush();
-        return true;
+        return $status;
     }
 
     /**
@@ -1427,7 +1481,7 @@ class DUPX_DBInstall extends AbstractJsonSerializable
      * has been the saftest option because the act of seting the sql_mode will nullify the MySQL Engine defaults which can be very problematic
      * if the default is something such as STRICT_TRANS_TABLES,STRICT_ALL_TABLES,NO_ZERO_DATE.  So the default behavior will be to always
      * use NO_AUTO_VALUE_ON_ZERO.  If the user insits on using the true system defaults they can use the Custom option.  Note these values can
-     * be overriden by values set in the database.sql script such as:
+     * be overriden by values set in the SQL dump such as:
      * !40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO'
      *
      * @return void

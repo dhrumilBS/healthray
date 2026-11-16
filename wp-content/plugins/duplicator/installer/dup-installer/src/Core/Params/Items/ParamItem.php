@@ -3,6 +3,7 @@
 namespace Duplicator\Installer\Core\Params\Items;
 
 use Duplicator\Installer\Utils\Log\Log;
+use Duplicator\Libs\Snap\SnapUtil;
 
 /**
  * this class describes the value of a parameter.
@@ -575,22 +576,16 @@ class ParamItem
         $reflect = new \ReflectionObject($copy);
 
         $nameProp = $reflect->getProperty('name');
-        if (PHP_VERSION_ID < 80100) {
-            $nameProp->setAccessible(true);
-        }
+        SnapUtil::setAccessible($nameProp);
         $nameProp->setValue($copy, $newName);
 
         $attrProp = $reflect->getProperty('attr');
-        if (PHP_VERSION_ID < 80100) {
-            $attrProp->setAccessible(true);
-        }
+        SnapUtil::setAccessible($attrProp);
         $newAttr = array_merge($attrProp->getValue($copy), $attr);
         $attrProp->setValue($copy, $newAttr);
 
         $valueProp = $reflect->getProperty('value');
-        if (PHP_VERSION_ID < 80100) {
-            $valueProp->setAccessible(true);
-        }
+        SnapUtil::setAccessible($valueProp);
         $valueProp->setValue($copy, $newAttr['default']);
 
         return $copy;

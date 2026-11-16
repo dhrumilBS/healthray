@@ -43,7 +43,7 @@ class UpdraftCentral_Users_Commands extends UpdraftCentral_Commands {
 			'orderby' => 'ID',
 			'order' => 'ASC',
 			'role'=> $query["role"],
-			'meta_query'=>array(
+			'meta_query'=>array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Searching by first_name/last_name user meta is the intended feature (UpdraftCentral's user search by name); there is no core WP_User_Query alternative for this, and results are bounded to this site's users.
 				'relation' => 'OR',
 				array(
 					'key' => 'first_name',
