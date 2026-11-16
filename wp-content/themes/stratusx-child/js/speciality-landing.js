@@ -5,9 +5,27 @@
  *   swipe, trackpad and keyboard scrolling work without this file.
  * - before/after comparison in feature rows (template-parts/speciality/feature-row.php):
  *   the range input moves the divider.
- * The FAQ uses <details> and needs no script; reveal-on-scroll stays in script.js.
+ * - FAQ (template-parts/speciality/faq.php): <details name="sp-faq"> keeps one item
+ *   open natively; this closes the others for browsers without that support.
+ * Reveal-on-scroll stays in script.js.
  */
 (function () {
+	document.querySelectorAll('.sp-faq__list').forEach(function (list) {
+		var items = list.querySelectorAll('.sp-faq__item');
+		items.forEach(function (item) {
+			item.addEventListener('toggle', function () {
+				if (!item.open) {
+					return;
+				}
+				items.forEach(function (other) {
+					if (other !== item && other.open) {
+						other.open = false;
+					}
+				});
+			});
+		});
+	});
+
 	document.querySelectorAll('[data-sp-compare]').forEach(function (compare) {
 		var range = compare.querySelector('.sp-compare__range');
 		if (!range) {

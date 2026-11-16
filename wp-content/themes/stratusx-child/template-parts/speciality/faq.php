@@ -19,9 +19,12 @@ if (! $hr_items) {
 			<h2 id="sp-faq-title"><?php echo hr_sp_inline($args['heading'] ?? 'Frequently Asked Questions'); ?></h2>
 		</div>
 		<div class="sp-faq__list">
+			<?php $hr_first = true; ?>
 			<?php foreach ($hr_items as $hr_item) : ?>
 				<?php if (empty($hr_item['question']) || empty($hr_item['answer'])) { continue; } ?>
-				<details class="sp-faq__item">
+				<?php // Shared name = one open at a time (native); first item starts open. ?>
+				<details class="sp-faq__item" name="sp-faq"<?php echo $hr_first ? ' open' : ''; ?>>
+				<?php $hr_first = false; ?>
 					<summary class="sp-faq__q"><span><?php echo hr_sp_inline($hr_item['question']); ?></span><span class="sp-faq__icon" aria-hidden="true"></span></summary>
 					<div class="sp-faq__a"><?php echo wp_kses_post($hr_item['answer']); ?></div>
 				</details>

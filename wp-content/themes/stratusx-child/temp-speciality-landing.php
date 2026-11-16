@@ -11,7 +11,7 @@
  * CSS:         css/speciality-landing.css, inlined. Only the container (.wrap)
  *              and section spacing rules come from css/common-landing.css,
  *              which is not loaded here; the rest is scoped to .sp-main
- * JS:          js/speciality-landing.js (testimonial slider)
+ * JS:          js/speciality-landing.js (testimonial slider, FAQ one-open fallback)
  * Fields:      lib/acf-speciality.php - shared content under Pages > Speciality Settings
  * Schema:      FAQPage from the FAQ section, via healthray_head()
  *
