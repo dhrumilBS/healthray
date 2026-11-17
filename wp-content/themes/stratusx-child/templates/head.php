@@ -4,15 +4,47 @@
 <head>
   <meta charset="<?php bloginfo('charset'); ?>">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-10935864100"></script>
   <script async>
   (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-M85X2N9V');
-  
-    window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); }gtag('js', new Date());gtag('config', 'AW-10935864100');gtag('event', 'conversion', {'send_to': 'AW-10935864100/Yc8NCInZxdYDEKSW0N4o'});
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'AW-10935864100');
+  gtag('event', 'conversion', {'send_to': 'AW-10935864100/Yc8NCInZxdYDEKSW0N4o'});
   </script>
-  <link rel="stylesheet" href="https://healthray.com/wp-content/fonts/font.css"> 
-   <?php wp_head(); ?>
-   <?php
+
+  <!-- Meta Pixel Code (remove after few days)-->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){
+  n.callMethod ?
+  n.callMethod.apply(n,arguments) : n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)
+  }(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+
+  fbq('init', '294618046845150');
+  fbq('track', 'PageView');
+  </script>
+
+  <noscript>
+  <img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=294618046845150&ev=PageView&noscript=1"/>
+  </noscript>
+  <!-- End Meta Pixel Code -->
+
+  <link rel="stylesheet" href="https://healthray.com/wp-content/fonts/font.css">
+
+  <?php wp_head(); ?>
+
+  <?php
   // Case studies mark their own first image fetchpriority="high"; a preload
   // here would fetch a hidden hero on phones and the wrong card on the hub.
   if (has_post_thumbnail() && ! is_singular('case-studies') && ! is_post_type_archive('case-studies')) {
@@ -22,6 +54,9 @@
     printf('<link rel="preload" as="image" importance="high" href="%s" srcset="%s" />', $featured_img_src, $featured_img_srcset);
   }
   ?>
+
   <meta name="google-site-verification" content="DMKDxRL2ftBjaytNBCW73YRefPDi2mokr06dov343G0" />
+
   <script src="https://analytics.ahrefs.com/analytics.js" data-key="k2duGxZiULE/wJIt0LuX/A" async></script>
+
 </head>

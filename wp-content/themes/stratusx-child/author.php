@@ -149,9 +149,9 @@ $schema = [
 	transition:all .2s ease;
 }
 .hr-author-article-cat:hover{background:var(--hr-navy,#1b3c74);border-color:var(--hr-navy,#1b3c74);color:#fff}
-.hr-author-article-title{margin:0 0 12px;font-size:18px;font-weight:700;line-height:1.4;letter-spacing:-.01em;text-transform:none}
-.hr-author-article-title a{color:var(--hr-ink-strong,#0f172a)}
-.hr-author-article-title a:hover{color:var(--hr-navy,#1b3c74)}
+.hr-author-article-body .hr-author-article-title{margin:0 0 12px;font-size:18px;font-weight:700;line-height:1.4;letter-spacing:-.01em;text-transform:none}
+.hr-author-article-body .hr-author-article-title a{color:var(--hr-ink-strong,#0f172a)}
+.hr-author-article-body .hr-author-article-title a:hover{color:var(--hr-navy,#1b3c74)}
 .hr-author-article-footer{margin-top:auto;display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--hr-line,#e2e8f0)}
 .hr-author-article-date{font-size:13.5px;color:var(--hr-ink-faint,#64748b)}
 
