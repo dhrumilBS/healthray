@@ -1941,6 +1941,47 @@
 	}));
 
 //#endregion
+//#region node_modules/core-js/modules/es.iterator.find.js
+	var require_es_iterator_find = /* @__PURE__ */ __commonJSMin((() => {
+		var $ = require_export();
+		var call = require_function_call();
+		var iterate = require_iterate();
+		var aCallable = require_a_callable();
+		var anObject = require_an_object();
+		var getIteratorDirect = require_get_iterator_direct();
+		var iteratorClose = require_iterator_close();
+		var findWithoutClosingOnEarlyError = require_iterator_helper_without_closing_on_early_error()("find", TypeError);
+		$({
+			target: "Iterator",
+			proto: true,
+			real: true,
+			forced: findWithoutClosingOnEarlyError
+		}, { find: function find(predicate) {
+			anObject(this);
+			try {
+				aCallable(predicate);
+			} catch (error) {
+				iteratorClose(this, "throw", error);
+			}
+			if (findWithoutClosingOnEarlyError) return call(findWithoutClosingOnEarlyError, this, predicate);
+			var record = getIteratorDirect(this);
+			var counter = 0;
+			return iterate(record, function(value, stop) {
+				if (predicate(value, counter++)) return stop(value);
+			}, {
+				IS_RECORD: true,
+				INTERRUPTED: true
+			}).result;
+		} });
+	}));
+
+//#endregion
+//#region node_modules/core-js/modules/esnext.iterator.find.js
+	var require_esnext_iterator_find = /* @__PURE__ */ __commonJSMin((() => {
+		require_es_iterator_find();
+	}));
+
+//#endregion
 //#region node_modules/core-js/modules/es.iterator.for-each.js
 	var require_es_iterator_for_each = /* @__PURE__ */ __commonJSMin((() => {
 		var $ = require_export();
@@ -2021,6 +2062,18 @@
 //#region node_modules/core-js/modules/esnext.iterator.map.js
 	var require_esnext_iterator_map = /* @__PURE__ */ __commonJSMin((() => {
 		require_es_iterator_map();
+	}));
+
+//#endregion
+//#region modules/agents/assets/js/frontend/model-context.js
+	var require_model_context = /* @__PURE__ */ __commonJSMin(((exports) => {
+		Object.defineProperty(exports, "__esModule", { value: true });
+		exports.getModelContext = void 0;
+		var getModelContext = (doc, nav) => {
+			var _doc$modelContext;
+			return (_doc$modelContext = doc === null || doc === void 0 ? void 0 : doc.modelContext) !== null && _doc$modelContext !== void 0 ? _doc$modelContext : nav === null || nav === void 0 ? void 0 : nav.modelContext;
+		};
+		exports.getModelContext = getModelContext;
 	}));
 
 //#endregion
@@ -17131,12 +17184,23 @@
 	require_esnext_iterator_constructor();
 	require_esnext_iterator_every();
 	require_esnext_iterator_filter();
+	require_esnext_iterator_find();
 	require_esnext_iterator_for_each();
 	require_esnext_iterator_map();
 	var _frontendHandlers = (globalThis.elementorV2.frontendHandlers);
 	var _alpinejs = (globalThis.elementorV2.alpinejs);
+	var _modelContext = require_model_context();
 	var _utils = require_utils();
 	var _lodash = _interopRequireDefault(require_lodash());
+	var REDIRECT_DELAY_MS = 1e3;
+	var SUBMIT_SUCCESS_EVENT = "elementor/atomic-form/submit-success";
+	var BEFORE_SUBMIT_EVENT = "elementor/atomic-form/before-submit";
+	var ALLOWED_REDIRECT_PROTOCOLS = [
+		"http:",
+		"https:",
+		"ftp:",
+		"ftps:"
+	];
 	var webmcpFormListenersRegistered = false;
 	(0, _frontendHandlers.registerBySelector)({
 		id: "atomic-form-submit-handler",
@@ -17146,11 +17210,10 @@
 	function registerWebmcpFormListeners() {
 		if (webmcpFormListenersRegistered) return;
 		webmcpFormListenersRegistered = true;
-		window.addEventListener("toolactivated", ({ toolName }) => {
-			resetWebmcpFormState(toolName);
-		});
-		window.addEventListener("toolcancel", ({ toolName }) => {
-			resetWebmcpFormState(toolName);
+		const modelContext = (0, _modelContext.getModelContext)(document, navigator);
+		(modelContext ? [window, modelContext] : [window]).forEach((eventTarget) => {
+			eventTarget.addEventListener("toolactivated", ({ toolName }) => resetWebmcpFormState(toolName));
+			eventTarget.addEventListener("toolcancel", ({ toolName }) => resetWebmcpFormState(toolName));
 		});
 	}
 	function resetWebmcpFormState(toolName) {
@@ -17182,9 +17245,11 @@
 			data: extractAgentToolData(payload)
 		};
 	}
-	function respondToAgentIfInvoked(event, response, state) {
-		if (!(event === null || event === void 0 ? void 0 : event.agentInvoked) || "function" !== typeof event.respondWith) return;
-		event.respondWith(Promise.resolve(buildAgentToolResponse(response, state)));
+	function createAgentResponder(event) {
+		if (!(event === null || event === void 0 ? void 0 : event.agentInvoked) || "function" !== typeof event.respondWith) return () => {};
+		const { promise, resolve } = Promise.withResolvers();
+		event.respondWith(promise);
+		return (response, state) => resolve(buildAgentToolResponse(response, state));
 	}
 	function registerAtomicFormAlpineData(form) {
 		var _alpinejs$Alpine;
@@ -17195,8 +17260,9 @@
 			return _asyncToGenerator(function* () {
 				if ((0, _utils.isEditorContext)()) return;
 				event.preventDefault();
+				const respondToAgent = createAgentResponder(event);
 				if (form.dataset.atomicFormSubmitting) {
-					respondToAgentIfInvoked(event, {
+					respondToAgent({
 						success: false,
 						message: "Form is already submitting."
 					}, "error");
@@ -17210,7 +17276,7 @@
 				const payload = buildAtomicFormPayload(form);
 				if (!payload) {
 					setFormState(form, "error");
-					respondToAgentIfInvoked(event, {
+					respondToAgent({
 						success: false,
 						message: "Invalid form payload."
 					}, "error");
@@ -17218,20 +17284,26 @@
 					return;
 				}
 				try {
+					payload.extraFields = yield collectBeforeSubmitFields(form);
 					const response = yield submitAtomicForm(payload);
 					const state = (response === null || response === void 0 ? void 0 : response.success) ? "success" : "error";
 					setFormState(form, state);
+					respondToAgent(response, state);
 					if (response === null || response === void 0 ? void 0 : response.success) {
-						form.reset();
-						form.addEventListener("input", () => {
-							setFormState(form, "default");
-						}, { once: true });
+						resetFormAfterSuccess(form, event);
+						form.dispatchEvent(new CustomEvent(SUBMIT_SUCCESS_EVENT, {
+							bubbles: true,
+							detail: {
+								response,
+								agentInvoked: Boolean(event === null || event === void 0 ? void 0 : event.agentInvoked)
+							}
+						}));
 					}
-					respondToAgentIfInvoked(event, response, state);
+					redirectIfRequested(event, response);
 				} catch (error) {
 					var _error$message;
 					setFormState(form, "error");
-					respondToAgentIfInvoked(event, {
+					respondToAgent({
 						success: false,
 						message: (_error$message = error === null || error === void 0 ? void 0 : error.message) !== null && _error$message !== void 0 ? _error$message : "Submission failed."
 					}, "error");
@@ -17240,6 +17312,36 @@
 				}
 			})();
 		} }));
+	}
+	function resetFormAfterSuccess(form, event) {
+		const resetForm = () => {
+			form.reset();
+			form.addEventListener("input", () => {
+				setFormState(form, "default");
+			}, { once: true });
+		};
+		if (!(event === null || event === void 0 ? void 0 : event.agentInvoked)) {
+			resetForm();
+			return;
+		}
+		setTimeout(resetForm);
+	}
+	function redirectIfRequested(event, response) {
+		var _response$data$data$a;
+		var _response$data2;
+		var _actionResults$find;
+		if ((event === null || event === void 0 ? void 0 : event.agentInvoked) || !(response === null || response === void 0 ? void 0 : response.success)) return;
+		const safeRedirectUrl = getSafeRedirectUrl((_actionResults$find = ((_response$data$data$a = response === null || response === void 0 || (_response$data2 = response.data) === null || _response$data2 === void 0 || (_response$data2 = _response$data2.data) === null || _response$data2 === void 0 ? void 0 : _response$data2.actionResults) !== null && _response$data$data$a !== void 0 ? _response$data$data$a : []).find((result) => "redirect" === result.type && "success" === result.status)) === null || _actionResults$find === void 0 ? void 0 : _actionResults$find.redirectUrl);
+		if (safeRedirectUrl) setTimeout(() => window.location.assign(safeRedirectUrl), REDIRECT_DELAY_MS);
+	}
+	function getSafeRedirectUrl(redirectUrl) {
+		if (!redirectUrl) return null;
+		try {
+			const url = new URL(redirectUrl, window.location.href);
+			return ALLOWED_REDIRECT_PROTOCOLS.includes(url.protocol) ? url.href : null;
+		} catch (_unused) {
+			return null;
+		}
 	}
 	function handleAtomicFormSubmit(form) {
 		registerWebmcpFormListeners();
@@ -17376,7 +17478,22 @@
 		formData.append(`${prefix}[options]`, JSON.stringify(field.options));
 		appendFieldValue(formData, `${prefix}[value]`, field.value);
 	}
-	function submitAtomicForm(_x) {
+	function collectBeforeSubmitFields(_x) {
+		return _collectBeforeSubmitFields.apply(this, arguments);
+	}
+	function _collectBeforeSubmitFields() {
+		_collectBeforeSubmitFields = _asyncToGenerator(function* (form) {
+			const pendingFields = [];
+			form.dispatchEvent(new CustomEvent(BEFORE_SUBMIT_EVENT, {
+				bubbles: true,
+				detail: { addFields: (fields) => pendingFields.push(fields) }
+			}));
+			const resolved = yield Promise.all(pendingFields);
+			return Object.assign({}, ...resolved.filter((fields) => fields && "object" === typeof fields));
+		});
+		return _collectBeforeSubmitFields.apply(this, arguments);
+	}
+	function submitAtomicForm(_x2) {
 		return _submitAtomicForm.apply(this, arguments);
 	}
 	function _submitAtomicForm() {
@@ -17387,6 +17504,7 @@
 			var _document;
 			var _window$location$href;
 			var _window;
+			var _payload$extraFields;
 			const ajaxUrl = (_elementorFrontendCon = elementorFrontendConfig) === null || _elementorFrontendCon === void 0 || (_elementorFrontendCon = _elementorFrontendCon.urls) === null || _elementorFrontendCon === void 0 ? void 0 : _elementorFrontendCon.ajaxurl;
 			if (!ajaxUrl) return { success: false };
 			const formData = new FormData();
@@ -17398,6 +17516,7 @@
 			formData.append("referer_title", (_document$title = (_document = document) === null || _document === void 0 ? void 0 : _document.title) !== null && _document$title !== void 0 ? _document$title : "");
 			formData.append("referrer", (_window$location$href = (_window = window) === null || _window === void 0 || (_window = _window.location) === null || _window === void 0 ? void 0 : _window.href) !== null && _window$location$href !== void 0 ? _window$location$href : "");
 			payload.formFields.forEach((field, index) => appendFormField(formData, field, index));
+			Object.entries((_payload$extraFields = payload.extraFields) !== null && _payload$extraFields !== void 0 ? _payload$extraFields : {}).forEach(([key, value]) => formData.append(key, value));
 			const response = yield fetch(ajaxUrl, {
 				method: "POST",
 				body: formData

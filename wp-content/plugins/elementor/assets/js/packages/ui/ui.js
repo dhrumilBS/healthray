@@ -13663,10 +13663,17 @@ To suppress this warning, you need to explicitly provide the \`palette.${key}Cha
 	var RTL_CACHE_KEY = "eui-rtl";
 	var UNSTABLE_DEFAULT_BORDER_RADIUS_MULTIPLIERS = [
 		0,
+		.75,
 		1,
+		1.5,
+		2.5
+	];
+	var UNSTABLE_LEGACY_BORDER_RADIUS_MULTIPLIERS = [
+		0,
+		.5,
 		1,
-		1,
-		1
+		1.5,
+		2.5
 	];
 
 //#endregion
@@ -13674,7 +13681,7 @@ To suppress this warning, you need to explicitly provide the \`palette.${key}Cha
 	var createTheme = (options, ...args) => {
 		const normalizedOptions = { ...options };
 		normalizedOptions.shape = {
-			borderRadius: 4,
+			borderRadius: 8,
 			__unstableBorderRadiusMultipliers: UNSTABLE_DEFAULT_BORDER_RADIUS_MULTIPLIERS,
 			...normalizedOptions.shape
 		};
@@ -14791,10 +14798,11 @@ To suppress this warning, you need to explicitly provide the \`palette.${key}Cha
 	var themeBaseConfig = {
 		components: style_configs_default,
 		shape: {
-			borderRadius: 4,
+			borderRadius: 8,
 			__unstableBorderRadiusMultipliers: UNSTABLE_DEFAULT_BORDER_RADIUS_MULTIPLIERS
 		},
 		typography: {
+			fontFamily: "\"DM Sans\", \"Roboto\", \"Helvetica\", \"Arial\", sans-serif",
 			display1: { fontSize: "0rem" },
 			display2: { fontSize: "0rem" },
 			display3: { fontSize: "0rem" },
@@ -14802,22 +14810,78 @@ To suppress this warning, you need to explicitly provide the \`palette.${key}Cha
 			display5: { fontSize: "0rem" },
 			display6: { fontSize: "0rem" },
 			button: { textTransform: "none" },
-			h1: { fontWeight: 700 },
-			h2: { fontWeight: 700 },
+			h1: {
+				fontSize: "6rem",
+				fontWeight: 700,
+				lineHeight: 1.167,
+				letterSpacing: "-0.015625em"
+			},
+			h2: {
+				fontSize: "3.75rem",
+				fontWeight: 700,
+				lineHeight: 1.2,
+				letterSpacing: "-0.01333333em"
+			},
 			h3: {
 				fontSize: "2.75rem",
-				fontWeight: 700
+				fontWeight: 700,
+				lineHeight: 1.182,
+				letterSpacing: "-0.00681818em"
 			},
 			h4: {
 				fontSize: "2rem",
-				fontWeight: 700
+				fontWeight: 700,
+				lineHeight: 1.25,
+				letterSpacing: "-0.015625em"
 			},
-			h5: { fontWeight: 700 },
-			subtitle1: {
+			h5: {
+				fontSize: "1.5rem",
+				fontWeight: 700,
+				lineHeight: 1.333,
+				letterSpacing: "-0.025em"
+			},
+			h6: {
+				fontSize: "1.25rem",
 				fontWeight: 500,
-				lineHeight: 1.3
+				lineHeight: 1.6,
+				letterSpacing: "-0.015em"
 			},
-			subtitle2: { lineHeight: 1.3 }
+			subtitle1: {
+				fontSize: "1rem",
+				fontWeight: 500,
+				lineHeight: 1.3125,
+				letterSpacing: "-0.0125em"
+			},
+			subtitle2: {
+				fontSize: "0.875rem",
+				fontWeight: 500,
+				lineHeight: 1.286,
+				letterSpacing: "-0.025em"
+			},
+			body1: {
+				fontSize: "1rem",
+				fontWeight: 400,
+				lineHeight: 1.5,
+				letterSpacing: "-0.0125em"
+			},
+			body2: {
+				fontSize: "0.875rem",
+				fontWeight: 400,
+				lineHeight: 1.429,
+				letterSpacing: "-0.01785714em"
+			},
+			caption: {
+				fontSize: "0.75rem",
+				fontWeight: 400,
+				lineHeight: 1.667,
+				letterSpacing: "0.00833333em"
+			},
+			overline: {
+				fontSize: "0.75rem",
+				fontWeight: 400,
+				lineHeight: 2.667,
+				letterSpacing: "0.08333333em"
+			}
 		},
 		zIndex: {
 			mobileStepper: 1e3,
@@ -14832,7 +14896,29 @@ To suppress this warning, you need to explicitly provide the \`palette.${key}Cha
 	};
 
 //#endregion
+//#region node_modules/@elementor/ui/styles/theme-config/paper-neutral.js
+	var lightPaperNeutralScale = {
+		50: "#FCFCFC",
+		100: "#F9FAFA",
+		200: "#F3F4F7",
+		300: "#EDEEF2",
+		400: "#E7E9EE",
+		500: "#E1E3EB"
+	};
+	var darkPaperNeutralScale = {
+		50: "#27292E",
+		100: "#23262A",
+		200: "#1F2124",
+		300: "#1C1E22",
+		400: "#151719",
+		500: "#0E0F11"
+	};
+
+//#endregion
 //#region node_modules/@elementor/ui/styles/theme-config/light.js
+	var OVERLAY_BASE = "#001436";
+	var ACTION_HOVER_OPACITY = .04;
+	var ACTION_FOCUS_OPACITY = .12;
 	var lightThemeConfig = {
 		...themeBaseConfig,
 		palette: {
@@ -14937,7 +15023,14 @@ To suppress this warning, you need to explicitly provide the \`palette.${key}Cha
 				light: "#ffffff",
 				dark: "#ffffff",
 				contrastText: "#ffffff"
-			}
+			},
+			paper: { neutral: lightPaperNeutralScale },
+			action: {
+				hover: alpha$19(OVERLAY_BASE, ACTION_HOVER_OPACITY),
+				selected: alpha$19(OVERLAY_BASE, ACTION_SELECTED_OPACITY),
+				focus: alpha$19(OVERLAY_BASE, ACTION_FOCUS_OPACITY)
+			},
+			divider: alpha$19(OVERLAY_BASE, ACTION_FOCUS_OPACITY)
 		}
 	};
 
@@ -15047,7 +15140,8 @@ To suppress this warning, you need to explicitly provide the \`palette.${key}Cha
 				light: "#ffffff",
 				dark: "#ffffff",
 				contrastText: "#ffffff"
-			}
+			},
+			paper: { neutral: darkPaperNeutralScale }
 		}
 	};
 
@@ -15177,6 +15271,35 @@ To suppress this warning, you need to explicitly provide the \`palette.${key}Cha
 			dark: "#f00",
 			contrastText: "#f00"
 		}
+	};
+
+//#endregion
+//#region node_modules/@elementor/ui/styles/theme-config/typography-overrides/unstable-legacy-typography.js
+	var unstableLegacyTypography = {
+		fontFamily: "\"Roboto\", \"Helvetica\", \"Arial\", sans-serif",
+		display1: { fontSize: "0rem" },
+		display2: { fontSize: "0rem" },
+		display3: { fontSize: "0rem" },
+		display4: { fontSize: "0rem" },
+		display5: { fontSize: "0rem" },
+		display6: { fontSize: "0rem" },
+		button: { textTransform: "none" },
+		h1: { fontWeight: 700 },
+		h2: { fontWeight: 700 },
+		h3: {
+			fontSize: "2.75rem",
+			fontWeight: 700
+		},
+		h4: {
+			fontSize: "2rem",
+			fontWeight: 700
+		},
+		h5: { fontWeight: 700 },
+		subtitle1: {
+			fontWeight: 500,
+			lineHeight: 1.3
+		},
+		subtitle2: { lineHeight: 1.3 }
 	};
 
 //#endregion
@@ -15563,20 +15686,18 @@ To suppress this warning, you need to explicitly provide the \`palette.${key}Cha
 	var getTheme = ({ palette = "default", rtl = false, isDarkMode = false } = {}) => {
 		const cacheKey = `${palette}-${isDarkMode}-${rtl}`;
 		if (themeCacheMap.has(cacheKey)) return themeCacheMap.get(cacheKey);
-		const themeData = isDarkMode ? darkThemeConfig : lightThemeConfig;
+		let themeData = isDarkMode ? darkThemeConfig : lightThemeConfig;
 		const themeArgs = {};
 		if (palette === "marketing-suite") themeArgs.palette = marketing_suite_palette_default;
 		if (palette === "unstable") {
+			themeData = {
+				...themeData,
+				typography: unstableLegacyTypography
+			};
 			themeArgs.palette = isDarkMode ? unstable_dark_palette_default : unstable_light_palette_default;
 			themeArgs.shape = {
 				borderRadius: 8,
-				__unstableBorderRadiusMultipliers: [
-					0,
-					.5,
-					1,
-					1.5,
-					2.5
-				]
+				__unstableBorderRadiusMultipliers: UNSTABLE_LEGACY_BORDER_RADIUS_MULTIPLIERS
 			};
 		}
 		if (palette === "argon-beta") {
@@ -15585,7 +15706,7 @@ To suppress this warning, you need to explicitly provide the \`palette.${key}Cha
 				borderRadius: 8,
 				__unstableBorderRadiusMultipliers: [
 					0,
-					.5,
+					.75,
 					1,
 					1.5,
 					2.5
@@ -66901,11 +67022,12 @@ styles: import_prop_types.default.oneOfType([
 	var defaultProps$9 = {
 		hideInputFields: false,
 		disableOpacity: false,
-		formats: DEFAULT_FORMATS
+		formats: DEFAULT_FORMATS,
+		slotProps: { formatSelection: {} }
 	};
 	var TinyMenuItem$1 = styled(MenuItem_default)(({ theme }) => ({ ...theme.typography.caption }));
 	var ColorBox = react.default.forwardRef((inProps, ref) => {
-		const { value, onChange, hideInputFields, disableOpacity = false, formats: inFormats = DEFAULT_FORMATS, ...props } = {
+		const { value, onChange, hideInputFields, disableOpacity = false, formats: inFormats = DEFAULT_FORMATS, slotProps, ...props } = {
 			...defaultProps$9,
 			...inProps
 		};
@@ -66928,6 +67050,7 @@ styles: import_prop_types.default.oneOfType([
 		}, showFormatSelect && /* @__PURE__ */ react.default.createElement(Select_default, {
 			size: "tiny",
 			value: format,
+			...slotProps?.formatSelection,
 			onChange: (event) => {
 				const updatedFormat = event.target.value;
 				const updatedColor = convertColor(value, updatedFormat);

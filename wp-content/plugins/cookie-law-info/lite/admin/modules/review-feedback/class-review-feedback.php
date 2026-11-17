@@ -216,7 +216,7 @@ class Review_Feedback extends Modules {
 			return;
 		}
 
-		$expiry = 60 * DAY_IN_SECONDS;
+		$expiry = 30 * DAY_IN_SECONDS;
 
 		?>
 			<script type="text/javascript">

@@ -209,7 +209,7 @@
             }
         }
 
-        :has(img) {
+        &:has(img:not([src=""])) {
             .image-remove-btn {
                 visibility: visible;
             }

@@ -1,0 +1,25 @@
+{
+  "_index-21e04b1b.js": {
+    "file": "index-21e04b1b.js"
+  },
+  "admin.tsx": {
+    "file": "admin.tsx-5f63a41d.js",
+    "imports": [
+      "_index-21e04b1b.js"
+    ],
+    "isEntry": true,
+    "src": "admin.tsx"
+  },
+  "main.tsx": {
+    "file": "main.tsx-90fdc97c.js",
+    "imports": [
+      "_index-21e04b1b.js"
+    ],
+    "isEntry": true,
+    "src": "main.tsx"
+  },
+  "style.css": {
+    "file": "style.css",
+    "src": "style.css"
+  }
+}

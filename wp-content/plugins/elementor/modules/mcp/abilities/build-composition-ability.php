@@ -8,8 +8,10 @@ use Elementor\Modules\Mcp\Abilities\Build_Composition\Composition_Persister;
 use Elementor\Modules\Mcp\Abilities\Build_Composition\Xml_Parser;
 use Elementor\Modules\Mcp\Abilities\Utils\Composition_Compiler;
 use Elementor\Modules\Mcp\Abilities\Utils\Document_Mutation_Links;
+use Elementor\Modules\Mcp\Abilities\Utils\Document_Revision_Snapshots;
 use Elementor\Modules\Mcp\Abilities\Utils\Prompt_Loader;
 use Elementor\Modules\Mcp\Abilities\Utils\Tool_Performance_Metrics;
+use Elementor\Modules\Mcp\Abilities\Utils\Warnings_Bag;
 use Elementor\Modules\Mcp\Events\Mcp_Event_Dispatcher;
 use Elementor\Plugin;
 
@@ -41,15 +43,16 @@ class Build_Composition_Ability extends Abstract_Ability {
 	protected function get_definition(): Ability_Definition {
 		return new Ability_Definition(
 			__( 'Build Composition', 'elementor' ),
-			$this->get_ability_description(),
+			Prompt_Loader::load( 'build-composition' ),
 			'elementor',
 			$this->get_output_schema(),
 			[
 				'annotations' => [
 					'readonly' => false,
 					'idempotent' => false,
-					'destructive' => true,
+					'destructive' => false,
 				],
+				'mutates_page' => true,
 			],
 			fn() => current_user_can( 'edit_posts' ),
 			$this->get_input_schema()
@@ -101,17 +104,19 @@ class Build_Composition_Ability extends Abstract_Ability {
 
 		$subtrees      = $compiled['elements'];
 		$warnings      = $compiled['warnings'];
-		$warning_codes = $compiled['warning_codes'] ?? [];
+		$warning_codes = $warnings->codes();
 		$dom           = $compiled['dom'];
 		$xml_parser    = $compiled['xml_parser'];
+		$skipped_pro   = $compiled['pro_features_discovery'];
 
 		if ( $dry_run ) {
-			$response = $this->build_response( $post_id, $document, $xml_parser, $dom, [], $warnings, $mode, [] );
+			$response = $this->build_response( $post_id, $document, $xml_parser, $dom, [], $warnings, $mode, [], $skipped_pro );
 			$this->emit_mcp_build_composition_executed( $started_at, $post_id, $mode, $dry_run, null, $subtrees, $warning_codes, $document, $response, [] );
 			return $response;
 		}
 
 		$persister = new Composition_Persister( $this->get_mutator(), $xml_parser );
+		$undo_point = Document_Revision_Snapshots::capture( $document, $this->get_id() );
 		$persisted = $persister->insert_and_save( $document, $subtrees, $parent_id, $mode );
 		if ( is_wp_error( $persisted ) ) {
 			$this->emit_mcp_build_composition_executed( $started_at, $post_id, $mode, $dry_run, $persisted, $subtrees, $warning_codes, $document );
@@ -120,7 +125,13 @@ class Build_Composition_Ability extends Abstract_Ability {
 
 		$persister->embed_ids_into_dom( $dom, $persisted['tree'], $parent_id, $persisted['root_ids'] );
 
-		$response = $this->build_response( $post_id, $document, $xml_parser, $dom, $persisted['root_ids'], $warnings, $mode, $persisted['removed_ids'] );
+		$response = $this->build_response( $post_id, $document, $xml_parser, $dom, $persisted['root_ids'], $warnings, $mode, $persisted['removed_ids'], $skipped_pro );
+
+		if ( $undo_point ) {
+			$undo_point->commit();
+			$response = $undo_point->add_to_response( $response );
+		}
+
 		$this->emit_mcp_build_composition_executed( $started_at, $post_id, $mode, $dry_run, null, $subtrees, $warning_codes, $document, $response, $persisted['removed_ids'] );
 
 		return $response;
@@ -213,10 +224,6 @@ class Build_Composition_Ability extends Abstract_Ability {
 		return $document->get_name();
 	}
 
-	private function get_ability_description(): string {
-		return Prompt_Loader::load( 'build-composition' );
-	}
-
 	private function get_output_schema(): array {
 		return [
 			'type' => 'object',
@@ -242,13 +249,30 @@ class Build_Composition_Ability extends Abstract_Ability {
 				'warnings' => [
 					'type' => 'array',
 					'items' => [ 'type' => 'string' ],
-					'description' => 'Non-fatal notices, e.g. props skipped because the target widget does not support them, or CSS that fell back to custom_css. The composition was still built.',
+					'description' => 'Every warning is fixable: one field was skipped or adjusted and the rest was saved — correct that field via manage-elements. The composition was still built. Errors fail the call instead.',
 				],
+				'warning_details' => Warnings_Bag::get_details_schema(),
 				'removed_element_ids' => [
 					'type' => 'array',
 					'items' => [ 'type' => 'string' ],
 					'description' => 'Element IDs removed when mode is replace_children (empty when none existed).',
 				],
+				'pro_features_discovery' => [
+					'type' => 'array',
+					'description' => 'Present when some elements need Elementor Pro and were skipped; the rest was built. Relay each message following its instructions; do not retry the skipped elements.',
+					'items' => [
+						'type' => 'object',
+						'properties' => [
+							'message' => [ 'type' => 'string' ],
+							'upgrade_url' => [
+								'type' => 'string',
+								'format' => 'uri',
+							],
+						],
+					],
+				],
+				'undo_revision_id' => Document_Mutation_Links::undo_revision_id_schema_property(),
+				'llm_instructions' => Document_Mutation_Links::llm_instructions_schema_property(),
 			],
 		];
 	}
@@ -270,6 +294,11 @@ class Build_Composition_Ability extends Abstract_Ability {
 					'type' => 'object',
 					'default' => (object) [],
 					'description' => 'Record mapping configuration-id → plain widget settings matching elementor://widgets/schema/{type}. Keys MUST match configuration-id attributes in xml_structure. For <e-component> configuration-ids, the value is { component_id: int, overrides?: {<override_key>: <plain value>} } — see elementor/list-components.',
+				],
+				'editor_settings' => [
+					'type' => 'object',
+					'default' => (object) [],
+					'description' => 'Record mapping configuration-id → editor-only fields, kept separate from element_config. `name` is not accepted here; the layer name is the configuration-id.',
 				],
 				'style' => [
 					'type' => 'object',
@@ -371,9 +400,10 @@ class Build_Composition_Ability extends Abstract_Ability {
 		Xml_Parser $xml_parser,
 		\DOMDocument $dom,
 		array $root_ids,
-		array $warnings,
+		Warnings_Bag $warnings,
 		string $mode,
-		array $removed_ids
+		array $removed_ids,
+		array $skipped_pro
 	): array {
 		$post = get_post( $post_id );
 
@@ -386,12 +416,20 @@ class Build_Composition_Ability extends Abstract_Ability {
 			'resolved_xml' => $xml_parser->serialize_children( $dom ),
 		];
 
-		if ( ! empty( $warnings ) ) {
-			$response['warnings'] = $warnings;
-		}
+		$response = $warnings->add_to_response( $response );
 
 		if ( self::MODE_REPLACE_CHILDREN === $mode ) {
 			$response['removed_element_ids'] = $removed_ids;
+		}
+
+		if ( ! empty( $skipped_pro ) ) {
+			$response['pro_features_discovery'] = array_map(
+				fn ( \WP_Error $error ) => [
+					'message' => $error->get_error_message(),
+					'upgrade_url' => $error->get_error_data()['upgrade_url'],
+				],
+				$skipped_pro
+			);
 		}
 
 		return $response;

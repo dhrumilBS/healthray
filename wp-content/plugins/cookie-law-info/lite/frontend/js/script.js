@@ -1,6 +1,22 @@
 /**
  * WordPress localize object mapped to a constant.
  */
+(function () {
+/**
+ * Only one CookieYes copy may run on a page: a second one adds a second banner
+ * and script blocker, and wrapping document.createElement twice throws
+ * "Cannot redefine property: src". The first copy wins, as in the cloud
+ * script, which skips itself when window.cookieyes._ckyStore is set.
+ */
+if (window.cookieyes && window.cookieyes._ckyStore) {
+    console.warn(
+        "CookieYes: another CookieYes script is already running on this page, so this copy (" +
+        (document.currentScript && document.currentScript.src ? document.currentScript.src : "CookieYes plugin") +
+        ") was skipped. Remove the extra copy (for example a Google Tag Manager tag or a pasted snippet)."
+    );
+    return;
+}
+
 const _ckyStore = window._ckyConfig;
 const _ckyStyle = window._ckyStyles;
 
@@ -8,15 +24,19 @@ _ckyStore._backupNodes = [];
 _ckyStore._resetConsentID = false;
 _ckyStore._bannerState = false;
 _ckyStore._preferenceOriginTag = false;
+_ckyStore._preferenceOriginElement = false;
 _ckyStore._optoutSuccessCountdownInterval = null;
 _ckyStore._optoutSuccessAutoCloseTimer = null;
 _ckyStore._optoutSuccessSubtextTemplate = "";
 
 const CKY_OPTOUT_SUCCESS_DISMISS_MS = 15000;
 const CKY_OPTOUT_SUCCESS_SECONDS = 15;
+// Controls that can take keyboard focus. Shared by the focus trap and the opener lookup.
+const _ckyFocusableSelector = 'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), [tabindex]:not([disabled]):not([tabindex="-1"])';
 
 window.cookieyes = window.cookieyes || {};
 const ref = window.cookieyes;
+ref._ckyStore = _ckyStore;
 ref._ckyConsentStore = new Map();
 
 ref._ckyGetCookieMap = function () {
@@ -32,7 +52,6 @@ ref._ckyGetCookieMap = function () {
     return cookieMap;
 };
 
-const currentCookieMap = ref._ckyGetCookieMap();
 ref._ckyGetFromStore = function (key) {
     return ref._ckyConsentStore.get(key) || "";
 };
@@ -52,21 +71,51 @@ ref._ckySetInStore = function (key, value) {
         cookieStringArray.join(","),
         scriptExpiry
     );
+    ref._ckyLastConsentCookie = _ckyReadConsentCookie();
 };
 
-const cookieyesConsentMap = (currentCookieMap["cookieyes-consent"] || "")
-    .split(",")
-    .reduce((prev, curr) => {
-        if (!curr) return prev;
-        const [key, value] = curr.split(":");
-        prev[key] = value;
-        return prev;
-    }, {});
-["consentid", "consent", "action"]
-    .concat(_ckyStore._categories.map(({ slug }) => slug))
-    .map((item) =>
-        ref._ckyConsentStore.set(item, cookieyesConsentMap[item] || "")
-    );
+/**
+ * Read the cookieyes-consent cookie into the consent store. Runs when the
+ * script starts, and again when a prerendered page is opened, since the
+ * visitor may have made a choice on another page meanwhile.
+ */
+function _ckyLoadConsentStore() {
+    const currentCookieMap = ref._ckyGetCookieMap();
+    const cookieyesConsentMap = (currentCookieMap["cookieyes-consent"] || "")
+        .split(",")
+        .reduce((prev, curr) => {
+            if (!curr) return prev;
+            const [key, value] = curr.split(":");
+            prev[key] = value;
+            return prev;
+        }, {});
+    ["consentid", "consent", "action"]
+        .concat(_ckyStore._categories.map(({ slug }) => slug))
+        .map((item) =>
+            ref._ckyConsentStore.set(item, cookieyesConsentMap[item] || "")
+        );
+    ref._ckyLastConsentCookie = _ckyReadConsentCookie();
+}
+
+/**
+ * The raw cookieyes-consent cookie, as this script last read or wrote it.
+ *
+ * @returns {string}
+ */
+function _ckyReadConsentCookie() {
+    return ref._ckyGetCookie("cookieyes-consent") || "";
+}
+
+/**
+ * Whether the consent cookie changed since this page last read or wrote it,
+ * i.e. the visitor made a choice on another page.
+ *
+ * @returns {boolean}
+ */
+function _ckyConsentChangedElsewhere() {
+    return _ckyReadConsentCookie() !== ref._ckyLastConsentCookie;
+}
+
 
 
 /**
@@ -89,6 +138,8 @@ ref._ckyGetCookie = function (name) {
  * @param {*} domain Cookie domain.
  */
 ref._ckySetCookie = function (name, value, days = 0, domain = _ckyStore._rootDomain) {
+    // A prerendered page the visitor has not opened must not change cookies.
+    if (document.prerendering) return;
     const date = new Date();
     if (!!domain) {
         domain = `domain=${domain}`;
@@ -100,6 +151,8 @@ ref._ckySetCookie = function (name, value, days = 0, domain = _ckyStore._rootDom
     ).toUTCString()}; path=/;${domain}; SameSite=Strict;`;
 }
 
+_ckyLoadConsentStore();
+
 function _ckySetConsentID() {
     const cookieyesID = ref._ckyGetFromStore("consentid");
     if (cookieyesID) return;
@@ -108,12 +161,17 @@ function _ckySetConsentID() {
     _ckyStore._resetConsentID = true;
 }
 
-const _revisitCkyConsent = function () {
+/**
+ * Reopen the consent preferences.
+ *
+ * @param {HTMLElement|false} origin Control that opened the preferences; focus returns to it on close.
+ */
+const _revisitCkyConsent = function (origin = false) {
     const type = _ckyGetType();
     if (type === 'classic') {
         _ckyShowBanner();
     }
-    _ckySetPreferenceAction();
+    _ckySetPreferenceAction(false, origin);
     _ckyToggleRevisit();
 };
 /**
@@ -390,11 +448,51 @@ function _ckyDomReady(callback) {
 /**
  * Callback function to Domready event.
  */
-_ckyDomReady(async function () {
-    try {
-        await _ckyInit();
-    } catch (err) {
-        console.error(err);
+_ckyDomReady(function () {
+    _ckyWhenPageIsShown(async function () {
+        try {
+            await _ckyInit();
+        } catch (err) {
+            console.error(err);
+        }
+    });
+});
+
+/**
+ * Run the callback once the visitor sees the page. A page prerendered in the
+ * background (by the browser or an optimizer such as NitroPack) waits until
+ * it is opened, keeping the script blocker on but showing no banner. If the
+ * visitor made a choice on another page meanwhile, the page reloads so that
+ * it starts with that choice.
+ *
+ * @param {function} callback
+ */
+function _ckyWhenPageIsShown(callback) {
+    const run = function () {
+        if (_ckyConsentChangedElsewhere()) {
+            _ckyLoadConsentStore();
+            if (ref._ckyGetFromStore("action")) {
+                window.location.reload();
+                return;
+            }
+        }
+        callback();
+    };
+    // Also checked when not prerendering: a prerendered page opened before
+    // DOMContentLoaded has already missed prerenderingchange.
+    if (!document.prerendering) {
+        return void run();
+    }
+    document.addEventListener("prerenderingchange", run, { once: true });
+}
+
+/**
+ * A page restored from the back-forward cache keeps the consent it had when
+ * the visitor left it. Reload it if the visitor made a choice elsewhere since.
+ */
+window.addEventListener("pageshow", function (event) {
+    if (event.persisted && _ckyConsentChangedElsewhere()) {
+        window.location.reload();
     }
 });
 
@@ -421,8 +519,29 @@ function _ckyRegisterListeners() {
     _ckyAttachListener("=detail-category-preview-save-button", _ckyAcceptReject());
     _ckyAttachListener("=optout-confirm-button", _ckyHandleOptoutConfirm());
     _ckyAttachListener("=detail-reject-button", _ckyAcceptReject("reject"));
-    _ckyAttachListener("=revisit-consent", () => _revisitCkyConsent());
+    _ckyAttachListener("=revisit-consent", (event) => _revisitCkyConsent(_ckyGetFocusTarget(event.currentTarget)));
     _ckyAttachListener("=optout-close", () => _ckyHandleOptoutPopupClose());
+    // Capture phase: the dialog sits above the page, so it gets Escape before a
+    // site modal or off-canvas menu that opened it.
+    document.addEventListener("keydown", _ckyHandleEscapeKey, true);
+}
+
+/**
+ * Close the preference center dialog on Escape, as its close button would.
+ * The classic layout's push-down panel is not a dialog, so it is left alone.
+ *
+ * @param {KeyboardEvent} event Keydown event.
+ */
+function _ckyHandleEscapeKey(event) {
+    if (event.key !== "Escape" && event.key !== "Esc") return;
+    // Escape that cancels an IME composition or was already handled by the page is not ours.
+    if (event.isComposing || event.defaultPrevented) return;
+    if (_ckyGetType() === "classic") return;
+    if (!_ckyIsPreferenceCenterOpen()) return;
+    // One Escape closes one layer: keep it from also closing whatever opened the dialog.
+    event.preventDefault();
+    event.stopPropagation();
+    _ckyGetLaw() === "ccpa" ? _ckyHandleOptoutPopupClose() : _ckyHidePreferenceCenter();
 }
 
 function _ckyAttachCategoryListeners() {
@@ -551,6 +670,9 @@ function _ckyGetPreferenceCenter() {
     return element && element.closest('.cky-modal') || false;
 }
 function _ckyHidePreferenceCenter() {
+    // Accept/Reject on the banner also lands here while the preference center is closed;
+    // focus must only move when this call actually closes it.
+    const wasOpen = _ckyIsPreferenceCenterOpen();
     _ckyResetOptoutSuccessMessage();
     const element = _ckyGetPreferenceCenter();
     element && element.classList.remove(_ckyGetPreferenceClass());
@@ -566,8 +688,7 @@ function _ckyHidePreferenceCenter() {
         _ckyClassRemove("=notice", "cky-consent-bar-expand");
     }
     if (ref._ckyGetFromStore("action")) _ckyShowRevisit();
-    const origin = _ckyStore._preferenceOriginTag;
-    origin && _ckySetFocus(origin)
+    if (wasOpen) _ckyRestorePreferenceFocus();
 }
 function _ckyShowPreferenceCenter() {
     const element = _ckyGetPreferenceCenter();
@@ -589,6 +710,9 @@ function _ckyShowPreferenceCenter() {
     if (_ckyGetType() !== 'classic') {
         _ckyShowOverLay();
         _ckyHideBanner();
+        // Move focus into the dialog, as the web app banner does.
+        const [firstElement] = _ckyGetFocusableElements(_ckyGetLaw() === 'ccpa' ? 'optout-popup' : 'detail');
+        _ckyFocusWhenVisible(firstElement);
     } else {
         _ckyToggleAriaExpandStatus("=settings-button");
         _ckyClassAdd("=notice", "cky-consent-bar-expand");
@@ -624,11 +748,21 @@ function _ckyTogglePreferenceCenter() {
         }
     }
     if (ref._ckyGetFromStore("action")) _ckyShowRevisit();
-    const origin = _ckyStore._preferenceOriginTag;
-    origin && _ckySetFocus(origin)
+    // Toggle runs on open too; only a close returns focus to the opener.
+    if (!_ckyIsPreferenceCenterOpen()) _ckyRestorePreferenceFocus();
 }
 function _ckyGetPreferenceClass() {
     return _ckyGetPtype() === 'pushdown' ? 'cky-consent-bar-expand' : 'cky-modal-open';
+}
+/**
+ * Is the preference center currently shown? The classic push-down panel is
+ * expanded on the consent container; the other layouts open the modal wrapper.
+ *
+ * @returns {boolean}
+ */
+function _ckyIsPreferenceCenterOpen() {
+    const element = _ckyGetPreferenceCenter();
+    return !!element && element.classList.contains(_ckyGetPreferenceClass());
 }
 
 function _ckyGetRevisit() {
@@ -643,8 +777,9 @@ function _ckyShowRevisit() {
     const revisit = _ckyGetRevisit();
     revisit && revisit.classList.remove('cky-revisit-hide')
 }
-function _ckySetPreferenceAction(tagName = false) {
+function _ckySetPreferenceAction(tagName = false, originElement = false) {
     _ckyStore._preferenceOriginTag = tagName;
+    _ckyStore._preferenceOriginElement = originElement;
     if (_ckyGetType() === 'classic') {
         _ckyTogglePreferenceCenter();
         _ckyToggleAriaExpandStatus("=settings-button");
@@ -656,9 +791,7 @@ function _ckyGetFocusableElements(element) {
     const wrapperElement = document.querySelector(`[data-cky-tag="${element}"]`);
     if (!wrapperElement) return [];
     const focussableElements = Array.from(
-        wrapperElement.querySelectorAll(
-            'a:not([disabled]), button:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])'
-        )
+        wrapperElement.querySelectorAll(_ckyFocusableSelector)
     ).filter((element) => element.style.display !== "none");
     if (focussableElements.length <= 0) return [];
     return [
@@ -1176,6 +1309,9 @@ const _ckyCreateElementBackup = document.createElement;
 document.createElement = (...args) => {
     const createdElement = _ckyCreateElementBackup.call(document, ...args);
     if (createdElement.nodeName.toLowerCase() !== "script") return createdElement;
+    // Another CookieYes copy has already wrapped this element (its src can't be redefined).
+    const _ckySrcDescriptor = Object.getOwnPropertyDescriptor(createdElement, "src");
+    if (_ckySrcDescriptor && !_ckySrcDescriptor.configurable) return createdElement;
     const originalSetAttribute = createdElement.setAttribute.bind(createdElement);
     Object.defineProperties(createdElement, {
         src: {
@@ -1585,6 +1721,57 @@ function _ckySetFocus(tagName) {
     element.focus();
 }
 
+/**
+ * Resolve the element that should receive focus for a trigger: the trigger itself
+ * when it is focusable, otherwise the first focusable control inside it.
+ *
+ * @param {HTMLElement} element Trigger element.
+ * @returns {HTMLElement|false}
+ */
+function _ckyGetFocusTarget(element) {
+    if (!element || !element.matches) return false;
+    if (element.matches(_ckyFocusableSelector)) return element;
+    return element.querySelector(_ckyFocusableSelector) || false;
+}
+
+/**
+ * Focus an element once it is rendered visible. The preference center animates in
+ * from visibility: hidden, so a synchronous focus() on open is ignored.
+ *
+ * @param {HTMLElement} element Element to focus.
+ */
+function _ckyFocusWhenVisible(element) {
+    if (!element || typeof window.requestAnimationFrame !== "function") return;
+    const dialog = element.closest(".cky-preference-center") || element;
+    let attempts = 0;
+    const tryFocus = () => {
+        // The user already moved focus into the dialog; leave it there.
+        if (dialog.contains(document.activeElement)) return;
+        if (window.getComputedStyle(element).visibility === "visible") {
+            element.focus();
+        } else if (attempts++ < 100) {
+            window.requestAnimationFrame(tryFocus);
+        }
+    };
+    window.requestAnimationFrame(tryFocus);
+}
+
+/**
+ * Return focus to the control that opened the preference center.
+ */
+function _ckyRestorePreferenceFocus() {
+    const origin = _ckyStore._preferenceOriginElement;
+    const tag = _ckyStore._preferenceOriginTag;
+    // Each opener is used once; a later close must not send focus back to it.
+    _ckyStore._preferenceOriginElement = false;
+    _ckyStore._preferenceOriginTag = false;
+    if (origin && document.body.contains(origin)) {
+        origin.focus();
+        return;
+    }
+    tag && _ckySetFocus(tag);
+}
+
 function _ckySetPoweredBy() {
     let position = 'flex-end';
     ['detail-powered-by', 'optout-powered-by'].map((key) => {
@@ -1607,7 +1794,7 @@ function _ckyWatchBannerElement() {
                 ? event.target.matches(selector)
                 : event.target.msMatchesSelector(selector)
         )
-            _revisitCkyConsent();
+            _revisitCkyConsent(_ckyGetFocusTarget(event.target.closest(".cky-banner-element")));
     });
 }
 
@@ -1668,7 +1855,12 @@ function _ckySetCheckBoxInfo(
     });
 }
 
-window.revisitCkyConsent = () => _revisitCkyConsent();
+// The opener is whatever has focus when the site calls this. That covers keyboard users
+// (WCAG 2.4.3). Mouse clicks in Safari do not focus buttons, so no opener is saved there;
+// and a programmatic call made while a page field has focus returns focus to that field.
+window.revisitCkyConsent = () => _revisitCkyConsent(
+    document.activeElement && document.activeElement !== document.body ? document.activeElement : false
+);
 
 window.getCkyConsent = function () {
     const cookieConsent = {
@@ -1693,3 +1885,4 @@ window.getCkyConsent = function () {
 
     return cookieConsent;
 };
+})();

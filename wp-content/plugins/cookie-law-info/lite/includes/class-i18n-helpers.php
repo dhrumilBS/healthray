@@ -83,8 +83,9 @@ if ( ! function_exists( 'cky_current_language' ) ) {
 				$current_language = apply_filters( 'wpml_current_language', null );
 			}
 
-			// Fallback if neither WPML nor Polylang is used.
-			if ( 'all' === $current_language ) {
+			// Fallback if neither WPML nor Polylang is used, or neither returned a language
+			// (null as an array key below is deprecated from PHP 8.5).
+			if ( empty( $current_language ) || 'all' === $current_language ) {
 				$current_language = cky_default_language();
 			}
 		} else {
@@ -92,7 +93,19 @@ if ( ! function_exists( 'cky_current_language' ) ) {
 		}
 		$map              = cky_get_lang_map();
 		$current_language = isset( $map[ $current_language ] ) ? $map[ $current_language ] : $current_language;
-		if ( in_array( $current_language, cky_selected_languages(), true ) === false ) {
+		$selected         = cky_selected_languages();
+		// WPML 5.0 can use a language-and-country code (en-us): fall back to the language part (en)
+		// when only that is a banner language. Exact codes such as pt-br still match first. Only a
+		// region subtag (en-us, es-419) is stripped, plus zh-hans since the zh banner is Simplified
+		// Chinese. Other script subtags (sr-latn, zh-hant) name a different script than the bare
+		// code's banner, so they keep falling back to the default language.
+		if ( ! in_array( $current_language, $selected, true ) && is_string( $current_language ) && preg_match( '/^([a-z]{2,3})-(?:[a-z]{2}|[0-9]{3})$|^(zh)-hans$/', strtolower( $current_language ), $matches ) ) {
+			$language = '' !== $matches[1] ? $matches[1] : $matches[2];
+			if ( in_array( $language, $selected, true ) ) {
+				$current_language = $language;
+			}
+		}
+		if ( in_array( $current_language, $selected, true ) === false ) {
 			$current_language = cky_default_language();
 		}
 		return apply_filters( 'cky_current_language', $current_language );

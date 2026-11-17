@@ -98,7 +98,30 @@ class McpSettingsController extends RestController {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function update_settings( WP_REST_Request $request ) {
-		$enabled = (bool) $request->get_param( 'enabled' );
+		$saved = self::set_enabled( (bool) $request->get_param( 'enabled' ) );
+
+		if ( is_wp_error( $saved ) ) {
+			return $saved;
+		}
+
+		return new WP_REST_Response(
+			[
+				'success' => true,
+				'data'    => self::get_settings_data(),
+			],
+			200
+		);
+	}
+
+	/**
+	 * Store the MCP enabled state.
+	 *
+	 * Callers are responsible for the capability check: this changes site state.
+	 *
+	 * @param bool $enabled Target state.
+	 * @return true|WP_Error
+	 */
+	public static function set_enabled( bool $enabled ) {
 		$current_value = \get_option( self::OPTION_NAME, self::MISSING_OPTION_VALUE );
 		$updated       = self::MISSING_OPTION_VALUE === $current_value
 			? \add_option( self::OPTION_NAME, $enabled, '', false )
@@ -112,13 +135,7 @@ class McpSettingsController extends RestController {
 			);
 		}
 
-		return new WP_REST_Response(
-			[
-				'success' => true,
-				'data'    => self::get_settings_data(),
-			],
-			200
-		);
+		return true;
 	}
 
 	/**

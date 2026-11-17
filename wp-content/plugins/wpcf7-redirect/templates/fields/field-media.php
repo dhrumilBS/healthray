@@ -21,12 +21,12 @@ defined( 'ABSPATH' ) || exit;
 	<?php endif; ?>
 	<div class="image-container">
 		<img src="<?php echo esc_url( $field['value'] ); ?>" alt="" style="max-width:100px;" class="popup-image" />
-		<a title="<?php echo esc_attr__( 'Set Image', 'wpcf7-redirect' ); ?>" href="javascript:;" class="image-uploader-btn browser button button-hero">
+		<button type="button" title="<?php echo esc_attr__( 'Set Image', 'wpcf7-redirect' ); ?>" class="image-uploader-btn browser button button-hero">
 			<?php esc_html_e( 'Select Image', 'wpcf7-redirect' ); ?>
-		</a>
-		<a title="<?php echo esc_attr__( 'Remove image', 'wpcf7-redirect' ); ?>" href="javascript:;" class="image-remove-btn browser button">
+		</button>
+		<button type="button" title="<?php echo esc_attr__( 'Remove image', 'wpcf7-redirect' ); ?>" class="image-remove-btn browser button">
 			<span class="dashicons dashicons-no-alt"></span>
-		</a>
+		</button>
 		<input
 			type="hidden"
 			class="wpcf7-redirect-<?php echo esc_attr( $field['name'] ); ?>-fields"

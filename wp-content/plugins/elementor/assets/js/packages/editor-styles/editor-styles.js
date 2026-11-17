@@ -32,6 +32,12 @@
 	}
 
 //#endregion
+//#region packages/packages/libs/editor-styles/src/utils/get-non-empty-variants.ts
+	function getNonEmptyVariants(style) {
+		return style.variants.filter(({ props, custom_css: customCss }) => Object.keys(props).length > 0 || Boolean(customCss?.raw));
+	}
+
+//#endregion
 //#region packages/packages/libs/editor-styles/src/utils/get-styles-schema.ts
 	var getElementorConfig = () => {
 		return window.elementor?.config ?? {};
@@ -90,6 +96,7 @@
 //#region packages/packages/libs/editor-styles/src/index.ts
 	var src_exports = /* @__PURE__ */ __exportAll({
 		generateId: () => generateId,
+		getNonEmptyVariants: () => getNonEmptyVariants,
 		getSelectorWithState: () => getSelectorWithState,
 		getStylesSchema: () => getStylesSchema,
 		getVariantByMeta: () => getVariantByMeta,

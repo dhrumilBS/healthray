@@ -1,4 +1,4 @@
-(function(_elementor_editor_v1_adapters, _elementor_editor_mcp, _elementor_http_client, _elementor_editor, react, _elementor_editor_documents, _elementor_editor_styles_repository, _elementor_utils, _elementor_editor_elements, _elementor_ui, react_dom, _elementor_editor_interactions, _elementor_editor_responsive, _elementor_editor_styles, _elementor_editor_props, _elementor_editor_notifications, _wordpress_i18n, _elementor_wp_media, _elementor_editor_controls, _elementor_twing, _elementor_schema) {
+(function(_elementor_editor_v1_adapters, _elementor_editor_mcp, _elementor_http_client, _elementor_editor, react, _elementor_editor_documents, _elementor_editor_styles_repository, _elementor_utils, _elementor_editor_elements, _elementor_ui, react_dom, _elementor_editor_interactions, _elementor_editor_responsive, _elementor_editor_styles, _elementor_editor_props, _elementor_editor_notifications, _wordpress_i18n, _elementor_editor_controls, _elementor_wp_media, _elementor_twing, _elementor_editor_ui, _elementor_schema) {
 
 //#region \0rolldown/runtime.js
 	var __create = Object.create;
@@ -55,20 +55,22 @@ react_dom = __toESM(react_dom, 1);
 	var WIDGET_SCHEMA_FULL_URI = `${CANVAS_SERVER_NAME}_${WIDGET_SCHEMA_URI}`;
 	var BEST_PRACTICES_URI$1 = "elementor://style/best-practices";
 	var BEST_PRACTICES_FULL_URI = `${CANVAS_SERVER_NAME}_${BEST_PRACTICES_URI$1}`;
-	var MCP_PROXY_URL$4 = "elementor/v1/mcp-proxy";
+	var MCP_PROXY_URL$5 = "elementor/v1/mcp-proxy";
 	var listWidgetTypes = async () => {
-		const { data } = await (0, _elementor_http_client.httpService)().post(MCP_PROXY_URL$4, {
+		const { data } = await (0, _elementor_http_client.httpService)().post(MCP_PROXY_URL$5, {
 			tool: "list-widget-schemas",
 			input: { summary: true }
 		});
 		return (data.data?.widgets ?? []).map((widget) => widget.type);
 	};
 	var fetchWidgetSchema = async (widgetType) => {
-		const { data } = await (0, _elementor_http_client.httpService)().post(MCP_PROXY_URL$4, {
-			tool: "get-widget-schema",
-			input: { widget_type: widgetType }
+		const { data } = await (0, _elementor_http_client.httpService)().post(MCP_PROXY_URL$5, {
+			tool: "get-widget-schemas",
+			input: { widget_type: [widgetType] }
 		});
-		return data.data ?? {};
+		const schema = data.data?.schemas?.[widgetType];
+		if (!schema) throw new Error(data.data?.errors?.[widgetType]?.message ?? `No schema found for ${widgetType}.`);
+		return schema;
 	};
 	var initWidgetsSchemaResource = (reg) => {
 		const { resource } = reg;
@@ -3913,7 +3915,7 @@ var import_jsx_runtime = require_jsx_runtime();
 //#region packages/packages/core/editor-canvas/src/components/outline-overlay.tsx
 	var CANVAS_WRAPPER_ID = "elementor-preview-responsive-wrapper";
 	var OverlayBox = (0, _elementor_ui.styled)(_elementor_ui.Box, { shouldForwardProp: (prop) => prop !== "isSelected" && prop !== "isSmallerOffset" && prop !== "isGlobal" })(({ theme, isSelected, isSmallerOffset, isGlobal }) => ({
-		outline: `${isSelected ? "2px" : "1px"} solid ${isGlobal ? theme.palette.global.main : theme.palette.primary.light}`,
+		outline: `${isSelected ? "2px" : "1px"} solid ${isGlobal ? theme.palette.global.main : theme.palette.accent.light}`,
 		outlineOffset: isSelected && !isSmallerOffset ? "-2px" : "-1px",
 		pointerEvents: "none"
 	}));
@@ -4317,6 +4319,20 @@ var import_jsx_runtime = require_jsx_runtime();
 	}
 
 //#endregion
+//#region packages/packages/core/editor-canvas/src/hooks/use-pregenerated-links-handoff.ts
+	function usePregeneratedLinksHandoff(canvasHead, renderedProviders) {
+		(0, react.useLayoutEffect)(() => {
+			if (!isCurrentCanvasHead(canvasHead)) return;
+			Object.entries(renderedProviders).forEach(([providerKey, { provider, items }]) => {
+				if (items.length > 0 && provider.isPregeneratedLink) removeProviderPregeneratedLinks(providerKey, provider.isPregeneratedLink);
+			});
+		}, [canvasHead, renderedProviders]);
+	}
+	function isCurrentCanvasHead(canvasHead) {
+		return !!canvasHead && canvasHead === (0, _elementor_editor_v1_adapters.getCanvasIframeDocument)()?.head;
+	}
+
+//#endregion
 //#region packages/packages/core/editor-canvas/src/renderers/multi-props.ts
 	var isMultiProps = (propValue) => {
 		return !!propValue && typeof propValue === "object" && "$$multi-props" in propValue && propValue["$$multi-props"] === true;
@@ -4567,7 +4583,7 @@ var import_jsx_runtime = require_jsx_runtime();
 
 //#endregion
 //#region packages/packages/core/editor-canvas/src/hooks/use-style-items.ts
-	function useStyleItems() {
+	function useStyleItems(canvasHead) {
 		const renderStyles = useStyleRenderer(useStylePropResolver());
 		const breakpoints = (0, _elementor_editor_responsive.useBreakpoints)();
 		const [styleItems, setStyleItems] = (0, react.useState)({});
@@ -4608,6 +4624,7 @@ var import_jsx_runtime = require_jsx_runtime();
 				await Promise.all(promises);
 			});
 		});
+		usePregeneratedLinksHandoff(canvasHead, styleItems);
 		const breakpointSorter = (0, react.useMemo)(() => createBreakpointSorter(breakpoints.map((breakpoint) => breakpoint.id)), [breakpoints]);
 		return (0, react.useMemo)(() => Object.values(styleItems).sort(prioritySorter).flatMap(({ items }) => items).sort(stateSorter).sort(breakpointSorter), [styleItems, breakpointSorter]);
 	}
@@ -4634,7 +4651,6 @@ var import_jsx_runtime = require_jsx_runtime();
 			const cache = getCache();
 			const hasDiffInfo = current !== void 0 && previous !== void 0;
 			const hasCache = cache.orderedIds.length > 0;
-			if (hasCache && provider.isPregeneratedLink) removeProviderPregeneratedLinks(provider.getKey(), provider.isPregeneratedLink);
 			if (hasDiffInfo && hasCache) return updateItems(cache, previous, current, signal);
 			return createItems(cache, signal);
 		}).then((items) => {
@@ -4725,7 +4741,7 @@ var import_jsx_runtime = require_jsx_runtime();
 //#region packages/packages/core/editor-canvas/src/components/style-renderer.tsx
 	function StyleRenderer() {
 		const container = usePortalContainer();
-		const styleItems = useStyleItems();
+		const styleItems = useStyleItems(container);
 		const linksAttrs = useDocumentsCssLinks();
 		if (!container) return null;
 		return /* @__PURE__ */ react.createElement(_elementor_ui.Portal, { container }, filterUniqueStyleDefinitions(styleItems).map((item) => /* @__PURE__ */ react.createElement("style", { key: `${item.id}-${item.breakpoint}-${item.state ?? "normal"}` }, item.value)), linksAttrs.map((attrs) => /* @__PURE__ */ react.createElement("link", {
@@ -4753,6 +4769,9 @@ var import_jsx_runtime = require_jsx_runtime();
 //#endregion
 //#region packages/packages/core/editor-canvas/src/form-structure/utils.ts
 	var FORM_ELEMENT_TYPE = "e-form";
+	var FORM_HIDDEN_FIELD_ELEMENT_TYPE = "e-form-hidden";
+	var FORM_HONEYPOT_ELEMENT_TYPE = "e-form-honeypot";
+	var FORM_RECAPTCHA_SCORE_ELEMENT_TYPE = "e-form-recaptcha-score";
 	var FORM_FIELD_ELEMENT_TYPES = /* @__PURE__ */ new Set([
 		"e-form-input",
 		"e-form-textarea",
@@ -4763,10 +4782,25 @@ var import_jsx_runtime = require_jsx_runtime();
 		"e-form-radio-button",
 		"e-form-file-upload",
 		"e-form-date-picker",
-		"e-form-time-picker"
+		"e-form-time-picker",
+		FORM_HIDDEN_FIELD_ELEMENT_TYPE,
+		FORM_HONEYPOT_ELEMENT_TYPE,
+		FORM_RECAPTCHA_SCORE_ELEMENT_TYPE
 	]);
 	function getArgsElementType(args) {
 		return args.model?.widgetType || args.model?.elType;
+	}
+	function hasModelElementType(model, type) {
+		if (!model) return false;
+		if ((model.widgetType || model.elType) === type) return true;
+		return (model.elements ?? []).some((child) => hasModelElementType(child, type));
+	}
+	function getFormContainer(element) {
+		let current = element;
+		while (current) {
+			if (getElementType$1(current) === "e-form") return current;
+			current = current.parent;
+		}
 	}
 	function getElementType$1(element) {
 		return element?.model.get("widgetType") || element?.model.get("elType");
@@ -4864,6 +4898,100 @@ var import_jsx_runtime = require_jsx_runtime();
 		(0, _elementor_editor_notifications.notify)(FORM_FIELDS_OUTSIDE_ALERT);
 	}
 	__name(handleBlockedFormField$1, "handleBlockedFormField");
+
+//#endregion
+//#region packages/packages/core/editor-canvas/src/form-structure/form-atom-added-hints.ts
+	var MOVE_COMMAND$2 = "document/elements/move";
+	var FORM_ATOM_HINTS = {
+		[FORM_HONEYPOT_ELEMENT_TYPE]: {
+			idPrefix: "honeypot-added",
+			getMessage: () => (0, _wordpress_i18n.__)("Honeypot added - invisible on your form. Reorder it in the Structure panel.", "elementor")
+		},
+		[FORM_RECAPTCHA_SCORE_ELEMENT_TYPE]: {
+			idPrefix: "recaptcha-score-added",
+			getMessage: () => (0, _wordpress_i18n.__)("Score-based reCAPTCHA added - You can adjust its settings from the Structure panel.", "elementor")
+		}
+	};
+	var notificationCounter$1 = 0;
+	function initFormAtomAddedHints() {
+		(0, _elementor_editor_v1_adapters.registerDataHook)("after", "document/elements/create", (args, _result, options) => {
+			if (options?.commandsCurrentTrace?.includes(MOVE_COMMAND$2)) return;
+			const elementType = getArgsElementType(args);
+			const hint = elementType ? FORM_ATOM_HINTS[elementType] : void 0;
+			if (!hint) return;
+			(0, _elementor_editor_notifications.notify)({
+				type: "default",
+				message: hint.getMessage(),
+				id: `${hint.idPrefix}-${++notificationCounter$1}`
+			});
+		});
+	}
+
+//#endregion
+//#region packages/packages/core/editor-canvas/src/form-structure/hidden-field-hint.ts
+	var MOVE_COMMAND$1 = "document/elements/move";
+	var notificationCounter = 0;
+	function createHiddenFieldNotification() {
+		return {
+			type: "default",
+			message: (0, _wordpress_i18n.__)("Hidden field added - invisible on your form. Manage it in the Structure panel.", "elementor"),
+			id: `hidden-field-added-${++notificationCounter}`
+		};
+	}
+	function initHiddenFieldHint() {
+		(0, _elementor_editor_v1_adapters.registerDataHook)("after", "document/elements/create", (args, _result, options) => {
+			if (options?.commandsCurrentTrace?.includes(MOVE_COMMAND$1)) return;
+			if (getArgsElementType(args) === "e-form-hidden") (0, _elementor_editor_notifications.notify)(createHiddenFieldNotification());
+		});
+	}
+
+//#endregion
+//#region packages/packages/core/editor-canvas/src/form-structure/prevent-duplicate-form-atoms-commands.ts
+	var MOVE_COMMAND = "document/elements/move";
+	var SINGLE_INSTANCE_FORM_ATOM_ALERTS = {
+		[FORM_HONEYPOT_ELEMENT_TYPE]: {
+			type: "default",
+			message: (0, _wordpress_i18n.__)("Only one Honeypot can be added per form.", "elementor"),
+			id: "duplicate-honeypot-blocked"
+		},
+		[FORM_RECAPTCHA_SCORE_ELEMENT_TYPE]: {
+			type: "default",
+			message: (0, _wordpress_i18n.__)("Only one Score-based reCAPTCHA can be added per form.", "elementor"),
+			id: "duplicate-recaptcha-score-blocked"
+		}
+	};
+	var SINGLE_INSTANCE_FORM_ATOM_TYPES = Object.keys(SINGLE_INSTANCE_FORM_ATOM_ALERTS);
+	function initDuplicateFormAtomsPrevention() {
+		(0, _elementor_editor_v1_adapters.registerDataHook)("dependency", "document/elements/create", (args, options) => {
+			return !blockDuplicateCreate(args, options);
+		});
+		(0, _elementor_editor_v1_adapters.blockCommand)({
+			command: "document/elements/move",
+			condition: blockDuplicateMove
+		});
+	}
+	function blockDuplicateCreate(args, options) {
+		if (options?.commandsCurrentTrace?.includes(MOVE_COMMAND)) return false;
+		const containers = args.containers ?? [args.container];
+		const blockedType = SINGLE_INSTANCE_FORM_ATOM_TYPES.find((type) => hasModelElementType(args.model, type) && containers.some((container) => formHasElementType(getFormContainer(container), type)));
+		if (!blockedType) return false;
+		(0, _elementor_editor_notifications.notify)(SINGLE_INSTANCE_FORM_ATOM_ALERTS[blockedType]);
+		return true;
+	}
+	function blockDuplicateMove(args) {
+		const { containers = [args.container], target } = args;
+		const movedContainers = containers.filter((container) => !!container);
+		const movedElements = new Set(movedContainers.flatMap((container) => (0, _elementor_editor_elements.getAllDescendants)(container)));
+		const targetForm = getFormContainer(target);
+		const blockedType = SINGLE_INSTANCE_FORM_ATOM_TYPES.find((type) => movedContainers.some((container) => hasElementType(container, type)) && formHasElementType(targetForm, type, movedElements));
+		if (!blockedType) return false;
+		(0, _elementor_editor_notifications.notify)(SINGLE_INSTANCE_FORM_ATOM_ALERTS[blockedType]);
+		return true;
+	}
+	function formHasElementType(form, type, excluded = /* @__PURE__ */ new Set()) {
+		if (!form) return false;
+		return (0, _elementor_editor_elements.getAllDescendants)(form).some((element) => !excluded.has(element) && getElementType$1(element) === type);
+	}
 
 //#endregion
 //#region packages/packages/core/editor-canvas/src/form-structure/prevent-form-nesting-commands.ts
@@ -6664,67 +6792,107 @@ var import_jsx_runtime = require_jsx_runtime();
 	}
 
 //#endregion
-//#region packages/packages/core/editor-canvas/src/transformers/shared/icon-transformer.ts
-	var FONT_AWESOME_JSON = {
-		width: 0,
-		height: 1,
-		path: 4
-	};
-	var fontAwesomeJsonCache = /* @__PURE__ */ new Map();
-	var iconTransformer = createTransformer(async (value, { signal }) => {
-		const iconValue = typeof value.value === "string" ? value.value : null;
-		const library = typeof value.library === "string" ? value.library : null;
-		if (!iconValue || !library) return {
-			html: null,
-			url: null
-		};
-		const iconName = getFontAwesomeIconName(iconValue);
-		const jsonFileName = getFontAwesomeJsonFileName(library);
-		if (!iconName || !jsonFileName) return {
-			html: null,
-			url: null
-		};
-		const iconData = (await fetchFontAwesomeIcons(jsonFileName, signal))?.[iconName];
-		if (!iconData) return {
-			html: null,
-			url: null
-		};
-		return {
-			html: processSvgContent(buildFontAwesomeSvg(iconData)),
-			url: null
-		};
-	});
-	function getFontAwesomeIconName(iconValue) {
-		return iconValue.match(/^fa\S*\s+fa-(.+)$/)?.[1] ?? null;
-	}
-	function getFontAwesomeJsonFileName(library) {
-		if (!library.startsWith("fa-")) return null;
-		return library.replace(/^fa-/, "");
-	}
-	function getAssetsBaseUrl() {
-		const assetsUrl = window.elementorCommon?.config?.urls?.assets;
-		return typeof assetsUrl === "string" && assetsUrl !== "" ? assetsUrl : null;
-	}
-	async function fetchFontAwesomeIcons(jsonFileName, signal) {
-		const cached = fontAwesomeJsonCache.get(jsonFileName);
-		if (cached) return cached;
-		const icons = await loadFontAwesomeIcons(jsonFileName, signal);
-		if (icons) fontAwesomeJsonCache.set(jsonFileName, icons);
-		return icons;
-	}
-	async function loadFontAwesomeIcons(jsonFileName, signal) {
-		const assetsUrl = getAssetsBaseUrl();
-		if (!assetsUrl) return null;
+//#region packages/packages/core/editor-canvas/src/transformers/shared/svg-src-transformer.ts
+	async function fetchSvgContent(url, signal) {
 		try {
-			const response = await fetch(`${assetsUrl}lib/font-awesome/json/${jsonFileName}.json`, { signal });
+			const response = await fetch(url, { signal });
 			if (!response.ok) return null;
-			return (await response.json()).icons ?? null;
+			const contentType = response.headers.get("content-type") ?? "";
+			if (!(contentType.includes("svg") || contentType.includes("xml") || url.endsWith(".svg"))) return null;
+			return await response.text();
 		} catch {
 			return null;
 		}
 	}
-	function buildFontAwesomeSvg(iconData) {
-		return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${iconData[FONT_AWESOME_JSON.width]} ${iconData[FONT_AWESOME_JSON.height]}"><path d="${iconData[FONT_AWESOME_JSON.path]}"></path></svg>`;
+	function resolveSvgSrcId(id) {
+		if (typeof id !== "number" || id <= 0) return null;
+		return id;
+	}
+	var svgSrcTransformer = createTransformer(async (value, { signal }) => {
+		const id = resolveSvgSrcId(value.id);
+		const urlFromValue = typeof value.url === "string" ? value.url : null;
+		let url = urlFromValue;
+		if (id && !urlFromValue) url = (await (0, _elementor_wp_media.getMediaAttachment)({ id }))?.url ?? null;
+		const resolvedUrl = typeof url === "string" ? url : null;
+		if (!resolvedUrl) return {
+			html: null,
+			url: null
+		};
+		const svgText = await fetchSvgContent(resolvedUrl, signal);
+		return {
+			html: svgText ? processSvgContent(svgText) : null,
+			url: resolvedUrl
+		};
+	});
+
+//#endregion
+//#region packages/packages/core/editor-canvas/src/transformers/shared/icon-transformer.ts
+	var EMPTY_ICON_RESULT = {
+		html: null,
+		url: null
+	};
+	var ICON_SVG_SIZE = "100%";
+	var ICON_SVG_OVERFLOW = "visible";
+	var EICONS_LIBRARY = "eicons";
+	var DEFAULT_SVG_RELATIVE_PATH = "images/default-svg.svg";
+	var iconTransformer = createTransformer(async (value, { signal }) => {
+		const iconValue = typeof value.value === "string" ? value.value : null;
+		const library = typeof value.library === "string" ? value.library : null;
+		if (!iconValue || !library) return EMPTY_ICON_RESULT;
+		const fontAwesomeHtml = await resolveFontAwesomeSvg(library, iconValue, signal);
+		if (fontAwesomeHtml) return {
+			html: fontAwesomeHtml,
+			url: null
+		};
+		if (EICONS_LIBRARY === library) return EMPTY_ICON_RESULT;
+		const providerHtml = await resolveProviderSvg(library, iconValue, signal);
+		if (providerHtml) return {
+			html: providerHtml,
+			url: null
+		};
+		return resolveDefaultSvg(signal);
+	});
+	async function resolveDefaultSvg(signal) {
+		const assetsUrl = window.elementorCommon?.config?.urls?.assets;
+		if (typeof assetsUrl !== "string" || assetsUrl === "") return EMPTY_ICON_RESULT;
+		return svgSrcTransformer({
+			id: null,
+			url: `${assetsUrl}${DEFAULT_SVG_RELATIVE_PATH}`
+		}, {
+			key: "svg",
+			signal
+		});
+	}
+	async function resolveProviderSvg(library, iconValue, signal) {
+		const markup = await (0, _elementor_editor_controls.resolveProviderIconSvg)(library, iconValue, signal);
+		return markup ? processIconSvgContent(markup) : null;
+	}
+	async function resolveFontAwesomeSvg(library, iconValue, signal) {
+		const iconName = (0, _elementor_editor_controls.getFontAwesome7IconName)(iconValue);
+		if (!iconName) return null;
+		const iconData = await (0, _elementor_editor_controls.resolveFontAwesome7Icon)(library, iconName, signal);
+		if (!iconData) return null;
+		const svgText = buildPathSvg(iconData);
+		return svgText ? processIconSvgContent(svgText) : null;
+	}
+	function buildPathSvg(iconData) {
+		if (iconData.paths.length === 0) return null;
+		const pathMarkup = iconData.paths.map((path) => `<path d="${escapeSvgPath(path)}"></path>`).join("");
+		return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${iconData.width} ${iconData.height}">${pathMarkup}</svg>`;
+	}
+	function escapeSvgPath(path) {
+		return path.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+	}
+	function processIconSvgContent(svgText) {
+		const html = processSvgContent(svgText);
+		if (!html) return null;
+		const svgElement = new DOMParser().parseFromString(html, "image/svg+xml").querySelector("svg");
+		if (!svgElement) return null;
+		svgElement.setAttribute("aria-hidden", "true");
+		svgElement.style.setProperty("width", ICON_SVG_SIZE);
+		svgElement.style.setProperty("height", ICON_SVG_SIZE);
+		svgElement.style.setProperty("overflow", ICON_SVG_OVERFLOW);
+		return svgElement.outerHTML;
 	}
 
 //#endregion
@@ -6767,40 +6935,6 @@ var import_jsx_runtime = require_jsx_runtime();
 	});
 
 //#endregion
-//#region packages/packages/core/editor-canvas/src/transformers/shared/svg-src-transformer.ts
-	async function fetchSvgContent(url, signal) {
-		try {
-			const response = await fetch(url, { signal });
-			if (!response.ok) return null;
-			const contentType = response.headers.get("content-type") ?? "";
-			if (!(contentType.includes("svg") || contentType.includes("xml") || url.endsWith(".svg"))) return null;
-			return await response.text();
-		} catch {
-			return null;
-		}
-	}
-	function resolveSvgSrcId(id) {
-		if (typeof id !== "number" || id <= 0) return null;
-		return id;
-	}
-	var svgSrcTransformer = createTransformer(async (value, { signal }) => {
-		const id = resolveSvgSrcId(value.id);
-		const urlFromValue = typeof value.url === "string" ? value.url : null;
-		let url = urlFromValue;
-		if (id && !urlFromValue) url = (await (0, _elementor_wp_media.getMediaAttachment)({ id }))?.url ?? null;
-		const resolvedUrl = typeof url === "string" ? url : null;
-		if (!resolvedUrl) return {
-			html: null,
-			url: null
-		};
-		const svgText = await fetchSvgContent(resolvedUrl, signal);
-		return {
-			html: svgText ? processSvgContent(svgText) : null,
-			url: resolvedUrl
-		};
-	});
-
-//#endregion
 //#region packages/packages/core/editor-canvas/src/transformers/shared/video-src-transformer.ts
 	var videoSrcTransformer = createTransformer(async (value) => {
 		const { id, url } = value;
@@ -6832,6 +6966,7 @@ var import_jsx_runtime = require_jsx_runtime();
 //#region packages/packages/core/editor-canvas/src/transformers/styles/background-gradient-overlay-transformer.ts
 	var backgroundGradientOverlayTransformer = createTransformer((value) => {
 		if (value.type === "radial") return `radial-gradient(circle at ${value.positions}, ${value.stops})`;
+		if (value.angle === null || value.angle === void 0) return `linear-gradient(${value.stops})`;
 		return `linear-gradient(${value.angle}deg, ${value.stops})`;
 	});
 
@@ -7291,10 +7426,13 @@ var import_jsx_runtime = require_jsx_runtime();
 //#region packages/packages/core/editor-canvas/src/legacy/create-pending-element.ts
 	function createPendingElement(wrapperView, data, options = {}) {
 		const parentContainer = wrapperView.getContainer();
-		const model = { ...data };
-		if (!model.id) model.id = (0, _elementor_editor_elements.generateElementId)();
+		const model = options.clone ? (0, _elementor_editor_elements.cloneElementTree)(data) : { ...data };
+		if (!options.clone && !model.id) model.id = (0, _elementor_editor_elements.generateElementId)();
 		if (!model.elements) model.elements = [];
-		if (!(0, _elementor_editor_elements.addModelToParent)(parentContainer.id, model, options)) return;
+		if (!(0, _elementor_editor_elements.addModelToParent)(parentContainer.id, model, {
+			...options,
+			clone: false
+		})) return;
 		const childId = model.id;
 		const childModel = (0, _elementor_editor_elements.findModelInDocument)(childId);
 		if (!childModel) return;
@@ -7452,6 +7590,7 @@ var import_jsx_runtime = require_jsx_runtime();
 					this._domUpdateWasSkipped = false;
 					this._lastResolvedSettingsHash = settingsHash;
 					const context = {
+						...element.template_context ?? {},
 						id: this.model.get("id"),
 						interaction_id: this.getInteractionId(),
 						type,
@@ -7521,10 +7660,13 @@ var import_jsx_runtime = require_jsx_runtime();
 	function buildEditorAttributes(model) {
 		const id = model.get("id");
 		const originId = model.get("originId");
+		const cid = model.cid ?? "";
+		const isDecorative = model.get("editor_settings")?.decorative === true;
 		const attrs = {
-			"data-model-cid": model.cid ?? "",
+			"data-model-cid": cid,
 			"data-interaction-id": originId ?? id,
-			"x-ignore": "true"
+			"x-ignore": "true",
+			...isDecorative ? { "data-e-decorative": "true" } : {}
 		};
 		return Object.entries(attrs).map(([key, value]) => `${key}="${value}"`).join(" ");
 	}
@@ -7996,7 +8138,7 @@ var import_client = require_client();
 			return () => ownerDocument.removeEventListener("mousedown", handleClickAway);
 		}, [contentElement, dismiss]);
 		if (!active) return null;
-		return /* @__PURE__ */ react.createElement(_elementor_ui.ThemeProvider, null, /* @__PURE__ */ react.createElement(InlineEditingOverlay, {
+		return /* @__PURE__ */ react.createElement(_elementor_editor_ui.ThemeProvider, null, /* @__PURE__ */ react.createElement(InlineEditingOverlay, {
 			expectedTag,
 			rootElement,
 			id
@@ -8495,11 +8637,11 @@ var import_client = require_client();
 
 //#endregion
 //#region packages/packages/core/editor-canvas/src/mcp/resources/available-widgets-resource.ts
-	var MCP_PROXY_URL$3 = "elementor/v1/mcp-proxy";
+	var MCP_PROXY_URL$4 = "elementor/v1/mcp-proxy";
 	var AVAILABLE_WIDGETS_URI = "elementor://context/available-widgets";
 	var AVAILABLE_WIDGETS_URI_V4 = "elementor://context/available-widgets/v4";
 	var fetchWidgets = async () => {
-		const { data } = await (0, _elementor_http_client.httpService)().post(MCP_PROXY_URL$3, {
+		const { data } = await (0, _elementor_http_client.httpService)().post(MCP_PROXY_URL$4, {
 			tool: "list-widget-schemas",
 			input: { summary: true }
 		});
@@ -8521,7 +8663,7 @@ var import_client = require_client();
 
 //#endregion
 //#region packages/packages/core/editor-canvas/src/mcp/resources/best-practices-resource.ts
-	var MCP_PROXY_URL$2 = "elementor/v1/mcp-proxy";
+	var MCP_PROXY_URL$3 = "elementor/v1/mcp-proxy";
 	var BEST_PRACTICES_URI = "elementor://style/best-practices";
 	var initBestPracticesResource = (reg) => {
 		const { resource } = reg;
@@ -8529,7 +8671,7 @@ var import_client = require_client();
 			description: "Design quality guidelines for avoiding generic AI output: typography, color strategy, spacing, motion, and visual hierarchy best practices.",
 			mimeType: "text/markdown"
 		}, async (uri) => {
-			const { data } = await (0, _elementor_http_client.httpService)().get(MCP_PROXY_URL$2, { params: { uri: uri.href } });
+			const { data } = await (0, _elementor_http_client.httpService)().get(MCP_PROXY_URL$3, { params: { uri: uri.href } });
 			return { contents: [{
 				uri: uri.href,
 				mimeType: "text/markdown",
@@ -8605,9 +8747,9 @@ var import_client = require_client();
 //#endregion
 //#region packages/packages/core/editor-canvas/src/mcp/resources/dynamic-tags-resource.ts
 	var DYNAMIC_TAGS_URI = "elementor://dynamic-tags";
-	var MCP_PROXY_URL$1 = "elementor/v1/mcp-proxy";
+	var MCP_PROXY_URL$2 = "elementor/v1/mcp-proxy";
 	var fetchDynamicTags = async () => {
-		const { data } = await (0, _elementor_http_client.httpService)().get(MCP_PROXY_URL$1, { params: { uri: DYNAMIC_TAGS_URI } });
+		const { data } = await (0, _elementor_http_client.httpService)().get(MCP_PROXY_URL$2, { params: { uri: DYNAMIC_TAGS_URI } });
 		return data.data ?? "[]";
 	};
 	var initDynamicTagsResource = (reg) => {
@@ -8824,10 +8966,14 @@ var import_client = require_client();
 	function getElementProperties(container, widgetType) {
 		const settings = container.settings?.toJSON?.();
 		if (!settings || typeof settings !== "object") return null;
-		const controls = (widgetType ? (0, _elementor_editor_elements.getWidgetsCache)()?.[widgetType] : null)?.controls;
+		const widgetsCache = (0, _elementor_editor_elements.getWidgetsCache)();
+		const controls = (widgetType ? widgetsCache?.[widgetType] : null)?.controls;
+		const schemaType = widgetType ?? container.model.get("elType") ?? null;
+		const propsSchema = schemaType ? widgetsCache?.[schemaType]?.atomic_props_schema : void 0;
 		const filtered = {};
 		for (const [key, value] of Object.entries(settings)) {
 			if (value === void 0 || value === null || value === "") continue;
+			if (_elementor_editor_props.Schema.isPropSensitive(propsSchema?.[key])) continue;
 			const controlDefault = controls?.[key]?.default;
 			if (controlDefault !== void 0 && JSON.stringify(value) === JSON.stringify(controlDefault)) continue;
 			filtered[key] = value;
@@ -9062,6 +9208,43 @@ Expected Schema: ${jsonSchema}`);
 
 //#endregion
 //#region packages/packages/core/editor-canvas/src/mcp/tools/configure-element/prompt.ts
+	var ICONS_SECTION = `# Icons (the \`svg\` property on e-svg)
+The \`svg\` property accepts two variants. Prefer a library icon for iconography (carts, arrows, social marks, check marks) \u2014 it needs no upload and inherits \`color\` via \`currentColor\`. Use an uploaded file only for custom artwork such as a brand logo.
+
+Resolve the icon with the \`find-icons\` tool FIRST, then copy its \`value\` and \`library\` verbatim. Never assemble those strings yourself: Font Awesome renamed many icons between major versions (\`shopping-cart\` became \`cart-shopping\`), so a plausible guess renders nothing. \`find-icons\` matches on names, aliases, human search terms, and categories, so describe the intent \u2014 "add to cart" finds \`cart-shopping\`. It takes a batch of \`queries\`, so resolve every icon you need in one call.
+
+Library icon (note the nested PropValues \u2014 \`value\` and \`library\` are each a \`string\` PropValue):
+{ "$$type": "icon", "value": { "value": { "$$type": "string", "value": "fa-solid fa-cart-shopping" }, "library": { "$$type": "string", "value": "fa-solid" } } }
+
+Uploaded SVG file:
+{ "$$type": "svg-src", "value": { "id": { "$$type": "image-attachment-id", "value": 123 } } }
+
+Size and colour an e-svg through \`style\` (\`width\`, \`height\`, \`color\`), never through \`propertiesToChange\`.
+`;
+	var ICON_EXAMPLE = `
+Setting a Font Awesome icon on an e-svg, after resolving it with \`find-icons\`:
+
+\`\`\`json
+{
+  propertiesToChange: {
+    svg: {
+      $$type: 'icon',
+      value: {
+        value: { $$type: 'string', value: 'fa-solid fa-cart-shopping' },
+        library: { $$type: 'string', value: 'fa-solid' }
+      }
+    }
+  },
+  style: {
+    'width': '1.25rem',
+    'height': '1.25rem',
+    'color': '#1a1a1a'
+  },
+  elementId: 'element-id',
+  elementType: 'e-svg'
+};
+\`\`\`
+`;
 	var CONFIGURE_ELEMENT_GUIDE_URI = "elementor://canvas/tools/configure-element-guide";
 	var generatePrompt = () => {
 		const configureElementToolPrompt = (0, _elementor_editor_mcp.toolPrompts)("configure-element");
@@ -9121,7 +9304,8 @@ Put the dynamic object EXACTLY at the node whose schema offers the "dynamic" var
 }
 Image example: { "$$type": "image", "value": { "src": { "$$type": "dynamic", "value": { "name": "<image tag>", "settings": { ... } } } } }
 Do NOT send "group" (it is resolved automatically). Use { "settings": {} } only when the tag has no settings.
-`);
+
+${ICONS_SECTION}`);
 		configureElementToolPrompt.parameter("elementId", "The ID of the element to configure. MANDATORY.");
 		configureElementToolPrompt.parameter("elementType", "The type of the element to configure (i.e. e-heading, e-button). MANDATORY.");
 		configureElementToolPrompt.parameter("propertiesToChange", "An object containing the properties to change, with their new values. MANDATORY. When updating a style only, provide an empty object.");
@@ -9149,6 +9333,7 @@ Do NOT send "group" (it is resolved automatically). Use { "settings": {} } only 
 };
 \`\`\`
 `);
+		configureElementToolPrompt.example(ICON_EXAMPLE);
 		configureElementToolPrompt.instruction("The $$type property is MANDATORY for every value in propertiesToChange; it is not used in the style parameter (raw CSS only).");
 		configureElementToolPrompt.instruction(`
 V4 only: If MCP fails, give manual steps using V4 UI.
@@ -9217,7 +9402,7 @@ Note: \`link\` is valid only when the element's PropType schema (which you must 
 				const toUpdate = Object.entries(propertiesToUpdate);
 				const skippedProps = [];
 				for (const [propertyName, propertyValue] of toUpdate) {
-					if (!_elementor_editor_props.Schema.isPropKeyConfigurable(propertyName)) throw new Error(`Not allowed to update ${propertyName}`);
+					if (!_elementor_editor_props.Schema.isPropKeyConfigurable(propertyName, widgetData.atomic_props_schema[propertyName])) throw new Error(`Not allowed to update ${propertyName}`);
 					try {
 						doUpdateElementProperty({
 							elementId,
@@ -9300,6 +9485,95 @@ Provide styling as raw CSS via the "style" parameter (a flat map of CSS property
 	}
 
 //#endregion
+//#region packages/packages/core/editor-canvas/src/mcp/tools/find-icons/prompt.ts
+	var findIconsToolPrompt = (0, _elementor_editor_mcp.toolPrompts)("find-icons");
+	findIconsToolPrompt.description("Finds icons for the `svg` property of an `e-svg` element, across Font Awesome and any icon packs uploaded to this site. Returns the exact `value` and `library` pair to write - never assemble those strings yourself, and never guess an icon name. Call this before placing or configuring an `e-svg`. Nothing has to be uploaded to the Media Library for an icon to work.");
+	findIconsToolPrompt.instruction("Call it when the user names an icon (\"use the cart-shopping icon\") and take the first exact `name` match, and also when the user describes a page and you decide icons belong in it (\"create a product page\") - in that case pass one query per icon you intend to place, in a single call.");
+	findIconsToolPrompt.instruction("Write queries the way a person would describe the icon (\"shopping cart\", \"credit card\", \"phone\"). Icons are matched on their name, aliases, Font Awesome search terms and category, so plain language works better than guessed icon names.");
+	findIconsToolPrompt.instruction("Results are ordered best first; `matched_on: \"name\"` is a stronger signal than `matched_on: \"term\"`. Check each result's `license` and only use `free` icons; skip any `pro` entry. Prefer `fa-solid` for UI iconography and keep one style across a page; brand marks only exist in `fa-brands`. An empty `matches` array means no match was found: broaden the phrase instead of inventing a value.");
+	findIconsToolPrompt.instruction("Pass the chosen pair to `configure-element` as the `svg` property: { \"$$type\": \"icon\", \"value\": { \"value\": { \"$$type\": \"string\", \"value\": \"fa-solid fa-cart-shopping\" }, \"library\": { \"$$type\": \"string\", \"value\": \"fa-solid\" } } }. An `e-svg` has no colour or size of its own, so set `width`, `height` and `color` in the same `configure-element` call.");
+	findIconsToolPrompt.example(`Icon named by the user:
+{ "queries": ["cart-shopping"] }`);
+	findIconsToolPrompt.example(`Every icon a product page needs, in one call:
+{ "queries": ["add to cart", "free shipping", "secure payment", "instagram"] }`);
+	findIconsToolPrompt.example(`Browse a category, one style only:
+{ "category": "shopping", "library": "fa-solid", "perPage": 25 }`);
+
+//#endregion
+//#region packages/packages/core/editor-canvas/src/mcp/tools/find-icons/tool.ts
+	var MCP_PROXY_URL$1 = "elementor/v1/mcp-proxy";
+	var MAX_QUERIES = 10;
+	var MAX_PER_PAGE = 25;
+	var initFindIconsTool = (reg) => {
+		const { addTool } = reg;
+		addTool({
+			name: "find-icons",
+			description: findIconsToolPrompt.prompt(),
+			schema: {
+				queries: _elementor_schema.z.array(_elementor_schema.z.string()).max(MAX_QUERIES).optional().describe("One plain-language phrase per icon you need, for example [\"add to cart\", \"free shipping\"]. Batch every icon a page needs into a single call."),
+				library: _elementor_schema.z.string().optional().describe("Restrict results to one library key reported in \"libraries\", for example \"fa-solid\". Omit to search every library installed on the site."),
+				category: _elementor_schema.z.string().optional().describe("Restrict results to one Font Awesome category reported in \"categories\", for example \"shopping\". May be used without a query to browse that category."),
+				page: _elementor_schema.z.number().int().min(1).optional(),
+				perPage: _elementor_schema.z.number().int().min(1).max(MAX_PER_PAGE).optional()
+			},
+			outputSchema: {
+				results: _elementor_schema.z.array(_elementor_schema.z.object({
+					query: _elementor_schema.z.string(),
+					matches: _elementor_schema.z.array(_elementor_schema.z.object({
+						value: _elementor_schema.z.string(),
+						library: _elementor_schema.z.string(),
+						name: _elementor_schema.z.string(),
+						label: _elementor_schema.z.string(),
+						matched_on: _elementor_schema.z.enum([
+							"name",
+							"alias",
+							"term",
+							"category",
+							"library"
+						]),
+						license: _elementor_schema.z.enum(["free", "pro"])
+					})),
+					total: _elementor_schema.z.number(),
+					page: _elementor_schema.z.number(),
+					per_page: _elementor_schema.z.number(),
+					truncated: _elementor_schema.z.boolean()
+				})).describe("One entry per query, each with ranked \"matches\". Every match carries the \"value\" and \"library\" pair to write on the e-svg icon prop, plus \"matched_on\" and \"license\"."),
+				libraries: _elementor_schema.z.array(_elementor_schema.z.string()).optional().describe("Icon library keys installed on this site. Only sent when nothing matched or when browsing."),
+				customLibraries: _elementor_schema.z.record(_elementor_schema.z.string(), _elementor_schema.z.string()).optional().describe("Custom (uploaded) icon libraries keyed by library. Only sent when nothing matched or when browsing."),
+				categories: _elementor_schema.z.array(_elementor_schema.z.string()).optional().describe("Icon categories for the \"category\" filter. Only sent when nothing matched or when browsing."),
+				truncatedCustomLibraries: _elementor_schema.z.array(_elementor_schema.z.string()).optional().describe("Custom libraries with more than 250 icons; only their first 250 icons are searchable."),
+				fontAwesomeVersion: _elementor_schema.z.string().nullable().describe("Font Awesome version the site renders icons from."),
+				llmInstructions: _elementor_schema.z.string().optional().describe("Present only when nothing matched, explaining what to do next.")
+			},
+			handler: async ({ queries, library, category, page, perPage }) => {
+				try {
+					const { data } = await (0, _elementor_http_client.httpService)().post(MCP_PROXY_URL$1, {
+						tool: "find-icons",
+						input: {
+							...queries ? { queries } : {},
+							...library ? { library } : {},
+							...category ? { category } : {},
+							...page ? { page } : {},
+							...perPage ? { per_page: perPage } : {}
+						}
+					});
+					return {
+						results: data.data.results,
+						...data.data.libraries ? { libraries: data.data.libraries } : {},
+						...data.data.custom_libraries ? { customLibraries: data.data.custom_libraries } : {},
+						...data.data.categories ? { categories: data.data.categories } : {},
+						...data.data.truncated_custom_libraries ? { truncatedCustomLibraries: data.data.truncated_custom_libraries } : {},
+						fontAwesomeVersion: data.data.font_awesome_version,
+						...data.data.llm_instructions ? { llmInstructions: data.data.llm_instructions } : {}
+					};
+				} catch (error) {
+					throw new Error(getMcpErrorMessage(error, "find-icons"));
+				}
+			}
+		});
+	};
+
+//#endregion
 //#region packages/packages/core/editor-canvas/src/mcp/tools/get-page-structure/tool.ts
 	var MCP_PROXY_URL = "elementor/v1/mcp-proxy";
 	var initGetPageStructureTool = (reg) => {
@@ -9346,6 +9620,7 @@ Provide styling as raw CSS via the "style" parameter (a flat map of CSS property
 		initGeneralContextResource(reg);
 		initBestPracticesResource(reg);
 		initConfigureElementTool(reg);
+		initFindIconsTool(reg);
 		initGetPageStructureTool(reg);
 		initBreakpointsResource(reg);
 	};
@@ -9716,6 +9991,9 @@ Note: The "size" property controls image resolution/loading, not visual size. Se
 		initLinkInLinkPrevention();
 		initFormNestingPrevention();
 		initFormAncestorEnforcement();
+		initHiddenFieldHint();
+		initDuplicateFormAtomsPrevention();
+		initFormAtomAddedHints();
 		initViewReplacements();
 		initLegacyViews();
 		initSettingsTransformers();
@@ -9909,6 +10187,6 @@ Note: The "size" property controls image resolution/loading, not visual size. Se
 	(window.elementorV2 = window.elementorV2 || {}).editorCanvas = src_exports;
 
 //#endregion
-})(elementorV2.editorV1Adapters, elementorV2.editorMcp, elementorV2.httpClient, elementorV2.editor, React, elementorV2.editorDocuments, elementorV2.editorStylesRepository, elementorV2.utils, elementorV2.editorElements, elementorV2.ui, ReactDOM, elementorV2.editorInteractions, elementorV2.editorResponsive, elementorV2.editorStyles, elementorV2.editorProps, elementorV2.editorNotifications, wp.i18n, elementorV2.wpMedia, elementorV2.editorControls, elementorV2.twing, elementorV2.schema);
+})(elementorV2.editorV1Adapters, elementorV2.editorMcp, elementorV2.httpClient, elementorV2.editor, React, elementorV2.editorDocuments, elementorV2.editorStylesRepository, elementorV2.utils, elementorV2.editorElements, elementorV2.ui, ReactDOM, elementorV2.editorInteractions, elementorV2.editorResponsive, elementorV2.editorStyles, elementorV2.editorProps, elementorV2.editorNotifications, wp.i18n, elementorV2.editorControls, elementorV2.wpMedia, elementorV2.twing, elementorV2.editorUi, elementorV2.schema);
 window.elementorV2.editorCanvas?.init?.();
 //# sourceMappingURL=editor-canvas.js.map

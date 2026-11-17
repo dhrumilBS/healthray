@@ -180,8 +180,16 @@ class Migration {
 			return $instance;
 		}
 
-		// Use the ONE instance for migrated plugins
-		return $instances[ Config::PLUGIN_SLUG ] ?? null;
+		// Get the ONE instance
+		$one_instance = $instances[ Config::PLUGIN_SLUG ] ?? null;
+
+		// Return ONE instance only if it exists and is connected
+		if ( $one_instance && $one_instance->utils()->is_connected() ) {
+			return $one_instance;
+		}
+
+		// Otherwise return the original instance
+		return $instance;
 	}
 
 	/**

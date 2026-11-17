@@ -809,76 +809,7 @@
 	}
 
 //#endregion
-//#region node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
-	function _arrayLikeToArray(r, a) {
-		(null == a || a > r.length) && (a = r.length);
-		for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
-		return n;
-	}
-
-//#endregion
-//#region node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
-	function _arrayWithoutHoles(r) {
-		if (Array.isArray(r)) return _arrayLikeToArray(r);
-	}
-
-//#endregion
-//#region node_modules/@babel/runtime/helpers/esm/iterableToArray.js
-	function _iterableToArray(r) {
-		if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r);
-	}
-
-//#endregion
-//#region node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-	function _unsupportedIterableToArray(r, a) {
-		if (r) {
-			if ("string" == typeof r) return _arrayLikeToArray(r, a);
-			var t = {}.toString.call(r).slice(8, -1);
-			return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0;
-		}
-	}
-
-//#endregion
-//#region node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js
-	function _nonIterableSpread() {
-		throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-	}
-
-//#endregion
-//#region node_modules/@babel/runtime/helpers/esm/toConsumableArray.js
-	function _toConsumableArray(r) {
-		return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread();
-	}
-
-//#endregion
-//#region node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
-	function _objectWithoutPropertiesLoose(r, e) {
-		if (null == r) return {};
-		var t = {};
-		for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-			if (-1 !== e.indexOf(n)) continue;
-			t[n] = r[n];
-		}
-		return t;
-	}
-
-//#endregion
-//#region node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
-	function _objectWithoutProperties(e, t) {
-		if (null == e) return {};
-		var o;
-		var r;
-		var i = _objectWithoutPropertiesLoose(e, t);
-		if (Object.getOwnPropertySymbols) {
-			var n = Object.getOwnPropertySymbols(e);
-			for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
-		}
-		return i;
-	}
-
-//#endregion
 //#region app/modules/import-export-customization/assets/js/shared/registry/base.js
-	var _excluded = ["children"];
 	function ownKeys$1(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
@@ -911,33 +842,21 @@
 			{
 				key: "register",
 				value: function register(section) {
-					var _this = this;
 					if (!section.key || !section.title) throw new Error("Template type must have key and title");
-					var formattedSection = this.get(section.key) || this.formatSection(section);
-					if (section.children) if (formattedSection.children) {
-						var existingChildrenMap = new Map(formattedSection.children.map(function(child) {
-							return [child.key, child];
-						}));
-						section.children.forEach(function(childSection) {
-							var formattedChild = _this.formatSection(childSection);
-							existingChildrenMap.set(childSection.key, formattedChild);
-						});
-						formattedSection.children = Array.from(existingChildrenMap.values());
-					} else formattedSection.children = section.children.map(function(childSection) {
-						return _this.formatSection(childSection);
-					});
+					var existingSection = this.get(section.key);
+					var formattedSection = this.formatSection(_objectSpread$1(_objectSpread$1({}, existingSection), section));
 					this.sections.set(section.key, formattedSection);
 				}
 			},
 			{
 				key: "formatSection",
-				value: function formatSection(_ref) {
-					_ref.children;
-					var section = _objectWithoutProperties(_ref, _excluded);
+				value: function formatSection(section) {
 					return _objectSpread$1({
 						key: section.key,
+						parentKey: section.parentKey || null,
 						title: section.title,
 						description: section.description || "",
+						isPlaceholder: !!section.isPlaceholder,
 						useParentDefault: section.useParentDefault !== false,
 						getInitialState: section.getInitialState || null,
 						component: section.component || null,
@@ -953,13 +872,8 @@
 				value: function getAll() {
 					return Array.from(this.sections.values()).filter(function(type) {
 						return type.isAvailable();
-					}).map(function(type) {
-						if (type.children) return _objectSpread$1(_objectSpread$1({}, type), {}, { children: _toConsumableArray(type.children).sort(function(a, b) {
-							return a.order - b.order;
-						}) });
-						return type;
-					}).sort(function(a, b) {
-						return a.order - b.order;
+					}).sort(function(first, second) {
+						return first.order - second.order;
 					});
 				}
 			},
@@ -973,8 +887,166 @@
 	}();
 
 //#endregion
-//#region app/modules/import-export-customization/assets/js/shared/registry/customization-dialogs.js
-	var customizationDialogsRegistry = new BaseRegistry();
+//#region app/modules/import-export-customization/assets/js/shared/utils.js
+	function isExperimentActive(experimentName) {
+		var _common$config;
+		var common = typeof globalThis !== "undefined" ? globalThis.elementorCommon : void 0;
+		return !!(common !== null && common !== void 0 && (_common$config = common.config) !== null && _common$config !== void 0 && (_common$config = _common$config.experimentalFeatures) !== null && _common$config !== void 0 && _common$config[experimentName]);
+	}
+	function isAtomicElementsFeatureActive() {
+		return isExperimentActive("e_atomic_elements");
+	}
+	var SITE_SETTINGS_MANIFEST_KEY = "site-settings";
+	function getImportManifest(contextData) {
+		var _contextData$data$upl;
+		var _contextData$data;
+		return (_contextData$data$upl = contextData === null || contextData === void 0 || (_contextData$data = contextData.data) === null || _contextData$data === void 0 || (_contextData$data = _contextData$data.uploadedData) === null || _contextData$data === void 0 ? void 0 : _contextData$data.manifest) !== null && _contextData$data$upl !== void 0 ? _contextData$data$upl : null;
+	}
+	function getManifestItem(contextData, manifestKey) {
+		var _getImportManifest;
+		return (_getImportManifest = getImportManifest(contextData)) === null || _getImportManifest === void 0 ? void 0 : _getImportManifest[manifestKey];
+	}
+	function getSiteSettingsManifest(contextData) {
+		return getManifestItem(contextData, SITE_SETTINGS_MANIFEST_KEY);
+	}
+	function isSiteSettingExported(contextData, settingKey) {
+		var _getSiteSettingsManif;
+		return !!((_getSiteSettingsManif = getSiteSettingsManifest(contextData)) !== null && _getSiteSettingsManif !== void 0 && _getSiteSettingsManif[settingKey]);
+	}
+	function isThemeExported(contextData) {
+		if (contextData !== null && contextData !== void 0 && contextData.isOldExport) return !!getManifestItem(contextData, "theme");
+		return isSiteSettingExported(contextData, "theme");
+	}
+
+//#endregion
+//#region app/modules/import-export-customization/assets/js/shared/constants.js
+	var KIT_SECTIONS = Object.freeze({
+		CONTENT: "content",
+		TEMPLATES: "templates",
+		SETTINGS: "settings",
+		PLUGINS: "plugins"
+	});
+	var KIT_SECTION_ITEMS = Object.freeze({
+		CONTENT_CUSTOM_POST_TYPES: "content/custom-post-types",
+		CONTENT_MEDIA_FORMAT: "content/media-format",
+		SETTINGS_DESIGN_SYSTEM: "settings/design-system",
+		SETTINGS_THEME: "settings/theme",
+		SETTINGS_GLOBAL_CLASSES: "settings/design-system/global-classes",
+		SETTINGS_GLOBAL_VARIABLES: "settings/design-system/global-variables",
+		SETTINGS_DEFAULT_STYLES: "settings/design-system/default-styles",
+		SETTINGS_GLOBAL_COLORS: "settings/global-colors",
+		SETTINGS_GLOBAL_FONTS: "settings/global-fonts",
+		SETTINGS_THEME_STYLE_SETTINGS: "settings/theme-style-settings",
+		SETTINGS_GENERAL_SETTINGS: "settings/general-settings",
+		SETTINGS_EXPERIMENTS: "settings/experiments",
+		SETTINGS_CUSTOM_FONTS: "settings/custom-fonts",
+		SETTINGS_CUSTOM_ICONS: "settings/custom-icons",
+		SETTINGS_CUSTOM_CODE: "settings/custom-code",
+		PLUGINS_PLUGIN_LIST: "plugins/plugin-list"
+	});
+
+//#endregion
+//#region app/modules/import-export-customization/assets/js/shared/registry/customization-dialogs-base.js
+	function getThemeInitialState(_ref) {
+		var contextData = _ref.contextData;
+		var includesSettings = _ref.includesSettings;
+		if (!_ref.isImport) return includesSettings;
+		return includesSettings && isThemeExported(contextData);
+	}
+	function createSiteSettingsInitialStateResolver(manifestKey) {
+		return function(_ref2) {
+			var _getSiteSettingsManif;
+			var contextData = _ref2.contextData;
+			var includesSettings = _ref2.includesSettings;
+			if (!_ref2.isImport) return includesSettings;
+			return includesSettings && !!((_getSiteSettingsManif = getSiteSettingsManifest(contextData)) !== null && _getSiteSettingsManif !== void 0 && _getSiteSettingsManif[manifestKey]);
+		};
+	}
+	function createCustomizationDialogsRegistry() {
+		var customizationDialogsRegistry = new BaseRegistry();
+		[
+			{
+				key: KIT_SECTIONS.CONTENT,
+				title: "Content"
+			},
+			{
+				key: KIT_SECTION_ITEMS.CONTENT_CUSTOM_POST_TYPES,
+				parentKey: KIT_SECTIONS.CONTENT,
+				title: "Custom post types",
+				order: 20
+			},
+			{
+				key: KIT_SECTION_ITEMS.CONTENT_MEDIA_FORMAT,
+				parentKey: KIT_SECTIONS.CONTENT,
+				title: "Media format",
+				order: 30
+			},
+			{
+				key: KIT_SECTIONS.TEMPLATES,
+				title: "Templates"
+			},
+			{
+				key: KIT_SECTIONS.SETTINGS,
+				title: "Settings"
+			},
+			{
+				key: KIT_SECTION_ITEMS.SETTINGS_THEME,
+				parentKey: KIT_SECTIONS.SETTINGS,
+				title: "Theme",
+				order: 10,
+				settingKey: "theme",
+				getInitialState: getThemeInitialState
+			},
+			{
+				key: KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM,
+				parentKey: KIT_SECTIONS.SETTINGS,
+				title: "Classes, variables & default styles",
+				order: 20,
+				isAvailable: isAtomicElementsFeatureActive
+			},
+			{
+				key: KIT_SECTION_ITEMS.SETTINGS_GLOBAL_CLASSES,
+				parentKey: KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM,
+				title: "Classes",
+				order: 10,
+				settingKey: "classes",
+				isAvailable: isAtomicElementsFeatureActive,
+				getInitialState: createSiteSettingsInitialStateResolver("classes")
+			},
+			{
+				key: KIT_SECTION_ITEMS.SETTINGS_GLOBAL_VARIABLES,
+				parentKey: KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM,
+				title: "Variables",
+				order: 20,
+				settingKey: "variables",
+				isAvailable: isAtomicElementsFeatureActive,
+				getInitialState: createSiteSettingsInitialStateResolver("variables")
+			},
+			{
+				key: KIT_SECTION_ITEMS.SETTINGS_DEFAULT_STYLES,
+				parentKey: KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM,
+				title: "Default styles",
+				order: 30,
+				settingKey: "defaultStyles",
+				isAvailable: isAtomicElementsFeatureActive,
+				getInitialState: createSiteSettingsInitialStateResolver("defaultStyles")
+			},
+			{
+				key: KIT_SECTIONS.PLUGINS,
+				title: "Plugins"
+			},
+			{
+				key: KIT_SECTION_ITEMS.PLUGINS_PLUGIN_LIST,
+				parentKey: KIT_SECTIONS.PLUGINS,
+				title: "Plugin list",
+				order: 10
+			}
+		].forEach(function(entry) {
+			return customizationDialogsRegistry.register(entry);
+		});
+		return customizationDialogsRegistry;
+	}
+	var customizationDialogsRegistry = createCustomizationDialogsRegistry();
 
 //#endregion
 //#region assets/dev/js/modules/modules.js
@@ -1385,6 +1457,24 @@
 				}
 			}
 			return a;
+		}
+	}
+
+//#endregion
+//#region node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
+	function _arrayLikeToArray(r, a) {
+		(null == a || a > r.length) && (a = r.length);
+		for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
+		return n;
+	}
+
+//#endregion
+//#region node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
+	function _unsupportedIterableToArray(r, a) {
+		if (r) {
+			if ("string" == typeof r) return _arrayLikeToArray(r, a);
+			var t = {}.toString.call(r).slice(8, -1);
+			return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0;
 		}
 	}
 

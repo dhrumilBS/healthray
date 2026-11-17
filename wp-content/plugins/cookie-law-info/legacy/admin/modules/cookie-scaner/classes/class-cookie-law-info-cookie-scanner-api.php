@@ -33,17 +33,21 @@ class Cookie_Law_Info_Cookie_Scanner_Api extends Cookie_Law_Info_Cookie_Scaner {
 	 * @return array
 	 */
 	public function append_bypasspath( $url ) {
+		// Carry this scan's secret token so the public bypass check can tell the
+		// genuine scanner apart from a crafted public URL (CAP-227).
+		$bypass = get_option( 'cli_scan_bypass' );
+		$token  = ( is_array( $bypass ) && ! empty( $bypass['token'] ) ) ? $bypass['token'] : '';
 		$url_arr = explode( '?', $url );
 		if ( count( $url_arr ) > 1 ) {
 			if ( trim( $url_arr[1] ) != '' ) {
 				parse_str( $url_arr[1], $params );
-				$params['cli_bypass'] = 1;
+				$params['cli_bypass'] = $token;
 				$url_arr[1]           = http_build_query( $params );
 			} else {
-				$url_arr[1] = 'cli_bypass=1';
+				$url_arr[1] = 'cli_bypass=' . rawurlencode( $token );
 			}
 		} else {
-			$url_arr[] = 'cli_bypass=1';
+			$url_arr[] = 'cli_bypass=' . rawurlencode( $token );
 		}
 		return implode( '?', $url_arr );
 	}

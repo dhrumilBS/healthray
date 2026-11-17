@@ -253,10 +253,12 @@ class Elementor_One_Menu_Manager {
 		$capability = $item->get_capability();
 		$position = $item->get_position();
 
+		$menu_label = method_exists( $item, 'get_wp_menu_label' ) ? $item->get_wp_menu_label() : $item->get_label();
+
 		return add_submenu_page(
 			$parent_slug,
 			$page_title,
-			$item->get_label(),
+			$menu_label,
 			$capability,
 			$item_slug,
 			$callback,
@@ -310,6 +312,7 @@ class Elementor_One_Menu_Manager {
 			'elementor-theme-builder',
 			'e-form-submissions',
 			'elementor-mcp',
+			'elementor-agents-ready',
 			'elementor-license',
 			'elementor-connect-account',
 		];

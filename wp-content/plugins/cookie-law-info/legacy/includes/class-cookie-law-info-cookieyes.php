@@ -142,7 +142,8 @@ if ( ! class_exists( 'Cookie_Law_Info_Cookieyes' ) ) {
 						$data['code'] = $status_code;
 						$data['html'] = $html;
 						if ( false === $message ) {
-							$data['message'] = $this->get_ckyes_message( $status_code );
+							$data['message']       = $this->get_ckyes_message( $status_code );
+							$data['has_help_link'] = $this->ckyes_message_has_help_link( $status_code );
 						} else {
 							$data['message'] = $message;
 						}
@@ -297,6 +298,19 @@ if ( ! class_exists( 'Cookie_Law_Info_Cookieyes' ) ) {
 			endif;
 		}
 		/**
+		 * Whether get_ckyes_message() adds the forum help link for this code.
+		 *
+		 * The admin JS keeps the modal open (no page reload) for these messages so the link can be clicked.
+		 * Code 100 is also the generic failure code, so callers must only use this when the message came
+		 * from get_ckyes_message(), not from a custom message.
+		 *
+		 * @param int $msg_code Message code.
+		 * @return bool
+		 */
+		public function ckyes_message_has_help_link( $msg_code ) {
+			return self::EC_WT_CKYES_CONNECTION_FAILED === (int) $msg_code;
+		}
+		/**
 		 * CookieYes message handler
 		 *
 		 * @param int $msg_code Message code.
@@ -305,7 +319,8 @@ if ( ! class_exists( 'Cookie_Law_Info_Cookieyes' ) ) {
 		public function get_ckyes_message( $msg_code ) {
 			switch ( $msg_code ) {
 				case self::EC_WT_CKYES_CONNECTION_FAILED:
-					$msg = __( 'Could not establish connection with scanner! please try again later', 'cookie-law-info' );
+					$msg = esc_html__( 'Could not establish connection with scanner! please try again later', 'cookie-law-info' )
+						. ' <a href="https://wordpress.org/support/plugin/cookie-law-info/#new-topic-0" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Get help on the forum', 'cookie-law-info' ) . '</a>';
 					break;
 				case self::EC_WT_CKYES_INVALID_CREDENTIALS:
 					$msg = __( 'Invalid credentials', 'cookie-law-info' );

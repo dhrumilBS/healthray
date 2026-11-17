@@ -34,6 +34,9 @@ final class Composition_Compiler {
 
 	private const DEFAULT_PARENT_ID = 'document';
 	private const DOCUMENT_ROOT_WRAPPER = 'e-div-block';
+	private const DOCUMENT_ROOT_V3_WRAPPER = 'container';
+
+	private const NAME_COMES_FROM_CONFIGURATION_ID_HINT = 'The layer name is the element\'s configuration-id; rename it afterwards with elementor/manage-elements editor_settings.name.';
 
 	public const COMPONENT_PARENT_ID = 'component';
 
@@ -47,7 +50,7 @@ final class Composition_Compiler {
 	 * @param array     $document_tree Existing document tree used for insertion-context validation.
 	 * @param string    $parent_id     Target parent used for insertion-context validation.
 	 *
-	 * @return array{elements: array[], warnings: string[], dom: \DOMDocument, xml_parser: Xml_Parser}|\WP_Error
+	 * @return array{elements: array[], warnings: Warnings_Bag, dom: \DOMDocument, xml_parser: Xml_Parser, pro_features_discovery: \WP_Error[]}|\WP_Error
 	 */
 	public function compile(
 		array $input,
@@ -63,6 +66,8 @@ final class Composition_Compiler {
 		if ( is_wp_error( $dom ) ) {
 			return $dom;
 		}
+
+		$pro_features_discovery = ( new Pro_Elements_Remover( $xml_parser ) )->remove_and_collect_errors( $dom );
 
 		[
 			'configs' => $widget_configs,
@@ -80,12 +85,15 @@ final class Composition_Compiler {
 			return $validation_error;
 		}
 
+		$warnings = Warnings_Bag::make();
+
 		$wrapping_result = $this->wrap_document_root_content( $dom, $widget_configs, $parent_id, $type_resolver, $xml_parser );
 		if ( is_wp_error( $wrapping_result ) ) {
 			return $wrapping_result;
 		}
 
 		$widget_configs = $wrapping_result['widget_configs'];
+		$warnings->merge( $wrapping_result['warnings'] );
 
 		$child_type_errors = $type_resolver->collect_child_type_and_required_child_errors( $dom, $widget_configs );
 		if ( ! empty( $child_type_errors ) ) {
@@ -98,9 +106,9 @@ final class Composition_Compiler {
 
 		$subtrees = $subtree_builder->build( $dom, $widget_configs );
 		if ( empty( $subtrees ) ) {
-			return new \WP_Error(
+			return $pro_features_discovery[0] ?? new \WP_Error(
 				'empty_composition',
-				__( 'xml_structure did not contain any elements. Pass raw XML tags (e.g. <e-flexbox configuration-id="..."></e-flexbox>) — do not wrap the value in <![CDATA[...]]> or other text-only content.', 'elementor' ),
+				__( 'xml_structure did not contain any elements. Pass raw XML tags (e.g. <e-div-block configuration-id="..."></e-div-block>) — do not wrap the value in <![CDATA[...]]> or other text-only content.', 'elementor' ),
 				[ 'status' => \WP_Http::BAD_REQUEST ]
 			);
 		}
@@ -114,35 +122,25 @@ final class Composition_Compiler {
 		if ( $config_result['error'] ) {
 			return $config_result['error'];
 		}
+		$warnings->merge( $config_result['warnings'] );
+
+		$warnings->merge( $this->apply_editor_settings( $index, $this->as_map( $input['editor_settings'] ?? [] ) ) );
 
 		$class_applier = new Class_Applier( $this->create_global_classes_repository() );
-		$class_error = $class_applier->apply( $index, $this->as_map( $input['classes'] ?? [] ) );
-		if ( $class_error ) {
-			return $class_error;
-		}
+		$warnings->merge( $class_applier->apply( $index, $this->as_map( $input['classes'] ?? [] ) )['warnings'] );
 
-		$style_applier = new Style_Applier( $this->create_css_converter( $variables_service ), $this->get_active_breakpoints() );
-		$style_result = $style_applier->apply( $index, $this->as_map( $input['style'] ?? [] ), 'patch', $widget_configs );
-		if ( $style_result['error'] ) {
-			return $style_result['error'];
-		}
+		$style_applier = new Style_Applier( $this->create_css_converter( $variables_service ), $this->get_active_breakpoints(), $variables_service );
+		$warnings->merge( $style_applier->apply( $index, $this->as_map( $input['style'] ?? [] ), 'patch' )['warnings'] );
+		Grid_Empty_Rows_Warnings::report( $index, $warnings );
 
-		$interactions_result = $this->apply_interactions( $index, $this->as_map( $input['interactions'] ?? [] ) );
-		if ( $interactions_result['error'] ) {
-			return $interactions_result['error'];
-		}
+		$warnings->merge( $this->apply_interactions( $index, $this->as_map( $input['interactions'] ?? [] ) )['warnings'] );
 
 		return [
 			'elements' => $subtrees,
-			'warnings' => array_merge( $wrapping_result['warnings'], $config_result['warnings'], $style_result['warnings'], $interactions_result['warnings'] ),
-			'warning_codes' => array_values( array_unique( array_merge(
-				$wrapping_result['warning_codes'] ?? [],
-				$config_result['warning_codes'] ?? [],
-				$style_result['warning_codes'] ?? [],
-				$interactions_result['warning_codes'] ?? []
-			) ) ),
+			'warnings' => $warnings,
 			'dom' => $dom,
 			'xml_parser' => $xml_parser,
+			'pro_features_discovery' => $pro_features_discovery,
 		];
 	}
 
@@ -206,21 +204,18 @@ final class Composition_Compiler {
 		Widget_Type_Resolver $type_resolver,
 		Xml_Parser $xml_parser
 	) {
+		$unwrapped = [
+			'widget_configs' => $widget_configs,
+			'warnings' => Warnings_Bag::make(),
+		];
+
 		if ( self::DEFAULT_PARENT_ID !== $parent_id ) {
-			return [
-				'widget_configs' => $widget_configs,
-				'warnings' => [],
-				'warning_codes' => [],
-			];
+			return $unwrapped;
 		}
 
 		$root = $xml_parser->get_root( $dom );
 		if ( ! $root ) {
-			return [
-				'widget_configs' => $widget_configs,
-				'warnings' => [],
-				'warning_codes' => [],
-			];
+			return $unwrapped;
 		}
 
 		$root_children = $xml_parser->get_child_elements( $root );
@@ -238,21 +233,18 @@ final class Composition_Compiler {
 		}
 
 		if ( ! $has_widget ) {
-			return [
-				'widget_configs' => $widget_configs,
-				'warnings' => [],
-				'warning_codes' => [],
-			];
+			return $unwrapped;
 		}
 
-		$wrapper_config = $type_resolver->resolve_type_config( self::DOCUMENT_ROOT_WRAPPER );
+		$wrapper_tag = $this->resolve_document_root_wrapper();
+		$wrapper_config = $type_resolver->resolve_type_config( $wrapper_tag );
 		if ( is_wp_error( $wrapper_config ) ) {
 			return $wrapper_config;
 		}
 
-		$widget_configs[ self::DOCUMENT_ROOT_WRAPPER ] = $wrapper_config;
+		$widget_configs[ $wrapper_tag ] = $wrapper_config;
 
-		$wrapper = $dom->createElement( self::DOCUMENT_ROOT_WRAPPER );
+		$wrapper = $dom->createElement( $wrapper_tag );
 		$root->appendChild( $wrapper );
 
 		foreach ( $root_children as $child ) {
@@ -261,9 +253,47 @@ final class Composition_Compiler {
 
 		return [
 			'widget_configs' => $widget_configs,
-			'warnings' => [ __( 'Direct document-root content was wrapped in an e-div-block element.', 'elementor' ) ],
-			'warning_codes' => [ 'root_auto_wrapped' ],
+			'warnings' => Warnings_Bag::make()->add(
+				'root_auto_wrapped',
+				sprintf(
+					/* translators: %s: wrapper element tag */
+					__( 'Direct document-root content was wrapped in a %s element.', 'elementor' ),
+					$wrapper_tag
+				)
+			),
 		];
+	}
+
+	private function resolve_document_root_wrapper(): string {
+		if ( Widget_Context_Helper::is_v3_supported( self::DOCUMENT_ROOT_V3_WRAPPER ) ) {
+			return self::DOCUMENT_ROOT_V3_WRAPPER;
+		}
+
+		return self::DOCUMENT_ROOT_WRAPPER;
+	}
+
+	/**
+	 * @param array<string, array&>               $index           Index of subtree refs.
+	 * @param array<string, array<string, mixed>> $editor_settings Per-config-id editor-only fields.
+	 */
+	private function apply_editor_settings( array $index, array $editor_settings ): Warnings_Bag {
+		$warnings = Warnings_Bag::make();
+
+		foreach ( $editor_settings as $config_id => $values ) {
+			if ( ! isset( $index[ $config_id ] ) ) {
+				continue;
+			}
+
+			Editor_Settings::apply(
+				$index[ $config_id ],
+				$this->as_map( $values ),
+				(string) $config_id,
+				$warnings,
+				[ Editor_Settings::NAME => self::NAME_COMES_FROM_CONFIGURATION_ID_HINT ]
+			);
+		}
+
+		return $warnings;
 	}
 
 	private function as_map( $value ): array {
@@ -316,28 +346,29 @@ final class Composition_Compiler {
 	 * @param array<string, array&>            $index
 	 * @param array<string, array<int, array>> $interactions
 	 *
-	 * @return array{error: \WP_Error|null, warnings: string[]}
+	 * @return array{error: null, warnings: Warnings_Bag}
 	 */
 	private function apply_interactions( array &$index, array $interactions ): array {
 		if ( empty( $interactions ) ) {
 			return [
 				'error' => null,
-				'warnings' => [],
-				'warning_codes' => [],
+				'warnings' => Warnings_Bag::make(),
 			];
 		}
 
 		if ( ! Plugin::$instance->experiments->is_feature_active( Interactions_Module::EXPERIMENT_NAME ) ) {
 			return [
 				'error' => null,
-				'warnings' => [ __( 'Interactions experiment is not active. Interactions were not applied.', 'elementor' ) ],
-				'warning_codes' => [ 'interactions_experiment_off' ],
+				'warnings' => Warnings_Bag::make()->add(
+					'interactions_experiment_off',
+					__( 'Interactions experiment is not active. Interactions were not applied.', 'elementor' )
+				),
 			];
 		}
 
 		$applier = new Interactions_Applier( $this->get_plain_values_resolver() );
 
-		return $applier->apply( $index, $interactions ) + [ 'warning_codes' => [] ];
+		return $applier->apply( $index, $interactions );
 	}
 
 	private function is_variables_active(): bool {

@@ -89,7 +89,6 @@ var CLI =
 		if (this.settings.cookie_bar_as == 'popup') {
 			CLI_COOKIEBAR_AS_POPUP = true;
 		}
-		this.mayBeSetPreferenceCookie();
 		this.addStyleAttribute();
 		this.configBar();
 		this.toggleBar();
@@ -933,11 +932,6 @@ var CLI =
 				CLI.displayHeader();
 			}
 		);
-	},
-	mayBeSetPreferenceCookie: function () {
-		if (CLI.getParameterByName('cli_bypass') === "1") {
-			CLI.generateConsent();
-		}
 	}
 }
 var cliBlocker =
@@ -949,7 +943,7 @@ var cliBlocker =
 	ccpaApplicable: false,
 	ccpaBarEnabled: false,
 	cliShowBar: true,
-	isBypassEnabled: CLI.getParameterByName('cli_bypass'),
+	isBypassEnabled: (typeof Cli_Data !== 'undefined' && Boolean(Cli_Data.is_scan)),
 	checkPluginStatus: function (callbackA, callbackB) {
 		this.ccpaEnabled = Boolean(Cli_Data.ccpaEnabled);
 		this.ccpaRegionBased = Boolean(Cli_Data.ccpaRegionBased);
@@ -969,7 +963,7 @@ var cliBlocker =
 			} else {
 				jQuery('.wt-cli-ccpa-opt-out,.wt-cli-ccpa-checkbox,.wt-cli-ccpa-element').remove();
 			}
-			if (cliBlocker.isBypassEnabled === "1") {
+			if (cliBlocker.isBypassEnabled === true) {
 				cliBlocker.blockingStatus = false;
 			}
 			callbackA(this.cliShowBar);

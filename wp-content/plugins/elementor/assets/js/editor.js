@@ -182,11 +182,11 @@ react_dom = __toESM(react_dom);
 				};
 				var hasHorizontalDetection = function hasHorizontalDetection() {
 					if (!!settings.axis) return -1 !== settings.axis.indexOf("horizontal");
-					return placeholderContext.isFlexRowContainer;
+					return placeholderContext.isFlexRowContainer || placeholderContext.isAtomicFlexWrapRowHost;
 				};
 				var hasVerticalDetection = function hasVerticalDetection() {
 					if (!!settings.axis) return -1 !== settings.axis.indexOf("vertical");
-					return !placeholderContext.isFlexRowContainer;
+					return !placeholderContext.isFlexRowContainer && !placeholderContext.isAtomicFlexWrapRowHost;
 				};
 				var checkHorizontal = function checkHorizontal(offsetX, clientX, elementWidth) {
 					var isPercentValue;
@@ -235,6 +235,9 @@ react_dom = __toESM(react_dom);
 						case "gridRow":
 							insertGridRowPlaceholder();
 							break;
+						case "flexWrapRow":
+							insertFlexWrapRowPlaceholder();
+							break;
 						case "flexRow":
 							insertFlexRowPlaceholder();
 							break;
@@ -242,6 +245,31 @@ react_dom = __toESM(react_dom);
 							insertDefaultPlaceholder();
 							break;
 					}
+				};
+				var getDroppableHostAndStyleTarget = function getDroppableHostAndStyleTarget() {
+					var droppableElement = elementsCache.$element[0];
+					if (!droppableElement) return {
+						host: null,
+						styleTarget: null
+					};
+					var atomicHost = droppableElement.matches(".e-atomic-element") ? droppableElement : null;
+					if (!atomicHost) return {
+						host: null,
+						styleTarget: null
+					};
+					return {
+						host: atomicHost,
+						styleTarget: atomicHost.querySelector(":scope > .e-con-inner") || atomicHost
+					};
+				};
+				var isAtomicFlexWrapRowHostElement = function isAtomicFlexWrapRowHostElement(host, styleTarget) {
+					if (!host || !styleTarget) return false;
+					if (!host.matches(".e-con.e-atomic-element")) return false;
+					if (host.classList.contains("e-grid-base")) return false;
+					var styles = getComputedStyle(styleTarget);
+					if (!["flex", "inline-flex"].includes(styles.display)) return false;
+					if (!["row", "row-reverse"].includes(styles.flexDirection)) return false;
+					return ["wrap", "wrap-reverse"].includes(styles.flexWrap);
 				};
 				var createPlaceholderContext = function createPlaceholderContext() {
 					if (!currentElement || !currentElement.nodeType) return;
@@ -253,7 +281,12 @@ react_dom = __toESM(react_dom);
 					var containerWrapperStyle = !!container ? getComputedStyle(innerContainer || container) : null;
 					var isFlexContainer = !!container && ["flex", "inline-flex"].includes(containerWrapperStyle.display);
 					var isRowDirection = !!container && ["row", "row-reverse"].includes(containerWrapperStyle.flexDirection);
-					maybeAddFlexRowClass(container);
+					var isFlexRowContainer = isFlexContainer && isRowDirection;
+					var _getDroppableHostAndS = getDroppableHostAndStyleTarget();
+					var droppableHost = _getDroppableHostAndS.host;
+					var droppableStyleTarget = _getDroppableHostAndS.styleTarget;
+					var isAtomicFlexWrapRowHost = isAtomicFlexWrapRowHostElement(droppableHost, droppableStyleTarget);
+					maybeAddFlexRowClass(container, isFlexRowContainer);
 					return {
 						$currentElement,
 						placeholderTarget: hasLogicalWrapper ? currentElement.querySelector(":scope > :not(.elementor-widget-placeholder)") : currentElement,
@@ -264,7 +297,10 @@ react_dom = __toESM(react_dom);
 						isAtomicGridContainer: 0 !== $currentElement.closest(".e-grid-base").length,
 						isFlexContainer,
 						isRowDirection,
-						isFlexRowContainer: isFlexContainer && isRowDirection,
+						isFlexRowContainer,
+						isAtomicFlexWrapRowHost,
+						droppableHost,
+						droppableStyleTarget,
 						isBlockContainer: ["block", "inline-block"].includes(containerDisplayStyle),
 						hasLogicalWrapper,
 						isAtomicContainer: [
@@ -274,9 +310,9 @@ react_dom = __toESM(react_dom);
 						].includes(currentElement.dataset.element_type)
 					};
 				};
-				var maybeAddFlexRowClass = function maybeAddFlexRowClass(container) {
+				var maybeAddFlexRowClass = function maybeAddFlexRowClass(container, isFlexRowContainer) {
 					if (!container || container.classList.contains("e-grid")) return;
-					if (placeholderContext.isFlexRowContainer) {
+					if (isFlexRowContainer) {
 						container.classList.add("e-con--row");
 						return;
 					}
@@ -286,12 +322,20 @@ react_dom = __toESM(react_dom);
 					if (placeholderContext.isFirstInsert) return "default";
 					if (placeholderContext.isAtomicGridContainer) return "atomicGrid";
 					if (placeholderContext.isGridRowContainer) return "gridRow";
+					if (placeholderContext.isAtomicFlexWrapRowHost) return "flexWrapRow";
 					if (placeholderContext.isFlexRowContainer) return "flexRow";
 					if (placeholderContext.isBlockContainer) return "block";
 					return "default";
 				};
+				var clearOverlayPlaceholderState = function clearOverlayPlaceholderState() {
+					elementsCache.$placeholder.removeClass("e-placeholder--overlay e-dragging-left e-dragging-right");
+					elementsCache.$placeholder.css("--e-placeholder-left", "");
+					elementsCache.$placeholder.css("--e-placeholder-top", "");
+					elementsCache.$placeholder.css("--e-placeholder-height", "");
+				};
 				var clearPreviousPlaceholder = function clearPreviousPlaceholder() {
-					placeholderContext.$parentContainer.find(".elementor-widget-placeholder").remove();
+					clearOverlayPlaceholderState();
+					if (placeholderContext.$parentContainer) placeholderContext.$parentContainer.find(".elementor-widget-placeholder").remove();
 					elementsCache.$placeholder.removeClass("e-dragging-left e-dragging-right e-dragging-top e-dragging-bottom is-logical");
 					elementsCache.$placeholder.css("--e-placeholder-margin-top", "");
 					elementsCache.$placeholder.css("--e-placeholder-margin-bottom", "");
@@ -330,18 +374,18 @@ react_dom = __toESM(react_dom);
 					return !!(element !== null && element !== void 0 && element.tagName) && VOID_PLACEHOLDER_TAGS.has(element.tagName.toLowerCase());
 				};
 				var insertPlaceholderOutsideLogicalWrapperChild = function insertPlaceholderOutsideLogicalWrapperChild() {
-					var _placeholderContext3 = placeholderContext;
-					var hasLogicalWrapper = _placeholderContext3.hasLogicalWrapper;
-					var placeholderTarget = _placeholderContext3.placeholderTarget;
+					var _placeholderContext2 = placeholderContext;
+					var hasLogicalWrapper = _placeholderContext2.hasLogicalWrapper;
+					var placeholderTarget = _placeholderContext2.placeholderTarget;
 					if (!hasLogicalWrapper || !placeholderTarget) return false;
 					insertPlaceholderOutsideElement(placeholderTarget);
 					return true;
 				};
 				var getDefaultPlaceholderInsertPlan = function getDefaultPlaceholderInsertPlan() {
-					var _placeholderContext4 = placeholderContext;
-					var placeholderTarget = _placeholderContext4.placeholderTarget;
-					var hasLogicalWrapper = _placeholderContext4.hasLogicalWrapper;
-					var isAtomicContainer = _placeholderContext4.isAtomicContainer;
+					var _placeholderContext3 = placeholderContext;
+					var placeholderTarget = _placeholderContext3.placeholderTarget;
+					var hasLogicalWrapper = _placeholderContext3.hasLogicalWrapper;
+					var isAtomicContainer = _placeholderContext3.isAtomicContainer;
 					var insertTarget = placeholderTarget || currentElement;
 					return {
 						insertTarget,
@@ -356,18 +400,66 @@ react_dom = __toESM(react_dom);
 					insertPlaceholderInsideElement(placeholderTarget);
 				};
 				var insertGridRowPlaceholder = function insertGridRowPlaceholder() {
-					var _placeholderContext6 = placeholderContext;
-					var hasLogicalWrapper = _placeholderContext6.hasLogicalWrapper;
-					var placeholderTarget = _placeholderContext6.placeholderTarget;
+					var _placeholderContext5 = placeholderContext;
+					var hasLogicalWrapper = _placeholderContext5.hasLogicalWrapper;
+					var placeholderTarget = _placeholderContext5.placeholderTarget;
 					if (!hasLogicalWrapper) elementsCache.$placeholder.addClass("e-dragging-" + currentSide);
 					insertPlaceholderInsideElement(placeholderTarget);
 				};
 				var insertFlexRowPlaceholder = function insertFlexRowPlaceholder() {
-					var _placeholderContext7 = placeholderContext;
-					var $currentElement = _placeholderContext7.$currentElement;
-					var isInnerContainer = _placeholderContext7.isInnerContainer;
+					var _placeholderContext6 = placeholderContext;
+					var $currentElement = _placeholderContext6.$currentElement;
+					var isInnerContainer = _placeholderContext6.isInnerContainer;
 					if (insertPlaceholderOutsideLogicalWrapperChild()) return;
 					insertPlaceholderOutsideElement((isInnerContainer ? $currentElement.closest(".e-con") : $currentElement)[0]);
+				};
+				var measureFlexWrapOverlayPlaceholder = function measureFlexWrapOverlayPlaceholder(host, heightPx) {
+					var placeholder = elementsCache.$placeholder[0];
+					elementsCache.$placeholder.css({
+						position: "absolute",
+						top: 0,
+						left: 0,
+						visibility: "hidden",
+						"pointer-events": "none",
+						"--e-placeholder-height": "".concat(heightPx, "px")
+					});
+					elementsCache.$placeholder.appendTo(host);
+					var measurement = {
+						barSize: placeholder.offsetWidth,
+						anchor: placeholder.offsetParent || host
+					};
+					elementsCache.$placeholder.css({
+						position: "",
+						top: "",
+						left: "",
+						visibility: "",
+						"pointer-events": ""
+					});
+					return measurement;
+				};
+				var insertFlexWrapRowPlaceholder = function insertFlexWrapRowPlaceholder() {
+					var _placeholderContext7 = placeholderContext;
+					var placeholderTarget = _placeholderContext7.placeholderTarget;
+					var droppableHost = _placeholderContext7.droppableHost;
+					var droppableStyleTarget = _placeholderContext7.droppableStyleTarget;
+					var target = placeholderTarget || currentElement;
+					var host = droppableHost;
+					if (!host || !target || !currentSide) return;
+					var flexStyles = getComputedStyle(droppableStyleTarget || host);
+					var gap = parseFloat(flexStyles.columnGap) || 0;
+					var targetRect = target.getBoundingClientRect();
+					var height = targetRect.height;
+					elementsCache.$placeholder.addClass("e-placeholder--overlay e-dragging-" + currentSide);
+					var _measureFlexWrapOverl = measureFlexWrapOverlayPlaceholder(host, height);
+					var barSize = _measureFlexWrapOverl.barSize;
+					var anchor = _measureFlexWrapOverl.anchor;
+					var anchorRect = anchor.getBoundingClientRect();
+					var halfGap = gap / 2;
+					var edgeX = "right" === currentSide ? targetRect.right + halfGap : targetRect.left - halfGap;
+					var top = targetRect.top - anchorRect.top - anchor.clientTop + anchor.scrollTop;
+					var left = edgeX - barSize / 2 - anchorRect.left - anchor.clientLeft + anchor.scrollLeft;
+					elementsCache.$placeholder.css("--e-placeholder-left", "".concat(left, "px"));
+					elementsCache.$placeholder.css("--e-placeholder-top", "".concat(top, "px"));
 				};
 				var insertDefaultPlaceholder = function insertDefaultPlaceholder() {
 					var _getDefaultPlaceholde = getDefaultPlaceholderInsertPlan();
@@ -509,7 +601,10 @@ react_dom = __toESM(react_dom);
 					attachEvents();
 				};
 				this.doDragLeave = function() {
-					if (settings.placeholder) elementsCache.$placeholder.remove();
+					if (settings.placeholder) {
+						clearOverlayPlaceholderState();
+						elementsCache.$placeholder.remove();
+					}
 					elementsCache.$element.removeClass(settings.hasDraggingOnChildClass);
 					$(document).off("dragend", _onDocumentDragEnd);
 					restoreFirstAddOpacity();
@@ -550,41 +645,45 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region node_modules/@babel/runtime/helpers/esm/typeof.js
-	function _typeof(o) {
+	function _typeof$1(o) {
 		"@babel/helpers - typeof";
-		return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
+		return _typeof$1 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
 			return typeof o;
 		} : function(o) {
 			return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-		}, _typeof(o);
+		}, _typeof$1(o);
 	}
-	var init_typeof = __esmMin((() => {}));
+	var init_typeof$1 = __esmMin((() => {
+		__name(_typeof$1, "_typeof");
+	}));
 
 //#endregion
 //#region node_modules/@babel/runtime/helpers/esm/toPrimitive.js
-	function toPrimitive(t, r) {
-		if ("object" != _typeof(t) || !t) return t;
+	function toPrimitive$1(t, r) {
+		if ("object" != _typeof$1(t) || !t) return t;
 		var e = t[Symbol.toPrimitive];
 		if (void 0 !== e) {
 			var i = e.call(t, r || "default");
-			if ("object" != _typeof(i)) return i;
+			if ("object" != _typeof$1(i)) return i;
 			throw new TypeError("@@toPrimitive must return a primitive value.");
 		}
 		return ("string" === r ? String : Number)(t);
 	}
-	var init_toPrimitive = __esmMin((() => {
-		init_typeof();
+	var init_toPrimitive$1 = __esmMin((() => {
+		init_typeof$1();
+		__name(toPrimitive$1, "toPrimitive");
 	}));
 
 //#endregion
 //#region node_modules/@babel/runtime/helpers/esm/toPropertyKey.js
-	function toPropertyKey(t) {
-		var i = toPrimitive(t, "string");
-		return "symbol" == _typeof(i) ? i : i + "";
+	function toPropertyKey$1(t) {
+		var i = toPrimitive$1(t, "string");
+		return "symbol" == _typeof$1(i) ? i : i + "";
 	}
-	var init_toPropertyKey = __esmMin((() => {
-		init_typeof();
-		init_toPrimitive();
+	var init_toPropertyKey$1 = __esmMin((() => {
+		init_typeof$1();
+		init_toPrimitive$1();
+		__name(toPropertyKey$1, "toPropertyKey");
 	}));
 
 //#endregion
@@ -592,14 +691,14 @@ react_dom = __toESM(react_dom);
 	function _defineProperties(e, r) {
 		for (var t = 0; t < r.length; t++) {
 			var o = r[t];
-			o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, toPropertyKey(o.key), o);
+			o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, toPropertyKey$1(o.key), o);
 		}
 	}
 	function _createClass(e, r, t) {
 		return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 	}
 	var init_createClass = __esmMin((() => {
-		init_toPropertyKey();
+		init_toPropertyKey$1();
 	}));
 
 //#endregion
@@ -613,12 +712,12 @@ react_dom = __toESM(react_dom);
 //#endregion
 //#region node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js
 	function _possibleConstructorReturn(t, e) {
-		if (e && ("object" == _typeof(e) || "function" == typeof e)) return e;
+		if (e && ("object" == _typeof$1(e) || "function" == typeof e)) return e;
 		if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
 		return _assertThisInitialized(t);
 	}
 	var init_possibleConstructorReturn = __esmMin((() => {
-		init_typeof();
+		init_typeof$1();
 		init_assertThisInitialized();
 	}));
 
@@ -719,27 +818,27 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
-	function _arrayLikeToArray$10(r, a) {
+	function _arrayLikeToArray$11(r, a) {
 		(null == a || a > r.length) && (a = r.length);
 		for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
 		return n;
 	}
 	var init_arrayLikeToArray = __esmMin((() => {
-		__name(_arrayLikeToArray$10, "_arrayLikeToArray");
+		__name(_arrayLikeToArray$11, "_arrayLikeToArray");
 	}));
 
 //#endregion
 //#region node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-	function _unsupportedIterableToArray$10(r, a) {
+	function _unsupportedIterableToArray$11(r, a) {
 		if (r) {
-			if ("string" == typeof r) return _arrayLikeToArray$10(r, a);
+			if ("string" == typeof r) return _arrayLikeToArray$11(r, a);
 			var t = {}.toString.call(r).slice(8, -1);
-			return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray$10(r, a) : void 0;
+			return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray$11(r, a) : void 0;
 		}
 	}
 	var init_unsupportedIterableToArray = __esmMin((() => {
 		init_arrayLikeToArray();
-		__name(_unsupportedIterableToArray$10, "_unsupportedIterableToArray");
+		__name(_unsupportedIterableToArray$11, "_unsupportedIterableToArray");
 	}));
 
 //#endregion
@@ -752,7 +851,7 @@ react_dom = __toESM(react_dom);
 //#endregion
 //#region node_modules/@babel/runtime/helpers/esm/slicedToArray.js
 	function _slicedToArray(r, e) {
-		return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray$10(r, e) || _nonIterableRest();
+		return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray$11(r, e) || _nonIterableRest();
 	}
 	var init_slicedToArray = __esmMin((() => {
 		init_arrayWithHoles();
@@ -793,16 +892,17 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region node_modules/@babel/runtime/helpers/esm/defineProperty.js
-	function _defineProperty(e, r, t) {
-		return (r = toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+	function _defineProperty$1(e, r, t) {
+		return (r = toPropertyKey$1(r)) in e ? Object.defineProperty(e, r, {
 			value: t,
 			enumerable: !0,
 			configurable: !0,
 			writable: !0
 		}) : e[r] = t, e;
 	}
-	var init_defineProperty = __esmMin((() => {
-		init_toPropertyKey();
+	var init_defineProperty$1 = __esmMin((() => {
+		init_toPropertyKey$1();
+		__name(_defineProperty$1, "_defineProperty");
 	}));
 
 //#endregion
@@ -1146,7 +1246,7 @@ react_dom = __toESM(react_dom);
 //#endregion
 //#region node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
 	function _arrayWithoutHoles(r) {
-		if (Array.isArray(r)) return _arrayLikeToArray$10(r);
+		if (Array.isArray(r)) return _arrayLikeToArray$11(r);
 	}
 	var init_arrayWithoutHoles = __esmMin((() => {
 		init_arrayLikeToArray();
@@ -1169,7 +1269,7 @@ react_dom = __toESM(react_dom);
 //#endregion
 //#region node_modules/@babel/runtime/helpers/esm/toConsumableArray.js
 	function _toConsumableArray(r) {
-		return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray$10(r) || _nonIterableSpread();
+		return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray$11(r) || _nonIterableSpread();
 	}
 	var init_toConsumableArray = __esmMin((() => {
 		init_arrayWithoutHoles();
@@ -1226,14 +1326,14 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region assets/dev/js/editor/components/validator/breakpoint.js
-	function _callSuper$321(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$322() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$322(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$323() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	function _isNativeReflectConstruct$322() {
+	function _isNativeReflectConstruct$323() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$322 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$323 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
@@ -1244,13 +1344,13 @@ react_dom = __toESM(react_dom);
 		init_possibleConstructorReturn();
 		init_getPrototypeOf();
 		init_inherits();
-		__name(_callSuper$321, "_callSuper");
-		__name(_isNativeReflectConstruct$322, "_isNativeReflectConstruct");
+		__name(_callSuper$322, "_callSuper");
+		__name(_isNativeReflectConstruct$323, "_isNativeReflectConstruct");
 		NumberValidator = require_number$1();
 		BreakpointValidator = /*#__PURE__*/ function(_NumberValidator) {
 			function BreakpointValidator() {
 				_classCallCheck(this, BreakpointValidator);
-				return _callSuper$321(this, BreakpointValidator, arguments);
+				return _callSuper$322(this, BreakpointValidator, arguments);
 			}
 			_inherits(BreakpointValidator, _NumberValidator);
 			return _createClass(BreakpointValidator, [
@@ -1322,7 +1422,7 @@ react_dom = __toESM(react_dom);
 //#endregion
 //#region assets/dev/js/editor/controls/base.js
 	var require_base$3 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_defineProperty();
+		init_defineProperty$1();
 		function ownKeys(e, r) {
 			var t = Object.keys(e);
 			if (Object.getOwnPropertySymbols) {
@@ -1337,7 +1437,7 @@ react_dom = __toESM(react_dom);
 			for (var r = 1; r < arguments.length; r++) {
 				var t = null != arguments[r] ? arguments[r] : {};
 				r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
-					_defineProperty(e, r, t[r]);
+					_defineProperty$1(e, r, t[r]);
 				}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
 					Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 				});
@@ -1588,7 +1688,7 @@ react_dom = __toESM(react_dom);
 //#endregion
 //#region assets/dev/js/editor/components/dynamic-tags/control-behavior.js
 	var require_control_behavior = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_defineProperty();
+		init_defineProperty$1();
 		var TagPanelView = require_tag_panel_view();
 		module.exports = Marionette.Behavior.extend({
 			tagView: null,
@@ -1755,11 +1855,11 @@ react_dom = __toESM(react_dom);
 				if (this.view.getGlobalKey()) this.view.triggerMethod("unset:global:value");
 				if (this.isDynamicMode()) $e.run("document/dynamic/settings", {
 					container: this.view.options.container,
-					settings: _defineProperty({}, this.view.model.get("name"), this.tagViewToTagText())
+					settings: _defineProperty$1({}, this.view.model.get("name"), this.tagViewToTagText())
 				});
 				else $e.run("document/dynamic/enable", {
 					container: this.view.options.container,
-					settings: _defineProperty({}, this.view.model.get("name"), this.tagViewToTagText())
+					settings: _defineProperty$1({}, this.view.model.get("name"), this.tagViewToTagText())
 				});
 				this.toggleDynamicClass();
 				this.toggleTagsList();
@@ -1768,7 +1868,7 @@ react_dom = __toESM(react_dom);
 			onTagViewRemove: function onTagViewRemove() {
 				$e.run("document/dynamic/disable", {
 					container: this.view.options.container,
-					settings: _defineProperty({}, this.view.model.get("name"), this.tagViewToTagText())
+					settings: _defineProperty$1({}, this.view.model.get("name"), this.tagViewToTagText())
 				});
 				this.toggleDynamicClass();
 			},
@@ -1788,7 +1888,7 @@ react_dom = __toESM(react_dom);
 //#region assets/dev/js/editor/controls/base-data.js
 	var require_base_data = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		init_slicedToArray();
-		init_defineProperty();
+		init_defineProperty$1();
 		init_breakpoint();
 		function _createForOfIteratorHelper(r, e) {
 			var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
@@ -1950,7 +2050,7 @@ react_dom = __toESM(react_dom);
 				var key = this.model.get("name");
 				$e.run("document/elements/settings", {
 					container: this.options.container,
-					settings: _defineProperty({}, key, value)
+					settings: _defineProperty$1({}, key, value)
 				});
 				this.triggerMethod("settings:change");
 			},
@@ -2196,14 +2296,14 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region assets/dev/js/editor/utils/color-picker.js
-	function _callSuper$320(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$321() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$321(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$322() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	function _isNativeReflectConstruct$321() {
+	function _isNativeReflectConstruct$322() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$321 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$322 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
@@ -2214,14 +2314,14 @@ react_dom = __toESM(react_dom);
 		init_possibleConstructorReturn();
 		init_getPrototypeOf();
 		init_inherits();
-		__name(_callSuper$320, "_callSuper");
-		__name(_isNativeReflectConstruct$321, "_isNativeReflectConstruct");
+		__name(_callSuper$321, "_callSuper");
+		__name(_isNativeReflectConstruct$322, "_isNativeReflectConstruct");
 		ColorPicker = /*#__PURE__*/ function(_elementorModules$Mod) {
 			function ColorPicker() {
 				var _this;
 				_classCallCheck(this, ColorPicker);
 				for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
-				_this = _callSuper$320(this, ColorPicker, [].concat(args));
+				_this = _callSuper$321(this, ColorPicker, [].concat(args));
 				_this.createPicker();
 				return _this;
 			}
@@ -2440,19 +2540,19 @@ react_dom = __toESM(react_dom);
 	var import_regenerator$16 = /* @__PURE__ */ __toESM(require_regenerator());
 	var import_base_data$1 = /* @__PURE__ */ __toESM(require_base_data());
 	init_color_picker();
-	function _callSuper$319(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$320() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$320(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$321() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	__name(_callSuper$319, "_callSuper");
-	function _isNativeReflectConstruct$320() {
+	__name(_callSuper$320, "_callSuper");
+	function _isNativeReflectConstruct$321() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$320 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$321 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
-	__name(_isNativeReflectConstruct$320, "_isNativeReflectConstruct");
+	__name(_isNativeReflectConstruct$321, "_isNativeReflectConstruct");
 	function _superPropGet$37(t, o, e, r) {
 		var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e);
 		return 2 & r && "function" == typeof p ? function(t) {
@@ -2463,7 +2563,7 @@ react_dom = __toESM(react_dom);
 	var _default$29 = /*#__PURE__*/ function(_ControlBaseDataView) {
 		function _default() {
 			_classCallCheck(this, _default);
-			return _callSuper$319(this, _default, arguments);
+			return _callSuper$320(this, _default, arguments);
 		}
 		_inherits(_default, _ControlBaseDataView);
 		return _createClass(_default, [
@@ -2784,19 +2884,19 @@ react_dom = __toESM(react_dom);
 	init_getPrototypeOf();
 	init_get();
 	init_inherits();
-	function _callSuper$318(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$319() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$319(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$320() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	__name(_callSuper$318, "_callSuper");
-	function _isNativeReflectConstruct$319() {
+	__name(_callSuper$319, "_callSuper");
+	function _isNativeReflectConstruct$320() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$319 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$320 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
-	__name(_isNativeReflectConstruct$319, "_isNativeReflectConstruct");
+	__name(_isNativeReflectConstruct$320, "_isNativeReflectConstruct");
 	function _superPropGet$36(t, o, e, r) {
 		var p = _get(_getPrototypeOf(1 & r ? t.prototype : t), o, e);
 		return 2 & r && "function" == typeof p ? function(t) {
@@ -2807,7 +2907,7 @@ react_dom = __toESM(react_dom);
 	var _default$28 = /*#__PURE__*/ function(_ControlBaseDataView) {
 		function _default() {
 			_classCallCheck(this, _default);
-			return _callSuper$318(this, _default, arguments);
+			return _callSuper$319(this, _default, arguments);
 		}
 		_inherits(_default, _ControlBaseDataView);
 		return _createClass(_default, [
@@ -2915,10 +3015,10 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region assets/dev/js/editor/utils/is-instanceof.js
-	function _createForOfIteratorHelper$9(r, e) {
+	function _createForOfIteratorHelper$10(r, e) {
 		var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
 		if (!t) {
-			if (Array.isArray(r) || (t = _unsupportedIterableToArray$9(r)) || e && r && "number" == typeof r.length) {
+			if (Array.isArray(r) || (t = _unsupportedIterableToArray$10(r)) || e && r && "number" == typeof r.length) {
 				t && (r = t);
 				var _n = 0;
 				var F = function F() {};
@@ -2961,26 +3061,26 @@ react_dom = __toESM(react_dom);
 			}
 		};
 	}
-	function _unsupportedIterableToArray$9(r, a) {
+	function _unsupportedIterableToArray$10(r, a) {
 		if (r) {
-			if ("string" == typeof r) return _arrayLikeToArray$9(r, a);
+			if ("string" == typeof r) return _arrayLikeToArray$10(r, a);
 			var t = {}.toString.call(r).slice(8, -1);
-			return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray$9(r, a) : void 0;
+			return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray$10(r, a) : void 0;
 		}
 	}
-	function _arrayLikeToArray$9(r, a) {
+	function _arrayLikeToArray$10(r, a) {
 		(null == a || a > r.length) && (a = r.length);
 		for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
 		return n;
 	}
 	var is_instanceof_default;
 	var init_is_instanceof = __esmMin((() => {
-		__name(_createForOfIteratorHelper$9, "_createForOfIteratorHelper");
-		__name(_unsupportedIterableToArray$9, "_unsupportedIterableToArray");
-		__name(_arrayLikeToArray$9, "_arrayLikeToArray");
+		__name(_createForOfIteratorHelper$10, "_createForOfIteratorHelper");
+		__name(_unsupportedIterableToArray$10, "_unsupportedIterableToArray");
+		__name(_arrayLikeToArray$10, "_arrayLikeToArray");
 		is_instanceof_default = /* @__PURE__ */ __name((function(object, constructors) {
 			constructors = Array.isArray(constructors) ? constructors : [constructors];
-			var _iterator = _createForOfIteratorHelper$9(constructors);
+			var _iterator = _createForOfIteratorHelper$10(constructors);
 			var _step;
 			try {
 				for (_iterator.s(); !(_step = _iterator.n()).done;) {
@@ -2998,20 +3098,20 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region assets/dev/js/modules/imports/args-object.js
-	function _callSuper$317(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$318() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$318(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$319() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	function _isNativeReflectConstruct$318() {
+	function _isNativeReflectConstruct$319() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$318 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$319 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
 	var ArgsObject;
 	var init_args_object = __esmMin((() => {
-		init_typeof();
+		init_typeof$1();
 		init_classCallCheck();
 		init_createClass();
 		init_possibleConstructorReturn();
@@ -3019,8 +3119,8 @@ react_dom = __toESM(react_dom);
 		init_inherits();
 		init_instance_type();
 		init_is_instanceof();
-		__name(_callSuper$317, "_callSuper");
-		__name(_isNativeReflectConstruct$318, "_isNativeReflectConstruct");
+		__name(_callSuper$318, "_callSuper");
+		__name(_isNativeReflectConstruct$319, "_isNativeReflectConstruct");
 		ArgsObject = /*#__PURE__*/ function(_InstanceType) {
 			/**
 			* Function constructor().
@@ -3032,7 +3132,7 @@ react_dom = __toESM(react_dom);
 			function ArgsObject(args) {
 				var _this;
 				_classCallCheck(this, ArgsObject);
-				_this = _callSuper$317(this, ArgsObject);
+				_this = _callSuper$318(this, ArgsObject);
 				_this.args = args;
 				return _this;
 			}
@@ -3060,7 +3160,7 @@ react_dom = __toESM(react_dom);
 					value: function requireArgumentType(property, type) {
 						var args = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : this.args;
 						this.requireArgument(property, args);
-						if (_typeof(args[property]) !== type) throw Error("".concat(property, " invalid type: ").concat(type, "."));
+						if (_typeof$1(args[property]) !== type) throw Error("".concat(property, " invalid type: ").concat(type, "."));
 					}
 				},
 				{
@@ -3205,14 +3305,14 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region modules/web-cli/assets/js/modules/command-infra.js
-	function _callSuper$316(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$317() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$317(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$318() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	function _isNativeReflectConstruct$317() {
+	function _isNativeReflectConstruct$318() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$317 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$318 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
@@ -3223,11 +3323,11 @@ react_dom = __toESM(react_dom);
 		init_possibleConstructorReturn();
 		init_getPrototypeOf();
 		init_inherits();
-		init_defineProperty();
+		init_defineProperty$1();
 		init_args_object();
 		init_deprecation();
-		__name(_callSuper$316, "_callSuper");
-		__name(_isNativeReflectConstruct$317, "_isNativeReflectConstruct");
+		__name(_callSuper$317, "_callSuper");
+		__name(_isNativeReflectConstruct$318, "_isNativeReflectConstruct");
 		CommandInfra = /*#__PURE__*/ function(_ArgsObject) {
 			/**
 			* Function constructor().
@@ -3240,7 +3340,7 @@ react_dom = __toESM(react_dom);
 				var _this;
 				var args = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
 				_classCallCheck(this, CommandInfra);
-				_this = _callSuper$316(this, CommandInfra, [args]);
+				_this = _callSuper$317(this, CommandInfra, [args]);
 				if (!_this.constructor.registerConfig) throw RangeError("Doing it wrong: Each command type should have `registerConfig`.");
 				_this.command = _this.constructor.getCommand();
 				_this.component = _this.constructor.getComponent();
@@ -3356,19 +3456,19 @@ react_dom = __toESM(react_dom);
 		/**
 		* @type {Object}
 		*/
-		_defineProperty(CommandInfra, "registerConfig", null);
+		_defineProperty$1(CommandInfra, "registerConfig", null);
 	}));
 
 //#endregion
 //#region modules/web-cli/assets/js/modules/command-base.js
-	function _callSuper$315(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$316() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$316(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$317() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	function _isNativeReflectConstruct$316() {
+	function _isNativeReflectConstruct$317() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$316 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$317 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
@@ -3381,12 +3481,12 @@ react_dom = __toESM(react_dom);
 		init_inherits();
 		init_command_infra();
 		init_deprecation();
-		__name(_callSuper$315, "_callSuper");
-		__name(_isNativeReflectConstruct$316, "_isNativeReflectConstruct");
+		__name(_callSuper$316, "_callSuper");
+		__name(_isNativeReflectConstruct$317, "_isNativeReflectConstruct");
 		CommandBase = /*#__PURE__*/ function(_CommandInfra) {
 			function CommandBase() {
 				_classCallCheck(this, CommandBase);
-				return _callSuper$315(this, CommandBase, arguments);
+				return _callSuper$316(this, CommandBase, arguments);
 			}
 			_inherits(CommandBase, _CommandInfra);
 			return _createClass(CommandBase, [
@@ -3457,14 +3557,14 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region modules/web-cli/assets/js/modules/command-callback-base.js
-	function _callSuper$314(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$315() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$315(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$316() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	function _isNativeReflectConstruct$315() {
+	function _isNativeReflectConstruct$316() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$315 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$316 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
@@ -3476,12 +3576,12 @@ react_dom = __toESM(react_dom);
 		init_getPrototypeOf();
 		init_inherits();
 		init_command_base();
-		__name(_callSuper$314, "_callSuper");
-		__name(_isNativeReflectConstruct$315, "_isNativeReflectConstruct");
+		__name(_callSuper$315, "_callSuper");
+		__name(_isNativeReflectConstruct$316, "_isNativeReflectConstruct");
 		CommandCallbackBase = /*#__PURE__*/ function(_CommandBase) {
 			function CommandCallbackBase() {
 				_classCallCheck(this, CommandCallbackBase);
-				return _callSuper$314(this, CommandCallbackBase, arguments);
+				return _callSuper$315(this, CommandCallbackBase, arguments);
 			}
 			_inherits(CommandCallbackBase, _CommandBase);
 			return _createClass(CommandCallbackBase, [{
@@ -3507,7 +3607,7 @@ react_dom = __toESM(react_dom);
 //#endregion
 //#region assets/dev/js/modules/imports/module.js
 	var require_module = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_typeof();
+		init_typeof$1();
 		var Module = function Module() {
 			var $ = jQuery;
 			var instanceParams = arguments;
@@ -3549,7 +3649,7 @@ react_dom = __toESM(react_dom);
 			};
 			this.setSettings = function(settingKey, value, settingsContainer) {
 				if (!settingsContainer) settingsContainer = settings;
-				if ("object" === _typeof(settingKey)) {
+				if ("object" === _typeof$1(settingKey)) {
 					$.extend(settingsContainer, settingKey);
 					return self;
 				}
@@ -3576,7 +3676,7 @@ react_dom = __toESM(react_dom);
 				throw new Error(this.getErrorMessage("forceMethodImplementation", functionName));
 			};
 			this.on = function(eventName, callback) {
-				if ("object" === _typeof(eventName)) {
+				if ("object" === _typeof$1(eventName)) {
 					$.each(eventName, function(singleEventName) {
 						self.on(singleEventName, this);
 					});
@@ -3651,22 +3751,22 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region node_modules/@babel/runtime/helpers/esm/isNativeReflectConstruct.js
-	function _isNativeReflectConstruct$314() {
+	function _isNativeReflectConstruct$315() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$314 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$315 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
 	var init_isNativeReflectConstruct = __esmMin((() => {
-		__name(_isNativeReflectConstruct$314, "_isNativeReflectConstruct");
+		__name(_isNativeReflectConstruct$315, "_isNativeReflectConstruct");
 	}));
 
 //#endregion
 //#region node_modules/@babel/runtime/helpers/esm/construct.js
 	function _construct(t, e, r) {
-		if (_isNativeReflectConstruct$314()) return Reflect.construct.apply(null, arguments);
+		if (_isNativeReflectConstruct$315()) return Reflect.construct.apply(null, arguments);
 		var o = [null];
 		o.push.apply(o, e);
 		var p = new (t.bind.apply(t, o))();
@@ -3708,14 +3808,14 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region modules/web-cli/assets/js/utils/force-method-implementation.js
-	function _callSuper$313(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$313() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$314(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$314() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	function _isNativeReflectConstruct$313() {
+	function _isNativeReflectConstruct$314() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$313 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$314 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
@@ -3727,14 +3827,14 @@ react_dom = __toESM(react_dom);
 		init_getPrototypeOf();
 		init_inherits();
 		init_wrapNativeSuper();
-		__name(_callSuper$313, "_callSuper");
-		__name(_isNativeReflectConstruct$313, "_isNativeReflectConstruct");
+		__name(_callSuper$314, "_callSuper");
+		__name(_isNativeReflectConstruct$314, "_isNativeReflectConstruct");
 		ForceMethodImplementation = /*#__PURE__*/ function(_Error) {
 			function ForceMethodImplementation() {
 				var _this;
 				var info = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
 				_classCallCheck(this, ForceMethodImplementation);
-				_this = _callSuper$313(this, ForceMethodImplementation, ["".concat(info.isStatic ? "static " : "").concat(info.fullName, "() should be implemented, please provide '").concat(info.functionName || info.fullName, "' functionality.")]);
+				_this = _callSuper$314(this, ForceMethodImplementation, ["".concat(info.isStatic ? "static " : "").concat(info.fullName, "() should be implemented, please provide '").concat(info.functionName || info.fullName, "' functionality.")]);
 				Error.captureStackTrace(_this, ForceMethodImplementation);
 				return _this;
 			}
@@ -3758,7 +3858,7 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region modules/web-cli/assets/js/modules/component-base.js
-	function ownKeys$25(e, r) {
+	function ownKeys$28(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -3768,31 +3868,31 @@ react_dom = __toESM(react_dom);
 		}
 		return t;
 	}
-	function _objectSpread$25(e) {
+	function _objectSpread$27(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$25(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$25(Object(t)).forEach(function(r) {
+			r % 2 ? ownKeys$28(Object(t), !0).forEach(function(r) {
+				_defineProperty$1(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$28(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	function _callSuper$312(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$312() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$313(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$313() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	function _isNativeReflectConstruct$312() {
+	function _isNativeReflectConstruct$313() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$312 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$313 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
 	var import_module, ComponentBase$1;
 	var init_component_base$1 = __esmMin((() => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_slicedToArray();
 		init_classCallCheck();
 		init_createClass();
@@ -3803,14 +3903,14 @@ react_dom = __toESM(react_dom);
 		import_module = /* @__PURE__ */ __toESM(require_module());
 		init_force_method_implementation();
 		init_deprecation();
-		__name(ownKeys$25, "ownKeys");
-		__name(_objectSpread$25, "_objectSpread");
-		__name(_callSuper$312, "_callSuper");
-		__name(_isNativeReflectConstruct$312, "_isNativeReflectConstruct");
+		__name(ownKeys$28, "ownKeys");
+		__name(_objectSpread$27, "_objectSpread");
+		__name(_callSuper$313, "_callSuper");
+		__name(_isNativeReflectConstruct$313, "_isNativeReflectConstruct");
 		ComponentBase$1 = /*#__PURE__*/ function(_Module) {
 			function ComponentBase() {
 				_classCallCheck(this, ComponentBase);
-				return _callSuper$312(this, ComponentBase, arguments);
+				return _callSuper$313(this, ComponentBase, arguments);
 			}
 			_inherits(ComponentBase, _Module);
 			return _createClass(ComponentBase, [
@@ -4046,7 +4146,7 @@ react_dom = __toESM(react_dom);
 							context = /*#__PURE__*/ function(_CommandCallbackBase) {
 								function context() {
 									_classCallCheck(this, context);
-									return _callSuper$312(this, context, arguments);
+									return _callSuper$313(this, context, arguments);
 								}
 								_inherits(context, _CommandCallbackBase);
 								return _createClass(context);
@@ -4078,7 +4178,7 @@ react_dom = __toESM(react_dom);
 					key: "registerState",
 					value: function registerState(id, stateConfig) {
 						id = this.getNamespace() + (id ? "/".concat(id) : "");
-						var slice = (0, _reduxjs_toolkit.createSlice)(_objectSpread$25(_objectSpread$25({}, stateConfig), {}, { name: id }));
+						var slice = (0, _reduxjs_toolkit.createSlice)(_objectSpread$27(_objectSpread$27({}, stateConfig), {}, { name: id }));
 						$e.store.register(id, slice);
 					}
 				},
@@ -4340,7 +4440,7 @@ react_dom = __toESM(react_dom);
 init_component_base$1();
 	init_classCallCheck();
 	init_createClass();
-	init_defineProperty();
+	init_defineProperty$1();
 	var import_item_model = /* @__PURE__ */ __toESM(require_item_model());
 	/**
 	* TODO: consider refactor this class.
@@ -4350,10 +4450,10 @@ init_component_base$1();
 	var HistoryManager = /*#__PURE__*/ function() {
 		function HistoryManager(document) {
 			_classCallCheck(this, HistoryManager);
-			_defineProperty(this, "currentItemID", null);
-			_defineProperty(this, "items", new Backbone.Collection([], { model: import_item_model.default }));
-			_defineProperty(this, "active", true);
-			_defineProperty(this, "translations", {
+			_defineProperty$1(this, "currentItemID", null);
+			_defineProperty$1(this, "items", new Backbone.Collection([], { model: import_item_model.default }));
+			_defineProperty$1(this, "active", true);
+			_defineProperty$1(this, "translations", {
 				add: (0, _wordpress_i18n.__)("Added", "elementor"),
 				change: (0, _wordpress_i18n.__)("Edited", "elementor"),
 				disable: (0, _wordpress_i18n.__)("Disabled", "elementor"),
@@ -4573,7 +4673,7 @@ init_component_base$1();
 //#region modules/history/assets/js/revisions/manager.js
 	init_classCallCheck();
 	init_createClass();
-	init_defineProperty();
+	init_defineProperty$1();
 	var RevisionsCollection = require_collection();
 	/**
 	* TODO: consider refactor this class.
@@ -4582,8 +4682,8 @@ init_component_base$1();
 	var RevisionsManager = /*#__PURE__*/ function() {
 		function RevisionsManager(document) {
 			_classCallCheck(this, RevisionsManager);
-			_defineProperty(this, "document", void 0);
-			_defineProperty(this, "revisions", void 0);
+			_defineProperty$1(this, "document", void 0);
+			_defineProperty$1(this, "revisions", void 0);
 			this.document = document;
 		}
 		return _createClass(RevisionsManager, [
@@ -4662,7 +4762,7 @@ init_component_base$1();
 //#region assets/dev/js/editor/components/documents/models/editor.js
 	init_createClass();
 	init_classCallCheck();
-	init_defineProperty();
+	init_defineProperty$1();
 	var Editor$1 = /*#__PURE__*/ _createClass(function Editor() {
 		_classCallCheck(this, Editor);
 		/**
@@ -4670,44 +4770,44 @@ init_component_base$1();
 		*
 		* @type {'open'|'closed'}
 		*/
-		_defineProperty(this, "status", "closed");
+		_defineProperty$1(this, "status", "closed");
 		/**
 		* Is document still saving?.
 		*
 		* @type {boolean}
 		*/
-		_defineProperty(this, "isSaving", false);
+		_defineProperty$1(this, "isSaving", false);
 		/**
 		* Is document changed?.
 		*
 		* @type {boolean}
 		*/
-		_defineProperty(this, "isChanged", false);
+		_defineProperty$1(this, "isChanged", false);
 		/**
 		* Is document changed during save?.
 		*
 		* @type {boolean}
 		*/
-		_defineProperty(this, "isChangedDuringSave", false);
+		_defineProperty$1(this, "isChangedDuringSave", false);
 		/**
 		* Is document saved?
 		*
 		* @type {boolean}
 		*/
-		_defineProperty(this, "isSaved", true);
+		_defineProperty$1(this, "isSaved", true);
 		/**
 		* Last save history id.
 		*
 		* @type {number}
 		*/
-		_defineProperty(this, "lastSaveHistoryId", 0);
+		_defineProperty$1(this, "lastSaveHistoryId", 0);
 	});
 
 //#endregion
 //#region assets/dev/js/editor/components/documents/document.js
 	init_classCallCheck();
 	init_createClass();
-	init_defineProperty();
+	init_defineProperty$1();
 	/**
 	* @typedef {import('../../container/container')} Container
 	*/
@@ -4726,31 +4826,31 @@ init_component_base$1();
 			*
 			* @type {number|null}
 			*/
-			_defineProperty(this, "id", null);
+			_defineProperty$1(this, "id", null);
 			/**
 			* History of the document.
 			*
 			* @type {HistoryManager}
 			*/
-			_defineProperty(this, "history", null);
+			_defineProperty$1(this, "history", null);
 			/**
 			* Revisions of the document.
 			*
 			* @type {RevisionsManager}
 			*/
-			_defineProperty(this, "revisions", null);
+			_defineProperty$1(this, "revisions", null);
 			/**
 			* Current container.
 			*
 			* @type {Container}
 			*/
-			_defineProperty(this, "container", null);
+			_defineProperty$1(this, "container", null);
 			/**
 			* Editor Settings.
 			*
 			* @type {Editor}
 			*/
-			_defineProperty(this, "editor", new Editor$1());
+			_defineProperty$1(this, "editor", new Editor$1());
 			this.config = config;
 			this.id = config.id;
 			this.history = new HistoryManager(this);
@@ -4772,23 +4872,23 @@ init_component_base$1();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	function _callSuper$311(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$311() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$312(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$312() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	__name(_callSuper$311, "_callSuper");
-	function _isNativeReflectConstruct$311() {
+	__name(_callSuper$312, "_callSuper");
+	function _isNativeReflectConstruct$312() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$311 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$312 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
-	__name(_isNativeReflectConstruct$311, "_isNativeReflectConstruct");
+	__name(_isNativeReflectConstruct$312, "_isNativeReflectConstruct");
 	var Close$4 = /*#__PURE__*/ function(_$e$modules$CommandBa) {
 		function Close() {
 			_classCallCheck(this, Close);
-			return _callSuper$311(this, Close, arguments);
+			return _callSuper$312(this, Close, arguments);
 		}
 		_inherits(Close, _$e$modules$CommandBa);
 		return _createClass(Close, [
@@ -4910,23 +5010,23 @@ init_component_base$1();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	function _callSuper$310(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$310() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$311(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$311() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	__name(_callSuper$310, "_callSuper");
-	function _isNativeReflectConstruct$310() {
+	__name(_callSuper$311, "_callSuper");
+	function _isNativeReflectConstruct$311() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$310 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$311 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
-	__name(_isNativeReflectConstruct$310, "_isNativeReflectConstruct");
+	__name(_isNativeReflectConstruct$311, "_isNativeReflectConstruct");
 	var Open$6 = /*#__PURE__*/ function(_$e$modules$CommandBa) {
 		function Open() {
 			_classCallCheck(this, Open);
-			return _callSuper$310(this, Open, arguments);
+			return _callSuper$311(this, Open, arguments);
 		}
 		_inherits(Open, _$e$modules$CommandBa);
 		return _createClass(Open, [{
@@ -4976,23 +5076,23 @@ init_component_base$1();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	function _callSuper$309(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$309() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$310(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$310() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	__name(_callSuper$309, "_callSuper");
-	function _isNativeReflectConstruct$309() {
+	__name(_callSuper$310, "_callSuper");
+	function _isNativeReflectConstruct$310() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$309 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$310 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
-	__name(_isNativeReflectConstruct$309, "_isNativeReflectConstruct");
+	__name(_isNativeReflectConstruct$310, "_isNativeReflectConstruct");
 	var Preview$1 = /*#__PURE__*/ function(_$e$modules$CommandBa) {
 		function Preview() {
 			_classCallCheck(this, Preview);
-			return _callSuper$309(this, Preview, arguments);
+			return _callSuper$310(this, Preview, arguments);
 		}
 		_inherits(Preview, _$e$modules$CommandBa);
 		return _createClass(Preview, [{
@@ -5040,23 +5140,23 @@ init_component_base$1();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	function _callSuper$308(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$308() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$309(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$309() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	__name(_callSuper$308, "_callSuper");
-	function _isNativeReflectConstruct$308() {
+	__name(_callSuper$309, "_callSuper");
+	function _isNativeReflectConstruct$309() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$308 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$309 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
-	__name(_isNativeReflectConstruct$308, "_isNativeReflectConstruct");
+	__name(_isNativeReflectConstruct$309, "_isNativeReflectConstruct");
 	var View$5 = /*#__PURE__*/ function(_$e$modules$CommandBa) {
 		function View() {
 			_classCallCheck(this, View);
-			return _callSuper$308(this, View, arguments);
+			return _callSuper$309(this, View, arguments);
 		}
 		_inherits(View, _$e$modules$CommandBa);
 		return _createClass(View, [{
@@ -5095,23 +5195,23 @@ init_component_base$1();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	function _callSuper$307(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$307() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$308(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$308() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	__name(_callSuper$307, "_callSuper");
-	function _isNativeReflectConstruct$307() {
+	__name(_callSuper$308, "_callSuper");
+	function _isNativeReflectConstruct$308() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$307 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$308 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
-	__name(_isNativeReflectConstruct$307, "_isNativeReflectConstruct");
+	__name(_isNativeReflectConstruct$308, "_isNativeReflectConstruct");
 	var Switch = /*#__PURE__*/ function(_$e$modules$CommandBa) {
 		function Switch() {
 			_classCallCheck(this, Switch);
-			return _callSuper$307(this, Switch, arguments);
+			return _callSuper$308(this, Switch, arguments);
 		}
 		_inherits(Switch, _$e$modules$CommandBa);
 		return _createClass(Switch, [{
@@ -5196,23 +5296,23 @@ init_component_base$1();
 	init_getPrototypeOf();
 	init_inherits();
 	var _excluded = ["shouldNavigateToDefaultRoute"];
-	function _callSuper$306(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$306() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$307(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$307() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	__name(_callSuper$306, "_callSuper");
-	function _isNativeReflectConstruct$306() {
+	__name(_callSuper$307, "_callSuper");
+	function _isNativeReflectConstruct$307() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$306 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$307 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
-	__name(_isNativeReflectConstruct$306, "_isNativeReflectConstruct");
+	__name(_isNativeReflectConstruct$307, "_isNativeReflectConstruct");
 	var AttachPreview = /*#__PURE__*/ function(_$e$modules$CommandIn) {
 		function AttachPreview() {
 			_classCallCheck(this, AttachPreview);
-			return _callSuper$306(this, AttachPreview, arguments);
+			return _callSuper$307(this, AttachPreview, arguments);
 		}
 		_inherits(AttachPreview, _$e$modules$CommandIn);
 		return _createClass(AttachPreview, [
@@ -5282,8 +5382,8 @@ init_component_base$1();
 //#region assets/dev/js/editor/utils/heartbeat.js
 	init_classCallCheck();
 	init_createClass();
-	init_defineProperty();
-	function ownKeys$24(e, r) {
+	init_defineProperty$1();
+	function ownKeys$27(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -5293,40 +5393,41 @@ init_component_base$1();
 		}
 		return t;
 	}
-	__name(ownKeys$24, "ownKeys");
-	function _objectSpread$24(e) {
+	__name(ownKeys$27, "ownKeys");
+	function _objectSpread$26(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$24(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$24(Object(t)).forEach(function(r) {
+			r % 2 ? ownKeys$27(Object(t), !0).forEach(function(r) {
+				_defineProperty$1(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$27(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$24, "_objectSpread");
+	__name(_objectSpread$26, "_objectSpread");
 	var Heartbeat = /*#__PURE__*/ function() {
 		function Heartbeat(document) {
 			var _this = this;
 			_classCallCheck(this, Heartbeat);
-			_defineProperty(this, "modal", null);
-			_defineProperty(this, "externalChangeModal", null);
-			_defineProperty(this, "document", null);
-			_defineProperty(this, "lastSyncedAt", 0);
-			_defineProperty(this, "pendingSyncTime", true);
-			_defineProperty(this, "lastStateOfDocumentChange", false);
-			_defineProperty(this, "getModal", function() {
+			_defineProperty$1(this, "modal", null);
+			_defineProperty$1(this, "externalChangeModal", null);
+			_defineProperty$1(this, "document", null);
+			_defineProperty$1(this, "lastSyncedAt", 0);
+			_defineProperty$1(this, "pendingSyncTime", true);
+			_defineProperty$1(this, "lastStateOfDocumentChange", false);
+			_defineProperty$1(this, "getModal", function() {
 				if (!_this.modal) _this.modal = _this.initModal();
 				return _this.modal;
 			});
 			this.document = document;
+			this.lastSyncedAt = document.config.server_time || 0;
+			this.pendingSyncTime = !this.lastSyncedAt;
 			this.lastStateOfDocumentChange = document.editor.isChanged;
 			this.onSend = this.onSend.bind(this);
 			this.onTick = this.onTick.bind(this);
 			this.onRefreshNonce = this.onRefreshNonce.bind(this);
 			this.onDocumentChanged = this.onDocumentChanged.bind(this);
-			this.onDocumentLoaded = this.onDocumentLoaded.bind(this);
 			this.bindEvents();
 			wp.heartbeat.connectNow();
 		}
@@ -5392,12 +5493,6 @@ init_component_base$1();
 				}
 			},
 			{
-				key: "onDocumentLoaded",
-				value: function onDocumentLoaded() {
-					this.pendingSyncTime = true;
-				}
-			},
-			{
 				key: "reloadDocument",
 				value: function reloadDocument() {
 					$e.internal("document/save/set-is-modified", { status: false });
@@ -5430,7 +5525,7 @@ init_component_base$1();
 							return _this2.reloadDocument();
 						}
 					};
-					var config = isDirty ? _objectSpread$24(_objectSpread$24({}, baseConfig), {}, {
+					var config = isDirty ? _objectSpread$26(_objectSpread$26({}, baseConfig), {}, {
 						message: (0, _wordpress_i18n.__)("This page was changed externally. Save your changes or reload to get the latest version.", "elementor"),
 						strings: {
 							confirm: (0, _wordpress_i18n.__)("Force Save", "elementor"),
@@ -5442,11 +5537,11 @@ init_component_base$1();
 						onCancel: function onCancel() {
 							return _this2.reloadDocument();
 						}
-					}) : _objectSpread$24(_objectSpread$24({}, baseConfig), {}, {
+					}) : _objectSpread$26(_objectSpread$26({}, baseConfig), {}, {
 						message: (0, _wordpress_i18n.__)("This page was changed externally. Reload to get the latest version.", "elementor"),
 						strings: { confirm: (0, _wordpress_i18n.__)("Reload", "elementor") }
 					});
-					this.externalChangeModal = elementorCommon.dialogsManager.createWidget(isDirty ? "confirm" : "alert", _objectSpread$24(_objectSpread$24({}, config), {}, {
+					this.externalChangeModal = elementorCommon.dialogsManager.createWidget(isDirty ? "confirm" : "alert", _objectSpread$26(_objectSpread$26({}, config), {}, {
 						closeButton: false,
 						hide: {
 							onOutsideClick: false,
@@ -5475,7 +5570,6 @@ init_component_base$1();
 						"heartbeat-tick.wp-refresh-nonces": this.onRefreshNonce
 					});
 					elementor.channels.editor.on("status:change", this.onDocumentChanged);
-					elementor.on("document:loaded", this.onDocumentLoaded);
 				}
 			},
 			{
@@ -5487,7 +5581,6 @@ init_component_base$1();
 						"heartbeat-tick.wp-refresh-nonces": this.onRefreshNonce
 					});
 					elementor.channels.editor.off("status:change", this.onDocumentChanged);
-					elementor.off("document:loaded", this.onDocumentLoaded);
 				}
 			}
 		]);
@@ -5500,23 +5593,23 @@ init_component_base$1();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	function _callSuper$305(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$305() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$306(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$306() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	__name(_callSuper$305, "_callSuper");
-	function _isNativeReflectConstruct$305() {
+	__name(_callSuper$306, "_callSuper");
+	function _isNativeReflectConstruct$306() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$305 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$306 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
-	__name(_isNativeReflectConstruct$305, "_isNativeReflectConstruct");
+	__name(_isNativeReflectConstruct$306, "_isNativeReflectConstruct");
 	var Load = /*#__PURE__*/ function(_$e$modules$CommandIn) {
 		function Load() {
 			_classCallCheck(this, Load);
-			return _callSuper$305(this, Load, arguments);
+			return _callSuper$306(this, Load, arguments);
 		}
 		_inherits(Load, _$e$modules$CommandIn);
 		return _createClass(Load, [{
@@ -5573,23 +5666,23 @@ init_component_base$1();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	function _callSuper$304(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$304() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$305(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$305() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	__name(_callSuper$304, "_callSuper");
-	function _isNativeReflectConstruct$304() {
+	__name(_callSuper$305, "_callSuper");
+	function _isNativeReflectConstruct$305() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$304 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$305 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
-	__name(_isNativeReflectConstruct$304, "_isNativeReflectConstruct");
+	__name(_isNativeReflectConstruct$305, "_isNativeReflectConstruct");
 	var Unload = /*#__PURE__*/ function(_$e$modules$CommandIn) {
 		function Unload() {
 			_classCallCheck(this, Unload);
-			return _callSuper$304(this, Unload, arguments);
+			return _callSuper$305(this, Unload, arguments);
 		}
 		_inherits(Unload, _$e$modules$CommandIn);
 		return _createClass(Unload, [{
@@ -5651,23 +5744,23 @@ init_component_base$1();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	function _callSuper$303(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$303() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$304(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$304() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	__name(_callSuper$303, "_callSuper");
-	function _isNativeReflectConstruct$303() {
+	__name(_callSuper$304, "_callSuper");
+	function _isNativeReflectConstruct$304() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$303 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$304 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
-	__name(_isNativeReflectConstruct$303, "_isNativeReflectConstruct");
+	__name(_isNativeReflectConstruct$304, "_isNativeReflectConstruct");
 	var RemoveActiveDocumentQueryParam = /*#__PURE__*/ function(_$e$modules$hookUI$Af) {
 		function RemoveActiveDocumentQueryParam() {
 			_classCallCheck(this, RemoveActiveDocumentQueryParam);
-			return _callSuper$303(this, RemoveActiveDocumentQueryParam, arguments);
+			return _callSuper$304(this, RemoveActiveDocumentQueryParam, arguments);
 		}
 		_inherits(RemoveActiveDocumentQueryParam, _$e$modules$hookUI$Af);
 		return _createClass(RemoveActiveDocumentQueryParam, [
@@ -5701,23 +5794,23 @@ init_component_base$1();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	function _callSuper$302(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$302() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$303(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$303() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	__name(_callSuper$302, "_callSuper");
-	function _isNativeReflectConstruct$302() {
+	__name(_callSuper$303, "_callSuper");
+	function _isNativeReflectConstruct$303() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$302 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$303 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
-	__name(_isNativeReflectConstruct$302, "_isNativeReflectConstruct");
+	__name(_isNativeReflectConstruct$303, "_isNativeReflectConstruct");
 	var SetActiveDocumentQueryParam = /*#__PURE__*/ function(_$e$modules$hookUI$Af) {
 		function SetActiveDocumentQueryParam() {
 			_classCallCheck(this, SetActiveDocumentQueryParam);
-			return _callSuper$302(this, SetActiveDocumentQueryParam, arguments);
+			return _callSuper$303(this, SetActiveDocumentQueryParam, arguments);
 		}
 		_inherits(SetActiveDocumentQueryParam, _$e$modules$hookUI$Af);
 		return _createClass(SetActiveDocumentQueryParam, [
@@ -5756,23 +5849,23 @@ init_component_base$1();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	function _callSuper$301(t, o, e) {
-		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$301() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	function _callSuper$302(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$302() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
-	__name(_callSuper$301, "_callSuper");
-	function _isNativeReflectConstruct$301() {
+	__name(_callSuper$302, "_callSuper");
+	function _isNativeReflectConstruct$302() {
 		try {
 			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
 		} catch (t) {}
-		return (_isNativeReflectConstruct$301 = function _isNativeReflectConstruct() {
+		return (_isNativeReflectConstruct$302 = function _isNativeReflectConstruct() {
 			return !!t;
 		})();
 	}
-	__name(_isNativeReflectConstruct$301, "_isNativeReflectConstruct");
+	__name(_isNativeReflectConstruct$302, "_isNativeReflectConstruct");
 	var ClearDynamicTagsCache = /*#__PURE__*/ function(_$e$modules$hookUI$Be) {
 		function ClearDynamicTagsCache() {
 			_classCallCheck(this, ClearDynamicTagsCache);
-			return _callSuper$301(this, ClearDynamicTagsCache, arguments);
+			return _callSuper$302(this, ClearDynamicTagsCache, arguments);
 		}
 		_inherits(ClearDynamicTagsCache, _$e$modules$hookUI$Be);
 		return _createClass(ClearDynamicTagsCache, [
@@ -5798,6 +5891,211 @@ init_component_base$1();
 	}($e.modules.hookUI.Before);
 
 //#endregion
+//#region assets/dev/js/editor/components/documents/hooks/ui/attach-preview/select-active-element.js
+	init_classCallCheck();
+	init_createClass();
+	init_possibleConstructorReturn();
+	init_getPrototypeOf();
+	init_inherits();
+	init_defineProperty$1();
+	function _createForOfIteratorHelper$9(r, e) {
+		var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+		if (!t) {
+			if (Array.isArray(r) || (t = _unsupportedIterableToArray$9(r)) || e && r && "number" == typeof r.length) {
+				t && (r = t);
+				var _n = 0;
+				var F = function F() {};
+				return {
+					s: F,
+					n: function n() {
+						return _n >= r.length ? { done: !0 } : {
+							done: !1,
+							value: r[_n++]
+						};
+					},
+					e: function e(r) {
+						throw r;
+					},
+					f: F
+				};
+			}
+			throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+		}
+		var o;
+		var a = !0;
+		var u = !1;
+		return {
+			s: function s() {
+				t = t.call(r);
+			},
+			n: function n() {
+				var r = t.next();
+				return a = r.done, r;
+			},
+			e: function e(r) {
+				u = !0, o = r;
+			},
+			f: function f() {
+				try {
+					a || null == t.return || t.return();
+				} finally {
+					if (u) throw o;
+				}
+			}
+		};
+	}
+	__name(_createForOfIteratorHelper$9, "_createForOfIteratorHelper");
+	function _unsupportedIterableToArray$9(r, a) {
+		if (r) {
+			if ("string" == typeof r) return _arrayLikeToArray$9(r, a);
+			var t = {}.toString.call(r).slice(8, -1);
+			return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray$9(r, a) : void 0;
+		}
+	}
+	__name(_unsupportedIterableToArray$9, "_unsupportedIterableToArray");
+	function _arrayLikeToArray$9(r, a) {
+		(null == a || a > r.length) && (a = r.length);
+		for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
+		return n;
+	}
+	__name(_arrayLikeToArray$9, "_arrayLikeToArray");
+	function _callSuper$301(t, o, e) {
+		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$301() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+	}
+	__name(_callSuper$301, "_callSuper");
+	function _isNativeReflectConstruct$301() {
+		try {
+			var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
+		} catch (t) {}
+		return (_isNativeReflectConstruct$301 = function _isNativeReflectConstruct() {
+			return !!t;
+		})();
+	}
+	__name(_isNativeReflectConstruct$301, "_isNativeReflectConstruct");
+	var ELEMENT_ID_PATTERN = /^[A-Za-z0-9]+$/;
+	var SELECT_AFTER_PREVIEW_READY = 1e3;
+	var SCROLL_RETRY_DELAY = 400;
+	var MAX_SCROLL_ATTEMPTS = 8;
+	var IN_VIEW_TOLERANCE = 4;
+	var pendingSelectTimeoutId = null;
+	var watchSessionId = 0;
+	var SelectActiveElement = /*#__PURE__*/ function(_$e$modules$hookUI$Af) {
+		function SelectActiveElement() {
+			_classCallCheck(this, SelectActiveElement);
+			return _callSuper$301(this, SelectActiveElement, arguments);
+		}
+		_inherits(SelectActiveElement, _$e$modules$hookUI$Af);
+		return _createClass(SelectActiveElement, [
+			{
+				key: "getCommand",
+				value: function getCommand() {
+					return "editor/documents/attach-preview";
+				}
+			},
+			{
+				key: "getId",
+				value: function getId() {
+					return "select-active-element";
+				}
+			},
+			{
+				key: "getConditions",
+				value: function getConditions() {
+					if (this.constructor.calledOnce) return false;
+					return !!getQueryParam("active-element");
+				}
+			},
+			{
+				key: "apply",
+				value: function apply() {
+					var _container$view;
+					var _container$view2;
+					var activeDocumentId = parseInt(getQueryParam("active-document"));
+					var currentDocumentId = parseInt(elementor.documents.getCurrentId());
+					if (!isNaN(activeDocumentId) && activeDocumentId !== currentDocumentId) return;
+					this.constructor.calledOnce = true;
+					var activeElementId = getQueryParam("active-element");
+					if (!activeElementId || !ELEMENT_ID_PATTERN.test(activeElementId)) {
+						removeQueryParam("active-element");
+						return;
+					}
+					var container = elementor.getContainer(activeElementId);
+					if (!(container !== null && container !== void 0 && (_container$view = container.view) !== null && _container$view !== void 0 && _container$view.el) && !(container !== null && container !== void 0 && (_container$view2 = container.view) !== null && _container$view2 !== void 0 && (_container$view2 = _container$view2.$el) !== null && _container$view2 !== void 0 && _container$view2[0])) {
+						removeQueryParam("active-element");
+						return;
+					}
+					if (null !== pendingSelectTimeoutId) {
+						window.clearTimeout(pendingSelectTimeoutId);
+						pendingSelectTimeoutId = null;
+					}
+					var targetDocumentId = parseInt(elementor.documents.getCurrentId());
+					var sessionId = ++watchSessionId;
+					pendingSelectTimeoutId = window.setTimeout(function() {
+						pendingSelectTimeoutId = null;
+						watchElementInView(container, 0, targetDocumentId, sessionId);
+					}, SELECT_AFTER_PREVIEW_READY);
+				}
+			}
+		]);
+	}($e.modules.hookUI.After);
+	_defineProperty$1(SelectActiveElement, "calledOnce", false);
+	function shouldSkipScheduledContainerAction(container, targetDocumentId) {
+		var _container$document;
+		var currentDocumentId = parseInt(elementor.documents.getCurrentId());
+		if (isNaN(targetDocumentId) || targetDocumentId !== currentDocumentId) return true;
+		var containerDocumentId = (_container$document = container.document) === null || _container$document === void 0 ? void 0 : _container$document.id;
+		if (void 0 !== containerDocumentId && parseInt(containerDocumentId) !== currentDocumentId) return true;
+		return false;
+	}
+	function watchElementInView(container, attempt, targetDocumentId, sessionId) {
+		var _container$view3;
+		var _container$view4;
+		var isSelected = arguments.length > 4 && arguments[4] !== void 0 ? arguments[4] : false;
+		if (sessionId !== watchSessionId || shouldSkipScheduledContainerAction(container, targetDocumentId)) return;
+		var elementNode = ((_container$view3 = container.view) === null || _container$view3 === void 0 ? void 0 : _container$view3.el) || ((_container$view4 = container.view) === null || _container$view4 === void 0 || (_container$view4 = _container$view4.$el) === null || _container$view4 === void 0 ? void 0 : _container$view4[0]);
+		var isConnected = !!(elementNode !== null && elementNode !== void 0 && elementNode.isConnected);
+		if (isConnected && !isSelected) $e.run("document/elements/select", { container });
+		var inView = isConnected && scrollContainerIntoView(container);
+		if (attempt < MAX_SCROLL_ATTEMPTS - 1 && (!isSelected || !inView)) window.setTimeout(function() {
+			return watchElementInView(container, attempt + 1, targetDocumentId, sessionId, isSelected || isConnected);
+		}, SCROLL_RETRY_DELAY);
+	}
+	function measureVisibleBox(elementNode) {
+		var _elementNode$querySel;
+		var _elementNode$querySel2;
+		var ownRect = elementNode.getBoundingClientRect();
+		if (ownRect.height > 0) return ownRect;
+		var _iterator = _createForOfIteratorHelper$9((_elementNode$querySel = (_elementNode$querySel2 = elementNode.querySelectorAll) === null || _elementNode$querySel2 === void 0 ? void 0 : _elementNode$querySel2.call(elementNode, "*")) !== null && _elementNode$querySel !== void 0 ? _elementNode$querySel : []);
+		var _step;
+		try {
+			for (_iterator.s(); !(_step = _iterator.n()).done;) {
+				var rect = _step.value.getBoundingClientRect();
+				if (rect.height > 0) return rect;
+			}
+		} catch (err) {
+			_iterator.e(err);
+		} finally {
+			_iterator.f();
+		}
+		return ownRect;
+	}
+	function scrollContainerIntoView(container) {
+		var _container$view5;
+		var _container$view6;
+		var elementNode = ((_container$view5 = container.view) === null || _container$view5 === void 0 ? void 0 : _container$view5.el) || ((_container$view6 = container.view) === null || _container$view6 === void 0 || (_container$view6 = _container$view6.$el) === null || _container$view6 === void 0 ? void 0 : _container$view6[0]);
+		if (!(elementNode !== null && elementNode !== void 0 && elementNode.isConnected)) return false;
+		var previewWindow = elementNode.ownerDocument.defaultView;
+		var scrollingElement = previewWindow.document.scrollingElement || previewWindow.document.documentElement;
+		var rect = measureVisibleBox(elementNode);
+		if (rect.height <= 0) return false;
+		var centeredTop = scrollingElement.scrollTop + rect.top - (previewWindow.innerHeight - rect.height) / 2;
+		scrollingElement.scrollTop = Math.max(0, centeredTop);
+		var placed = measureVisibleBox(elementNode);
+		var expectedTop = (previewWindow.innerHeight - placed.height) / 2;
+		return Math.abs(placed.top - expectedTop) <= IN_VIEW_TOLERANCE;
+	}
+
+//#endregion
 //#region assets/dev/js/editor/components/documents/hooks/ui/attach-preview/switch-to-active-document.js
 	init_asyncToGenerator();
 	init_classCallCheck();
@@ -5805,7 +6103,7 @@ init_component_base$1();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	function _callSuper$300(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$300() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -5896,7 +6194,7 @@ init_component_base$1();
 			}
 		]);
 	}($e.modules.hookUI.After);
-	_defineProperty(SwitchToActiveDocument, "calledOnce", false);
+	_defineProperty$1(SwitchToActiveDocument, "calledOnce", false);
 
 //#endregion
 //#region assets/dev/js/editor/components/documents/hooks/ui/switch/switch-to-active-tab.js
@@ -5905,7 +6203,7 @@ init_component_base$1();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	function _callSuper$299(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$299() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -5959,7 +6257,7 @@ init_component_base$1();
 			}
 		]);
 	}($e.modules.hookUI.After);
-	_defineProperty(SwitchToActiveTab, "calledOnce", false);
+	_defineProperty$1(SwitchToActiveTab, "calledOnce", false);
 
 //#endregion
 //#region assets/dev/js/editor/components/documents/hooks/ui/close/remove-active-tab-query-param.js
@@ -6065,6 +6363,7 @@ init_component_base$1();
 		RemoveActiveDocumentQueryParam: () => RemoveActiveDocumentQueryParam,
 		RemoveActiveTabQueryParam: () => RemoveActiveTabQueryParam,
 		RemoveActiveTabQueryParamBack: () => RemoveActiveTabQueryParamBack,
+		SelectActiveElement: () => SelectActiveElement,
 		SetActiveDocumentQueryParam: () => SetActiveDocumentQueryParam,
 		SwitchToActiveDocument: () => SwitchToActiveDocument,
 		SwitchToActiveTab: () => SwitchToActiveTab
@@ -6246,6 +6545,7 @@ init_component_base$1();
 					id = parseInt(id);
 					return {
 						action: "get_document_config",
+						retry: true,
 						unique_id: "document-".concat(id),
 						data: { id },
 						success: function success(config) {
@@ -6456,8 +6756,8 @@ init_component_base$1();
 //#endregion
 //#region assets/dev/js/editor/elements/models/element.js
 	var require_element$2 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_typeof();
-		init_defineProperty();
+		init_typeof$1();
+		init_defineProperty$1();
 		init_base_element_model();
 		function ownKeys(e, r) {
 			var t = Object.keys(e);
@@ -6473,7 +6773,7 @@ init_component_base$1();
 			for (var r = 1; r < arguments.length; r++) {
 				var t = null != arguments[r] ? arguments[r] : {};
 				r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
-					_defineProperty(e, r, t[r]);
+					_defineProperty$1(e, r, t[r]);
 				}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
 					Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 				});
@@ -6536,7 +6836,7 @@ init_component_base$1();
 			},
 			setSetting: function setSetting(key, value) {
 				var settings = this.get("settings");
-				if ("object" !== _typeof(key)) {
+				if ("object" !== _typeof$1(key)) {
 					var keyParts = key.split(".");
 					var isRepeaterKey = 3 === keyParts.length;
 					key = keyParts[0];
@@ -6759,7 +7059,7 @@ init_element_base();
 			props: mobileProps,
 			custom_css: null
 		});
-		model.styles = _defineProperty({}, styleId, {
+		model.styles = _defineProperty$1({}, styleId, {
 			id: styleId,
 			label: "local",
 			type: "class",
@@ -6863,12 +7163,12 @@ init_element_base();
 		return result;
 	}
 	var init_v4_preset_utils = __esmMin((() => {
-		init_defineProperty();
+		init_defineProperty$1();
 	}));
 
 //#endregion
 //#region assets/dev/js/editor/utils/v4-flexbox-preset.js
-	function ownKeys$23(e, r) {
+	function ownKeys$26(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -6878,12 +7178,12 @@ init_element_base();
 		}
 		return t;
 	}
-	function _objectSpread$23(e) {
+	function _objectSpread$25(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$23(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$23(Object(t)).forEach(function(r) {
+			r % 2 ? ownKeys$26(Object(t), !0).forEach(function(r) {
+				_defineProperty$1(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$26(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -6930,10 +7230,10 @@ init_element_base();
 	}
 	var V4_ELEMENT_TYPE$1, DIRECTION_ROW$1, DIRECTION_COLUMN$1, SIZES_MAP, sizeProp, stringProp, widthPercent, FULL_WIDTH_MOBILE, ROW, COLUMN, ROW_WRAP, widthChild, bareChild, rowOfSizes, PRESET_DEFINITIONS;
 	var init_v4_flexbox_preset = __esmMin((() => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_v4_preset_utils();
-		__name(ownKeys$23, "ownKeys");
-		__name(_objectSpread$23, "_objectSpread");
+		__name(ownKeys$26, "ownKeys");
+		__name(_objectSpread$25, "_objectSpread");
 		V4_ELEMENT_TYPE$1 = "e-flexbox";
 		DIRECTION_ROW$1 = "row";
 		DIRECTION_COLUMN$1 = "column";
@@ -6963,10 +7263,10 @@ init_element_base();
 		FULL_WIDTH_MOBILE = { width: sizeProp(100, "%") };
 		ROW = { "flex-direction": stringProp(DIRECTION_ROW$1) };
 		COLUMN = { "flex-direction": stringProp(DIRECTION_COLUMN$1) };
-		ROW_WRAP = _objectSpread$23(_objectSpread$23({}, ROW), {}, { "flex-wrap": stringProp("wrap") });
+		ROW_WRAP = _objectSpread$25(_objectSpread$25({}, ROW), {}, { "flex-wrap": stringProp("wrap") });
 		widthChild = function widthChild(size) {
 			return {
-				parent: _objectSpread$23(_objectSpread$23({}, COLUMN), widthPercent(size)),
+				parent: _objectSpread$25(_objectSpread$25({}, COLUMN), widthPercent(size)),
 				parentMobile: FULL_WIDTH_MOBILE,
 				children: []
 			};
@@ -6997,7 +7297,7 @@ init_element_base();
 			"c100-c50-50": {
 				parent: ROW,
 				children: [widthChild("50"), {
-					parent: _objectSpread$23(_objectSpread$23(_objectSpread$23({}, COLUMN), widthPercent("50")), {}, { padding: sizeProp(0, "px") }),
+					parent: _objectSpread$25(_objectSpread$25(_objectSpread$25({}, COLUMN), widthPercent("50")), {}, { padding: sizeProp(0, "px") }),
 					parentMobile: FULL_WIDTH_MOBILE,
 					children: [bareChild(), bareChild()]
 				}]
@@ -7047,7 +7347,7 @@ init_element_base();
 
 //#endregion
 //#region assets/dev/js/editor/utils/container-helper.js
-	function ownKeys$22(e, r) {
+	function ownKeys$25(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -7057,12 +7357,12 @@ init_element_base();
 		}
 		return t;
 	}
-	function _objectSpread$22(e) {
+	function _objectSpread$24(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$22(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$22(Object(t)).forEach(function(r) {
+			r % 2 ? ownKeys$25(Object(t), !0).forEach(function(r) {
+				_defineProperty$1(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$25(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -7072,12 +7372,12 @@ init_element_base();
 	var init_container_helper = __esmMin((() => {
 		init_classCallCheck();
 		init_createClass();
-		init_defineProperty();
+		init_defineProperty$1();
 		init_v4_flexbox_preset();
 		init_v4_grid_preset();
 		;
-		__name(ownKeys$22, "ownKeys");
-		__name(_objectSpread$22, "_objectSpread");
+		__name(ownKeys$25, "ownKeys");
+		__name(_objectSpread$24, "_objectSpread");
 		ContainerHelper = /*#__PURE__*/ function() {
 			function ContainerHelper() {
 				_classCallCheck(this, ContainerHelper);
@@ -7109,7 +7409,7 @@ init_element_base();
 						var modelAttributes = arguments.length > 3 && arguments[3] !== void 0 ? arguments[3] : {};
 						return $e.run("document/elements/create", {
 							container: target,
-							model: _objectSpread$22({
+							model: _objectSpread$24({
 								elType: "container",
 								settings
 							}, modelAttributes),
@@ -7141,7 +7441,7 @@ init_element_base();
 						var shouldWrap = sizes.reduce(function(sum, size) {
 							return sum + parseInt(size);
 						}, 0) > 100;
-						var settings = _objectSpread$22(_objectSpread$22({ flex_direction: this.DIRECTION_ROW }, shouldWrap ? { flex_wrap: "wrap" } : {}), {}, { flex_gap: {
+						var settings = _objectSpread$24(_objectSpread$24({ flex_direction: this.DIRECTION_ROW }, shouldWrap ? { flex_wrap: "wrap" } : {}), {}, { flex_gap: {
 							unit: "px",
 							size: 0,
 							column: "0",
@@ -7191,7 +7491,7 @@ init_element_base();
 								unit: "fr",
 								size: parsedStructure.rows
 							}
-						}, target, options, _objectSpread$22({
+						}, target, options, _objectSpread$24({
 							title: (0, _wordpress_i18n.__)("Grid", "elementor"),
 							custom: {
 								isPreset: true,
@@ -7247,7 +7547,7 @@ init_element_base();
 										}
 									};
 									ContainerHelper.createContainer(settings, newContainer, { edit: false });
-									var rightContainer = ContainerHelper.createContainer(_objectSpread$22(_objectSpread$22({}, settings), {}, {
+									var rightContainer = ContainerHelper.createContainer(_objectSpread$24(_objectSpread$24({}, settings), {}, {
 										padding: {
 											unit: "px",
 											top: 0,
@@ -7286,7 +7586,7 @@ init_element_base();
 					key: "createContainerFromModel",
 					value: function createContainerFromModel(model, target) {
 						var options = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {};
-						return $e.run("document/elements/create", _objectSpread$22({
+						return $e.run("document/elements/create", _objectSpread$24({
 							model,
 							container: target
 						}, options));
@@ -7295,18 +7595,18 @@ init_element_base();
 			]);
 		}();
 		_ContainerHelper = ContainerHelper;
-		_defineProperty(ContainerHelper, "DIRECTION_ROW", "row");
-		_defineProperty(ContainerHelper, "DIRECTION_COLUMN", "column");
-		_defineProperty(ContainerHelper, "DIRECTION_ROW_REVERSED", "row-reverse");
-		_defineProperty(ContainerHelper, "DIRECTION_COLUMN_REVERSED", "column-reverse");
-		_defineProperty(ContainerHelper, "DIRECTION_DEFAULT", _ContainerHelper.DIRECTION_COLUMN);
-		_defineProperty(ContainerHelper, "CONTAINER_TYPE_GRID", "grid");
-		_defineProperty(ContainerHelper, "V4_DEFAULT_CONTAINER_TYPE", "e-flexbox");
+		_defineProperty$1(ContainerHelper, "DIRECTION_ROW", "row");
+		_defineProperty$1(ContainerHelper, "DIRECTION_COLUMN", "column");
+		_defineProperty$1(ContainerHelper, "DIRECTION_ROW_REVERSED", "row-reverse");
+		_defineProperty$1(ContainerHelper, "DIRECTION_COLUMN_REVERSED", "column-reverse");
+		_defineProperty$1(ContainerHelper, "DIRECTION_DEFAULT", _ContainerHelper.DIRECTION_COLUMN);
+		_defineProperty$1(ContainerHelper, "CONTAINER_TYPE_GRID", "grid");
+		_defineProperty$1(ContainerHelper, "V4_DEFAULT_CONTAINER_TYPE", "e-flexbox");
 	}));
 
 //#endregion
 //#region assets/dev/js/editor/utils/editor-one-events.js
-	function ownKeys$21(e, r) {
+	function ownKeys$24(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -7316,24 +7616,25 @@ init_element_base();
 		}
 		return t;
 	}
-	function _objectSpread$21(e) {
+	function _objectSpread$23(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$21(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$21(Object(t)).forEach(function(r) {
+			r % 2 ? ownKeys$24(Object(t), !0).forEach(function(r) {
+				_defineProperty$1(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$24(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	var EditorOneEventManager, createDebouncedWidgetPanelSearch;
+	var ADMIN_NAV_CLICK_EVENT, EditorOneEventManager, createDebouncedWidgetPanelSearch;
 	var init_editor_one_events = __esmMin((() => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_classCallCheck();
 		init_createClass();
-		__name(ownKeys$21, "ownKeys");
-		__name(_objectSpread$21, "_objectSpread");
+		__name(ownKeys$24, "ownKeys");
+		__name(_objectSpread$23, "_objectSpread");
+		ADMIN_NAV_CLICK_EVENT = "elementor/admin/nav-click";
 		EditorOneEventManager = /*#__PURE__*/ function() {
 			function EditorOneEventManager() {
 				_classCallCheck(this, EditorOneEventManager);
@@ -7422,7 +7723,7 @@ init_element_base();
 						var _config$appTypes3;
 						var overrides = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
 						var config = this.getConfig();
-						return _objectSpread$21({ window_name: (_config$appTypes$edit = config === null || config === void 0 || (_config$appTypes3 = config.appTypes) === null || _config$appTypes3 === void 0 ? void 0 : _config$appTypes3.editor) !== null && _config$appTypes$edit !== void 0 ? _config$appTypes$edit : "editor" }, overrides);
+						return _objectSpread$23({ window_name: (_config$appTypes$edit = config === null || config === void 0 || (_config$appTypes3 = config.appTypes) === null || _config$appTypes3 === void 0 ? void 0 : _config$appTypes3.editor) !== null && _config$appTypes$edit !== void 0 ? _config$appTypes$edit : "editor" }, overrides);
 					}
 				},
 				{
@@ -7743,7 +8044,7 @@ init_element_base();
 						var _config$locations11;
 						var overrides = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
 						var config = this.getConfig();
-						return this.createBasePayload(_objectSpread$21({
+						return this.createBasePayload(_objectSpread$23({
 							window_name: (_config$appTypes$wpDa = config === null || config === void 0 || (_config$appTypes4 = config.appTypes) === null || _config$appTypes4 === void 0 ? void 0 : _config$appTypes4.wpDash) !== null && _config$appTypes$wpDa !== void 0 ? _config$appTypes$wpDa : "wpdash",
 							target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations11 = config.locations) === null || _config$locations11 === void 0 ? void 0 : _config$locations11.wpDashAdmin),
 							location_l2: ""
@@ -7818,6 +8119,9 @@ init_element_base();
 							var _config$targetTypes14;
 							var _config$interactionRe16;
 							var _config$locations12;
+							var _window$crypto$random;
+							var _window$crypto;
+							var _window$crypto$random2;
 							var _config$names13;
 							var config = this.getConfig();
 							var payload = this.createBasePayload({
@@ -7829,7 +8133,15 @@ init_element_base();
 								target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations12 = config.locations) === null || _config$locations12 === void 0 ? void 0 : _config$locations12.sidebar)
 							});
 							if (groupEventId) payload.location_l1 = groupEventId;
-							return this.dispatchEvent(config === null || config === void 0 || (_config$names13 = config.names) === null || _config$names13 === void 0 || (_config$names13 = _config$names13.editorOne) === null || _config$names13 === void 0 ? void 0 : _config$names13.sidebarMenuItemClicked, payload);
+							var navClickId = (_window$crypto$random = (_window$crypto = window.crypto) === null || _window$crypto === void 0 || (_window$crypto$random2 = _window$crypto.randomUUID) === null || _window$crypto$random2 === void 0 ? void 0 : _window$crypto$random2.call(_window$crypto)) !== null && _window$crypto$random !== void 0 ? _window$crypto$random : "".concat(Date.now(), "-").concat(Math.random().toString(36).slice(2));
+							payload.nav_click_id = navClickId;
+							var dispatched = this.dispatchEvent(config === null || config === void 0 || (_config$names13 = config.names) === null || _config$names13 === void 0 || (_config$names13 = _config$names13.editorOne) === null || _config$names13 === void 0 ? void 0 : _config$names13.sidebarMenuItemClicked, payload);
+							window.dispatchEvent(new CustomEvent(ADMIN_NAV_CLICK_EVENT, { detail: {
+								itemId: eventId,
+								rootItem: groupEventId,
+								navClickId
+							} }));
+							return dispatched;
 						} catch (error) {
 							return false;
 						}
@@ -8140,7 +8452,7 @@ init_element_base();
 
 //#endregion
 //#region assets/dev/js/editor/views/add-section/base.js
-	function ownKeys$20(e, r) {
+	function ownKeys$23(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -8150,12 +8462,12 @@ init_element_base();
 		}
 		return t;
 	}
-	function _objectSpread$20(e) {
+	function _objectSpread$22(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$20(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$20(Object(t)).forEach(function(r) {
+			r % 2 ? ownKeys$23(Object(t), !0).forEach(function(r) {
+				_defineProperty$1(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$23(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -8179,12 +8491,12 @@ init_element_base();
 		init_possibleConstructorReturn();
 		init_getPrototypeOf();
 		init_inherits();
-		init_defineProperty();
+		init_defineProperty$1();
 		init_container_helper();
 		init_environment();
 		init_editor_one_events();
-		__name(ownKeys$20, "ownKeys");
-		__name(_objectSpread$20, "_objectSpread");
+		__name(ownKeys$23, "ownKeys");
+		__name(_objectSpread$22, "_objectSpread");
 		__name(_callSuper$292, "_callSuper");
 		__name(_isNativeReflectConstruct$292, "_isNativeReflectConstruct");
 		AddSectionBase = /*#__PURE__*/ function(_Marionette$ItemView) {
@@ -8376,7 +8688,7 @@ init_element_base();
 				{
 					key: "onRender",
 					value: function onRender() {
-						this.$el.html5Droppable(_objectSpread$20({
+						this.$el.html5Droppable(_objectSpread$22({
 							axis: ["vertical"],
 							groups: ["elementor-element"],
 							placeholder: false,
@@ -8475,10 +8787,10 @@ init_element_base();
 				}
 			}]);
 		}(Marionette.ItemView);
-		_defineProperty(AddSectionBase, "IS_CONTAINER_ACTIVE", !!elementorCommon.config.experimentalFeatures.container);
-		_defineProperty(AddSectionBase, "VIEW_CHOOSE_ACTION", "choose-action");
-		_defineProperty(AddSectionBase, "VIEW_CONTAINER_FLEX_PRESET", "select-container-preset");
-		_defineProperty(AddSectionBase, "VIEW_CONTAINER_GRID_PRESET", "select-container-preset-grid");
+		_defineProperty$1(AddSectionBase, "IS_CONTAINER_ACTIVE", !!elementorCommon.config.experimentalFeatures.container);
+		_defineProperty$1(AddSectionBase, "VIEW_CHOOSE_ACTION", "choose-action");
+		_defineProperty$1(AddSectionBase, "VIEW_CONTAINER_FLEX_PRESET", "select-container-preset");
+		_defineProperty$1(AddSectionBase, "VIEW_CONTAINER_GRID_PRESET", "select-container-preset-grid");
 	}));
 
 //#endregion
@@ -9085,10 +9397,124 @@ init_element_base();
 	}));
 
 //#endregion
+//#region packages/packages/libs/editor-elements/src/sync/generate-element-id.ts
+	var generateElementId;
+	var init_generate_element_id = __esmMin((() => {
+		generateElementId = () => {
+			var _extendedWindow$eleme;
+			var _extendedWindow$eleme2;
+			var _extendedWindow$eleme3;
+			return (_extendedWindow$eleme = (_extendedWindow$eleme2 = window.elementorCommon) === null || _extendedWindow$eleme2 === void 0 || (_extendedWindow$eleme2 = _extendedWindow$eleme2.helpers) === null || _extendedWindow$eleme2 === void 0 || (_extendedWindow$eleme3 = _extendedWindow$eleme2.getUniqueId) === null || _extendedWindow$eleme3 === void 0 ? void 0 : _extendedWindow$eleme3.call(_extendedWindow$eleme2)) !== null && _extendedWindow$eleme !== void 0 ? _extendedWindow$eleme : `el-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+		};
+	}));
+
+//#endregion
+//#region \0@oxc-project+runtime@0.140.0/helpers/esm/typeof.js
+	function _typeof(o) {
+		"@babel/helpers - typeof";
+		return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
+			return typeof o;
+		} : function(o) {
+			return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+		}, _typeof(o);
+	}
+	var init_typeof = __esmMin((() => {}));
+
+//#endregion
+//#region \0@oxc-project+runtime@0.140.0/helpers/esm/toPrimitive.js
+	function toPrimitive(t, r) {
+		if ("object" != _typeof(t) || !t) return t;
+		var e = t[Symbol.toPrimitive];
+		if (void 0 !== e) {
+			var i = e.call(t, r || "default");
+			if ("object" != _typeof(i)) return i;
+			throw new TypeError("@@toPrimitive must return a primitive value.");
+		}
+		return ("string" === r ? String : Number)(t);
+	}
+	var init_toPrimitive = __esmMin((() => {
+		init_typeof();
+	}));
+
+//#endregion
+//#region \0@oxc-project+runtime@0.140.0/helpers/esm/toPropertyKey.js
+	function toPropertyKey(t) {
+		var i = toPrimitive(t, "string");
+		return "symbol" == _typeof(i) ? i : i + "";
+	}
+	var init_toPropertyKey = __esmMin((() => {
+		init_typeof();
+		init_toPrimitive();
+	}));
+
+//#endregion
+//#region \0@oxc-project+runtime@0.140.0/helpers/esm/defineProperty.js
+	function _defineProperty(e, r, t) {
+		return (r = toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+			value: t,
+			enumerable: !0,
+			configurable: !0,
+			writable: !0
+		}) : e[r] = t, e;
+	}
+	var init_defineProperty = __esmMin((() => {
+		init_toPropertyKey();
+	}));
+
+//#endregion
+//#region \0@oxc-project+runtime@0.140.0/helpers/esm/objectSpread2.js
+	function ownKeys$22(e, r) {
+		var t = Object.keys(e);
+		if (Object.getOwnPropertySymbols) {
+			var o = Object.getOwnPropertySymbols(e);
+			r && (o = o.filter(function(r) {
+				return Object.getOwnPropertyDescriptor(e, r).enumerable;
+			})), t.push.apply(t, o);
+		}
+		return t;
+	}
+	function _objectSpread2(e) {
+		for (var r = 1; r < arguments.length; r++) {
+			var t = null != arguments[r] ? arguments[r] : {};
+			r % 2 ? ownKeys$22(Object(t), !0).forEach(function(r) {
+				_defineProperty(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$22(Object(t)).forEach(function(r) {
+				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+			});
+		}
+		return e;
+	}
+	var init_objectSpread2 = __esmMin((() => {
+		init_defineProperty();
+		__name(ownKeys$22, "ownKeys");
+	}));
+
+//#endregion
+//#region packages/packages/libs/editor-elements/src/sync/clone-element-tree.ts
+	function isBackboneModel(item) {
+		return "toJSON" in item && "get" in item;
+	}
+	function cloneElementTree(item) {
+		var _source$settings;
+		var _source$elements;
+		const source = isBackboneModel(item) ? item.toJSON() : item;
+		return _objectSpread2(_objectSpread2({}, source), {}, {
+			id: generateElementId(),
+			settings: _objectSpread2(_objectSpread2({}, (_source$settings = source.settings) !== null && _source$settings !== void 0 ? _source$settings : {}), {}, { _element_id: "" }),
+			elements: ((_source$elements = source.elements) !== null && _source$elements !== void 0 ? _source$elements : []).map((child) => cloneElementTree(child))
+		});
+	}
+	var init_clone_element_tree = __esmMin((() => {
+		init_generate_element_id();
+		init_objectSpread2();
+	}));
+
+//#endregion
 //#region assets/dev/js/editor/views/base-container.js
 	var require_base_container = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		init_slicedToArray();
 		init_container_helper();
+		init_clone_element_tree();
 		var import_element_types$3 = require_element_types();
 		/**
 		* @typedef {import('elementor/assets/lib/backbone/backbone.marionette')} Marionette
@@ -9276,14 +9702,7 @@ init_element_base();
 				return "add";
 			},
 			cloneItem: function cloneItem(item) {
-				var self = this;
-				if (item instanceof Backbone.Model) return item.clone();
-				item.id = elementorCommon.helpers.getUniqueId();
-				item.settings._element_id = "";
-				item.elements.forEach(function(childItem, index) {
-					item.elements[index] = self.cloneItem(childItem);
-				});
-				return item;
+				return cloneElementTree(item);
 			},
 			lookup: function lookup() {
 				var element = this;
@@ -9346,7 +9765,7 @@ init_element_base();
 	var require_base$2 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		init_slicedToArray();
 		init_asyncToGenerator();
-		init_typeof();
+		init_typeof$1();
 		init_toConsumableArray();
 		init_awaitAsyncGenerator();
 		init_wrapAsyncGenerator();
@@ -9812,13 +10231,13 @@ init_element_base();
 			},
 			addRenderAttribute: function addRenderAttribute(element, key, value, overwrite) {
 				var self = this;
-				if ("object" === _typeof(element)) {
+				if ("object" === _typeof$1(element)) {
 					jQuery.each(element, function(elementKey, elementValue) {
 						self.addRenderAttribute(elementKey, elementValue, null, overwrite);
 					});
 					return self;
 				}
-				if ("object" === _typeof(key)) {
+				if ("object" === _typeof$1(key)) {
 					jQuery.each(key, function(attributeKey, attributeValue) {
 						self.addRenderAttribute(element, attributeKey, attributeValue, overwrite);
 					});
@@ -9978,7 +10397,7 @@ init_element_base();
 				}))();
 			},
 			findUniqueKey: function findUniqueKey(obj1, obj2) {
-				if ("object" !== _typeof(obj1) || "object" !== _typeof(obj2)) return false;
+				if ("object" !== _typeof$1(obj1) || "object" !== _typeof$1(obj2)) return false;
 				var keys1 = Object.keys(obj1);
 				var keys2 = Object.keys(obj2);
 				return keys1.concat(keys2).filter(function(item, index, arr) {
@@ -10545,7 +10964,7 @@ init_element_base();
 //#endregion
 //#region assets/dev/js/editor/elements/views/behaviors/sortable.js
 	var require_sortable = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_defineProperty();
+		init_defineProperty$1();
 		function ownKeys(e, r) {
 			var t = Object.keys(e);
 			if (Object.getOwnPropertySymbols) {
@@ -10560,7 +10979,7 @@ init_element_base();
 			for (var r = 1; r < arguments.length; r++) {
 				var t = null != arguments[r] ? arguments[r] : {};
 				r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
-					_defineProperty(e, r, t[r]);
+					_defineProperty$1(e, r, t[r]);
 				}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
 					Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 				});
@@ -11718,7 +12137,7 @@ init_element_base();
 
 //#endregion
 //#region assets/dev/js/editor/elements/views/behaviors/widget-resizeable.js
-	function ownKeys$19(e, r) {
+	function ownKeys$21(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -11728,12 +12147,12 @@ init_element_base();
 		}
 		return t;
 	}
-	function _objectSpread$19(e) {
+	function _objectSpread$21(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$19(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$19(Object(t)).forEach(function(r) {
+			r % 2 ? ownKeys$21(Object(t), !0).forEach(function(r) {
+				_defineProperty$1(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$21(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -11758,15 +12177,15 @@ init_element_base();
 	}
 	var _default$26;
 	var init_widget_resizeable = __esmMin((() => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_classCallCheck();
 		init_createClass();
 		init_possibleConstructorReturn();
 		init_getPrototypeOf();
 		init_get();
 		init_inherits();
-		__name(ownKeys$19, "ownKeys");
-		__name(_objectSpread$19, "_objectSpread");
+		__name(ownKeys$21, "ownKeys");
+		__name(_objectSpread$21, "_objectSpread");
 		__name(_callSuper$282, "_callSuper");
 		__name(_isNativeReflectConstruct$282, "_isNativeReflectConstruct");
 		__name(_superPropGet$31, "_superPropGet");
@@ -11894,7 +12313,7 @@ init_element_base();
 						var widthSettingKey = this.getDeviceSetting(this.getWidthKey());
 						var unit = this.getSetting(widthSettingKey).unit;
 						var width = elementor.helpers.elementSizeToUnit(this.$el, ui.size.width, unit);
-						var settingToChange = _objectSpread$19(_objectSpread$19(_objectSpread$19({}, this.isContainerActive() ? { _flex_size: "none" } : {}), this.isContainer() ? { content_width: "full" } : {}), {}, _defineProperty(_defineProperty({}, elementWidthSettingKey, "initial"), widthSettingKey, {
+						var settingToChange = _objectSpread$21(_objectSpread$21(_objectSpread$21({}, this.isContainerActive() ? { _flex_size: "none" } : {}), this.isContainer() ? { content_width: "full" } : {}), {}, _defineProperty$1(_defineProperty$1({}, elementWidthSettingKey, "initial"), widthSettingKey, {
 							unit,
 							size: width
 						}));
@@ -12067,7 +12486,7 @@ init_element_base();
 //#endregion
 //#region assets/dev/js/editor/elements/views/behaviors/inline-editing.js
 	var require_inline_editing = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_defineProperty();
+		init_defineProperty$1();
 		var InlineEditingBehavior = Marionette.Behavior.extend({
 			editing: false,
 			$currentEditingArea: null,
@@ -12204,7 +12623,7 @@ init_element_base();
 				}
 				$e.run("document/elements/settings", {
 					container,
-					settings: _defineProperty({}, key, this.editor.getContent()),
+					settings: _defineProperty$1({}, key, this.editor.getContent()),
 					options: { external: true }
 				});
 			}
@@ -13211,7 +13630,7 @@ init_element_base();
 		init_getPrototypeOf();
 		init_get();
 		init_inherits();
-		init_defineProperty();
+		init_defineProperty$1();
 		init_react();
 		init_empty_component();
 		__name(_callSuper$279, "_callSuper");
@@ -13223,8 +13642,8 @@ init_element_base();
 				_classCallCheck(this, EmptyView);
 				for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 				_this = _callSuper$279(this, EmptyView, [].concat(args));
-				_defineProperty(_this, "template", "<div></div>");
-				_defineProperty(_this, "className", "elementor-empty-view");
+				_defineProperty$1(_this, "template", "<div></div>");
+				_defineProperty$1(_this, "className", "elementor-empty-view");
 				return _this;
 			}
 			_inherits(EmptyView, _Marionette$ItemView);
@@ -13275,7 +13694,7 @@ init_element_base();
 	var init_hook_base = __esmMin((() => {
 		init_classCallCheck();
 		init_createClass();
-		init_defineProperty();
+		init_defineProperty$1();
 		init_force_method_implementation();
 		HookBase = /*#__PURE__*/ function() {
 			/**
@@ -13290,19 +13709,19 @@ init_element_base();
 				*
 				* @type {string}
 				*/
-				_defineProperty(this, "type", void 0);
+				_defineProperty$1(this, "type", void 0);
 				/**
 				* Full command address, that will hook the callback.
 				*
 				* @type {string}
 				*/
-				_defineProperty(this, "command", void 0);
+				_defineProperty$1(this, "command", void 0);
 				/**
 				* Unique id of the callback.
 				*
 				* @type {string}
 				*/
-				_defineProperty(this, "id", void 0);
+				_defineProperty$1(this, "id", void 0);
 				this.initialize();
 				this.type = this.getType();
 				this.command = this.getCommand();
@@ -13553,7 +13972,80 @@ init_element_base();
 	}));
 
 //#endregion
+//#region assets/dev/js/editor/utils/omit-props-by-meta.js
+	function ownKeys$20(e, r) {
+		var t = Object.keys(e);
+		if (Object.getOwnPropertySymbols) {
+			var o = Object.getOwnPropertySymbols(e);
+			r && (o = o.filter(function(r) {
+				return Object.getOwnPropertyDescriptor(e, r).enumerable;
+			})), t.push.apply(t, o);
+		}
+		return t;
+	}
+	function _objectSpread$20(e) {
+		for (var r = 1; r < arguments.length; r++) {
+			var t = null != arguments[r] ? arguments[r] : {};
+			r % 2 ? ownKeys$20(Object(t), !0).forEach(function(r) {
+				_defineProperty$1(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$20(Object(t)).forEach(function(r) {
+				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+			});
+		}
+		return e;
+	}
+	function omitPropsByMeta(elementData) {
+		if (!elementData || "object" !== _typeof$1(elementData)) return elementData;
+		var result = _objectSpread$20({}, elementData);
+		var schema = getSchema(elementData);
+		if (schema && elementData.settings && "object" === _typeof$1(elementData.settings)) result.settings = Object.fromEntries(Object.entries(elementData.settings).filter(function(_ref) {
+			var key = _slicedToArray(_ref, 1)[0];
+			return !isOmitted(schema[key]);
+		}));
+		if (Array.isArray(elementData.elements)) result.elements = elementData.elements.map(omitPropsByMeta);
+		return result;
+	}
+	var isOmitted, getSchema;
+	var init_omit_props_by_meta = __esmMin((() => {
+		init_slicedToArray();
+		init_defineProperty$1();
+		init_typeof$1();
+		__name(ownKeys$20, "ownKeys");
+		__name(_objectSpread$20, "_objectSpread");
+		isOmitted = function isOmitted(propType) {
+			var meta = propType === null || propType === void 0 ? void 0 : propType.meta;
+			return !!meta && !Array.isArray(meta) && true === meta.sensitive;
+		};
+		getSchema = function getSchema(elementData) {
+			var _window$elementor;
+			var type = elementData.widgetType || elementData.elType;
+			return (_window$elementor = window.elementor) === null || _window$elementor === void 0 || (_window$elementor = _window$elementor.widgetsCache) === null || _window$elementor === void 0 || (_window$elementor = _window$elementor[type]) === null || _window$elementor === void 0 ? void 0 : _window$elementor.atomic_props_schema;
+		};
+	}));
+
+//#endregion
 //#region assets/dev/js/editor/document/elements/commands/copy.js
+	function ownKeys$19(e, r) {
+		var t = Object.keys(e);
+		if (Object.getOwnPropertySymbols) {
+			var o = Object.getOwnPropertySymbols(e);
+			r && (o = o.filter(function(r) {
+				return Object.getOwnPropertyDescriptor(e, r).enumerable;
+			})), t.push.apply(t, o);
+		}
+		return t;
+	}
+	function _objectSpread$19(e) {
+		for (var r = 1; r < arguments.length; r++) {
+			var t = null != arguments[r] ? arguments[r] : {};
+			r % 2 ? ownKeys$19(Object(t), !0).forEach(function(r) {
+				_defineProperty$1(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$19(Object(t)).forEach(function(r) {
+				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+			});
+		}
+		return e;
+	}
 	function _callSuper$274(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$274() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -13567,11 +14059,15 @@ init_element_base();
 	}
 	var Copy$1;
 	var init_copy = __esmMin((() => {
+		init_defineProperty$1();
 		init_classCallCheck();
 		init_createClass();
 		init_possibleConstructorReturn();
 		init_getPrototypeOf();
 		init_inherits();
+		init_omit_props_by_meta();
+		__name(ownKeys$19, "ownKeys");
+		__name(_objectSpread$19, "_objectSpread");
 		__name(_callSuper$274, "_callSuper");
 		__name(_isNativeReflectConstruct$274, "_isNativeReflectConstruct");
 		Copy$1 = /*#__PURE__*/ function(_$e$modules$editor$Co) {
@@ -13615,7 +14111,7 @@ init_element_base();
 					};
 					elementorCommon.storage.set(storageKey, storageData);
 					var clipboard = document.createElement("textarea");
-					clipboard.value = JSON.stringify(storageData);
+					clipboard.value = JSON.stringify(_objectSpread$19(_objectSpread$19({}, storageData), {}, { elements: elementsData.map(omitPropsByMeta) }));
 					document.body.appendChild(clipboard);
 					clipboard.select();
 					document.execCommand("copy");
@@ -14034,7 +14530,7 @@ init_element_base();
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$18(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$18(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -14054,7 +14550,7 @@ init_element_base();
 	}
 	var Duplicate$2;
 	var init_duplicate = __esmMin((() => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_classCallCheck();
 		init_createClass();
 		init_possibleConstructorReturn();
@@ -14533,7 +15029,7 @@ init_element_base();
 		init_possibleConstructorReturn();
 		init_getPrototypeOf();
 		init_inherits();
-		init_defineProperty();
+		init_defineProperty$1();
 		import_regenerator$13 = /* @__PURE__ */ __toESM(require_regenerator());
 		init_environment();
 		__name(_callSuper$264, "_callSuper");
@@ -14639,9 +15135,9 @@ init_element_base();
 				}
 			]);
 		}($e.modules.editor.document.CommandHistoryBase);
-		_defineProperty(PasteArea, "dialog", null);
-		_defineProperty(PasteArea, "container", null);
-		_defineProperty(PasteArea, "options", {});
+		_defineProperty$1(PasteArea, "dialog", null);
+		_defineProperty$1(PasteArea, "container", null);
+		_defineProperty$1(PasteArea, "options", {});
 	}));
 
 //#endregion
@@ -14785,7 +15281,7 @@ init_element_base();
 	var PasteStyle$1;
 	var init_paste_style = __esmMin((() => {
 		init_slicedToArray();
-		init_typeof();
+		init_typeof$1();
 		init_classCallCheck();
 		init_createClass();
 		init_possibleConstructorReturn();
@@ -14814,7 +15310,7 @@ init_element_base();
 					key: "validateControls",
 					value: function validateControls(source, target) {
 						var result = true;
-						if (null === source || null === target || void 0 === source || void 0 === target || "object" === _typeof(source) ^ "object" === _typeof(target)) result = false;
+						if (null === source || null === target || void 0 === source || void 0 === target || "object" === _typeof$1(source) ^ "object" === _typeof$1(target)) result = false;
 						return result;
 					}
 				},
@@ -14874,7 +15370,7 @@ init_element_base();
 									var controlSourceValue = sourceSettings[controlName];
 									var controlTargetValue = targetSettingsAttributes[controlName];
 									if (!_this.validateControls(controlSourceValue, controlTargetValue)) return;
-									if ("object" === _typeof(controlSourceValue)) {
+									if ("object" === _typeof$1(controlSourceValue)) {
 										if (Object.keys(controlSourceValue).some(function(propertyKey) {
 											if (controlSourceValue[propertyKey] !== controlTargetValue[propertyKey]) return false;
 										})) return;
@@ -15257,7 +15753,7 @@ init_element_base();
 	}
 	var Settings$2;
 	var init_settings$2 = __esmMin((() => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_classCallCheck();
 		init_createClass();
 		init_possibleConstructorReturn();
@@ -15275,7 +15771,7 @@ init_element_base();
 				{
 					key: "addToHistory",
 					value: function addToHistory(container, newSettings, oldSettings) {
-						var changes = _defineProperty({}, container.id, {
+						var changes = _defineProperty$1({}, container.id, {
 							old: oldSettings,
 							new: newSettings
 						});
@@ -16134,7 +16630,7 @@ init_element_base();
 	}
 	var HandleDynamic;
 	var init_handle_dynamic = __esmMin((() => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_classCallCheck();
 		init_createClass();
 		init_possibleConstructorReturn();
@@ -16186,7 +16682,7 @@ init_element_base();
 								var tagText = elementor.dynamicTags.tagContainerToTagText(container);
 								var commandArgs = {
 									container: container.parent,
-									settings: _defineProperty({}, container.view.options.controlName, tagText)
+									settings: _defineProperty$1({}, container.view.options.controlName, tagText)
 								};
 								$e.run("document/dynamic/settings", commandArgs);
 							}
@@ -17437,7 +17933,7 @@ init_element_base();
 //#endregion
 //#region assets/dev/js/editor/elements/views/container.js
 	var require_container = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_toConsumableArray();
 		init_inline();
 		init_widget_resizeable();
@@ -17544,7 +18040,7 @@ init_element_base();
 			getDroppableAxis: function getDroppableAxis() {
 				var isColumnDefault = ContainerHelper.DIRECTION_DEFAULT === ContainerHelper.DIRECTION_COLUMN;
 				var currentDirection = this.getContainer().settings.get(this.getDirectionSettingKey());
-				return _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty({}, ContainerHelper.DIRECTION_COLUMN, "vertical"), ContainerHelper.DIRECTION_COLUMN_REVERSED, "vertical"), ContainerHelper.DIRECTION_ROW, "horizontal"), ContainerHelper.DIRECTION_ROW_REVERSED, "horizontal"), "", isColumnDefault ? "vertical" : "horizontal")[currentDirection];
+				return _defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1({}, ContainerHelper.DIRECTION_COLUMN, "vertical"), ContainerHelper.DIRECTION_COLUMN_REVERSED, "vertical"), ContainerHelper.DIRECTION_ROW, "horizontal"), ContainerHelper.DIRECTION_ROW_REVERSED, "horizontal"), "", isColumnDefault ? "vertical" : "horizontal")[currentDirection];
 			},
 			getDroppableOptions: function getDroppableOptions() {
 				var _this = this;
@@ -17911,7 +18407,7 @@ init_element_base();
 //#region assets/dev/js/editor/elements/manager.js
 	init_classCallCheck();
 	init_createClass();
-	init_defineProperty();
+	init_defineProperty$1();
 	init_element_base();
 	var ElementsManager = /*#__PURE__*/ function() {
 		function ElementsManager() {
@@ -17921,7 +18417,7 @@ init_element_base();
 			*
 			* @type {Object.<ElementBase>}
 			*/
-			_defineProperty(this, "elementTypes", {});
+			_defineProperty$1(this, "elementTypes", {});
 			this.registerElements();
 		}
 		/**
@@ -17970,11 +18466,11 @@ init_element_base();
 //#region assets/dev/js/editor/introduction-tooltips/tooltips/global-color-introduction.js
 	init_classCallCheck();
 	init_createClass();
-	init_defineProperty();
+	init_defineProperty$1();
 	var GlobalColorIntroduction = /*#__PURE__*/ function() {
 		function GlobalColorIntroduction(introductionKey) {
 			_classCallCheck(this, GlobalColorIntroduction);
-			_defineProperty(this, "introductionKey", void 0);
+			_defineProperty$1(this, "introductionKey", void 0);
 			this.introductionKey = introductionKey;
 		}
 		return _createClass(GlobalColorIntroduction, [
@@ -18039,11 +18535,11 @@ init_element_base();
 //#region assets/dev/js/editor/introduction-tooltips/tooltips/global-font-introduction.js
 	init_classCallCheck();
 	init_createClass();
-	init_defineProperty();
+	init_defineProperty$1();
 	var GlobalFontIntroduction = /*#__PURE__*/ function() {
 		function GlobalFontIntroduction(introductionKey) {
 			_classCallCheck(this, GlobalFontIntroduction);
-			_defineProperty(this, "introductionKey", void 0);
+			_defineProperty$1(this, "introductionKey", void 0);
 			this.introductionKey = introductionKey;
 		}
 		return _createClass(GlobalFontIntroduction, [
@@ -18595,7 +19091,7 @@ init_element_base();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	function _callSuper$218(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$218() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -18617,7 +19113,7 @@ init_element_base();
 			var _this;
 			_classCallCheck(this, FavoritesModule);
 			_this = _callSuper$218(this, FavoritesModule);
-			_defineProperty(_this, "types", {});
+			_defineProperty$1(_this, "types", {});
 			[Widgets].forEach(function(classRef) {
 				return _this.register(classRef);
 			});
@@ -19099,7 +19595,7 @@ init_element_base();
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$17(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$17(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -19119,7 +19615,7 @@ init_element_base();
 	}
 	var filterUnknownElements;
 	var init_filter_unknown_elements = __esmMin((() => {
-		init_defineProperty();
+		init_defineProperty$1();
 		__name(ownKeys$17, "ownKeys");
 		__name(_objectSpread$17, "_objectSpread");
 		filterUnknownElements = function filterUnknownElements(data) {
@@ -20416,7 +20912,7 @@ init_component_modal_base();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 	function _callSuper$195(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$195() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
@@ -20437,7 +20933,7 @@ init_component_modal_base();
 			_classCallCheck(this, LazyIconList);
 			for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 			_this = _callSuper$195(this, LazyIconList, [].concat(args));
-			_defineProperty(_this, "state", {
+			_defineProperty$1(_this, "state", {
 				itemSize: {
 					width: 0,
 					height: 0
@@ -20448,15 +20944,15 @@ init_component_modal_base();
 				},
 				firstRowInView: 0
 			});
-			_defineProperty(_this, "selectors", {
+			_defineProperty$1(_this, "selectors", {
 				item: ".elementor-icons-manager__tab__item",
 				wrapper: "elementor-icons-manager__tab__wrapper"
 			});
-			_defineProperty(_this, "attachScrollListener", function() {
+			_defineProperty$1(_this, "attachScrollListener", function() {
 				var element = document.getElementById(_this.selectors.wrapper);
 				if (element) element.addEventListener("scroll", _this.handleScroll);
 			});
-			_defineProperty(_this, "maybeMeasureItem", function() {
+			_defineProperty$1(_this, "maybeMeasureItem", function() {
 				if (_this.state.itemSize.width) return;
 				var itemPadding = 20;
 				var testElement = document.querySelector(_this.selectors.item);
@@ -20476,7 +20972,7 @@ init_component_modal_base();
 					_this.maybeScrollToSelected();
 				});
 			});
-			_defineProperty(_this, "maybeScrollToSelected", function() {
+			_defineProperty$1(_this, "maybeScrollToSelected", function() {
 				if (!_this.hasSelected()) return;
 				var selectedIndex = _this.props.selectedIndex;
 				var _this$state = _this.state;
@@ -20492,7 +20988,7 @@ init_component_modal_base();
 					});
 				}, 0);
 			});
-			_defineProperty(_this, "handleScroll", function() {
+			_defineProperty$1(_this, "handleScroll", function() {
 				_this.clearDebounceScrollCallback();
 				_this._debounce = setTimeout(function() {
 					var element = document.getElementById(_this.selectors.wrapper);
@@ -20500,7 +20996,7 @@ init_component_modal_base();
 					_this.setState({ firstRowInView: Math.floor(element.scrollTop / itemSize.height) });
 				}, 10);
 			});
-			_defineProperty(_this, "render", function() {
+			_defineProperty$1(_this, "render", function() {
 				var _this$state2 = _this.state;
 				var itemSize = _this$state2.itemSize;
 				var wrapperSize = _this$state2.wrapperSize;
@@ -20578,7 +21074,7 @@ init_component_modal_base();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	function _callSuper$194(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$194() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -20598,13 +21094,13 @@ init_component_modal_base();
 			_classCallCheck(this, Icon);
 			for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 			_this = _callSuper$194(this, Icon, [].concat(args));
-			_defineProperty(_this, "setSelected", function() {
+			_defineProperty$1(_this, "setSelected", function() {
 				_this.props.setSelectedHandler({
 					value: _this.props.data.displayPrefix + " " + _this.props.data.selector,
 					library: _this.props.library
 				});
 			});
-			_defineProperty(_this, "render", function() {
+			_defineProperty$1(_this, "render", function() {
 				return /*#__PURE__*/ react.default.createElement("div", {
 					className: _this.props.containerClass,
 					key: _this.props.keyID,
@@ -20639,7 +21135,7 @@ init_component_modal_base();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	function _createForOfIteratorHelper$7(r, e) {
 		var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
 		if (!t) {
@@ -20720,13 +21216,13 @@ init_component_modal_base();
 			_classCallCheck(this, Tab);
 			for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 			_this = _callSuper$193(this, Tab, [].concat(args));
-			_defineProperty(_this, "componentDidMount", function() {
+			_defineProperty$1(_this, "componentDidMount", function() {
 				if (_this.props.selected && _this.props.selected.value) setTimeout(function() {
 					var element = document.querySelector(".elementor-selected");
 					if (element) element.scrollIntoView(false);
 				}, 0);
 			});
-			_defineProperty(_this, "handleFullIconList", function() {
+			_defineProperty$1(_this, "handleFullIconList", function() {
 				var fullIconList = [];
 				Object.entries(_this.props.icons).forEach(function(library) {
 					if ("recommended" !== library[0]) fullIconList = [].concat(_toConsumableArray(fullIconList), _toConsumableArray(_this.getIconsOfType(library[0], library[1])));
@@ -20735,12 +21231,12 @@ init_component_modal_base();
 					return a.filter === b.filter ? 0 : +(a.filter > b.filter) || -1;
 				});
 			});
-			_defineProperty(_this, "getLibrary", function(libraryName) {
+			_defineProperty$1(_this, "getLibrary", function(libraryName) {
 				return elementor.config.icons.libraries.filter(function(library) {
 					return libraryName === library.name;
 				});
 			});
-			_defineProperty(_this, "handleRecommendedList", function() {
+			_defineProperty$1(_this, "handleRecommendedList", function() {
 				var recommendedIconList = [];
 				Object.entries(_this.props.icons).forEach(function(library) {
 					var iconsOfType = _this.getLibrary(library[0])[0].icons;
@@ -20752,7 +21248,7 @@ init_component_modal_base();
 				});
 				return recommendedIconList;
 			});
-			_defineProperty(_this, "getIconsComponentList", function() {
+			_defineProperty$1(_this, "getIconsComponentList", function() {
 				var iconsToShow = [];
 				var _this$props = _this.props;
 				var name = _this$props.name;
@@ -20774,7 +21270,7 @@ init_component_modal_base();
 				});
 				return iconsToShow;
 			});
-			_defineProperty(_this, "render", function() {
+			_defineProperty$1(_this, "render", function() {
 				var icons = _this.getIconsComponentList();
 				var selectedIndex = -1;
 				var _iterator = _createForOfIteratorHelper$7(icons.entries());
@@ -20846,7 +21342,7 @@ init_component_modal_base();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	function _callSuper$192(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$192() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -20866,7 +21362,7 @@ init_component_modal_base();
 			_classCallCheck(this, IconsGoPro);
 			for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 			_this = _callSuper$192(this, IconsGoPro, [].concat(args));
-			_defineProperty(_this, "render", function() {
+			_defineProperty$1(_this, "render", function() {
 				return /*#__PURE__*/ react.default.createElement("div", { id: "elementor-icons-manager__promotion" }, /*#__PURE__*/ react.default.createElement("i", {
 					id: "elementor-icons-manager__promotion__icon",
 					className: "eicon-nerd"
@@ -20891,7 +21387,7 @@ init_component_modal_base();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	init_react();
 	function ownKeys$16(e, r) {
 		var t = Object.keys(e);
@@ -20908,7 +21404,7 @@ init_component_modal_base();
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$16(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$16(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -20935,8 +21431,8 @@ init_component_modal_base();
 			_classCallCheck(this, IconsManager);
 			for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 			_this = _callSuper$191(this, IconsManager, [].concat(args));
-			_defineProperty(_this, "scrollViewRef", (0, react.createRef)());
-			_defineProperty(_this, "state", {
+			_defineProperty$1(_this, "scrollViewRef", (0, react.createRef)());
+			_defineProperty$1(_this, "state", {
 				activeTab: _this.props.activeTab,
 				selected: {
 					library: "",
@@ -20946,8 +21442,8 @@ init_component_modal_base();
 				loaded: _this.props.loaded,
 				filter: ""
 			});
-			_defineProperty(_this, "cache", {});
-			_defineProperty(_this, "loadAllTabs", function() {
+			_defineProperty$1(_this, "cache", {});
+			_defineProperty$1(_this, "loadAllTabs", function() {
 				var loaded = _this.state.loaded;
 				_this.props.icons.forEach(function(tabSettings) {
 					if (loaded[tabSettings.name]) return;
@@ -20961,7 +21457,7 @@ init_component_modal_base();
 				loaded.recommended = true;
 				_this.setState({ loaded });
 			});
-			_defineProperty(_this, "getActiveTab", function() {
+			_defineProperty$1(_this, "getActiveTab", function() {
 				var activeTab = _this.state.activeTab;
 				var loaded = _this.state.loaded;
 				var icons = _this.props.icons;
@@ -20981,7 +21477,7 @@ init_component_modal_base();
 				});
 				return false;
 			});
-			_defineProperty(_this, "getIconTabsLinks", function() {
+			_defineProperty$1(_this, "getIconTabsLinks", function() {
 				var native = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : true;
 				return _this.props.icons.map(function(tab) {
 					if (native ^ _this.isNativeTab(tab)) return "";
@@ -20998,7 +21494,7 @@ init_component_modal_base();
 					}, /*#__PURE__*/ react.default.createElement("i", { className: tab.labelIcon }), tab.label);
 				});
 			});
-			_defineProperty(_this, "getActiveTabIcons", function(activeTab) {
+			_defineProperty$1(_this, "getActiveTabIcons", function(activeTab) {
 				if (activeTab.name) return _this.getActiveTabIcons(activeTab.name);
 				if (_this.cache[activeTab]) return _this.cache[activeTab].icons;
 				if ("recommended" === activeTab) return _this.state.iconTabs[0].icons;
@@ -21014,7 +21510,7 @@ init_component_modal_base();
 				}
 				return elementor.iconManager.store.getIcons(activeTab);
 			});
-			_defineProperty(_this, "getAllIcons", function() {
+			_defineProperty$1(_this, "getAllIcons", function() {
 				if (_this.cache.all) return _this.cache.all.icons;
 				var icons = {};
 				_this.props.icons.forEach(function(tabSettings) {
@@ -21024,7 +21520,7 @@ init_component_modal_base();
 				_this.cache.all = { icons };
 				return icons;
 			});
-			_defineProperty(_this, "handleSearch", function(event) {
+			_defineProperty$1(_this, "handleSearch", function(event) {
 				var filter = event.target.value;
 				if (filter && "" !== filter) {
 					filter = filter.toLocaleLowerCase();
@@ -21032,11 +21528,11 @@ init_component_modal_base();
 				} else filter = "";
 				_this.setState({ filter });
 			});
-			_defineProperty(_this, "setSelected", function(selected) {
+			_defineProperty$1(_this, "setSelected", function(selected) {
 				elementor.iconManager.setSettings("selectedIcon", selected);
 				_this.setState({ selected });
 			});
-			_defineProperty(_this, "getSelected", function() {
+			_defineProperty$1(_this, "getSelected", function() {
 				var selected = _this.state.selected;
 				if ("" === selected.value && _this.props.selected && _this.props.selected.value) selected = {
 					value: _this.props.selected.value,
@@ -21044,7 +21540,7 @@ init_component_modal_base();
 				};
 				return selected;
 			});
-			_defineProperty(_this, "render", function() {
+			_defineProperty$1(_this, "render", function() {
 				var activeTab = _this.getActiveTab();
 				var activeTabName = activeTab.name ? activeTab.name : activeTab;
 				var _this$props$showSearc = _this.props.showSearch;
@@ -21146,17 +21642,17 @@ init_component_modal_base();
 
 //#endregion
 //#region assets/dev/js/editor/components/icons-manager/classes/icon-library.js
-	init_typeof();
+	init_typeof$1();
 	init_classCallCheck();
 	init_createClass();
-	init_defineProperty();
+	init_defineProperty$1();
 	var _default$14 = /*#__PURE__*/ function() {
 		function _default() {
 			var _this = this;
 			_classCallCheck(this, _default);
-			_defineProperty(this, "loaded", {});
-			_defineProperty(this, "notifyCallback", null);
-			_defineProperty(this, "fetchIcons", function(library) {
+			_defineProperty$1(this, "loaded", {});
+			_defineProperty$1(this, "notifyCallback", null);
+			_defineProperty$1(this, "fetchIcons", function(library) {
 				fetch(library.fetchJson, { mode: "cors" }).then(function(res) {
 					return res.json();
 				}).then(function(json) {
@@ -21164,11 +21660,11 @@ init_component_modal_base();
 					return _this.normalizeIconList(library);
 				});
 			});
-			_defineProperty(this, "runCallback", function(library) {
+			_defineProperty$1(this, "runCallback", function(library) {
 				if ("function" !== typeof _this.notifyCallback) return library;
 				return _this.notifyCallback(library);
 			});
-			_defineProperty(this, "initIconType", function(libraryConfig, callback) {
+			_defineProperty$1(this, "initIconType", function(libraryConfig, callback) {
 				_this.notifyCallback = callback;
 				var store = elementor.iconManager.store;
 				if (_this.loaded[libraryConfig.name]) {
@@ -21198,7 +21694,7 @@ init_component_modal_base();
 				var name;
 				jQuery.each(library.icons, function(index, icon) {
 					name = icon;
-					if ("object" === _typeof(name)) name = Object.entries(name)[0][0];
+					if ("object" === _typeof$1(name)) name = Object.entries(name)[0][0];
 					if (!name) return;
 					icons[name] = {
 						prefix: library.prefix,
@@ -21595,7 +22091,7 @@ init_component_modal_base();
 	init_asyncToGenerator();
 	init_classCallCheck();
 	init_createClass();
-	init_defineProperty();
+	init_defineProperty$1();
 	/**
 	* @abstract
 	*/
@@ -21612,7 +22108,7 @@ init_component_modal_base();
 			*
 			* @type {File}
 			*/
-			_defineProperty(this, "file", void 0);
+			_defineProperty$1(this, "file", void 0);
 			this.file = file;
 		}
 		/**
@@ -21936,7 +22432,7 @@ init_component_modal_base();
 	init_asyncToGenerator();
 	init_classCallCheck();
 	init_createClass();
-	init_defineProperty();
+	init_defineProperty$1();
 	/**
 	* @typedef {import('../../../container/container')} Container
 	*/
@@ -21959,13 +22455,13 @@ init_component_modal_base();
 			*
 			* @type {FileReaderBase}
 			*/
-			_defineProperty(this, "reader", void 0);
+			_defineProperty$1(this, "reader", void 0);
 			/**
 			* Tasks to complete, even after parsing completed.
 			*
 			* @type {[]}
 			*/
-			_defineProperty(this, "tasks", []);
+			_defineProperty$1(this, "tasks", []);
 			this.reader = reader;
 		}
 		/**
@@ -22026,7 +22522,7 @@ init_component_modal_base();
 
 //#endregion
 //#region assets/dev/js/editor/components/browser-import/files/parsers/base/media-parser.js
-	init_defineProperty();
+	init_defineProperty$1();
 	init_classCallCheck();
 	init_createClass();
 	init_possibleConstructorReturn();
@@ -22047,7 +22543,7 @@ init_component_modal_base();
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$15(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$15(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -22680,7 +23176,7 @@ init_component_modal_base();
 
 //#endregion
 //#region assets/dev/js/editor/components/browser-import/default-config.js
-	init_typeof();
+	init_typeof$1();
 	/**
 	* Recursively convert objects to arrays of values.
 	*
@@ -22689,7 +23185,7 @@ init_component_modal_base();
 	*/
 	var recursiveValues = function recursiveValues(object) {
 		return Object.values(object).map(function(value) {
-			return "object" === _typeof(value) ? Object.values(value) : value;
+			return "object" === _typeof$1(value) ? Object.values(value) : value;
 		});
 	};
 	var default_config_default = {
@@ -24006,7 +24502,7 @@ init_component_modal_base();
 //#region assets/dev/js/editor/components/browser-import/items/item.js
 	init_classCallCheck();
 	init_createClass();
-	init_defineProperty();
+	init_defineProperty$1();
 	init_is_instanceof();
 	var import_mime = /* @__PURE__ */ __toESM(require_mime());
 	/**
@@ -24028,13 +24524,13 @@ init_component_modal_base();
 			*
 			* @type {File}
 			*/
-			_defineProperty(this, "file", void 0);
+			_defineProperty$1(this, "file", void 0);
 			/**
 			* The Item options list.
 			*
 			* @type {{}}
 			*/
-			_defineProperty(this, "options", {});
+			_defineProperty$1(this, "options", {});
 			this.file = this.toFile(input);
 			this.options = options;
 		}
@@ -24099,7 +24595,7 @@ init_component_modal_base();
 //#region assets/dev/js/editor/components/browser-import/items/item-collection.js
 	init_classCallCheck();
 	init_createClass();
-	init_defineProperty();
+	init_defineProperty$1();
 	function _createForOfIteratorHelper$5(r, e) {
 		var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
 		if (!t) {
@@ -24173,7 +24669,7 @@ init_component_modal_base();
 			/**
 			* The Item objects list.
 			*/
-			_defineProperty(this, "items", void 0);
+			_defineProperty$1(this, "items", void 0);
 			this.setItems(items);
 		}
 		/**
@@ -24361,7 +24857,7 @@ init_component_modal_base();
 	init_asyncToGenerator();
 	init_classCallCheck();
 	init_createClass();
-	init_defineProperty();
+	init_defineProperty$1();
 	function _createForOfIteratorHelper$4(r, e) {
 		var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
 		if (!t) {
@@ -24451,25 +24947,25 @@ init_component_modal_base();
 			*
 			* @type {Manager}
 			*/
-			_defineProperty(this, "manager", void 0);
+			_defineProperty$1(this, "manager", void 0);
 			/**
 			* The ItemCollection instance.
 			*
 			* @type {ItemCollection}
 			*/
-			_defineProperty(this, "itemCollection", void 0);
+			_defineProperty$1(this, "itemCollection", void 0);
 			/**
 			* The Target instance.
 			*
 			* @type {Container}
 			*/
-			_defineProperty(this, "target", void 0);
+			_defineProperty$1(this, "target", void 0);
 			/**
 			* The Session options.
 			*
 			* @type {{}}
 			*/
-			_defineProperty(this, "options", { target: {} });
+			_defineProperty$1(this, "options", { target: {} });
 			this.manager = manager;
 			this.itemCollection = itemCollection;
 			this.target = target;
@@ -24641,7 +25137,7 @@ init_component_modal_base();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	function _createForOfIteratorHelper$3(r, e) {
 		var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
 		if (!t) {
@@ -24738,13 +25234,13 @@ init_component_modal_base();
 			*
 			* @type {{}}
 			*/
-			_defineProperty(_this, "readers", {});
+			_defineProperty$1(_this, "readers", {});
 			/**
 			* File-parsers list according to their readers.
 			*
 			* @type {{}}
 			*/
-			_defineProperty(_this, "parsers", {});
+			_defineProperty$1(_this, "parsers", {});
 			_this.normalizer = new Normalizer(_this);
 			$e.components.register(new Component$20({ manager: _this }));
 			_this.parseConfig(default_config_default);
@@ -25271,7 +25767,7 @@ init_component_modal_base();
 //#region assets/dev/js/editor/regions/panel/pages/menu/menu.js
 	init_slicedToArray();
 	init_asyncToGenerator();
-	init_defineProperty();
+	init_defineProperty$1();
 	init_classCallCheck();
 	init_createClass();
 	init_possibleConstructorReturn();
@@ -25292,7 +25788,7 @@ init_component_modal_base();
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$14(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$14(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -25521,7 +26017,7 @@ init_component_modal_base();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	function ownKeys$13(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
@@ -25537,7 +26033,7 @@ init_component_modal_base();
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$13(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$13(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -25563,7 +26059,7 @@ init_component_modal_base();
 			var _this;
 			_classCallCheck(this, _default);
 			_this = _callSuper$173(this, _default);
-			_defineProperty(_this, "defaultOptions", {
+			_defineProperty$1(_this, "defaultOptions", {
 				title: "",
 				content: "",
 				targetElement: null,
@@ -25578,7 +26074,7 @@ init_component_modal_base();
 				},
 				hideProTag: false
 			});
-			_defineProperty(_this, "elements", {
+			_defineProperty$1(_this, "elements", {
 				$title: null,
 				$titleBadge: null,
 				$closeButton: null,
@@ -26564,7 +27060,7 @@ init_component_modal_base();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	function _callSuper$159(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$159() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -26591,7 +27087,7 @@ init_component_modal_base();
 			_classCallCheck(this, KitRemovePreviewDeletedVariables);
 			for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 			_this = _callSuper$159(this, KitRemovePreviewDeletedVariables, [].concat(args));
-			_defineProperty(_this, "controls", ["custom_colors", "custom_typography"]);
+			_defineProperty$1(_this, "controls", ["custom_colors", "custom_typography"]);
 			return _this;
 		}
 		_inherits(KitRemovePreviewDeletedVariables, _$e$modules$hookUI$Be);
@@ -26747,7 +27243,7 @@ init_component_modal_base();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	init_editor_one_events();
 	function _callSuper$157(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$157() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
@@ -26768,9 +27264,9 @@ init_component_modal_base();
 			_classCallCheck(this, Back);
 			for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 			_this = _callSuper$157(this, Back, [].concat(args));
-			_defineProperty(_this, "document", null);
-			_defineProperty(_this, "confirmDialog", null);
-			_defineProperty(_this, "unsavedChangesDialog", []);
+			_defineProperty$1(_this, "document", null);
+			_defineProperty$1(_this, "confirmDialog", null);
+			_defineProperty$1(_this, "unsavedChangesDialog", []);
 			return _this;
 		}
 		_inherits(Back, _$e$modules$CommandBa);
@@ -27116,7 +27612,7 @@ init_component_modal_base();
 //#region assets/dev/js/editor/views/controls-popover.js
 	var ControlsPopover;
 	var init_controls_popover = __esmMin((() => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_classCallCheck();
 		init_createClass();
 		ControlsPopover = /*#__PURE__*/ function() {
@@ -27161,7 +27657,7 @@ init_component_modal_base();
 						var groupControlName = this.child.model.get("groupPrefix") + "typography";
 						var args = {
 							container: this.child.options.container,
-							settings: _defineProperty({}, groupControlName, "")
+							settings: _defineProperty$1({}, groupControlName, "")
 						};
 						if (this.child.options.container.globals.get(groupControlName)) $e.run("document/globals/disable", args);
 						else $e.run("document/elements/settings", args);
@@ -28008,7 +28504,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 	init_getPrototypeOf();
 	init_get();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	init_component_base();
 	function ownKeys$12(e, r) {
 		var t = Object.keys(e);
@@ -28025,7 +28521,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$12(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$12(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -28059,8 +28555,8 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 			_classCallCheck(this, _default);
 			for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 			_this = _callSuper$150(this, _default, [].concat(args));
-			_defineProperty(_this, "pages", {});
-			_defineProperty(_this, "siteSettingsSession", {
+			_defineProperty$1(_this, "pages", {});
+			_defineProperty$1(_this, "siteSettingsSession", {
 				visitedItems: [],
 				savedItems: [],
 				hasSaved: false
@@ -28315,7 +28811,6 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 		});
 	};
 	PanelMenu.initGroups = function() {
-		var agentsItems = PanelMenu.createGroupItems("agents");
 		var settingsItems = PanelMenu.createGroupItems("settings");
 		var additionalSettingsProps = {
 			name: "settings-additional-settings",
@@ -28335,11 +28830,6 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 			title: (0, _wordpress_i18n.__)("Theme Style", "elementor"),
 			items: PanelMenu.createGroupItems("theme-style")
 		}];
-		if (agentsItems.length) groups.push({
-			name: "agents",
-			title: (0, _wordpress_i18n.__)("Agents", "elementor"),
-			items: agentsItems
-		});
 		groups.push({
 			name: "settings",
 			title: (0, _wordpress_i18n.__)("Settings", "elementor"),
@@ -28427,7 +28917,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 
 //#endregion
 //#region core/kits/assets/js/globals/global-select-behavior.js
-	init_defineProperty();
+	init_defineProperty$1();
 	init_classCallCheck();
 	init_createClass();
 	init_possibleConstructorReturn();
@@ -28868,7 +29358,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 					var globalMeta = this.view.getGlobalMeta();
 					return $e.run("document/globals/disable", {
 						container: this.view.container,
-						settings: _defineProperty({}, globalMeta.key, ""),
+						settings: _defineProperty$1({}, globalMeta.key, ""),
 						options: { restore }
 					}).then(function() {
 						_this11.onValueTypeChange();
@@ -28888,7 +29378,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 	init_getPrototypeOf();
 	init_get();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	var import_controls_css_parser = /* @__PURE__ */ __toESM(require_controls_css_parser());
 	function ownKeys$11(e, r) {
 		var t = Object.keys(e);
@@ -28905,7 +29395,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$11(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$11(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -28940,14 +29430,14 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 			_classCallCheck(this, Manager);
 			for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 			_this = _callSuper$145(this, Manager, [].concat(args));
-			_defineProperty(_this, "loadingTriggers", {
+			_defineProperty$1(_this, "loadingTriggers", {
 				preview: false,
 				globals: false
 			});
 			/**
 			* @type {ControlsCSSParser}
 			*/
-			_defineProperty(_this, "variablesCSS", null);
+			_defineProperty$1(_this, "variablesCSS", null);
 			return _this;
 		}
 		_inherits(Manager, _elementorModules$edi);
@@ -29452,7 +29942,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 
 //#endregion
 //#region assets/dev/js/editor/regions/navigator/element.js
-	init_defineProperty();
+	init_defineProperty$1();
 	init_classCallCheck();
 	init_createClass();
 	init_possibleConstructorReturn();
@@ -29473,7 +29963,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$10(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$10(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -30629,7 +31119,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 //#endregion
 //#region assets/dev/js/editor/views/preview.js
 	var require_preview$2 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_independent();
 		function ownKeys(e, r) {
 			var t = Object.keys(e);
@@ -30645,7 +31135,7 @@ var import_repeater = /* @__PURE__ */ __toESM(require_repeater());
 			for (var r = 1; r < arguments.length; r++) {
 				var t = null != arguments[r] ? arguments[r] : {};
 				r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
-					_defineProperty(e, r, t[r]);
+					_defineProperty$1(e, r, t[r]);
 				}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
 					Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 				});
@@ -31072,7 +31562,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	function _createForOfIteratorHelper$2(r, e) {
 		var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
 		if (!t) {
@@ -31167,7 +31657,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			*
 			* @type {{}}
 			*/
-			_defineProperty(_this, "elements", {});
+			_defineProperty$1(_this, "elements", {});
 			/**
 			* Selected elements type.
 			*
@@ -31176,7 +31666,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			*
 			* @type {string|boolean}
 			*/
-			_defineProperty(_this, "type", false);
+			_defineProperty$1(_this, "type", false);
 			return _possibleConstructorReturn(_this, new Proxy(_this, { get: function get(target, prop) {
 				if (["add", "remove"].includes(prop)) return function() {
 					if (!target.isAllowed()) return;
@@ -31513,7 +32003,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 
 //#endregion
 //#region modules/elements-color-picker/assets/js/editor/commands/apply.js
-	init_defineProperty();
+	init_defineProperty$1();
 	init_classCallCheck();
 	init_createClass();
 	init_possibleConstructorReturn();
@@ -31572,7 +32062,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				value: function setColor(color) {
 					$e.run("document/elements/settings", {
 						container: this.component.currentPicker.container,
-						settings: _defineProperty({}, this.component.currentPicker.control, color),
+						settings: _defineProperty$1({}, this.component.currentPicker.control, color),
 						options: { external: true }
 					});
 					this.component.currentPicker.initialColor = color;
@@ -32128,7 +32618,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 
 //#endregion
 //#region modules/elements-color-picker/assets/js/editor/ui-states/color-picking.js
-	init_defineProperty();
+	init_defineProperty$1();
 	init_classCallCheck();
 	init_createClass();
 	init_possibleConstructorReturn();
@@ -32174,7 +32664,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			{
 				key: "getOptions",
 				value: function getOptions() {
-					return _defineProperty({}, "on", "");
+					return _defineProperty$1({}, "on", "");
 				}
 			},
 			{
@@ -32200,7 +32690,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 
 //#endregion
 //#region modules/elements-color-picker/assets/js/editor/commands/start.js
-	init_defineProperty();
+	init_defineProperty$1();
 	init_classCallCheck();
 	init_createClass();
 	init_possibleConstructorReturn();
@@ -32221,7 +32711,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$9(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$9(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -32291,7 +32781,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	init_component_base$1();
 	function _callSuper$119(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$119() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
@@ -32312,7 +32802,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			_classCallCheck(this, Component);
 			for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 			_this = _callSuper$119(this, Component, [].concat(args));
-			_defineProperty(_this, "currentPicker", _this.getDefaultPicker());
+			_defineProperty$1(_this, "currentPicker", _this.getDefaultPicker());
 			return _this;
 		}
 		_inherits(Component, _ComponentBase);
@@ -32427,7 +32917,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 
 //#endregion
 //#region assets/dev/js/utils/breakpoints.js
-	init_defineProperty();
+	init_defineProperty$1();
 	init_classCallCheck();
 	init_createClass();
 	init_possibleConstructorReturn();
@@ -32448,7 +32938,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$8(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$8(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -36034,11 +36524,11 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 	var require_footer_saver = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		init_classCallCheck();
 		init_createClass();
-		init_defineProperty();
+		init_defineProperty$1();
 		module.exports = /*#__PURE__*/ function() {
 			function FooterSaver() {
 				_classCallCheck(this, FooterSaver);
-				_defineProperty(this, "previewWindow", null);
+				_defineProperty$1(this, "previewWindow", null);
 			}
 			return _createClass(FooterSaver, [{
 				key: "refreshWpPreview",
@@ -36538,7 +37028,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 	}
 	var DIRECTION_ROW, DIRECTION_ROW_REVERSE, DIRECTION_COLUMN, DIRECTION_COLUMN_REVERSE, DirectionMode;
 	var init_direction_mode = __esmMin((() => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_classCallCheck();
 		init_createClass();
 		init_possibleConstructorReturn();
@@ -36567,7 +37057,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				{
 					key: "getOptions",
 					value: function getOptions() {
-						return _defineProperty(_defineProperty(_defineProperty(_defineProperty({}, "row", ""), DIRECTION_ROW_REVERSE, ""), DIRECTION_COLUMN, ""), DIRECTION_COLUMN_REVERSE, "");
+						return _defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1({}, "row", ""), DIRECTION_ROW_REVERSE, ""), DIRECTION_COLUMN, ""), DIRECTION_COLUMN_REVERSE, "");
 					}
 				},
 				{
@@ -36600,7 +37090,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		init_possibleConstructorReturn();
 		init_getPrototypeOf();
 		init_inherits();
-		init_defineProperty();
+		init_defineProperty$1();
 		init_ui_state_base();
 		__name(_callSuper$56, "_callSuper");
 		__name(_isNativeReflectConstruct$56, "_isNativeReflectConstruct");
@@ -36620,7 +37110,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				{
 					key: "getOptions",
 					value: function getOptions() {
-						return _defineProperty({}, this.constructor.ON, "");
+						return _defineProperty$1({}, this.constructor.ON, "");
 					}
 				},
 				{
@@ -36631,7 +37121,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				}
 			]);
 		}(UiStateBase);
-		_defineProperty(ScrubbingMode, "ON", "on");
+		_defineProperty$1(ScrubbingMode, "ON", "on");
 	}));
 
 //#endregion
@@ -36654,6 +37144,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 	init_get();
 	init_inherits();
 	init_component_base$1();
+	init_clone_element_tree();
 	init_hooks$1();
 	init_ui_states();
 	function _createForOfIteratorHelper$1(r, e) {
@@ -36833,7 +37324,8 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 							if (!parentModel) return false;
 							var elements = parentModel.get("elements");
 							if (!elements) return false;
-							elements.add(childData, {
+							var modelToAdd = options !== null && options !== void 0 && options.clone ? cloneElementTree(childData) : childData;
+							elements.add(modelToAdd, {
 								at: options === null || options === void 0 ? void 0 : options.at,
 								silent: true
 							});
@@ -36894,7 +37386,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 
 //#endregion
 //#region app/modules/onboarding/assets/js/utils/modules/storage-manager.js
-	init_typeof();
+	init_typeof$1();
 	var ONBOARDING_STORAGE_KEYS = {
 		START_TIME: "elementor_onboarding_start_time",
 		INITIATED: "elementor_onboarding_initiated",
@@ -36952,7 +37444,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		if (!storedString) return null;
 		try {
 			var parsed = JSON.parse(storedString);
-			if (parsed && "object" === _typeof(parsed)) return parsed;
+			if (parsed && "object" === _typeof$1(parsed)) return parsed;
 			return null;
 		} catch (error) {
 			remove(key);
@@ -37105,7 +37597,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 
 //#endregion
 //#region app/modules/onboarding/assets/js/utils/modules/onboarding-event-names.js
-	init_defineProperty();
+	init_defineProperty$1();
 	function ownKeys$7(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
@@ -37121,7 +37613,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$7(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$7(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -37160,7 +37652,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 //#endregion
 //#region app/modules/onboarding/assets/js/utils/modules/event-dispatcher.js
 	init_toConsumableArray();
-	init_defineProperty();
+	init_defineProperty$1();
 	function ownKeys$6(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
@@ -37176,7 +37668,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$6(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$6(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -37324,7 +37816,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 
 //#endregion
 //#region app/modules/onboarding/assets/js/utils/modules/click-tracker.js
-	init_defineProperty();
+	init_defineProperty$1();
 	init_classCallCheck();
 	init_createClass();
 	function ownKeys$5(e, r) {
@@ -37342,7 +37834,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$5(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$5(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -38142,7 +38634,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 
 //#endregion
 //#region assets/dev/js/editor/utils/conditions.js
-	init_typeof();
+	init_typeof$1();
 	init_classCallCheck();
 	init_createClass();
 	var Conditions = /*#__PURE__*/ function() {
@@ -38183,7 +38675,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				key: "getConditionValue",
 				value: function getConditionValue(comparisonObject, conditionName, subConditionName) {
 					var value;
-					if ("object" === _typeof(comparisonObject[conditionName]) && subConditionName) value = comparisonObject[conditionName][subConditionName];
+					if ("object" === _typeof$1(comparisonObject[conditionName]) && subConditionName) value = comparisonObject[conditionName][subConditionName];
 					else value = comparisonObject[conditionName];
 					return value;
 				}
@@ -38347,7 +38839,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 
 //#endregion
 //#region modules/promotions/assets/js/editor/behavior.js
-	init_defineProperty();
+	init_defineProperty$1();
 	init_classCallCheck();
 	init_createClass();
 	init_possibleConstructorReturn();
@@ -38368,7 +38860,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$4(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$4(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -39294,7 +39786,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	function _callSuper$31(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$31() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -39314,9 +39806,9 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			_classCallCheck(this, Component);
 			for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 			_this = _callSuper$31(this, Component, [].concat(args));
-			_defineProperty(_this, "promise", null);
-			_defineProperty(_this, "request", null);
-			_defineProperty(_this, "maybeSendQuotaCapacityEvent", function(data) {
+			_defineProperty$1(_this, "promise", null);
+			_defineProperty$1(_this, "request", null);
+			_defineProperty$1(_this, "maybeSendQuotaCapacityEvent", function(data) {
 				var value = data ? Math.round(data.currentUsage / data.threshold * 100) : 0;
 				var quotaUsageAlert = null;
 				if (value < 80) return;
@@ -39448,7 +39940,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	function _callSuper$29(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct$29() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
 	}
@@ -39468,9 +39960,9 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			_classCallCheck(this, Ally);
 			for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 			_this = _callSuper$29(this, Ally, [].concat(args));
-			_defineProperty(_this, "eventName", "ally_heading_notice");
-			_defineProperty(_this, "suffix", "");
-			_defineProperty(_this, "control", null);
+			_defineProperty$1(_this, "eventName", "ally_heading_notice");
+			_defineProperty$1(_this, "suffix", "");
+			_defineProperty$1(_this, "control", null);
 			return _this;
 		}
 		_inherits(Ally, _elementorModules$edi);
@@ -44260,7 +44752,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 //#endregion
 //#region assets/dev/js/editor/components/template-library/views/parts/save-template.js
 	var require_save_template = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_asyncToGenerator();
 		var import_regenerator$10 = /* @__PURE__ */ __toESM(require_regenerator());
 		init_constants();
@@ -44592,7 +45084,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				var _actions$key;
 				var key = "".concat(lastSource, "_").concat(saveContext);
 				if (((_formData$source4 = formData.source) === null || _formData$source4 === void 0 ? void 0 : _formData$source4.length) > 1) return (0, _wordpress_i18n.__)("Template saved to your Site and Cloud Templates.", "elementor");
-				return (_actions$key = _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty({}, "local_".concat(SAVE_CONTEXTS.MOVE), this.getFormattedToastMessage("moved to your Site Templates", formData.title)), "cloud_".concat(SAVE_CONTEXTS.MOVE), this.getFormattedToastMessage("moved to your Cloud Templates", formData.title)), "local_".concat(SAVE_CONTEXTS.COPY), this.getFormattedToastMessage("copied to your Site Templates", formData.title)), "cloud_".concat(SAVE_CONTEXTS.COPY), this.getFormattedToastMessage("copied to your Cloud Templates", formData.title)), "local_".concat(SAVE_CONTEXTS.BULK_MOVE), this.getFormattedToastMessage("moved to your Site Templates", null, (_formData$from_templa = formData.from_template_id) === null || _formData$from_templa === void 0 ? void 0 : _formData$from_templa.length)), "cloud_".concat(SAVE_CONTEXTS.BULK_MOVE), this.getFormattedToastMessage("moved to your Cloud Templates", null, (_formData$from_templa2 = formData.from_template_id) === null || _formData$from_templa2 === void 0 ? void 0 : _formData$from_templa2.length)), "local_".concat(SAVE_CONTEXTS.BULK_COPY), this.getFormattedToastMessage("copied to your Site Templates", null, (_formData$from_templa3 = formData.from_template_id) === null || _formData$from_templa3 === void 0 ? void 0 : _formData$from_templa3.length)), "cloud_".concat(SAVE_CONTEXTS.BULK_COPY), this.getFormattedToastMessage("copied to your Cloud Templates", null, (_formData$from_templa4 = formData.from_template_id) === null || _formData$from_templa4 === void 0 ? void 0 : _formData$from_templa4.length))[key]) !== null && _actions$key !== void 0 ? _actions$key : false;
+				return (_actions$key = _defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1({}, "local_".concat(SAVE_CONTEXTS.MOVE), this.getFormattedToastMessage("moved to your Site Templates", formData.title)), "cloud_".concat(SAVE_CONTEXTS.MOVE), this.getFormattedToastMessage("moved to your Cloud Templates", formData.title)), "local_".concat(SAVE_CONTEXTS.COPY), this.getFormattedToastMessage("copied to your Site Templates", formData.title)), "cloud_".concat(SAVE_CONTEXTS.COPY), this.getFormattedToastMessage("copied to your Cloud Templates", formData.title)), "local_".concat(SAVE_CONTEXTS.BULK_MOVE), this.getFormattedToastMessage("moved to your Site Templates", null, (_formData$from_templa = formData.from_template_id) === null || _formData$from_templa === void 0 ? void 0 : _formData$from_templa.length)), "cloud_".concat(SAVE_CONTEXTS.BULK_MOVE), this.getFormattedToastMessage("moved to your Cloud Templates", null, (_formData$from_templa2 = formData.from_template_id) === null || _formData$from_templa2 === void 0 ? void 0 : _formData$from_templa2.length)), "local_".concat(SAVE_CONTEXTS.BULK_COPY), this.getFormattedToastMessage("copied to your Site Templates", null, (_formData$from_templa3 = formData.from_template_id) === null || _formData$from_templa3 === void 0 ? void 0 : _formData$from_templa3.length)), "cloud_".concat(SAVE_CONTEXTS.BULK_COPY), this.getFormattedToastMessage("copied to your Cloud Templates", null, (_formData$from_templa4 = formData.from_template_id) === null || _formData$from_templa4 === void 0 ? void 0 : _formData$from_templa4.length))[key]) !== null && _actions$key !== void 0 ? _actions$key : false;
 			},
 			getFormattedToastMessage: function getFormattedToastMessage(action, title, count) {
 				if (count !== void 0) return (0, _wordpress_i18n.sprintf)((0, _wordpress_i18n.__)("%1$d Template(s) %2$s.", "elementor"), count, action);
@@ -45825,7 +46317,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$3(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$3(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -45852,7 +46344,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 	var import_regenerator$5, TemplateLibraryLayoutView, Component$4;
 	var init_component$4 = __esmMin((() => {
 		init_asyncToGenerator();
-		init_defineProperty();
+		init_defineProperty$1();
 		init_classCallCheck();
 		init_createClass();
 		init_possibleConstructorReturn();
@@ -46442,7 +46934,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		init_getPrototypeOf();
 		init_get();
 		init_inherits();
-		init_defineProperty();
+		init_defineProperty$1();
 		init_base_storage();
 		__name(_callSuper$23, "_callSuper");
 		__name(_isNativeReflectConstruct$23, "_isNativeReflectConstruct");
@@ -46499,7 +46991,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				}
 			]);
 		}(BaseStorage);
-		_defineProperty(BasePrefixStorage, "DEFAULT_KEY_PREFIX", "e_");
+		_defineProperty$1(BasePrefixStorage, "DEFAULT_KEY_PREFIX", "e_");
 	}));
 
 //#endregion
@@ -46561,7 +47053,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$2(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$2(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -46570,7 +47062,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 	}
 	var import_regenerator$4, EVENTS_MAP, CLOUD_TEMPLATES_EXPERIMENTS, EventManager;
 	var init_event_manager = __esmMin((() => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_asyncToGenerator();
 		init_classCallCheck();
 		init_createClass();
@@ -46805,9 +47297,9 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 //#region assets/dev/js/editor/components/template-library/manager.js
 	var require_manager$3 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		init_toConsumableArray();
-		init_typeof();
+		init_typeof$1();
 		init_asyncToGenerator();
-		init_defineProperty();
+		init_defineProperty$1();
 		init_slicedToArray();
 		var import_regenerator$3 = /* @__PURE__ */ __toESM(require_regenerator());
 		init_component$4();
@@ -46828,7 +47320,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			for (var r = 1; r < arguments.length; r++) {
 				var t = null != arguments[r] ? arguments[r] : {};
 				r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
-					_defineProperty(e, r, t[r]);
+					_defineProperty$1(e, r, t[r]);
 				}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
 					Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 				});
@@ -46884,7 +47376,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 						page: (0, _wordpress_i18n.__)("Page", "elementor"),
 						section: (0, _wordpress_i18n.__)("Section", "elementor"),
 						container: (0, _wordpress_i18n.__)("Container", "elementor")
-					}, elements), {}, _defineProperty({}, elementor.config.document.type, elementor.config.document.panel.title));
+					}, elements), {}, _defineProperty$1({}, elementor.config.document.type, elementor.config.document.panel.title));
 					jQuery.each(translationMap, function(type, title) {
 						self.getDefaultTemplateTypeSafeData(title, type).then(function(defaultTemplateData) {
 							var safeData = jQuery.extend(true, {}, data, defaultTemplateData);
@@ -47422,7 +47914,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			this.getSaveAjaxAction = function(saveContext) {
 				var _saveActions$saveCont;
 				this.clearLastRemovedItems();
-				return (_saveActions$saveCont = _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty({}, SAVE_CONTEXTS.SAVE, "save_template"), SAVE_CONTEXTS.MOVE, "move_template"), SAVE_CONTEXTS.COPY, "copy_template"), SAVE_CONTEXTS.BULK_MOVE, "bulk_move_templates"), SAVE_CONTEXTS.BULK_COPY, "bulk_copy_templates")[saveContext]) !== null && _saveActions$saveCont !== void 0 ? _saveActions$saveCont : "save_template";
+				return (_saveActions$saveCont = _defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1(_defineProperty$1({}, SAVE_CONTEXTS.SAVE, "save_template"), SAVE_CONTEXTS.MOVE, "move_template"), SAVE_CONTEXTS.COPY, "copy_template"), SAVE_CONTEXTS.BULK_MOVE, "bulk_move_templates"), SAVE_CONTEXTS.BULK_COPY, "bulk_copy_templates")[saveContext]) !== null && _saveActions$saveCont !== void 0 ? _saveActions$saveCont : "save_template";
 			};
 			this.requestTemplateContent = function(source, id, ajaxOptions) {
 				this.clearLastRemovedItems();
@@ -47667,7 +48159,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				});
 			};
 			this.showErrorDialog = function(errorMessage) {
-				if ("object" === _typeof(errorMessage)) {
+				if ("object" === _typeof$1(errorMessage)) {
 					var message = "";
 					_.each(errorMessage, function(error) {
 						if (!(error !== null && error !== void 0 && error.message)) return;
@@ -47938,7 +48430,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 //#endregion
 //#region assets/dev/js/editor/controls/base-multiple.js
 	var require_base_multiple = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_typeof();
+		init_typeof$1();
 		init_slicedToArray();
 		var ControlBaseMultipleItemView = require_base_data().extend({
 			applySavedValue: function applySavedValue() {
@@ -47978,7 +48470,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			},
 			setValue: function setValue(key, value) {
 				var values = this.getControlValue();
-				if ("object" === _typeof(key)) _.each(key, function(internalValue, internalKey) {
+				if ("object" === _typeof$1(key)) _.each(key, function(internalValue, internalKey) {
 					values[internalKey] = internalValue;
 				});
 				else values[key] = value;
@@ -48220,7 +48712,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys$1(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -48245,7 +48737,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		init_possibleConstructorReturn();
 		init_getPrototypeOf();
 		init_inherits();
-		init_defineProperty();
+		init_defineProperty$1();
 		init_ui_states();
 		__name(ownKeys$1, "ownKeys");
 		__name(_objectSpread$1, "_objectSpread");
@@ -48260,8 +48752,8 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				_classCallCheck(this, Scrubbing);
 				for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 				_this = _callSuper$21(this, Scrubbing, [].concat(args));
-				_defineProperty(_this, "checkIntentTimeout", null);
-				_defineProperty(_this, "skipperCount", 0);
+				_defineProperty$1(_this, "checkIntentTimeout", null);
+				_defineProperty$1(_this, "skipperCount", 0);
 				var userOptions = _this.getOption("scrubSettings") || {};
 				_this.scrubSettings = _objectSpread$1({
 					intentTime: 600,
@@ -48584,7 +49076,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 //#endregion
 //#region assets/dev/js/editor/controls/dimensions.js
 	var require_dimensions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_scrubbing();
 		function ownKeys(e, r) {
 			var t = Object.keys(e);
@@ -48600,7 +49092,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			for (var r = 1; r < arguments.length; r++) {
 				var t = null != arguments[r] ? arguments[r] : {};
 				r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
-					_defineProperty(e, r, t[r]);
+					_defineProperty$1(e, r, t[r]);
 				}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
 					Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 				});
@@ -48659,17 +49151,32 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				return filter;
 			},
 			onReady: function onReady() {
-				var self = this;
-				var currentValue = self.getControlValue();
-				if (!self.isLinkedDimensions()) {
-					self.ui.link.addClass("unlinked");
-					self.ui.controls.each(function(index, element) {
-						var value = currentValue[element.dataset.setting];
-						if (_.isEmpty(value)) value = self.defaultDimensionValue;
-						self.$(element).val(value);
-					});
-				}
-				self.fillEmptyDimensions();
+				if (!this.isLinkedDimensions()) this.ui.link.addClass("unlinked");
+				this.fillEmptyDimensions({ keepInherited: true });
+			},
+			/**
+			* Get the value that a dimension inherits from the responsive parent control (shown as placeholder).
+			*
+			* @param {string} dimension
+			* @return {string|number|undefined} inherited value, or undefined when there is nothing to inherit
+			*/
+			getInheritedDimensionValue: function getInheritedDimensionValue(dimension) {
+				var placeholder = this.getControlPlaceholder();
+				if (!_.isObject(placeholder)) return;
+				var value = placeholder[dimension];
+				return void 0 === value || null === value || "" === value ? void 0 : value;
+			},
+			/**
+			* Whether the control has its own dimension values (as opposed to inheriting all of them).
+			*
+			* @return {boolean} true when at least one dimension has a value of its own
+			*/
+			hasOwnDimensionValues: function hasOwnDimensionValues() {
+				var currentValue = this.getControlValue();
+				return this.getPossibleDimensions().some(function(dimension) {
+					var value = currentValue[dimension];
+					return !(void 0 === value || null === value || "" === value);
+				});
 			},
 			updateDimensionsValue: function updateDimensionsValue() {
 				var currentValue = {};
@@ -48683,13 +49190,22 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				this.setValue(currentValue);
 			},
 			fillEmptyDimensions: function fillEmptyDimensions() {
+				var _this2 = this;
+				var _ref$keepInherited = (arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {}).keepInherited;
+				var keepInherited = _ref$keepInherited === void 0 ? false : _ref$keepInherited;
 				var $controls = this.ui.controls;
 				var defaultDimensionValue = this.defaultDimensionValue;
 				if (this.isLinkedDimensions()) return;
 				var allowedDimensions = this.model.get("allowed_dimensions");
 				this.getPossibleDimensions().forEach(function(dimension) {
 					var $element = $controls.filter("[data-setting=\"" + dimension + "\"]");
-					if (-1 !== _.indexOf(allowedDimensions, dimension) && $element.length && _.isEmpty($element.val())) $element.val(defaultDimensionValue);
+					if (!(-1 !== _.indexOf(allowedDimensions, dimension)) || !$element.length || !_.isEmpty($element.val())) return;
+					var inheritedValue = _this2.getInheritedDimensionValue(dimension);
+					if (void 0 !== inheritedValue) {
+						if (!keepInherited) $element.val(inheritedValue);
+						return;
+					}
+					$element.val(defaultDimensionValue);
 				});
 			},
 			updateDimensions: function updateDimensions() {
@@ -48715,13 +49231,29 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			onLinkDimensionsClicked: function onLinkDimensionsClicked(event) {
 				event.preventDefault();
 				event.stopPropagation();
-				this.ui.link.toggleClass("unlinked");
-				this.setValue("isLinked", !this.ui.link.hasClass("unlinked"));
-				if (this.isLinkedDimensions()) this.ui.controls.val(this.ui.controls.eq(0).val());
+				var isLinked = !this.isLinkedDimensions();
+				this.setValue("isLinked", isLinked);
+				if (isLinked) {
+					var $firstControl = this.ui.controls.eq(0);
+					var value = $firstControl.val();
+					if (_.isEmpty(value)) value = this.getInheritedDimensionValue($firstControl.data("setting"));
+					if (void 0 === value && this.getResponsiveParentView()) value = this.defaultDimensionValue;
+					this.ui.controls.val(value !== null && value !== void 0 ? value : "");
+				}
 				this.updateDimensions();
+				this.ui.link.toggleClass("unlinked", !this.isLinkedDimensions());
+			},
+			updateElementModel: function updateElementModel(value, input) {
+				if (this.getControlValue("isLinked") && !this.isLinkedDimensions()) this.setValue("isLinked", false);
+				ControlBaseUnitsItemView.prototype.updateElementModel.call(this, value, input);
 			},
 			isLinkedDimensions: function isLinkedDimensions() {
-				return this.getControlValue("isLinked");
+				var isLinked = this.getControlValue("isLinked");
+				if (isLinked && !this.hasOwnDimensionValues()) {
+					var parentView = this.getResponsiveParentView();
+					if (parentView && "function" === typeof parentView.isLinkedDimensions) return parentView.isLinkedDimensions();
+				}
+				return isLinked;
 			},
 			updateUnitChoices: function updateUnitChoices() {
 				ControlBaseUnitsItemView.prototype.updateUnitChoices.apply(this, arguments);
@@ -48825,7 +49357,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 //#endregion
 //#region assets/dev/js/editor/controls/gaps.js
 	var require_gaps = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_typeof();
+		init_typeof$1();
 		var ControlDimensionsView = require_dimensions();
 		var ControlGapItemView = ControlDimensionsView.extend({
 			ui: function ui() {
@@ -48839,7 +49371,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			},
 			setValue: function setValue(key, value) {
 				var values = this.getControlValue();
-				if ("object" === _typeof(key)) _.each(key, function(internalValue, internalKey) {
+				if ("object" === _typeof$1(key)) _.each(key, function(internalValue, internalKey) {
 					values[internalKey] = internalValue;
 				});
 				else values[key] = value;
@@ -49497,7 +50029,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 //#endregion
 //#region assets/dev/js/editor/controls/image-dimensions.js
 	var require_image_dimensions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_scrubbing();
 		function ownKeys(e, r) {
 			var t = Object.keys(e);
@@ -49513,7 +50045,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			for (var r = 1; r < arguments.length; r++) {
 				var t = null != arguments[r] ? arguments[r] : {};
 				r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
-					_defineProperty(e, r, t[r]);
+					_defineProperty$1(e, r, t[r]);
 				}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
 					Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 				});
@@ -49559,7 +50091,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 //#endregion
 //#region assets/dev/js/editor/controls/media.js
 	var require_media = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_asyncToGenerator();
 		var import_regenerator$1 = /* @__PURE__ */ __toESM(require_regenerator());
 		init_files_upload_handler();
@@ -49578,7 +50110,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			for (var r = 1; r < arguments.length; r++) {
 				var t = null != arguments[r] ? arguments[r] : {};
 				r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
-					_defineProperty(e, r, t[r]);
+					_defineProperty$1(e, r, t[r]);
 				}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
 					Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 				});
@@ -49959,7 +50491,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 //#endregion
 //#region assets/dev/js/editor/controls/number.js
 	var require_number = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_scrubbing();
 		function ownKeys(e, r) {
 			var t = Object.keys(e);
@@ -49975,7 +50507,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			for (var r = 1; r < arguments.length; r++) {
 				var t = null != arguments[r] ? arguments[r] : {};
 				r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
-					_defineProperty(e, r, t[r]);
+					_defineProperty$1(e, r, t[r]);
 				}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
 					Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 				});
@@ -50564,7 +51096,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 //#endregion
 //#region assets/dev/js/editor/regions/panel/pages/elements/views/element.js
 	var require_element$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_defineProperty();
+		init_defineProperty$1();
 		init_slicedToArray();
 		var import_context_menu = /* @__PURE__ */ __toESM(require_context_menu());
 		function ownKeys(e, r) {
@@ -50581,7 +51113,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			for (var r = 1; r < arguments.length; r++) {
 				var t = null != arguments[r] ? arguments[r] : {};
 				r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
-					_defineProperty(e, r, t[r]);
+					_defineProperty$1(e, r, t[r]);
 				}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
 					Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 				});
@@ -51063,7 +51595,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 //#endregion
 //#region assets/dev/js/editor/components/dynamic-tags/manager.js
 	var require_manager$2 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_defineProperty();
+		init_defineProperty$1();
 		function ownKeys(e, r) {
 			var t = Object.keys(e);
 			if (Object.getOwnPropertySymbols) {
@@ -51078,7 +51610,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			for (var r = 1; r < arguments.length; r++) {
 				var t = null != arguments[r] ? arguments[r] : {};
 				r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
-					_defineProperty(e, r, t[r]);
+					_defineProperty$1(e, r, t[r]);
 				}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
 					Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 				});
@@ -51879,7 +52411,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 //#endregion
 //#region assets/dev/js/utils/notifications.js
 	var require_notifications = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_defineProperty();
+		init_defineProperty$1();
 		function ownKeys(e, r) {
 			var t = Object.keys(e);
 			if (Object.getOwnPropertySymbols) {
@@ -51894,7 +52426,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			for (var r = 1; r < arguments.length; r++) {
 				var t = null != arguments[r] ? arguments[r] : {};
 				r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
-					_defineProperty(e, r, t[r]);
+					_defineProperty$1(e, r, t[r]);
 				}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
 					Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 				});
@@ -52541,7 +53073,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		init_possibleConstructorReturn();
 		init_getPrototypeOf();
 		init_inherits();
-		init_defineProperty();
+		init_defineProperty$1();
 		init_component_base();
 		init_commands$1();
 		init_internal();
@@ -52554,7 +53086,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				_classCallCheck(this, Component);
 				for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 				_this = _callSuper$5(this, Component, [].concat(args));
-				_defineProperty(_this, "stateReadyOnce", false);
+				_defineProperty$1(_this, "stateReadyOnce", false);
 				_classPrivateFieldInitSpec(_this, _userInteractionsBlocked, false);
 				return _this;
 			}
@@ -53355,8 +53887,8 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 //#endregion
 //#region assets/dev/js/editor/regions/panel/pages/elements/elements.js
 	var require_elements = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-		init_typeof();
-		init_defineProperty();
+		init_typeof$1();
+		init_defineProperty$1();
 		init_slicedToArray();
 		init_is_widget_new();
 		function ownKeys(e, r) {
@@ -53373,7 +53905,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			for (var r = 1; r < arguments.length; r++) {
 				var t = null != arguments[r] ? arguments[r] : {};
 				r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
-					_defineProperty(e, r, t[r]);
+					_defineProperty$1(e, r, t[r]);
 				}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
 					Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 				});
@@ -53560,7 +54092,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			},
 			deepMergeKey: function deepMergeKey(mergedObj, originalObj, replacementObj, key) {
 				if (!replacementObj.hasOwnProperty(key)) return;
-				if ("object" === _typeof(replacementObj[key]) && null !== replacementObj[key] && originalObj.hasOwnProperty(key) && "object" === _typeof(originalObj[key]) && null !== originalObj[key]) mergedObj[key] = this.deepMerge(originalObj[key], replacementObj[key]);
+				if ("object" === _typeof$1(replacementObj[key]) && null !== replacementObj[key] && originalObj.hasOwnProperty(key) && "object" === _typeof$1(originalObj[key]) && null !== originalObj[key]) mergedObj[key] = this.deepMerge(originalObj[key], replacementObj[key]);
 				else mergedObj[key] = replacementObj[key];
 			},
 			showView: function showView(viewName) {
@@ -53969,14 +54501,14 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 //#endregion
 //#region assets/dev/js/editor/editor-base.js
 	init_slicedToArray();
-	init_typeof();
+	init_typeof$1();
 	init_asyncToGenerator();
 	init_classCallCheck();
 	init_createClass();
 	init_possibleConstructorReturn();
 	init_getPrototypeOf();
 	init_inherits();
-	init_defineProperty();
+	init_defineProperty$1();
 	init_environment();
 	init_element_base();
 	function ownKeys(e, r) {
@@ -53993,7 +54525,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
 			r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
-				_defineProperty(e, r, t[r]);
+				_defineProperty$1(e, r, t[r]);
 			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
@@ -54022,20 +54554,20 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			_classCallCheck(this, EditorBase);
 			for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
 			_this = _callSuper$1(this, EditorBase, [].concat(args));
-			_defineProperty(_this, "widgetsCache", {});
-			_defineProperty(_this, "config", {});
-			_defineProperty(_this, "loaded", false);
-			_defineProperty(_this, "previewLoadedOnce", false);
-			_defineProperty(_this, "activeBreakpointsUpdated", false);
-			_defineProperty(_this, "helpers", require_helpers());
-			_defineProperty(_this, "imagesManager", require_images_manager());
-			_defineProperty(_this, "presetsFactory", require_presets_factory());
-			_defineProperty(_this, "templates", require_manager$3());
-			_defineProperty(_this, "ajax", elementorCommon.ajax);
-			_defineProperty(_this, "conditions", new ControlConditions());
-			_defineProperty(_this, "history", (init_module(), __toCommonJS(module_exports)));
-			_defineProperty(_this, "hints", new Ally());
-			_defineProperty(_this, "channels", {
+			_defineProperty$1(_this, "widgetsCache", {});
+			_defineProperty$1(_this, "config", {});
+			_defineProperty$1(_this, "loaded", false);
+			_defineProperty$1(_this, "previewLoadedOnce", false);
+			_defineProperty$1(_this, "activeBreakpointsUpdated", false);
+			_defineProperty$1(_this, "helpers", require_helpers());
+			_defineProperty$1(_this, "imagesManager", require_images_manager());
+			_defineProperty$1(_this, "presetsFactory", require_presets_factory());
+			_defineProperty$1(_this, "templates", require_manager$3());
+			_defineProperty$1(_this, "ajax", elementorCommon.ajax);
+			_defineProperty$1(_this, "conditions", new ControlConditions());
+			_defineProperty$1(_this, "history", (init_module(), __toCommonJS(module_exports)));
+			_defineProperty$1(_this, "hints", new Ally());
+			_defineProperty$1(_this, "channels", {
 				editor: Backbone.Radio.channel("ELEMENTOR:editor"),
 				data: Backbone.Radio.channel("ELEMENTOR:data"),
 				panelElements: Backbone.Radio.channel("ELEMENTOR:panelElements"),
@@ -54044,7 +54576,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 				templates: Backbone.Radio.channel("ELEMENTOR:templates"),
 				responsivePreview: Backbone.Radio.channel("ELEMENTOR:responsivePreview")
 			});
-			_defineProperty(_this, "backgroundClickListeners", {
+			_defineProperty$1(_this, "backgroundClickListeners", {
 				tooltip: {
 					element: ".dialog-tooltip-widget",
 					ignore: ".dialog-widget, .elementor-controls-popover, .pcr-selection"
@@ -54085,7 +54617,7 @@ var import_preview = /* @__PURE__ */ __toESM(require_preview$2());
 			* Exporting modules that can be used externally
 			* TODO: All of the following entries should move to `elementorModules.editor`
 			*/
-			_defineProperty(_this, "modules", {
+			_defineProperty$1(_this, "modules", {
 				/**
 				* @deprecated since 2.3.0, use `elementorModules.Module` instead.
 				*/
@@ -55203,13 +55735,13 @@ get ControlsStack() {
 						var _controlConfig$popove;
 						var responsiveControlName;
 						var controlDevices;
-						if ("object" === _typeof(controlConfig.fields)) controlConfig.fields = _this10.generateResponsiveControls(controlConfig.fields);
+						if ("object" === _typeof$1(controlConfig.fields)) controlConfig.fields = _this10.generateResponsiveControls(controlConfig.fields);
 						if (!controlConfig.is_responsive) {
 							newControlsStack[controlName] = controlConfig;
 							return;
 						}
 						if ((_controlConfig$respon = controlConfig.responsive) !== null && _controlConfig$respon !== void 0 && _controlConfig$respon.devices) {
-							if ("object" === _typeof(controlConfig.responsive.devices)) controlConfig.responsive.devices = Object.values(controlConfig.responsive.devices);
+							if ("object" === _typeof$1(controlConfig.responsive.devices)) controlConfig.responsive.devices = Object.values(controlConfig.responsive.devices);
 							controlDevices = devices.filter(function(device) {
 								return controlConfig.responsive.devices.includes(device);
 							});
@@ -55251,7 +55783,7 @@ get ControlsStack() {
 								if (controlArgs.min_affected_device[device]) controlArgs.responsive.min = controlArgs.min_affected_device[device];
 								delete controlArgs.min_affected_device;
 							}
-							if (controlArgs[device + "_default"]) if ("object" === _typeof(controlArgs[device + "_default"])) controlArgs.default = _objectSpread(_objectSpread({}, controlArgs.default), controlArgs[device + "_default"]);
+							if (controlArgs[device + "_default"]) if ("object" === _typeof$1(controlArgs[device + "_default"])) controlArgs.default = _objectSpread(_objectSpread({}, controlArgs.default), controlArgs[device + "_default"]);
 							else controlArgs.default = controlArgs[device + "_default"];
 							else if (deleteControlDefault) controlArgs.default = "";
 							if (0 !== index && (_controlArgs$popover = controlArgs.popover) !== null && _controlArgs$popover !== void 0 && _controlArgs$popover.start) delete controlArgs.popover.start;

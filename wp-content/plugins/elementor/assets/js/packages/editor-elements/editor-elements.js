@@ -171,7 +171,10 @@
 	}
 	function attachChildFromRule(parentId, rule, stash) {
 		const currentChildren = getDirectChildData(getContainer(parentId) ?? void 0);
-		if (currentChildren.some((child) => child.elType === rule.child_type)) return;
+		if (currentChildren.some((child) => child.elType === rule.child_type)) {
+			placeAnchoredChild(parentId, rule);
+			return;
+		}
 		const { modelData, wasStashed } = resolveChildModelData(parentId, rule, stash);
 		if (!addModelToParent(parentId, modelData, { at: resolveInsertIndex(rule.position, currentChildren) })) return;
 		if (wasStashed) stash.clear(parentId, rule.child_type);
@@ -183,6 +186,30 @@
 		const childSnapshot = child.model.toJSON();
 		if (!removeModelFromParent(parentId, child.id)) return;
 		if (rule.stash) stash.save(parentId, rule.child_type, childSnapshot);
+		requestNavigatorRefresh(parentId);
+	}
+	function placeAnchoredChild(parentId, rule) {
+		if (rule.position.kind !== "after_type" && rule.position.kind !== "before_type") return;
+		let parent;
+		try {
+			parent = getContainer(parentId) ?? void 0;
+		} catch {
+			return;
+		}
+		const collection = parent?.model?.get?.("elements");
+		const models = collection?.models;
+		if (!models || !collection?.remove || !collection?.add) return;
+		const existingIndex = models.findIndex((model2) => model2.get("elType") === rule.child_type);
+		if (existingIndex < 0) return;
+		const remaining = models.map((model2) => ({ elType: model2.get("elType") })).filter((_, index) => index !== existingIndex);
+		const insertAt = resolveInsertIndex(rule.position, remaining);
+		if (insertAt === existingIndex) return;
+		const model = models[existingIndex];
+		collection.remove(model, { silent: true });
+		collection.add(model, {
+			at: insertAt,
+			silent: true
+		});
 		requestNavigatorRefresh(parentId);
 	}
 	function requestNavigatorRefresh(parentId) {
@@ -205,6 +232,15 @@
 			const isMet = evaluateWhen(rule.when, settings);
 			const existingIndex = elements.findIndex((element) => element.elType === rule.child_type);
 			const isPresent = existingIndex >= 0;
+			if (isMet && isPresent && isAnchoredPosition(rule.position.kind)) {
+				const remaining = elements.filter((_, index) => index !== existingIndex);
+				const insertAt = resolveInsertIndex(rule.position, remaining);
+				if (insertAt !== existingIndex) {
+					const [moved] = elements.splice(existingIndex, 1);
+					elements.splice(insertAt, 0, moved);
+				}
+				return;
+			}
 			if (isMet && !isPresent) {
 				const { modelData, wasStashed } = resolveChildModelData(elementId, rule, stash);
 				const insertAt = resolveInsertIndex(rule.position, elements);
@@ -218,6 +254,9 @@
 			}
 		});
 		attributes.elements = elements;
+	}
+	function isAnchoredPosition(kind) {
+		return kind === "after_type" || kind === "before_type";
 	}
 
 //#endregion
@@ -596,6 +635,35 @@
 	};
 
 //#endregion
+//#region packages/packages/libs/editor-elements/src/sync/clone-element-tree.ts
+	function isBackboneModel(item) {
+		return "toJSON" in item && "get" in item;
+	}
+	function cloneElementTree(item) {
+		const source = isBackboneModel(item) ? item.toJSON() : item;
+		return {
+			...source,
+			id: generateElementId(),
+			settings: {
+				...source.settings ?? {},
+				_element_id: ""
+			},
+			elements: (source.elements ?? []).map((child) => cloneElementTree(child))
+		};
+	}
+
+//#endregion
+//#region packages/packages/libs/editor-elements/src/sync/find-closest-container.ts
+	function findClosestContainer(start, predicate) {
+		let current = start ?? null;
+		while (current) {
+			if (predicate(current)) return current;
+			current = current.parent ?? null;
+		}
+		return null;
+	}
+
+//#endregion
 //#region packages/packages/libs/editor-elements/src/sync/get-preview-element-dom.ts
 	function getPreviewElementDOM(id) {
 		try {
@@ -711,11 +779,36 @@
 	}
 
 //#endregion
+//#region packages/packages/libs/editor-elements/src/sync/get-host-document-id.ts
+	function getHostDocumentId() {
+		const extendedWindow = window;
+		try {
+			return extendedWindow.elementor?.documents?.getInitialId?.() ?? null;
+		} catch {
+			return null;
+		}
+	}
+
+//#endregion
+//#region packages/packages/libs/editor-elements/src/sync/get-host-document-container.ts
+	function getHostDocumentContainer() {
+		const extendedWindow = window;
+		const hostId = getHostDocumentId();
+		if (!hostId) return null;
+		return extendedWindow.elementor?.documents?.get?.(hostId)?.container ?? null;
+	}
+
+//#endregion
 //#region packages/packages/libs/editor-elements/src/sync/get-elements.ts
-	function getElements(root) {
-		const container = root ? getContainer(root) : getCurrentDocumentContainer();
+	function collectElements(container) {
 		if (!container) return [];
 		return [container, ...[...container.model.get("elements") ?? []].flatMap((childModel) => getElements(childModel.get("id")))];
+	}
+	function getElements(root) {
+		return collectElements(root ? getContainer(root) : getCurrentDocumentContainer());
+	}
+	function getHostDocumentElements() {
+		return collectElements(getHostDocumentContainer());
 	}
 
 //#endregion
@@ -1252,6 +1345,7 @@
 		ELEMENT_STYLE_CHANGE_EVENT: () => ELEMENT_STYLE_CHANGE_EVENT,
 		addModelToParent: () => addModelToParent,
 		bindSettingsReconcile: () => bindSettingsReconcile,
+		cloneElementTree: () => cloneElementTree,
 		createElement: () => createElement,
 		createElementStyle: () => createElementStyle,
 		createElements: () => createElements,
@@ -1262,6 +1356,7 @@
 		duplicateElements: () => duplicateElements,
 		evaluateWhen: () => evaluateWhen,
 		findChildRecursive: () => findChildRecursive,
+		findClosestContainer: () => findClosestContainer,
 		findModelInDocument: () => findModelInDocument,
 		generateElementId: () => generateElementId,
 		getAllDescendants: () => getAllDescendants,
@@ -1282,6 +1377,8 @@
 		getElementTitle: () => getElementTitle,
 		getElementType: () => getElementType,
 		getElements: () => getElements,
+		getHostDocumentElements: () => getHostDocumentElements,
+		getHostDocumentId: () => getHostDocumentId,
 		getLinkInLinkRestriction: () => getLinkInLinkRestriction,
 		getPreviewElementDOM: () => getPreviewElementDOM,
 		getSelectedElements: () => getSelectedElements,

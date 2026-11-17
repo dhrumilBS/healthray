@@ -4317,6 +4317,18 @@ html.elementor-html {
   margin-inline-end: var(--margin-end);
   margin-inline-start: var(--margin-start);
 }
+.e-con > .elementor-sortable-placeholder.elementor-widget-placeholder.e-placeholder--overlay {
+  position: absolute;
+  top: var(--e-placeholder-top);
+  left: var(--e-placeholder-left);
+  width: var(--size);
+  height: var(--e-placeholder-height);
+  min-height: 0;
+  margin: 0;
+  z-index: 9999;
+  pointer-events: none;
+  animation-name: dnd-placeholder-overlay;
+}
 .e-con.e-grid.e-con--row .elementor-widget-placeholder.e-dragging-right, .e-con.e-grid.e-con--row .elementor-widget-placeholder.e-dragging-left, .e-con.e-grid.e-con--row > .e-con-inner .elementor-widget-placeholder.e-dragging-right, .e-con.e-grid.e-con--row > .e-con-inner .elementor-widget-placeholder.e-dragging-left {
   position: absolute;
   width: var(--size);
@@ -4385,11 +4397,15 @@ html.elementor-html {
   padding: 2px;
 }
 
-.e-atomic-element:has(> .elementor-empty-view) {
+.e-atomic-element:not(:where([data-e-decorative])):has(> .elementor-empty-view) {
   min-height: 120px;
 }
 .e-atomic-element > .elementor-empty-view.elementor-empty-view {
   min-height: inherit;
+}
+.e-atomic-element[data-e-decorative] > .elementor-empty-view.elementor-empty-view {
+  min-height: 0;
+  min-width: 0;
 }
 
 .e-grid-base > .elementor-empty-view.elementor-empty-view > .elementor-first-add {
@@ -4439,6 +4455,18 @@ body.rtl .e-con.e-grid.e-con--row .elementor-widget-placeholder.e-dragging-left,
   left: auto;
 }
 
+@keyframes dnd-placeholder-overlay {
+  0% {
+    transform-origin: 50% 50%;
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  100% {
+    transform-origin: 50% 50%;
+    transform: scaleX(1);
+    opacity: 0.9;
+  }
+}
 @keyframes dnd-placeholder-widget-vertical {
   0% {
     transform-origin: 0 50%;

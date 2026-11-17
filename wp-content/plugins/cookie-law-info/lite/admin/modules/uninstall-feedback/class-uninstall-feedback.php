@@ -258,9 +258,9 @@ class Uninstall_Feedback extends Modules {
 					<button class="button-primary cky-modal-submit">
 						<?php echo esc_html__( 'Submit & Deactivate', 'cookie-law-info' ); ?>
 					</button>
-					<a class="cky-goto-support" href="https://www.cookieyes.com/support/" target="_blank">
+					<a class="cky-goto-support" href="https://wordpress.org/support/plugin/cookie-law-info/#new-topic-0" target="_blank" rel="noopener noreferrer">
 						<span class="dashicons dashicons-external"></span>
-						<?php echo esc_html__( 'Go to support', 'cookie-law-info' ); ?>
+						<?php echo esc_html__( 'Having a problem? Ask on the support forum', 'cookie-law-info' ); ?>
 					</a>
 					<button class="button-secondary cky-modal-skip">
 						<?php echo esc_html__( 'Skip & Deactivate', 'cookie-law-info' ); ?>
@@ -329,6 +329,9 @@ class Uninstall_Feedback extends Modules {
 			.cky-modal-footer {
 				padding: 0px 20px 15px 20px;
 				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				row-gap: 8px;
 			}
 
 			.cky-button-left {
@@ -365,7 +368,13 @@ class Uninstall_Feedback extends Modules {
 				text-decoration: none;
 				display: flex;
 				align-items: center;
-				margin-left: 15px;
+				margin-left: 12px;
+				font-size: 12px;
+				white-space: nowrap;
+			}
+
+			.cky-goto-support .dashicons {
+				flex-shrink: 0;
 			}
 
 			.cky-modal-footer .cky-modal-submit {
@@ -380,6 +389,7 @@ class Uninstall_Feedback extends Modules {
 				background: none;
 				border: none;
 				margin-left: auto;
+				padding: 0 0 0 12px;
 			}
 
 			.cky-modal-close {

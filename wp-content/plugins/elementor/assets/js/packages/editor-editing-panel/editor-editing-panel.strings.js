@@ -1,3 +1,6 @@
+__( 'Content-only access', 'elementor' );
+__( 'Your Site Admin has limited this role to content editing.', 'elementor' );
+__( 'Learn More', 'elementor' );
 __( 'Open CSS Class Menu', 'elementor' );
 __( 'States', 'elementor' );
 /* translators: %s: Element type title. */
@@ -310,6 +313,10 @@ __( 'Duplicate Accordion Item', 'elementor' );
 __( 'Reorder Accordion Items', 'elementor' );
 __( 'Accordion', 'elementor' );
 __( 'Show Icon', 'elementor' );
+__( 'Accordion', 'elementor' );
+__( 'Different icon when open', 'elementor' );
+__( 'Marker', 'elementor' );
+__( 'Content', 'elementor' );
 __( 'Duplicate List Item', 'elementor' );
 __( 'Reorder List Items', 'elementor' );
 __( 'List Items', 'elementor' );

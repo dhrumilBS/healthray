@@ -162,6 +162,15 @@ class Promotions extends Abstract_Module {
 			return false;
 		}
 
+		// Registered for every user: the notices save their dismiss state through /wp/v2/settings, which is not an admin request.
+		add_action( 'init', array( $this, 'register_settings' ), 99 );
+		add_action( 'admin_init', array( $this, 'register_reference' ), 99 );
+
+		// load() only renders promotions for users who can install plugins, so skip the environment checks for everyone else.
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			return false;
+		}
+
 		$this->debug        = apply_filters( 'themeisle_sdk_promo_debug', $this->debug );
 		$promotions_to_load = apply_filters( $product->get_key() . '_load_promotions', array() );
 
@@ -190,8 +199,6 @@ class Promotions extends Abstract_Module {
 				unset( $this->promotions[ $slug ] );
 			}
 		}
-		add_action( 'init', array( $this, 'register_settings' ), 99 );
-		add_action( 'admin_init', array( $this, 'register_reference' ), 99 );
 
 		return ! empty( $this->promotions );
 	}
@@ -670,7 +677,7 @@ class Promotions extends Abstract_Module {
 		$has_neve_from_promo       = get_option( $this->option_neve, false );
 		$has_enough_attachments    = $this->has_min_media_attachments();
 		$has_enough_old_posts      = $this->has_old_posts();
-		$has_feedzy                = defined( 'FEEDZY_BASEFILE' ) || $this->is_plugin_installed( 'feedzy-rss-feedss' );
+		$has_feedzy                = defined( 'FEEDZY_BASEFILE' ) || $this->is_plugin_installed( 'feedzy-rss-feeds' );
 		$had_feedzy_from_promo     = get_option( $this->option_feedzy, false );
 		$had_masteriyo_from_promo  = get_option( $this->option_masteriyo, false );
 		$has_masteriyo_conditions  = $is_min_php_7_2 && ! $had_masteriyo_from_promo && ! $this->has_active_lms_plugin() && $can_check_plugin_install && $this->has_lms_tagline();

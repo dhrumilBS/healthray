@@ -8,7 +8,7 @@ $cli_feature_cards   = array(
 	array( 'icon' => 'icon-accessibility.svg',  'title' => __( 'Improved accessibility', 'cookie-law-info' ),         'desc' => __( 'Deliver a more inclusive experience with WCAG-compliant banner design.', 'cookie-law-info' ) ),
 	array( 'icon' => 'icon-performance.svg',     'title' => __( 'Faster performance', 'cookie-law-info' ),              'desc' => __( 'Load your banner faster and reduce impact on page speed.', 'cookie-law-info' ) ),
 	array( 'icon' => 'icon-blocking.svg',        'title' => __( 'Automatic cookie blocking', 'cookie-law-info' ),       'desc' => __( 'Handle cookie blocking automatically without manual setup.', 'cookie-law-info' ) ),
-	array( 'icon' => 'icon-compliance.svg',      'title' => __( 'Built-in compliance standards', 'cookie-law-info' ),   'desc' => __( 'Supports Google Consent Mode, IAB TCF v2.3, and Google Additional Consent Mode.', 'cookie-law-info' ) ),
+	array( 'icon' => 'icon-compliance.svg',      'title' => __( 'Built-in compliance standards', 'cookie-law-info' ),   'desc' => __( 'Supports Google Consent Mode, IAB TCF v2.4, and Google Additional Consent Mode.', 'cookie-law-info' ) ),
 	array( 'icon' => 'icon-customisation.svg',   'title' => __( 'More flexible customisation', 'cookie-law-info' ),     'desc' => __( 'Customise styles and layout easily with custom CSS to adjust fonts, button style, and revisit button.', 'cookie-law-info' ) ),
 );
 $cli_accordion_items = array(
@@ -37,6 +37,9 @@ $cli_modal_close_btn = '<button type="button" class="wt-cli-modal-close-btn" ari
 	. '"><img src="' . esc_url( $cli_uf_img . 'close.svg' ) . '" width="20" height="20" alt=""></button>';
 $cli_get_help_link   = '<a href="https://www.cookieyes.com/support/" target="_blank" rel="noopener noreferrer" class="wt-cli-btn-outline">'
 	. esc_html__( 'Get help', 'cookie-law-info' )
+	. '<img src="' . esc_url( $cli_uf_img . 'icon-external-link.svg' ) . '" width="16" height="16" alt=""></a>'
+	. '<a href="https://wordpress.org/support/plugin/cookie-law-info/#new-topic-0" target="_blank" rel="noopener noreferrer" class="wt-cli-btn-outline">'
+	. esc_html__( 'Get help on the forum', 'cookie-law-info' )
 	. '<img src="' . esc_url( $cli_uf_img . 'icon-external-link.svg' ) . '" width="16" height="16" alt=""></a>';
 ?>
 

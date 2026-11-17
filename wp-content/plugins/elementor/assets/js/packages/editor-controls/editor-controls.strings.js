@@ -177,11 +177,31 @@ __(
 			`The tag is locked to 'a' tag because this %s has a link. To pick a different tag, remove the link first.`,
 			'elementor'
 		);
+__( 'Filter by library, active', 'elementor' );
+__( 'Filter by library', 'elementor' );
+__( 'Filter by library', 'elementor' );
+__( 'Filter by library', 'elementor' );
+__( 'Icons', 'elementor' );
+__( 'Icon library', 'elementor' );
+__( 'Search', 'elementor' );
+__( 'Loading icons', 'elementor' );
+__( "Icons couldn't be loaded.", 'elementor' );
+__( 'Sorry, nothing matched', 'elementor' );
+__( 'Clear & try again', 'elementor' );
+__( 'Upload library', 'elementor' );
+__( 'Upgrade now', 'elementor' );
+__( 'Upload custom icons', 'elementor' );
+__( 'Add your own icon font library to use across your site.', 'elementor' );
+__( 'Grid view', 'elementor' );
+__( 'List view', 'elementor' );
+__( 'Switch to list view', 'elementor' );
+__( 'Switch to grid view', 'elementor' );
 __( 'Image', 'elementor' );
 __( 'Resolution', 'elementor' );
-__( 'Select image', 'elementor' );
-__( 'Upload', 'elementor' );
-__( 'Insert from URL', 'elementor' );
+__( 'Image', 'elementor' );
+__( 'Optimize your images', 'elementor' );
+__( 'Dismiss', 'elementor' );
+__( 'Optimize', 'elementor' );
 __( 'Key', 'elementor' );
 __( 'Value', 'elementor' );
 __( 'Invalid Format', 'elementor' );
@@ -210,6 +230,9 @@ __( 'Left', 'elementor' );
 __( '%s right', 'elementor' );
 /* translators: %s is the name of the main group (margin or padding) */
 __( '%s left', 'elementor' );
+__( 'Select', 'elementor' );
+__( 'Upload', 'elementor' );
+__( 'Insert URL', 'elementor' );
 __( 'Center center', 'elementor' );
 __( 'Center left', 'elementor' );
 __( 'Center right', 'elementor' );
@@ -227,16 +250,18 @@ __( 'Filter', 'elementor' );
 __( 'Add %s item', 'elementor' );
 __( 'Item', 'elementor' );
 __( 'Type', 'elementor' );
+__( 'Search', 'elementor' );
 __( 'CSS function', 'elementor' );
 __( 'Stroke width', 'elementor' );
 __( 'Stroke color', 'elementor' );
+__( 'SVG', 'elementor' );
+__( 'SVG control', 'elementor' );
 __( "Sorry, you can't upload that file yet.", 'elementor' );
 __( 'To upload them anyway, ask the site administrator to enable unfiltered', 'elementor' );
 __( 'file uploads.', 'elementor' );
-__( 'Select SVG', 'elementor' );
 __( 'Icon library', 'elementor' );
 __( 'Icon library', 'elementor' );
-__( 'Upload', 'elementor' );
+__( 'Loading icon', 'elementor' );
 __( 'Preview icon', 'elementor' );
 __( 'Preview SVG', 'elementor' );
 __( 'Start time', 'elementor' );
@@ -346,7 +371,5 @@ __(
 									'Upgrade to customize transition properties and control effects.',
 									'elementor'
 								);
-__( 'Select video', 'elementor' );
-__( 'Upload', 'elementor' );
-__( 'Insert from URL', 'elementor' );
+__( 'Video', 'elementor' );
 __( 'Video preview', 'elementor' );

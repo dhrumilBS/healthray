@@ -1,4 +1,4 @@
-(function(react, _elementor_ui, _elementor_editor_elements, _elementor_editor_props, _elementor_locations, _elementor_session, _elementor_editor_styles_repository, _elementor_utils, _elementor_editor_controls, _elementor_icons, _elementor_editor_ui, _wordpress_i18n, _elementor_editor_styles, _elementor_editor_v1_adapters, _elementor_editor_documents, _elementor_editor_responsive, _elementor_editor_panels, _elementor_menus, _elementor_editor_interactions, _elementor_editor_variables, _elementor_editor_canvas, _elementor_editor, _elementor_schema, _elementor_wp_media) {
+(function(react, _elementor_ui, _elementor_editor_elements, _elementor_editor_props, _elementor_locations, _elementor_session, _elementor_editor_styles_repository, _elementor_utils, _elementor_editor_controls, _elementor_icons, _elementor_editor_ui, _wordpress_i18n, _elementor_editor_styles, _elementor_editor_v1_adapters, _elementor_editor_documents, _elementor_editor_responsive, _elementor_editor_panels, _elementor_menus, _elementor_editor_current_user, _elementor_editor_interactions, _elementor_editor_variables, _elementor_editor_canvas, _elementor_editor, _elementor_schema, _elementor_wp_media) {
 
 //#region \0rolldown/runtime.js
 	var __create = Object.create;
@@ -516,10 +516,6 @@ react = __toESM(react);
 		if ((0, _elementor_editor_styles_repository.isElementsStylesProvider)(provider)) return (theme) => theme.palette.accent.main;
 		return getStyleProviderColors(provider).getThemeColor;
 	};
-	function getTempStylesProviderThemeColor(provider) {
-		if ((0, _elementor_editor_styles_repository.isElementsStylesProvider)(provider)) return (theme) => theme.palette.primary.main;
-		return getStylesProviderThemeColor(provider);
-	}
 
 //#endregion
 //#region packages/packages/core/editor-editing-panel/src/utils/tracking/subscribe.ts
@@ -1026,7 +1022,7 @@ react = __toESM(react);
 			alignItems: "center"
 		}, isStyled && /* @__PURE__ */ react.createElement(StyleIndicator, {
 			"aria-label": (0, _wordpress_i18n.__)("Has style", "elementor"),
-			getColor: getTempStylesProviderThemeColor(provider ?? "")
+			getColor: getStylesProviderThemeColor(provider ?? "")
 		}), label)));
 	}
 	function UnapplyClassMenuItem({ closeMenu, ...props }) {
@@ -1098,7 +1094,7 @@ react = __toESM(react);
 				openEditMode();
 			}
 		}, [id, convertedFromLocalId]);
-		return /* @__PURE__ */ react.createElement(_elementor_ui.ThemeProvider, { palette: "default" }, /* @__PURE__ */ react.createElement(_elementor_ui.UnstableChipGroup, {
+		return /* @__PURE__ */ react.createElement(_elementor_editor_ui.ThemeProvider, null, /* @__PURE__ */ react.createElement(_elementor_ui.UnstableChipGroup, {
 			ref: setChipRef,
 			...chipGroupProps,
 			"aria-label": `Edit ${label}`,
@@ -1205,7 +1201,7 @@ react = __toESM(react);
 		label: (0, _wordpress_i18n.__)("local", "elementor"),
 		value: null,
 		fixed: true,
-		color: getTempStylesProviderColorName("accent"),
+		color: "accent",
 		icon: /* @__PURE__ */ react.createElement(_elementor_icons.MapPinIcon, null),
 		provider: null
 	};
@@ -1380,16 +1376,12 @@ react = __toESM(react);
 					label: styleDef.label,
 					value: styleDef.id,
 					fixed: isElements,
-					color: getTempStylesProviderColorName(getStylesProviderColorName(provider.getKey())),
+					color: getStylesProviderColorName(provider.getKey()),
 					icon: isElements ? /* @__PURE__ */ react.createElement(_elementor_icons.MapPinIcon, null) : null,
 					provider: provider.getKey()
 				};
 			});
 		});
-	}
-	function getTempStylesProviderColorName(color) {
-		if (color === "accent") return "primary";
-		return color;
 	}
 	function useCreateAction() {
 		const [provider, createAction] = useCreateAndApplyClass();
@@ -1918,6 +1910,39 @@ react = __toESM(react);
 	};
 
 //#endregion
+//#region packages/packages/core/editor-editing-panel/src/components/content-only-infotip.tsx
+	var LEARN_MORE_URL = "https://go.elementor.com/content-only-access-infotip";
+	var INFOTIP_WIDTH = 300;
+	var ContentOnlyInfotip = ({ children }) => {
+		const [isOpen, setIsOpen] = (0, react.useState)(false);
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Infotip, {
+			open: isOpen,
+			placement: "bottom",
+			color: "secondary",
+			content: /* @__PURE__ */ react.createElement(_elementor_ui.Alert, {
+				color: "secondary",
+				icon: /* @__PURE__ */ react.createElement(_elementor_icons.InfoCircleFilledIcon, null),
+				size: "small"
+			}, /* @__PURE__ */ react.createElement(_elementor_ui.AlertTitle, null, (0, _wordpress_i18n.__)("Content-only access", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.Box, { component: "span" }, (0, _wordpress_i18n.__)("Your Site Admin has limited this role to content editing.", "elementor"), " ", /* @__PURE__ */ react.createElement(_elementor_ui.Link, {
+				href: LEARN_MORE_URL,
+				target: "_blank",
+				rel: "noreferrer",
+				color: "info.main"
+			}, (0, _wordpress_i18n.__)("Learn More", "elementor")))),
+			slotProps: { popper: {
+				sx: { width: INFOTIP_WIDTH },
+				onMouseEnter: () => setIsOpen(true),
+				onMouseLeave: () => setIsOpen(false)
+			} }
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+			component: "span",
+			sx: { pointerEvents: "auto" },
+			onMouseEnter: () => setIsOpen(true),
+			onMouseLeave: () => setIsOpen(false)
+		}, children));
+	};
+
+//#endregion
 //#region packages/packages/core/editor-editing-panel/src/components/sections-list.tsx
 	function SectionsList(props) {
 		return /* @__PURE__ */ react.createElement(_elementor_ui.List, {
@@ -1943,13 +1968,16 @@ react = __toESM(react);
 		});
 		return elementSettingsWithDefaults;
 	}
+	function isHiddenByDependency(dependency, values) {
+		const depCheck = (0, _elementor_editor_props.isDependencyMet)(dependency, values);
+		const failingTerm = !depCheck.isMet ? depCheck.failingDependencies[0] : void 0;
+		return !!failingTerm && !(0, _elementor_editor_props.isDependency)(failingTerm) && failingTerm.effect === "hide";
+	}
 	function extractDependencyEffect(bind, propsSchema, settings) {
 		const settingsWithDefaults = getElementSettingsWithDefaults(propsSchema, settings);
 		const propType = propsSchema[bind];
-		const depCheck = (0, _elementor_editor_props.isDependencyMet)(propType?.dependencies, settingsWithDefaults);
-		const failingTerm = !depCheck.isMet ? depCheck.failingDependencies[0] : void 0;
 		return {
-			isHidden: !!failingTerm && !(0, _elementor_editor_props.isDependency)(failingTerm) && failingTerm?.effect === "hide",
+			isHidden: isHiddenByDependency(propType?.dependencies, settingsWithDefaults),
 			isDisabled: (prop) => !(0, _elementor_editor_props.isDependencyMet)(prop?.dependencies, settingsWithDefaults).isMet
 		};
 	}
@@ -2114,6 +2142,20 @@ react = __toESM(react);
 	}
 
 //#endregion
+//#region packages/packages/core/editor-editing-panel/src/utils/ancestor-dependency-utils.ts
+	function getSettingsWithDefaults(ancestor, elementType) {
+		const schema = (0, _elementor_editor_elements.getWidgetsCache)()?.[elementType]?.atomic_props_schema ?? {};
+		return getElementSettingsWithDefaults(schema, Object.fromEntries(Object.keys(schema).map((key) => [key, ancestor.settings.get(key) ?? null])));
+	}
+	function isHiddenByAncestor(elementId, propType) {
+		const ancestorDependency = propType?.meta?.ancestor_dependency;
+		if (!Array.isArray(ancestorDependency?.dependency?.terms)) return false;
+		const ancestor = (0, _elementor_editor_elements.findClosestContainer)((0, _elementor_editor_elements.getContainer)(elementId)?.parent, (container) => container.model.get("elType") === ancestorDependency.element_type);
+		if (!ancestor) return false;
+		return isHiddenByDependency(ancestorDependency.dependency, getSettingsWithDefaults(ancestor, ancestorDependency.element_type));
+	}
+
+//#endregion
 //#region packages/packages/core/editor-editing-panel/src/components/section.tsx
 	function Section({ title, children, defaultExpanded = false, titleEnd, unmountOnExit = true, action }) {
 		const [isOpen, setIsOpen] = useStateByElement(title, !!defaultExpanded);
@@ -2232,6 +2274,11 @@ react = __toESM(react);
 			layout: "full",
 			propTypeUtil: queryArrayPropTypeUtil
 		},
+		"query-select": {
+			component: _elementor_editor_controls.QuerySelectControl,
+			layout: "full",
+			propTypeUtil: _elementor_editor_props.queryPropTypeUtil
+		},
 		"query-filter-repeater": {
 			component: _elementor_editor_controls.QueryFilterRepeaterControl,
 			layout: "full",
@@ -2306,6 +2353,11 @@ react = __toESM(react);
 			component: _elementor_editor_controls.AttachmentTypeControl,
 			layout: "custom",
 			propTypeUtil: _elementor_editor_props.stringPropTypeUtil
+		},
+		notice: {
+			component: _elementor_editor_controls.NoticeControl,
+			layout: "full",
+			propTypeUtil: _elementor_editor_props.stringPropTypeUtil
 		}
 	};
 	var ControlsRegistry = class {
@@ -2376,6 +2428,29 @@ react = __toESM(react);
 	};
 
 //#endregion
+//#region packages/packages/core/editor-editing-panel/src/hooks/use-is-hidden-by-ancestor.ts
+	function useIsHiddenByAncestor(bind) {
+		const { element: { id: elementId }, elementType: { propsSchema } } = useElement();
+		const propType = propsSchema[bind];
+		return (0, _elementor_editor_v1_adapters.__privateUseListenTo)([
+			(0, _elementor_editor_v1_adapters.v1ReadyEvent)(),
+			(0, _elementor_editor_v1_adapters.commandEndEvent)("document/elements/set-settings"),
+			(0, _elementor_editor_v1_adapters.commandEndEvent)("document/elements/create"),
+			(0, _elementor_editor_v1_adapters.commandEndEvent)("document/elements/delete"),
+			(0, _elementor_editor_v1_adapters.commandEndEvent)("document/elements/move")
+		], () => isHiddenByAncestor(elementId, propType), [elementId, propType]);
+	}
+
+//#endregion
+//#region packages/packages/core/editor-editing-panel/src/utils/is-responsive-prop-type.ts
+	function isResponsivePropType(propType) {
+		if (!propType) return false;
+		if ("key" in propType && propType.key === "responsive") return true;
+		if (propType.kind === "union") return Object.values(propType.prop_types).some((inner) => isResponsivePropType(inner));
+		return false;
+	}
+
+//#endregion
 //#region packages/packages/core/editor-editing-panel/src/controls-registry/create-top-level-object-type.ts
 	var createTopLevelObjectType = ({ schema }) => {
 		return {
@@ -2391,6 +2466,7 @@ react = __toESM(react);
 //#endregion
 //#region packages/packages/core/editor-editing-panel/src/controls-registry/settings-field.tsx
 	var HISTORY_DEBOUNCE_WAIT = 800;
+	var DESKTOP_BREAKPOINT = "desktop";
 	var SettingsField = ({ bind, children, propDisplayName }) => {
 		const { element: { id: elementId }, elementType: { propsSchema, dependenciesPerTargetMapping = {} }, settings: currentElementSettings } = useElement();
 		const value = { [bind]: currentElementSettings?.[bind] ?? null };
@@ -2399,8 +2475,9 @@ react = __toESM(react);
 			elementId,
 			propDisplayName
 		});
+		const isHiddenByAncestor = useIsHiddenByAncestor(bind);
 		const { isDisabled, isHidden } = extractDependencyEffect(bind, propsSchema, currentElementSettings);
-		if (isHidden) return null;
+		if (isHidden || isHiddenByAncestor) return null;
 		const setValue = (newValue, _ = {}, meta) => {
 			const { withHistory = true } = meta ?? {};
 			const dependents = extractOrderedDependencies(dependenciesPerTargetMapping);
@@ -2418,7 +2495,20 @@ react = __toESM(react);
 			value,
 			setValue,
 			isDisabled
-		}, /* @__PURE__ */ react.createElement(_elementor_editor_controls.PropKeyProvider, { bind }, children));
+		}, /* @__PURE__ */ react.createElement(_elementor_editor_controls.PropKeyProvider, { bind }, isResponsivePropType(propsSchema[bind]) ? /* @__PURE__ */ react.createElement(ResponsiveBinding, null, children) : children));
+	};
+	var ResponsiveBinding = ({ children }) => {
+		const { value, setValue, propType, disabled } = (0, _elementor_editor_controls.useBoundProp)(_elementor_editor_props.responsivePropTypeUtil);
+		const breakpoint = (0, _elementor_editor_responsive.useActiveBreakpoint)() ?? DESKTOP_BREAKPOINT;
+		const activeBreakpoints = ((0, _elementor_editor_responsive.useBreakpoints)() ?? []).map(({ id }) => id);
+		const inherited = (0, _elementor_editor_props.responsiveFallbackChain)(breakpoint).filter((key) => key !== breakpoint && activeBreakpoints.includes(key)).map((key) => value?.[key]).find((entry) => entry !== null && entry !== void 0);
+		return /* @__PURE__ */ react.createElement(_elementor_editor_controls.PropProvider, {
+			propType,
+			value,
+			setValue,
+			placeholder: { [breakpoint]: inherited },
+			isDisabled: () => disabled
+		}, /* @__PURE__ */ react.createElement(_elementor_editor_controls.PropKeyProvider, { bind: breakpoint }, children));
 	};
 	function useUndoableUpdateElementProp({ elementId, propDisplayName }) {
 		return (0, react.useMemo)(() => {
@@ -2480,7 +2570,7 @@ react = __toESM(react);
 		if (!controlsRegistry.get(value.type)) return null;
 		const layout = value.meta?.layout || controlsRegistry.getLayout(value.type);
 		const controlProps = populateChildControlProps(value.props);
-		if (layout === "custom") controlProps.label = value.label;
+		if (layout === "custom" || value.type === "video" || value.type === "svg-media") controlProps.label = value.label;
 		if (type === "element-control") return /* @__PURE__ */ react.createElement(ControlLayout, {
 			control: value,
 			layout,
@@ -2558,16 +2648,17 @@ react = __toESM(react);
 	function renderSectionItems({ items, element, propsSchema, settings }) {
 		return items?.flatMap((item) => {
 			if (!isControl(item)) return [];
-			if (item.type === "control" && isControlHiddenByDependencies(item, propsSchema, settings)) return [];
+			if (item.type === "control" && isControlHiddenByDependencies(item, propsSchema, settings, element.id)) return [];
 			return [/* @__PURE__ */ react.createElement(SettingsControl, {
 				key: getKey(item, element),
 				control: item
 			})];
 		}) ?? [];
 	}
-	function isControlHiddenByDependencies(control, propsSchema, settings) {
-		const { isHidden } = extractDependencyEffect(control.value.bind, propsSchema, settings);
-		return isHidden;
+	function isControlHiddenByDependencies(control, propsSchema, settings, elementId) {
+		const { bind } = control.value;
+		const { isHidden } = extractDependencyEffect(bind, propsSchema, settings);
+		return isHidden || isHiddenByAncestor(elementId, propsSchema[bind]);
 	}
 
 //#endregion
@@ -3045,7 +3136,7 @@ react = __toESM(react);
 //#region packages/packages/core/editor-editing-panel/src/styles-inheritance/components/ui-providers.tsx
 	var UiProviders = ({ children }) => {
 		const { isSiteRtl } = useDirection();
-		return /* @__PURE__ */ react.createElement(_elementor_ui.DirectionProvider, { rtl: isSiteRtl }, /* @__PURE__ */ react.createElement(_elementor_ui.ThemeProvider, null, children));
+		return /* @__PURE__ */ react.createElement(_elementor_ui.DirectionProvider, { rtl: isSiteRtl }, /* @__PURE__ */ react.createElement(_elementor_editor_ui.ThemeProvider, null, children));
 	};
 
 //#endregion
@@ -5563,6 +5654,8 @@ react = __toESM(react);
 
 //#endregion
 //#region packages/packages/core/editor-editing-panel/src/components/editing-panel-tabs.tsx
+	var CONTENT_ONLY_TAB = "settings";
+	var DESIGN_TABS = ["style", "interactions"];
 	var EditingPanelTabs = () => {
 		const { element } = useElement();
 		return /* @__PURE__ */ react.createElement(react.Fragment, { key: element.id }, /* @__PURE__ */ react.createElement(PanelTabContent, null));
@@ -5570,9 +5663,23 @@ react = __toESM(react);
 	var PanelTabContent = () => {
 		const { element } = useElement();
 		const defaultComponentTab = useDefaultPanelSettings().defaultTab;
-		const isPromotedElement = !!(0, _elementor_editor_elements.getWidgetsCache)()?.[element.type]?.meta?.is_pro_promotion;
+		const elementMeta = (0, _elementor_editor_elements.getWidgetsCache)()?.[element.type]?.meta;
+		const isPromotedElement = !!elementMeta?.is_pro_promotion;
+		const hasDesignTabs = !elementMeta?.hide_design_tabs;
+		const areDesignTabsRestricted = (0, _elementor_editor_current_user.useHasContentOnlyAccess)() && !isPromotedElement;
 		const [storedTab, setCurrentTab] = useStateByElement("tab", defaultComponentTab);
-		const { getTabProps, getTabPanelProps, getTabsProps } = (0, _elementor_ui.useTabs)(isPromotedElement && storedTab === "settings" ? "style" : storedTab);
+		const { getTabProps, getTabPanelProps, getTabsProps } = (0, _elementor_ui.useTabs)(resolveCurrentTab({
+			storedTab,
+			isPromotedElement,
+			areDesignTabsRestricted,
+			hasDesignTabs
+		}));
+		const getDesignTabProps = (tab) => ({
+			...getTabProps(tab),
+			disabled: areDesignTabsRestricted,
+			sx: areDesignTabsRestricted ? { pointerEvents: "auto" } : void 0
+		});
+		const withRestrictionInfotip = (label) => areDesignTabsRestricted ? /* @__PURE__ */ react.createElement(ContentOnlyInfotip, null, label) : label;
 		return /* @__PURE__ */ react.createElement(ScrollProvider, null, /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
 			direction: "column",
 			sx: { width: "100%" }
@@ -5585,28 +5692,34 @@ react = __toESM(react);
 			sx: { mt: .5 },
 			...getTabsProps(),
 			onChange: (_, newValue) => {
+				if (areDesignTabsRestricted && DESIGN_TABS.includes(newValue)) return;
 				getTabsProps().onChange(_, newValue);
 				setCurrentTab(newValue);
 			}
 		}, !isPromotedElement && /* @__PURE__ */ react.createElement(_elementor_ui.Tab, {
 			label: (0, _wordpress_i18n.__)("General", "elementor"),
 			...getTabProps("settings")
-		}), /* @__PURE__ */ react.createElement(_elementor_ui.Tab, {
-			label: (0, _wordpress_i18n.__)("Style", "elementor"),
-			...getTabProps("style")
-		}), /* @__PURE__ */ react.createElement(_elementor_ui.Tab, {
-			label: (0, _wordpress_i18n.__)("Interactions", "elementor"),
-			...getTabProps("interactions")
+		}), hasDesignTabs && /* @__PURE__ */ react.createElement(_elementor_ui.Tab, {
+			label: withRestrictionInfotip((0, _wordpress_i18n.__)("Style", "elementor")),
+			...getDesignTabProps("style")
+		}), hasDesignTabs && /* @__PURE__ */ react.createElement(_elementor_ui.Tab, {
+			label: withRestrictionInfotip((0, _wordpress_i18n.__)("Interactions", "elementor")),
+			...getDesignTabProps("interactions")
 		})), /* @__PURE__ */ react.createElement(_elementor_ui.Divider, null)), !isPromotedElement && /* @__PURE__ */ react.createElement(_elementor_ui.TabPanel, {
 			...getTabPanelProps("settings"),
 			disablePadding: true
-		}, /* @__PURE__ */ react.createElement(SettingsTab, null)), /* @__PURE__ */ react.createElement(_elementor_ui.TabPanel, {
+		}, /* @__PURE__ */ react.createElement(SettingsTab, null)), hasDesignTabs && !areDesignTabsRestricted && /* @__PURE__ */ react.createElement(react.Fragment, null, /* @__PURE__ */ react.createElement(_elementor_ui.TabPanel, {
 			...getTabPanelProps("style"),
 			disablePadding: true
 		}, /* @__PURE__ */ react.createElement(StyleTab, null)), /* @__PURE__ */ react.createElement(_elementor_ui.TabPanel, {
 			...getTabPanelProps("interactions"),
 			disablePadding: true
-		}, /* @__PURE__ */ react.createElement(InteractionsTab, null))));
+		}, /* @__PURE__ */ react.createElement(InteractionsTab, null)))));
+	};
+	var resolveCurrentTab = ({ storedTab, isPromotedElement, areDesignTabsRestricted, hasDesignTabs }) => {
+		if ((areDesignTabsRestricted || !hasDesignTabs) && DESIGN_TABS.includes(storedTab)) return CONTENT_ONLY_TAB;
+		if (isPromotedElement && storedTab === "settings") return "style";
+		return storedTab;
 	};
 
 //#endregion
@@ -5733,7 +5846,7 @@ react = __toESM(react);
 	var ACCORDION_ITEM_TITLE_ELEMENT_TYPE = "e-accordion-item-title";
 	var ACCORDION_ITEM_ICON_ELEMENT_TYPE = "e-accordion-item-icon";
 	var ACCORDION_ITEM_CONTENT_ELEMENT_TYPE = "e-accordion-item-content";
-	var PARAGRAPH_WIDGET_TYPE = "e-paragraph";
+	var PARAGRAPH_WIDGET_TYPE$1 = "e-paragraph";
 	var getItemTitle$1 = /* @__PURE__ */ __name((position) => (0, _wordpress_i18n.sprintf)((0, _wordpress_i18n.__)("Accordion Item %d", "elementor"), position), "getItemTitle");
 	var TRAILING_NUMBER$1 = /(\d+)\s*$/;
 	var getNextItemNumber$1 = /* @__PURE__ */ __name((existingTitles) => {
@@ -5746,7 +5859,7 @@ react = __toESM(react);
 		while (taken.has(getItemTitle$1(next))) next += 1;
 		return next;
 	}, "getNextItemNumber");
-	var buildItemModel = (position, showIcon) => {
+	var buildItemModel$1 = /* @__PURE__ */ __name((position, showIcon, differentOpenIcon) => {
 		const numberedTitle = getItemTitle$1(position);
 		return {
 			elType: ACCORDION_ITEM_ELEMENT_TYPE,
@@ -5759,14 +5872,17 @@ react = __toESM(react);
 				elType: ACCORDION_ITEM_HEADER_ELEMENT_TYPE$1,
 				id: (0, _elementor_editor_elements.generateElementId)(),
 				editor_settings: { title: (0, _wordpress_i18n.__)("Header", "elementor") },
-				settings: { show_icon: _elementor_editor_props.booleanPropTypeUtil.create(showIcon) },
+				settings: {
+					show_icon: _elementor_editor_props.booleanPropTypeUtil.create(showIcon),
+					different_open_icon: _elementor_editor_props.booleanPropTypeUtil.create(differentOpenIcon)
+				},
 				elements: [{
 					elType: ACCORDION_ITEM_TITLE_ELEMENT_TYPE,
 					id: (0, _elementor_editor_elements.generateElementId)(),
 					editor_settings: { title: (0, _wordpress_i18n.__)("Title", "elementor") },
 					elements: [{
 						elType: "widget",
-						widgetType: PARAGRAPH_WIDGET_TYPE,
+						widgetType: PARAGRAPH_WIDGET_TYPE$1,
 						id: (0, _elementor_editor_elements.generateElementId)(),
 						elements: [],
 						settings: {
@@ -5792,9 +5908,9 @@ react = __toESM(react);
 				hydrateDefaultChildren: true
 			}]
 		};
-	};
+	}, "buildItemModel");
 	var useActions$1 = /* @__PURE__ */ __name(() => {
-		const addItem = ({ accordionId, existingTitles, items, showIcon }) => {
+		const addItem = ({ accordionId, existingTitles, items, showIcon, differentOpenIcon = false }) => {
 			const accordion = (0, _elementor_editor_elements.getContainer)(accordionId);
 			if (!accordion) throw new Error("Accordion container not found");
 			const titles = [...existingTitles];
@@ -5804,7 +5920,7 @@ react = __toESM(react);
 					title: (0, _wordpress_i18n.__)("Accordion", "elementor"),
 					elements: [{
 						container: accordion,
-						model: buildItemModel(position, showIcon)
+						model: buildItemModel$1(position, showIcon, differentOpenIcon)
 					}]
 				});
 				titles.push(getItemTitle$1(position));
@@ -5876,6 +5992,48 @@ react = __toESM(react);
 	function getAccordionHeaderIds(accordionId) {
 		return ((0, _elementor_editor_elements.getContainer)(accordionId)?.children ?? []).filter((child) => child.model.get("elType") === ACCORDION_ITEM_ELEMENT_TYPE).map((item) => item.children?.find((child) => child.model.get("elType") === ACCORDION_ITEM_HEADER_ELEMENT_TYPE)).filter((header) => Boolean(header)).map((header) => header.id);
 	}
+	var cascadeDifferentOpenIconToHeaders = (0, _elementor_editor_v1_adapters.undoable)({
+		do: ({ accordionId, differentOpenIcon }) => {
+			const headerIds = getAccordionHeaderIds(accordionId);
+			const previous = Object.fromEntries(headerIds.map((headerId) => [headerId, (0, _elementor_editor_elements.getElementSettings)(headerId, ["different_open_icon"]).different_open_icon]));
+			headerIds.forEach((headerId) => {
+				(0, _elementor_editor_elements.updateElementSettings)({
+					id: headerId,
+					props: { different_open_icon: _elementor_editor_props.booleanPropTypeUtil.create(differentOpenIcon) },
+					withHistory: false
+				});
+			});
+			return { previous };
+		},
+		undo: (_payload, { previous }) => {
+			Object.entries(previous).forEach(([headerId, previousValue]) => {
+				(0, _elementor_editor_elements.updateElementSettings)({
+					id: headerId,
+					props: { different_open_icon: previousValue ?? null },
+					withHistory: false
+				});
+			});
+		}
+	}, {
+		title: (0, _wordpress_i18n.__)("Accordion", "elementor"),
+		subtitle: (0, _wordpress_i18n.__)("Different icon when open", "elementor"),
+		debounce: { wait: 800 }
+	});
+	function useDifferentOpenIconWriteThrough(accordionId, differentOpenIcon) {
+		const previousRef = (0, react.useRef)(null);
+		(0, react.useEffect)(() => {
+			const previous = previousRef.current;
+			previousRef.current = {
+				accordionId,
+				differentOpenIcon
+			};
+			if (!previous || previous.accordionId !== accordionId || previous.differentOpenIcon === differentOpenIcon) return;
+			cascadeDifferentOpenIconToHeaders({
+				accordionId,
+				differentOpenIcon
+			});
+		}, [accordionId, differentOpenIcon]);
+	}
 	function useShowIconWriteThrough(accordionId, showIcon) {
 		const previousRef = (0, react.useRef)(null);
 		(0, react.useEffect)(() => {
@@ -5899,7 +6057,9 @@ react = __toESM(react);
 		const { addItem, duplicateItem, moveItem, removeItem } = useActions$1();
 		const { [ACCORDION_ITEM_ELEMENT_TYPE]: items } = (0, _elementor_editor_elements.useElementChildren)(element.id, { [ACCORDION_ELEMENT_TYPE]: ACCORDION_ITEM_ELEMENT_TYPE }, { includeSelfAsParent: true });
 		const showIcon = _elementor_editor_props.booleanPropTypeUtil.extract(settings.show_icon) ?? true;
+		const differentOpenIcon = _elementor_editor_props.booleanPropTypeUtil.extract(settings.different_open_icon) ?? false;
 		useShowIconWriteThrough(element.id, showIcon);
+		useDifferentOpenIconWriteThrough(element.id, differentOpenIcon);
 		const repeaterValues = items.map((item, index) => {
 			return {
 				id: item.id,
@@ -5912,7 +6072,8 @@ react = __toESM(react);
 				accordionId: element.id,
 				existingTitles: repeaterValues.map(({ title }) => title),
 				items: meta.action.payload,
-				showIcon
+				showIcon,
+				differentOpenIcon
 			});
 			if (meta?.action?.type === "remove") return removeItem({ items: meta.action.payload });
 			if (meta?.action?.type === "duplicate") return duplicateItem({ items: meta.action.payload });
@@ -5983,8 +6144,11 @@ react = __toESM(react);
 //#endregion
 //#region packages/packages/core/editor-editing-panel/src/controls-registry/element-controls/list-items-control/list-actions.ts
 	var LIST_ITEM_ELEMENT_TYPE = "e-list-item";
+	var LIST_ITEM_MARKER_ELEMENT_TYPE = "e-list-item-marker";
+	var LIST_ITEM_CONTENT_ELEMENT_TYPE = "e-list-item-content";
+	var PARAGRAPH_WIDGET_TYPE = "e-paragraph";
 	var TRAILING_NUMBER = /(\d+)\s*$/;
-	var getItemTitle = (position) => `Item ${position}`;
+	var getItemTitle = (position) => `List item ${position}`;
 	var getNextItemNumber = (existingTitles) => {
 		const taken = new Set(existingTitles.filter((title) => Boolean(title)));
 		let next = existingTitles.reduce((max, title) => {
@@ -5994,6 +6158,36 @@ react = __toESM(react);
 		}, 0) + 1;
 		while (taken.has(getItemTitle(next))) next += 1;
 		return next;
+	};
+	var buildItemModel = (position, showMarkers) => {
+		const itemTitle = getItemTitle(position);
+		return {
+			elType: LIST_ITEM_ELEMENT_TYPE,
+			id: (0, _elementor_editor_elements.generateElementId)(),
+			settings: { show_markers: _elementor_editor_props.booleanPropTypeUtil.create(showMarkers) },
+			editor_settings: {
+				title: itemTitle,
+				initial_position: position
+			},
+			elements: [{
+				elType: LIST_ITEM_MARKER_ELEMENT_TYPE,
+				id: (0, _elementor_editor_elements.generateElementId)(),
+				editor_settings: { title: (0, _wordpress_i18n.__)("Marker", "elementor") },
+				elements: [],
+				hydrateDefaultChildren: true
+			}, {
+				elType: LIST_ITEM_CONTENT_ELEMENT_TYPE,
+				id: (0, _elementor_editor_elements.generateElementId)(),
+				editor_settings: { title: (0, _wordpress_i18n.__)("Content", "elementor") },
+				elements: [{
+					elType: "widget",
+					widgetType: PARAGRAPH_WIDGET_TYPE,
+					id: (0, _elementor_editor_elements.generateElementId)(),
+					elements: [],
+					settings: { paragraph: _elementor_editor_props.escapedHtmlPropTypeUtil.create(itemTitle) }
+				}]
+			}]
+		};
 	};
 	var duplicateItem = ({ items }) => {
 		(0, _elementor_editor_elements.duplicateElements)({
@@ -6030,15 +6224,7 @@ react = __toESM(react);
 				title: (0, _wordpress_i18n.__)("List Items", "elementor"),
 				elements: [{
 					container: listContainer,
-					model: {
-						elType: LIST_ITEM_ELEMENT_TYPE,
-						settings: { show_markers: _elementor_editor_props.booleanPropTypeUtil.create(showMarkers) },
-						hydrateDefaultChildren: true,
-						editor_settings: {
-							title: getItemTitle(position),
-							initial_position: position
-						}
-					},
+					model: buildItemModel(position, showMarkers),
 					options: { at: index }
 				}]
 			});
@@ -6101,7 +6287,7 @@ react = __toESM(react);
 		return label?.trim() ? label : fallbackLabel;
 	};
 	var getDefaultListItemLabel = (index) => {
-		return `Item ${index + 1}`;
+		return `List item ${index + 1}`;
 	};
 	var ListItemsControl = ({ label }) => {
 		return /* @__PURE__ */ react.createElement(ListItemsControlContent, { label });
@@ -6145,7 +6331,7 @@ react = __toESM(react);
 				getId: ({ item }) => item.id,
 				initialValues: {
 					id: "",
-					title: "Item"
+					title: "List item"
 				},
 				Label: ItemLabel$1,
 				Content: ItemContent$1,
@@ -7527,7 +7713,10 @@ react = __toESM(react);
 	};
 	var getGradientValue = (gradient) => {
 		const stops = gradient.stops?.map(({ color, offset }) => `${color} ${offset ?? 0}%`)?.join(",");
-		if (gradient.type === "linear") return `linear-gradient(${gradient.angle}deg, ${stops})`;
+		if (gradient.type === "linear") {
+			if (gradient.angle === null || gradient.angle === void 0) return `linear-gradient(${stops})`;
+			return `linear-gradient(${gradient.angle}deg, ${stops})`;
+		}
 		return `radial-gradient(circle at ${gradient.positions}, ${stops})`;
 	};
 
@@ -7761,6 +7950,6 @@ react = __toESM(react);
 	(window.elementorV2 = window.elementorV2 || {}).editorEditingPanel = src_exports;
 
 //#endregion
-})(React, elementorV2.ui, elementorV2.editorElements, elementorV2.editorProps, elementorV2.locations, elementorV2.session, elementorV2.editorStylesRepository, elementorV2.utils, elementorV2.editorControls, elementorV2.icons, elementorV2.editorUi, wp.i18n, elementorV2.editorStyles, elementorV2.editorV1Adapters, elementorV2.editorDocuments, elementorV2.editorResponsive, elementorV2.editorPanels, elementorV2.menus, elementorV2.editorInteractions, elementorV2.editorVariables, elementorV2.editorCanvas, elementorV2.editor, elementorV2.schema, elementorV2.wpMedia);
+})(React, elementorV2.ui, elementorV2.editorElements, elementorV2.editorProps, elementorV2.locations, elementorV2.session, elementorV2.editorStylesRepository, elementorV2.utils, elementorV2.editorControls, elementorV2.icons, elementorV2.editorUi, wp.i18n, elementorV2.editorStyles, elementorV2.editorV1Adapters, elementorV2.editorDocuments, elementorV2.editorResponsive, elementorV2.editorPanels, elementorV2.menus, elementorV2.editorCurrentUser, elementorV2.editorInteractions, elementorV2.editorVariables, elementorV2.editorCanvas, elementorV2.editor, elementorV2.schema, elementorV2.wpMedia);
 window.elementorV2.editorEditingPanel?.init?.();
 //# sourceMappingURL=editor-editing-panel.js.map

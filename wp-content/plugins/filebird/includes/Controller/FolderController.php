@@ -1,0 +1,448 @@
+<?php
+
+namespace FileBird\Controller;
+
+use FileBird\Model\Folder as FolderModel;
+use FileBird\Model\UserSettingModel;
+use FileBird\Classes\Tree;
+use FileBird\Classes\Helpers;
+
+defined( 'ABSPATH' ) || exit;
+class FolderController extends Controller {
+	/**
+	 * Whether the current user owns (or, in shared mode, may use) a media folder.
+	 *
+	 * @param int $folder_id Folder ID; 0 means the unassigned root.
+	 * @return bool
+	 */
+	private static function canUseFolder( $folder_id ) {
+		return FolderModel::verifyAuthor(
+			(int) $folder_id,
+			get_current_user_id(),
+			get_option( 'njt_fbv_folder_per_user', '0' ) === '1'
+		);
+	}
+
+	public function getFolders( \WP_REST_Request $request ) {
+		$order   = sanitize_key( $request->get_param( 'order' ) );
+		$orderby = sanitize_key( $request->get_param( 'orderby' ) );
+		$lang    = sanitize_key( $request->get_param( 'language' ) );
+		$search  = sanitize_text_field( $request->get_param( 'search' ) );
+
+		$tree = ( new Tree( $orderby, $order, $search ) )->get();
+
+		return rest_ensure_response(
+			array(
+				'tree'                => $tree,
+				'allAttachmentsCount' => Tree::getCount( -1, $lang ),
+				'attachmentsCount'    => FolderModel::countAttachments( $lang ),
+			)
+		);
+	}
+
+	public function setFolderCounter( \WP_REST_Request $request ) {
+		$type = sanitize_key( $request->get_param( 'type' ) );
+		$lang = sanitize_key( $request->get_param( 'language' ) );
+
+		// add_filter(
+        //     'fbv_counter_type',
+        //     function() use ( $type ) {
+		// 		return $type;
+		// 	}
+        // );
+
+		UserSettingModel::getInstance()->setFolderCounterType( $type );
+
+		return rest_ensure_response( FolderModel::countAttachments( $lang ) );
+	}
+
+	public function updateFolderColor( \WP_REST_Request $request ) {
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return new \WP_Error(
+				'rest_forbidden',
+				__( 'Sorry, you are not allowed to manage folders.', 'filebird' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+		$id    = (int) $request->get_param( 'folderId' );
+		$color = sanitize_hex_color( $request->get_param( 'color' ) );
+
+		if ( $id <= 0 || ! FolderModel::isFolderExist( $id ) ) {
+			return new \WP_Error( 'validation_failed', __( 'Validation failed', 'filebird' ), array( 'status' => 400 ) );
+		}
+
+		if ( ! self::canUseFolder( $id ) ) {
+			return new \WP_Error(
+				'rest_forbidden',
+				__( 'Permisson Denied.', 'filebird' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+		$option        = get_option( 'fbv_folder_colors', array() );
+		$option[ $id ] = $color;
+
+		update_option( 'fbv_folder_colors', $option );
+
+		return rest_ensure_response( true );
+	}
+
+	public function createFolder( \WP_REST_Request $request ) {
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return new \WP_Error( 
+				'rest_forbidden', 
+				__( 'Sorry, you are not allowed to manage folders.', 'filebird' ), 
+				array( 'status' => rest_authorization_required_code() ) 
+			);
+		}
+
+		$name   = $request->get_param( 'title' );
+		$parent = $request->get_param( 'parent' );
+		$name   = isset( $name ) ? sanitize_text_field( wp_unslash( $name ) ) : '';
+		$parent = isset( $parent ) ? sanitize_text_field( $parent ) : '';
+		if ( $name != '' && $parent != '' ) {
+			$insert = FolderModel::newUniqueFolder( $name, $parent );
+			if ( $insert !== false ) {
+				return rest_ensure_response( array( $insert ) );
+			} else {
+				return new \WP_Error( 'folder_name_exist', __( 'A folder with this name already exists. Please choose another one.', 'filebird' ) );
+			}
+		} else {
+			return new \WP_Error( 'validation_failed', __( 'Validation failed', 'filebird' ) );
+		}
+	}
+
+	public function updateFolder( \WP_REST_Request $request ) {
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return new \WP_Error( 
+				'rest_forbidden', 
+				__( 'Sorry, you are not allowed to manage folders.', 'filebird' ), 
+				array( 'status' => rest_authorization_required_code() ) 
+			);
+		}
+		$id     = $request->get_param( 'id' );
+		$parent = $request->get_param( 'parent' );
+		$name   = $request->get_param( 'title' );
+
+		$id     = isset( $id ) ? sanitize_text_field( $id ) : '';
+		$parent = isset( $parent ) ? intval( sanitize_text_field( $parent ) ) : '';
+		$name   = isset( $name ) ? sanitize_text_field( wp_unslash( $name ) ) : '';
+
+		$current_user_id = get_current_user_id();
+		$folder_per_user = get_option( 'njt_fbv_folder_per_user', '0' ) === '1';
+
+		if ( is_numeric( $id ) && is_numeric( $parent ) && $name != '' && FolderModel::verifyAuthor( $id, $current_user_id, $folder_per_user ) ) {
+			$update = FolderModel::updateFolderName( $name, $parent, $id, false );
+			if ( true === $update ) {
+				return rest_ensure_response( $update );
+			} else {
+				return new \WP_Error( 'folder_name_exist', __( 'A folder with this name already exists. Please choose another one.', 'filebird' ) );
+			}
+		}
+		return new \WP_Error( 'validation_failed', __( 'Validation failed', 'filebird' ) );
+	}
+
+	public function updateFolderOrder( \WP_REST_Request $request ) {
+		global $wpdb;
+
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return new \WP_Error( 
+				'rest_forbidden', 
+				__( 'Sorry, you are not allowed to manage folders.', 'filebird' ), 
+				array( 'status' => rest_authorization_required_code() ) 
+			);
+		}
+		$data = array(
+			'dropPosition' => $request->get_param( 'dropPosition' ),
+			'dropNodeId'   => $request->get_param( 'dropNodeId' ),
+			'dragNodeId'   => $request->get_param( 'dragNodeId' ),
+			'toParentId'   => $request->get_param( 'toParentId' ),
+		);
+
+		$lang = sanitize_key( $request->get_param( 'language' ) );
+
+		foreach ( $data as $param ) {
+			if ( strlen( $param ) === 0 || ! is_numeric( $param ) ) {
+				return new \WP_Error( 'invalid_params', __( 'Invalid params', 'filebird' ), array( 'status' => 400 ) );
+			}
+		}
+
+		$drag_node = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT id, parent, ord, name FROM {$wpdb->prefix}fbv WHERE `id` = %d AND `created_by` = %d",
+				$data['dragNodeId'],
+				apply_filters( 'fbv_folder_created_by', 0 )
+			),
+			ARRAY_A
+		);
+
+		if ( ! $drag_node ) {
+			return new \WP_Error( 'drag_node_not_found', __( 'Drag node not found', 'filebird' ), array( 'status' => 400 ) );
+		}
+
+		// The parent this operation would store, depending on the drop position.
+		$new_parent_id = ( 0 === (int) $data['dropPosition'] )
+			? (int) $data['dropNodeId']
+			: (int) $data['toParentId'];
+
+		if ( FolderModel::isSelfOrDescendant( (int) $data['dragNodeId'], $new_parent_id ) ) {
+			return new \WP_Error(
+				'invalid_parent',
+				__( 'A folder cannot be moved into itself or into one of its subfolders.', 'filebird' ),
+				array( 'status' => 400 )
+			);
+		}
+
+		$will_be_renamed = false;
+		//check if the name of the drag node exists
+		$exist_name = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$wpdb->prefix}fbv WHERE name = %s AND parent = %d AND created_by = %d AND id != %d",
+				$drag_node['name'],
+				$data['toParentId'],
+				apply_filters( 'fbv_folder_created_by', 0 ),
+				$data['dragNodeId']
+			),
+			ARRAY_A
+		);
+		if ( $exist_name ) {
+			$will_be_renamed = true;
+		}
+
+		$old_node = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT id, parent, ord FROM {$wpdb->prefix}fbv WHERE `id` = %d AND `created_by` = %d",
+				$data['dropNodeId'],
+				apply_filters( 'fbv_folder_created_by', 0 )
+			),
+			ARRAY_A
+		);
+
+		// Drop folder inside another folder
+		if ( 0 === $data['dropPosition'] ) {
+			$children = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT id, ord FROM {$wpdb->prefix}fbv WHERE (parent = %d and created_by = %d and id != %d) ORDER BY ord+0 ASC",
+					$data['dropNodeId'],
+					apply_filters( 'fbv_folder_created_by', 0 ),
+					$data['dragNodeId']
+				)
+			);
+
+			array_unshift(
+                $children,
+                (object) array(
+					'id'  => $data['dragNodeId'],
+					'ord' => 0,
+				)
+                );
+
+			foreach ( $children as $key => $child ) {
+				$wpdb->update(
+					"{$wpdb->prefix}fbv",
+					array(
+						'ord'    => $key + 1,
+						'parent' => $data['dropNodeId'],
+					),
+					array(
+						'id' => $child->id,
+					),
+					array( '%d', '%d' ),
+					array( '%d' )
+				);
+			}
+		}
+
+		if ( 1 === $data['dropPosition'] ) {
+			$children = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT id, ord FROM {$wpdb->prefix}fbv WHERE (parent = %d and created_by = %d and id != %d) ORDER BY ord+0 ASC",
+					$data['toParentId'],
+					apply_filters( 'fbv_folder_created_by', 0 ),
+					$data['dragNodeId']
+				)
+			);
+
+			$ord = 0;
+
+			foreach ( $children as $child ) {
+				$wpdb->update(
+					"{$wpdb->prefix}fbv",
+					array(
+						'ord'    => $ord++,
+						'parent' => $data['toParentId'],
+					),
+					array(
+						'id' => $child->id,
+					),
+					array( '%d', '%d' ),
+					array( '%d' )
+				);
+				if ( intval( $child->id ) === $data['dropNodeId'] ) {
+					$wpdb->update(
+						"{$wpdb->prefix}fbv",
+						array(
+							'ord'    => $ord++,
+							'parent' => $data['toParentId'],
+						),
+						array(
+							'id' => $data['dragNodeId'],
+						),
+						array( '%d', '%d' ),
+						array( '%d' )
+					);
+				}
+			}
+		}
+
+		if ( -1 === $data['dropPosition'] ) {
+			$children = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT id, ord FROM {$wpdb->prefix}fbv WHERE (parent = %d and created_by = %d and id != %d) ORDER BY ord+0 ASC",
+					$data['toParentId'],
+					apply_filters( 'fbv_folder_created_by', 0 ),
+					$data['dragNodeId']
+				)
+			);
+
+			array_unshift(
+                $children,
+                (object) array(
+					'id'  => $data['dragNodeId'],
+					'ord' => 0,
+				)
+                );
+
+			foreach ( $children as $key => $child ) {
+				$wpdb->update(
+					"{$wpdb->prefix}fbv",
+					array(
+						'ord'    => $key + 1,
+						'parent' => $data['toParentId'],
+					),
+					array(
+						'id' => $child->id,
+					),
+					array( '%d', '%d' ),
+					array( '%d' )
+				);
+			}
+		}
+		if ( $will_be_renamed ) {
+			$base_name = $drag_node['name'];
+			$parent_id = $data['toParentId'];
+			$new_name = FolderModel::findUniqueFolderName( $base_name, $parent_id, $data['dragNodeId'], 1 );
+			$wpdb->update(
+				"{$wpdb->prefix}fbv",
+				array( 'name' => $new_name ),
+				array( 'id' => $data['dragNodeId'] ),
+				array( '%s' ),
+				array( '%d' )
+			);
+		}
+		if ( ! is_null( $old_node ) && ( $old_node['parent'] != $data['toParentId'] ) ) {
+			do_action( 'fbv_folder_parent_updated', $data['dragNodeId'], $data['toParentId'] );
+		}
+
+		if ( UserSettingModel::getInstance()->get( 'FOLDER_COUNTER_TYPE' ) === 'counter_file_in_folder_and_sub' ) {
+			return rest_ensure_response( FolderModel::countAttachments( $lang ) );
+		}
+
+		return rest_ensure_response( array( 'reload' => $will_be_renamed ) );
+	}
+
+	public function deleteFolder( \WP_REST_Request $request ) {
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return new \WP_Error( 
+				'rest_forbidden', 
+				__( 'Sorry, you are not allowed to manage folders.', 'filebird' ), 
+				array( 'status' => rest_authorization_required_code() ) 
+			);
+		}
+		$ids  = $request->get_param( 'ids' );
+		$lang = sanitize_key( $request->get_param( 'language' ) );
+
+		if ( empty( $ids ) ) {
+			return new \WP_Error( 'delete_failed', __( 'Can\'t delete folder, please try again later', 'filebird' ) );
+
+		}
+
+		$ids = array_map( 'intval', $ids );
+
+		$current_user_id = get_current_user_id();
+		$folder_per_user = get_option( 'njt_fbv_folder_per_user', '0' ) === '1';
+		foreach ( $ids as $k => $id ) {
+			if ( ! FolderModel::verifyAuthor( $id, $current_user_id, $folder_per_user ) ) {
+				unset( $ids[ $k ] );
+			}
+		}
+		$folderCounter = FolderModel::delete( $ids, $lang );
+
+		return rest_ensure_response( $folderCounter );
+	}
+
+	public function assignFolder( \WP_REST_Request $request ) {
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return new \WP_Error( 
+				'rest_forbidden', 
+				__( 'Sorry, you are not allowed to manage folders.', 'filebird' ), 
+				array( 'status' => rest_authorization_required_code() ) 
+			);
+		}
+		$folderId = $request->get_param( 'folderId' );
+		$ids      = $request->get_param( 'ids' );
+		$lang     = sanitize_key( $request->get_param( 'language' ) );
+
+		if ( empty( $folderId ) && ! is_numeric( $folderId ) && empty( $ids ) ) {
+			return new \WP_Error( 'validation_failed', __( 'Validation failed', 'filebird' ), array( 'status' => 400 ) );
+		}
+
+		$ids = array_map( 'intval', apply_filters( 'fbv_ids_assigned_to_folder', $ids ) );
+
+		if ( empty( $ids ) ) {
+			return new \WP_Error( 'validation_failed', __( 'Validation failed', 'filebird' ), array( 'status' => 400 ) );
+		}
+
+		$current_user_id = get_current_user_id();
+		$user_has_own_folder = get_option( 'njt_fbv_folder_per_user', '0' ) === '1';
+		if( ! FolderModel::verifyAuthor( $folderId, $current_user_id, $user_has_own_folder ) ) {
+			return new \WP_Error(
+				'rest_forbidden',
+				__( 'Permisson Denied.', 'filebird' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+		// Authorize every target before a single relation row is touched.
+		if ( ! Helpers::canEditObjects( $ids, 'attachment' ) ) {
+			return new \WP_Error(
+				'rest_forbidden',
+				__( 'Sorry, you are not allowed to edit one or more of these files.', 'filebird' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+		$folderCounter = FolderModel::assignFolder( $folderId, $ids, $lang );
+
+		return rest_ensure_response( $folderCounter );
+	}
+
+	public function gutenbergGetFolder() {
+		$_folders = Tree::getFolders( null, null, true );
+		$folders  = array(
+			array(
+				'value'    => 0,
+				'label'    => __( 'Please choose folder', 'filebird' ),
+				'disabled' => true,
+			),
+		);
+		foreach ( $_folders as $k => $v ) {
+			$folders[] = array(
+				'value' => $v['id'],
+				'label' => $v['text'],
+			);
+		}
+
+		wp_send_json_success( $folders );
+	}
+}

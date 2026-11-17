@@ -133,17 +133,17 @@ class Module extends BaseModule {
 		( new Rest_Api() )->register_routes();
 	}
 
-	public function get_reports_data(): array {
+	public function get_reports_data( string $format = '' ): array {
 		$reports = $this->load_reports( self::get_allowed_reports() );
 
-		return $this->build_reports_data( $reports );
+		return $this->build_reports_data( $reports, $format );
 	}
 
-	private function build_reports_data( array $reports ): array {
+	private function build_reports_data( array $reports, string $format ): array {
 		$data = [];
 
 		foreach ( $reports as $report_name => $report_details ) {
-			$report = $report_details['report']->get_report();
+			$report = $report_details['report']->get_report( $format );
 
 			if ( is_wp_error( $report ) ) {
 				continue;
@@ -155,7 +155,7 @@ class Module extends BaseModule {
 			];
 
 			if ( ! empty( $report_details['sub'] ) ) {
-				$report_data['sub'] = $this->build_reports_data( $report_details['sub'] );
+				$report_data['sub'] = $this->build_reports_data( $report_details['sub'], $format );
 			}
 
 			$data[ $report_name ] = $report_data;
@@ -184,14 +184,14 @@ class Module extends BaseModule {
 		?>
 		<div id="elementor-system-info">
 			<div class="elementor-system-info-header">
-				<h3 class="wp-heading-inline"><?php echo esc_html__( 'System Info', 'elementor' ); ?></h3>
+				<h1 class="wp-heading-inline"><?php echo esc_html__( 'System Info', 'elementor' ); ?></h1>
 				<form action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" method="post">
 					<input type="hidden" name="action" value="elementor_system_info_download_file">
 					<input type="submit" data-id="elementor-system-info-download-file" class="button button-primary" value="<?php echo esc_attr__( 'Download System Info', 'elementor' ); ?>">
 				</form>
 			</div>
 			<div><?php $this->print_report( $reports, 'html' ); ?></div>
-			<h3><?php echo esc_html__( 'Copy & Paste Info', 'elementor' ); ?></h3>
+			<h2><?php echo esc_html__( 'Copy & Paste Info', 'elementor' ); ?></h2>
 			<div id="elementor-system-info-raw">
 				<label id="elementor-system-info-raw-code-label" for="elementor-system-info-raw-code"><?php echo esc_html__( 'You can copy the below info as simple text with Ctrl+C / Ctrl+V:', 'elementor' ); ?></label>
 				<textarea id="elementor-system-info-raw-code" readonly>

@@ -1,4 +1,4 @@
-(function(_elementor_editor_app_bar, _wordpress_i18n, react, _elementor_query, _elementor_editor_v1_adapters, _elementor_icons_RocketIcon, _elementor_ui, _elementor_icons) {
+(function(_elementor_editor_app_bar, _wordpress_i18n, react, _elementor_query, _elementor_editor_v1_adapters, _elementor_icons_RocketIcon, _elementor_ui, _elementor_editor_ui, _elementor_icons) {
 
 //#region \0rolldown/runtime.js
 	var __create = Object.create;
@@ -1770,7 +1770,7 @@ var import_regenerator = /* @__PURE__ */ __toESM(require_regenerator());
 			variant: "text",
 			onClick: toggleMarkAsDone
 		}, isMarkedCompleted ? (0, _wordpress_i18n.__)("Unmark as done", "elementor") : (0, _wordpress_i18n.__)("Mark as done", "elementor")) : null, /*#__PURE__*/ react.default.createElement(_elementor_ui.Button, {
-			color: promotionData ? "promotion" : "primary",
+			color: promotionData ? "promotion" : "accent",
 			size: "small",
 			variant: "contained",
 			onClick: redirectHandler
@@ -1828,7 +1828,7 @@ var import_regenerator = /* @__PURE__ */ __toESM(require_regenerator());
 		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.ListItemIcon, null, /*#__PURE__*/ react.default.createElement(_elementor_ui.Checkbox, {
 			"data-is-checked": isChecked,
 			icon: /*#__PURE__*/ react.default.createElement(_elementor_icons.RadioButtonUncheckedIcon, null),
-			checkedIcon: /*#__PURE__*/ react.default.createElement(_elementor_icons.CircleCheckFilledIcon, { color: "primary" }),
+			checkedIcon: /*#__PURE__*/ react.default.createElement(_elementor_icons.CircleCheckFilledIcon, { color: "accent" }),
 			edge: "start",
 			checked: isChecked,
 			tabIndex: -1,
@@ -2011,7 +2011,7 @@ var import_regenerator = /* @__PURE__ */ __toESM(require_regenerator());
 			color: "text.secondary",
 			component: "p"
 		}, (0, _wordpress_i18n.__)("With these steps, you've got a great base for a robust website. Enjoy your web creation journey!", "elementor"))), /*#__PURE__*/ react.default.createElement(_elementor_ui.CardActions, { sx: { justifyContent: "center" } }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Button, {
-			color: "primary",
+			color: "accent",
 			size: "small",
 			variant: "contained",
 			onClick: hideChecklist
@@ -2152,7 +2152,7 @@ var import_regenerator = /* @__PURE__ */ __toESM(require_regenerator());
 			});
 		}, []);
 		if (userProgressError || !userProgress || stepsError || !(steps !== null && steps !== void 0 && steps.length)) return null;
-		return /*#__PURE__*/ react.default.createElement(_elementor_ui.DirectionProvider, { rtl: isRTL }, /*#__PURE__*/ react.default.createElement(_elementor_ui.ThemeProvider, { colorScheme: "light" }, /*#__PURE__*/ react.default.createElement(Checklist, {
+		return /*#__PURE__*/ react.default.createElement(_elementor_ui.DirectionProvider, { rtl: isRTL }, /*#__PURE__*/ react.default.createElement(_elementor_editor_ui.ThemeProvider, { colorScheme: "light" }, /*#__PURE__*/ react.default.createElement(Checklist, {
 			steps: _toConsumableArray(steps),
 			userProgress
 		})));
@@ -2455,5 +2455,5 @@ var import_regenerator = /* @__PURE__ */ __toESM(require_regenerator());
 	}
 
 //#endregion
-})(elementorV2.editorAppBar, wp.i18n, React, elementorV2.query, elementorV2.editorV1Adapters, elementorV2.icons['RocketIcon'], elementorV2.ui, elementorV2.icons);
+})(elementorV2.editorAppBar, wp.i18n, React, elementorV2.query, elementorV2.editorV1Adapters, elementorV2.icons['RocketIcon'], elementorV2.ui, elementorV2.editorUi, elementorV2.icons);
 //# sourceMappingURL=checklist.js.map

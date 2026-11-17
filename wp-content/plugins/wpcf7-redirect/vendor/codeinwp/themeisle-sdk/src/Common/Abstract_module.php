@@ -256,6 +256,12 @@ abstract class Abstract_Module {
 			return $this->resolved_plugin_paths[ $slug ];
 		}
 
+		// get_plugins() opens the folder with @opendir(), which still reaches custom error handlers when it is missing.
+		if ( ! is_dir( WP_PLUGIN_DIR . '/' . $slug ) ) {
+			$this->resolved_plugin_paths[ $slug ] = $default_plugin_file;
+			return $this->resolved_plugin_paths[ $slug ];
+		}
+
 		include_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 		if ( function_exists( 'get_plugins' ) ) {

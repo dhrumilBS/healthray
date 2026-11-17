@@ -158,6 +158,7 @@ react = __toESM(react);
 		customization: { settings: {
 			theme: false,
 			classes: true,
+			defaultStyles: true,
 			variables: true
 		} }
 	};
@@ -195,7 +196,11 @@ react = __toESM(react);
 //#region packages/packages/core/editor-design-system/src/import/hooks/use-import-request.ts
 	var IMPORT_BASE_PATH = "elementor/v1/import-export-customization";
 	var IMPORT_REQUEST_TIMEOUT_MS = 12e4;
-	var SUPPORTED_RUNNERS = ["global-classes", "global-variables"];
+	var SUPPORTED_RUNNERS = [
+		"default-styles",
+		"global-classes",
+		"global-variables"
+	];
 	var IMPORT_DESIGN_SYSTEM_MUTATION_KEY = "design-system-import";
 	var useImportRequest = () => {
 		return (0, _elementor_query.useMutation)({
@@ -250,15 +255,15 @@ react = __toESM(react);
 	var getOptions = () => [{
 		value: "replace",
 		title: (0, _wordpress_i18n.__)("Replace existing values", "elementor"),
-		description: (0, _wordpress_i18n.__)("Imported design system values will overwrite existing variables and classes.", "elementor")
+		description: (0, _wordpress_i18n.__)("Imported design system values will overwrite existing default styles, variables, and classes.", "elementor")
 	}, {
 		value: "keep",
 		title: (0, _wordpress_i18n.__)("Keep existing values", "elementor"),
-		description: (0, _wordpress_i18n.__)("Existing variables and classes will not change.", "elementor")
+		description: (0, _wordpress_i18n.__)("Existing default styles, variables, and classes will not change.", "elementor")
 	}];
 	var ConflictOptions = ({ value, onChange }) => {
 		const options = getOptions();
-		return /* @__PURE__ */ react.createElement(_elementor_ui.Stack, { spacing: 1 }, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, { variant: "body1" }, (0, _wordpress_i18n.__)("How to handle conflicts with existing variables or classes?", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.RadioGroup, {
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Stack, { spacing: 1 }, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, { variant: "body1" }, (0, _wordpress_i18n.__)("How to handle conflicts with existing default styles, variables, or classes?", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.RadioGroup, {
 			value: value ?? "",
 			onChange: (_, next) => onChange(next)
 		}, /* @__PURE__ */ react.createElement(_elementor_ui.Stack, { spacing: 1 }, options.map((option) => /* @__PURE__ */ react.createElement(_elementor_ui.Card, {
@@ -533,6 +538,9 @@ react = __toESM(react);
 	var EVENT_SET_TAB$1 = "elementor/design-system/set-tab";
 	var trackDesignSystemTabOpened = (tab) => {
 		switch (tab) {
+			case "defaults":
+				(0, _elementor_editor_default_styles.trackDefaultStyles)({ event: "panelOpened" });
+				break;
 			case "classes":
 				(0, _elementor_editor_global_classes.trackGlobalClasses)({
 					event: "classManagerOpened",

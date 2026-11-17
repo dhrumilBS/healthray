@@ -524,7 +524,7 @@ class Cookie_Law_Info_Cookie_Scaner extends Cookie_Law_Info_Cookieyes {
 			$last_scan_date = date( 'F j, Y g:i a T', $last_scan_date ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		}
 
-		$message  = '<div class="wt-cli-scan-status"><p><b>' . __( 'Scan failed', 'cookie-law-info' ) . '</b></p></div>';
+		$message  = '<div class="wt-cli-scan-status"><p><b>' . __( 'Scan failed', 'cookie-law-info' ) . '</b> &middot; <a href="https://wordpress.org/support/plugin/cookie-law-info/#new-topic-0" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Get help on the forum', 'cookie-law-info' ) . '</a></p></div>';
 		$message .= '<div class="wt-cli-scan-date"><p style="color: #80827f;">' . __( 'Last scan:', 'cookie-law-info' ) . ' ' . $last_scan_date . '</p></div>';
 
 		return Cookie_Law_Info_Admin::wt_cli_admin_notice( 'warning', $message, true );
@@ -542,7 +542,7 @@ class Cookie_Law_Info_Cookie_Scaner extends Cookie_Law_Info_Cookieyes {
 			$last_scan_date = date( 'F j, Y g:i a T', $last_scan_date ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		}
 
-		$message  = '<div class="wt-cli-scan-status"><p><b>' . __( 'Scan aborted', 'cookie-law-info' ) . '</b></p></div>';
+		$message  = '<div class="wt-cli-scan-status"><p><b>' . __( 'Scan aborted', 'cookie-law-info' ) . '</b> &middot; <a href="https://wordpress.org/support/plugin/cookie-law-info/#new-topic-0" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Get help on the forum', 'cookie-law-info' ) . '</a></p></div>';
 		$message .= '<div class="wt-cli-scan-date"><p style="color: #80827f;">' . __( 'Last scan:', 'cookie-law-info' ) . ' ' . $last_scan_date . '</p></div>';
 		return Cookie_Law_Info_Admin::wt_cli_admin_notice( 'alert', $message, true );
 	}
@@ -963,7 +963,29 @@ class Cookie_Law_Info_Cookie_Scaner extends Cookie_Law_Info_Cookieyes {
 			'current_action' => 'get_pages',
 			'status'         => 1,
 		);
-		update_option( 'CLI_BYPASS', 1 );
+		// Authorize this scan with a fresh secret token the public bypass check
+		// verifies (CAP-227). A new token each scan invalidates any previous one,
+		// and the expiry bounds the window if a reset is ever missed.
+		// random_bytes() is the CSPRNG; it exists natively on PHP 7+ and via WordPress
+		// core's random_compat polyfill on older PHP. Guard and fall back to
+		// wp_generate_password() so a 5.6 host without the polyfill still gets a token.
+		if ( function_exists( 'random_bytes' ) ) {
+			try {
+				$bypass_token = bin2hex( random_bytes( 32 ) );
+			} catch ( Exception $e ) {
+				$bypass_token = wp_generate_password( 64, false );
+			}
+		} else {
+			$bypass_token = wp_generate_password( 64, false );
+		}
+		update_option(
+			'cli_scan_bypass',
+			array(
+				'token'   => $bypass_token,
+				'expires' => time() + DAY_IN_SECONDS,
+			),
+			false
+		);
 		if ( $wpdb->insert( $scan_table, $data_arr ) ) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			return $wpdb->insert_id;
 		} else {
@@ -1068,6 +1090,9 @@ class Cookie_Law_Info_Cookie_Scaner extends Cookie_Law_Info_Cookieyes {
 		$this->set_ckyes_scan_status( 2 );
 		$this->update_scan_entry( $scan_data, $scan_id );
 		$this->reset_scan_token();
+		// Most scans complete through the fetch_results REST callback with nobody on
+		// the scanner page, so revoke the bypass token here too (CAP-227).
+		delete_option( 'cli_scan_bypass' );
 	}
 	/**
 	 * Insert all the cookie categories.
@@ -1084,7 +1109,7 @@ class Cookie_Law_Info_Cookie_Scaner extends Cookie_Law_Info_Cookieyes {
 			// Check if the entry already exists
 			$existing_entry = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$wpdb->prepare( // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-					"SELECT * FROM $category_table WHERE cli_cookie_category_name = %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"SELECT * FROM {$wpdb->prefix}cli_cookie_scan_categories WHERE cli_cookie_category_name = %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 					$category
 				)
 			);
@@ -1127,7 +1152,7 @@ class Cookie_Law_Info_Cookie_Scaner extends Cookie_Law_Info_Cookieyes {
 				// Check if the entry already exists
 				$existing_entry = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 					$wpdb->prepare( // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-						"SELECT * FROM $cookies_table WHERE cookie_id = %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						"SELECT * FROM {$wpdb->prefix}cli_cookie_scan_cookies WHERE cookie_id = %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 						$cookie_id
 					)
 				);

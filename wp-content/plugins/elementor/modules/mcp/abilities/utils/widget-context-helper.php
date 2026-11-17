@@ -6,9 +6,10 @@ use Elementor\Modules\AtomicWidgets\PropTypes\Base\Array_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Base\Object_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Contracts\Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Escaped_Html_Prop_Type;
+use Elementor\Modules\AtomicWidgets\PropTypes\Prop_Sensitivity;
 use Elementor\Modules\AtomicWidgets\PropTypes\Utils\Plain_Llm_Schema_Converter;
 use Elementor\Modules\GlobalClasses\Utils\Atomic_Elements_Utils;
-use Elementor\Modules\Mcp\Abilities\Appliers\V3\V3_Widget_Bridge_Registry;
+use Elementor\Modules\Mcp\Abilities\Appliers\V3\Maps\V3_Widget_Map_Registry;
 use Elementor\Plugin;
 use Elementor\Utils;
 
@@ -30,18 +31,9 @@ class Widget_Context_Helper {
 
 	const VERSION_V4 = 'v4';
 
-	const V3_ALLOWLIST = [
-		'nav-menu',
-		'theme-post-content',
-		'theme-post-title',
-		'theme-post-featured-image',
-		'theme-post-excerpt',
-		'theme-archive-title',
+	const MCP_UNPROMOTED_ELEMENT_TYPES = [
+		'e-flexbox',
 	];
-
-	const V3_FALLBACK_MESSAGE = '`properties` lists the only keys accepted in `element_config` / `manage-elements.settings` for this widget. Put all visual styling in the `style` (CSS) input.';
-
-	const V3_FALLBACK_FIELDS_NOTE = 'All properties are optional. Object-typed properties describe common shapes but do not include exhaustive inner validation.';
 
 	const ALLOWED_HTML_TAGS_NOTE = 'May contain inline HTML written directly in the string (e.g. "Hello <strong>world</strong>"), limited to these tags: %s. Any other tag is stripped on save.';
 
@@ -49,16 +41,35 @@ class Widget_Context_Helper {
 	 * @return array<string, array> widget_type => config, filtered to widgets eligible for LLM use.
 	 */
 	public static function get_llm_eligible_widgets(): array {
-		$all_types = array_merge(
-			Plugin::$instance->widgets_manager->get_widget_types(),
-			Plugin::$instance->elements_manager->get_element_types()
-		);
-
 		$eligible = [];
 
-		foreach ( $all_types as $type => $instance ) {
-			if ( self::is_v3_allowlisted( (string) $type ) && method_exists( $instance, 'get_stack' ) ) {
-				$instance->get_stack();
+		foreach ( Plugin::$instance->widgets_manager->get_widget_types() as $type => $instance ) {
+			$type = (string) $type;
+
+			if ( self::is_type_unpromoted_in_widget_list( $type ) ) {
+				continue;
+			}
+
+			if ( self::should_initialize_v3_controls_stack( $type ) && method_exists( $instance, 'get_stack' ) ) {
+				$instance->get_stack( false );
+			}
+
+			$config = $instance->get_config();
+
+			if ( self::is_widget_eligible_for_llm( $config ) ) {
+				$eligible[ $type ] = $config;
+			}
+		}
+
+		foreach ( Plugin::$instance->elements_manager->get_element_types() as $type => $instance ) {
+			$type = (string) $type;
+
+			if ( self::is_type_unpromoted_in_widget_list( $type ) ) {
+				continue;
+			}
+
+			if ( self::should_initialize_v3_controls_stack( $type ) && method_exists( $instance, 'get_stack' ) ) {
+				$instance->get_stack( false );
 			}
 
 			$config = $instance->get_config();
@@ -78,8 +89,8 @@ class Widget_Context_Helper {
 			return null;
 		}
 
-		if ( self::is_v3_allowlisted( $widget_type ) && method_exists( $instance, 'get_stack' ) ) {
-			$instance->get_stack();
+		if ( self::should_initialize_v3_controls_stack( $widget_type ) && method_exists( $instance, 'get_stack' ) ) {
+			$instance->get_stack( false );
 		}
 
 		return $instance->get_config();
@@ -109,8 +120,12 @@ class Widget_Context_Helper {
 		return empty( $config['atomic_props_schema'] ) ? self::VERSION_V3 : self::VERSION_V4;
 	}
 
-	public static function is_v3_allowlisted( string $widget_type ): bool {
-		return in_array( $widget_type, self::V3_ALLOWLIST, true );
+	public static function is_type_unpromoted_in_widget_list( string $widget_type ): bool {
+		return in_array( $widget_type, self::MCP_UNPROMOTED_ELEMENT_TYPES, true );
+	}
+
+	public static function is_v3_supported( string $widget_type ): bool {
+		return V3_Widget_Map_Registry::instance()->is_supported( $widget_type );
 	}
 
 	public static function build_widget_summary( string $widget_type, array $config ): array {
@@ -155,26 +170,13 @@ class Widget_Context_Helper {
 				return null;
 			}
 
-			$allowed_keys = V3_Widget_Bridge_Registry::get_non_style_keys( $widget_type );
-			$built = V3_Json_Schema_Builder::build( $config['controls'], $allowed_keys );
-
-			return self::filter_nulls( [
-				'type' => 'object',
-				'widget_version' => self::VERSION_V3,
-				'description' => self::get_description( $config, $widget_type ),
-				'message' => self::V3_FALLBACK_MESSAGE,
-				'fields_note' => self::V3_FALLBACK_FIELDS_NOTE,
-				'properties' => $built['properties'],
-				'required' => $built['required'],
-				'additionalProperties' => false,
-			] );
+			return self::build_standardized_v3_widget_schema( $widget_type, $config );
 		}
-
-		$properties = self::build_configurable_properties_schema( $props_schema, $widget_type );
 
 		return self::filter_nulls( [
 			'type' => 'object',
-			'properties' => $properties,
+			'properties' => self::build_configurable_properties_schema( $props_schema, $widget_type ),
+			'editor_settings' => Editor_Settings::get_schema( $widget_type ),
 			'description' => self::get_description( $config, $widget_type ),
 			'llm_guidance' => Llm_Guidance_Builder::build( $config, $widget_type, $parents_index ),
 		] );
@@ -187,21 +189,28 @@ class Widget_Context_Helper {
 		$properties = [];
 
 		foreach ( $props_schema as $key => $prop_type ) {
-			if ( ! $prop_type instanceof Prop_Type || ! self::is_prop_key_configurable( $key, $prop_type ) ) {
-				continue;
+			$schema = $prop_type instanceof Prop_Type ? self::build_published_property_schema( $key, $prop_type, $widget_type ) : null;
+
+			if ( null !== $schema ) {
+				$properties[ $key ] = $schema;
 			}
-
-			$schema = self::to_plain_llm_schema_from_json( $prop_type->to_json_schema() );
-			$allowed_html_tags = Escaped_Html_Prop_Type::get_allowed_html_tags_for_prop( $widget_type, $key );
-
-			if ( null !== $allowed_html_tags ) {
-				$schema = self::describe_allowed_html_tags( $schema, $allowed_html_tags );
-			}
-
-			$properties[ $key ] = $schema;
 		}
 
 		return $properties;
+	}
+
+	/**
+	 * @return array<string, mixed>|null The property schema `get-widget-schemas` publishes, or null when the key is not configurable.
+	 */
+	public static function build_published_property_schema( string $key, Prop_Type $prop_type, string $widget_type ): ?array {
+		if ( ! self::is_prop_key_configurable( $key, $prop_type ) ) {
+			return null;
+		}
+
+		$schema = self::to_plain_llm_schema_from_json( $prop_type->to_json_schema() );
+		$allowed_html_tags = Escaped_Html_Prop_Type::get_allowed_html_tags_for_prop( $widget_type, $key );
+
+		return null === $allowed_html_tags ? $schema : self::describe_allowed_html_tags( $schema, $allowed_html_tags );
 	}
 
 	/**
@@ -333,6 +342,10 @@ class Widget_Context_Helper {
 	}
 
 	private static function is_prop_key_configurable( string $key, Prop_Type $prop_type ): bool {
+		if ( Prop_Sensitivity::is_sensitive( $prop_type ) ) {
+			return false;
+		}
+
 		if ( ! in_array( $key, self::NON_CONFIGURABLE_PROP_KEYS, true ) ) {
 			return true;
 		}
@@ -347,8 +360,12 @@ class Widget_Context_Helper {
 			return $description;
 		}
 
-		if ( null !== $widget_type && self::is_v3_allowlisted( $widget_type ) ) {
-			return V3_Widget_Bridge_Registry::get_description( $widget_type );
+		if ( null !== $widget_type && self::is_v3_supported( $widget_type ) ) {
+			$map = V3_Widget_Map_Registry::instance()->get_map( $widget_type );
+
+			if ( null !== $map && '' !== $map->get_description() ) {
+				return $map->get_description();
+			}
 		}
 
 		return null;
@@ -356,5 +373,32 @@ class Widget_Context_Helper {
 
 	private static function filter_nulls( array $data ): array {
 		return array_filter( $data, fn( $value ) => null !== $value );
+	}
+
+	private static function should_initialize_v3_controls_stack( string $widget_type ): bool {
+		return V3_Widget_Map_Registry::instance()->has_registered_map( $widget_type );
+	}
+
+	private static function build_standardized_v3_widget_schema( string $widget_type, array $config ): ?array {
+		$contract = V3_Widget_Map_Registry::instance()->get_llm_contract( $widget_type );
+
+		if ( null === $contract ) {
+			return null;
+		}
+
+		$description = '' !== $contract['description']
+			? $contract['description']
+			: self::get_description( $config, $widget_type );
+
+		return self::filter_nulls( [
+			'type' => 'object',
+			'widget_version' => self::VERSION_V3,
+			'description' => $description,
+			'properties' => $contract['properties'],
+			'editor_settings' => Editor_Settings::get_schema( $widget_type ),
+			'additionalProperties' => false,
+			'default_style_target' => $contract['default_style_target'],
+			'style_targets' => $contract['style_targets'],
+		] );
 	}
 }

@@ -158,11 +158,17 @@ class Cookie_Law_Info_Cookies {
 	}
 
 	public function add_category_meta( $term_id ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
 		$this->cookie_save_defaultstate( $term_id );
 		$this->save_scripts_meta( $term_id );
 		$this->save_priority_meta( $term_id );
 	}
 	public function edit_category_meta( $term_id ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
 		$this->cookie_save_defaultstate( $term_id );
 		$this->save_scripts_meta( $term_id );
 	}
@@ -325,6 +331,17 @@ class Cookie_Law_Info_Cookies {
 				'show_ui'             => true,
 				'rewrite'             => true,
 				'hierarchical'        => false,
+				// Without explicit capabilities WordPress falls back to its defaults
+				// (assign_terms => edit_posts, manage/edit/delete_terms => manage_categories),
+				// which let Contributors and Editors create or edit cookie categories —
+				// and their scripts — through Quick Edit / Bulk Edit. Require manage_options
+				// for every term operation, matching the cookie CPT.
+				'capabilities'        => array(
+					'manage_terms' => 'manage_options',
+					'edit_terms'   => 'manage_options',
+					'delete_terms' => 'manage_options',
+					'assign_terms' => 'manage_options',
+				),
 				'show_in_menu'        => ( $this->check_if_old_category_table() === true ? false : true ),
 			)
 		);
@@ -637,6 +654,11 @@ class Cookie_Law_Info_Cookies {
 	* Category Active State save form
 	*/
 	public function cookie_save_defaultstate( $term_id ) {
+		// Quick Edit (inline-save-tax) does not carry the default-state field at all, so its
+		// absence there is not an unchecked box; leave the stored state alone.
+		if ( isset( $_POST['action'] ) && 'inline-save-tax' === $_POST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return;
+		}
 		if ( isset( $_POST['CLIdefaultstate'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$term_default_state = sanitize_text_field( wp_unslash( $_POST['CLIdefaultstate'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
@@ -650,19 +672,21 @@ class Cookie_Law_Info_Cookies {
 	}
 
 	public function add_scripts_meta( $term ) {
+		$readonly = ! current_user_can( 'unfiltered_html' );
+		$this->scripts_readonly_notice( $readonly );
 		?>
 		<div class="form-field term-head-scripts-field">
 			<p>	
 				<label><b><?php echo esc_html__( 'Head scripts', 'cookie-law-info' ); ?></b></label>
 				<label>Script: eg:-  &lt;script&gt; enableGoogleAnalytics(); &lt;/script&gt; </label><br />
-				<textarea rows=5 name="_cli_cookie_head_scripts" class="wt-cli-code-editor"></textarea>
+				<textarea rows=5 name="_cli_cookie_head_scripts" class="wt-cli-code-editor"<?php echo $readonly ? ' readonly' : ''; ?>></textarea>
 			</p>
 		</div>
 		<div class="form-field term-body-scripts-field">
 			<p>	
 				<label><b><?php echo esc_html__( 'Body scripts', 'cookie-law-info' ); ?></b></label>
 				<label>Script: eg:-  &lt;script&gt; enableGoogleAnalytics(); &lt;/script&gt; </label><br />
-				<textarea rows="5" name="_cli_cookie_body_scripts" class="wt-cli-code-editor"></textarea>
+				<textarea rows="5" name="_cli_cookie_body_scripts" class="wt-cli-code-editor"<?php echo $readonly ? ' readonly' : ''; ?>></textarea>
 			</p>
 		</div>
 		<?php
@@ -673,17 +697,15 @@ class Cookie_Law_Info_Cookies {
 		$term_id      = $term->term_id;
 		$head_scripts = $this->get_term_meta( $term_id, '_cli_cookie_head_scripts', true );
 		$body_scripts = $this->get_term_meta( $term_id, '_cli_cookie_body_scripts', true );
+		$readonly     = ! current_user_can( 'unfiltered_html' );
 		?>
 		<tr class="form-field term-body-scripts-field">
 			<th>
 				<label for="_cli_cookie_head_scripts"><?php echo esc_html__( 'Head scripts', 'cookie-law-info' ); ?></label>
 			</th>			 
 			<td>
-				<textarea id="_cli_cookie_head_scripts" rows="5" name="_cli_cookie_head_scripts" class="wt-cli-code-editor">
-					<?php
-					echo wp_unslash( $head_scripts ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					?>
-				</textarea>
+				<textarea id="_cli_cookie_head_scripts" rows="5" name="_cli_cookie_head_scripts" class="wt-cli-code-editor"<?php echo $readonly ? ' readonly' : ''; ?>><?php echo esc_textarea( wp_unslash( $head_scripts ) ); ?></textarea>
+				<?php $this->scripts_readonly_notice( $readonly ); ?>
 			</td>
 		</tr>
 		<tr class="form-field term-head-scripts-field">
@@ -691,23 +713,61 @@ class Cookie_Law_Info_Cookies {
 				<label for="_cli_cookie_body_scripts"><?php echo esc_html__( 'Body scripts', 'cookie-law-info' ); ?></label>
 			</th>			 
 			<td>
-				<textarea  id="_cli_cookie_body_scripts" rows="5" name="_cli_cookie_body_scripts" class="wt-cli-code-editor">
-					<?php
-					echo wp_unslash( $body_scripts ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					?>
-				</textarea>
+				<textarea  id="_cli_cookie_body_scripts" rows="5" name="_cli_cookie_body_scripts" class="wt-cli-code-editor"<?php echo $readonly ? ' readonly' : ''; ?>><?php echo esc_textarea( wp_unslash( $body_scripts ) ); ?></textarea>
 			</td>
 		</tr>
 		<?php
 	}
 
+	/**
+	 * Tell a user without unfiltered_html why the script boxes are read-only.
+	 *
+	 * @param bool $readonly Whether the script boxes are read-only for this user.
+	 * @return void
+	 */
+	private function scripts_readonly_notice( $readonly ) {
+		if ( ! $readonly ) {
+			return;
+		}
+		echo '<p class="description">' . esc_html__( 'Your account is not allowed to add scripts, so these boxes are read-only and changes to them are not saved.', 'cookie-law-info' ) . '</p>';
+	}
+
 	public function save_scripts_meta( $term_id ) {
-		$head_scripts = ( isset( $_POST['_cli_cookie_head_scripts'] ) ? wp_unslash( $_POST['_cli_cookie_head_scripts'] ) : '' ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$body_scripts = ( isset( $_POST['_cli_cookie_body_scripts'] ) ? wp_unslash( $_POST['_cli_cookie_body_scripts'] ) : '' ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// Category scripts run for every visitor and in the admin's session, so only
+		// administrators may write them. Lower roles can reach the create/edited term
+		// hooks through Quick Edit / Bulk Edit tax_input, so this guard — not the
+		// taxonomy capabilities alone — is what stops the injection.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
 
-		$this->update_term_meta( $term_id, '_cli_cookie_head_scripts', $head_scripts );
-		$this->update_term_meta( $term_id, '_cli_cookie_body_scripts', $body_scripts );
+		// Request-authenticity check: the script fields ride the standard term form, so
+		// require its WordPress nonce — the add-term screen's `add-tag` nonce or the
+		// edit-term screen's `update-tag_<id>` nonce. Any route that does not carry a
+		// valid term nonce (a crafted POST, a hook fired programmatically) saves nothing.
+		$nonce_ok = ( isset( $_POST['_wpnonce_add-tag'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce_add-tag'] ) ), 'add-tag' ) )
+			|| ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'update-tag_' . $term_id ) );
+		if ( ! $nonce_ok ) {
+			return;
+		}
 
+		// Only users allowed to post unfiltered HTML may write scripts (administrators on
+		// single site, Super Admins on multisite, nobody under DISALLOW_UNFILTERED_HTML).
+		// For anyone else the stored scripts are left exactly as they are: the edit form
+		// always re-posts both boxes, and filtering them (wp_kses_post() strips the <script>
+		// tags but keeps their code) would turn a working tag into text printed on the page.
+		if ( ! current_user_can( 'unfiltered_html' ) ) {
+			return;
+		}
+
+		// Only touch a field the request actually carried, so a partial POST cannot
+		// wipe the other stored script.
+		if ( isset( $_POST['_cli_cookie_head_scripts'] ) ) {
+			$this->update_term_meta( $term_id, '_cli_cookie_head_scripts', wp_unslash( $_POST['_cli_cookie_head_scripts'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- stored as entered for users with unfiltered_html, as WordPress does for post content.
+		}
+		if ( isset( $_POST['_cli_cookie_body_scripts'] ) ) {
+			$this->update_term_meta( $term_id, '_cli_cookie_body_scripts', wp_unslash( $_POST['_cli_cookie_body_scripts'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- stored as entered for users with unfiltered_html, as WordPress does for post content.
+		}
 	}
 
 	public function migrate() {
@@ -769,6 +829,12 @@ class Cookie_Law_Info_Cookies {
 		$options['thirdparty_description']    = wp_kses_post( isset( $data['thirdparty_description'] ) && $data['thirdparty_description'] !== '' ? $data['thirdparty_description'] : '' );
 		$options['thirdparty_head_section']   = wp_unslash( isset( $data['thirdparty_head_section'] ) && $data['thirdparty_head_section'] !== '' ? $data['thirdparty_head_section'] : '' );
 		$options['thirdparty_body_section']   = wp_unslash( isset( $data['thirdparty_body_section'] ) && $data['thirdparty_body_section'] !== '' ? $data['thirdparty_body_section'] : '' );
+		// Same rule as the category scripts: without unfiltered_html the stored scripts are kept as they are.
+		if ( ! current_user_can( 'unfiltered_html' ) ) {
+			$stored                             = get_option( 'cookielawinfo_thirdparty_settings', array() );
+			$options['thirdparty_head_section'] = isset( $stored['thirdparty_head_section'] ) ? $stored['thirdparty_head_section'] : '';
+			$options['thirdparty_body_section'] = isset( $stored['thirdparty_body_section'] ) ? $stored['thirdparty_body_section'] : '';
+		}
 
 		update_option( 'cookielawinfo_thirdparty_settings', $options );
 	}

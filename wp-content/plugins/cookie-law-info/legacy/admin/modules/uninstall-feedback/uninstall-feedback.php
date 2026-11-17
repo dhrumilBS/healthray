@@ -169,9 +169,9 @@ class Cookie_Law_Info_Uninstall_Feedback {
 				</div>
 				<div class="<?php echo esc_attr( $this->plugin_id ); ?>-modal-footer">
 
-					<a class="button-primary" href="https://www.cookieyes.com/support/" target="_blank">
+					<a class="button-primary" href="https://wordpress.org/support/plugin/cookie-law-info/#new-topic-0" target="_blank" rel="noopener noreferrer">
 						<span class="dashicons dashicons-external" style="margin-top:3px;"></span>
-						<?php echo esc_html__( 'Go to support', 'cookie-law-info' ); ?></a>
+						<?php echo esc_html__( 'Having a problem? Ask on the support forum', 'cookie-law-info' ); ?></a>
 					<button class="button-primary <?php echo esc_attr( $this->plugin_id ); ?>-model-submit"><?php echo esc_html__( 'Submit & Deactivate', 'cookie-law-info' ); ?></button>
 					<button class="button-secondary <?php echo esc_attr( $this->plugin_id ); ?>-model-cancel"><?php echo esc_html__( 'Cancel', 'cookie-law-info' ); ?></button>
 					<a href="#" style="color: #737373;" class="dont-bother-me"><?php echo esc_html__( 'I rather wouldn\'t say', 'cookie-law-info' ); ?></a>

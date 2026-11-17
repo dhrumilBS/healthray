@@ -574,20 +574,11 @@ class Plugins extends Route {
 			return $plugin_data;
 		}
 
-		$was_active = is_plugin_active( $plugin_slug );
-		$was_network_active = is_multisite() && is_plugin_active_for_network( $plugin_slug );
-
-		if ( $was_active || $was_network_active ) {
-			deactivate_plugins( $plugin_slug, false, $was_network_active );
-		}
-
+		// Keep the plugin active: re-activating in this request would include the new
+		// main file next to the already loaded old one and fatal on redeclared functions.
 		if ( 'temp-backup' === $version ) {
 			$plugin_dir_name = dirname( $plugin_slug );
 			$restore_result = Temp_Backup::restore_plugin_backup( $plugin_dir_name );
-
-			if ( $was_active || $was_network_active ) {
-				activate_plugin( $plugin_slug, '', $was_network_active );
-			}
 
 			if ( is_wp_error( $restore_result ) ) {
 				return $restore_result;
@@ -642,10 +633,6 @@ class Plugins extends Route {
 				'Failed to rollback plugin for an unknown reason.',
 				[ 'status' => \WP_Http::INTERNAL_SERVER_ERROR ]
 			);
-		}
-
-		if ( $was_active || $was_network_active ) {
-			activate_plugin( $plugin_slug, '', $was_network_active );
 		}
 
 		return rest_ensure_response( [

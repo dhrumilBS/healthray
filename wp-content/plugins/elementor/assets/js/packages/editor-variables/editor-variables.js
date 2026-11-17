@@ -3392,10 +3392,14 @@ react = __toESM(react);
 					vertical: "top",
 					horizontal: -10
 				},
-				slotProps: { colorIndicator: {
-					size: "inherit",
-					sx: { borderRadius: .5 }
-				} }
+				slotProps: {
+					colorIndicator: {
+						"aria-label": "Color indicator",
+						size: "inherit",
+						sx: { borderRadius: .5 }
+					},
+					colorBox: { slotProps: { formatSelection: { MenuProps: { disablePortal: true } } } }
+				}
 			} }
 		});
 	};

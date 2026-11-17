@@ -19570,12 +19570,22 @@ arguments: record(string(), string()).optional() }).optional()
 		}
 	}
 	async function handleGetWidgetSettings(params) {
-		const container = getElementor()?.getContainer(params.elementId);
+		const elementor = getElementor();
+		const container = elementor?.getContainer(params.elementId);
 		if (!container) throw new Error(`Element with ID ${params.elementId} not found.`);
+		const settings = container.settings.attributes || {};
+		const elementType = container.model.get?.("widgetType") ?? container.model.get?.("elType");
 		return { content: [{
 			type: "text",
-			text: encodeToolJson(container.settings.attributes || {})
+			text: encodeToolJson(omitSensitiveProps(settings, elementType ? elementor?.widgetsCache?.[elementType]?.atomic_props_schema : void 0))
 		}] };
+	}
+	function omitSensitiveProps(settings, propsSchema) {
+		if (!propsSchema) return settings;
+		return Object.fromEntries(Object.entries(settings).filter(([key]) => {
+			const meta = propsSchema[key]?.meta;
+			return !(meta && !Array.isArray(meta) && true === meta.sensitive);
+		}));
 	}
 	async function handleGetWidgetSchema(params) {
 		const controls = getElementor()?.widgetsCache[params.widgetType]?.controls;

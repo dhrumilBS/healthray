@@ -15,6 +15,7 @@ namespace CookieYes\Lite\Frontend;
 use CookieYes\Lite\Admin\Modules\Banners\Includes\Controller;
 use CookieYes\Lite\Admin\Modules\Settings\Includes\Settings;
 use CookieYes\Lite\Admin\Modules\Gcm\Includes\Gcm_Settings;
+use CookieYes\Lite\Integrations\Wp_Google_Maps\Wp_Google_Maps;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -105,6 +106,13 @@ class Frontend {
 	 * @var array
 	 */
 	protected $providers = array();
+
+	/**
+	 * WP Consent API consent type for this request, resolved on first use.
+	 *
+	 * @var string|null
+	 */
+	protected $wp_consent_type = null;
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -119,11 +127,18 @@ class Frontend {
 		$this->load_modules();
 		$this->settings = new Settings();
 		$this->gcm_settings = new Gcm_Settings();
+		( new Wp_Google_Maps( $this->version ) )->init();
 		add_action( 'init', array( $this, 'load_banner' ) );
+		// Registered straight away, not on init, so plugins that check consent early still get the type.
+		add_filter( 'wp_get_consent_type', array( $this, 'get_wp_consent_type' ) );
+		add_filter( 'wp_consent_api_waitfor_consent_hook', array( $this, 'get_wp_consent_waitfor' ) );
 		add_action( 'wp_footer', array( $this, 'banner_html' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'release_wca_dependency' ), PHP_INT_MAX );
 		add_action( 'wp_head', array( $this, 'insert_script' ), 1 );
 		add_action( 'wp_head', array( $this, 'insert_styles' ) );
+		add_filter( 'script_loader_tag', array( $this, 'exclude_script_tag_from_optimizers' ), 10, 2 );
+		add_filter( 'wp_inline_script_attributes', array( $this, 'exclude_inline_script_from_optimizers' ) );
 	}
 
 	/**
@@ -133,7 +148,9 @@ class Frontend {
 	 * @return array
 	 */
 	public function get_default_modules() {
-		$modules = array();
+		$modules = array(
+			'video_players',
+		);
 		return $modules;
 	}
 
@@ -185,17 +202,20 @@ class Frontend {
 			wp_localize_script( $this->plugin_name, '_ckyStyles', array( 'css' => $css ) );
 		}
 		if ( true === $this->is_wpconsentapi_enabled() ) {
-			$handle = $this->plugin_name . '-wca';
-			wp_register_script( $handle, plugin_dir_url( __FILE__ ) . 'js/wca' . $suffix . '.js', array(), $this->version, false );
-			if ( true === $this->is_gsk_enabled() ) {
-				wp_add_inline_script( $handle, 'const _ckyGsk = true;', 'before' );
-			}
-			wp_enqueue_script( $handle );
+			// Depending on the WP Consent API script moves it from the footer into the head, before this one,
+			// so wp_set_consent() exists when wca.js applies a returning visitor's stored consent.
+			$this->register_wca_script( array( 'wp-consent-api' ) );
+			wp_enqueue_script( $this->plugin_name . '-wca' );
 		}
 	}
 
 	/**
 	 * Add inline styles to the head
+	 *
+	 * The banner script removes this rule by its id once the banner is rendered.
+	 * data-noptimize and nitro-exclude keep Autoptimize and NitroPack from moving
+	 * it into their own stylesheets, where the rule could no longer be removed
+	 * and the banner would stay hidden.
 	 *
 	 * @return void
 	 */
@@ -203,7 +223,7 @@ class Frontend {
 		if ( true === $this->settings->is_connected() || true === cky_disable_banner() || is_admin() ) {
 			return;
 		}
-		echo '<style id="cky-style-inline">[data-cky-tag]{visibility:hidden;}</style>';
+		echo '<style id="cky-style-inline" data-noptimize nitro-exclude>[data-cky-tag]{visibility:hidden;}</style>';
 	}
 	/**
 	 * Add CookieYes web app script on the header.
@@ -218,7 +238,7 @@ class Frontend {
 			$gcm = $this->get_gcm_data();
 			$gcm_json = wp_json_encode($gcm);
 			?>
-<script id="cookie-law-info-gcm-var-js">
+<script id="cookie-law-info-gcm-var-js" nitro-exclude>
 var _ckyGcm = <?php echo $gcm_json; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
 </script>
@@ -226,9 +246,49 @@ var _ckyGcm = <?php echo $gcm_json; //phpcs:ignore WordPress.Security.EscapeOutp
 			$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 			$script_url = plugin_dir_url( __FILE__ ) . 'js/gcm' . $suffix . '.js'; 
 ?>
-<script id="cookie-law-info-gcm-js" type="text/javascript" src="<?php echo esc_url( $script_url ); ?>"></script> <?php //phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
+<script id="cookie-law-info-gcm-js" type="text/javascript" nitro-exclude src="<?php echo esc_url( $script_url ); ?>"></script> <?php //phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
 		}
-		echo '<script id="cookieyes" type="text/javascript" src="' . esc_url( $this->settings->get_script_url() ) . '"></script>'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
+		echo '<script id="cookieyes" type="text/javascript" nitro-exclude src="' . esc_url( $this->settings->get_script_url() ) . '"></script>'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
+	}
+
+	/**
+	 * Mark the plugin's enqueued script tags so NitroPack does not combine,
+	 * delay or move them. On WordPress below 6.4 this also covers the inline
+	 * "before" script printed with the tag.
+	 *
+	 * @param string $tag    The script tag HTML.
+	 * @param string $handle The script handle.
+	 * @return string
+	 */
+	public function exclude_script_tag_from_optimizers( $tag, $handle ) {
+		if ( ! in_array( $handle, array( $this->plugin_name, $this->plugin_name . '-wca' ), true ) ) {
+			return $tag;
+		}
+		return preg_replace_callback(
+			'/<script\b[^>]*>/i',
+			function ( $matches ) {
+				if ( false !== stripos( $matches[0], 'nitro-exclude' ) ) {
+					return $matches[0];
+				}
+				return preg_replace( '/^<script\b/i', '<script nitro-exclude', $matches[0] );
+			},
+			$tag
+		);
+	}
+
+	/**
+	 * Mark the plugin's inline scripts (the banner config and the WP Consent
+	 * API flag) so NitroPack does not delay or move them. WordPress 6.4+.
+	 *
+	 * @param array $attributes Inline script tag attributes.
+	 * @return array
+	 */
+	public function exclude_inline_script_from_optimizers( $attributes ) {
+		$id = isset( $attributes['id'] ) ? (string) $attributes['id'] : '';
+		if ( 1 === preg_match( '/^' . preg_quote( $this->plugin_name, '/' ) . '(-wca)?-js-(extra|before|after)$/', $id ) ) {
+			$attributes['nitro-exclude'] = true;
+		}
+		return $attributes;
 	}
 	/**
 	 * Load active banner.
@@ -259,7 +319,7 @@ var _ckyGcm = <?php echo $gcm_json; //phpcs:ignore WordPress.Security.EscapeOutp
 			return;
 		}
 		$html = isset( $this->template['html'] ) ? $this->template['html'] : '';
-		echo '<script id="ckyBannerTemplate" type="text/template">';
+		echo '<script id="ckyBannerTemplate" type="text/template" nitro-exclude>';
 		echo wp_kses( $html, cky_allowed_html() );
 		echo '</script>';
 	}
@@ -620,6 +680,115 @@ var _ckyGcm = <?php echo $gcm_json; //phpcs:ignore WordPress.Security.EscapeOutp
 	 */
 	public function is_wpconsentapi_enabled() {
 		return class_exists( 'WP_CONSENT_API' );
+	}
+
+	/**
+	 * Whether CookieYes reports consent to the WP Consent API on this request.
+	 *
+	 * Page views and AJAX and REST requests (checkout, add to cart), but not wp-admin screens or
+	 * cron, where there is no visitor, and not page builder previews, which run without the banner.
+	 *
+	 * @return boolean
+	 */
+	private function reports_wp_consent() {
+		if ( true === cky_disable_banner() ) {
+			return false;
+		}
+		if ( ( is_admin() && ! wp_doing_ajax() ) || wp_doing_cron() ) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Consent type for the WP Consent API: optout for CCPA, optin otherwise.
+	 *
+	 * Without it the type depends on wca.js running in the right order; while it is unset,
+	 * wp_has_consent() allows every category. In connected mode the law can depend on the
+	 * visitor's region and is only known in the browser, so the server reports optin and
+	 * wca.js sets the visitor's actual type. The filter does nothing without the WP Consent API.
+	 *
+	 * @param string $type Consent type set so far.
+	 * @return string
+	 */
+	public function get_wp_consent_type( $type ) {
+		if ( ! $this->reports_wp_consent() ) {
+			return $type;
+		}
+		if ( null === $this->wp_consent_type ) {
+			$this->wp_consent_type = $this->resolve_wp_consent_type();
+		}
+		return '' !== $this->wp_consent_type ? $this->wp_consent_type : $type;
+	}
+
+	/**
+	 * Work out the consent type once per request.
+	 *
+	 * @return string optin, optout, or '' when no banner is active.
+	 */
+	private function resolve_wp_consent_type() {
+		if ( true === $this->settings->is_connected() ) {
+			return 'optin';
+		}
+		// load_banner() only runs for page views; other requests load the banner here.
+		$banner = $this->banner ? $this->banner : Controller::get_instance()->get_active_banner();
+		if ( ! $banner ) {
+			return '';
+		}
+		return 'ccpa' === $banner->get_law() ? 'optout' : 'optin';
+	}
+
+	/**
+	 * Ask plugins to wait for wp_consent_type_defined, which wca.js dispatches on every page load.
+	 *
+	 * Connected mode only, where the visitor's law is known only in the browser. In standalone
+	 * mode the server already reports the exact type, which per the WP Consent API readme needs
+	 * nothing more. Only when wca.js is enqueued: a plugin told to wait for an event that never
+	 * comes would never act. The WP Consent API applies this filter after enqueue_scripts().
+	 *
+	 * @param bool $wait Value set so far.
+	 * @return bool
+	 */
+	public function get_wp_consent_waitfor( $wait ) {
+		if ( true === $this->settings->is_connected() && $this->reports_wp_consent() && wp_script_is( $this->plugin_name . '-wca', 'enqueued' ) ) {
+			return true;
+		}
+		return $wait;
+	}
+
+	/**
+	 * Register the WP Consent API bridge script.
+	 *
+	 * @param array $deps Script dependencies.
+	 * @return void
+	 */
+	private function register_wca_script( $deps ) {
+		$handle = $this->plugin_name . '-wca';
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		wp_register_script( $handle, plugin_dir_url( __FILE__ ) . 'js/wca' . $suffix . '.js', $deps, $this->version, false );
+		if ( true === $this->is_gsk_enabled() ) {
+			wp_add_inline_script( $handle, 'const _ckyGsk = true;', 'before' );
+		}
+	}
+
+	/**
+	 * Keep wca.js printed when the WP Consent API script is not registered under its usual handle.
+	 *
+	 * The bridge script depends on 'wp-consent-api' so that wp_set_consent() is defined before it
+	 * runs, and WordPress drops a script whose dependency is missing. Runs after the WP Consent API
+	 * has registered its script, and registers the bridge again without the dependency. It then
+	 * applies the stored choice once the page has loaded instead.
+	 *
+	 * @return void
+	 */
+	public function release_wca_dependency() {
+		$handle = $this->plugin_name . '-wca';
+		if ( ! wp_script_is( $handle, 'enqueued' ) || wp_script_is( 'wp-consent-api', 'registered' ) ) {
+			return;
+		}
+		wp_deregister_script( $handle );
+		$this->register_wca_script( array() );
+		wp_enqueue_script( $handle );
 	}
 
 	/**

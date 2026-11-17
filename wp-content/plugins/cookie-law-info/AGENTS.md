@@ -10,7 +10,7 @@ plugin itself, see `DEVELOPMENT.md` (not shipped in the release package).
 |---|---|
 | **Plugin slug** | `cookie-law-info` |
 | **Text domain** | `cookie-law-info` |
-| **Version** | 3.5.6 |
+| **Version** | 3.5.9 |
 | **Requires** | WordPress 5.0+, PHP 5.6+ (tested to WordPress 7.1) |
 | **Admin menu** | `admin.php?page=cookie-law-info` (capability `manage_options`) |
 | **REST namespace** | `cky/v1` |
@@ -228,7 +228,11 @@ section 7 for how to tell which path a site is on.
 | `cky_registered_admin_menus` | Add or alter CookieYes admin submenus. |
 | `cky_request_sslverify` | Disable TLS verification on outbound platform calls. **Local development only.** |
 | `cky_admin_scripts_languages` | Adjust languages passed to the admin app. |
+| `cky_wpgmza_consent_category` | Cookie category slug whose consent releases WP Go Maps maps. Default `functional`. See "WP Go Maps" below. |
+| `cky_wpgmza_placeholder_text` | Text shown over a blocked WP Go Maps map (HTML is stripped). Receives the text and the category slug. |
+| `cky_video_player_scripts` | Player plugins whose front-end scripts wait for consent (slug => `path`, `provider`, optional `category`, `container` and `overlay`; `category` is the fallback when the banner has no rule for the provider). Ships with Video Player for YouTube and Vimeify; add another player that builds its video in JavaScript. |
 | `wp_consent_api_registered_<basename>` | Already returned `true` by the plugin — it declares WP Consent API compliance. |
+| `wp_get_consent_type`, `wp_consent_api_waitfor_consent_hook` | Already answered by the plugin when the banner is active — see [WP Consent API mapping](#wp-consent-api-mapping). |
 
 ### Actions
 
@@ -261,6 +265,64 @@ Cache purging is already integrated with Autoptimize, Borlabs Cache, Breeze, Cac
 Hummingbird, LiteSpeed Cache, SiteGround Optimizer, W3 Total Cache, WP Fastest Cache,
 WP Rocket and WP Super Cache. Do not hand-roll a purge for these; hook `cky_clear_cache`
 for anything else.
+
+With **Autoptimize**, the plugin also keeps its own tags out of Autoptimize's optimizations:
+the banner's pre-render hide rule (`<style id="cky-style-inline" data-noptimize>`, also via
+`autoptimize_filter_css_exclude`) and its scripts — `client_data/` (the connected-mode banner),
+`id="cookie-law-info-` and `id='cookie-law-info-` (the plugin's script tags and inline data, by id),
+`_ckyGcm` (the inline Google Consent Mode settings) and `<plugin folder>/lite/frontend/js/` (the
+plugin's script files, by path) — via `autoptimize_filter_js_exclude`, so they are neither aggregated
+nor deferred. Autoptimize matches a pattern anywhere in a tag, inline code included, so never use a
+bare `cookie-law-info`: it also pulls out third-party inline scripts that mention `#cookie-law-info-bar`,
+which then run before the aggregated jQuery and fail. The path pattern is needed because, with
+"Do not aggregate but defer", Autoptimize defers a local script unless its file path matches as well
+as its tag; Autoptimize builds that path from the script URL, so the folder comes from
+`CLI_PLUGIN_BASENAME` (symlink-safe), not `CLI_PLUGIN_BASEPATH` (the real path on disk). Do not add
+these to Autoptimize's *Exclude scripts* or *Exclude CSS* boxes by hand; they do not show there.
+
+With **NitroPack**, saving banner, cookie or settings purges NitroPack's page cache (once per
+request, page cache only). Every tag the plugin prints carries NitroPack's `nitro-exclude`
+attribute, so NitroPack does not combine, delay or move it. On WordPress below 6.4 the inline
+banner config (`cookie-law-info-js-extra`) cannot be marked; there, exclude `cookie-law-info` in
+NitroPack's *Excluded resources*.
+
+The banner runtime runs **once per page**: if another CookieYes copy (a GTM tag, a pasted
+snippet, a second plugin copy) is already running, the plugin's copy logs a console warning and
+stops. A prerendered page shows no banner and writes no cookie until it is opened, and a page
+opened from prerender or restored with Back reloads if the visitor made a choice on another page.
+
+With **WP Rocket**, the plugin also keeps its own scripts out of *Delay JavaScript execution*,
+*Minify JavaScript files* and *Load JavaScript deferred* (`cookie-law-info`, `_ckyGcm` and
+`client_data/(.*)/script.js` — the plugin's scripts, the inline Google Consent Mode settings and the
+connected-mode banner — via `rocket_delay_js_exclusions`, `rocket_exclude_js` and
+`rocket_exclude_defer_js`) and
+Google Maps iframes (`google.com/maps`) out of *LazyLoad for iframes* (via
+`rocket_lazyload_iframe_excluded_patterns`). Do not add CookieYes to WP Rocket's exclusion lists
+by hand — it is already done in code and does not show in WP Rocket's settings screen. Other
+iframes CookieYes blocks (YouTube, Vimeo…) are **not** excluded from LazyLoad; see section 7.
+
+### WP Go Maps
+
+When WP Go Maps is active and uses the Google Maps engine, the plugin:
+
+- prints WP Go Maps' Google Maps script (handle `wpgmza_api_call`) as an inert
+  `<script type="text/plain" data-cky-wpgmza-src="…">` and loads it once the visitor accepts the
+  category from `cky_wpgmza_consent_category` (default `functional`) — no page reload;
+- shows a placeholder over each `.wpgmza_map` with a *Cookie settings* button that opens the
+  preference centre;
+- sets or removes WP Go Maps' own cookie `wpgmza-api-consent-given` with the CookieYes choice, so
+  its *Require consent before loading* option does not ask a second time (and shows an admin
+  notice recommending that option be turned off). The cookie lasts as long as the CookieYes
+  consent cookie. With that option on, WP Go Maps leaves the script out of the page, so the page
+  reloads once after consent; a page that comes back still without it (a page cache) is not
+  reloaded again in that browser session, and a console warning names the cause;
+- in standalone mode, adds one cookie to the cookie list on the first admin page an administrator
+  opens: `NID`, domain `.google.com`, URL pattern `google.com/maps`, in that category. This gives
+  the category a switch in the preference centre and also blocks plain Google Maps iframe embeds.
+  It is added once (option `cky_wpgmza_cookie_added`); if the owner deletes it, it is not re-added.
+
+Nothing is held when the OpenStreetMap engine is used, in wp-admin, in page-builder previews, or
+when no CookieYes banner loads on the page. WP Go Maps' own settings are never changed.
 
 ### Known gaps
 
@@ -398,6 +460,10 @@ if you could not run the browser-side steps — say which ones you skipped.
 - **Uninstall keeps data by default.** Removing the plugin leaves tables and settings in
   place unless `CKY_REMOVE_ALL_DATA` is `true`. Say so before an uninstall — an owner
   expecting a clean removal will not get one.
+- **Lazy-loaded iframes slip past blocking.** Optimizers that swap an iframe's `src` for
+  `about:blank` and set it later (WP Rocket *LazyLoad for iframes*, and similar) hide the iframe
+  from the blocker, so it loads without consent. Google Maps is excluded from WP Rocket's LazyLoad
+  automatically; for other providers, exclude their domain in the optimizer's lazyload settings.
 - **Embedded-video placeholders change layout.** A blocked iframe becomes a placeholder of
   the same measured size; zero-sized or lazily-measured iframes may not be replaced cleanly.
 
@@ -415,6 +481,7 @@ if you could not run the browser-side steps — say which ones you skipped.
 | `cky_cookie_consent_lite_db_version` | Internal DB version; also selects legacy vs current code path. |
 | `cky_missing_tables` | Tables that failed to create. |
 | `cky_admin_notices`, `cky_connect_notice`, `cky_connect_expand` | Admin notice state. |
+| `cky_wpgmza_cookie_added` | Set once the Google Maps cookie for WP Go Maps has been added to the cookie list. Delete it to let the plugin add the cookie again. If the consent category does not exist yet, the plugin tries again after an hour (transient `cky_wpgmza_cookie_retry`). |
 | `cky_first_time_activated_plugin` | First-activation marker. |
 | `cky_install_source` | Who performed the install, when declared. `agent` is the only recognised value; any other non-empty value is reported as `other`. Unset means nothing is reported at all. |
 | `cky_activation_context` | `wp-cli`, `wp-admin` or `other`, recorded automatically on a first-time install. `other` means the activation was neither — a deploy tool writing `active_plugins` directly, or a REST/XML-RPC activation. Absent on sites upgraded from before 3.5.6. |
@@ -434,7 +501,15 @@ All under `/wp-json/cky/v1/`, all requiring `manage_options` and a valid nonce:
 | `performance` | `functional` |
 | `advertisement` | `marketing` |
 
-`window.wp_consent_type` is set to `optin` under GDPR and `optout` under CCPA. Note that
+`window.wp_consent_type` is set to `optin` under GDPR and `optout` under CCPA on every page
+load — also for returning visitors and when an optimiser delays JavaScript — and after each
+consent change. `wp_consent_type_defined` is dispatched when the type is first known, once more
+when the page is ready, and after each consent change; in connected mode, not before the banner
+has resolved the visitor's region. A returning visitor's stored choice is passed to
+`wp_set_consent` once per page load. On the server, for page views and AJAX/REST requests, the
+plugin answers `wp_get_consent_type` (standalone: `optin` for GDPR, `optout` for CCPA; connected:
+`optin`, because the visitor's law is only known in the browser). In connected mode it also
+enables `wp_consent_api_waitfor_consent_hook`. Note that
 `performance` maps to `functional` and *not* the other way round — the names do not line up
 between the two systems, which trips up hand-written mappings.
 

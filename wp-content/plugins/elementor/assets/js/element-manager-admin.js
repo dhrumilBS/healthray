@@ -2365,7 +2365,7 @@ var import_regenerator = /* @__PURE__ */ __toESM(require_regenerator());
 			alignItems: "center"
 		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, null, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
 			variant: "h6",
-			component: "h3"
+			component: "h2"
 		}, (0, _wordpress_i18n.__)("Elementor Pro Elements", "elementor")), /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
 			variant: "body2",
 			component: "p"

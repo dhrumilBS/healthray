@@ -23,8 +23,8 @@ class Review_Request {
 
 	const OPTION_STATE   = 'wt_cli_review_request';
 	const OPTION_START   = 'wt_cli_start_date';
-	const DAYS_FIRST     = 15;
-	const DAYS_REMIND    = 15;
+	const DAYS_FIRST     = 30;
+	const DAYS_REMIND    = 30;
 	const REVIEW_URL     = 'https://wordpress.org/support/plugin/cookie-law-info/reviews/#new-post';
 
 	/**
@@ -78,7 +78,7 @@ class Review_Request {
 			return false;
 		}
 
-		if ( 'never' === $action || 'closed' === $action ) {
+		if ( 'never' === $action ) {
 			update_option( self::OPTION_STATE, 3 );
 			return true;
 		}
@@ -88,7 +88,7 @@ class Review_Request {
 			return true;
 		}
 
-		// Remind me later.
+		// Remind me later, or closed with ×: show again after DAYS_REMIND.
 		update_option( self::OPTION_START, time() );
 		update_option( self::OPTION_STATE, 5 );
 		return true;

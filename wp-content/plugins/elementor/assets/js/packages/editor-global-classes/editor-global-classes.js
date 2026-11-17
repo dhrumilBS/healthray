@@ -211,7 +211,7 @@ react = __toESM(react);
 						variant.props = mergeProps(variantProps, payloadProps);
 					}
 					variant.custom_css = customCss;
-					style.variants = getNonEmptyVariants(style);
+					style.variants = (0, _elementor_editor_styles.getNonEmptyVariants)(style);
 				} else style.variants.push({
 					meta: payload.meta,
 					props: payload.props,
@@ -291,9 +291,6 @@ react = __toESM(react);
 			else props[key] = value;
 		});
 		return props;
-	};
-	var getNonEmptyVariants = (style) => {
-		return style.variants.filter(({ props, custom_css: customCss }) => Object.keys(props).length || customCss?.raw);
 	};
 	var placeholderDefinition = (id, label) => ({
 		id,
@@ -3436,7 +3433,7 @@ react = __toESM(react);
 		});
 	}
 	function triggerSave(panelActions, context = "preview") {
-		if (!(0, _elementor_editor_current_user.getCurrentUser)()?.capabilities.includes("elementor_global_classes_update_class")) return null;
+		if (!(0, _elementor_editor_current_user.getCurrentUser)()?.capabilities.includes("elementor_global_classes_update_class") || (0, _elementor_editor_current_user.isContentOnlyUser)()) return null;
 		if (pendingSave) return pendingSave;
 		const promise = saveGlobalClasses({
 			context,

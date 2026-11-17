@@ -1,6 +1,7 @@
 <?php
 namespace Elementor;
 
+use Elementor\Core\Common\Modules\Connect\Module as ConnectModule;
 use Elementor\Core\Files\Fonts\Google_Font;
 use Elementor\Core\Utils\Collection;
 
@@ -663,6 +664,18 @@ class Utils {
 		return class_exists( '\ElementorPro\License\API' ) && \ElementorPro\License\API::is_license_active();
 	}
 
+	public static function is_license_expired(): bool {
+		return class_exists( '\ElementorPro\License\API' ) && \ElementorPro\License\API::is_license_expired();
+	}
+
+	public static function get_license_access_tier(): string {
+		if ( ! self::is_license_active() ) {
+			return ConnectModule::ACCESS_TIER_FREE;
+		}
+
+		return (string) \ElementorPro\License\API::get_access_tier();
+	}
+
 	public static function is_pro_installed_and_not_active(): bool {
 		if ( ! function_exists( 'get_plugins' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -671,7 +684,15 @@ class Utils {
 		$file_path = self::get_elementor_pro_file_path();
 		$installed_plugins = get_plugins();
 
-		return isset( $installed_plugins[ $file_path ] );
+		if ( ! isset( $installed_plugins[ $file_path ] ) ) {
+			return false;
+		}
+
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		return ! is_plugin_active( $file_path );
 	}
 
 	private static function get_elementor_pro_file_path(): string {

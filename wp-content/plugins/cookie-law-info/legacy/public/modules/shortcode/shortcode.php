@@ -202,9 +202,14 @@ class Cookie_Law_Info_Shortcode {
 				$wpml_default_lang = $sitepress->get_default_language();
 				$wpml_current_lang = ICL_LANGUAGE_CODE;
 				if ( $wpml_default_lang != $wpml_current_lang ) {
-					$sitepress->switch_lang( $wpml_default_lang ); // switching to default lang
-					$term = get_term_by( 'slug', $category, 'cookielawinfo-category' ); // original term
-					$sitepress->switch_lang( $wpml_current_lang ); // revert back to current lang
+					do_action( 'wpml_switch_language', $wpml_default_lang ); // Switching to default lang.
+					try {
+						$term = get_term_by( 'slug', $category, 'cookielawinfo-category' ); // Original term.
+					} finally {
+						// WPML 5.0+ nests language switches and only null closes one; 4.x restores by name (WPML erratum).
+						$has_stack = defined( 'ICL_SITEPRESS_VERSION' ) && version_compare( ICL_SITEPRESS_VERSION, '5.0', '>=' );
+						do_action( 'wpml_switch_language', $has_stack ? null : $wpml_current_lang );
+					}
 					if ( ! $term ) {
 						$term = get_term_by( 'slug', $category, 'cookielawinfo-category' ); // current lang term
 					}

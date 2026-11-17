@@ -91,7 +91,7 @@ var import_client = require_client();
 		const queryClient = (0, _elementor_query.createQueryClient)();
 		ensureCurrentUser();
 		(0, _elementor_editor_v1_adapters.__privateDispatchReadyEvent)();
-		render(/* @__PURE__ */ react.createElement(_elementor_store.__StoreProvider, { store }, /* @__PURE__ */ react.createElement(_elementor_query.QueryClientProvider, { client: queryClient }, /* @__PURE__ */ react.createElement(_elementor_ui.DirectionProvider, { rtl: window.document.dir === "rtl" }, /* @__PURE__ */ react.createElement(_elementor_ui.ThemeProvider, null, /* @__PURE__ */ react.createElement(_elementor_editor_ui.GlobalDialog, null), /* @__PURE__ */ react.createElement(Shell, null))))), domElement);
+		render(/* @__PURE__ */ react.createElement(_elementor_store.__StoreProvider, { store }, /* @__PURE__ */ react.createElement(_elementor_query.QueryClientProvider, { client: queryClient }, /* @__PURE__ */ react.createElement(_elementor_ui.DirectionProvider, { rtl: window.document.dir === "rtl" }, /* @__PURE__ */ react.createElement(_elementor_editor_ui.ThemeProvider, null, /* @__PURE__ */ react.createElement(_elementor_editor_ui.GlobalDialog, null), /* @__PURE__ */ react.createElement(Shell, null))))), domElement);
 	}
 	function render(app, domElement) {
 		let renderFn;

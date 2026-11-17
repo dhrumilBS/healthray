@@ -2,7 +2,7 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: CookieYes | GDPR Cookie Consent 3.5.6\n"
+"Project-Id-Version: CookieYes | GDPR Cookie Consent 3.5.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cookieyes-wp-plugin-react\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1980,7 +1980,7 @@ msgid "Customise the validity period of your users' consent preferences here. Th
 msgstr ""
 
 #: lite/admin/dist/js/index.js
-msgid "Support IAB TCF v2.3"
+msgid "Support IAB TCF v2.4"
 msgstr ""
 
 #: lite/admin/dist/js/index.js
@@ -3124,7 +3124,7 @@ msgstr ""
 
 #: legacy/admin/modules/uninstall-feedback/uninstall-feedback.php:174
 #: lite/admin/modules/uninstall-feedback/class-uninstall-feedback.php:263
-msgid "Go to support"
+msgid "Having a problem? Ask on the support forum"
 msgstr ""
 
 #: legacy/admin/modules/uninstall-feedback/uninstall-feedback.php:175
@@ -3218,7 +3218,7 @@ msgid "Built-in compliance standards"
 msgstr ""
 
 #: legacy/admin/partials/wt-cli-update-modals.php:11
-msgid "Supports Google Consent Mode, IAB TCF v2.3, and Google Additional Consent Mode."
+msgid "Supports Google Consent Mode, IAB TCF v2.4, and Google Additional Consent Mode."
 msgstr ""
 
 #: legacy/admin/partials/wt-cli-update-modals.php:12
@@ -3299,6 +3299,13 @@ msgstr ""
 
 #: legacy/admin/partials/wt-cli-update-modals.php:39
 msgid "Get help"
+msgstr ""
+
+#: legacy/admin/modules/cookie-scaner/cookie-scaner.php:527
+#: legacy/admin/modules/cookie-scaner/cookie-scaner.php:545
+#: legacy/admin/partials/wt-cli-update-modals.php:42
+#: legacy/includes/class-cookie-law-info-cookieyes.php:323
+msgid "Get help on the forum"
 msgstr ""
 
 #: legacy/admin/partials/wt-cli-update-modals.php:51

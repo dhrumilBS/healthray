@@ -3,7 +3,7 @@
  * Plugin Name: Manage
  * Description: Manage multiple WordPress websites from one place using your Elementor account. Safe updates, monitoring, and bulk actions powered by Elementor.
  * Plugin URI: https://elementor.com/
- * Version: 1.0.9
+ * Version: 1.0.12
  * Author: Elementor.com
  * Author URI: http://go.elementor.com/author-uri-manage/
  * License: GPL-3
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'MANAGE_VERSION', '1.0.9' );
+define( 'MANAGE_VERSION', '1.0.12' );
 define( 'MANAGE_PLUGIN_BASE', plugin_basename( __FILE__ ) );
 define( 'MANAGE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MANAGE_URL', plugins_url( '/', __FILE__ ) );

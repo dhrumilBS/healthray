@@ -1,4 +1,5 @@
-const _ckyGcmData = window._ckyGcm;
+// An optimizer can delay or drop the inline settings; fall back to denied defaults.
+const _ckyGcmData = window._ckyGcm || {};
 let setDefaultSetting = true;
 const regionSettings = _ckyGcmData.default_settings || [];
 const waitForTime = _ckyGcmData.wait_for_update;

@@ -1521,7 +1521,7 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 	var IconWithBadge = function IconWithBadge(_ref) {
 		var count = _ref.count;
 		return /*#__PURE__*/ react.default.createElement(_elementor_ui.Badge, {
-			color: "primary",
+			color: "accent",
 			badgeContent: count,
 			invisible: 0 === count
 		}, /*#__PURE__*/ react.default.createElement(_elementor_icons_SpeakerphoneIcon.default, null));

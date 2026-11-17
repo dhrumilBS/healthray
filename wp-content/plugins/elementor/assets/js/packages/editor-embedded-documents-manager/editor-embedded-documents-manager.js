@@ -131,6 +131,7 @@
 				data: await _elementor_editor_v1_adapters.ajax.load({
 					data: { id },
 					action: "get_document_config",
+					retry: true,
 					unique_id: `embedded-document-${id}`
 				})
 			};

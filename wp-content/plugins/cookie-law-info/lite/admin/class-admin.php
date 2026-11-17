@@ -34,6 +34,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Admin {
 
 	/**
+	 * Cached in place of the plan when the plugin-row lookup fails, so the failure is not retried on every load.
+	 */
+	const PLAN_LOOKUP_FAILED = 'lookup_failed';
+
+	/**
 	 * The ID of this plugin.
 	 *
 	 * @since    3.0.0
@@ -164,7 +169,7 @@ class Admin {
 	 * Add review notice if the plugin has been installed long enough.
 	 */
 	public function add_review_notice() {
-		$expiry   = 60 * DAY_IN_SECONDS;
+		$expiry   = 30 * DAY_IN_SECONDS;
 		$settings = new \CookieYes\Lite\Admin\Modules\Settings\Includes\Settings();
 		$installed = $settings->get_installed_date();
 		if ( $installed && ( $installed + $expiry > time() ) ) {
@@ -910,21 +915,58 @@ class Admin {
 	 * @return array
 	 */
 	public function plugin_action_links( $links ) {
-		$settings = Settings::get_instance();
-		$notice   = Notice::get_instance();
-		if ( $settings->is_connected() && ! $notice->is_dismissed( 'affiliate_banner' ) ) {
-			$info = Controller::get_instance()->get_info();
-			if ( ! is_wp_error( $info ) && is_array( $info ) ) {
-				$plan = isset( $info['plan'] ) && is_array( $info['plan'] ) ? $info['plan'] : array();
-				$name = isset( $plan['name'] ) ? $plan['name'] : '';
-				if ( 'Agency' !== $name ) {
-					$links[] = '<a href="https://www.cookieyes.com/partners/affiliates/onboarding/?ref=aiaflwp" target="_blank">' . esc_html__( 'Affiliate Program', 'cookie-law-info' ) . '</a>';
-				}
+		$settings  = Settings::get_instance();
+		$notice    = Notice::get_instance();
+		$connected = $settings->is_connected();
+		$plan      = $connected ? $this->get_connected_plan() : null;
+		if ( is_array( $plan ) && ! $notice->is_dismissed( 'affiliate_banner' ) ) {
+			if ( 'Agency' !== $plan['name'] ) {
+				$links[] = '<a href="https://www.cookieyes.com/partners/affiliates/onboarding/?ref=aiaflwp" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Affiliate Program', 'cookie-law-info' ) . '</a>';
 			}
 		}
-		$links[] = '<a href="https://www.cookieyes.com/support/" target="_blank">' . esc_html__( 'Support', 'cookie-law-info' ) . '</a>';
-		$links[] = '<a href="' . get_admin_url( null, 'admin.php?page=cookie-law-info' ) . '">' . esc_html__( 'Settings', 'cookie-law-info' ) . '</a>';
+		// Paid web app accounts keep the CookieYes support portal; free and standalone installs go to the WordPress.org forum.
+		// 'plan_f' is the legacy "Free Plugin" plan, which legacy sites keep when they connect through this plugin.
+		$plan_slug   = is_array( $plan ) && '' !== $plan['slug'] ? $plan['slug'] : $settings->get_plan();
+		$is_paid     = $connected && ! empty( $plan_slug ) && ! in_array( strtolower( (string) $plan_slug ), array( 'free', 'plan_f' ), true );
+		$support_url = $is_paid ? 'https://www.cookieyes.com/support/' : 'https://wordpress.org/support/plugin/cookie-law-info/#new-topic-0';
+		$links[]     = '<a href="' . esc_url( $support_url ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Support', 'cookie-law-info' ) . '</a>';
+		$links[]     = '<a href="' . esc_url( get_admin_url( null, 'admin.php?page=cookie-law-info' ) ) . '">' . esc_html__( 'Settings', 'cookie-law-info' ) . '</a>';
 		return array_reverse( $links );
+	}
+
+	/**
+	 * Plan of the connected web app account, for the plugin row links.
+	 *
+	 * Cached for an hour so the Installed Plugins page does not call the web app on every load; every
+	 * successful plan fetch (Controller::get_app_info()) refreshes it. A failed lookup is remembered for a
+	 * few minutes so an unreachable web app does not hold every page load for the full timeout.
+	 *
+	 * @return array|null Array with 'slug' and 'name', or null when the web app could not be reached.
+	 */
+	private function get_connected_plan() {
+		$controller = Controller::get_instance();
+		$cache_key  = $controller->get_plan_cache_key();
+		$plan       = get_transient( $cache_key );
+		if ( is_array( $plan ) ) {
+			return $plan;
+		}
+		if ( self::PLAN_LOOKUP_FAILED === $plan ) {
+			return null;
+		}
+		// Short timeout for this call only; the controller is shared, so put back whatever was set before.
+		$previous_timeout = $controller->get_timeout();
+		$controller->set_timeout( 10 );
+		try {
+			$info = $controller->get_app_info();
+		} finally {
+			$controller->set_timeout( $previous_timeout );
+		}
+		if ( is_wp_error( $info ) || ! is_array( $info ) || empty( $info['plan'] ) || ! is_array( $info['plan'] ) ) {
+			set_transient( $cache_key, self::PLAN_LOOKUP_FAILED, 5 * MINUTE_IN_SECONDS );
+			return null;
+		}
+		// get_app_info() has already cached the plan for an hour.
+		return $controller->get_cacheable_plan( $info['plan'] );
 	}
 
 	/**

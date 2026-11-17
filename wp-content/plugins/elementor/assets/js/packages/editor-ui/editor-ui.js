@@ -192,18 +192,20 @@ react = __toESM(react);
 
 //#endregion
 //#region packages/packages/libs/editor-ui/src/hooks/use-color-scheme.ts
-	function useColorScheme() {
+	function useColorScheme(staticColorScheme) {
 		const [colorScheme, setColorScheme] = (0, react.useState)(() => getV1ColorScheme());
 		(0, react.useEffect)(() => {
+			if (staticColorScheme) return;
 			return (0, _elementor_editor_v1_adapters.__privateListenTo)((0, _elementor_editor_v1_adapters.v1ReadyEvent)(), () => setColorScheme(getV1ColorScheme()));
-		}, []);
+		}, [staticColorScheme]);
 		(0, react.useEffect)(() => {
+			if (staticColorScheme) return;
 			return (0, _elementor_editor_v1_adapters.__privateListenTo)((0, _elementor_editor_v1_adapters.commandEndEvent)("document/elements/settings"), (e) => {
 				const event = e;
 				if (event.args?.settings && "ui_theme" in event.args.settings) setColorScheme(getV1ColorScheme());
 			});
-		}, []);
-		return colorScheme;
+		}, [staticColorScheme]);
+		return staticColorScheme || colorScheme;
 	}
 	function getV1ColorScheme() {
 		return window.elementor?.getPreferences?.("ui_theme") || "auto";
@@ -212,8 +214,8 @@ react = __toESM(react);
 //#endregion
 //#region packages/packages/libs/editor-ui/src/components/theme-provider.tsx
 	var EDITOR_PALETTE = "unstable";
-	function ThemeProvider({ children }) {
-		const colorScheme = useColorScheme();
+	function ThemeProvider({ children, colorScheme: staticColorScheme }) {
+		const colorScheme = useColorScheme(staticColorScheme);
 		return /* @__PURE__ */ react.createElement(_elementor_ui.ThemeProvider, {
 			colorScheme,
 			palette: EDITOR_PALETTE
@@ -487,6 +489,30 @@ react = __toESM(react);
 	};
 
 //#endregion
+//#region packages/packages/libs/editor-ui/src/hooks/use-roving-focus.ts
+	var useRovingFocus = ({ tabbableKey, mountedSignature }) => {
+		const elements = (0, react.useRef)(/* @__PURE__ */ new Map());
+		const isFocusPending = (0, react.useRef)(false);
+		(0, react.useLayoutEffect)(() => {
+			if (!isFocusPending.current || tabbableKey === void 0) return;
+			const element = elements.current.get(tabbableKey);
+			if (element) {
+				element.focus();
+				isFocusPending.current = false;
+			}
+		}, [tabbableKey, mountedSignature]);
+		return {
+			registerRef: (0, react.useCallback)((key) => (node) => {
+				if (node) elements.current.set(key, node);
+				else elements.current.delete(key);
+			}, []),
+			requestFocus: (0, react.useCallback)(() => {
+				isFocusPending.current = true;
+			}, [])
+		};
+	};
+
+//#endregion
 //#region packages/packages/libs/editor-ui/src/components/promotions/promotion-infotip.tsx
 	var PromotionInfotip = ({ children, open, onClose, onCtaClick, ...cardProps }) => {
 		useCanvasClickHandler(!!open, onClose);
@@ -534,7 +560,7 @@ react = __toESM(react);
 
 //#endregion
 //#region packages/packages/libs/editor-ui/src/components/promotions/promotion-popover.tsx
-	var PromotionPopover = ({ children, open, placement = "right", slotProps, anchorRef, ...cardProps }) => {
+	var PromotionPopover = ({ children, open, placement = "right", arrow = false, slotProps, anchorRef, ...cardProps }) => {
 		const anchorEl = anchorRef?.current;
 		const defaultSlotProps = { popper: {
 			...anchorEl && { anchorEl },
@@ -545,7 +571,7 @@ react = __toESM(react);
 		} };
 		return /* @__PURE__ */ react.createElement(_elementor_ui.Infotip, {
 			placement,
-			arrow: false,
+			arrow,
 			content: /* @__PURE__ */ react.createElement(PopoverAlert, { ...cardProps }),
 			open,
 			slotProps: slotProps || defaultSlotProps
@@ -763,19 +789,25 @@ react = __toESM(react);
 	var SECTION_PADDING_INLINE = 32;
 	var DEFAULT_POPOVER_HEIGHT = 348;
 	var FALLBACK_POPOVER_WIDTH = 220;
-	var PopoverBody = ({ children, height = DEFAULT_POPOVER_HEIGHT, width, id }) => {
+	var PopoverBody = ({ children, height = DEFAULT_POPOVER_HEIGHT, width, id, fillWidth = false }) => {
+		const resolvedWidth = resolvePopoverWidth(width, fillWidth);
 		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
 			display: "flex",
 			flexDirection: "column",
 			sx: {
 				height,
 				overflow: "hidden",
-				width: `${width ? width - SECTION_PADDING_INLINE : FALLBACK_POPOVER_WIDTH}px`,
-				maxWidth: 496
+				width: `${resolvedWidth}px`,
+				maxWidth: fillWidth ? resolvedWidth : 496
 			},
 			id
 		}, children);
 	};
+	function resolvePopoverWidth(width, fillWidth) {
+		if (!width) return FALLBACK_POPOVER_WIDTH;
+		if (fillWidth) return width;
+		return width - SECTION_PADDING_INLINE;
+	}
 
 //#endregion
 //#region packages/packages/libs/editor-ui/src/contexts/section-context.tsx
@@ -799,15 +831,18 @@ react = __toESM(react);
 //#endregion
 //#region packages/packages/libs/editor-ui/src/components/popover/header.tsx
 	var SIZE$1 = "tiny";
-	var PopoverHeader = ({ title, onClose, icon, actions }) => {
+	var PopoverHeader = ({ title, onClose, icon, actions, sx }) => {
 		return /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
 			direction: "row",
 			alignItems: "center",
-			pl: 2,
-			pr: 1,
-			py: 1.5,
-			maxHeight: 36,
-			sx: { columnGap: .5 }
+			sx: {
+				pl: 2,
+				pr: 1,
+				py: 1.5,
+				maxHeight: 36,
+				columnGap: .5,
+				...sx
+			}
 		}, icon, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
 			variant: "subtitle2",
 			sx: {
@@ -1629,6 +1664,12 @@ react = __toESM(react);
 	var ITEM_HEIGHT = 32;
 	var LIST_ITEMS_BUFFER = 6;
 	var MENU_LIST_PADDING_TOP = 8;
+	var ROVING_FOCUS_KEYS = /* @__PURE__ */ new Set([
+		"ArrowDown",
+		"ArrowUp",
+		"Home",
+		"End"
+	]);
 	var menuSubHeaderAbsoluteStyling = (start) => ({
 		position: "absolute",
 		transform: `translateY(${start + MENU_LIST_PADDING_TOP}px)`
@@ -1638,21 +1679,42 @@ react = __toESM(react);
 		const nextTwoStickyIndices = stickyIndices.filter((stickyIndex) => stickyIndex > range.endIndex).slice(0, 2);
 		return [...previousTwoStickyIndices, ...nextTwoStickyIndices];
 	};
-	var PopoverMenuList = ({ items, onSelect, onClose, selectedValue, itemStyle, onChange, "data-testid": dataTestId, menuItemContentTemplate, categoryItemContentTemplate, noResultsComponent, menuListTemplate: CustomMenuList }) => {
+	var PopoverMenuList = ({ items, onSelect, onClose, selectedValue, itemStyle, onChange, "data-testid": dataTestId, menuItemContentTemplate, categoryItemContentTemplate, noResultsComponent, menuListTemplate: CustomMenuList, itemHeight = 32, rovingFocus = false }) => {
 		const containerRef = (0, react.useRef)(null);
 		const scrollTop = useScrollTop({ containerRef });
 		const theme = (0, _elementor_ui.useTheme)();
+		const [focusedValue, setFocusedValue] = (0, react.useState)();
 		const MenuListComponent = CustomMenuList || StyledMenuList;
 		const stickyIndices = (0, react.useMemo)(() => items.reduce((categoryIndices, item, index) => {
 			if (item.type === "category") categoryIndices.push(index);
 			return categoryIndices;
 		}, []), [items]);
+		const enabledIndices = (0, react.useMemo)(() => items.reduce((indices, item, index) => {
+			if (item.type !== "category" && !item.disabled) indices.push(index);
+			return indices;
+		}, []), [items]);
+		const tabbableIndex = (0, react.useMemo)(() => {
+			if (!rovingFocus) return -1;
+			const candidates = [focusedValue, selectedValue];
+			for (const candidate of candidates) {
+				const index = items.findIndex((item) => item.value === candidate);
+				if (enabledIndices.includes(index)) return index;
+			}
+			return enabledIndices[0] ?? -1;
+		}, [
+			rovingFocus,
+			focusedValue,
+			selectedValue,
+			items,
+			enabledIndices
+		]);
 		const getActiveItemIndices = (range) => {
 			const visibleAndStickyIndexes = [];
 			for (let i = range.startIndex; i <= range.endIndex; i++) visibleAndStickyIndexes.push(i);
 			getAdjacentStickyIndices(stickyIndices, range).forEach((stickyIndex) => {
 				if (!visibleAndStickyIndexes.includes(stickyIndex)) visibleAndStickyIndexes.push(stickyIndex);
 			});
+			if (tabbableIndex >= 0 && !visibleAndStickyIndexes.includes(tabbableIndex)) visibleAndStickyIndexes.push(tabbableIndex);
 			return visibleAndStickyIndexes.sort((a, b) => a - b);
 		};
 		const onChangeCallback = ({ getVirtualIndexes }) => {
@@ -1662,7 +1724,7 @@ react = __toESM(react);
 		const virtualizer = useVirtualizer({
 			count: items.length,
 			getScrollElement: () => containerRef.current,
-			estimateSize: () => 32,
+			estimateSize: () => itemHeight,
 			overscan: LIST_ITEMS_BUFFER,
 			rangeExtractor: getActiveItemIndices,
 			onChange: onChangeCallback
@@ -1676,6 +1738,24 @@ react = __toESM(react);
 			virtualizer
 		});
 		const virtualItems = virtualizer.getVirtualItems();
+		const mountedSignature = virtualItems.map((row) => row.index).join(",");
+		const { registerRef, requestFocus } = useRovingFocus({
+			tabbableKey: items[tabbableIndex]?.value,
+			mountedSignature
+		});
+		const moveFocus = (key, currentIndex) => {
+			const position = enabledIndices.indexOf(currentIndex);
+			const targetIndex = {
+				ArrowDown: enabledIndices[position + 1],
+				ArrowUp: position > 0 ? enabledIndices[position - 1] : void 0,
+				Home: enabledIndices[0],
+				End: enabledIndices[enabledIndices.length - 1]
+			}[key];
+			if (targetIndex === void 0 || targetIndex === currentIndex) return;
+			requestFocus();
+			setFocusedValue(items[targetIndex].value);
+			virtualizer.scrollToIndex(targetIndex);
+		};
 		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
 			ref: containerRef,
 			sx: {
@@ -1685,13 +1765,16 @@ react = __toESM(react);
 		}, items.length === 0 && noResultsComponent ? noResultsComponent : /* @__PURE__ */ react.createElement(MenuListComponent, {
 			role: "listbox",
 			style: { height: `${virtualizer.getTotalSize()}px` },
-			"data-testid": dataTestId
+			"data-testid": dataTestId,
+			sx: itemHeight === 32 ? void 0 : { "& > li": { height: itemHeight } }
 		}, virtualItems.map((virtualRow) => {
 			const item = items[virtualRow.index];
 			const isLast = virtualRow.index === items.length - 1;
 			const isFirst = items[0]?.type === "category" ? virtualRow.index === 1 : virtualRow.index === 0;
 			const isSelected = selectedValue === item.value;
-			const tabIndexFallback = !selectedValue ? 0 : -1;
+			const defaultTabIndex = isSelected ? 0 : !selectedValue ? 0 : -1;
+			const rovingTabIndex = virtualRow.index === tabbableIndex ? 0 : -1;
+			const optionTabIndex = rovingFocus ? rovingTabIndex : defaultTabIndex;
 			if (!item) return null;
 			if (item.type === "category") {
 				const shouldStick = virtualRow.start + MENU_LIST_PADDING_TOP <= scrollTop;
@@ -1707,6 +1790,7 @@ react = __toESM(react);
 			const isDisabled = item.disabled;
 			return /* @__PURE__ */ react.createElement(_elementor_ui.ListItem, {
 				key: virtualRow.key,
+				ref: registerRef(item.value),
 				role: "option",
 				"aria-selected": isSelected,
 				"aria-disabled": isDisabled,
@@ -1716,9 +1800,16 @@ react = __toESM(react);
 					onClose();
 				},
 				onKeyDown: (event) => {
-					if (event.key === "Enter" && !isDisabled) {
+					if ((event.key === "Enter" || rovingFocus && event.key === " ") && !isDisabled) {
+						if (rovingFocus) event.preventDefault();
 						onSelect(item.value);
 						onClose();
+					}
+					if (rovingFocus && ROVING_FOCUS_KEYS.has(event.key)) {
+						event.preventDefault();
+						event.stopPropagation();
+						moveFocus(event.key, virtualRow.index);
+						return;
 					}
 					if (event.key === "ArrowDown" && isLast) {
 						event.preventDefault();
@@ -1729,7 +1820,8 @@ react = __toESM(react);
 						event.stopPropagation();
 					}
 				},
-				tabIndex: isSelected ? 0 : tabIndexFallback,
+				onFocus: rovingFocus ? () => setFocusedValue(item.value) : void 0,
+				tabIndex: optionTabIndex,
 				sx: {
 					transform: `translateY(${virtualRow.start + MENU_LIST_PADDING_TOP}px)`,
 					...theme.typography.caption,
@@ -2087,6 +2179,7 @@ react = __toESM(react);
 		useDialog: () => useDialog,
 		useEditable: () => useEditable,
 		useFloatingActionsBar: () => useFloatingActionsBar,
+		useRovingFocus: () => useRovingFocus,
 		useSectionWidth: () => useSectionWidth,
 		useTextFieldAutoSelect: () => useTextFieldAutoSelect
 	});

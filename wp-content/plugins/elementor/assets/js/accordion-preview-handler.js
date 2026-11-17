@@ -1799,15 +1799,44 @@
 	}));
 
 //#endregion
+//#region modules/atomic-widgets/elements/atomic-accordion/handlers/accordion-header-selected.js
+	var require_accordion_header_selected = /* @__PURE__ */ __commonJSMin(((exports) => {
+		Object.defineProperty(exports, "__esModule", { value: true });
+		exports.SELECTED_CLASS = exports.ITEM_ELEMENT_TYPE = exports.HEADER_ELEMENT_TYPE = exports.ACCORDION_ELEMENT_TYPE = void 0;
+		exports.createAccordionScopeHelpers = createAccordionScopeHelpers;
+		exports.syncAllHeadersInAccordion = syncAllHeadersInAccordion;
+		exports.syncHeaderSelectedClass = syncHeaderSelectedClass;
+		require_esnext_iterator_constructor();
+		require_esnext_iterator_filter();
+		require_esnext_iterator_for_each();
+		var ACCORDION_ELEMENT_TYPE = exports.ACCORDION_ELEMENT_TYPE = "e-accordion";
+		var ITEM_ELEMENT_TYPE = exports.ITEM_ELEMENT_TYPE = "e-accordion-item";
+		var HEADER_ELEMENT_TYPE = exports.HEADER_ELEMENT_TYPE = "e-accordion-item-header";
+		var SELECTED_CLASS = exports.SELECTED_CLASS = "e--selected";
+		function syncHeaderSelectedClass(item) {
+			var _item$querySelector;
+			const header = item === null || item === void 0 || (_item$querySelector = item.querySelector) === null || _item$querySelector === void 0 ? void 0 : _item$querySelector.call(item, `[data-element_type="${HEADER_ELEMENT_TYPE}"]`);
+			if (!header) return;
+			header.classList.toggle(SELECTED_CLASS, item.hasAttribute("open"));
+		}
+		function syncAllHeadersInAccordion(accordionElement, belongsToThisAccordion) {
+			Array.from(accordionElement.querySelectorAll(`[data-element_type="${ITEM_ELEMENT_TYPE}"]`)).filter(belongsToThisAccordion).forEach(syncHeaderSelectedClass);
+		}
+		function createAccordionScopeHelpers(accordionElement) {
+			const getOwnAccordion = (node) => node.closest(`[data-element_type="${ACCORDION_ELEMENT_TYPE}"]`);
+			const belongsToThisAccordion = (node) => getOwnAccordion(node) === accordionElement;
+			return { belongsToThisAccordion };
+		}
+	}));
+
+//#endregion
 //#region modules/atomic-widgets/elements/atomic-accordion/handlers/editor-accordion-state.js
 	require_esnext_iterator_constructor();
 	require_esnext_iterator_filter();
 	require_esnext_iterator_for_each();
 	require_esnext_iterator_some();
 	var _frontendHandlers = (globalThis.elementorV2.frontendHandlers);
-	var ACCORDION_ELEMENT_TYPE = "e-accordion";
-	var ITEM_ELEMENT_TYPE = "e-accordion-item";
-	var HEADER_ELEMENT_TYPE = "e-accordion-item-header";
+	var _accordionHeaderSelected = require_accordion_header_selected();
 	var MAX_EXPANDED_ONE = "one";
 	var DEFAULT_STATE_FIRST_EXPANDED = "first_expanded";
 	var SELECT_COMMAND = "document/elements/select";
@@ -1835,12 +1864,12 @@
 	* here would cancel each other out - revisit this file together with that change.
 	*/
 	(0, _frontendHandlers.register)({
-		elementType: ACCORDION_ELEMENT_TYPE,
+		elementType: _accordionHeaderSelected.ACCORDION_ELEMENT_TYPE,
 		id: "e-accordion-preview-handler",
 		callback: ({ element, signal, listenToChildren }) => {
-			const getOwnAccordion = (node) => node.closest(`[data-element_type="${ACCORDION_ELEMENT_TYPE}"]`);
+			const getOwnAccordion = (node) => node.closest(`[data-element_type="${_accordionHeaderSelected.ACCORDION_ELEMENT_TYPE}"]`);
 			const belongsToThisAccordion = (node) => getOwnAccordion(node) === element;
-			const getItems = () => Array.from(element.querySelectorAll(`[data-element_type="${ITEM_ELEMENT_TYPE}"]`)).filter(belongsToThisAccordion);
+			const getItems = () => Array.from(element.querySelectorAll(`[data-element_type="${_accordionHeaderSelected.ITEM_ELEMENT_TYPE}"]`)).filter(belongsToThisAccordion);
 			const getRootSetting = (key, fallback) => {
 				var _window$parent;
 				var _window$parent$getCon;
@@ -1882,15 +1911,22 @@
 				});
 			};
 			applyDefaultState();
-			listenToChildren([ITEM_ELEMENT_TYPE]).render((event) => {
+			listenToChildren([_accordionHeaderSelected.ITEM_ELEMENT_TYPE]).render((event) => {
 				if (belongsToThisAccordion(event.detail.element)) applyDefaultState();
+			});
+			listenToChildren([_accordionHeaderSelected.HEADER_ELEMENT_TYPE]).render((event) => {
+				const header = event.detail.element;
+				if (!header || !belongsToThisAccordion(header)) return;
+				const item = header.closest(`[data-element_type="${_accordionHeaderSelected.ITEM_ELEMENT_TYPE}"]`);
+				if (!item || !belongsToThisAccordion(item)) return;
+				(0, _accordionHeaderSelected.syncHeaderSelectedClass)(item);
 			});
 			let itemToggledByClick = null;
 			element.addEventListener("click", (event) => {
 				var _event$target;
 				var _event$target$closest;
-				const header = (_event$target = event.target) === null || _event$target === void 0 || (_event$target$closest = _event$target.closest) === null || _event$target$closest === void 0 ? void 0 : _event$target$closest.call(_event$target, `[data-element_type="${HEADER_ELEMENT_TYPE}"]`);
-				const item = header === null || header === void 0 ? void 0 : header.closest(`[data-element_type="${ITEM_ELEMENT_TYPE}"]`);
+				const header = (_event$target = event.target) === null || _event$target === void 0 || (_event$target$closest = _event$target.closest) === null || _event$target$closest === void 0 ? void 0 : _event$target$closest.call(_event$target, `[data-element_type="${_accordionHeaderSelected.HEADER_ELEMENT_TYPE}"]`);
+				const item = header === null || header === void 0 ? void 0 : header.closest(`[data-element_type="${_accordionHeaderSelected.ITEM_ELEMENT_TYPE}"]`);
 				if (!item || !belongsToThisAccordion(item)) return;
 				itemToggledByClick = item;
 				userToggledAnItem = true;
@@ -1947,7 +1983,7 @@
 				if (!selectedId) return;
 				const selectedNode = element.querySelector(`[data-id="${CSS.escape(selectedId)}"]`);
 				if (!selectedNode) return;
-				const item = selectedNode.closest(`[data-element_type="${ITEM_ELEMENT_TYPE}"]`);
+				const item = selectedNode.closest(`[data-element_type="${_accordionHeaderSelected.ITEM_ELEMENT_TYPE}"]`);
 				if (!item || !belongsToThisAccordion(item) || item === itemToggledByClick) return;
 				if (item.hasAttribute("open")) return;
 				openItem(item);

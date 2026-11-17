@@ -182,6 +182,10 @@ class Cookie_Law_Info_Public {
 				'custom_integration'    => $enable_custom_integration,
 				'triggerDomRefresh'     => $trigger_dom_reload,
 				'secure_cookies'        => apply_filters( 'wt_cli_set_secure_cookies', false ),
+				// True only for a genuine, token-verified CookieYes scan (CAP-227).
+				// The browser-side blocker lifts blocking on this server-set flag,
+				// never on the raw cli_bypass URL value.
+				'is_scan'               => self::is_authorized_scan(),
 			);
 			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/cookie-law-info-public.js', array( 'jquery' ), $this->version, false );
 			wp_localize_script( $this->plugin_name, 'Cli_Data', $cli_cookie_data );
@@ -301,11 +305,36 @@ class Cookie_Law_Info_Public {
 			echo $this->pre_process_scripts( $slug, $script, $head ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
+	/**
+	 * Is this request an authorized, active CookieYes scan?
+	 *
+	 * Script blocking is lifted only for the genuine scanner, which carries a
+	 * per-scan secret token the site generated and handed to it. A bare
+	 * `cli_bypass` value in a public URL — missing, empty, `1`, forged, reused
+	 * from an old scan, or past expiry — never matches and never lifts blocking
+	 * (CAP-227). The token is compared with hash_equals() to avoid timing leaks.
+	 *
+	 * @return bool
+	 */
+	public static function is_authorized_scan() {
+		if ( ! isset( $_GET['cli_bypass'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return false;
+		}
+		$bypass = get_option( 'cli_scan_bypass' );
+		if ( ! is_array( $bypass ) || empty( $bypass['token'] ) || empty( $bypass['expires'] ) || time() > (int) $bypass['expires'] ) {
+			return false;
+		}
+		$provided = sanitize_text_field( wp_unslash( $_GET['cli_bypass'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return hash_equals( (string) $bypass['token'], (string) $provided );
+	}
 	public function check_consent( $slug ) {
 
 		$preference_cookie = isset( $_COOKIE[ 'cookielawinfo-checkbox-' . $slug ] ) ? sanitize_text_field( wp_unslash( $_COOKIE[ 'cookielawinfo-checkbox-' . $slug ] ) ) : 'no';
 		$main_cookie       = isset( $_COOKIE['viewed_cookie_policy'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['viewed_cookie_policy'] ) ) : 'no';
-		if ( $main_cookie === 'yes' && $preference_cookie === 'yes' || isset( $_GET['cli_bypass'] ) && get_option( 'CLI_BYPASS' ) == 1 ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( $main_cookie === 'yes' && $preference_cookie === 'yes' ) {
+			return true;
+		}
+		if ( self::is_authorized_scan() ) {
 			return true;
 		}
 		return false;

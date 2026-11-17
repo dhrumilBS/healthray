@@ -316,13 +316,15 @@ let wpcf7_redirect_admin;
 				imgIdInput.val(attachment.url).change();
 			});
 
-			$(document.body).on('click', '.image-uploader-btn', function () {
+			$(document.body).on('click', '.image-uploader-btn', function (e) {
+				e.preventDefault();
 				imgIdInput = $(this).parent().find('input[type=hidden]');
 				imgContainer = $(this).parent();
 				file_frame.open();
 			});
 
-			$(document.body).on('click', '.image-remove-btn, .input-remove-btn', function () {
+			$(document.body).on('click', '.image-remove-btn, .input-remove-btn', function (e) {
+				e.preventDefault();
 				imgIdInput = $(this).parent().find('input[type=hidden]');
 				imgContainer = $(this).parent();
 

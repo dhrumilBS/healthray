@@ -60,7 +60,7 @@ if ( ! defined( 'WPINC' ) ) {
 				<tr>
 					<td>
 						<label for="thirdparty_head_section"><?php echo esc_html__( 'This script will be added to the page HEAD section if the above settings is enabled and user has give consent.', 'cookie-law-info' ); ?></label>
-						<textarea name="thirdparty_head_section" class="vvv_textbox">
+						<textarea name="thirdparty_head_section" class="vvv_textbox"<?php echo current_user_can( 'unfiltered_html' ) ? '' : ' readonly'; ?>>
 							<?php
 							echo apply_filters( 'format_to_edit', stripslashes( $settings['head_scripts'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							?>
@@ -74,7 +74,7 @@ if ( ! defined( 'WPINC' ) ) {
 				<tr>
 					<td>
 						<label for="thirdparty_body_section"><?php echo esc_html__( 'This script will be added right after the BODY section if the above settings is enabled and user has given consent.', 'cookie-law-info' ); ?></label>
-						<textarea name="thirdparty_body_section" class="vvv_textbox">
+						<textarea name="thirdparty_body_section" class="vvv_textbox"<?php echo current_user_can( 'unfiltered_html' ) ? '' : ' readonly'; ?>>
 							<?php
 							echo apply_filters( 'format_to_edit', stripslashes( $settings['body_scripts'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							?>

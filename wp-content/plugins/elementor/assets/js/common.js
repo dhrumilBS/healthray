@@ -493,6 +493,9 @@ var import_debug = /* @__PURE__ */ __toESM(require_debug());
 		})();
 	}
 	__name(_isNativeReflectConstruct$34, "_isNativeReflectConstruct");
+	var MAX_RETRIES = 3;
+	var RETRY_BASE_DELAY_MS = 1e3;
+	var RETRY_MAX_DELAY_MS = 3e4;
 	var _default$10 = /*#__PURE__*/ function(_elementorModules$Mod) {
 		function _default() {
 			var _this;
@@ -577,6 +580,7 @@ var import_debug = /* @__PURE__ */ __toESM(require_debug());
 						deferred = this.addRequest(request.action, {
 							data: request.data,
 							unique_id: request.unique_id,
+							retry: request.retry,
 							success: function success(data) {
 								return _this3.cache[cacheKey] = data;
 							},
@@ -636,6 +640,9 @@ var import_debug = /* @__PURE__ */ __toESM(require_debug());
 						requests = this.requests;
 						this.requests = {};
 					}
+					var canRetry = Object.values(requests).every(function(request) {
+						return request.options.retry;
+					});
 					Object.entries(requests).forEach(function(_ref) {
 						var _ref2 = _slicedToArray(_ref, 2);
 						var id = _ref2[0];
@@ -647,6 +654,7 @@ var import_debug = /* @__PURE__ */ __toESM(require_debug());
 					});
 					return this.send("ajax", {
 						data: { actions: JSON.stringify(actions) },
+						retry: canRetry,
 						success: function success(data) {
 							Object.entries(data.responses).forEach(function(_ref3) {
 								var _ref4 = _slicedToArray(_ref3, 2);
@@ -706,7 +714,98 @@ var import_debug = /* @__PURE__ */ __toESM(require_debug());
 			{
 				key: "send",
 				value: function send(action, options) {
-					return jQuery.ajax(this.prepareSend(action, options));
+					var ajaxParams = this.prepareSend(action, options);
+					var retryEnabled = true === ajaxParams.retry;
+					delete ajaxParams.retry;
+					var attempt = 0;
+					var aborted = false;
+					var settled = false;
+					var jqXhr = null;
+					var retryTimer = null;
+					var markTransportComplete = function markTransportComplete(xhrFacade, activeJqXhr) {
+						if (activeJqXhr) {
+							xhrFacade.readyState = activeJqXhr.readyState;
+							xhrFacade.status = activeJqXhr.status;
+							xhrFacade.statusText = activeJqXhr.statusText;
+						}
+						if (4 !== xhrFacade.readyState) xhrFacade.readyState = 4;
+					};
+					var deferred = jQuery.Deferred();
+					var originalSuccess = ajaxParams.success;
+					var originalError = ajaxParams.error;
+					var xhrFacade = Object.assign(deferred.promise(), {
+						readyState: 1,
+						status: 0,
+						statusText: ""
+					});
+					ajaxParams.success = function(response) {
+						markTransportComplete(xhrFacade, jqXhr);
+						jqXhr = null;
+						settled = true;
+						deferred.resolve(response);
+						if (originalSuccess) originalSuccess(response);
+					};
+					ajaxParams.error = function(errorJqXHR, textStatus, errorThrown) {
+						jqXhr = null;
+						if (aborted || "abort" === textStatus || !retryEnabled || 429 !== errorJqXHR.status || attempt >= MAX_RETRIES) {
+							markTransportComplete(xhrFacade, errorJqXHR);
+							settled = true;
+							deferred.reject(errorJqXHR, textStatus, errorThrown);
+							if (originalError) originalError(errorJqXHR, textStatus, errorThrown);
+							return;
+						}
+						attempt += 1;
+						xhrFacade.readyState = 1;
+						retryTimer = setTimeout(function() {
+							jqXhr = jQuery.ajax(ajaxParams);
+							if (jqXhr) {
+								xhrFacade.readyState = jqXhr.readyState;
+								xhrFacade.status = jqXhr.status;
+								xhrFacade.statusText = jqXhr.statusText;
+							}
+						}, Math.min(getRetryDelayMs(errorJqXHR), RETRY_MAX_DELAY_MS));
+					};
+					function getRetryDelayMs(failedRequest) {
+						var header = failedRequest.getResponseHeader && failedRequest.getResponseHeader("Retry-After");
+						if (header && /^\d+(\.\d+)?$/.test(header.trim())) return Math.max(0, Number(header) * 1e3);
+						if (header) {
+							var date = Date.parse(header);
+							if (!Number.isNaN(date)) return Math.max(0, date - Date.now());
+						}
+						return RETRY_BASE_DELAY_MS * Math.pow(2, attempt - 1) * (1 + Math.random() * .2);
+					}
+					jqXhr = jQuery.ajax(ajaxParams);
+					if (jqXhr) {
+						xhrFacade.readyState = jqXhr.readyState;
+						xhrFacade.status = jqXhr.status;
+						xhrFacade.statusText = jqXhr.statusText;
+					}
+					xhrFacade.abort = function() {
+						if (settled) return;
+						aborted = true;
+						clearTimeout(retryTimer);
+						if (jqXhr) jqXhr.abort("Request canceled");
+						else {
+							var syntheticJqXHR = {
+								status: 0,
+								statusText: "abort",
+								readyState: 0,
+								getResponseHeader: function getResponseHeader() {
+									return null;
+								},
+								getAllResponseHeaders: function getAllResponseHeaders() {
+									return "";
+								}
+							};
+							xhrFacade.readyState = 0;
+							xhrFacade.status = 0;
+							xhrFacade.statusText = "abort";
+							settled = true;
+							deferred.reject(syntheticJqXHR, "abort", "Request canceled");
+							if (originalError) originalError(syntheticJqXHR, "abort", "Request canceled");
+						}
+					};
+					return xhrFacade;
 				}
 			},
 			{
@@ -2345,6 +2444,7 @@ var import_module = /* @__PURE__ */ __toESM(require_module());
 		return e;
 	}
 	__name(_objectSpread$4, "_objectSpread");
+	var ADMIN_NAV_CLICK_EVENT = "elementor/admin/nav-click";
 	var EditorOneEventManager = /*#__PURE__*/ function() {
 		function EditorOneEventManager() {
 			_classCallCheck(this, EditorOneEventManager);
@@ -2829,6 +2929,9 @@ var import_module = /* @__PURE__ */ __toESM(require_module());
 						var _config$targetTypes14;
 						var _config$interactionRe16;
 						var _config$locations12;
+						var _window$crypto$random;
+						var _window$crypto;
+						var _window$crypto$random2;
 						var _config$names13;
 						var config = this.getConfig();
 						var payload = this.createBasePayload({
@@ -2840,7 +2943,15 @@ var import_module = /* @__PURE__ */ __toESM(require_module());
 							target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations12 = config.locations) === null || _config$locations12 === void 0 ? void 0 : _config$locations12.sidebar)
 						});
 						if (groupEventId) payload.location_l1 = groupEventId;
-						return this.dispatchEvent(config === null || config === void 0 || (_config$names13 = config.names) === null || _config$names13 === void 0 || (_config$names13 = _config$names13.editorOne) === null || _config$names13 === void 0 ? void 0 : _config$names13.sidebarMenuItemClicked, payload);
+						var navClickId = (_window$crypto$random = (_window$crypto = window.crypto) === null || _window$crypto === void 0 || (_window$crypto$random2 = _window$crypto.randomUUID) === null || _window$crypto$random2 === void 0 ? void 0 : _window$crypto$random2.call(_window$crypto)) !== null && _window$crypto$random !== void 0 ? _window$crypto$random : "".concat(Date.now(), "-").concat(Math.random().toString(36).slice(2));
+						payload.nav_click_id = navClickId;
+						var dispatched = this.dispatchEvent(config === null || config === void 0 || (_config$names13 = config.names) === null || _config$names13 === void 0 || (_config$names13 = _config$names13.editorOne) === null || _config$names13 === void 0 ? void 0 : _config$names13.sidebarMenuItemClicked, payload);
+						window.dispatchEvent(new CustomEvent(ADMIN_NAV_CLICK_EVENT, { detail: {
+							itemId: eventId,
+							rootItem: groupEventId,
+							navClickId
+						} }));
+						return dispatched;
 					} catch (error) {
 						return false;
 					}
@@ -5171,6 +5282,12 @@ var import_regenerator = /* @__PURE__ */ __toESM(require_regenerator());
 				importFailed: "design_system_import_failed",
 				export: "design_system_export",
 				opened: "design_system_opened"
+			},
+			default_styles: {
+				panelOpened: "default_styles_panel_opened",
+				tagSaved: "default_styles_tag_saved",
+				saveFailed: "default_styles_save_failed",
+				changesDiscarded: "default_styles_changes_discarded"
 			},
 			components: {
 				createClicked: "component_create_clicked",

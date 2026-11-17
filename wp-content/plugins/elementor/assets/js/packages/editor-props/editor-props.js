@@ -205,6 +205,52 @@
 	var numberPropTypeUtil = createPropUtils("number", _elementor_schema.z.number().nullable());
 
 //#endregion
+//#region packages/packages/libs/editor-props/src/utils/resolve-responsive-value.ts
+	var RESPONSIVE_BREAKPOINT_KEYS = [
+		"mobile",
+		"mobile_extra",
+		"tablet",
+		"tablet_extra",
+		"laptop",
+		"desktop",
+		"widescreen"
+	];
+	function responsiveFallbackChain(breakpoint) {
+		const keys = [...RESPONSIVE_BREAKPOINT_KEYS];
+		const index = keys.indexOf(breakpoint);
+		const desktopIndex = keys.indexOf("desktop");
+		if (-1 === index || -1 === desktopIndex) return ["desktop"];
+		if (index > desktopIndex) return [breakpoint, "desktop"];
+		return keys.slice(index, desktopIndex + 1);
+	}
+	function isBreakpointActive(key, activeBreakpoints) {
+		if ("desktop" === key || !activeBreakpoints) return true;
+		if (Array.isArray(activeBreakpoints)) return activeBreakpoints.includes(key);
+		return Object.prototype.hasOwnProperty.call(activeBreakpoints, key);
+	}
+	function unwrapResponsiveEntry(entry) {
+		if (null === entry || void 0 === entry || "" === entry) return null;
+		if (typeof entry === "object" && !Array.isArray(entry) && entry !== null && "$$type" in entry && "value" in entry) return entry.value;
+		return entry;
+	}
+	function resolveResponsiveValue(value, breakpoint, activeBreakpoints) {
+		if (value === null || value === void 0) return null;
+		if (typeof value !== "object" || Array.isArray(value)) return value;
+		const map = value;
+		for (const key of responsiveFallbackChain(breakpoint)) {
+			if (!isBreakpointActive(key, activeBreakpoints)) continue;
+			const resolved = unwrapResponsiveEntry(map[key]);
+			if (resolved !== null && resolved !== void 0) return resolved;
+		}
+		return unwrapResponsiveEntry(map.desktop);
+	}
+
+//#endregion
+//#region packages/packages/libs/editor-props/src/prop-types/responsive.ts
+	var responsiveShape = Object.fromEntries(RESPONSIVE_BREAKPOINT_KEYS.map((key) => [key, unknownChildrenSchema.optional()]));
+	var responsivePropTypeUtil = createPropUtils("responsive", _elementor_schema.z.object(responsiveShape).partial());
+
+//#endregion
 //#region packages/packages/libs/editor-props/src/prop-types/size.ts
 	var sizeNumberOrEmpty = _elementor_schema.z.union([_elementor_schema.z.number(), _elementor_schema.z.literal("")]);
 	var sizePropTypeUtil = createPropUtils("size", _elementor_schema.z.strictObject({
@@ -864,7 +910,11 @@
 		"classes",
 		"attributes"
 	];
+	function isPropSensitive(propType) {
+		return !Array.isArray(propType?.meta) && true === propType?.meta?.sensitive;
+	}
 	function isPropKeyConfigurable(propKey, propType) {
+		if (isPropSensitive(propType)) return false;
 		if (!nonConfigurablePropKeys.includes(propKey)) return true;
 		return !!(!Array.isArray(propType?.meta) && propType?.meta?.llm_configurable);
 	}
@@ -2539,6 +2589,7 @@
 	var src_exports = /* @__PURE__ */ __exportAll({
 		CLASSES_PROP_KEY: () => CLASSES_PROP_KEY,
 		DateTimePropTypeUtil: () => DateTimePropTypeUtil,
+		RESPONSIVE_BREAKPOINT_KEYS: () => RESPONSIVE_BREAKPOINT_KEYS,
 		Schema: () => Schema,
 		backdropFilterPropTypeUtil: () => backdropFilterPropTypeUtil,
 		backgroundColorOverlayPropTypeUtil: () => backgroundColorOverlayPropTypeUtil,
@@ -2604,6 +2655,9 @@
 		queryFilterArrayPropTypeUtil: () => queryFilterArrayPropTypeUtil,
 		queryFilterPropTypeUtil: () => queryFilterPropTypeUtil,
 		queryPropTypeUtil: () => queryPropTypeUtil,
+		resolveResponsiveValue: () => resolveResponsiveValue,
+		responsiveFallbackChain: () => responsiveFallbackChain,
+		responsivePropTypeUtil: () => responsivePropTypeUtil,
 		rewrapOverridableValue: () => rewrapOverridableValue,
 		rotateTransformPropTypeUtil: () => rotateTransformPropTypeUtil,
 		scaleTransformPropTypeUtil: () => scaleTransformPropTypeUtil,
@@ -2630,6 +2684,7 @@
 		propTypeToJsonSchema,
 		adjustLlmPropValueSchema,
 		isPropKeyConfigurable,
+		isPropSensitive,
 		nonConfigurablePropKeys,
 		configurableKeys,
 		validatePropValue,

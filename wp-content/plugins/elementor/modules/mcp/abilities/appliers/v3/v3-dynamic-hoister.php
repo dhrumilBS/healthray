@@ -3,6 +3,8 @@
 namespace Elementor\Modules\Mcp\Abilities\Appliers\V3;
 
 use Elementor\Core\DynamicTags\Manager;
+use Elementor\Modules\Mcp\Abilities\Appliers\V3\Maps\V3_Widget_Map_Registry;
+use Elementor\Modules\Mcp\Abilities\Utils\V3_Json_Schema_Builder;
 use Elementor\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -29,13 +31,40 @@ class V3_Dynamic_Hoister {
 		$primitives = [];
 		$shortcodes = [];
 		$errors = [];
+		$map = V3_Widget_Map_Registry::instance()->get_map( $widget_type );
+		$map_settings = null !== $map ? $map->get_settings() : null;
 
 		foreach ( $allowed as $key => $value ) {
-			$control = is_array( $controls[ $key ] ?? null ) ? $controls[ $key ] : [];
+			$map_setting = $map_settings[ $key ] ?? null;
+			$control_key = null !== $map_setting ? $map_setting->get_control_key() : $key;
+			$control = is_array( $controls[ $control_key ] ?? null ) ? $controls[ $control_key ] : [];
+
+			if ( null !== $map_settings && ( null === $map_setting || ! $map_setting->is_dynamic() ) ) {
+				if ( $this->value_contains_disallowed_dynamic( $value, $control ) ) {
+					$errors[] = sprintf(
+						'V3 widget "%s" property "%s": dynamic tags are not supported on this field.',
+						$widget_type,
+						$key
+					);
+					continue;
+				}
+
+				$primitives[ $key ] = $value;
+				continue;
+			}
 
 			if ( ! V3_Dynamic_Resolver::is_dynamic_capable( $control ) ) {
 				$primitives[ $key ] = $value;
 				continue;
+			}
+
+			if ( null !== $map_settings && is_array( $value ) ) {
+				$public_schema = $map_setting->get_published_schema();
+
+				if ( null !== V3_Json_Schema_Builder::check_value_shape( $value, $public_schema, true ) ) {
+					$primitives[ $key ] = $value;
+					continue;
+				}
 			}
 
 			$control_dynamic = is_array( $control['dynamic'] ?? null ) ? $control['dynamic'] : [];
@@ -87,7 +116,7 @@ class V3_Dynamic_Hoister {
 				continue;
 			}
 
-			$shortcodes[ $key ] = $shortcode;
+			$shortcodes[ $control_key ] = $shortcode;
 
 			if ( is_array( $value ) ) {
 				$remainder = V3_Dynamic_Resolver::extract_primitive_remainder( $value, $property );
@@ -102,6 +131,17 @@ class V3_Dynamic_Hoister {
 			'shortcodes' => $shortcodes,
 			'errors' => $errors,
 		];
+	}
+
+	private function value_contains_disallowed_dynamic( $value, array $control ): bool {
+		$control_dynamic = is_array( $control['dynamic'] ?? null ) ? $control['dynamic'] : [];
+		$property = is_string( $control_dynamic['property'] ?? null ) ? $control_dynamic['property'] : null;
+
+		if ( V3_Dynamic_Resolver::contains_dynamic_input( $value, $property ) ) {
+			return true;
+		}
+
+		return V3_Dynamic_Resolver::contains_nested_dynamic_input( $value );
 	}
 
 	/**

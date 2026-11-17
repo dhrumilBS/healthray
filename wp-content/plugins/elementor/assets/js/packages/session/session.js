@@ -79,7 +79,9 @@ react = __toESM(react);
 	var useSessionStorage = (key, customPrefix) => {
 		const contextPrefix = (0, react.useContext)(Context)?.prefix ?? "";
 		const prefixedKey = `${customPrefix ? customPrefix : contextPrefix}/${key}`;
-		const [value, setValue] = (0, react.useState)();
+		const [value, setValue] = (0, react.useState)(() => {
+			return getSessionStorageItem(prefixedKey) ?? null;
+		});
 		(0, react.useEffect)(() => {
 			return subscribeToSessionStorage(prefixedKey, (newValue) => {
 				setValue(newValue ?? null);

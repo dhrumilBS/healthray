@@ -1024,7 +1024,7 @@ _wordpress_api_fetch = __toESM(_wordpress_api_fetch);
 //#region packages/packages/core/editor-site-navigation/src/components/top-bar/chip-doc-type.tsx
 	var iconsMap = getIconsMap();
 	function DocTypeChip({ postType, docType, label }) {
-		const color = "elementor_library" === postType ? "global" : "primary";
+		const color = "elementor_library" === postType ? "global" : "accent";
 		const Icon = iconsMap[docType] || _elementor_icons.PostTypeIcon;
 		return /* @__PURE__ */ react.createElement(_elementor_ui.Chip, {
 			component: "span",
@@ -1118,13 +1118,11 @@ _wordpress_api_fetch = __toESM(_wordpress_api_fetch);
 			title: documentTitle,
 			status: document.status
 		})), /* @__PURE__ */ react.createElement(_elementor_ui.Menu, {
-			MenuListProps: { subheader: /* @__PURE__ */ react.createElement(_elementor_ui.ListSubheader, {
-				color: "primary",
-				sx: {
-					fontStyle: "italic",
-					fontWeight: "300"
-				}
-			}, (0, _wordpress_i18n.__)("Recent", "elementor")) },
+			MenuListProps: { subheader: /* @__PURE__ */ react.createElement(_elementor_ui.ListSubheader, { sx: {
+				color: "accent.main",
+				fontStyle: "italic",
+				fontWeight: "300"
+			} }, (0, _wordpress_i18n.__)("Recent", "elementor")) },
 			PaperProps: { sx: {
 				mt: 2.5,
 				width: 320

@@ -87,6 +87,7 @@ class WPCF7r_Form_Helper {
 		add_action( 'init', array( $this, 'extensions' ) );
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_action( 'wpcf7_editor_panels', array( $this, 'add_panel' ) );
+		add_action( 'wpcf7_admin_load', array( $this, 'allow_panel_html' ), 10, 2 );
 		add_action( 'wpcf7_after_save', array( $this, 'store_meta' ) );
 		// add contact form scripts.
 		add_action( 'wp_enqueue_scripts', array( $this, 'front_end_scripts' ) );
@@ -266,6 +267,46 @@ class WPCF7r_Form_Helper {
 
 		$form = get_cf7r_form( $cf7->id() );
 		$form->store_meta( $cf7 );
+	}
+
+	/**
+	 * Keep the Actions panel markup that the CF7 editor would remove with wp_kses().
+	 *
+	 * Runs only while the CF7 editor renders. CF7 also fires wpcf7_admin_load before it saves a form,
+	 * and a saved form must keep the default list, so forms on the frontend do not allow these tags.
+	 *
+	 * @param string       $page   The CF7 admin page.
+	 * @param string|false $action The CF7 admin action, or false when there is none.
+	 * @return void
+	 */
+	public function allow_panel_html( $page, $action ) {
+		if ( ! in_array( $action, array( false, 'edit' ), true ) ) {
+			return;
+		}
+
+		add_filter(
+			'wpcf7_kses_allowed_html',
+			function ( $tags, $context ) {
+				if ( 'form' !== $context ) {
+					return $tags;
+				}
+
+				// Locks the premium items of the Add Action dropdown.
+				$tags['div']['disabled'] = true;
+				// The Create PDF and Popup preview.
+				$tags['iframe'] = array(
+					'class'     => true,
+					'data-name' => true,
+					'scrolling' => true,
+					'src'       => true,
+					'style'     => true,
+				);
+
+				return $tags;
+			},
+			10,
+			2
+		);
 	}
 
 	/**

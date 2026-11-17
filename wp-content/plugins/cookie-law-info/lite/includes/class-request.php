@@ -91,6 +91,15 @@ abstract class Request {
 	}
 
 	/**
+	 * Get the Request API Timeout
+	 *
+	 * @return int|float Timeout.
+	 */
+	public function get_timeout() {
+		return $this->timeout;
+	}
+
+	/**
 	 * Add a new request argument for POST requests
 	 *
 	 * @param string $name   Argument name.

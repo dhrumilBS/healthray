@@ -120,10 +120,16 @@
 			setInputValue(val);
 			debouncedSetValue(val);
 		};
+		const setImmediateValue = (val) => {
+			runRef.current?.cancel?.();
+			setInputValue(val);
+			setDebouncedValue(val);
+		};
 		return {
 			debouncedValue,
 			inputValue,
 			handleChange,
+			setImmediateValue,
 			setInputValue
 		};
 	}

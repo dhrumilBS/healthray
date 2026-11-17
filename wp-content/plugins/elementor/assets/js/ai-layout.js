@@ -685,7 +685,7 @@ init_createClass();
 
 //#endregion
 //#region modules/ai/assets/js/editor/utils/preview-container.js
-	function ownKeys$12(e, r) {
+	function ownKeys$13(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -695,12 +695,12 @@ init_createClass();
 		}
 		return t;
 	}
-	function _objectSpread$11(e) {
+	function _objectSpread$12(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$12(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$13(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$12(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$13(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -757,8 +757,8 @@ init_createClass();
 		toggleHistory(false);
 		var container = $e.run("document/elements/create", {
 			container: parentContainer,
-			model: _objectSpread$11(_objectSpread$11({}, model), {}, { id: "".concat(PREFIX, "-").concat(elementorCommon.helpers.getUniqueId().toString()) }),
-			options: _objectSpread$11(_objectSpread$11({}, options), {}, { edit: false })
+			model: _objectSpread$12(_objectSpread$12({}, model), {}, { id: "".concat(PREFIX, "-").concat(elementorCommon.helpers.getUniqueId().toString()) }),
+			options: _objectSpread$12(_objectSpread$12({}, options), {}, { edit: false })
 		});
 		toggleHistory(true);
 		container.view.$el.addClass(CLASS_HIDDEN);
@@ -798,8 +798,8 @@ init_createClass();
 		init_defineProperty$1();
 		init_toConsumableArray();
 		init_history();
-		__name(ownKeys$12, "ownKeys");
-		__name(_objectSpread$11, "_objectSpread");
+		__name(ownKeys$13, "ownKeys");
+		__name(_objectSpread$12, "_objectSpread");
 		PREFIX = "e-ai-preview-container";
 		CLASS_HIDDEN = PREFIX + "--hidden";
 		CLASS_IDLE = PREFIX + "--idle";
@@ -1905,7 +1905,7 @@ init_createClass();
 
 //#endregion
 //#region \0@oxc-project+runtime@0.140.0/helpers/esm/objectSpread2.js
-	function ownKeys$11(e, r) {
+	function ownKeys$12(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -1918,9 +1918,9 @@ init_createClass();
 	function _objectSpread2(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$11(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$12(Object(t), !0).forEach(function(r) {
 				_defineProperty(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$11(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$12(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -1928,7 +1928,7 @@ init_createClass();
 	}
 	var init_objectSpread2 = __esmMin((() => {
 		init_defineProperty();
-		__name(ownKeys$11, "ownKeys");
+		__name(ownKeys$12, "ownKeys");
 	}));
 
 //#endregion
@@ -3095,7 +3095,7 @@ init_createClass();
 
 //#endregion
 //#region modules/ai/assets/js/editor/components/prompt-dialog.js
-	function ownKeys$10(e, r) {
+	function ownKeys$11(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -3105,12 +3105,12 @@ init_createClass();
 		}
 		return t;
 	}
-	function _objectSpread$10(e) {
+	function _objectSpread$11(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$10(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$11(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$10(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$11(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -3124,8 +3124,8 @@ init_createClass();
 		import_prop_types$32 = /* @__PURE__ */ __toESM(require_prop_types());
 		import_cjs = /* @__PURE__ */ __toESM(require_cjs());
 		init_dialog_header();
-		__name(ownKeys$10, "ownKeys");
-		__name(_objectSpread$10, "_objectSpread");
+		__name(ownKeys$11, "ownKeys");
+		__name(_objectSpread$11, "_objectSpread");
 		DraggablePaper = function DraggablePaper(props) {
 			var _useState2 = _slicedToArray((0, react.useState)({
 				x: 0,
@@ -3149,7 +3149,7 @@ init_createClass();
 					var _paperRef$current;
 					var dialogTop = (_paperRef$current = paperRef.current) === null || _paperRef$current === void 0 ? void 0 : _paperRef$current.getBoundingClientRect().top;
 					if (dialogTop < 0) setPosition(function(prev) {
-						return _objectSpread$10(_objectSpread$10({}, prev), {}, { y: prev.y - dialogTop });
+						return _objectSpread$11(_objectSpread$11({}, prev), {}, { y: prev.y - dialogTop });
 					});
 				}, 50);
 			};
@@ -3204,7 +3204,7 @@ init_createClass();
 
 //#endregion
 //#region modules/ai/assets/js/editor/pages/form-layout/components/layout-dialog.js
-	function ownKeys$9(e, r) {
+	function ownKeys$10(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -3214,12 +3214,12 @@ init_createClass();
 		}
 		return t;
 	}
-	function _objectSpread$9(e) {
+	function _objectSpread$10(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$9(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$10(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$9(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$10(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -3234,8 +3234,8 @@ init_createClass();
 		import_prop_types$31 = /* @__PURE__ */ __toESM(require_prop_types());
 		init_prompt_dialog();
 		_excluded$7 = ["sx", "PaperProps"];
-		__name(ownKeys$9, "ownKeys");
-		__name(_objectSpread$9, "_objectSpread");
+		__name(ownKeys$10, "ownKeys");
+		__name(_objectSpread$10, "_objectSpread");
 		StyledDialog = (0, _elementor_ui.styled)(PromptDialog)(function() {
 			return {
 				"& .MuiDialog-container": {
@@ -3304,7 +3304,7 @@ init_createClass();
 			*/
 			return /*#__PURE__*/ react.default.createElement(StyledDialog, _extends({
 				maxWidth: "md",
-				PaperProps: _objectSpread$9({
+				PaperProps: _objectSpread$10({
 					sx: { pointerEvents: "auto" },
 					onMouseEnter: function onMouseEnter() {
 						clearTimeout(timeoutRef.current);
@@ -3317,7 +3317,7 @@ init_createClass();
 						}, 200);
 					}
 				}, PaperProps)
-			}, props, { sx: _objectSpread$9(_objectSpread$9({}, sxStyle), sx) }));
+			}, props, { sx: _objectSpread$10(_objectSpread$10({}, sxStyle), sx) }));
 		};
 		LayoutDialog.propTypes = {
 			sx: import_prop_types$31.default.object,
@@ -3396,7 +3396,7 @@ init_createClass();
 
 //#endregion
 //#region modules/ai/assets/js/editor/pages/form-layout/components/prompt-autocomplete.js
-	function ownKeys$8(e, r) {
+	function ownKeys$9(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -3406,12 +3406,12 @@ init_createClass();
 		}
 		return t;
 	}
-	function _objectSpread$8(e) {
+	function _objectSpread$9(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$8(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$9(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$8(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$9(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -3427,8 +3427,8 @@ init_createClass();
 		init_prompt_library_link();
 		init_config();
 		_excluded$6 = ["onSubmit"];
-		__name(ownKeys$8, "ownKeys");
-		__name(_objectSpread$8, "_objectSpread");
+		__name(ownKeys$9, "ownKeys");
+		__name(_objectSpread$9, "_objectSpread");
 		TextInput = (0, react.forwardRef)(function(props, ref) {
 			return /*#__PURE__*/ react.default.createElement(_elementor_ui.TextField, _extends({
 				autoFocus: true,
@@ -3439,7 +3439,7 @@ init_createClass();
 				variant: "standard"
 			}, props, {
 				inputRef: ref,
-				InputProps: _objectSpread$8(_objectSpread$8({}, props.InputProps), {}, {
+				InputProps: _objectSpread$9(_objectSpread$9({}, props.InputProps), {}, {
 					type: "search",
 					sx: { pt: 0 }
 				})
@@ -3719,7 +3719,7 @@ init_createClass();
 
 //#endregion
 //#region modules/ai/assets/js/editor/hooks/use-prompt.js
-	function ownKeys$7(e, r) {
+	function ownKeys$8(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -3729,12 +3729,12 @@ init_createClass();
 		}
 		return t;
 	}
-	function _objectSpread$7(e) {
+	function _objectSpread$8(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$7(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$8(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$7(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$8(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -3754,8 +3754,8 @@ init_createClass();
 			"usage",
 			"images"
 		];
-		__name(ownKeys$7, "ownKeys");
-		__name(_objectSpread$7, "_objectSpread");
+		__name(ownKeys$8, "ownKeys");
+		__name(_objectSpread$8, "_objectSpread");
 		normalizeResponse = function normalizeResponse(_ref) {
 			var text = _ref.text;
 			var responseId = _ref.response_id;
@@ -3830,7 +3830,7 @@ init_createClass();
 									batchId: batchId.current,
 									requestId: requestId.current
 								};
-								payload = _objectSpread$7(_objectSpread$7({}, payload), {}, { requestIds });
+								payload = _objectSpread$8(_objectSpread$8({}, payload), {}, { requestIds });
 								fetchData(payload).then(function(result) {
 									var normalizedData = normalizeResponse(result);
 									setData(normalizedData);
@@ -3869,7 +3869,7 @@ init_createClass();
 				data,
 				setResult: function setResult(result) {
 					var responseId = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : null;
-					var updatedResult = _objectSpread$7({}, data);
+					var updatedResult = _objectSpread$8({}, data);
 					updatedResult.result = result;
 					if (responseId) updatedResult.responseId = responseId;
 					setData(updatedResult);
@@ -4094,7 +4094,7 @@ init_createClass();
 
 //#endregion
 //#region modules/ai/assets/js/editor/hooks/use-user-info.js
-	function ownKeys$6(e, r) {
+	function ownKeys$7(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -4104,12 +4104,12 @@ init_createClass();
 		}
 		return t;
 	}
-	function _objectSpread$6(e) {
+	function _objectSpread$7(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$6(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$7(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$6(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$7(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -4123,8 +4123,8 @@ init_createClass();
 		import_regenerator$6 = /* @__PURE__ */ __toESM(require_regenerator());
 		init_api();
 		import_prop_types$22 = /* @__PURE__ */ __toESM(require_prop_types());
-		__name(ownKeys$6, "ownKeys");
-		__name(_objectSpread$6, "_objectSpread");
+		__name(ownKeys$7, "ownKeys");
+		__name(_objectSpread$7, "_objectSpread");
 		useUserInfo = function useUserInfo() {
 			var immediately = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : false;
 			var _useState2 = _slicedToArray((0, react.useState)(false), 2);
@@ -4159,7 +4159,7 @@ init_createClass();
 							case 1:
 								userInfoResult = _context.sent;
 								setUserInfo(function(prevState) {
-									return _objectSpread$6(_objectSpread$6({}, prevState), userInfoResult);
+									return _objectSpread$7(_objectSpread$7({}, prevState), userInfoResult);
 								});
 								setIsLoaded(true);
 								setIsLoading(false);
@@ -4984,7 +4984,7 @@ init_createClass();
 
 //#endregion
 //#region modules/ai/assets/js/editor/pages/form-layout/components/screenshot-unavailable.js
-	function ownKeys$5(e, r) {
+	function ownKeys$6(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -4994,19 +4994,19 @@ init_createClass();
 		}
 		return t;
 	}
-	function _objectSpread$5(e) {
+	function _objectSpread$6(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$5(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$6(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$5(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$6(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
 	function ScreenshotUnavailable(props) {
-		return /*#__PURE__*/ react.default.createElement(ScreenshotContainer, _extends({}, props, { sx: _objectSpread$5(_objectSpread$5({}, props.sx || {}), {}, {
+		return /*#__PURE__*/ react.default.createElement(ScreenshotContainer, _extends({}, props, { sx: _objectSpread$6(_objectSpread$6({}, props.sx || {}), {}, {
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "center",
@@ -5025,8 +5025,8 @@ init_createClass();
 		init_defineProperty$1();
 		import_prop_types$11 = /* @__PURE__ */ __toESM(require_prop_types());
 		init_screenshot_container();
-		__name(ownKeys$5, "ownKeys");
-		__name(_objectSpread$5, "_objectSpread");
+		__name(ownKeys$6, "ownKeys");
+		__name(_objectSpread$6, "_objectSpread");
 		ScreenshotUnavailable.propTypes = { sx: import_prop_types$11.default.object };
 	}));
 
@@ -5176,7 +5176,7 @@ init_createClass();
 
 //#endregion
 //#region modules/ai/assets/js/editor/pages/form-layout/components/screenshot.js
-	function ownKeys$4(e, r) {
+	function ownKeys$5(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -5186,12 +5186,12 @@ init_createClass();
 		}
 		return t;
 	}
-	function _objectSpread$4(e) {
+	function _objectSpread$5(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$4(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$5(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$4(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$5(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -5204,8 +5204,8 @@ init_createClass();
 		init_screenshot_container();
 		init_screenshot_unavailable();
 		init_template_badge();
-		__name(ownKeys$4, "ownKeys");
-		__name(_objectSpread$4, "_objectSpread");
+		__name(ownKeys$5, "ownKeys");
+		__name(_objectSpread$5, "_objectSpread");
 		SCREENSHOT_HEIGHT = "138px";
 		Screenshot = function Screenshot(_ref) {
 			var url = _ref.url;
@@ -5220,7 +5220,7 @@ init_createClass();
 			var _ref$sx = _ref.sx;
 			var sx = _ref$sx === void 0 ? {} : _ref$sx;
 			var outlineOffset = _ref.outlineOffset;
-			if (isPlaceholder) return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: _objectSpread$4({ height: SCREENSHOT_HEIGHT }, sx) });
+			if (isPlaceholder) return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: _objectSpread$5({ height: SCREENSHOT_HEIGHT }, sx) });
 			if (isLoading) return /*#__PURE__*/ react.default.createElement(_elementor_ui.Skeleton, {
 				width: "100%",
 				animation: "wave",
@@ -5239,7 +5239,7 @@ init_createClass();
 			return /*#__PURE__*/ react.default.createElement(ScreenshotContainer, {
 				selected: isSelected,
 				disabled,
-				sx: _objectSpread$4({ backgroundImage: "url('".concat(url, "')") }, sx),
+				sx: _objectSpread$5({ backgroundImage: "url('".concat(url, "')") }, sx),
 				onClick,
 				height: SCREENSHOT_HEIGHT,
 				outlineOffset
@@ -5961,7 +5961,7 @@ init_createClass();
 
 //#endregion
 //#region modules/ai/assets/js/editor/components/voice-promotion-alert.js
-	function ownKeys$3(e, r) {
+	function ownKeys$4(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -5971,12 +5971,12 @@ init_createClass();
 		}
 		return t;
 	}
-	function _objectSpread$3(e) {
+	function _objectSpread$4(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$3(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$4(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$3(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$4(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -5988,15 +5988,15 @@ init_createClass();
 		init_bulb_icon();
 		init_use_introduction();
 		import_prop_types$8 = /* @__PURE__ */ __toESM(require_prop_types());
-		__name(ownKeys$3, "ownKeys");
-		__name(_objectSpread$3, "_objectSpread");
+		__name(ownKeys$4, "ownKeys");
+		__name(_objectSpread$4, "_objectSpread");
 		VoicePromotionAlert = function VoicePromotionAlert(props) {
 			var _useIntroduction = useIntroduction(props.introductionKey);
 			var isViewed = _useIntroduction.isViewed;
 			var markAsViewed = _useIntroduction.markAsViewed;
 			if (isViewed) return null;
 			return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, {
-				sx: _objectSpread$3({ mt: 2 }, props.sx),
+				sx: _objectSpread$4({ mt: 2 }, props.sx),
 				alignItems: "top"
 			}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Alert, {
 				severity: "info",
@@ -6398,7 +6398,7 @@ init_createClass();
 
 //#endregion
 //#region modules/ai/assets/js/editor/components/loader.js
-	function ownKeys$2(e, r) {
+	function ownKeys$3(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -6408,12 +6408,12 @@ init_createClass();
 		}
 		return t;
 	}
-	function _objectSpread$2(e) {
+	function _objectSpread$3(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$2(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$3(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$2(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$3(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -6426,8 +6426,8 @@ init_createClass();
 		init_objectWithoutProperties$1();
 		import_prop_types$5 = /* @__PURE__ */ __toESM(require_prop_types());
 		_excluded$1 = ["sx", "BoxProps"];
-		__name(ownKeys$2, "ownKeys");
-		__name(_objectSpread$2, "_objectSpread");
+		__name(ownKeys$3, "ownKeys");
+		__name(_objectSpread$3, "_objectSpread");
 		Loader = function Loader(_ref) {
 			var _ref$sx = _ref.sx;
 			var sx = _ref$sx === void 0 ? {} : _ref$sx;
@@ -6438,12 +6438,12 @@ init_createClass();
 				width: "100%",
 				display: "flex",
 				alignItems: "center"
-			}, BoxProps, { sx: _objectSpread$2({
+			}, BoxProps, { sx: _objectSpread$3({
 				px: 1.5,
 				minHeight: function minHeight(theme) {
 					return theme.spacing(5);
 				}
-			}, BoxProps.sx || {}) }), /*#__PURE__*/ react.default.createElement(_elementor_ui.LinearProgress, _extends({ color: "secondary" }, props, { sx: _objectSpread$2({ width: "100%" }, sx) })));
+			}, BoxProps.sx || {}) }), /*#__PURE__*/ react.default.createElement(_elementor_ui.LinearProgress, _extends({ color: "secondary" }, props, { sx: _objectSpread$3({ width: "100%" }, sx) })));
 		};
 		Loader.propTypes = {
 			sx: import_prop_types$5.default.object,
@@ -6583,7 +6583,7 @@ init_createClass();
 
 //#endregion
 //#region modules/ai/assets/js/editor/components/wizard-dialog.js
-	function ownKeys$1(e, r) {
+	function ownKeys$2(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -6593,12 +6593,12 @@ init_createClass();
 		}
 		return t;
 	}
-	function _objectSpread$1(e) {
+	function _objectSpread$2(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$1(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$2(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$2(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -6612,8 +6612,8 @@ init_createClass();
 		import_prop_types$3 = /* @__PURE__ */ __toESM(require_prop_types());
 		init_dialog_header();
 		_excluded = ["sx"];
-		__name(ownKeys$1, "ownKeys");
-		__name(_objectSpread$1, "_objectSpread");
+		__name(ownKeys$2, "ownKeys");
+		__name(_objectSpread$2, "_objectSpread");
 		WizardDialog = function WizardDialog(props) {
 			return /*#__PURE__*/ react.default.createElement(_elementor_ui.Dialog, {
 				open: true,
@@ -6633,7 +6633,7 @@ init_createClass();
 			var _ref$sx = _ref.sx;
 			var sx = _ref$sx === void 0 ? {} : _ref$sx;
 			var props = _objectWithoutProperties$1(_ref, _excluded);
-			return /*#__PURE__*/ react.default.createElement(_elementor_ui.DialogContent, _extends({}, props, { sx: _objectSpread$1({
+			return /*#__PURE__*/ react.default.createElement(_elementor_ui.DialogContent, _extends({}, props, { sx: _objectSpread$2({
 				display: "flex",
 				flexDirection: "column",
 				justifyContent: "center"
@@ -8029,7 +8029,7 @@ init_createClass();
 		createDebouncedWidgetPanelSearch: () => createDebouncedWidgetPanelSearch,
 		default: () => EditorOneEventManager
 	});
-	function ownKeys(e, r) {
+	function ownKeys$1(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -8039,20 +8039,23 @@ init_createClass();
 		}
 		return t;
 	}
-	function _objectSpread(e) {
+	function _objectSpread$1(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$1(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	var EditorOneEventManager, createDebouncedFinderSearch, createDebouncedWidgetPanelSearch;
+	var ADMIN_NAV_CLICK_EVENT, EditorOneEventManager, createDebouncedFinderSearch, createDebouncedWidgetPanelSearch;
 	var init_editor_one_events = __esmMin((() => {
 		init_defineProperty$1();
+		__name(ownKeys$1, "ownKeys");
+		__name(_objectSpread$1, "_objectSpread");
+		ADMIN_NAV_CLICK_EVENT = "elementor/admin/nav-click";
 		EditorOneEventManager = /*#__PURE__*/ function() {
 			function EditorOneEventManager() {
 				_classCallCheck(this, EditorOneEventManager);
@@ -8141,7 +8144,7 @@ init_createClass();
 						var _config$appTypes3;
 						var overrides = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
 						var config = this.getConfig();
-						return _objectSpread({ window_name: (_config$appTypes$edit = config === null || config === void 0 || (_config$appTypes3 = config.appTypes) === null || _config$appTypes3 === void 0 ? void 0 : _config$appTypes3.editor) !== null && _config$appTypes$edit !== void 0 ? _config$appTypes$edit : "editor" }, overrides);
+						return _objectSpread$1({ window_name: (_config$appTypes$edit = config === null || config === void 0 || (_config$appTypes3 = config.appTypes) === null || _config$appTypes3 === void 0 ? void 0 : _config$appTypes3.editor) !== null && _config$appTypes$edit !== void 0 ? _config$appTypes$edit : "editor" }, overrides);
 					}
 				},
 				{
@@ -8462,7 +8465,7 @@ init_createClass();
 						var _config$locations11;
 						var overrides = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
 						var config = this.getConfig();
-						return this.createBasePayload(_objectSpread({
+						return this.createBasePayload(_objectSpread$1({
 							window_name: (_config$appTypes$wpDa = config === null || config === void 0 || (_config$appTypes4 = config.appTypes) === null || _config$appTypes4 === void 0 ? void 0 : _config$appTypes4.wpDash) !== null && _config$appTypes$wpDa !== void 0 ? _config$appTypes$wpDa : "wpdash",
 							target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations11 = config.locations) === null || _config$locations11 === void 0 ? void 0 : _config$locations11.wpDashAdmin),
 							location_l2: ""
@@ -8537,6 +8540,9 @@ init_createClass();
 							var _config$targetTypes14;
 							var _config$interactionRe16;
 							var _config$locations12;
+							var _window$crypto$random;
+							var _window$crypto;
+							var _window$crypto$random2;
 							var _config$names13;
 							var config = this.getConfig();
 							var payload = this.createBasePayload({
@@ -8548,7 +8554,15 @@ init_createClass();
 								target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations12 = config.locations) === null || _config$locations12 === void 0 ? void 0 : _config$locations12.sidebar)
 							});
 							if (groupEventId) payload.location_l1 = groupEventId;
-							return this.dispatchEvent(config === null || config === void 0 || (_config$names13 = config.names) === null || _config$names13 === void 0 || (_config$names13 = _config$names13.editorOne) === null || _config$names13 === void 0 ? void 0 : _config$names13.sidebarMenuItemClicked, payload);
+							var navClickId = (_window$crypto$random = (_window$crypto = window.crypto) === null || _window$crypto === void 0 || (_window$crypto$random2 = _window$crypto.randomUUID) === null || _window$crypto$random2 === void 0 ? void 0 : _window$crypto$random2.call(_window$crypto)) !== null && _window$crypto$random !== void 0 ? _window$crypto$random : "".concat(Date.now(), "-").concat(Math.random().toString(36).slice(2));
+							payload.nav_click_id = navClickId;
+							var dispatched = this.dispatchEvent(config === null || config === void 0 || (_config$names13 = config.names) === null || _config$names13 === void 0 || (_config$names13 = _config$names13.editorOne) === null || _config$names13 === void 0 ? void 0 : _config$names13.sidebarMenuItemClicked, payload);
+							window.dispatchEvent(new CustomEvent(ADMIN_NAV_CLICK_EVENT, { detail: {
+								itemId: eventId,
+								rootItem: groupEventId,
+								navClickId
+							} }));
+							return dispatched;
 						} catch (error) {
 							return false;
 						}
@@ -8781,6 +8795,54 @@ init_createClass();
 	}));
 
 //#endregion
+//#region assets/dev/js/editor/utils/omit-props-by-meta.js
+var import_apply_template_for_ai_behavior = /* @__PURE__ */ __toESM(require_apply_template_for_ai_behavior());
+	init_slicedToArray();
+	init_defineProperty$1();
+	init_typeof$1();
+	function ownKeys(e, r) {
+		var t = Object.keys(e);
+		if (Object.getOwnPropertySymbols) {
+			var o = Object.getOwnPropertySymbols(e);
+			r && (o = o.filter(function(r) {
+				return Object.getOwnPropertyDescriptor(e, r).enumerable;
+			})), t.push.apply(t, o);
+		}
+		return t;
+	}
+	function _objectSpread(e) {
+		for (var r = 1; r < arguments.length; r++) {
+			var t = null != arguments[r] ? arguments[r] : {};
+			r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
+				_defineProperty$1(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
+				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+			});
+		}
+		return e;
+	}
+	var isOmitted = function isOmitted(propType) {
+		var meta = propType === null || propType === void 0 ? void 0 : propType.meta;
+		return !!meta && !Array.isArray(meta) && true === meta.sensitive;
+	};
+	var getSchema = function getSchema(elementData) {
+		var _window$elementor;
+		var type = elementData.widgetType || elementData.elType;
+		return (_window$elementor = window.elementor) === null || _window$elementor === void 0 || (_window$elementor = _window$elementor.widgetsCache) === null || _window$elementor === void 0 || (_window$elementor = _window$elementor[type]) === null || _window$elementor === void 0 ? void 0 : _window$elementor.atomic_props_schema;
+	};
+	function omitPropsByMeta(elementData) {
+		if (!elementData || "object" !== _typeof$1(elementData)) return elementData;
+		var result = _objectSpread({}, elementData);
+		var schema = getSchema(elementData);
+		if (schema && elementData.settings && "object" === _typeof$1(elementData.settings)) result.settings = Object.fromEntries(Object.entries(elementData.settings).filter(function(_ref) {
+			var key = _slicedToArray(_ref, 1)[0];
+			return !isOmitted(schema[key]);
+		}));
+		if (Array.isArray(elementData.elements)) result.elements = elementData.elements.map(omitPropsByMeta);
+		return result;
+	}
+
+//#endregion
 //#region modules/ai/assets/js/editor/layout-module.js
 	init_asyncToGenerator$1();
 	init_classCallCheck();
@@ -8789,7 +8851,6 @@ init_createClass();
 	var import_regenerator = /* @__PURE__ */ __toESM(require_regenerator());
 	init_editor_integration();
 	init_config();
-	var import_apply_template_for_ai_behavior = /* @__PURE__ */ __toESM(require_apply_template_for_ai_behavior());
 	init_attachments();
 	function _callSuper(t, o, e) {
 		return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
@@ -8830,7 +8891,7 @@ init_createClass();
 								while (1) switch (_context.prev = _context.next) {
 									case 0:
 										container = currentElement.getContainer();
-										json = container.model.toJSON({ remove: ["default"] });
+										json = omitPropsByMeta(container.model.toJSON({ remove: ["default"] }));
 										attachments = [{
 											type: "json",
 											previewHTML: "",

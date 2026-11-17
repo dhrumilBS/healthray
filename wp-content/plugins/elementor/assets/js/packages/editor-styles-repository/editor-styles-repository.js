@@ -74,9 +74,17 @@
 		update: true,
 		updateProps: true
 	};
+	var DENIED_CAPABILITIES = {
+		create: false,
+		delete: false,
+		update: false,
+		updateProps: false
+	};
 	var useUserStylesCapability = () => {
 		const { capabilities } = (0, _elementor_editor_current_user.useCurrentUserCapabilities)();
+		const hasContentOnlyAccess = (0, _elementor_editor_current_user.useHasContentOnlyAccess)();
 		const userCan = (providerKey) => {
+			if (hasContentOnlyAccess) return DENIED_CAPABILITIES;
 			const provider = stylesRepository.getProviderByKey(providerKey);
 			if (!provider?.capabilities) return DEFAULT_CAPABILITIES;
 			return Object.entries(provider.capabilities).reduce((acc, [key, capability]) => ({

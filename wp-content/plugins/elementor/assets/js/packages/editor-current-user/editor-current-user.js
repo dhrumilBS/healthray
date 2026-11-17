@@ -27,10 +27,11 @@
 	var getUserPayload = { params: { context: "edit" } };
 	var apiClient = {
 		get: () => (0, _elementor_http_client.httpService)().get(RESOURCE_URL, getUserPayload).then((res) => {
-			const { capabilities = [], suppressedMessages = [] } = res.data;
+			const { capabilities = [], suppressedMessages = [], restrictions = [] } = res.data;
 			return {
 				capabilities,
-				suppressedMessages
+				suppressedMessages,
+				restrictions
 			};
 		}),
 		update: (data) => (0, _elementor_http_client.httpService)().patch(RESOURCE_URL, { suppressedMessages: data.suppressedMessages })
@@ -88,6 +89,24 @@
 	};
 
 //#endregion
+//#region packages/packages/libs/editor-current-user/src/use-user-restrictions.ts
+	var DESIGN_RESTRICTION = "design";
+	var useUserRestrictions = () => {
+		const { data } = useCurrentUser();
+		const isRestricted = (restriction) => Boolean(data?.restrictions?.includes(restriction));
+		return {
+			isRestricted,
+			restrictions: data?.restrictions
+		};
+	};
+
+//#endregion
+//#region packages/packages/libs/editor-current-user/src/is-content-only-user.ts
+	var isContentOnlyUser = () => {
+		return Boolean(getCurrentUser()?.restrictions?.includes(DESIGN_RESTRICTION));
+	};
+
+//#endregion
 //#region packages/packages/libs/editor-current-user/src/ensure-current-user.ts
 	async function ensureUser() {
 		return (0, _elementor_query.getQueryClient)().ensureQueryData({
@@ -113,15 +132,23 @@
 	}
 
 //#endregion
+//#region packages/packages/libs/editor-current-user/src/use-has-content-only-access.ts
+	var useHasContentOnlyAccess = () => useUserRestrictions().isRestricted(DESIGN_RESTRICTION);
+
+//#endregion
 //#region packages/packages/libs/editor-current-user/src/index.ts
 	var src_exports = /* @__PURE__ */ __exportAll({
+		DESIGN_RESTRICTION: () => DESIGN_RESTRICTION,
 		ensureUser: () => ensureUser,
 		getCurrentUser: () => getCurrentUser,
+		isContentOnlyUser: () => isContentOnlyUser,
 		onSetUser: () => onSetUser,
 		useCurrentUser: () => useCurrentUser,
 		useCurrentUserCapabilities: () => useCurrentUserCapabilities,
+		useHasContentOnlyAccess: () => useHasContentOnlyAccess,
 		useSuppressedMessage: () => useSuppressedMessage,
-		useUpdateCurrentUser: () => useUpdateCurrentUser
+		useUpdateCurrentUser: () => useUpdateCurrentUser,
+		useUserRestrictions: () => useUserRestrictions
 	});
 
 //#endregion

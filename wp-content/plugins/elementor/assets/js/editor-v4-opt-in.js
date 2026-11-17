@@ -3294,7 +3294,7 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 			mx: "auto"
 		} }, /*#__PURE__*/ react.default.createElement(TextNode, {
 			variant: "h4",
-			width: "fit-content"
+			component: "h2"
 		}, /*#__PURE__*/ react.default.createElement("span", null, i18n.title)), /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, {
 			direction: "column",
 			gap: 1

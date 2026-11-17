@@ -2,12 +2,12 @@
   "name": "elementor/elementor-mcp-composer",
   "description": "Reusable Composer package for Elementor MCP integrations.",
   "type": "library",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "license": "proprietary",
   "require": {
     "php": ">=7.4",
-    "automattic/jetpack-autoloader": "^5",
-    "wordpress/mcp-adapter": "^0.6.1"
+    "automattic/jetpack-autoloader": "^6",
+    "wordpress/mcp-adapter": "^0.7.0"
   },
   "require-dev": {
     "dealerdirect/phpcodesniffer-composer-installer": "^1.0",

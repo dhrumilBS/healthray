@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'codeinwp/redirection-for-contact-form-7',
-        'pretty_version' => 'v3.2.13',
-        'version' => '3.2.13.0',
-        'reference' => 'd5c297e0c95106819608d42a86338de804cf94de',
+        'pretty_version' => 'v3.2.14',
+        'version' => '3.2.14.0',
+        'reference' => '0e56ef3a5009d19410804d45de7a57b4420f9b11',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,18 +11,18 @@
     ),
     'versions' => array(
         'codeinwp/redirection-for-contact-form-7' => array(
-            'pretty_version' => 'v3.2.13',
-            'version' => '3.2.13.0',
-            'reference' => 'd5c297e0c95106819608d42a86338de804cf94de',
+            'pretty_version' => 'v3.2.14',
+            'version' => '3.2.14.0',
+            'reference' => '0e56ef3a5009d19410804d45de7a57b4420f9b11',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
         'codeinwp/themeisle-sdk' => array(
-            'pretty_version' => '3.3.65',
-            'version' => '3.3.65.0',
-            'reference' => 'f650fe856d52ce4e5754557d89ba2f3127ad54d8',
+            'pretty_version' => '3.3.67',
+            'version' => '3.3.67.0',
+            'reference' => 'e1dda44811660a65c3da6994349c054a46686d69',
             'type' => 'library',
             'install_path' => __DIR__ . '/../codeinwp/themeisle-sdk',
             'aliases' => array(),

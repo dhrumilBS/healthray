@@ -24,14 +24,13 @@ defined( 'ABSPATH' ) || exit;
 		<button
 			type="button"
 			title="<?php esc_attr_e( 'Remove File', 'wpcf7-redirect' ); ?>"
-			href="javascript:;"
 			class="input-remove-btn browser button button-link button-link-delete"
 		>
 			<?php esc_html_e( 'Clear', 'wpcf7-redirect' ); ?>
 		</button>
-		<a title="<?php esc_attr_e( 'Set File', 'wpcf7-redirect' ); ?>" href="javascript:;" class="image-uploader-btn browser button button-hero">
+		<button type="button" title="<?php esc_attr_e( 'Set File', 'wpcf7-redirect' ); ?>" class="image-uploader-btn browser button button-hero">
 			<?php esc_html_e( 'Select File', 'wpcf7-redirect' ); ?>
-		</a>
+		</button>
 		<input
 			type="hidden"
 			class="wpcf7-redirect-<?php echo esc_attr( $field['name'] ); ?>-fields"

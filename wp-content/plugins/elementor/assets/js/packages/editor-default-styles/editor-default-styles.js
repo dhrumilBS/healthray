@@ -1,4 +1,4 @@
-(function(react, _elementor_editor_controls, _elementor_editor_editing_panel, _elementor_editor_responsive, _elementor_editor_styles_repository, _elementor_editor_ui, _elementor_menus, _elementor_query, _elementor_session, _elementor_store, _elementor_ui, _wordpress_i18n, _elementor_editor_styles, _elementor_utils, _elementor_http_client, _elementor_icons, _elementor_editor, _elementor_editor_v1_adapters) {
+(function(react, _elementor_editor_controls, _elementor_editor_editing_panel, _elementor_editor_responsive, _elementor_editor_styles_repository, _elementor_editor_ui, _elementor_menus, _elementor_query, _elementor_session, _elementor_store, _elementor_ui, _wordpress_i18n, _elementor_editor_props, _elementor_editor_styles, _elementor_utils, _elementor_http_client, _elementor_events, _elementor_icons, _elementor_editor, _elementor_editor_canvas, _elementor_editor_v1_adapters) {
 
 //#region \0rolldown/runtime.js
 	var __create = Object.create;
@@ -106,19 +106,17 @@ react = __toESM(react);
 				const variant = (0, _elementor_editor_styles.getVariantByMeta)(style, payload.meta);
 				let customCss = ("custom_css" in payload ? payload.custom_css : variant?.custom_css) ?? null;
 				customCss = customCss?.raw ? customCss : null;
+				const payloadProps = JSON.parse(JSON.stringify(payload.props));
+				const mode = payload.mode ?? "merge";
 				if (variant) {
-					const payloadProps = JSON.parse(JSON.stringify(payload.props));
-					if ((payload.mode ?? "merge") === "replace") variant.props = payloadProps;
-					else variant.props = {
-						...variant.props,
-						...payloadProps
-					};
+					variant.props = (0, _elementor_editor_props.mergeProps)(extractVariantProps(mode, variant), payloadProps);
 					variant.custom_css = customCss;
 				} else style.variants.push({
 					meta: payload.meta,
-					props: payload.props,
+					props: (0, _elementor_editor_props.mergeProps)({}, payloadProps),
 					custom_css: customCss
 				});
+				style.variants = (0, _elementor_editor_styles.getNonEmptyVariants)(style);
 				state.data[payload.id] = style;
 				state.isDirty = true;
 			},
@@ -136,6 +134,10 @@ react = __toESM(react);
 			}
 		}
 	});
+	function extractVariantProps(mode, variant) {
+		if ("replace" === mode) return {};
+		return JSON.parse(JSON.stringify(variant.props));
+	}
 	var selectData = (0, _elementor_store.__createSelector)((state) => state.defaultStyles.data, (data) => data);
 	var selectIsDirty = (0, _elementor_store.__createSelector)((state) => state.defaultStyles.isDirty, (isDirty) => isDirty);
 	var selectInitialData = (0, _elementor_store.__createSelector)((state) => state.defaultStyles.initialData, (initialData) => initialData);
@@ -221,6 +223,75 @@ react = __toESM(react);
 	};
 
 //#endregion
+//#region packages/packages/core/editor-default-styles/src/modified-sections.ts
+	var CUSTOM_CSS_SECTION = "custom_css";
+	function getModifiedSections(initialStyle, currentStyle) {
+		const sectionByProp = new Map(_elementor_editor_editing_panel.STYLE_SECTIONS.flatMap(({ name, fields }) => fields.map((field) => [field, name.toLowerCase()])));
+		const modified = /* @__PURE__ */ new Set();
+		const variantsOf = (style) => new Map((style?.variants ?? []).map((variant) => [JSON.stringify(variant.meta), variant]));
+		const initialVariants = variantsOf(initialStyle);
+		const currentVariants = variantsOf(currentStyle);
+		(/* @__PURE__ */ new Set([...initialVariants.keys(), ...currentVariants.keys()])).forEach((meta) => {
+			const initial = initialVariants.get(meta);
+			const current = currentVariants.get(meta);
+			(/* @__PURE__ */ new Set([...Object.keys(initial?.props ?? {}), ...Object.keys(current?.props ?? {})])).forEach((prop) => {
+				if (isChanged(initial?.props[prop], current?.props[prop]) && sectionByProp.has(prop)) modified.add(sectionByProp.get(prop));
+			});
+			if (isChanged(initial?.custom_css, current?.custom_css)) modified.add(CUSTOM_CSS_SECTION);
+		});
+		return [...modified];
+	}
+	function isChanged(initial, current) {
+		return (0, _elementor_utils.hash)({ value: initial ?? null }) !== (0, _elementor_utils.hash)({ value: current ?? null });
+	}
+
+//#endregion
+//#region packages/packages/core/editor-default-styles/src/utils/tracking.ts
+	var EVENT_PROPERTIES = {
+		panelOpened: {
+			target_type: "tab",
+			target_name: "defaults_tab",
+			target_location: "design_system_panel",
+			interaction_result: "panel_opened"
+		},
+		tagSaved: {
+			target_type: "button",
+			target_name: "save_changes",
+			target_location: "design_system_panel",
+			interaction_result: "tag_saved",
+			executed_by: "user"
+		},
+		saveFailed: {
+			target_type: "button",
+			target_name: "save_changes",
+			target_location: "design_system_panel",
+			interaction_result: "save_failed",
+			executed_by: "user"
+		},
+		changesDiscarded: {
+			target_type: "button",
+			target_name: "discard_changes",
+			target_location: "dialog",
+			interaction_result: "changes_discarded"
+		}
+	};
+	var trackDefaultStyles = (payload) => {
+		const { dispatchEvent, config } = (0, _elementor_events.getMixpanel)();
+		const name = config?.names?.default_styles?.[payload.event];
+		if (!name) return;
+		const { event, ...eventData } = payload;
+		try {
+			dispatchEvent?.(name, {
+				window_name: config?.appTypes?.editor,
+				app_type: config?.appTypes?.editor,
+				interaction_type: "click",
+				...EVENT_PROPERTIES[event],
+				...eventData
+			});
+		} catch {}
+	};
+
+//#endregion
 //#region packages/packages/core/editor-default-styles/src/save-default-styles.ts
 	function getChangedTags(state) {
 		const current = selectData(state);
@@ -240,6 +311,7 @@ react = __toESM(react);
 		const state = (0, _elementor_store.__getState)();
 		if (!selectIsDirty(state)) return;
 		const data = selectData(state);
+		const initialData = selectInitialData(state);
 		const changedTags = getChangedTags(state);
 		await Promise.all(changedTags.map(async (tag) => {
 			const style = data[tag];
@@ -248,7 +320,22 @@ react = __toESM(react);
 				return;
 			}
 			await apiClient.put(tag, style.variants);
-		}));
+		})).catch((error) => {
+			trackDefaultStyles({
+				event: "saveFailed",
+				tags_changed_count: changedTags.length
+			});
+			throw error;
+		});
+		changedTags.forEach((tag) => {
+			const isUnset = !data[tag]?.variants.length;
+			trackDefaultStyles({
+				event: "tagSaved",
+				tag,
+				action: isUnset ? "unset" : "set",
+				sections_modified: isUnset ? [] : getModifiedSections(initialData[tag], data[tag])
+			});
+		});
 		(0, _elementor_store.__dispatch)(slice.actions.commit());
 	}
 
@@ -409,6 +496,12 @@ react = __toESM(react);
 			setActiveStyleState(null);
 		};
 		const resetAndClosePanel = () => {
+			const tagsDiscarded = getChangedTags((0, _elementor_store.__getState)());
+			trackDefaultStyles({
+				event: "changesDiscarded",
+				tags_discarded: tagsDiscarded,
+				tags_discarded_count: tagsDiscarded.length
+			});
 			(0, _elementor_store.__dispatch)(slice.actions.reset());
 			closeSaveChangesDialog();
 			onRequestClose();
@@ -517,6 +610,21 @@ react = __toESM(react);
 	}
 
 //#endregion
+//#region packages/packages/core/editor-default-styles/src/components/global-styles-import-listener.tsx
+	function GlobalStylesImportListener() {
+		(0, react.useEffect)(() => {
+			const handleGlobalStylesImported = () => {
+				loadDefaultStyles();
+			};
+			window.addEventListener(_elementor_editor_canvas.GLOBAL_STYLES_IMPORTED_EVENT, handleGlobalStylesImported);
+			return () => {
+				window.removeEventListener(_elementor_editor_canvas.GLOBAL_STYLES_IMPORTED_EVENT, handleGlobalStylesImported);
+			};
+		}, []);
+		return null;
+	}
+
+//#endregion
 //#region packages/packages/core/editor-default-styles/src/components/populate-store.tsx
 	var V2_PANEL_ROUTE = "panel/v2";
 	function PopulateStore() {
@@ -544,6 +652,10 @@ react = __toESM(react);
 		});
 		_elementor_editor_styles_repository.stylesRepository.register(defaultStylesStylesProvider);
 		(0, _elementor_editor.injectIntoLogic)({
+			id: "default-styles-import-listener",
+			component: GlobalStylesImportListener
+		});
+		(0, _elementor_editor.injectIntoLogic)({
 			id: "default-styles-populate-store",
 			component: PopulateStore
 		});
@@ -553,7 +665,8 @@ react = __toESM(react);
 //#region packages/packages/core/editor-default-styles/src/index.ts
 	var src_exports = /* @__PURE__ */ __exportAll({
 		DefaultStylesTabEmbedded: () => DefaultStylesTabEmbedded,
-		init: () => init
+		init: () => init,
+		trackDefaultStyles: () => trackDefaultStyles
 	});
 
 //#endregion
@@ -561,6 +674,6 @@ react = __toESM(react);
 	(window.elementorV2 = window.elementorV2 || {}).editorDefaultStyles = src_exports;
 
 //#endregion
-})(React, elementorV2.editorControls, elementorV2.editorEditingPanel, elementorV2.editorResponsive, elementorV2.editorStylesRepository, elementorV2.editorUi, elementorV2.menus, elementorV2.query, elementorV2.session, elementorV2.store, elementorV2.ui, wp.i18n, elementorV2.editorStyles, elementorV2.utils, elementorV2.httpClient, elementorV2.icons, elementorV2.editor, elementorV2.editorV1Adapters);
+})(React, elementorV2.editorControls, elementorV2.editorEditingPanel, elementorV2.editorResponsive, elementorV2.editorStylesRepository, elementorV2.editorUi, elementorV2.menus, elementorV2.query, elementorV2.session, elementorV2.store, elementorV2.ui, wp.i18n, elementorV2.editorProps, elementorV2.editorStyles, elementorV2.utils, elementorV2.httpClient, elementorV2.events, elementorV2.icons, elementorV2.editor, elementorV2.editorCanvas, elementorV2.editorV1Adapters);
 window.elementorV2.editorDefaultStyles?.init?.();
 //# sourceMappingURL=editor-default-styles.js.map

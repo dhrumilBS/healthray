@@ -1,0 +1,425 @@
+<?php
+/**
+ * WPSEO Premium plugin file.
+ *
+ * @package WPSEO\Premium\Classes
+ */
+
+use Yoast\WP\SEO\Helpers\Home_Url_Helper;
+
+/**
+ * Represents a single redirect
+ */
+class WPSEO_Redirect implements ArrayAccess, JsonSerializable {
+
+	/**
+	 * Redirect origin.
+	 *
+	 * @var string
+	 */
+	protected $origin;
+
+	/**
+	 * Redirect target.
+	 *
+	 * @var string
+	 */
+	protected $target = '';
+
+	/**
+	 * A HTTP code determining the redirect type.
+	 *
+	 * @var int
+	 */
+	protected $type;
+
+	/**
+	 * A string determining the redirect format (plain or regex).
+	 *
+	 * @var string
+	 */
+	protected $format;
+
+	/**
+	 * A string holding a possible redirect validation error.
+	 *
+	 * @var string
+	 */
+	protected $validation_error;
+
+	/**
+	 * The home URL helper.
+	 *
+	 * @var Home_Url_Helper
+	 */
+	protected static $home_url;
+
+	/**
+	 * WPSEO_Redirect constructor.
+	 *
+	 * @param string $origin The origin of the redirect.
+	 * @param string $target The target of the redirect.
+	 * @param int    $type   The type of the redirect.
+	 * @param string $format The format of the redirect.
+	 */
+	public function __construct( $origin, $target = '', $type = WPSEO_Redirect_Types::PERMANENT, $format = WPSEO_Redirect_Formats::PLAIN ) {
+		static::$home_url ??= new Home_Url_Helper();
+
+		$this->origin = ( $format === WPSEO_Redirect_Formats::PLAIN ) ? $this->sanitize_origin_url( (string) $origin ) : (string) $origin;
+		$this->target = $this->sanitize_target_url( (string) $target );
+		$this->format = $format;
+		$this->type   = (int) $type;
+	}
+
+	/**
+	 * Strips C0 control characters and DEL from a string.
+	 *
+	 * @param string|null $value The value to strip.
+	 *
+	 * @return string The value without control characters.
+	 */
+	public static function strip_control_chars( $value ) {
+		return preg_replace( '/[\x00-\x1F\x7F]/', '', (string) $value );
+	}
+
+	/**
+	 * Checks whether a string contains a C0 control character or DEL.
+	 *
+	 * @param string|null $value The value to check.
+	 *
+	 * @return bool
+	 */
+	public static function contains_control_chars( $value ) {
+		return preg_match( '/[\x00-\x1F\x7F]/', (string) $value ) === 1;
+	}
+
+	/**
+	 * Returns true when either the origin or the target carries a C0 control character
+	 * or DEL. Shared by the export pre-filter (WPSEO_Redirect_Manager) and the upgrade
+	 * cleanup routine (WPSEO_Redirect_Upgrade) so both layers stay in lockstep.
+	 *
+	 * @param string|null $origin The redirect origin value.
+	 * @param string|null $target The redirect target value.
+	 *
+	 * @return bool True when either side is poisoned.
+	 */
+	public static function pair_has_control_chars( $origin, $target ) {
+		return self::contains_control_chars( $origin )
+			|| self::contains_control_chars( $target );
+	}
+
+	/**
+	 * Surfaces an admin notice naming a redirect that was dropped because its origin
+	 * or target carried a control character. The origin is stripped and truncated to
+	 * a safe excerpt before being embedded in the (escaped) message. Shared by
+	 * WPSEO_Redirect_Option::save() and WPSEO_Redirect_Manager so dropped rows are
+	 * reported once per save cycle regardless of which layer caught them.
+	 *
+	 * @param self $redirect The dropped redirect.
+	 *
+	 * @return void
+	 */
+	public static function notify_dropped_redirect( self $redirect ) {
+		$origin_excerpt = mb_substr( self::strip_control_chars( $redirect->get_origin() ), 0, 50, get_bloginfo( 'charset' ) );
+
+		Yoast_Notification_Center::get()->add_notification(
+			new Yoast_Notification(
+				sprintf(
+					/* translators: %s expands to a truncated form of the redirect origin. */
+					__( 'A redirect was skipped because it contained line breaks or control characters: %s', 'wordpress-seo-premium' ),
+					esc_html( $origin_excerpt ),
+				),
+				[ 'type' => 'error' ],
+			),
+		);
+	}
+
+	/**
+	 * Returns the origin.
+	 *
+	 * @return string The set origin.
+	 */
+	public function get_origin() {
+		return $this->origin;
+	}
+
+	/**
+	 * Returns the target
+	 *
+	 * @return string The set target.
+	 */
+	public function get_target() {
+		return $this->target;
+	}
+
+	/**
+	 * Returns the type
+	 *
+	 * @return int The set type.
+	 */
+	public function get_type() {
+		return $this->type;
+	}
+
+	/**
+	 * Returns the format
+	 *
+	 * @return string The set format.
+	 */
+	public function get_format() {
+		return $this->format;
+	}
+
+	/**
+	 * Whether a offset exists.
+	 *
+	 * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+	 *
+	 * @param string $offset An offset to check for.
+	 *
+	 * @return bool True on success or false on failure.
+	 *              The return value will be cast to boolean if non-boolean was returned.
+	 */
+	#[ReturnTypeWillChange]
+	public function offsetExists( $offset ) {
+		return in_array( $offset, [ 'url', 'type' ], true );
+	}
+
+	/**
+	 * Offset to retrieve.
+	 *
+	 * @link http://php.net/manual/en/arrayaccess.offsetget.php
+	 *
+	 * @param string $offset The offset to retrieve.
+	 *
+	 * @return mixed Can return all value types.
+	 */
+	#[ReturnTypeWillChange]
+	public function offsetGet( $offset ) {
+		switch ( $offset ) {
+			case 'old':
+				return $this->origin;
+
+			case 'url':
+				return $this->target;
+
+			case 'type':
+				return $this->type;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Offset to set.
+	 *
+	 * @link http://php.net/manual/en/arrayaccess.offsetset.php
+	 *
+	 * @param string $offset The offset to assign the value to.
+	 * @param string $value  The value to set.
+	 *
+	 * @return void
+	 */
+	#[ReturnTypeWillChange]
+	public function offsetSet( $offset, $value ) {
+		switch ( $offset ) {
+			case 'url':
+				$this->target = $value;
+				break;
+			case 'type':
+				$this->type = $value;
+				break;
+		}
+	}
+
+	/**
+	 * Offset to unset.
+	 *
+	 * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+	 *
+	 * @codeCoverageIgnore
+	 *
+	 * @param string $offset The offset to unset.
+	 *
+	 * @return void
+	 */
+	#[ReturnTypeWillChange]
+	public function offsetUnset( $offset ) {
+	}
+
+	/**
+	 * Compares an URL with the origin of the redirect.
+	 *
+	 * @param string $url The URL to compare.
+	 *
+	 * @return bool True when url matches the origin.
+	 */
+	public function origin_is( $url ) {
+		// Sanitize the slash in case of plain redirect.
+		if ( $this->format === WPSEO_Redirect_Formats::PLAIN ) {
+			$url = $this->sanitize_slash( $url, $this->parse_url( $url ) );
+		}
+
+		return (string) $this->origin === (string) $url;
+	}
+
+	/**
+	 * This method is called automatically when an instance of the class is passed to json_encode().
+	 *
+	 * @return array<string, int> An associative array containing redirect data.
+	 */
+	#[ReturnTypeWillChange]
+	public function jsonSerialize() {
+		return [
+			'origin'             => $this->get_origin(),
+			'target'             => $this->get_target(),
+			'type'               => $this->get_type(),
+			'format'             => $this->get_format(),
+		];
+	}
+
+	/**
+	 * Strip the trailing slashes for relative URLs.
+	 *
+	 * @param string $url_to_sanitize The URL to sanitize.
+	 * @param array  $url_pieces      The url pieces.
+	 *
+	 * @return string The sanitized url.
+	 */
+	private function sanitize_slash( $url_to_sanitize, array $url_pieces = [] ) {
+		$url = $url_to_sanitize;
+		if ( $url !== '/' && ! isset( $url_pieces['scheme'] ) ) {
+			return trim( $url_to_sanitize, '/' );
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Strip the protocol from the URL.
+	 *
+	 * @param string $scheme The scheme to strip.
+	 * @param string $url    The URL to remove the scheme from.
+	 *
+	 * @return string The url without the scheme.
+	 */
+	private function strip_scheme_from_url( $scheme, $url ) {
+		return str_replace( $scheme . '://', '', $url );
+	}
+
+	/**
+	 * Remove the home URL from the redirect to ensure that relative URLs are created.
+	 *
+	 * @param string $url The URL to sanitize.
+	 *
+	 * @return string The sanitized url.
+	 */
+	private function sanitize_origin_url( $url ) {
+		$home_url        = static::$home_url->get();
+		$home_url_pieces = static::$home_url->get_parsed();
+		$url_pieces      = $this->parse_url( $url );
+
+		if ( $this->match_home_url( $home_url_pieces, $url_pieces ) ) {
+			$url = substr(
+				$this->strip_scheme_from_url( $url_pieces['scheme'], $url ),
+				strlen( $this->strip_scheme_from_url( $home_url_pieces['scheme'], $home_url ) ),
+			);
+
+			$url_pieces['scheme'] = null;
+		}
+
+		return $this->sanitize_slash( $url, $url_pieces );
+	}
+
+	/**
+	 * Sanitizes the target url.
+	 *
+	 * @param string $url The url to sanitize.
+	 *
+	 * @return string The sanitized url.
+	 */
+	private function sanitize_target_url( $url ) {
+		$home_url_pieces = static::$home_url->get_parsed();
+		$url_pieces      = $this->parse_url( $url );
+
+		if ( $this->match_home_url( $home_url_pieces, $url_pieces ) ) {
+			$url = substr(
+				$this->strip_scheme_from_url( $url_pieces['scheme'], $url ),
+				strlen( $home_url_pieces['host'] ),
+			);
+
+			$url_pieces['scheme'] = null;
+		}
+
+		return $this->sanitize_slash( $url, $url_pieces );
+	}
+
+	/**
+	 * Checks if the URL matches the home URL.
+	 *
+	 * @param array $home_url_pieces The pieces (wp_parse_url) from the home_url.
+	 * @param array $url_pieces      The pieces (wp_parse_url) from the url to match.
+	 *
+	 * @return bool True when the URL matches the home URL.
+	 */
+	private function match_home_url( $home_url_pieces, $url_pieces ) {
+		if ( ! isset( $url_pieces['scheme'] ) ) {
+			return false;
+		}
+
+		if ( ! isset( $url_pieces['host'] ) || ! $this->match_home_url_host( $home_url_pieces['host'], $url_pieces['host'] ) ) {
+			return false;
+		}
+
+		if ( ! isset( $home_url_pieces['path'] ) ) {
+			return true;
+		}
+
+		return isset( $url_pieces['path'] ) && $this->match_home_url_path( $home_url_pieces['path'], $url_pieces['path'] );
+	}
+
+	/**
+	 * Checks if the URL matches the home URL by comparing their host.
+	 *
+	 * @param string $home_url_host The home URL host.
+	 * @param string $url_host      The URL host.
+	 *
+	 * @return bool True when both hosts are equal.
+	 */
+	private function match_home_url_host( $home_url_host, $url_host ) {
+		return $url_host === $home_url_host;
+	}
+
+	/**
+	 * Checks if the URL matches the home URL by comparing their path.
+	 *
+	 * @param string $home_url_path The home URL path.
+	 * @param string $url_path      The URL path.
+	 *
+	 * @return bool True when the home URL path is empty or when the URL path begins with the home URL path.
+	 */
+	private function match_home_url_path( $home_url_path, $url_path ) {
+		$home_url_path = trim( $home_url_path, '/' );
+		if ( empty( $home_url_path ) ) {
+			return true;
+		}
+
+		return strpos( trim( $url_path, '/' ), $home_url_path ) === 0;
+	}
+
+	/**
+	 * Parses the URL into separate pieces.
+	 *
+	 * @param string $url The URL string.
+	 *
+	 * @return array Array of URL pieces.
+	 */
+	private function parse_url( $url ) {
+		$parsed_url = wp_parse_url( $url );
+		if ( is_array( $parsed_url ) ) {
+			return $parsed_url;
+		}
+
+		return [];
+	}
+}

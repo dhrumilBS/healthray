@@ -1,4 +1,4 @@
-(function(_elementor_editor_floating_panels, _elementor_store, _elementor_editor_app_bar, _elementor_icons, _wordpress_i18n, react, _elementor_editor_elements, _elementor_ui, _elementor_http_client, _elementor_session, _elementor_editor_notifications, _elementor_editor_v1_adapters, _elementor_events, _elementor_editor_mcp) {
+(function(_elementor_editor_floating_panels, _elementor_store, _elementor_editor_app_bar, _wordpress_i18n, react, _elementor_icons, _elementor_ui, _elementor_editor_elements, _elementor_http_client, _elementor_editor_props, _elementor_session, _elementor_editor_notifications, _elementor_editor_v1_adapters, _elementor_events, _elementor_editor_mcp) {
 
 //#region \0rolldown/runtime.js
 	var __create = Object.create;
@@ -46,38 +46,77 @@
 //#endregion
 react = __toESM(react);
 
-//#region packages/packages/core/editor-audits/src/utils/window-config.ts
-	function getWindowConfig() {
-		const config = window.elementorAudits;
-		if (!config) return {
-			restNamespace: "elementor/v1",
-			nonce: ""
-		};
-		return config;
-	}
-
-//#endregion
-//#region packages/packages/core/editor-audits/src/api/page-context-client.ts
-	async function fetchPageContext(documentId, attachmentIds) {
-		const { restNamespace, nonce } = getWindowConfig();
-		const url = `${restNamespace}/audits/page-context`;
-		return (await (0, _elementor_http_client.httpService)().get(url, {
-			params: {
-				document_id: documentId,
-				attachment_ids: attachmentIds
+//#region packages/packages/core/editor-audits/src/store/slice.ts
+	var initialState = {
+		status: "idle",
+		report: null,
+		error: null,
+		isStale: false
+	};
+	var slice = (0, _elementor_store.__createSlice)({
+		name: "audits",
+		initialState,
+		reducers: {
+			runStarted(state) {
+				state.status = "loading";
+				state.error = null;
 			},
-			headers: { "X-WP-Nonce": nonce }
-		})).data;
+			runSucceeded(state, action) {
+				state.status = "ready";
+				state.report = action.payload;
+				state.isStale = false;
+			},
+			runFailed(state, action) {
+				state.status = "error";
+				state.error = action.payload;
+			},
+			runAborted(state) {
+				state.status = state.report ? "ready" : "idle";
+			},
+			reportRestored(state, action) {
+				state.status = "ready";
+				state.report = action.payload;
+				state.error = null;
+				state.isStale = false;
+			},
+			reportCleared(state) {
+				state.status = "idle";
+				state.report = null;
+				state.error = null;
+				state.isStale = false;
+			},
+			reportStale(state) {
+				if (state.report) state.isStale = true;
+			}
+		}
+	});
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/store/selectors.ts
+	function selectStatus(state) {
+		return state.audits.status;
+	}
+	function selectReport(state) {
+		return state.audits.report;
+	}
+	function selectError(state) {
+		return state.audits.error;
+	}
+	function selectIsStale(state) {
+		return state.audits.isStale;
 	}
 
 //#endregion
-//#region packages/packages/core/editor-audits/src/registry.ts
-	var registry = /* @__PURE__ */ new Map();
-	function registerAudit(audit) {
-		registry.set(audit.id, audit);
-	}
-	function getRegisteredAudits() {
-		return Array.from(registry.values());
+//#region packages/packages/core/editor-audits/src/components/audit-toggle-icon.tsx
+	function AuditToggleIcon() {
+		const isStale = (0, _elementor_store.__useSelector)((state) => selectIsStale(state));
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Badge, {
+			variant: "dot",
+			color: "warning",
+			invisible: !isStale,
+			overlap: "circular",
+			slotProps: { badge: { "data-testid": "audit-stale-indicator" } }
+		}, /* @__PURE__ */ react.createElement(_elementor_icons.ShieldCheckIcon, null));
 	}
 
 //#endregion
@@ -104,8 +143,92 @@ react = __toESM(react);
 		seo: (0, _wordpress_i18n.__)("SEO", "elementor"),
 		accessibility: (0, _wordpress_i18n.__)("Accessibility", "elementor"),
 		performance: (0, _wordpress_i18n.__)("Performance", "elementor"),
-		compliance: (0, _wordpress_i18n.__)("Compliance", "elementor")
+		compliance: (0, _wordpress_i18n.__)("Site compliance", "elementor")
 	};
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/utils/window-config.ts
+	function getWindowConfig() {
+		const config = window.elementorAudits;
+		if (!config) return {
+			restNamespace: "elementor/v1",
+			nonce: ""
+		};
+		return config;
+	}
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/utils/session-expiration.ts
+	var NONCE_INVALID_CODE = "rest_cookie_invalid_nonce";
+	var DEFAULT_AJAX_URL = "/wp-admin/admin-ajax.php";
+	var SessionExpiredError = class extends Error {};
+	var nonceRefreshPromise = null;
+	function isNonceInvalidError(error) {
+		const response = error?.response;
+		return response?.status === 403 && response?.data?.code === NONCE_INVALID_CODE;
+	}
+	async function refreshAuditsNonce() {
+		if (nonceRefreshPromise) return nonceRefreshPromise;
+		nonceRefreshPromise = requestFreshNonce();
+		try {
+			return await nonceRefreshPromise;
+		} finally {
+			nonceRefreshPromise = null;
+		}
+	}
+	async function requestFreshNonce() {
+		const ajaxUrl = window.elementorCommon?.ajax?.config?.url ?? DEFAULT_AJAX_URL;
+		const url = new URL(ajaxUrl, window.location.origin);
+		url.searchParams.set("action", "rest-nonce");
+		const response = await fetch(url.toString(), { credentials: "same-origin" });
+		if (!response.ok) throw new Error(`Failed to refresh audits nonce: HTTP ${response.status}`);
+		const nonce = await response.text();
+		if (!nonce || "0" === nonce) throw new SessionExpiredError("Session expired — received invalid nonce");
+		window.elementorAudits = {
+			...getWindowConfig(),
+			nonce
+		};
+		return nonce;
+	}
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/api/page-context-client.ts
+	async function fetchPageContext(documentId, imageSizeRequests) {
+		return requestPageContext(documentId, imageSizeRequests, true);
+	}
+	async function requestPageContext(documentId, imageSizeRequests, allowNonceRetry) {
+		const { restNamespace, nonce } = getWindowConfig();
+		const url = `${restNamespace}/audits/page-context`;
+		try {
+			return (await (0, _elementor_http_client.httpService)().get(url, {
+				params: {
+					document_id: documentId,
+					image_size_requests: imageSizeRequests
+				},
+				headers: { "X-WP-Nonce": nonce }
+			})).data;
+		} catch (error) {
+			if (!allowNonceRetry || !isNonceInvalidError(error)) throw error;
+			await refreshAuditsNonce();
+			return requestPageContext(documentId, imageSizeRequests, false);
+		}
+	}
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/registry.ts
+	var registry = /* @__PURE__ */ new Map();
+	function registerAudit(audit) {
+		registry.set(audit.id, audit);
+	}
+	function getRegisteredAudits() {
+		return Array.from(registry.values());
+	}
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/utils/is-scored-audit.ts
+	function isScoredAudit(audit) {
+		return audit.weight > 0;
+	}
 
 //#endregion
 //#region packages/packages/core/editor-audits/src/utils/sort-failed-audits.ts
@@ -138,7 +261,7 @@ react = __toESM(react);
 						...run,
 						result: run.result
 					});
-					totalViolations += run.result.violations.length;
+					if (isScoredAudit(run.audit)) totalViolations += run.result.violations.length;
 					break;
 				case "pass":
 					passed.push({
@@ -160,41 +283,6 @@ react = __toESM(react);
 			skipped,
 			totalViolations
 		};
-	}
-	function auditStatusDisplayCounts(report) {
-		let pass = 0;
-		let skipped = 0;
-		let totalViolations = 0;
-		for (const { result } of report.auditResults) switch (result.status) {
-			case "fail":
-				totalViolations += result.violations.length;
-				break;
-			case "pass":
-				pass++;
-				break;
-			case "skipped":
-				skipped++;
-				break;
-		}
-		return {
-			fail: totalViolations,
-			pass,
-			skipped
-		};
-	}
-	function auditStatusColor(status) {
-		switch (status) {
-			case "fail": return "error";
-			case "pass": return "success";
-			case "skipped": return "default";
-		}
-	}
-	function auditStatusLabel(status) {
-		switch (status) {
-			case "fail": return (0, _wordpress_i18n.__)("Failed audits", "elementor");
-			case "pass": return (0, _wordpress_i18n.__)("Passed audits", "elementor");
-			case "skipped": return (0, _wordpress_i18n.__)("Skipped audits", "elementor");
-		}
 	}
 	function getPopulatedCategories(categoryTotals, categories) {
 		return categories.filter((category) => categoryTotals[category].total > 0);
@@ -239,6 +327,27 @@ react = __toESM(react);
 	}
 
 //#endregion
+//#region packages/packages/core/editor-audits/src/utils/fetch-rendered-html.ts
+	var FETCH_TIMEOUT_MS = 1e4;
+	async function fetchRenderedHtml(url) {
+		if (!url) return null;
+		const timeoutController = new AbortController();
+		const timeoutId = setTimeout(() => timeoutController.abort(), FETCH_TIMEOUT_MS);
+		try {
+			const response = await fetch(url, {
+				credentials: "omit",
+				signal: timeoutController.signal
+			});
+			if (!response.ok) return null;
+			return await response.text();
+		} catch {
+			return null;
+		} finally {
+			clearTimeout(timeoutId);
+		}
+	}
+
+//#endregion
 //#region packages/packages/core/editor-audits/src/utils/walk.ts
 	function walkElements(tree, visit) {
 		recurse(tree, [], visit);
@@ -253,6 +362,85 @@ react = __toESM(react);
 	}
 
 //#endregion
+//#region packages/packages/core/editor-audits/src/utils/atomic-image-sources.ts
+	var ATOMIC_CONTENT_IMAGE_PROP_KEYS = ["image"];
+	var ATOMIC_IMAGE_PROP_KEYS = [...ATOMIC_CONTENT_IMAGE_PROP_KEYS, "poster"];
+	function walkAtomicImageSources(tree, visit, propKeys = ATOMIC_IMAGE_PROP_KEYS) {
+		walkElements(tree, (node) => {
+			if (node.elType !== "widget") return;
+			for (const key of propKeys) {
+				const media = extractAtomicImageMedia(node.settings[key]);
+				if (media) visit({
+					node,
+					media
+				});
+			}
+		});
+	}
+	function extractAtomicImageMedia(imageProp) {
+		const image = _elementor_editor_props.imagePropTypeUtil.extract(imageProp);
+		if (!image) return null;
+		const src = _elementor_editor_props.imageSrcPropTypeUtil.extract(image.src);
+		if (!src) return null;
+		const id = _elementor_editor_props.imageAttachmentIdPropType.extract(src.id) ?? void 0;
+		const url = _elementor_editor_props.urlPropTypeUtil.extract(src.url) ?? void 0;
+		if (!id && !url) return null;
+		return {
+			id,
+			url,
+			alt: _elementor_editor_props.stringPropTypeUtil.extract(src.alt) ?? void 0,
+			size: _elementor_editor_props.stringPropTypeUtil.extract(image.size) ?? void 0
+		};
+	}
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/utils/atomic-background-image-sources.ts
+	function walkAtomicBackgroundImageSources(tree, visit) {
+		walkElements(tree, (node) => {
+			const styles = (0, _elementor_editor_elements.getElementStyles)(node.id);
+			if (!styles) return;
+			for (const media of extractBackgroundImageMedia(styles)) visit({
+				node,
+				media
+			});
+		});
+	}
+	function extractBackgroundImageMedia(styles) {
+		const sources = [];
+		for (const style of Object.values(styles)) for (const variant of style.variants) {
+			const background = _elementor_editor_props.backgroundPropTypeUtil.extract(variant.props.background);
+			const overlays = _elementor_editor_props.backgroundOverlayPropTypeUtil.extract(background?.["background-overlay"]) ?? [];
+			for (const overlay of overlays) {
+				const media = extractAtomicImageMedia(_elementor_editor_props.backgroundImageOverlayPropTypeUtil.extract(overlay)?.image);
+				if (media) sources.push(media);
+			}
+		}
+		return sources;
+	}
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/utils/background-image-sources.ts
+	var BACKGROUND_IMAGE_SETTING_KEYS = [
+		"background_image",
+		"background_hover_image",
+		"background_overlay_image",
+		"background_overlay_hover_image",
+		"_background_image",
+		"_background_hover_image"
+	];
+	function walkBackgroundImageSources(tree, visit) {
+		walkElements(tree, (node) => {
+			for (const key of BACKGROUND_IMAGE_SETTING_KEYS) {
+				const media = node.settings[key];
+				if (media?.id || media?.url) visit({
+					node,
+					media
+				});
+			}
+		});
+	}
+
+//#endregion
 //#region packages/packages/core/editor-audits/src/utils/image-like-sources.ts
 	var IMAGE_LIKE_WIDGETS = /* @__PURE__ */ new Set([
 		"image",
@@ -261,13 +449,6 @@ react = __toESM(react);
 		"gallery",
 		"image-gallery"
 	]);
-	function hasPageImages(tree) {
-		let found = false;
-		walkImageLikeSources(tree, ({ media }) => {
-			if (media.id || media.url) found = true;
-		});
-		return found;
-	}
 	function walkImageLikeSources(tree, visit) {
 		walkElements(tree, (node) => {
 			if (node.elType !== "widget") return;
@@ -281,22 +462,47 @@ react = __toESM(react);
 	function collectMediaFromNode(node) {
 		const sources = [];
 		const image = node.settings.image;
-		if (image?.id || image?.url) sources.push(image);
+		if (image?.id || image?.url) sources.push({
+			...image,
+			size: node.settings.image_size
+		});
 		const gallery = node.settings.carousel ?? node.settings.gallery ?? node.settings.wp_gallery;
 		if (Array.isArray(gallery)) {
-			for (const item of gallery) if (item?.id || item?.url) sources.push(item);
+			const gallerySize = node.settings.thumbnail_size;
+			for (const item of gallery) if (item?.id || item?.url) sources.push({
+				...item,
+				size: gallerySize
+			});
 		}
 		return sources;
 	}
 
 //#endregion
+//#region packages/packages/core/editor-audits/src/utils/all-image-sources.ts
+	function walkAllImageSources(tree, visit) {
+		walkImageLikeSources(tree, visit);
+		walkBackgroundImageSources(tree, visit);
+		walkAtomicImageSources(tree, visit);
+		walkAtomicBackgroundImageSources(tree, visit);
+	}
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/utils/image-size-key.ts
+	function buildImageSizeKey({ id, size }) {
+		return `${id}:${size || "full"}`;
+	}
+
+//#endregion
 //#region packages/packages/core/editor-audits/src/utils/page-attachments.ts
-	function extractAttachmentIds(tree) {
-		const ids = /* @__PURE__ */ new Set();
-		walkImageLikeSources(tree, ({ media }) => {
-			if (media.id) ids.add(media.id);
+	function extractImageSizeRequests(tree) {
+		const keys = /* @__PURE__ */ new Set();
+		walkAllImageSources(tree, ({ media }) => {
+			if (media.id) keys.add(buildImageSizeKey({
+				id: media.id,
+				size: media.size
+			}));
 		});
-		return Array.from(ids).sort((a, b) => a - b);
+		return Array.from(keys).sort();
 	}
 
 //#endregion
@@ -380,16 +586,20 @@ react = __toESM(react);
 //#endregion
 //#region packages/packages/core/editor-audits/src/runner.ts
 	async function runPageAudit(documentId) {
-		const tree = buildSnapshotTree((0, _elementor_editor_elements.getElements)());
-		const pageContext = await fetchPageContext(documentId, extractAttachmentIds(tree));
+		if (documentId !== (0, _elementor_editor_elements.getHostDocumentId)()) throw new Error("runPageAudit: documentId must match the host document.");
+		const tree = buildSnapshotTree((0, _elementor_editor_elements.getHostDocumentElements)());
+		const pageContext = await fetchPageContext(documentId, extractImageSizeRequests(tree));
+		const elements = {
+			documentId,
+			tree
+		};
+		const [kit, renderedHtml] = await Promise.all([readKitSnapshot(pageContext.kit_id), fetchRenderedHtml(pageContext.frontend_url)]);
 		const ctx = {
 			documentId,
-			elements: {
-				documentId,
-				tree
-			},
+			elements,
 			pageContext,
-			kit: await readKitSnapshot(pageContext.kit_id)
+			kit,
+			renderedHtml
 		};
 		const registered = getRegisteredAudits();
 		return computeReport(documentId, await Promise.all(registered.map(async (audit) => {
@@ -412,54 +622,6 @@ react = __toESM(react);
 	}
 
 //#endregion
-//#region packages/packages/core/editor-audits/src/store/slice.ts
-	var initialState = {
-		status: "idle",
-		report: null,
-		error: null
-	};
-	var slice = (0, _elementor_store.__createSlice)({
-		name: "audits",
-		initialState,
-		reducers: {
-			runStarted(state) {
-				state.status = "loading";
-				state.error = null;
-			},
-			runSucceeded(state, action) {
-				state.status = "ready";
-				state.report = action.payload;
-			},
-			runFailed(state, action) {
-				state.status = "error";
-				state.error = action.payload;
-			},
-			reportRestored(state, action) {
-				state.status = "ready";
-				state.report = action.payload;
-				state.error = null;
-			},
-			reportCleared(state) {
-				state.status = "idle";
-				state.report = null;
-				state.error = null;
-			}
-		}
-	});
-
-//#endregion
-//#region packages/packages/core/editor-audits/src/store/selectors.ts
-	function selectStatus(state) {
-		return state.audits.status;
-	}
-	function selectReport(state) {
-		return state.audits.report;
-	}
-	function selectError(state) {
-		return state.audits.error;
-	}
-
-//#endregion
 //#region packages/packages/core/editor-audits/src/utils/report-storage.ts
 	function getStorageKey(documentId) {
 		return `${REPORT_STORAGE_KEY_PREFIX}/${documentId}`;
@@ -477,8 +639,9 @@ react = __toESM(react);
 		const status = (0, _elementor_store.__useSelector)((state) => selectStatus(state));
 		const report = (0, _elementor_store.__useSelector)((state) => selectReport(state));
 		const error = (0, _elementor_store.__useSelector)((state) => selectError(state));
+		const isStale = (0, _elementor_store.__useSelector)((state) => selectIsStale(state));
 		const dispatch = (0, _elementor_store.__useDispatch)();
-		const documentId = (0, _elementor_editor_elements.getCurrentDocumentId)() ?? 0;
+		const documentId = (0, _elementor_editor_elements.getHostDocumentId)() ?? 0;
 		(0, react.useEffect)(() => {
 			if (!documentId || report?.documentId === documentId) return;
 			const persisted = getPersistedReport(documentId);
@@ -496,6 +659,10 @@ react = __toESM(react);
 				dispatch(slice.actions.runSucceeded(nextReport));
 				persistReport(documentIdToRun, nextReport);
 			} catch (e) {
+				if (e instanceof SessionExpiredError) {
+					dispatch(slice.actions.runAborted());
+					return;
+				}
 				dispatch(slice.actions.runFailed(e instanceof Error ? e.message : "Unknown error"));
 			}
 		};
@@ -503,6 +670,7 @@ react = __toESM(react);
 			status,
 			report,
 			error,
+			isStale,
 			run
 		};
 	}
@@ -531,6 +699,7 @@ react = __toESM(react);
 		const [feedbackText, setFeedbackText] = (0, react.useState)("");
 		const [isSubmitting, setIsSubmitting] = (0, react.useState)(false);
 		const { dispatchEvent: trackEvent = (...args) => void 0 } = (0, _elementor_events.useMixpanel)();
+		const panelZIndex = (0, _elementor_editor_floating_panels.useFloatingPanelZIndex)(AUDIT_PANEL_ID);
 		if (!(0, _elementor_editor_v1_adapters.isExperimentActive)("in_editor_feedback")) return null;
 		const connected = isUserConnected();
 		const connectUrl = window.elementor?.config?.user?.top_bar?.connect_url;
@@ -576,7 +745,8 @@ react = __toESM(react);
 		};
 		return /* @__PURE__ */ react.createElement(react.Fragment, null, /* @__PURE__ */ react.createElement(_elementor_ui.Tooltip, {
 			title: triggerLabel,
-			placement: "top"
+			placement: "top",
+			PopperProps: { sx: { zIndex: panelZIndex } }
 		}, /* @__PURE__ */ react.createElement(_elementor_ui.IconButton, {
 			size: "small",
 			"aria-label": triggerLabel,
@@ -682,10 +852,33 @@ react = __toESM(react);
 	}
 
 //#endregion
+//#region packages/packages/core/editor-audits/src/hooks/use-single-expanded-card.ts
+	function useSingleExpandedCard(initialId = null) {
+		const [expandedId, setExpandedId] = (0, react.useState)(initialId);
+		const toggle = (id) => {
+			setExpandedId((current) => current === id ? null : id);
+		};
+		return {
+			expandedId,
+			toggle
+		};
+	}
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/components/category-icons.ts
+	var CATEGORY_ICONS = {
+		"best-practices": _elementor_icons.Settings2Icon,
+		seo: _elementor_icons.FileSearchIcon,
+		accessibility: _elementor_icons.ElementorAccessibilityIcon,
+		performance: _elementor_icons.BoltIcon,
+		compliance: _elementor_icons.ShieldCheckIcon
+	};
+
+//#endregion
 //#region packages/packages/core/editor-audits/src/components/status-section.tsx
 	function StatusSection({ label, count, color = "default", defaultExpanded = false, children }) {
 		const [expanded, setExpanded] = (0, react.useState)(defaultExpanded);
-		if (count === 0) return null;
+		if (react.Children.count(children) === 0) return null;
 		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: { paddingBlock: 1 } }, /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
 			sx: {
 				display: "flex",
@@ -783,7 +976,7 @@ react = __toESM(react);
 
 //#endregion
 //#region packages/packages/core/editor-audits/src/components/fix-violation-with-angie.tsx
-	function FixViolationWithAngie({ prompt }) {
+	function FixViolationWithAngie({ prompt, panelZIndex, variant = "icon" }) {
 		const label = (0, _wordpress_i18n.__)("Fix with Angie", "elementor");
 		const href = `#angie-prompt=${encodeURIComponent(prompt)}`;
 		const handleClick = (event) => {
@@ -798,8 +991,23 @@ react = __toESM(react);
 				prompt
 			} }));
 		};
-		return /* @__PURE__ */ react.createElement(_elementor_ui.Tooltip, { title: label }, /* @__PURE__ */ react.createElement(_elementor_ui.IconButton, {
-			className: "violation-hover-icon",
+		if (variant === "button") return /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
+			component: "a",
+			href,
+			size: "small",
+			color: "secondary",
+			variant: "outlined",
+			startIcon: /* @__PURE__ */ react.createElement(_elementor_icons.AngieIcon, {
+				fontSize: "tiny",
+				"aria-hidden": true
+			}),
+			onClick: handleClick
+		}, label);
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Tooltip, {
+			title: label,
+			placement: "top",
+			PopperProps: { sx: { zIndex: panelZIndex } }
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.IconButton, {
 			component: "a",
 			href,
 			size: "small",
@@ -820,16 +1028,39 @@ react = __toESM(react);
 			color: "warning"
 		},
 		info: {
-			Icon: _elementor_icons.InfoCircleIcon,
+			Icon: _elementor_icons.BulbIcon,
 			color: "info"
 		}
 	};
+	var INFO_ICON_VERTICAL_NUDGE = "translateY(-2px)";
 	function SeverityIcon({ severity }) {
 		const { Icon, color } = SEVERITY_CONFIG[severity];
+		const sx = "info" === severity ? { transform: INFO_ICON_VERTICAL_NUDGE } : void 0;
 		return /* @__PURE__ */ react.createElement(Icon, {
 			fontSize: "small",
-			color
+			color,
+			sx
 		});
+	}
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/components/violation-cta-button.tsx
+	function ViolationCtaButton({ ctaLabel, externalUrl, variant = "outlined", withIcon = false }) {
+		const handleClick = (event) => {
+			event.stopPropagation();
+			event.preventDefault();
+			window.open(externalUrl, "_blank", "noopener");
+		};
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
+			variant,
+			color: "secondary",
+			size: "small",
+			startIcon: withIcon ? /* @__PURE__ */ react.createElement(_elementor_icons.WandIcon, {
+				fontSize: "tiny",
+				"aria-hidden": true
+			}) : void 0,
+			onClick: handleClick
+		}, ctaLabel);
 	}
 
 //#endregion
@@ -853,7 +1084,7 @@ react = __toESM(react);
 			fontSize: "inherit",
 			"aria-hidden": true
 		});
-		return /* @__PURE__ */ react.createElement(_elementor_icons.ShieldCheckIcon, {
+		return /* @__PURE__ */ react.createElement(_elementor_icons.SettingsIcon, {
 			fontSize: "inherit",
 			"aria-hidden": true
 		});
@@ -878,19 +1109,52 @@ react = __toESM(react);
 		})));
 	}
 	function StatusIndicator({ audit, violations }) {
-		if (violations) return /* @__PURE__ */ react.createElement(react.Fragment, null, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
+		if (violations) return /* @__PURE__ */ react.createElement(react.Fragment, null, /* @__PURE__ */ react.createElement(SeverityIcon, { severity: audit.severity }), isScoredAudit(audit) && /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
 			variant: "caption",
 			color: "text.secondary",
 			fontWeight: "bold"
-		}, violations.length), /* @__PURE__ */ react.createElement(SeverityIcon, { severity: audit.severity }));
+		}, violations.length));
 		return /* @__PURE__ */ react.createElement(_elementor_icons.CheckIcon, {
 			fontSize: "small",
 			color: "success"
 		});
 	}
-	function ViolationRow({ audit, skipReason, violations }) {
-		const [expanded, setExpanded] = (0, react.useState)(false);
-		const toggleExpanded = () => setExpanded((value) => !value);
+	function GuidanceAction({ violation, sharedAngiePrompt, panelZIndex }) {
+		const hasPrimaryCta = !!(violation.ctaLabel && violation.externalUrl);
+		if (!hasPrimaryCta && !sharedAngiePrompt) return null;
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+			display: "flex",
+			alignItems: "center",
+			gap: 1,
+			mt: 1
+		}, hasPrimaryCta && /* @__PURE__ */ react.createElement(ViolationCtaButton, {
+			ctaLabel: violation.ctaLabel,
+			externalUrl: violation.externalUrl,
+			withIcon: true
+		}), hasPrimaryCta && violation.secondaryCtaLabel && violation.secondaryCtaUrl && /* @__PURE__ */ react.createElement(ViolationCtaButton, {
+			ctaLabel: violation.secondaryCtaLabel,
+			externalUrl: violation.secondaryCtaUrl,
+			variant: "text"
+		}), sharedAngiePrompt && /* @__PURE__ */ react.createElement(FixViolationWithAngie, {
+			prompt: sharedAngiePrompt,
+			panelZIndex,
+			variant: "button"
+		}));
+	}
+	function getSharedAngiePrompt(violations) {
+		if (!violations || violations.length < 2) return;
+		const [first, ...rest] = violations;
+		if (!first.angieFix || !first.angiePrompt) return;
+		return rest.every((violation) => violation.angieFix && violation.angiePrompt === first.angiePrompt) ? first.angiePrompt : void 0;
+	}
+	function ViolationRow({ audit, expanded, onToggleExpand, skipReason, violations }) {
+		const primaryViolation = violations?.[0];
+		const isGuidanceFocusable = !!primaryViolation;
+		const panelZIndex = (0, _elementor_editor_floating_panels.useFloatingPanelZIndex)(AUDIT_PANEL_ID);
+		const sharedAngiePrompt = getSharedAngiePrompt(violations);
+		const handleGuidanceClick = () => {
+			if (isGuidanceFocusable && primaryViolation) focusViolation(primaryViolation);
+		};
 		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
 			borderBottom: 1,
 			borderColor: "divider",
@@ -908,9 +1172,10 @@ react = __toESM(react);
 				gap: .5,
 				minWidth: 0
 			},
-			onClick: toggleExpanded
+			onClick: onToggleExpand
 		}, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
-			variant: "body2",
+			variant: "subtitle2",
+			color: "text.secondary",
 			sx: { flex: 1 }
 		}, audit.title), !skipReason && /* @__PURE__ */ react.createElement(StatusIndicator, {
 			audit,
@@ -918,62 +1183,47 @@ react = __toESM(react);
 		})), skipReason && /* @__PURE__ */ react.createElement(SkipReasonTooltip, { reason: skipReason }), /* @__PURE__ */ react.createElement(_elementor_ui.IconButton, {
 			size: "small",
 			"aria-label": expanded ? (0, _wordpress_i18n.__)("Collapse", "elementor") : (0, _wordpress_i18n.__)("Expand", "elementor"),
-			onClick: toggleExpanded
+			onClick: onToggleExpand
 		}, /* @__PURE__ */ react.createElement(_elementor_icons.ChevronDownIcon, {
 			fontSize: "small",
 			sx: {
 				transform: expanded ? "rotate(180deg)" : void 0,
 				transition: "transform .2s"
 			}
-		}))), /* @__PURE__ */ react.createElement(_elementor_ui.Collapse, { in: expanded }, /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
-			display: "flex",
-			flexDirection: "column",
-			gap: 1,
-			paddingBlock: 1
-		} }, /* @__PURE__ */ react.createElement(_elementor_ui.Alert, {
+		}))), /* @__PURE__ */ react.createElement(_elementor_ui.Collapse, { in: expanded }, /* @__PURE__ */ react.createElement(_elementor_ui.Box, { paddingBlock: 1 }, /* @__PURE__ */ react.createElement(_elementor_ui.Tooltip, {
+			title: audit.fixHint,
+			placement: "top"
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.Alert, {
 			severity: "secondary",
-			sx: { p: 1 },
-			icon: /* @__PURE__ */ react.createElement(_elementor_icons.AlertCircleIcon, {
-				fontSize: "small",
-				color: "secondary",
-				"aria-hidden": true
-			})
-		}, /* @__PURE__ */ react.createElement(_elementor_ui.AlertTitle, null, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
-			variant: "caption",
-			component: "p",
-			color: "text.primary",
-			fontWeight: "bold"
-		}, (0, _wordpress_i18n.__)("What's the issue", "elementor"))), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
-			variant: "caption",
-			component: "p",
-			color: "text.secondary"
-		}, audit.description)), /* @__PURE__ */ react.createElement(_elementor_ui.Alert, {
-			severity: "info",
-			sx: { p: 1 },
-			icon: /* @__PURE__ */ react.createElement(_elementor_icons.BulbIcon, {
-				fontSize: "small",
-				color: "info",
-				"aria-hidden": true
-			})
-		}, /* @__PURE__ */ react.createElement(_elementor_ui.AlertTitle, null, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
-			variant: "caption",
-			component: "p",
-			color: "text.primary",
-			fontWeight: "bold"
-		}, (0, _wordpress_i18n.__)("How to resolve", "elementor"))), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
-			variant: "caption",
-			component: "p",
-			color: "text.secondary"
-		}, audit.fixHint))), violations && violations.length > 0 && /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
-			role: "list",
 			sx: {
-				paddingBlockEnd: 1,
-				paddingInlineStart: 2
-			}
+				p: 1,
+				cursor: isGuidanceFocusable ? "pointer" : void 0
+			},
+			icon: /* @__PURE__ */ react.createElement(_elementor_icons.InfoCircleIcon, {
+				fontSize: "small",
+				"aria-hidden": true
+			}),
+			role: isGuidanceFocusable ? "button" : void 0,
+			tabIndex: isGuidanceFocusable ? 0 : void 0,
+			onClick: isGuidanceFocusable ? handleGuidanceClick : void 0,
+			onKeyDown: isGuidanceFocusable ? onKeyboardClick(handleGuidanceClick) : void 0
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
+			variant: "caption",
+			component: "p",
+			color: "text.secondary"
+		}, audit.description), primaryViolation && /* @__PURE__ */ react.createElement(GuidanceAction, {
+			violation: primaryViolation,
+			sharedAngiePrompt,
+			panelZIndex
+		})))), violations && violations.length > 0 && /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+			role: "list",
+			sx: { paddingBlockEnd: 1 }
 		}, violations.map((violation, idx) => {
 			const widgetIcon = violation.elementId ? (0, _elementor_editor_elements.getElementIcon)(violation.elementId) : null;
 			const elementTitle = violation.elementId ? (0, _elementor_editor_elements.getElementTitle)(violation.elementId) : null;
-			const rowLabel = elementTitle ? `${elementTitle} - ${violation.label}` : violation.label;
+			const displayLabel = elementTitle ?? violation.label;
+			const angiePromptContext = elementTitle ? `${elementTitle} - ${violation.label}` : violation.label;
+			const showsOwnFixAction = !!violation.angieFix && !sharedAngiePrompt;
 			return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
 				key: idx,
 				role: "button",
@@ -985,84 +1235,37 @@ react = __toESM(react);
 					alignItems: "center",
 					gap: 1,
 					paddingBlock: .5,
-					paddingInline: 2,
+					paddingInline: 1,
 					borderRadius: 1,
 					cursor: "pointer",
-					"& .violation-hover-icon": {
-						opacity: 0,
-						transition: "opacity .15s"
-					},
 					"&:hover": { bgcolor: "action.hover" },
-					"&:hover .violation-hover-icon, &:focus-visible .violation-hover-icon": { opacity: 1 }
+					"&:hover .violation-row-fix-action, &:focus-visible .violation-row-fix-action": { opacity: 1 }
 				}
 			}, /* @__PURE__ */ react.createElement(ViolationIcon, {
 				violation,
 				widgetIcon
-			}), /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: { flex: 1 } }, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, { variant: "caption" }, rowLabel), violation.detail && /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
+			}), /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: { flex: 1 } }, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, { variant: "caption" }, displayLabel), violation.detail && /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
 				variant: "caption",
 				color: "text.secondary"
-			}, violation.detail)), violation.angieFix && /* @__PURE__ */ react.createElement(FixViolationWithAngie, { prompt: buildAngiePrompt(rowLabel) }), /* @__PURE__ */ react.createElement(_elementor_icons.EyeIcon, {
-				className: "violation-hover-icon",
-				fontSize: "tiny",
-				"aria-hidden": true
-			}));
+			}, violation.detail)), showsOwnFixAction && /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+				className: "violation-row-fix-action",
+				sx: {
+					opacity: 0,
+					transition: "opacity .15s"
+				}
+			}, /* @__PURE__ */ react.createElement(FixViolationWithAngie, {
+				prompt: violation.angiePrompt ?? buildAngiePrompt(angiePromptContext),
+				panelZIndex
+			})));
 		}))));
 	}
-
-//#endregion
-//#region packages/packages/core/editor-audits/src/components/pages/all-audits-page.tsx
-	function AllAuditsPage({ initialExpandedStatus, onBack, report }) {
-		const { failed, passed, skipped, totalViolations } = partitionAuditResults(report);
-		const expandFail = !initialExpandedStatus || initialExpandedStatus === "fail";
-		const expandPass = initialExpandedStatus === "pass";
-		const expandSkipped = initialExpandedStatus === "skipped";
-		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, { key: initialExpandedStatus ?? "default" }, /* @__PURE__ */ react.createElement(SubpageHeader, {
-			title: (0, _wordpress_i18n.__)("All audits", "elementor"),
-			onBack
-		}), /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: { p: 1 } }, /* @__PURE__ */ react.createElement(StatusSection, {
-			label: auditStatusLabel("fail"),
-			count: totalViolations,
-			color: auditStatusColor("fail"),
-			defaultExpanded: expandFail
-		}, failed.map((r) => /* @__PURE__ */ react.createElement(ViolationRow, {
-			key: r.audit.id,
-			audit: r.audit,
-			violations: r.result.violations
-		}))), /* @__PURE__ */ react.createElement(StatusSection, {
-			label: auditStatusLabel("pass"),
-			count: passed.length,
-			color: auditStatusColor("pass"),
-			defaultExpanded: expandPass
-		}, passed.map((r) => /* @__PURE__ */ react.createElement(ViolationRow, {
-			key: r.audit.id,
-			audit: r.audit
-		}))), /* @__PURE__ */ react.createElement(StatusSection, {
-			label: auditStatusLabel("skipped"),
-			count: skipped.length,
-			color: auditStatusColor("skipped"),
-			defaultExpanded: expandSkipped
-		}, skipped.map((r) => /* @__PURE__ */ react.createElement(ViolationRow, {
-			key: r.audit.id,
-			audit: r.audit,
-			skipReason: r.result.reason
-		})))));
-	}
-
-//#endregion
-//#region packages/packages/core/editor-audits/src/components/category-icons.ts
-	var CATEGORY_ICONS = {
-		"best-practices": _elementor_icons.Settings2Icon,
-		seo: _elementor_icons.FilterIcon,
-		accessibility: _elementor_icons.ElementorAccessibilityIcon,
-		performance: _elementor_icons.ShieldHalfFilledIcon,
-		compliance: _elementor_icons.HeartHandShakeIcon
-	};
 
 //#endregion
 //#region packages/packages/core/editor-audits/src/components/pages/category-page.tsx
 	function CategoryPage({ category, report, onBack }) {
 		const Icon = CATEGORY_ICONS[category];
-		const { failed, passed, totalViolations } = partitionAuditResults(report, { category });
+		const { failed, passed, skipped, totalViolations } = partitionAuditResults(report, { category });
+		const { expandedId, toggle } = useSingleExpandedCard();
 		return /* @__PURE__ */ react.createElement(react.Fragment, null, /* @__PURE__ */ react.createElement(SubpageHeader, {
 			title: CATEGORY_LABELS[category],
 			onBack,
@@ -1079,14 +1282,28 @@ react = __toESM(react);
 		}, failed.map((r) => /* @__PURE__ */ react.createElement(ViolationRow, {
 			key: r.audit.id,
 			audit: r.audit,
-			violations: r.result.violations
+			violations: r.result.violations,
+			expanded: expandedId === r.audit.id,
+			onToggleExpand: () => toggle(r.audit.id)
 		}))), /* @__PURE__ */ react.createElement(StatusSection, {
 			label: (0, _wordpress_i18n.__)("Passed audits", "elementor"),
 			count: passed.length,
 			color: "success"
 		}, passed.map((r) => /* @__PURE__ */ react.createElement(ViolationRow, {
 			key: r.audit.id,
-			audit: r.audit
+			audit: r.audit,
+			expanded: expandedId === r.audit.id,
+			onToggleExpand: () => toggle(r.audit.id)
+		}))), /* @__PURE__ */ react.createElement(StatusSection, {
+			label: (0, _wordpress_i18n.__)("Skipped audits", "elementor"),
+			count: skipped.length,
+			color: "default"
+		}, skipped.map((r) => /* @__PURE__ */ react.createElement(ViolationRow, {
+			key: r.audit.id,
+			audit: r.audit,
+			skipReason: r.result.reason,
+			expanded: expandedId === r.audit.id,
+			onToggleExpand: () => toggle(r.audit.id)
 		})))));
 	}
 
@@ -1106,6 +1323,7 @@ react = __toESM(react);
 		for (const { audit, result } of report.auditResults) {
 			if (result.status !== "fail") continue;
 			if (category && !audit.categories.includes(category)) continue;
+			if (!isScoredAudit(audit)) continue;
 			counts[audit.severity] += result.violations.length;
 		}
 		return counts;
@@ -1114,14 +1332,7 @@ react = __toESM(react);
 		switch (severity) {
 			case "error": return (0, _wordpress_i18n.__)("Errors", "elementor");
 			case "warning": return (0, _wordpress_i18n.__)("Warnings", "elementor");
-			case "info": return (0, _wordpress_i18n.__)("Info", "elementor");
-		}
-	}
-	function severityRemainingCountLabel(severity, count) {
-		switch (severity) {
-			case "error": return (0, _wordpress_i18n.sprintf)((0, _wordpress_i18n.__)("%d errors", "elementor"), count);
-			case "warning": return (0, _wordpress_i18n.sprintf)((0, _wordpress_i18n.__)("%d warnings", "elementor"), count);
-			case "info": return (0, _wordpress_i18n.sprintf)((0, _wordpress_i18n.__)("%d info", "elementor"), count);
+			case "info": return (0, _wordpress_i18n.__)("Suggestions", "elementor");
 		}
 	}
 
@@ -1206,6 +1417,13 @@ react = __toESM(react);
 			getCtaUrl: firstFailExternalUrl
 		},
 		{
+			auditId: "audits/scan-for-cookies",
+			icon: _elementor_icons.ElementorCookieIcon,
+			ctaLabel: (0, _wordpress_i18n.__)("Scan", "elementor"),
+			formatSubtitle: (run) => run.result.status === "fail" ? (0, _wordpress_i18n.__)("Scan this page for cookies", "elementor") : null,
+			getCtaUrl: firstFailExternalUrl
+		},
+		{
 			auditId: "audits/images-too-large",
 			icon: _elementor_icons.ShieldHalfFilledIcon,
 			ctaLabel: (0, _wordpress_i18n.__)("Optimize all", "elementor"),
@@ -1278,10 +1496,10 @@ react = __toESM(react);
 			}];
 		});
 		if (cards.length === 0) return null;
-		return /* @__PURE__ */ react.createElement(react.Fragment, null, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
+		return /* @__PURE__ */ react.createElement(react.Fragment, null, /* @__PURE__ */ react.createElement(_elementor_ui.Divider, null), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
 			variant: "subtitle1",
 			fontWeight: "bold"
-		}, (0, _wordpress_i18n.__)("Quick wins", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
+		}, (0, _wordpress_i18n.__)("Quick actions", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
 			display: "flex",
 			flexDirection: "column",
 			gap: 1
@@ -1299,394 +1517,147 @@ react = __toESM(react);
 	}
 
 //#endregion
-//#region packages/packages/core/editor-audits/src/components/pages/issues-page.tsx
-	function IssuesPage({ report, onCategoryClick, onAllAuditsClick }) {
-		const populatedCategories = getPopulatedCategories(report.categories, ALL_CATEGORIES);
-		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
-			display: "flex",
-			flexDirection: "column",
-			gap: 4,
-			p: 2
-		} }, /* @__PURE__ */ react.createElement(_elementor_ui.Link, {
-			component: "button",
-			underline: "none",
-			color: "inherit",
-			onClick: onAllAuditsClick,
-			sx: { textAlign: "start" }
-		}, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
-			variant: "subtitle1",
-			component: "h2"
-		}, (0, _wordpress_i18n.__)("All issues", "elementor"))), /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
-			display: "flex",
-			flexDirection: "column",
-			gap: 1
-		} }, populatedCategories.map((category) => /* @__PURE__ */ react.createElement(IssuesCategoryRow, {
-			key: category,
-			category,
-			label: CATEGORY_LABELS[category],
-			counts: countSeverities(report, category),
-			onClick: () => onCategoryClick(category)
-		}))), /* @__PURE__ */ react.createElement(Promotions, { report }));
-	}
-
-//#endregion
-//#region packages/packages/core/editor-audits/src/utils/score-thresholds.ts
-	var GOOD_THRESHOLD = 90;
-	var OK_THRESHOLD = 50;
-	function getScoreTier(score) {
-		if (score >= 90) return {
-			color: "success",
-			label: (0, _wordpress_i18n.__)("Good", "elementor")
-		};
-		if (score >= 50) return {
-			color: "warning",
-			label: (0, _wordpress_i18n.__)("Needs work", "elementor")
-		};
-		return {
-			color: "error",
-			label: (0, _wordpress_i18n.__)("At risk", "elementor")
-		};
-	}
-
-//#endregion
-//#region packages/packages/core/editor-audits/src/components/count-summary-circle.tsx
-	var COUNT_SUMMARY_CIRCLE_SIZE = 64;
-	var COUNT_SUMMARY_BORDER_WIDTH = 4;
-	function chipBorderColor(theme, color) {
-		if (color === "default" || !color) return theme.palette.text.secondary;
-		return theme.palette[color].main;
-	}
-	function CountSummaryCircle({ ariaLabel, color, count, label, onClick }) {
+//#region packages/packages/core/editor-audits/src/components/severity-summary-cards.tsx
+	function SeveritySummaryCards({ report }) {
+		const counts = countSeverities(report);
 		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
-			"aria-label": ariaLabel,
-			component: "button",
-			onClick,
-			type: "button",
-			sx: {
-				alignItems: "center",
-				background: "none",
-				border: "none",
-				cursor: "pointer",
-				display: "flex",
-				flex: 1,
-				flexDirection: "column",
-				gap: .5,
-				padding: 0
-			}
-		}, /* @__PURE__ */ react.createElement(_elementor_ui.Chip, {
-			color,
-			label: count,
-			size: "small",
-			variant: "standard",
-			sx: (theme) => ({
-				border: `${COUNT_SUMMARY_BORDER_WIDTH}px solid ${chipBorderColor(theme, color)}`,
-				borderRadius: "50%",
-				height: COUNT_SUMMARY_CIRCLE_SIZE,
-				maxWidth: COUNT_SUMMARY_CIRCLE_SIZE,
-				width: COUNT_SUMMARY_CIRCLE_SIZE,
-				"& .MuiChip-label": {
-					fontSize: theme.typography.body2.fontSize,
-					fontWeight: 700,
-					lineHeight: 1,
-					padding: 0
-				}
-			})
-		}), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
-			color: "text.secondary",
-			sx: { textAlign: "center" },
-			variant: "caption"
-		}, label));
-	}
-
-//#endregion
-//#region packages/packages/core/editor-audits/src/components/score-bar.tsx
-	function ScoreBar({ label, score, onClick }) {
-		const isRtl = "rtl" === (0, _elementor_ui.useTheme)().direction;
-		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
-			role: onClick ? "button" : void 0,
-			tabIndex: onClick ? 0 : void 0,
-			onClick,
-			onKeyDown: onClick ? onKeyboardClick(onClick) : void 0,
-			sx: {
-				display: "flex",
-				alignItems: "center",
-				gap: 1,
-				cursor: onClick ? "pointer" : "default",
-				outline: "none",
-				"&:focus-visible": {
-					outline: "2px solid",
-					outlineColor: "primary.main",
-					borderRadius: 1
-				},
-				py: .5
-			}
-		}, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
-			variant: "body2",
-			sx: { minWidth: 96 }
-		}, label), /* @__PURE__ */ react.createElement(_elementor_ui.LinearProgress, {
-			variant: "determinate",
-			value: score,
-			color: getScoreTier(score).color,
-			sx: {
-				flex: 1,
-				height: 6,
-				borderRadius: 4,
-				bgcolor: "action.disabledBackground"
-			}
-		}), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
-			variant: "body2",
-			color: "text.primary",
-			sx: {
-				minWidth: 24,
-				textAlign: "right",
-				fontWeight: 900
-			}
-		}, score), onClick && /* @__PURE__ */ react.createElement(_elementor_ui.Rotate, { in: isRtl }, /* @__PURE__ */ react.createElement(_elementor_icons.ChevronRightIcon, {
-			fontSize: "small",
-			color: "action"
+			display: "flex",
+			gap: 1.5
+		}, ALL_SEVERITIES.map((severity) => /* @__PURE__ */ react.createElement(SeverityCard, {
+			key: severity,
+			severity,
+			count: counts[severity]
 		})));
 	}
-
-//#endregion
-//#region packages/packages/core/editor-audits/src/components/score-circle.tsx
-	var SCORE_CIRCLE_SIZE = 88;
-	var SCORE_CIRCLE_THICKNESS = 3;
-	function ScoreCircle({ color, score }) {
-		const progressColor = color ?? getScoreTier(score).color;
+	function SeverityCard({ severity, count }) {
 		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
-			role: "progressbar",
-			"aria-valuenow": score,
-			"aria-valuemin": 0,
-			"aria-valuemax": 100,
-			sx: {
-				position: "relative",
-				display: "inline-flex"
-			}
-		}, /* @__PURE__ */ react.createElement(_elementor_ui.CircularProgress, {
-			variant: "determinate",
-			value: 100,
-			size: SCORE_CIRCLE_SIZE,
-			thickness: SCORE_CIRCLE_THICKNESS,
-			sx: { color: "action.disabledBackground" }
-		}), /* @__PURE__ */ react.createElement(_elementor_ui.CircularProgress, {
-			variant: "determinate",
-			value: score,
-			size: SCORE_CIRCLE_SIZE,
-			thickness: SCORE_CIRCLE_THICKNESS,
-			color: progressColor,
-			sx: {
-				position: "absolute",
-				left: 0
-			}
-		}), /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
-			position: "absolute",
-			inset: 0,
 			display: "flex",
-			alignItems: "center",
-			justifyContent: "center"
-		} }, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
-			variant: "h4",
-			component: "span",
-			color: "text.primary",
-			sx: {
-				fontWeight: 700,
-				lineHeight: 1
-			}
-		}, score)));
+			flex: 1,
+			flexDirection: "column",
+			gap: 1,
+			bgcolor: "action.hover",
+			borderRadius: 1.5,
+			px: 1.5,
+			py: 1
+		}, /* @__PURE__ */ react.createElement(SeverityIcon, { severity }), /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+			display: "flex",
+			flexDirection: "column"
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
+			variant: "h5",
+			fontWeight: 700,
+			component: "span"
+		}, count), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
+			variant: "caption",
+			color: "text.secondary"
+		}, severityPluralLabel(severity))));
 	}
 
 //#endregion
 //#region packages/packages/core/editor-audits/src/components/pages/overview-page.tsx
-	var STATUS_ARIA_LABELS = {
-		pass: (count) => (0, _wordpress_i18n.sprintf)((0, _wordpress_i18n.__)("%d passed audits, view all", "elementor"), count),
-		fail: (count) => (0, _wordpress_i18n.sprintf)((0, _wordpress_i18n.__)("%d failed audits, view all", "elementor"), count),
-		skipped: (count) => (0, _wordpress_i18n.sprintf)((0, _wordpress_i18n.__)("%d skipped audits, view all", "elementor"), count)
-	};
-	var STATUS_GROUPS = [
-		"fail",
-		"pass",
-		"skipped"
-	];
-	function OverviewPage({ onCategoryClick, onStatusClick, report }) {
-		const populatedCategories = getPopulatedCategories(report.categories, ALL_CATEGORIES);
-		const severityCounts = countSeverities(report);
-		const statusCounts = auditStatusDisplayCounts(report);
-		const overallScore = getScoreTier(report.overall);
-		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
+	function OverviewPage({ onCategoryClick, report }) {
+		const categoryRows = getPopulatedCategories(report.categories, ALL_CATEGORIES).map((category) => ({
+			category,
+			counts: countSeverities(report, category)
+		})).filter(({ counts }) => Object.values(counts).some((count) => count > 0));
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
 			display: "flex",
 			flexDirection: "column",
-			gap: 4,
+			gap: 3,
 			p: 2
-		} }, /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
-			display: "flex",
-			alignItems: "center",
-			gap: 2
-		} }, /* @__PURE__ */ react.createElement(ScoreCircle, {
-			color: overallScore.color,
-			score: report.overall
-		}), /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
+		}, /* @__PURE__ */ react.createElement(SeveritySummaryCards, { report }), /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
 			display: "flex",
 			flexDirection: "column",
-			gap: .5
-		} }, /* @__PURE__ */ react.createElement(_elementor_ui.Chip, {
-			label: overallScore.label,
-			color: overallScore.color,
-			variant: "standard",
-			size: "small",
-			sx: {
-				fontWeight: 600,
-				alignSelf: "flex-start"
-			}
-		}), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
-			variant: "body2",
-			color: "text.secondary"
-		}, (0, _wordpress_i18n.__)("Overall score", "elementor")))), /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
+			gap: 1
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
+			variant: "subtitle1",
+			component: "h2"
+		}, (0, _wordpress_i18n.__)("All issues", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
 			display: "flex",
 			flexDirection: "column",
-			gap: 2
-		} }, populatedCategories.map((category) => /* @__PURE__ */ react.createElement(ScoreBar, {
+			gap: 1
+		}, categoryRows.map(({ category, counts }) => /* @__PURE__ */ react.createElement(IssuesCategoryRow, {
 			key: category,
+			category,
 			label: CATEGORY_LABELS[category],
-			score: report.categories[category].score,
+			counts,
 			onClick: () => onCategoryClick(category)
-		}))), /* @__PURE__ */ react.createElement(_elementor_ui.Divider, null), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
-			variant: "subtitle1",
-			fontWeight: "bold"
-		}, (0, _wordpress_i18n.__)("Audit statuses", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
-			display: "flex",
-			justifyContent: "space-around",
-			gap: 2
-		} }, STATUS_GROUPS.map((status) => /* @__PURE__ */ react.createElement(CountSummaryCircle, {
-			key: status,
-			ariaLabel: STATUS_ARIA_LABELS[status](statusCounts[status]),
-			color: auditStatusColor(status),
-			count: statusCounts[status],
-			label: auditStatusLabel(status),
-			onClick: () => onStatusClick(status)
-		}))), /* @__PURE__ */ react.createElement(_elementor_ui.Divider, null), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
-			variant: "subtitle1",
-			fontWeight: "bold"
-		}, (0, _wordpress_i18n.__)("Remaining issues", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
-			component: "ul",
-			sx: {
-				display: "flex",
-				flexDirection: "column",
-				gap: 1,
-				listStyle: "none",
-				m: 0,
-				p: 0
-			}
-		}, ALL_SEVERITIES.map((severity) => {
-			const count = severityCounts[severity];
-			return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
-				"aria-label": severityRemainingCountLabel(severity, count),
-				component: "li",
-				key: severity,
-				sx: {
-					alignItems: "center",
-					display: "flex",
-					gap: .5
-				}
-			}, /* @__PURE__ */ react.createElement(SeverityIcon, { severity }), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
-				variant: "body2",
-				fontWeight: "bold"
-			}, count), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, { variant: "body2" }, severityPluralLabel(severity)));
-		})));
+		})))), /* @__PURE__ */ react.createElement(Promotions, { report }));
 	}
 
 //#endregion
 //#region packages/packages/core/editor-audits/src/components/report-shell.tsx
-	function activeTab(page) {
-		if (page === "overview") return "overview";
-		if (page === "issues") return "issues";
-		return page.backTo;
-	}
-	function isAllAuditsPage(page) {
-		return typeof page === "object" && "page" in page && page.page === "all-audits";
-	}
 	function isCategoryPage(page) {
 		return typeof page === "object" && "category" in page;
 	}
 	function ReportShell({ report }) {
 		const [activePage, setActivePage] = (0, react.useState)("overview");
-		const currentTab = activeTab(activePage);
-		const handleTabChange = (_, value) => {
-			setActivePage(value);
-		};
-		const openCategory = (category, backTo) => {
-			setActivePage({
-				category,
-				backTo
-			});
-		};
-		const openAllAudits = (expand, backTo = "issues") => {
-			setActivePage({
-				page: "all-audits",
-				expand,
-				backTo
-			});
-		};
-		const backFromSubPage = () => {
-			if (isAllAuditsPage(activePage) || isCategoryPage(activePage)) setActivePage(activePage.backTo);
-		};
-		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, null, /* @__PURE__ */ react.createElement(_elementor_ui.Tabs, {
-			"aria-label": (0, _wordpress_i18n.__)("Audit navigation", "elementor"),
-			value: currentTab,
-			onChange: handleTabChange,
-			textColor: "secondary",
-			indicatorColor: "secondary",
-			size: "small",
-			centered: true,
-			variant: "fullWidth"
-		}, /* @__PURE__ */ react.createElement(_elementor_ui.Tab, {
-			value: "overview",
-			label: (0, _wordpress_i18n.__)("Overview", "elementor")
-		}), /* @__PURE__ */ react.createElement(_elementor_ui.Tab, {
-			value: "issues",
-			label: (0, _wordpress_i18n.__)("Issues", "elementor")
-		})), /* @__PURE__ */ react.createElement(_elementor_ui.Divider, null), activePage === "overview" && /* @__PURE__ */ react.createElement(OverviewPage, {
+		const openCategory = (category) => setActivePage({ category });
+		const backToOverview = () => setActivePage("overview");
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
+			flex: 1,
+			minHeight: 0,
+			overflowY: "auto"
+		} }, activePage === "overview" && /* @__PURE__ */ react.createElement(OverviewPage, {
 			report,
-			onCategoryClick: (category) => openCategory(category, "overview"),
-			onStatusClick: (status) => openAllAudits(status, "overview")
-		}), activePage === "issues" && /* @__PURE__ */ react.createElement(IssuesPage, {
-			report,
-			onCategoryClick: (category) => openCategory(category, "issues"),
-			onAllAuditsClick: () => openAllAudits()
-		}), isAllAuditsPage(activePage) && /* @__PURE__ */ react.createElement(AllAuditsPage, {
-			report,
-			initialExpandedStatus: activePage.expand,
-			onBack: backFromSubPage
+			onCategoryClick: openCategory
 		}), isCategoryPage(activePage) && /* @__PURE__ */ react.createElement(CategoryPage, {
 			category: activePage.category,
 			report,
-			onBack: backFromSubPage
+			onBack: backToOverview
 		}));
+	}
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/components/rescan-button.tsx
+	function RescanButton({ hasScanned, isStale, disabled, onClick }) {
+		const panelZIndex = (0, _elementor_editor_floating_panels.useFloatingPanelZIndex)(AUDIT_PANEL_ID);
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Tooltip, {
+			title: (0, _wordpress_i18n.__)("Page content changed - rescan advised", "elementor"),
+			disableHoverListener: !isStale,
+			PopperProps: { sx: { zIndex: panelZIndex } }
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.Badge, {
+			variant: "dot",
+			color: "warning",
+			invisible: !isStale,
+			overlap: "rectangular"
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
+			variant: "contained",
+			size: "small",
+			startIcon: hasScanned ? /* @__PURE__ */ react.createElement(_elementor_icons.ReloadIcon, { fontSize: "small" }) : void 0,
+			onClick,
+			disabled
+		}, hasScanned ? (0, _wordpress_i18n.__)("Rescan", "elementor") : (0, _wordpress_i18n.__)("Run page audit", "elementor"))));
 	}
 
 //#endregion
 //#region packages/packages/core/editor-audits/src/components/audit-panel.tsx
 	function AuditPanel() {
-		const { status, report, error, run } = useAuditReport();
-		const currentDocumentId = (0, _elementor_editor_elements.getCurrentDocumentId)() ?? 0;
-		const onRun = () => run(currentDocumentId);
+		const { status, report, error, isStale, run } = useAuditReport();
+		const hostDocumentId = (0, _elementor_editor_elements.getHostDocumentId)() ?? 0;
+		const onRun = () => run(hostDocumentId);
 		const lastScanLabel = report ? new Date(report.runAt).toLocaleTimeString() : null;
 		return /* @__PURE__ */ react.createElement(react.Fragment, null, /* @__PURE__ */ react.createElement(_elementor_editor_floating_panels.FloatingPanelHeader, {
-			panelId: "audit-panel",
+			panelId: AUDIT_PANEL_ID,
 			title: (0, _wordpress_i18n.__)("Page Audit", "elementor"),
 			badge: (0, _wordpress_i18n.__)("Beta", "elementor"),
 			titleVariant: "subtitle2"
-		}), /* @__PURE__ */ react.createElement(_elementor_editor_floating_panels.FloatingPanelBody, null, status === "idle" && /* @__PURE__ */ react.createElement(WelcomePage, null), status === "loading" && /* @__PURE__ */ react.createElement(LoadingPage, null), status === "error" && /* @__PURE__ */ react.createElement(ErrorPage, {
+		}), /* @__PURE__ */ react.createElement(_elementor_editor_floating_panels.FloatingPanelBody, { sx: status === "ready" ? {
+			display: "flex",
+			flexDirection: "column",
+			overflow: "hidden",
+			minHeight: 0
+		} : void 0 }, status === "idle" && /* @__PURE__ */ react.createElement(WelcomePage, null), status === "loading" && /* @__PURE__ */ react.createElement(LoadingPage, null), status === "error" && /* @__PURE__ */ react.createElement(ErrorPage, {
 			message: error ?? "",
 			onRetry: onRun
 		}), status === "ready" && report && /* @__PURE__ */ react.createElement(ReportShell, { report })), /* @__PURE__ */ react.createElement(_elementor_editor_floating_panels.FloatingPanelFooter, null, lastScanLabel ? /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
 			variant: "caption",
 			sx: { flex: 1 }
-		}, (0, _wordpress_i18n.__)("Last scan:", "elementor"), " ", lastScanLabel) : /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: { flex: 1 } }), lastScanLabel && /* @__PURE__ */ react.createElement(AuditFeedback, null), /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
-			variant: "contained",
-			size: "small",
-			onClick: onRun,
-			disabled: status === "loading" || currentDocumentId === 0
-		}, lastScanLabel ? (0, _wordpress_i18n.__)("Re-scan", "elementor") : (0, _wordpress_i18n.__)("Run page audit", "elementor"))));
+		}, (0, _wordpress_i18n.__)("Last scan:", "elementor"), " ", lastScanLabel) : /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: { flex: 1 } }), lastScanLabel && /* @__PURE__ */ react.createElement(AuditFeedback, null), /* @__PURE__ */ react.createElement(RescanButton, {
+			hasScanned: Boolean(lastScanLabel),
+			isStale,
+			disabled: status === "loading" || hostDocumentId === 0,
+			onClick: onRun
+		})));
 	}
 
 //#endregion
@@ -1713,7 +1684,7 @@ react = __toESM(react);
 		const { toggle } = auditPanel.useFloatingPanelActions();
 		return {
 			title: (0, _wordpress_i18n.__)("Audit Page", "elementor"),
-			icon: _elementor_icons.ShieldCheckIcon,
+			icon: AuditToggleIcon,
 			selected: isOpen,
 			onClick: () => toggle()
 		};
@@ -1732,7 +1703,7 @@ react = __toESM(react);
 
 //#endregion
 //#region packages/packages/core/editor-audits/src/audits/accessibility-policy.ts
-	var audit$19 = {
+	var audit$23 = {
 		id: "audits/accessibility-policy",
 		title: (0, _wordpress_i18n.__)("Accessibility policy", "elementor"),
 		description: (0, _wordpress_i18n.__)("An accessibility policy demonstrates your commitment to digital inclusion and may be legally required in some regions.", "elementor"),
@@ -1745,7 +1716,7 @@ react = __toESM(react);
 			return {
 				status: "fail",
 				violations: [{
-					auditId: audit$19.id,
+					auditId: audit$23.id,
 					label: (0, _wordpress_i18n.__)("Ally plugin is not installed or active.", "elementor"),
 					externalUrl: ctx.pageContext.ally_plugin_url
 				}]
@@ -1754,8 +1725,75 @@ react = __toESM(react);
 	};
 
 //#endregion
+//#region packages/packages/core/editor-audits/src/audits/accessibility-statement.ts
+	var audit$22 = {
+		id: "audits/accessibility-statement",
+		title: (0, _wordpress_i18n.__)("Create an accessibility statement", "elementor"),
+		description: (0, _wordpress_i18n.__)("An accessibility statement showcases your efforts to create an inclusive online space, highlighting helpful features and a commitment to accessibility.", "elementor"),
+		fixHint: (0, _wordpress_i18n.__)("Use Ally to create and publish an accessibility statement for your site.", "elementor"),
+		categories: ["accessibility"],
+		severity: "info",
+		weight: 1,
+		evaluate: (ctx) => {
+			const isReady = ctx.pageContext.ally_plugin_active;
+			if (isReady && ctx.pageContext.ally_accessibility_statement_created) return { status: "pass" };
+			return {
+				status: "fail",
+				violations: [{
+					auditId: audit$22.id,
+					label: (0, _wordpress_i18n.__)("No accessibility statement has been created for this site.", "elementor"),
+					externalUrl: isReady ? ctx.pageContext.ally_accessibility_statement_url : ctx.pageContext.ally_plugin_url,
+					ctaLabel: (0, _wordpress_i18n.__)("Create", "elementor"),
+					secondaryCtaLabel: (0, _wordpress_i18n.__)("Learn more", "elementor"),
+					secondaryCtaUrl: "https://elementor.com/help/start-using-ally/#statement"
+				}]
+			};
+		}
+	};
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/utils/scan-accessibility-widgets.ts
+	var ACCESSIBILITY_WIDGET_SCRIPT_SOURCES = ["cdn.elementor.com/a11y/widget.js"];
+	function hasAccessibilityWidgetScript(html) {
+		return ACCESSIBILITY_WIDGET_SCRIPT_SOURCES.some((src) => html.includes(src));
+	}
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/audits/accessibility-widget.ts
+	var audit$21 = {
+		id: "audits/accessibility-widget",
+		title: (0, _wordpress_i18n.__)("Add an accessibility widget", "elementor"),
+		description: (0, _wordpress_i18n.__)("Make your site more inclusive by adding an accessibility widget.", "elementor"),
+		fixHint: (0, _wordpress_i18n.__)("Activate Ally’s accessibility widget to give visitors on-page accessibility tools.", "elementor"),
+		categories: ["accessibility"],
+		severity: "info",
+		weight: 1,
+		evaluate: (ctx) => {
+			if (!ctx.pageContext.frontend_url) return {
+				status: "skipped",
+				reason: (0, _wordpress_i18n.__)("Page is not published.", "elementor")
+			};
+			if (!ctx.renderedHtml) return {
+				status: "skipped",
+				reason: (0, _wordpress_i18n.__)("Could not fetch the published page.", "elementor")
+			};
+			if (hasAccessibilityWidgetScript(ctx.renderedHtml)) return { status: "pass" };
+			const isReady = ctx.pageContext.ally_plugin_active;
+			return {
+				status: "fail",
+				violations: [{
+					auditId: audit$21.id,
+					label: (0, _wordpress_i18n.__)("No accessibility widget is active on this site.", "elementor"),
+					externalUrl: isReady ? ctx.pageContext.ally_widget_settings_url : ctx.pageContext.ally_plugin_url,
+					ctaLabel: (0, _wordpress_i18n.__)("Activate", "elementor")
+				}]
+			};
+		}
+	};
+
+//#endregion
 //#region packages/packages/core/editor-audits/src/audits/cookie-policy.ts
-	var audit$18 = {
+	var audit$20 = {
 		id: "audits/cookie-policy",
 		title: (0, _wordpress_i18n.__)("Cookie policy", "elementor"),
 		description: (0, _wordpress_i18n.__)("A cookie policy is required by privacy regulations such as GDPR (EU) or CCPA (US) to inform visitors about tracking and data collection.", "elementor"),
@@ -1768,9 +1806,10 @@ react = __toESM(react);
 			return {
 				status: "fail",
 				violations: [{
-					auditId: audit$18.id,
+					auditId: audit$20.id,
 					label: (0, _wordpress_i18n.__)("Cookiez plugin is not installed or active.", "elementor"),
-					externalUrl: ctx.pageContext.cookiez_plugin_url
+					externalUrl: ctx.pageContext.cookiez_plugin_url,
+					ctaLabel: (0, _wordpress_i18n.__)("Set up cookie consent", "elementor")
 				}]
 			};
 		}
@@ -1779,7 +1818,11 @@ react = __toESM(react);
 //#endregion
 //#region packages/packages/core/editor-audits/src/audits/deep-nesting.ts
 	var MAX_NESTING_DEPTH = 6;
-	var audit$17 = {
+	function isNestingElement(node, widgetsCache) {
+		if (node.elType === "container") return true;
+		return !!widgetsCache?.[node.elType]?.meta?.is_container;
+	}
+	var audit$19 = {
 		id: "audits/deep-nesting",
 		title: (0, _wordpress_i18n.__)("Deep container nesting", "elementor"),
 		description: (0, _wordpress_i18n.__)("Container nesting exceeds the recommended depth. Deep DOM trees hurt rendering performance and readability.", "elementor"),
@@ -1792,11 +1835,12 @@ react = __toESM(react);
 				status: "skipped",
 				reason: (0, _wordpress_i18n.__)("No elements", "elementor")
 			};
+			const widgetsCache = (0, _elementor_editor_elements.getWidgetsCache)();
 			const violations = [];
 			walkElements(ctx.elements.tree, (node, parents) => {
-				if (node.elType !== "container") return;
-				if (parents.length + 1 > MAX_NESTING_DEPTH) violations.push({
-					auditId: audit$17.id,
+				if (!isNestingElement(node, widgetsCache)) return;
+				if (parents.filter((parent) => isNestingElement(parent, widgetsCache)).length + 1 > MAX_NESTING_DEPTH) violations.push({
+					auditId: audit$19.id,
 					elementId: node.id,
 					targetHint: "element-settings",
 					label: (0, _wordpress_i18n.__)("Container nesting is too deep.", "elementor")
@@ -1811,7 +1855,7 @@ react = __toESM(react);
 
 //#endregion
 //#region packages/packages/core/editor-audits/src/audits/default-design-system.ts
-	var audit$16 = {
+	var audit$18 = {
 		id: "audits/default-design-system",
 		title: (0, _wordpress_i18n.__)("Default website kit", "elementor"),
 		description: (0, _wordpress_i18n.__)("Your website is using the default design system colors and fonts. Custom branding makes the website feel uniquely yours.", "elementor"),
@@ -1824,7 +1868,7 @@ react = __toESM(react);
 			return {
 				status: "fail",
 				violations: [{
-					auditId: audit$16.id,
+					auditId: audit$18.id,
 					label: (0, _wordpress_i18n.__)("Kit appears unchanged from default.", "elementor"),
 					targetHint: "site-settings"
 				}]
@@ -1835,7 +1879,7 @@ react = __toESM(react);
 //#endregion
 //#region packages/packages/core/editor-audits/src/audits/deprecated-widgets.ts
 	var DEPRECATION_CONTROL_NAME = "deprecation_message";
-	var audit$15 = {
+	var audit$17 = {
 		id: "audits/deprecated-widgets",
 		title: (0, _wordpress_i18n.__)("Deprecated widgets", "elementor"),
 		description: (0, _wordpress_i18n.__)("Deprecated widgets should not be used. For better capabilities use the recommended replacement.", "elementor"),
@@ -1857,7 +1901,7 @@ react = __toESM(react);
 				const deprecationControl = config.controls[DEPRECATION_CONTROL_NAME];
 				if (!deprecationControl || typeof deprecationControl !== "object") return;
 				violations.push({
-					auditId: audit$15.id,
+					auditId: audit$17.id,
 					elementId: node.id,
 					targetHint: "element-settings",
 					label: (0, _wordpress_i18n.__)("Using deprecated widget.", "elementor")
@@ -1866,6 +1910,67 @@ react = __toESM(react);
 			return violations.length === 0 ? { status: "pass" } : {
 				status: "fail",
 				violations
+			};
+		}
+	};
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/utils/scan-consent-signals.ts
+	var GOOGLE_TRACKING_PATTERNS = [
+		/googletagmanager\.com\/gtag\/js\?id=(G|AW)-/,
+		/googletagmanager\.com\/gtm\.js/,
+		/\bGTM-[A-Z0-9]+\b/,
+		/gtag\(\s*['"]config['"]\s*,\s*['"](G|AW)-/
+	];
+	var CONSENT_DEFAULT_PATTERNS = [/gtag\(\s*['"]consent['"]\s*,\s*['"]default['"]/, /dataLayer\.push\(\s*\[\s*['"]consent['"]\s*,\s*['"]default['"]/];
+	function hasGoogleTracking(html) {
+		return GOOGLE_TRACKING_PATTERNS.some((pattern) => pattern.test(html));
+	}
+	function hasConsentDefaultCall(html) {
+		return CONSENT_DEFAULT_PATTERNS.some((pattern) => pattern.test(html));
+	}
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/audits/google-consent-mode.ts
+	var audit$16 = {
+		id: "audits/google-consent-mode",
+		title: (0, _wordpress_i18n.__)("Google Consent Mode", "elementor"),
+		description: (0, _wordpress_i18n.__)("Google Analytics, Ads, or Tag Manager are running on this site and may not receive a consent signal, which risks losing conversion/analytics data and compliance exposure.", "elementor"),
+		fixHint: (0, _wordpress_i18n.__)("Turn on Google Consent Mode in your cookie consent plugin so Google tags respect visitor consent choices.", "elementor"),
+		categories: ["compliance"],
+		severity: "warning",
+		weight: 1,
+		evaluate: (ctx) => {
+			if (!ctx.pageContext.frontend_url) return {
+				status: "skipped",
+				reason: (0, _wordpress_i18n.__)("Page is not published.", "elementor")
+			};
+			if (!ctx.renderedHtml) return {
+				status: "skipped",
+				reason: (0, _wordpress_i18n.__)("Could not fetch the published page.", "elementor")
+			};
+			if (!hasGoogleTracking(ctx.renderedHtml)) return {
+				status: "skipped",
+				reason: (0, _wordpress_i18n.__)("No Google tracking product detected.", "elementor")
+			};
+			if (hasConsentDefaultCall(ctx.renderedHtml)) return { status: "pass" };
+			const label = (0, _wordpress_i18n.__)("No Google Consent Mode signal was found on the page.", "elementor");
+			if (ctx.pageContext.cookiez_plugin_installed && ctx.pageContext.cookiez_plugin_active) return {
+				status: "fail",
+				violations: [{
+					auditId: audit$16.id,
+					label,
+					ctaLabel: (0, _wordpress_i18n.__)("Enable", "elementor"),
+					externalUrl: ctx.pageContext.cookiez_consent_mode_settings_url
+				}]
+			};
+			return {
+				status: "fail",
+				violations: [{
+					auditId: audit$16.id,
+					label,
+					externalUrl: ctx.pageContext.cookiez_plugin_action_url
+				}]
 			};
 		}
 	};
@@ -2143,7 +2248,7 @@ react = __toESM(react);
 		});
 		return headings;
 	}
-	var audit$14 = {
+	var audit$15 = {
 		id: "audits/heading-structure",
 		title: (0, _wordpress_i18n.__)("Heading structure", "elementor"),
 		description: (0, _wordpress_i18n.__)("Pages should have exactly one H1 and a non-skipping heading order.", "elementor"),
@@ -2159,23 +2264,23 @@ react = __toESM(react);
 			const headings = extractPageHeadings(ctx.elements.tree);
 			const violations = [];
 			if (headings.length === 0) violations.push({
-				auditId: audit$14.id,
+				auditId: audit$15.id,
 				label: (0, _wordpress_i18n.__)("No headings found on the page.", "elementor")
 			});
 			else {
 				const h1Count = headings.filter((h) => h.level === 1).length;
 				if (h1Count === 0) violations.push({
-					auditId: audit$14.id,
+					auditId: audit$15.id,
 					label: (0, _wordpress_i18n.__)("No H1 on the page.", "elementor")
 				});
 				if (h1Count > 1) headings.filter((h) => h.level === 1).slice(1).forEach((h) => violations.push({
-					auditId: audit$14.id,
+					auditId: audit$15.id,
 					elementId: h.elementId,
 					targetHint: "element-settings",
 					label: (0, _wordpress_i18n.__)("More than one H1 on the page.", "elementor")
 				}));
 				for (let i = 1; i < headings.length; i++) if (headings[i].level - headings[i - 1].level > 1) violations.push({
-					auditId: audit$14.id,
+					auditId: audit$15.id,
 					elementId: headings[i].elementId,
 					targetHint: "element-settings",
 					label: (0, _wordpress_i18n.__)("Heading level skipped.", "elementor")
@@ -2193,7 +2298,7 @@ react = __toESM(react);
 	function isHiddenOnAllDevices(settings) {
 		return Boolean(settings.hide_desktop) && Boolean(settings.hide_tablet) && Boolean(settings.hide_mobile);
 	}
-	var audit$13 = {
+	var audit$14 = {
 		id: "audits/hidden-elements",
 		title: (0, _wordpress_i18n.__)("Hidden elements", "elementor"),
 		description: (0, _wordpress_i18n.__)("Elements hidden on all devices simultaneously are effectively dead code in the page tree.", "elementor"),
@@ -2209,7 +2314,7 @@ react = __toESM(react);
 			const violations = [];
 			walkElements(ctx.elements.tree, (node) => {
 				if (isHiddenOnAllDevices(node.settings)) violations.push({
-					auditId: audit$13.id,
+					auditId: audit$14.id,
 					elementId: node.id,
 					targetHint: "element-settings",
 					label: (0, _wordpress_i18n.__)("Element is hidden on all devices.", "elementor")
@@ -2223,10 +2328,30 @@ react = __toESM(react);
 	};
 
 //#endregion
+//#region packages/packages/core/editor-audits/src/utils/alt-text-image-sources.ts
+	function walkAltTextImageSources(tree, visit) {
+		walkImageLikeSources(tree, visit);
+		walkAtomicImageSources(tree, visit, ATOMIC_CONTENT_IMAGE_PROP_KEYS);
+	}
+	function hasAltTextImages(tree) {
+		let found = false;
+		walkAltTextImageSources(tree, ({ media }) => {
+			if (media.id || media.url) found = true;
+		});
+		return found;
+	}
+
+//#endregion
 //#region packages/packages/core/editor-audits/src/utils/image-alt.ts
 	function hasMeaningfulAlt(media, pageContext) {
 		if (!media.id && !media.url) return true;
-		if (media.id) return (pageContext.image_sizes[media.id]?.alt ?? "").trim().length > 0;
+		if (media.id) {
+			const key = buildImageSizeKey({
+				id: media.id,
+				size: media.size
+			});
+			return (pageContext.image_sizes[key]?.alt ?? "").trim().length > 0;
+		}
 		return (media.alt ?? "").trim().length > 0;
 	}
 	function isImageSourcePresent(media) {
@@ -2235,7 +2360,7 @@ react = __toESM(react);
 
 //#endregion
 //#region packages/packages/core/editor-audits/src/audits/images-alt-text.ts
-	var audit$12 = {
+	var audit$13 = {
 		id: "audits/images-alt-text",
 		title: (0, _wordpress_i18n.__)("Images alt text", "elementor"),
 		description: (0, _wordpress_i18n.__)("Every image needs a meaningful alt attribute for screen readers and image-search.", "elementor"),
@@ -2244,24 +2369,26 @@ react = __toESM(react);
 		severity: "error",
 		weight: 10,
 		evaluate: (ctx) => {
-			if (!hasPageImages(ctx.elements.tree)) return {
+			if (!hasAltTextImages(ctx.elements.tree)) return {
 				status: "skipped",
 				reason: (0, _wordpress_i18n.__)("No images", "elementor")
 			};
+			const isReady = ctx.pageContext.ally_plugin_active;
 			const violations = [];
 			const failedWidgetIds = /* @__PURE__ */ new Set();
 			let missingAltImageCount = 0;
-			walkImageLikeSources(ctx.elements.tree, ({ node, media }) => {
+			walkAltTextImageSources(ctx.elements.tree, ({ node, media }) => {
 				if (!isImageSourcePresent(media) || hasMeaningfulAlt(media, ctx.pageContext)) return;
 				missingAltImageCount++;
 				if (!failedWidgetIds.has(node.id)) {
 					failedWidgetIds.add(node.id);
 					violations.push({
-						auditId: audit$12.id,
+						auditId: audit$13.id,
 						elementId: node.id,
 						targetHint: "element-settings",
 						label: (0, _wordpress_i18n.__)("Image is missing alt text.", "elementor"),
-						externalUrl: ctx.pageContext.ally_plugin_url
+						externalUrl: isReady ? ctx.pageContext.ally_scan_url : ctx.pageContext.ally_plugin_url,
+						ctaLabel: (0, _wordpress_i18n.__)("Fix with Ally", "elementor")
 					});
 				}
 			});
@@ -2269,6 +2396,61 @@ react = __toESM(react);
 				status: "fail",
 				violations,
 				metadata: { missingAltImageCount }
+			};
+		}
+	};
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/audits/images-inefficient-format.ts
+	var LEGACY_RASTER_MIME_TYPES = /* @__PURE__ */ new Set([
+		"image/jpeg",
+		"image/png",
+		"image/gif",
+		"image/bmp",
+		"image/tiff"
+	]);
+	var audit$12 = {
+		id: "audits/images-inefficient-format",
+		title: (0, _wordpress_i18n.__)("Inefficient image format", "elementor"),
+		description: (0, _wordpress_i18n.__)("Image isn't served in a modern, efficient format like WebP or AVIF.", "elementor"),
+		fixHint: (0, _wordpress_i18n.__)("Convert the image to a modern format like WebP or AVIF, or enable image optimization.", "elementor"),
+		categories: ["performance"],
+		severity: "info",
+		weight: 1,
+		evaluate: (ctx) => {
+			const isReady = ctx.pageContext.image_optimization_plugin_active;
+			const offendingElementIds = /* @__PURE__ */ new Set();
+			let hasAnyImage = false;
+			let inefficientImageFormatCount = 0;
+			const evaluateSource = (node, media) => {
+				if (media.id || media.url) hasAnyImage = true;
+				const id = media.id;
+				if (!id) return;
+				const mime = ctx.pageContext.image_sizes[buildImageSizeKey({
+					id,
+					size: media.size
+				})]?.mime;
+				if (!mime || !LEGACY_RASTER_MIME_TYPES.has(mime)) return;
+				inefficientImageFormatCount++;
+				offendingElementIds.add(node.id);
+			};
+			walkAllImageSources(ctx.elements.tree, ({ node, media }) => evaluateSource(node, media));
+			if (!hasAnyImage) return {
+				status: "skipped",
+				reason: (0, _wordpress_i18n.__)("No images", "elementor")
+			};
+			const violations = Array.from(offendingElementIds).map((elementId) => ({
+				auditId: audit$12.id,
+				elementId,
+				targetHint: "element-settings",
+				label: (0, _wordpress_i18n.__)("Image isn't served in a modern format like WebP or AVIF.", "elementor"),
+				externalUrl: isReady ? ctx.pageContext.image_optimization_settings_url : ctx.pageContext.image_optimization_plugin_url,
+				ctaLabel: (0, _wordpress_i18n.__)("Optimize all", "elementor")
+			}));
+			return violations.length === 0 ? { status: "pass" } : {
+				status: "fail",
+				violations,
+				metadata: { inefficientImageFormatCount }
 			};
 		}
 	};
@@ -2286,28 +2468,36 @@ react = __toESM(react);
 		severity: "warning",
 		weight: 7,
 		evaluate: (ctx) => {
-			if (!hasPageImages(ctx.elements.tree)) return {
-				status: "skipped",
-				reason: (0, _wordpress_i18n.__)("No images", "elementor")
-			};
+			const isReady = ctx.pageContext.image_optimization_plugin_active;
 			const widgetMaxKb = /* @__PURE__ */ new Map();
 			let oversizedImageCount = 0;
-			walkImageLikeSources(ctx.elements.tree, ({ node, media }) => {
+			let hasAnyImage = false;
+			const evaluateSource = (node, media) => {
+				if (media.id || media.url) hasAnyImage = true;
 				const id = media.id;
 				if (!id) return;
-				const size = ctx.pageContext.image_sizes[id];
+				const size = ctx.pageContext.image_sizes[buildImageSizeKey({
+					id,
+					size: media.size
+				})];
 				if (!size || size.filesize_bytes <= SIZE_THRESHOLD_BYTES) return;
 				oversizedImageCount++;
 				const kb = Math.round(size.filesize_bytes / BYTES_PER_KB);
 				const currentMax = widgetMaxKb.get(node.id) ?? 0;
 				widgetMaxKb.set(node.id, Math.max(currentMax, kb));
-			});
+			};
+			walkAllImageSources(ctx.elements.tree, ({ node, media }) => evaluateSource(node, media));
+			if (!hasAnyImage) return {
+				status: "skipped",
+				reason: (0, _wordpress_i18n.__)("No images", "elementor")
+			};
 			const violations = Array.from(widgetMaxKb.entries()).map(([elementId, kb]) => ({
 				auditId: audit$11.id,
 				elementId,
 				targetHint: "element-settings",
 				label: (0, _wordpress_i18n.sprintf)((0, _wordpress_i18n.__)("Image is %d KB (over 500 KB).", "elementor"), kb),
-				externalUrl: ctx.pageContext.image_optimization_plugin_url
+				externalUrl: isReady ? ctx.pageContext.image_optimization_settings_url : ctx.pageContext.image_optimization_plugin_url,
+				ctaLabel: (0, _wordpress_i18n.__)("Optimize all", "elementor")
 			}));
 			return violations.length === 0 ? { status: "pass" } : {
 				status: "fail",
@@ -2343,7 +2533,9 @@ react = __toESM(react);
 					auditId: audit$10.id,
 					elementId: node.id,
 					targetHint: "element-settings",
-					label: (0, _wordpress_i18n.__)("Nested boxed container.", "elementor")
+					label: (0, _wordpress_i18n.__)("Nested boxed container.", "elementor"),
+					angieFix: true,
+					angiePrompt: (0, _wordpress_i18n.__)("Find containers that have nested containers. Containers can be deep-nested. Update the nested container styling so that when a parent container already uses a boxed setting, any inner container inside it is set to Full Width. Keep the first parent container boxed, remove all boxed styling from the nested inner containers, and preserve the inner container’s content, spacing, alignment, and hierarchy.", "elementor")
 				});
 			});
 			return violations.length === 0 ? { status: "pass" } : {
@@ -2419,7 +2611,8 @@ react = __toESM(react);
 					auditId: audit$7.id,
 					label: (0, _wordpress_i18n.__)("Page has no title.", "elementor"),
 					targetHint: "page-settings",
-					angieFix: true
+					angieFix: true,
+					angiePrompt: (0, _wordpress_i18n.__)("Based on this page's contents, generate a title for this page.", "elementor")
 				}]
 			};
 			if (title.length > MAX_TITLE_LENGTH) return {
@@ -2626,7 +2819,8 @@ react = __toESM(react);
 				violations: [{
 					auditId: audit$4.id,
 					label: (0, _wordpress_i18n.__)("No privacy policy page is set.", "elementor"),
-					externalUrl: ctx.pageContext.privacy_settings_url
+					externalUrl: ctx.pageContext.privacy_settings_url,
+					ctaLabel: (0, _wordpress_i18n.__)("Create", "elementor")
 				}]
 			};
 		}
@@ -2656,8 +2850,31 @@ react = __toESM(react);
 	};
 
 //#endregion
-//#region packages/packages/core/editor-audits/src/audits/sections-and-columns.ts
+//#region packages/packages/core/editor-audits/src/audits/scan-for-cookies.ts
 	var audit$2 = {
+		id: "audits/scan-for-cookies",
+		title: (0, _wordpress_i18n.__)("Scan for cookies", "elementor"),
+		description: (0, _wordpress_i18n.__)("Your site may be setting cookies you haven't disclosed. Some countries require a banner even without a full consent policy. Scan to see what needs disclosure.", "elementor"),
+		fixHint: (0, _wordpress_i18n.__)("Run a Cookiez scan on this page to see which cookies need disclosure.", "elementor"),
+		categories: ["compliance"],
+		severity: "info",
+		weight: 0,
+		evaluate: (ctx) => {
+			const isReady = ctx.pageContext.cookiez_plugin_installed && ctx.pageContext.cookiez_plugin_active;
+			return {
+				status: "fail",
+				violations: [{
+					auditId: audit$2.id,
+					label: (0, _wordpress_i18n.__)("This page has not been scanned for cookies yet.", "elementor"),
+					externalUrl: isReady ? ctx.pageContext.cookiez_scan_url : ctx.pageContext.cookiez_plugin_action_url
+				}]
+			};
+		}
+	};
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/audits/sections-and-columns.ts
+	var audit$1 = {
 		id: "audits/sections-and-columns",
 		title: (0, _wordpress_i18n.__)("Sections and columns", "elementor"),
 		description: (0, _wordpress_i18n.__)("Sections and columns are legacy elements. Containers render fewer DOM nodes and are more flexible.", "elementor"),
@@ -2673,7 +2890,7 @@ react = __toESM(react);
 			const violations = [];
 			walkElements(ctx.elements.tree, (node) => {
 				if (node.elType === "section" || node.elType === "column") violations.push({
-					auditId: audit$2.id,
+					auditId: audit$1.id,
 					elementId: node.id,
 					label: node.elType === "section" ? (0, _wordpress_i18n.__)("Section element", "elementor") : (0, _wordpress_i18n.__)("Column element", "elementor")
 				});
@@ -2687,7 +2904,7 @@ react = __toESM(react);
 
 //#endregion
 //#region packages/packages/core/editor-audits/src/audits/site-identity.ts
-	var audit$1 = {
+	var audit = {
 		id: "audits/site-identity",
 		title: (0, _wordpress_i18n.__)("Site identity", "elementor"),
 		description: (0, _wordpress_i18n.__)("Site name, description, logo, and favicon establish your brand and appear in search results and browser tabs.", "elementor"),
@@ -2699,23 +2916,23 @@ react = __toESM(react);
 			const { site_identity: identity } = ctx.pageContext;
 			const violations = [];
 			if (!identity.site_name_set) violations.push({
-				auditId: audit$1.id,
+				auditId: audit.id,
 				label: (0, _wordpress_i18n.__)("Site name is missing or still uses the default.", "elementor"),
 				targetHint: "site-identity-settings"
 			});
 			if (!identity.site_description_set) violations.push({
-				auditId: audit$1.id,
+				auditId: audit.id,
 				label: (0, _wordpress_i18n.__)("Site description is missing or still uses the default.", "elementor"),
 				targetHint: "site-identity-settings",
 				angieFix: true
 			});
 			if (!identity.site_logo_set) violations.push({
-				auditId: audit$1.id,
+				auditId: audit.id,
 				label: (0, _wordpress_i18n.__)("Site logo is not set.", "elementor"),
 				targetHint: "site-identity-settings"
 			});
 			if (!identity.site_favicon_set) violations.push({
-				auditId: audit$1.id,
+				auditId: audit.id,
 				label: (0, _wordpress_i18n.__)("Site favicon is not set.", "elementor"),
 				targetHint: "site-identity-settings"
 			});
@@ -2728,62 +2945,43 @@ react = __toESM(react);
 	};
 
 //#endregion
-//#region packages/packages/core/editor-audits/src/audits/too-many-widgets.ts
-	var WIDGET_COUNT_THRESHOLD = 100;
-	var audit = {
-		id: "audits/too-many-widgets",
-		title: (0, _wordpress_i18n.__)("Too many widgets", "elementor"),
-		description: (0, _wordpress_i18n.__)("Excessive DOM size caused by too many widgets degrades rendering performance.", "elementor"),
-		fixHint: (0, _wordpress_i18n.__)("Reduce the number of widgets on the page by removing or combining elements.", "elementor"),
-		categories: ["best-practices", "performance"],
-		severity: "warning",
-		weight: 5,
-		evaluate: (ctx) => {
-			if (ctx.elements.tree.length === 0) return {
-				status: "skipped",
-				reason: (0, _wordpress_i18n.__)("No elements", "elementor")
-			};
-			let widgetCount = 0;
-			walkElements(ctx.elements.tree, (node) => {
-				if (node.elType === "widget") widgetCount++;
-			});
-			if (widgetCount <= WIDGET_COUNT_THRESHOLD) return { status: "pass" };
-			return {
-				status: "fail",
-				violations: [{
-					auditId: audit.id,
-					label: (0, _wordpress_i18n.__)("Page has too many widgets.", "elementor")
-				}]
-			};
-		}
-	};
-
-//#endregion
 //#region packages/packages/core/editor-audits/src/register-audits.ts
 	var AUDITS = [
 		audit$7,
 		audit$9,
 		audit$8,
-		audit$13,
-		audit$15,
-		audit,
-		audit$2,
+		audit$14,
 		audit$17,
-		audit$10,
-		audit$16,
 		audit$1,
+		audit$19,
+		audit$10,
+		audit$18,
+		audit,
 		audit$6,
 		audit$5,
-		audit$14,
-		audit$12,
+		audit$15,
+		audit$13,
 		audit$11,
+		audit$12,
 		audit$3,
 		audit$4,
-		audit$19,
-		audit$18
+		audit$23,
+		audit$22,
+		audit$21,
+		audit$20,
+		audit$2,
+		audit$16
 	];
 	function registerAllAudits() {
 		for (const audit of AUDITS) registerAudit(audit);
+	}
+
+//#endregion
+//#region packages/packages/core/editor-audits/src/sync-report-staleness.ts
+	function syncReportStaleness() {
+		(0, _elementor_editor_v1_adapters.__privateListenTo)((0, _elementor_editor_v1_adapters.commandEndEvent)("document/save/set-is-modified"), (e) => {
+			if (e.args?.status) (0, _elementor_store.__dispatch)(slice.actions.reportStale());
+		});
 	}
 
 //#endregion
@@ -2793,6 +2991,7 @@ react = __toESM(react);
 		registerAllAudits();
 		(0, _elementor_editor_floating_panels.registerFloatingPanel)(auditPanel.panel);
 		registerAppBarAuditsToggle();
+		syncReportStaleness();
 	}
 
 //#endregion
@@ -2808,6 +3007,6 @@ react = __toESM(react);
 	(window.elementorV2 = window.elementorV2 || {}).editorAudits = src_exports;
 
 //#endregion
-})(elementorV2.editorFloatingPanels, elementorV2.store, elementorV2.editorAppBar, elementorV2.icons, wp.i18n, React, elementorV2.editorElements, elementorV2.ui, elementorV2.httpClient, elementorV2.session, elementorV2.editorNotifications, elementorV2.editorV1Adapters, elementorV2.events, elementorV2.editorMcp);
+})(elementorV2.editorFloatingPanels, elementorV2.store, elementorV2.editorAppBar, wp.i18n, React, elementorV2.icons, elementorV2.ui, elementorV2.editorElements, elementorV2.httpClient, elementorV2.editorProps, elementorV2.session, elementorV2.editorNotifications, elementorV2.editorV1Adapters, elementorV2.events, elementorV2.editorMcp);
 window.elementorV2.editorAudits?.init?.();
 //# sourceMappingURL=editor-audits.js.map

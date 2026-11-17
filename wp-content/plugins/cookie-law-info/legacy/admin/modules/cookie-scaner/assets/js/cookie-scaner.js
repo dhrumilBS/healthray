@@ -216,12 +216,15 @@
 										} else {
 											if ( data.message ) {
 												wtCliAdminFunctions.createModal( '',data.message );
-												setTimeout(
-													function(){
-														window.location.reload();
-													},
-													1500
-												);
+												// The scanner-unreachable message carries a forum link: keep the modal open so it can be clicked.
+												if ( ! data.has_help_link ) {
+													setTimeout(
+														function(){
+															window.location.reload();
+														},
+														1500
+													);
+												}
 											}
 										}
 									}
@@ -262,7 +265,9 @@
 								} else {
 									if ( data.message ) {
 										wtCliAdminFunctions.createModal( '',data.message );
-										CLI_cookie_scanner.reloadAfterRequest();
+										if ( ! data.has_help_link ) {
+											CLI_cookie_scanner.reloadAfterRequest();
+										}
 									}
 								}
 							},
@@ -312,7 +317,9 @@
 								} else {
 									if ( data.message ) {
 										wtCliAdminFunctions.createModal( '',data.message );
-										CLI_cookie_scanner.reloadAfterRequest( 3000 );
+										if ( ! data.has_help_link ) {
+											CLI_cookie_scanner.reloadAfterRequest( 3000 );
+										}
 									}
 								}
 							},

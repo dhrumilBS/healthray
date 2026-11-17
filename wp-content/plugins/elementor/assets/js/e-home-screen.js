@@ -805,7 +805,10 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 				alignItems: "center",
 				pt: 2.5
 			}
-		}, /*#__PURE__*/ react.default.createElement(_elementor_ui_Typography.default, { variant: "h5" }, (0, _wordpress_i18n.__)("Quick Start", "elementor")), /*#__PURE__*/ react.default.createElement(_elementor_ui_Button.default, {
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui_Typography.default, {
+			variant: "h5",
+			component: "h1"
+		}, (0, _wordpress_i18n.__)("Quick Start", "elementor")), /*#__PURE__*/ react.default.createElement(_elementor_ui_Button.default, {
 			variant: "contained",
 			size: "medium",
 			color: "primary",
@@ -1026,11 +1029,12 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 		ELEMENTOR_HOME_TOP_LEVEL: "li#toplevel_page_elementor-home",
 		ADMIN_MENU: "#adminmenu",
 		TOP_LEVEL_LINK: ".wp-menu-name",
+		TOP_LEVEL_ANCHOR: "a.menu-top",
 		SUBMENU_CONTAINER: ".wp-submenu",
 		SUBMENU_ITEM: ".wp-submenu li a",
-		SUBMENU_ITEM_TOP_LEVEL: ".wp-has-submenu",
-		SIDEBAR_NAVIGATION: "#editor-one-sidebar-navigation"
+		SUBMENU_ITEM_TOP_LEVEL: ".wp-has-submenu"
 	};
+	var ADMIN_NAV_CLICK_EVENT = "elementor/admin/nav-click";
 	var NavigationTracking = /*#__PURE__*/ function(_BaseTracking) {
 		function NavigationTracking() {
 			_classCallCheck(this, NavigationTracking);
@@ -1041,13 +1045,10 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 			{
 				key: "init",
 				value: function init() {
-					if (WpDashboardTracking.isEditorOneActive()) {
-						this.attachSidebarNavigationTracking();
-						this.attachElementorHomeMenuTracking();
-					} else {
-						this.attachElementorMenuTracking();
-						this.attachTemplatesMenuTracking();
-					}
+					this.attachSidebarNavigationTracking();
+					this.attachElementorMenuTracking();
+					this.attachElementorHomeMenuTracking();
+					this.attachTemplatesMenuTracking();
 				}
 			},
 			{
@@ -1055,7 +1056,7 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 				value: function attachTemplatesMenuTracking() {
 					var templatesMenu = document.querySelector(ELEMENTOR_MENU_SELECTORS.TEMPLATES_TOP_LEVEL);
 					if (!templatesMenu) return;
-					this.attachMenuTracking(templatesMenu, "Templates");
+					this.attachMenuTracking(templatesMenu);
 				}
 			},
 			{
@@ -1063,7 +1064,7 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 				value: function attachElementorHomeMenuTracking() {
 					var elementorHomeMenu = document.querySelector(ELEMENTOR_MENU_SELECTORS.ELEMENTOR_HOME_TOP_LEVEL);
 					if (!elementorHomeMenu) return;
-					this.attachMenuTracking(elementorHomeMenu, "Elementor");
+					this.attachMenuTracking(elementorHomeMenu);
 				}
 			},
 			{
@@ -1071,62 +1072,46 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 				value: function attachElementorMenuTracking() {
 					var elementorMenu = document.querySelector(ELEMENTOR_MENU_SELECTORS.ELEMENTOR_TOP_LEVEL);
 					if (!elementorMenu) return;
-					this.attachMenuTracking(elementorMenu, "Elementor");
+					this.attachMenuTracking(elementorMenu);
 				}
 			},
 			{
 				key: "attachSidebarNavigationTracking",
 				value: function attachSidebarNavigationTracking() {
-					var sidebar = document.querySelector(ELEMENTOR_MENU_SELECTORS.SIDEBAR_NAVIGATION);
-					if (sidebar) this.attachSidebarClickListener(sidebar);
-				}
-			},
-			{
-				key: "attachSidebarClickListener",
-				value: function attachSidebarClickListener(sidebar) {
-					var _this = this;
-					this.addEventListenerTracked(sidebar, "click", function(event) {
-						_this.handleSidebarClick(event);
-					}, { capture: true });
+					this.addEventListenerTracked(window, ADMIN_NAV_CLICK_EVENT, function(event) {
+						var _event$detail = event.detail;
+						var itemId = _event$detail.itemId;
+						var rootItem = _event$detail.rootItem;
+						var navClickId = _event$detail.navClickId;
+						WpDashboardTracking.trackNavClicked(itemId, rootItem || null, NAV_AREAS.SIDEBAR_MENU, navClickId);
+					});
 				}
 			},
 			{
 				key: "attachMenuTracking",
-				value: function attachMenuTracking(menuElement, menuName) {
-					var _this2 = this;
+				value: function attachMenuTracking(menuElement) {
+					var _this = this;
 					this.addEventListenerTracked(menuElement, "click", function(event) {
-						_this2.handleMenuClick(event, menuName);
+						_this.handleMenuClick(event, menuElement);
 					});
 				}
 			},
 			{
 				key: "handleMenuClick",
-				value: function handleMenuClick(event, menuName) {
+				value: function handleMenuClick(event, menuElement) {
 					var link = event.target.closest("a");
 					if (!link) return;
 					var isTopLevel = link.classList.contains("menu-top");
 					var itemId = this.extractItemId(link);
 					var area = this.determineNavArea(link);
-					WpDashboardTracking.trackNavClicked(itemId, isTopLevel ? null : menuName, area);
+					WpDashboardTracking.trackNavClicked(itemId, isTopLevel ? null : this.extractRootItemId(menuElement), area);
 				}
 			},
 			{
-				key: "handleSidebarClick",
-				value: function handleSidebarClick(event) {
-					var clickedElement = event.target.closest("a, button, [role=\"button\"]");
-					if (!clickedElement) return;
-					var itemId = this.extractSidebarItemId(clickedElement);
-					WpDashboardTracking.trackNavClicked(itemId, null, NAV_AREAS.SIDEBAR_MENU);
-				}
-			},
-			{
-				key: "extractSidebarItemId",
-				value: function extractSidebarItemId(element) {
-					var paragraph = element.querySelector("p");
-					if (paragraph) return paragraph.textContent.trim();
-					var textContent = element.textContent.trim();
-					if (textContent) return textContent;
-					return "unknown";
+				key: "extractRootItemId",
+				value: function extractRootItemId(menuElement) {
+					var rootLink = menuElement.querySelector(ELEMENTOR_MENU_SELECTORS.TOP_LEVEL_ANCHOR);
+					return rootLink ? this.extractItemId(rootLink) : null;
 				}
 			},
 			{
@@ -1143,13 +1128,22 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 			{
 				key: "extractItemId",
 				value: function extractItemId(link) {
+					var href = link.getAttribute("href");
+					var eventId = href ? WpDashboardTracking.getMenuEventId(this.toMenuHrefKey(href)) : null;
+					if (eventId) return eventId;
 					var textContent = link.textContent.trim();
 					if (textContent) return textContent;
-					var href = link.getAttribute("href");
 					if (href) return this.extractPageFromUrl(href);
 					var linkId = link.getAttribute("id");
 					if (linkId) return linkId;
 					return "unknown";
+				}
+			},
+			{
+				key: "toMenuHrefKey",
+				value: function toMenuHrefKey(href) {
+					var url = new URL(href, window.location.href);
+					return "".concat(url.pathname.split("/").pop()).concat(url.search).concat(url.hash);
 				}
 			},
 			{
@@ -2007,9 +2001,7 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 						var _event$target2;
 						var base = event.target && 1 === event.target.nodeType ? event.target : (_event$target2 = event.target) === null || _event$target2 === void 0 ? void 0 : _event$target2.parentElement;
 						if (!base) return;
-						var toggle = null;
-						if (WpDashboardTracking.isEditorOneActive()) toggle = base.closest(".MuiSwitch-switchBase");
-						else toggle = base.closest(".components-toggle-control");
+						var toggle = base.closest(".MuiSwitch-switchBase, .components-toggle-control");
 						if (toggle && !_this2.isExcludedElement(toggle)) {
 							_this2.trackControl(toggle, CONTROL_TYPES.TOGGLE);
 							return;
@@ -2125,12 +2117,40 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 //#endregion
 //#region app/assets/js/event-track/wp-dashboard-tracking.js
 	var _WpDashboardTracking;
+	function ownKeys(e, r) {
+		var t = Object.keys(e);
+		if (Object.getOwnPropertySymbols) {
+			var o = Object.getOwnPropertySymbols(e);
+			r && (o = o.filter(function(r) {
+				return Object.getOwnPropertyDescriptor(e, r).enumerable;
+			})), t.push.apply(t, o);
+		}
+		return t;
+	}
+	function _objectSpread(e) {
+		for (var r = 1; r < arguments.length; r++) {
+			var t = null != arguments[r] ? arguments[r] : {};
+			r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
+				_defineProperty(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
+				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+			});
+		}
+		return e;
+	}
 	var SESSION_TIMEOUT_MINUTES = 30;
 	var MINUTE_MS = 60 * 1e3;
 	var SESSION_TIMEOUT = SESSION_TIMEOUT_MINUTES * MINUTE_MS;
 	var ACTIVITY_CHECK_INTERVAL = 1 * MINUTE_MS;
 	var SESSION_STORAGE_KEY = "elementor_wpdash_session";
 	var PENDING_NAV_CLICK_KEY = "elementor_wpdash_pending_nav";
+	var LAST_NAV_KEY = "elementor_wpdash_last_nav";
+	var generateNavClickId = function generateNavClickId() {
+		var _window$crypto$random;
+		var _window$crypto;
+		var _window$crypto$random2;
+		return (_window$crypto$random = (_window$crypto = window.crypto) === null || _window$crypto === void 0 || (_window$crypto$random2 = _window$crypto.randomUUID) === null || _window$crypto$random2 === void 0 ? void 0 : _window$crypto$random2.call(_window$crypto)) !== null && _window$crypto$random !== void 0 ? _window$crypto$random : "".concat(Date.now(), "-").concat(Math.random().toString(36).slice(2));
+	};
 	var CONTROL_TYPES = {
 		BUTTON: "button",
 		CHECKBOX: "checkbox",
@@ -2196,12 +2216,12 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 				}
 			},
 			{
-				key: "isEditorOneActive",
-				value: function isEditorOneActive() {
+				key: "getMenuEventId",
+				value: function getMenuEventId(slug) {
 					var _elementorCommon$conf;
 					var _elementorCommon$conf2;
 					var elementorCommon = this.getElementorCommon();
-					return (_elementorCommon$conf = elementorCommon === null || elementorCommon === void 0 || (_elementorCommon$conf2 = elementorCommon.config) === null || _elementorCommon$conf2 === void 0 || (_elementorCommon$conf2 = _elementorCommon$conf2.editor_events) === null || _elementorCommon$conf2 === void 0 ? void 0 : _elementorCommon$conf2.isEditorOneActive) !== null && _elementorCommon$conf !== void 0 ? _elementorCommon$conf : false;
+					return (_elementorCommon$conf = elementorCommon === null || elementorCommon === void 0 || (_elementorCommon$conf2 = elementorCommon.config) === null || _elementorCommon$conf2 === void 0 || (_elementorCommon$conf2 = _elementorCommon$conf2.editor_events) === null || _elementorCommon$conf2 === void 0 || (_elementorCommon$conf2 = _elementorCommon$conf2.menuEventIds) === null || _elementorCommon$conf2 === void 0 ? void 0 : _elementorCommon$conf2[slug]) !== null && _elementorCommon$conf !== void 0 ? _elementorCommon$conf : null;
 				}
 			},
 			{
@@ -2214,13 +2234,9 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 							var itemId = _JSON$parse.itemId;
 							var rootItem = _JSON$parse.rootItem;
 							var area = _JSON$parse.area;
+							var navClickId = _JSON$parse.navClickId;
 							this.navItemsVisited.add(itemId);
-							var properties = {
-								wpdash_nav_item_id: itemId,
-								wpdash_nav_area: area
-							};
-							if (rootItem) properties.wpdash_nav_item_root = rootItem;
-							this.dispatchEvent("wpdash_nav_clicked", properties, { send_immediately: true });
+							this.dispatchEvent("wpdash_nav_clicked", this.buildNavClickProperties(itemId, rootItem, area, navClickId), { send_immediately: true });
 							sessionStorage.removeItem(PENDING_NAV_CLICK_KEY);
 						}
 					} catch (error) {
@@ -2411,15 +2427,61 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 				}
 			},
 			{
+				key: "buildNavClickProperties",
+				value: function buildNavClickProperties(itemId, rootItem, area, navClickId) {
+					var properties = {
+						wpdash_nav_item_id: itemId,
+						wpdash_nav_area: area,
+						nav_click_id: navClickId
+					};
+					if (rootItem) properties.wpdash_nav_item_root = rootItem;
+					return properties;
+				}
+			},
+			{
+				key: "storeLastNav",
+				value: function storeLastNav(itemId, area) {
+					sessionStorage.setItem(LAST_NAV_KEY, JSON.stringify({
+						itemId,
+						area,
+						clickedAt: Date.now()
+					}));
+				}
+			},
+			{
+				key: "consumeLastNavProperties",
+				value: function consumeLastNavProperties() {
+					try {
+						var stored = sessionStorage.getItem(LAST_NAV_KEY);
+						sessionStorage.removeItem(LAST_NAV_KEY);
+						if (!stored) return {};
+						var _JSON$parse2 = JSON.parse(stored);
+						var itemId = _JSON$parse2.itemId;
+						var area = _JSON$parse2.area;
+						var clickedAt = _JSON$parse2.clickedAt;
+						return {
+							last_nav_destination_event_id: itemId,
+							last_nav_area: area,
+							seconds_since_last_nav_click: this.formatDuration(Date.now() - clickedAt)
+						};
+					} catch (error) {
+						return {};
+					}
+				}
+			},
+			{
 				key: "trackNavClicked",
 				value: function trackNavClicked(itemId) {
 					var rootItem = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : null;
 					var area = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : NAV_AREAS.LEFT_MENU;
+					var clickId = (arguments.length > 3 && arguments[3] !== void 0 ? arguments[3] : null) || generateNavClickId();
+					this.storeLastNav(itemId, area);
 					if (!this.initialized) {
 						var pendingNav = {
 							itemId,
 							rootItem,
-							area
+							area,
+							navClickId: clickId
 						};
 						sessionStorage.setItem(PENDING_NAV_CLICK_KEY, JSON.stringify(pendingNav));
 						return;
@@ -2427,12 +2489,7 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 					this.updateActivity();
 					this.navItemsVisited.add(itemId);
 					this.saveSessionToStorage();
-					var properties = {
-						wpdash_nav_item_id: itemId,
-						wpdash_nav_area: area
-					};
-					if (rootItem) properties.wpdash_nav_item_root = rootItem;
-					this.dispatchEvent("wpdash_nav_clicked", properties);
+					this.dispatchEvent("wpdash_nav_clicked", this.buildNavClickProperties(itemId, rootItem, area, clickId));
 				}
 			},
 			{
@@ -2440,10 +2497,10 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 				value: function trackScreenViewed(screenId) {
 					var screenType = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : SCREEN_TYPES.TAB;
 					this.updateActivity();
-					var properties = {
+					var properties = _objectSpread({
 						wpdash_screen_id: screenId,
 						wpdash_screen_type: screenType
-					};
+					}, this.consumeLastNavProperties());
 					this.dispatchEvent("wpdash_screen_viewed", properties);
 				}
 			},

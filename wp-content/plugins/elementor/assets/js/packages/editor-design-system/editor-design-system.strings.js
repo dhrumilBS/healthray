@@ -26,10 +26,13 @@ __( 'Design system exported', 'elementor' );
 __( 'Your design system export failed', 'elementor' );
 __( 'Try again', 'elementor' );
 __( 'Replace existing values', 'elementor' );
-__( 'Imported design system values will overwrite existing variables and classes.', 'elementor' );
+__(
+			'Imported design system values will overwrite existing default styles, variables, and classes.',
+			'elementor'
+		);
 __( 'Keep existing values', 'elementor' );
-__( 'Existing variables and classes will not change.', 'elementor' );
-__( 'How to handle conflicts with existing variables or classes?', 'elementor' );
+__( 'Existing default styles, variables, and classes will not change.', 'elementor' );
+__( 'How to handle conflicts with existing default styles, variables, or classes?', 'elementor' );
 __( 'Import Design System', 'elementor' );
 __( 'Design system file dropzone', 'elementor' );
 // translators: %d is the maximum file size in megabytes.

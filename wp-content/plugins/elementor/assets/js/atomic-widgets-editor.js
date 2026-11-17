@@ -2101,6 +2101,7 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 		}
 		return e;
 	}
+	var ADMIN_NAV_CLICK_EVENT = "elementor/admin/nav-click";
 	var EditorOneEventManager = /*#__PURE__*/ function() {
 		function EditorOneEventManager() {
 			_classCallCheck(this, EditorOneEventManager);
@@ -2585,6 +2586,9 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 						var _config$targetTypes14;
 						var _config$interactionRe16;
 						var _config$locations12;
+						var _window$crypto$random;
+						var _window$crypto;
+						var _window$crypto$random2;
 						var _config$names13;
 						var config = this.getConfig();
 						var payload = this.createBasePayload({
@@ -2596,7 +2600,15 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 							target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations12 = config.locations) === null || _config$locations12 === void 0 ? void 0 : _config$locations12.sidebar)
 						});
 						if (groupEventId) payload.location_l1 = groupEventId;
-						return this.dispatchEvent(config === null || config === void 0 || (_config$names13 = config.names) === null || _config$names13 === void 0 || (_config$names13 = _config$names13.editorOne) === null || _config$names13 === void 0 ? void 0 : _config$names13.sidebarMenuItemClicked, payload);
+						var navClickId = (_window$crypto$random = (_window$crypto = window.crypto) === null || _window$crypto === void 0 || (_window$crypto$random2 = _window$crypto.randomUUID) === null || _window$crypto$random2 === void 0 ? void 0 : _window$crypto$random2.call(_window$crypto)) !== null && _window$crypto$random !== void 0 ? _window$crypto$random : "".concat(Date.now(), "-").concat(Math.random().toString(36).slice(2));
+						payload.nav_click_id = navClickId;
+						var dispatched = this.dispatchEvent(config === null || config === void 0 || (_config$names13 = config.names) === null || _config$names13 === void 0 || (_config$names13 = _config$names13.editorOne) === null || _config$names13 === void 0 ? void 0 : _config$names13.sidebarMenuItemClicked, payload);
+						window.dispatchEvent(new CustomEvent(ADMIN_NAV_CLICK_EVENT, { detail: {
+							itemId: eventId,
+							rootItem: groupEventId,
+							navClickId
+						} }));
+						return dispatched;
 					} catch (error) {
 						return false;
 					}

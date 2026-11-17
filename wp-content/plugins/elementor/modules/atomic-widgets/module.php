@@ -18,6 +18,9 @@ use Elementor\Modules\AtomicWidgets\PlainResolvers\Resolvers\Number_Plain_Resolv
 use Elementor\Modules\AtomicWidgets\PlainResolvers\Resolvers\Size_Plain_Resolver;
 use Elementor\Modules\AtomicWidgets\PlainResolvers\Resolvers\String_Plain_Resolver;
 use Elementor\Modules\AtomicWidgets\Elements\Atomic_Youtube\Atomic_Youtube;
+use Elementor\Modules\AtomicWidgets\Elements\Atomic_Google_Maps\Atomic_Google_Maps;
+use Elementor\Modules\AtomicWidgets\Elements\Atomic_Map\Map_Providers_Registry;
+use Elementor\Modules\AtomicWidgets\Elements\Atomic_Map\Providers\Google\Google_Maps_Provider;
 use Elementor\Modules\AtomicWidgets\Elements\Div_Block\Div_Block;
 use Elementor\Modules\AtomicWidgets\Elements\Flexbox\Flexbox;
 use Elementor\Modules\AtomicWidgets\Elements\Grid\Grid;
@@ -32,6 +35,7 @@ use Elementor\Modules\AtomicWidgets\Elements\Atomic_Accordion\Atomic_Accordion_I
 use Elementor\Modules\AtomicWidgets\Elements\Atomic_Accordion\Atomic_Accordion_Item_Content\Atomic_Accordion_Item_Content;
 use Elementor\Modules\AtomicWidgets\Elements\Atomic_Accordion\Atomic_Accordion_Item_Header\Atomic_Accordion_Item_Header;
 use Elementor\Modules\AtomicWidgets\Elements\Atomic_Accordion\Atomic_Accordion_Item_Icon\Atomic_Accordion_Item_Icon;
+use Elementor\Modules\AtomicWidgets\Elements\Atomic_Accordion\Atomic_Accordion_Item_Icon_Open\Atomic_Accordion_Item_Icon_Open;
 use Elementor\Modules\AtomicWidgets\Elements\Atomic_Accordion\Atomic_Accordion_Item_Title\Atomic_Accordion_Item_Title;
 use Elementor\Modules\AtomicWidgets\Elements\Atomic_Tabs\Atomic_Tabs\Atomic_Tabs;
 use Elementor\Modules\AtomicWidgets\Elements\Atomic_Tabs\Atomic_Tabs_Menu\Atomic_Tabs_Menu;
@@ -40,6 +44,7 @@ use Elementor\Modules\AtomicWidgets\Elements\Atomic_Tabs\Atomic_Tabs_Content_Are
 use Elementor\Modules\AtomicWidgets\ImportExport\Atomic_Import_Export;
 use Elementor\Modules\AtomicWidgets\Elements\Promotions\Pro_Promotion_Data_Preservation;
 use Elementor\Modules\AtomicWidgets\Elements\Loader\Frontend_Assets_Loader;
+use Elementor\Modules\AtomicWidgets\PropsResolver\Font_Awesome_7_Icon_Resolver;
 use Elementor\Modules\AtomicWidgets\PropsResolver\Transformers\Combine_Array_Transformer;
 use Elementor\Modules\AtomicWidgets\PropsResolver\Transformers\Export\Image_Src_Export_Transformer;
 use Elementor\Modules\AtomicWidgets\PropsResolver\Transformers\Export\Svg_Src_Export_Transformer;
@@ -138,6 +143,7 @@ use Elementor\Modules\AtomicWidgets\Elements\Atomic_Background_Video\Atomic_Back
 use Elementor\Modules\AtomicWidgets\Elements\Atomic_Background_Video\Atomic_Background_Video_Pause\Atomic_Background_Video_Pause;
 use Elementor\Modules\AtomicWidgets\Elements\Atomic_Background_Video\Atomic_Background_Video_Play\Atomic_Background_Video_Play;
 use Elementor\Modules\AtomicWidgets\Elements\Atomic_Tabs\Atomic_Tab_Content\Atomic_Tab_Content;
+use Elementor\Modules\AtomicWidgets\Elements\Atomic_Carousel\Carousel_Promotion;
 use Elementor\Modules\AtomicWidgets\Elements\Atomic_Collection_Loop\Collection_Loop_Promotion;
 use Elementor\Modules\AtomicWidgets\Elements\Atomic_Form\Atomic_Form;
 use Elementor\Modules\AtomicWidgets\Elements\Atomic_Form\Atomic_Form_Promotion;
@@ -175,10 +181,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Module extends BaseModule {
 	const EXPERIMENT_NAME = 'e_atomic_elements';
-	const EXPERIMENT_LIST = 'e_list';
 	const EXPERIMENT_ICON_BUTTON = 'e_icon_button';
 	const EXPERIMENT_ACCORDION = 'e_accordion';
-	const EXPERIMENT_ICON_LIBRARY = 'e_svg_library';
 
 	const PACKAGES = [
 		'editor-canvas',
@@ -205,15 +209,16 @@ class Module extends BaseModule {
 			return;
 		}
 
-		$this->register_list_experiment();
 		$this->register_icon_button_experiment();
 		$this->register_accordion_experiment();
-		$this->register_icon_library_experiment();
 
 		$this->register_hooks();
 
+		add_filter( 'elementor/document/load/data', [ Atomic_Accordion_Item_Header::class, 'replace_saved_upward_chevron' ] );
 		add_filter( 'elementor/editor/v2/packages', fn ( $packages ) => $this->add_packages( $packages ) );
 		add_filter( 'elementor/editor/localize_settings', fn ( $settings ) => $this->add_styles_schema( $settings ) );
+		add_filter( 'elementor/editor/localize_settings', fn ( $settings ) => $this->add_font_awesome_7_config( $settings ) );
+		add_filter( 'elementor/common/localize_settings', fn ( $settings ) => $this->add_font_awesome_7_config( $settings ) );
 		add_filter( 'elementor/editor/localize_settings', fn ( $settings ) => $this->add_supported_units( $settings ) );
 		add_filter( 'elementor/editor/localize_settings', fn ( $settings ) => $this->move_background_video_to_panel_end( $settings ) );
 		add_filter( 'elementor/widgets/register', fn ( Widgets_Manager $widgets_manager ) => $this->register_widgets( $widgets_manager ) );
@@ -223,6 +228,7 @@ class Module extends BaseModule {
 		add_action( 'elementor/editor/after_enqueue_scripts', fn () => $this->enqueue_scripts() );
 		add_action( 'elementor/editor/after_enqueue_styles', fn () => $this->enqueue_promotion_styles() );
 		add_action( 'elementor/preview/enqueue_styles', fn () => $this->enqueue_promotion_styles() );
+		add_action( 'elementor/preview/enqueue_styles', fn () => $this->add_preview_inline_styles() );
 		add_action( 'elementor/frontend/before_register_scripts', fn () => $this->register_frontend_scripts() );
 		add_action( 'elementor/frontend/after_enqueue_styles', fn () => $this->add_inline_styles() );
 
@@ -234,6 +240,7 @@ class Module extends BaseModule {
 		add_action( 'elementor/atomic-widgets/export/transformers/register', fn ( $transformers ) => $this->register_export_transformers( $transformers ) );
 		add_action( 'elementor/atomic-widgets/plain/transformers/register', fn ( $transformers ) => $this->register_plain_transformers( $transformers ) );
 		add_action( 'elementor/atomic-widgets/settings-resolvers/register', fn ( $registry ) => $this->register_settings_resolvers( $registry ) );
+		add_action( 'elementor/atomic-widgets/map-providers/register', fn ( Map_Providers_Registry $registry ) => $this->register_map_providers( $registry ) );
 		add_action( 'elementor/editor/templates/panel/category', fn () => $this->render_panel_category_chip() );
 	}
 
@@ -250,21 +257,6 @@ class Module extends BaseModule {
 				'minimum_installation_version' => '4.0.0',
 			],
 		];
-	}
-
-	/**
-	 * Dev-only gate that keeps the V4 List element off trunk while it is built across
-	 * several pull requests. Remove it once the element passes QA.
-	 */
-	private function register_list_experiment() {
-		Plugin::$instance->experiments->add_feature( [
-			'name' => self::EXPERIMENT_LIST,
-			'title' => esc_html__( 'List', 'elementor' ),
-			'description' => esc_html__( 'Enable the V4 List element.', 'elementor' ),
-			'hidden' => true,
-			'default' => Experiments_Manager::STATE_INACTIVE,
-			'release_status' => Experiments_Manager::RELEASE_STATUS_DEV,
-		] );
 	}
 
 	/**
@@ -287,17 +279,6 @@ class Module extends BaseModule {
 			'name' => self::EXPERIMENT_ACCORDION,
 			'title' => esc_html__( 'Accordion', 'elementor' ),
 			'description' => esc_html__( 'Enable the V4 Accordion element.', 'elementor' ),
-			'hidden' => true,
-			'default' => Experiments_Manager::STATE_INACTIVE,
-			'release_status' => Experiments_Manager::RELEASE_STATUS_DEV,
-		] );
-	}
-
-	private function register_icon_library_experiment() {
-		Plugin::$instance->experiments->add_feature( [
-			'name' => self::EXPERIMENT_ICON_LIBRARY,
-			'title' => esc_html__( 'SVG Library', 'elementor' ),
-			'description' => esc_html__( 'Enable SVG library support in the SVG element.', 'elementor' ),
 			'hidden' => true,
 			'default' => Experiments_Manager::STATE_INACTIVE,
 			'release_status' => Experiments_Manager::RELEASE_STATUS_DEV,
@@ -354,6 +335,16 @@ class Module extends BaseModule {
 		return $settings;
 	}
 
+	private function add_font_awesome_7_config( $settings ) {
+		if ( ! isset( $settings['fontAwesome'] ) || ! is_array( $settings['fontAwesome'] ) ) {
+			$settings['fontAwesome'] = [];
+		}
+
+		$settings['fontAwesome']['v7'] = Font_Awesome_7_Icon_Resolver::get_editor_config();
+
+		return $settings;
+	}
+
 	private function add_supported_units( $settings ) {
 		$settings['supported_size_units'] = Size_Constants::all_supported_units();
 
@@ -397,13 +388,17 @@ class Module extends BaseModule {
 		$widgets_manager->register( new Atomic_Youtube() );
 		$widgets_manager->register( new Atomic_Divider() );
 		$widgets_manager->register( new Atomic_Self_Hosted_Video() );
+
+		if ( Atomic_Google_Maps::has_provider() ) {
+			$widgets_manager->register( new Atomic_Google_Maps() );
+		}
+	}
+
+	private function register_map_providers( Map_Providers_Registry $registry ) {
+		$registry->register( new Google_Maps_Provider() );
 	}
 
 	private function register_list_element( Elements_Manager $elements_manager ) {
-		if ( ! Plugin::$instance->experiments->is_feature_active( self::EXPERIMENT_LIST ) ) {
-			return $this;
-		}
-
 		$elements_manager->register_element_type( new Atomic_List() );
 		$elements_manager->register_element_type( new Atomic_List_Item() );
 		$elements_manager->register_element_type( new Atomic_List_Item_Marker() );
@@ -430,6 +425,7 @@ class Module extends BaseModule {
 		$elements_manager->register_element_type( new Atomic_Accordion_Item_Header() );
 		$elements_manager->register_element_type( new Atomic_Accordion_Item_Title() );
 		$elements_manager->register_element_type( new Atomic_Accordion_Item_Icon() );
+		$elements_manager->register_element_type( new Atomic_Accordion_Item_Icon_Open() );
 		$elements_manager->register_element_type( new Atomic_Accordion_Item_Content() );
 
 		$elements_manager->register_element_type( new Atomic_Background_Video() );
@@ -448,6 +444,7 @@ class Module extends BaseModule {
 
 		if ( ! \Elementor\Utils::has_pro() ) {
 			$elements_manager->register_element_type( new Collection_Loop_Promotion() );
+			$elements_manager->register_element_type( new Carousel_Promotion() );
 		}
 	}
 
@@ -597,10 +594,6 @@ class Module extends BaseModule {
 		return Plugin::$instance->experiments->is_feature_active( self::EXPERIMENT_NAME );
 	}
 
-	public static function is_svg_library_active(): bool {
-		return Plugin::$instance->experiments->is_feature_active( self::EXPERIMENT_ICON_LIBRARY );
-	}
-
 	private function get_element_usage_name( $title, $type ) {
 		$element_instance = Plugin::$instance->elements_manager->get_element_types( $type );
 		$widget_instance = Plugin::$instance->widgets_manager->get_widget_types( $type );
@@ -646,6 +639,8 @@ class Module extends BaseModule {
 	private function add_inline_styles() {
 		$inline_css = implode( '', [
 			'.e-heading-base a, .e-paragraph-base a { all: unset; cursor: pointer; }',
+			// Default SVG size. A slot sets the variables; the SVG's own Width and Height outrank `:where()`.
+			'.elementor :where(.e-svg-base) { width: var(--e-svg-width, 65px); height: var(--e-svg-height, 65px); }',
 			'form[data-element_type="e-form"].form-state-success [data-element_type="e-form-success-message"],',
 			'form[data-element_type="e-form"].form-state-error [data-element_type="e-form-error-message"]',
 			'{ display: block; }',
@@ -703,13 +698,45 @@ class Module extends BaseModule {
 			'}',
 			'.e-accordion-item-base[open]::details-content { block-size: auto; }',
 			// Accordion icon slot: see docs/accordion_v4_icon_slot_behaviors.md
-			'.e-accordion-item-icon-base.e-accordion-item-icon-base .e-svg-base { width: auto; height: 100%; max-width: 100%; }',
-			'.e-accordion-item-icon-base.e-accordion-item-icon-base .e-svg-base svg { width: auto !important; }',
-			'.e-accordion-item-icon-base svg { transition: transform .3s ease; }',
-			'.e-accordion-item-base[open] > summary .e-accordion-item-icon-base svg { transform: rotate(180deg); }',
+			'.e-accordion-item-icon-base, .e-accordion-item-icon-open-base { --e-svg-width: auto; --e-svg-height: 100%; }',
+			':where(.e-accordion-item-icon-base, .e-accordion-item-icon-open-base) .e-svg-base { max-width: 100%; }',
+			'.e-accordion-item-icon-base.e-accordion-item-icon-base .e-svg-base svg, .e-accordion-item-icon-open-base.e-accordion-item-icon-open-base .e-svg-base svg { width: auto !important; }',
+			'.e-accordion-item-icon-base svg, .e-accordion-item-icon-open-base svg { transition: transform .3s ease; }',
+			// No fallback: a missing variable makes this declaration invalid, so it is dropped and the
+			// closed icon stays at transform none. That is the published accordion. 0 is omitted by the
+			// template for the same reason. A saved close angle is the only thing that rotates it.
+			'.e-accordion-item-base:not([open]) > summary :is(.e-accordion-item-icon-base, .e-accordion-item-icon-open-base) svg { transform: rotate(var(--e-accordion-icon-rotation-closed)); }',
+			'.e-accordion-item-base[open] > summary :is(.e-accordion-item-icon-base, .e-accordion-item-icon-open-base) svg { transform: rotate(var(--e-accordion-icon-rotation, ' . Atomic_Accordion::ICON_ROTATION_DEFAULT . 'deg)); }',
+			// `display: none` until [open] skips the transform transition, so the open icon
+			// appears already rotated. Keep both slots rendered, stacked in one cell, and
+			// swap them with visibility so the visible icon can rotate.
+			'.e-accordion-item-header-base.e-accordion-item-header-base:has(> .e-accordion-item-icon-open-base) { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; }',
+			'.e-accordion-item-header-base:has(> .e-accordion-item-icon-open-base) > .e-accordion-item-title-base { grid-column: 1; grid-row: 1; }',
+			'.e-accordion-item-header-base:has(> .e-accordion-item-icon-open-base) > :is(.e-accordion-item-icon-base, .e-accordion-item-icon-open-base) { grid-column: 2; grid-row: 1; }',
+			'.e-accordion-item-base .e-accordion-item-icon-open-base.e-accordion-item-icon-open-base { visibility: hidden; }',
+			'.e-accordion-item-base[open] > summary .e-accordion-item-icon-open-base { visibility: visible; }',
+			'.e-accordion-item-base[open] > summary:has(.e-accordion-item-icon-open-base) .e-accordion-item-icon-base { visibility: hidden; }',
+			// A solid circle at 1em fills the text box and looks heavier than a bullet. 0.6em stays inside the 1lh slot.
+			'.e-list-item-marker-base { --e-svg-width: ' . Atomic_List_Item_Marker::MARKER_SVG_SIZE . '; --e-svg-height: ' . Atomic_List_Item_Marker::MARKER_SVG_SIZE . '; }',
+			// The marker is a flex item and shrinks the icon (about 19.7px wide for a 21px font). :where() stays under the SVG's own styles.
+			':where(.e-list-item-marker-base) .e-svg-base { flex-shrink: 0; }',
+			// The inner svg is inline, so any box shorter than the line — the 0.6em default, or a smaller Width/Height the user sets — sits on the text baseline and drops below the slot.
+			'.e-list-item-marker-base .e-svg-base svg { display: block; }',
+
 		] );
+
 		wp_add_inline_style( 'elementor-frontend', $inline_css );
 		wp_add_inline_style( 'elementor-editor', $inline_css );
+	}
+
+	private function add_preview_inline_styles() {
+		// The marker handle moves beside the marker. The list and list item handles move to the far end: the list handle otherwise sits on the first item's icon, and the item handle sits on its own icon.
+		wp_add_inline_style(
+			'editor-preview',
+			'.e-list-item > .e-list-item__marker.e-con > .elementor-element-overlay > .elementor-editor-element-settings { inset-inline-start: auto; inset-inline-end: 100%; }' .
+			'.e-list > .e-list-item.e-con > .elementor-element-overlay > .elementor-editor-element-settings { inset-inline-start: auto; inset-inline-end: 0; }' .
+			'.e-list.e-con.e-atomic-element > .elementor-element-overlay > .elementor-editor-element-settings { inset-inline-start: auto; inset-inline-end: 0; transform: none; }'
+		);
 	}
 
 	private function enqueue_promotion_styles() {

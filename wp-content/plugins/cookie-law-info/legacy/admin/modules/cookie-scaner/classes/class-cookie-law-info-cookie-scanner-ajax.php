@@ -97,8 +97,9 @@ class Cookie_Law_Info_Cookie_Scanner_Ajax extends Cookie_Law_Info_Cookie_Scaner 
 				$data['scan_html'] = $this->scanner_notices( true );
 				$data['code']      = $status_code;
 			} else {
-				$data['code']    = $status_code;
-				$data['message'] = $this->get_ckyes_message( $status_code );
+				$data['code']          = $status_code;
+				$data['message']       = $this->get_ckyes_message( $status_code );
+				$data['has_help_link'] = $this->ckyes_message_has_help_link( $status_code );
 			}
 		}
 		if ( true === $status ) {
@@ -240,6 +241,7 @@ class Cookie_Law_Info_Cookie_Scanner_Ajax extends Cookie_Law_Info_Cookie_Scaner 
 		} else {
 			if ( 'completed' === $scan_status ) {
 
+				delete_option( 'cli_scan_bypass' );
 				$data['refresh'] = true;
 				$data['status']  = true;
 				wp_send_json_success( $data );
@@ -275,7 +277,7 @@ class Cookie_Law_Info_Cookie_Scanner_Ajax extends Cookie_Law_Info_Cookie_Scaner 
 		$scan_id  = $this->get_last_scan_id();
 		$data_arr = array( 'status' => 4 ); // Updating scan status to stopped.
 		$this->update_scan_entry( $data_arr, $scan_id );
-		update_option( 'CLI_BYPASS', 0 );
+		delete_option( 'cli_scan_bypass' );
 	}
 	/**
 	 * Return the total page count
@@ -385,7 +387,7 @@ class Cookie_Law_Info_Cookie_Scanner_Ajax extends Cookie_Law_Info_Cookie_Scaner 
 
 			$data_arr = array( 'status' => 3 ); // Updating scan status to stopped.
 			$this->update_scan_entry( $data_arr, $scan_id );
-			update_option( 'CLI_BYPASS', 0 );
+			delete_option( 'cli_scan_bypass' );
 			$data['refresh'] = true;
 			$data['message'] = __( 'Abort successful', 'cookie-law-info' );
 			wp_send_json_success( $data );
@@ -537,7 +539,7 @@ class Cookie_Law_Info_Cookie_Scanner_Ajax extends Cookie_Law_Info_Cookie_Scaner 
 		$scan_id  = $this->get_last_scan_id();
 		$data_arr = array( 'status' => 3 ); // Updating scan status to stopped.
 		$this->update_scan_entry( $data_arr, $scan_id );
-		update_option( 'CLI_BYPASS', 0 );
+		delete_option( 'cli_scan_bypass' );
 	}
 }
 

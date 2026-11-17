@@ -100,12 +100,15 @@
 							} else {
 								if ( data.message ) {
 									wtCliAdminFunctions.createModal( '',data.message );
-									setTimeout(
-										function(){
-											window.location.reload();
-										},
-										1500
-									);
+									// The scanner-unreachable message carries a forum link: keep the modal open so it can be clicked.
+									if ( ! data.has_help_link ) {
+										setTimeout(
+											function(){
+												window.location.reload();
+											},
+											1500
+										);
+									}
 								}
 							}
 						}

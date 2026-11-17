@@ -16,8 +16,8 @@ class Cookie_Law_Info_Review_Request {
 	private $plugin_title        = 'GDPR Cookie Consent (CCPA Ready)';
 	private $review_url          = 'https://wordpress.org/support/plugin/cookie-law-info/reviews/#new-post';
 	private $plugin_prefix       = 'wt_cli'; /* must be unique name */
-	private $days_to_show_banner = 60; /* when did the banner to show */
-	private $remind_days         = 60; /* remind interval in days */
+	private $days_to_show_banner = 30; /* when did the banner to show */
+	private $remind_days         = 30; /* remind interval in days */
 
 
 

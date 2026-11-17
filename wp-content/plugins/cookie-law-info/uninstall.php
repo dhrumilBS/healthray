@@ -71,6 +71,7 @@ if ( defined( 'CKY_REMOVE_ALL_DATA' ) && true === CKY_REMOVE_ALL_DATA ) {
 			// never declared one.
 			'cky_activation_context',
 			'cky_install_source',
+			'cky_wpgmza_cookie_added',
 		);
 		foreach ( $options as $option_name ) {
 			delete_option( $option_name );

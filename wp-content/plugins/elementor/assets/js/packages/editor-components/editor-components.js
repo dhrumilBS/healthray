@@ -65,6 +65,7 @@ react = __toESM(react);
 	var BASE_URL = "elementor/v1/components";
 	var getParams = (id) => ({
 		action: "get_document_config",
+		retry: true,
 		unique_id: `document-config-${id}`,
 		data: { id }
 	});
@@ -284,6 +285,7 @@ react = __toESM(react);
 //#region packages/packages/core/editor-components/src/utils/component-document-data.ts
 	var getComponentDocumentParams = (id) => ({
 		action: "get_document_config",
+		retry: true,
 		unique_id: `document-${id}`,
 		data: { id }
 	});
@@ -319,23 +321,27 @@ react = __toESM(react);
 //#region packages/packages/core/editor-components/src/component-overridable-transformer.ts
 	var componentOverridableTransformer = (0, _elementor_editor_canvas.createTransformer)((value, options) => {
 		const { overrides } = options.renderContext ?? {};
+		const originValue = normalizeOriginValue(value.origin_value);
 		const overrideValue = overrides?.[value.override_key];
 		if (overrideValue) {
-			if (isOriginValueOverride(value.origin_value)) return transformOverride(value, options, overrideValue);
+			if (isOriginValueOverride(originValue)) return transformOverride(originValue, options, overrideValue);
 			return overrideValue;
 		}
-		return value.origin_value;
+		return originValue;
 	});
-	function transformOverride(value, options, overrideValue) {
+	function normalizeOriginValue(originValue) {
+		return !!originValue && Object.keys(originValue).length === 0 ? null : originValue;
+	}
+	function transformOverride(originValue, options, overrideValue) {
 		const transformer = _elementor_editor_canvas.settingsTransformersRegistry.get("override");
 		if (!transformer) return null;
-		const transformedValue = transformer(value.origin_value.value, options);
+		const transformedValue = transformer(originValue.value, options);
 		if (!transformedValue) return null;
 		const [key] = Object.keys(transformedValue);
 		return { [key]: overrideValue };
 	}
 	function isOriginValueOverride(originValue) {
-		return originValue.$$type === "override";
+		return originValue?.$$type === "override";
 	}
 
 //#endregion
@@ -1858,6 +1864,7 @@ react = __toESM(react);
 		const value = { [overridableProp.overrideKey]: propValue };
 		const baseValue = { [overridableProp.overrideKey]: resolvedBaseValue };
 		const { control, controlProps, layout } = getControlParams(controls, overridableProp.originPropFields ?? overridableProp, overridableProp.label);
+		const effectiveControlProps = hasInheritedValue(resolvedBaseValue) ? omitPlaceholder(controlProps) : controlProps;
 		const propTypeSchema = (0, _elementor_editor_editing_panel.createTopLevelObjectType)({ schema: { [overridableProp.overrideKey]: propType } });
 		const setValue = (newValue, options, meta) => {
 			let newPropValue = getTempNewValueForDynamicProp(propType, propValue, newValue[overridableProp.overrideKey]);
@@ -1907,7 +1914,7 @@ react = __toESM(react);
 			isDisabled
 		}, /* @__PURE__ */ react.createElement(_elementor_editor_controls.PropKeyProvider, { bind: overridableProp.overrideKey }, /* @__PURE__ */ react.createElement(_elementor_editor_controls.ControlReplacementsProvider, { replacements: controlReplacements }, /* @__PURE__ */ react.createElement(_elementor_ui.Box, { mb: 1.5 }, /* @__PURE__ */ react.createElement(_elementor_editor_editing_panel.ControlTypeContainer, { layout }, layout !== "custom" && /* @__PURE__ */ react.createElement(ControlLabel, null, overridableProp.label), /* @__PURE__ */ react.createElement(OriginalControl, {
 			control,
-			controlProps
+			controlProps: effectiveControlProps
 		}))))))));
 	}
 	function resolveOverrideValues(overrideValue, resolvedOriginValues, propKey) {
@@ -1917,6 +1924,13 @@ react = __toESM(react);
 			propValue: isInheritedDynamic && !overrideValue ? inheritedValue : overrideValue,
 			baseValue: overrideValue || isInheritedDynamic ? null : inheritedValue
 		};
+	}
+	function hasInheritedValue(baseValue) {
+		return !!baseValue && !(0, _elementor_editor_props.isEmpty)(baseValue);
+	}
+	function omitPlaceholder(controlProps) {
+		const { placeholder: _placeholder, ...rest } = controlProps;
+		return rest;
 	}
 	function getTempNewValueForDynamicProp(propType, propValue, newPropValue) {
 		if (newPropValue === null && (0, _elementor_editor_editing_panel.isDynamicPropValue)(propValue)) return propType.default ?? null;
@@ -1991,6 +2005,10 @@ react = __toESM(react);
 	}
 
 //#endregion
+//#region packages/packages/core/editor-components/src/components/instance-editing-panel/override-props-group-constants.ts
+	var OVERRIDE_PROPS_GROUP_CONTENT_CLASS = "e-override-props-group__content";
+
+//#endregion
 //#region packages/packages/core/editor-components/src/components/instance-editing-panel/override-props-group.tsx
 	function OverridePropsGroup({ group }) {
 		const [isOpen, setIsOpen] = (0, _elementor_editor_editing_panel.useStateByElement)(group.id, true);
@@ -2001,7 +2019,10 @@ react = __toESM(react);
 		const labelId = `label-${id}`;
 		const contentId = `content-${id}`;
 		const title = group.label;
-		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, { "aria-label": `${title} section` }, /* @__PURE__ */ react.createElement(_elementor_ui.ListItemButton, {
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+			"aria-label": `${title} section`,
+			sx: { [`&:has(.${OVERRIDE_PROPS_GROUP_CONTENT_CLASS}:empty)`]: { display: "none" } }
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.ListItemButton, {
 			id: labelId,
 			"aria-controls": contentId,
 			"aria-label": `${title} section`,
@@ -2036,6 +2057,7 @@ react = __toESM(react);
 			in: isOpen,
 			timeout: "auto"
 		}, /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
+			className: OVERRIDE_PROPS_GROUP_CONTENT_CLASS,
 			direction: "column",
 			gap: 1,
 			p: 2

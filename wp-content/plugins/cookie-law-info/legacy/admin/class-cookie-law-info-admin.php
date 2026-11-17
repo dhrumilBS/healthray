@@ -266,7 +266,7 @@ class Cookie_Law_Info_Admin {
 	}
 	public function plugin_action_links( $links ) {
 		$links[] = '<a href="' . get_admin_url( null, 'edit.php?post_type=' . CLI_POST_TYPE . '&page=cookie-law-info' ) . '">' . __( 'Settings', 'cookie-law-info' ) . '</a>';
-		$links[] = '<a href="https://www.cookieyes.com/support/" target="_blank">' . esc_html__( 'Support', 'cookie-law-info' ) . '</a>';
+		$links[] = '<a href="https://wordpress.org/support/plugin/cookie-law-info/#new-topic-0" target="_blank">' . esc_html__( 'Support', 'cookie-law-info' ) . '</a>';
 		return $links;
 	}
 

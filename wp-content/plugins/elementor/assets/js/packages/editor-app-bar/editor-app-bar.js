@@ -1,4 +1,4 @@
-(function(_elementor_locations, _elementor_menus, react, _elementor_icons, _elementor_ui, _elementor_editor, _elementor_editor_documents, _wordpress_i18n, _elementor_editor_current_user, _elementor_editor_ui, _elementor_events, _elementor_editor_v1_adapters, _elementor_http_client, _elementor_editor_mcp, _elementor_editor_responsive) {
+(function(_elementor_locations, _elementor_menus, react, _elementor_icons, _elementor_ui, _elementor_editor, _elementor_editor_documents, _elementor_editor_ui, _wordpress_i18n, _elementor_editor_current_user, _elementor_events, _elementor_editor_v1_adapters, _elementor_http_client, _elementor_editor_mcp, _elementor_editor_responsive) {
 
 //#region \0rolldown/runtime.js
 	var __create = Object.create;
@@ -726,7 +726,7 @@ react = __toESM(react);
 		const document = (0, _elementor_editor_documents.__useActiveDocument)();
 		const containerRef = (0, react.useRef)(null);
 		const maxToolbarActions = getMaxToolbarActions(useContainerWidth(containerRef));
-		return /* @__PURE__ */ react.createElement(_elementor_ui.ThemeProvider, { colorScheme: "dark" }, /* @__PURE__ */ react.createElement(_elementor_ui.AppBar, { position: "sticky" }, /* @__PURE__ */ react.createElement(_elementor_ui.Toolbar, {
+		return /* @__PURE__ */ react.createElement(_elementor_editor_ui.ThemeProvider, { colorScheme: "dark" }, /* @__PURE__ */ react.createElement(_elementor_ui.AppBar, { position: "sticky" }, /* @__PURE__ */ react.createElement(_elementor_ui.Toolbar, {
 			disableGutters: true,
 			variant: "dense",
 			sx: { overflowX: "auto" }
@@ -971,7 +971,8 @@ react = __toESM(react);
 		const shouldShowSpinner = document.isSaving && !isPublishDisabled;
 		return /* @__PURE__ */ react.createElement(react.Fragment, null, /* @__PURE__ */ react.createElement(_elementor_ui.ButtonGroup, {
 			size: "large",
-			variant: "contained"
+			variant: "contained",
+			color: "accent"
 		}, /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
 			onClick: () => {
 				const extendedWindow = window;
@@ -1530,6 +1531,7 @@ react = __toESM(react);
 			borderColor: "divider"
 		} }, /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
 			variant: "contained",
+			color: "accent",
 			disabled: !document || !document.isDirty,
 			size: "medium",
 			sx: { width: "100%" },
@@ -1777,6 +1779,6 @@ react = __toESM(react);
 	(window.elementorV2 = window.elementorV2 || {}).editorAppBar = src_exports;
 
 //#endregion
-})(elementorV2.locations, elementorV2.menus, React, elementorV2.icons, elementorV2.ui, elementorV2.editor, elementorV2.editorDocuments, wp.i18n, elementorV2.editorCurrentUser, elementorV2.editorUi, elementorV2.events, elementorV2.editorV1Adapters, elementorV2.httpClient, elementorV2.editorMcp, elementorV2.editorResponsive);
+})(elementorV2.locations, elementorV2.menus, React, elementorV2.icons, elementorV2.ui, elementorV2.editor, elementorV2.editorDocuments, elementorV2.editorUi, wp.i18n, elementorV2.editorCurrentUser, elementorV2.events, elementorV2.editorV1Adapters, elementorV2.httpClient, elementorV2.editorMcp, elementorV2.editorResponsive);
 window.elementorV2.editorAppBar?.init?.();
 //# sourceMappingURL=editor-app-bar.js.map

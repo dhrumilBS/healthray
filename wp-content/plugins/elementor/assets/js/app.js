@@ -3003,7 +3003,7 @@ init_content();
 
 //#endregion
 //#region app/assets/js/ui/dialog/dialog-title.js
-	function ownKeys$47(e, r) {
+	function ownKeys$51(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -3013,12 +3013,12 @@ init_content();
 		}
 		return t;
 	}
-	function _objectSpread$46(e) {
+	function _objectSpread$50(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$47(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$51(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$47(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$51(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -3033,11 +3033,11 @@ init_content();
 		init_defineProperty$1();
 		init_extends();
 		init_heading();
-		__name(ownKeys$47, "ownKeys");
-		__name(_objectSpread$46, "_objectSpread");
+		__name(ownKeys$51, "ownKeys");
+		__name(_objectSpread$50, "_objectSpread");
 		__name(DialogTitle$3, "DialogTitle");
-		DialogTitle$3.propTypes = _objectSpread$46(_objectSpread$46({}, Heading$11.propTypes), {}, { className: import_prop_types$76.default.string });
-		DialogTitle$3.defaultProps = _objectSpread$46(_objectSpread$46({}, Heading$11.propTypes), {}, {
+		DialogTitle$3.propTypes = _objectSpread$50(_objectSpread$50({}, Heading$11.propTypes), {}, { className: import_prop_types$76.default.string });
+		DialogTitle$3.defaultProps = _objectSpread$50(_objectSpread$50({}, Heading$11.propTypes), {}, {
 			variant: "h3",
 			tag: "h3",
 			className: ""
@@ -3081,7 +3081,7 @@ init_content();
 
 //#endregion
 //#region app/assets/js/ui/dialog/dialog-text.js
-	function ownKeys$46(e, r) {
+	function ownKeys$50(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -3091,12 +3091,12 @@ init_content();
 		}
 		return t;
 	}
-	function _objectSpread$45(e) {
+	function _objectSpread$49(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$46(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$50(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$46(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$50(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -3109,10 +3109,10 @@ init_content();
 		init_defineProperty$1();
 		init_extends();
 		init_text();
-		__name(ownKeys$46, "ownKeys");
-		__name(_objectSpread$45, "_objectSpread");
-		DialogText.propTypes = _objectSpread$45({}, Text$11.propTypes);
-		DialogText.defaultProps = _objectSpread$45(_objectSpread$45({}, Text$11.defaultProps), {}, {
+		__name(ownKeys$50, "ownKeys");
+		__name(_objectSpread$49, "_objectSpread");
+		DialogText.propTypes = _objectSpread$49({}, Text$11.propTypes);
+		DialogText.defaultProps = _objectSpread$49(_objectSpread$49({}, Text$11.defaultProps), {}, {
 			tag: "p",
 			variant: "sm"
 		});
@@ -3132,7 +3132,7 @@ init_content();
 
 //#endregion
 //#region app/assets/js/ui/dialog/dialog-button.js
-	function ownKeys$45(e, r) {
+	function ownKeys$49(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -3142,12 +3142,12 @@ init_content();
 		}
 		return t;
 	}
-	function _objectSpread$44(e) {
+	function _objectSpread$48(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$45(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$49(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$45(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$49(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -3162,13 +3162,13 @@ init_content();
 		init_defineProperty$1();
 		init_extends();
 		init_button$1();
-		__name(ownKeys$45, "ownKeys");
-		__name(_objectSpread$44, "_objectSpread");
-		DialogButton.propTypes = _objectSpread$44(_objectSpread$44({}, Button$30.propTypes), {}, {
+		__name(ownKeys$49, "ownKeys");
+		__name(_objectSpread$48, "_objectSpread");
+		DialogButton.propTypes = _objectSpread$48(_objectSpread$48({}, Button$30.propTypes), {}, {
 			tabIndex: import_prop_types$73.default.string,
 			type: import_prop_types$73.default.string
 		});
-		DialogButton.defaultProps = _objectSpread$44(_objectSpread$44({}, Button$30.defaultProps), {}, {
+		DialogButton.defaultProps = _objectSpread$48(_objectSpread$48({}, Button$30.defaultProps), {}, {
 			tabIndex: "0",
 			type: "button"
 		});
@@ -5135,7 +5135,7 @@ var import_shallowequal = /* @__PURE__ */ __toESM(require_shallowequal());
 	init_defineProperty$1();
 	init_classCallCheck();
 	init_createClass();
-	function ownKeys$44(e, r) {
+	function ownKeys$48(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -5145,19 +5145,19 @@ var import_shallowequal = /* @__PURE__ */ __toESM(require_shallowequal());
 		}
 		return t;
 	}
-	__name(ownKeys$44, "ownKeys");
-	function _objectSpread$43(e) {
+	__name(ownKeys$48, "ownKeys");
+	function _objectSpread$47(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$44(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$48(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$44(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$48(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$43, "_objectSpread");
+	__name(_objectSpread$47, "_objectSpread");
 	var ReducerUtils = /*#__PURE__*/ function() {
 		function ReducerUtils() {
 			_classCallCheck(this, ReducerUtils);
@@ -5167,8 +5167,8 @@ var import_shallowequal = /* @__PURE__ */ __toESM(require_shallowequal());
 			value: function updateArray(state, key, value, action) {
 				if ("add" === action) {
 					if (state[key].includes(value)) return state;
-					return _objectSpread$43(_objectSpread$43({}, state), {}, _defineProperty$1({}, key, [].concat(_toConsumableArray(state[key]), [value])));
-				} else if ("remove" === action) return _objectSpread$43(_objectSpread$43({}, state), {}, _defineProperty$1({}, key, state[key].filter(function(item) {
+					return _objectSpread$47(_objectSpread$47({}, state), {}, _defineProperty$1({}, key, [].concat(_toConsumableArray(state[key]), [value])));
+				} else if ("remove" === action) return _objectSpread$47(_objectSpread$47({}, state), {}, _defineProperty$1({}, key, state[key].filter(function(item) {
 					return item !== value;
 				})));
 				return state;
@@ -5179,7 +5179,7 @@ var import_shallowequal = /* @__PURE__ */ __toESM(require_shallowequal());
 //#endregion
 //#region app/modules/import-export/assets/js/context/shared-context/shared-context-reducer.js
 	init_defineProperty$1();
-	function ownKeys$43(e, r) {
+	function ownKeys$47(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -5189,31 +5189,31 @@ var import_shallowequal = /* @__PURE__ */ __toESM(require_shallowequal());
 		}
 		return t;
 	}
-	__name(ownKeys$43, "ownKeys");
-	function _objectSpread$42(e) {
+	__name(ownKeys$47, "ownKeys");
+	function _objectSpread$46(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$43(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$47(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$43(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$47(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$42, "_objectSpread");
+	__name(_objectSpread$46, "_objectSpread");
 	var reducer$3 = function reducer(state, _ref) {
 		var type = _ref.type;
 		var payload = _ref.payload;
 		switch (type) {
 			case "ADD_INCLUDE": return ReducerUtils.updateArray(state, "includes", payload, "add");
 			case "REMOVE_INCLUDE": return ReducerUtils.updateArray(state, "includes", payload, "remove");
-			case "SET_REFERRER": return _objectSpread$42(_objectSpread$42({}, state), {}, { referrer: payload });
-			case "SET_INCLUDES": return _objectSpread$42(_objectSpread$42({}, state), {}, { includes: payload });
-			case "SET_CPT": return _objectSpread$42(_objectSpread$42({}, state), {}, { customPostTypes: payload });
-			case "SET_SELECTED_CPT": return _objectSpread$42(_objectSpread$42({}, state), {}, { selectedCustomPostTypes: payload });
-			case "SET_CURRENT_PAGE_NAME": return _objectSpread$42(_objectSpread$42({}, state), {}, { currentPage: payload });
-			case "SET_RETURN_TO": return _objectSpread$42(_objectSpread$42({}, state), {}, { returnTo: payload });
+			case "SET_REFERRER": return _objectSpread$46(_objectSpread$46({}, state), {}, { referrer: payload });
+			case "SET_INCLUDES": return _objectSpread$46(_objectSpread$46({}, state), {}, { includes: payload });
+			case "SET_CPT": return _objectSpread$46(_objectSpread$46({}, state), {}, { customPostTypes: payload });
+			case "SET_SELECTED_CPT": return _objectSpread$46(_objectSpread$46({}, state), {}, { selectedCustomPostTypes: payload });
+			case "SET_CURRENT_PAGE_NAME": return _objectSpread$46(_objectSpread$46({}, state), {}, { currentPage: payload });
+			case "SET_RETURN_TO": return _objectSpread$46(_objectSpread$46({}, state), {}, { returnTo: payload });
 			default: return state;
 		}
 	};
@@ -5300,7 +5300,7 @@ var import_shallowequal = /* @__PURE__ */ __toESM(require_shallowequal());
 //#endregion
 //#region app/modules/import-export/assets/js/context/import-context/import-context-reducer.js
 	init_defineProperty$1();
-	function ownKeys$42(e, r) {
+	function ownKeys$46(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -5310,37 +5310,37 @@ var import_shallowequal = /* @__PURE__ */ __toESM(require_shallowequal());
 		}
 		return t;
 	}
-	__name(ownKeys$42, "ownKeys");
-	function _objectSpread$41(e) {
+	__name(ownKeys$46, "ownKeys");
+	function _objectSpread$45(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$42(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$46(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$42(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$46(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$41, "_objectSpread");
+	__name(_objectSpread$45, "_objectSpread");
 	var reducer$2 = function reducer(state, _ref) {
 		var type = _ref.type;
 		var payload = _ref.payload;
 		switch (type) {
-			case "SET_ID": return _objectSpread$41(_objectSpread$41({}, state), {}, { id: payload });
-			case "SET_FILE": return _objectSpread$41(_objectSpread$41({}, state), {}, { file: payload });
-			case "SET_KIT_SOURCE": return _objectSpread$41(_objectSpread$41({}, state), {}, { source: payload });
+			case "SET_ID": return _objectSpread$45(_objectSpread$45({}, state), {}, { id: payload });
+			case "SET_FILE": return _objectSpread$45(_objectSpread$45({}, state), {}, { file: payload });
+			case "SET_KIT_SOURCE": return _objectSpread$45(_objectSpread$45({}, state), {}, { source: payload });
 			case "ADD_OVERRIDE_CONDITION": return ReducerUtils.updateArray(state, "overrideConditions", payload, "add");
 			case "REMOVE_OVERRIDE_CONDITION": return ReducerUtils.updateArray(state, "overrideConditions", payload, "remove");
-			case "SET_UPLOADED_DATA": return _objectSpread$41(_objectSpread$41({}, state), {}, { uploadedData: payload });
-			case "SET_IMPORTED_DATA": return _objectSpread$41(_objectSpread$41({}, state), {}, { importedData: payload });
-			case "SET_PLUGINS": return _objectSpread$41(_objectSpread$41({}, state), {}, { plugins: payload });
-			case "SET_REQUIRED_PLUGINS": return _objectSpread$41(_objectSpread$41({}, state), {}, { requiredPlugins: payload });
-			case "SET_IMPORTED_PLUGINS": return _objectSpread$41(_objectSpread$41({}, state), {}, { importedPlugins: payload });
-			case "SET_IS_PRO_INSTALLED_DURING_PROCESS": return _objectSpread$41(_objectSpread$41({}, state), {}, { isProInstalledDuringProcess: payload });
-			case "SET_ACTION_TYPE": return _objectSpread$41(_objectSpread$41({}, state), {}, { actionType: payload });
-			case "SET_IS_RESOLVED": return _objectSpread$41(_objectSpread$41({}, state), {}, { isResolvedData: payload });
-			case "SET_PLUGINS_STATE": return _objectSpread$41(_objectSpread$41({}, state), {}, { pluginsState: payload });
+			case "SET_UPLOADED_DATA": return _objectSpread$45(_objectSpread$45({}, state), {}, { uploadedData: payload });
+			case "SET_IMPORTED_DATA": return _objectSpread$45(_objectSpread$45({}, state), {}, { importedData: payload });
+			case "SET_PLUGINS": return _objectSpread$45(_objectSpread$45({}, state), {}, { plugins: payload });
+			case "SET_REQUIRED_PLUGINS": return _objectSpread$45(_objectSpread$45({}, state), {}, { requiredPlugins: payload });
+			case "SET_IMPORTED_PLUGINS": return _objectSpread$45(_objectSpread$45({}, state), {}, { importedPlugins: payload });
+			case "SET_IS_PRO_INSTALLED_DURING_PROCESS": return _objectSpread$45(_objectSpread$45({}, state), {}, { isProInstalledDuringProcess: payload });
+			case "SET_ACTION_TYPE": return _objectSpread$45(_objectSpread$45({}, state), {}, { actionType: payload });
+			case "SET_IS_RESOLVED": return _objectSpread$45(_objectSpread$45({}, state), {}, { isResolvedData: payload });
+			case "SET_PLUGINS_STATE": return _objectSpread$45(_objectSpread$45({}, state), {}, { pluginsState: payload });
 			default: return state;
 		}
 	};
@@ -5377,7 +5377,7 @@ var import_shallowequal = /* @__PURE__ */ __toESM(require_shallowequal());
 
 //#endregion
 //#region app/assets/js/hooks/use-query-params.js
-	function ownKeys$41(e, r) {
+	function ownKeys$45(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -5387,12 +5387,12 @@ var import_shallowequal = /* @__PURE__ */ __toESM(require_shallowequal());
 		}
 		return t;
 	}
-	function _objectSpread$40(e) {
+	function _objectSpread$44(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$41(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$45(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$41(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$45(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -5409,7 +5409,7 @@ var import_shallowequal = /* @__PURE__ */ __toESM(require_shallowequal());
 			var key = _pair$split2[0];
 			hashParams[key] = _pair$split2[1];
 		});
-		var queryParams = _objectSpread$40(_objectSpread$40({}, urlParams), hashParams);
+		var queryParams = _objectSpread$44(_objectSpread$44({}, urlParams), hashParams);
 		return { getAll: function getAll() {
 			return queryParams;
 		} };
@@ -5417,8 +5417,8 @@ var import_shallowequal = /* @__PURE__ */ __toESM(require_shallowequal());
 	var init_use_query_params = __esmMin((() => {
 		init_defineProperty$1();
 		init_slicedToArray();
-		__name(ownKeys$41, "ownKeys");
-		__name(_objectSpread$40, "_objectSpread");
+		__name(ownKeys$45, "ownKeys");
+		__name(_objectSpread$44, "_objectSpread");
 	}));
 
 //#endregion
@@ -5475,7 +5475,7 @@ init_use_query_params();
 	init_grid();
 	init_icon();
 	init_text();
-	function ownKeys$40(e, r) {
+	function ownKeys$44(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -5485,19 +5485,19 @@ init_use_query_params();
 		}
 		return t;
 	}
-	__name(ownKeys$40, "ownKeys");
-	function _objectSpread$39(e) {
+	__name(ownKeys$44, "ownKeys");
+	function _objectSpread$43(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$40(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$44(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$40(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$44(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$39, "_objectSpread");
+	__name(_objectSpread$43, "_objectSpread");
 	function ModalProvider$1(props) {
 		var _useState2 = _slicedToArray((0, react.useState)(props.show), 2);
 		var show = _useState2[0];
@@ -5510,7 +5510,7 @@ init_use_query_params();
 			setShow(true);
 			if (props.setShow) props.setShow(true);
 		};
-		var modalAttrs = _objectSpread$39(_objectSpread$39({}, props), {}, {
+		var modalAttrs = _objectSpread$43(_objectSpread$43({}, props), {}, {
 			show,
 			hideModal,
 			showModal
@@ -6015,6 +6015,12 @@ init_use_query_params();
 					export: "design_system_export",
 					opened: "design_system_opened"
 				},
+				default_styles: {
+					panelOpened: "default_styles_panel_opened",
+					tagSaved: "default_styles_tag_saved",
+					saveFailed: "default_styles_save_failed",
+					changesDiscarded: "default_styles_changes_discarded"
+				},
 				components: {
 					createClicked: "component_create_clicked",
 					createCancelled: "component_creation_cancelled",
@@ -6079,7 +6085,7 @@ init_use_query_params();
 
 //#endregion
 //#region app/assets/js/event-track/apps-event-tracking.js
-	function ownKeys$39(e, r) {
+	function ownKeys$43(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -6089,12 +6095,12 @@ init_use_query_params();
 		}
 		return t;
 	}
-	function _objectSpread$38(e) {
+	function _objectSpread$42(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$39(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$43(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$39(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$43(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -6164,8 +6170,8 @@ init_use_query_params();
 		init_classCallCheck();
 		init_createClass();
 		init_events_config();
-		__name(ownKeys$39, "ownKeys");
-		__name(_objectSpread$38, "_objectSpread");
+		__name(ownKeys$43, "ownKeys");
+		__name(_objectSpread$42, "_objectSpread");
 		__name(_createForOfIteratorHelper$4, "_createForOfIteratorHelper");
 		__name(_unsupportedIterableToArray$4, "_unsupportedIterableToArray");
 		__name(_arrayLikeToArray$4, "_arrayLikeToArray");
@@ -6273,13 +6279,13 @@ init_use_query_params();
 				{
 					key: "sendExportKitCustomization",
 					value: function sendExportKitCustomization(payload) {
-						return this.dispatchEvent(EVENTS_MAP.EXPORT_KIT_CUSTOMIZATION, _objectSpread$38({ trigger: eventsConfig.triggers.click }, payload));
+						return this.dispatchEvent(EVENTS_MAP.EXPORT_KIT_CUSTOMIZATION, _objectSpread$42({ trigger: eventsConfig.triggers.click }, payload));
 					}
 				},
 				{
 					key: "sendImportKitCustomization",
 					value: function sendImportKitCustomization(payload) {
-						return this.dispatchEvent(EVENTS_MAP.IMPORT_KIT_CUSTOMIZATION, _objectSpread$38({ trigger: eventsConfig.triggers.click }, payload));
+						return this.dispatchEvent(EVENTS_MAP.IMPORT_KIT_CUSTOMIZATION, _objectSpread$42({ trigger: eventsConfig.triggers.click }, payload));
 					}
 				},
 				{
@@ -6287,13 +6293,13 @@ init_use_query_params();
 					value: function sendKitImportStatus() {
 						var error = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : null;
 						var isError = !!error;
-						return this.dispatchEvent(EVENTS_MAP.KIT_IMPORT_STATUS, _objectSpread$38({ kit_import_status: !isError }, isError && { kit_import_error: error.message }));
+						return this.dispatchEvent(EVENTS_MAP.KIT_IMPORT_STATUS, _objectSpread$42({ kit_import_status: !isError }, isError && { kit_import_error: error.message }));
 					}
 				},
 				{
 					key: "sendKitCloudLibraryApply",
 					value: function sendKitCloudLibraryApply(kitId, kitApplyUrl) {
-						return this.dispatchEvent(EVENTS_MAP.KIT_CLOUD_LIBRARY_APPLY, _objectSpread$38({
+						return this.dispatchEvent(EVENTS_MAP.KIT_CLOUD_LIBRARY_APPLY, _objectSpread$42({
 							trigger: eventsConfig.triggers.click,
 							kit_cloud_id: kitId
 						}, kitApplyUrl && { kit_apply_url: kitApplyUrl }));
@@ -6397,7 +6403,7 @@ init_use_query_params();
 	init_slicedToArray();
 	init_apps_event_tracking();
 	init_redirect();
-	function ownKeys$38(e, r) {
+	function ownKeys$42(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -6407,19 +6413,19 @@ init_use_query_params();
 		}
 		return t;
 	}
-	__name(ownKeys$38, "ownKeys");
-	function _objectSpread$37(e) {
+	__name(ownKeys$42, "ownKeys");
+	function _objectSpread$41(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$38(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$42(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$38(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$42(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$37, "_objectSpread");
+	__name(_objectSpread$41, "_objectSpread");
 	function Layout$1(props) {
 		var _useState2 = _slicedToArray((0, react.useState)(false), 2);
 		var showInfoModal = _useState2[0];
@@ -6451,7 +6457,7 @@ init_use_query_params();
 				show: showInfoModal,
 				setShow: setShowInfoModal
 			};
-			if ("kit-library" === sharedContext.data.referrer || referrer) infoModalProps = _objectSpread$37(_objectSpread$37({ referrer }, infoModalProps), {}, {
+			if ("kit-library" === sharedContext.data.referrer || referrer) infoModalProps = _objectSpread$41(_objectSpread$41({ referrer }, infoModalProps), {}, {
 				onOpen: function onOpen() {
 					return eventTracking("kit-library/modal-open", null, null, "load", "info");
 				},
@@ -6462,7 +6468,7 @@ init_use_query_params();
 			return /*#__PURE__*/ react.default.createElement(ContentLayout, null, props.children, "import" === props.type ? /*#__PURE__*/ react.default.createElement(ImportInfoModal, infoModalProps) : /*#__PURE__*/ react.default.createElement(ExportInfoModal, infoModalProps));
 		};
 		var getInfoButtonProps = function getInfoButtonProps() {
-			return _objectSpread$37(_objectSpread$37({}, infoButtonProps), {}, { onClick: function onClick() {
+			return _objectSpread$41(_objectSpread$41({}, infoButtonProps), {}, { onClick: function onClick() {
 				eventTracking("kit-library/seek-more-info", "app_header");
 				setShowInfoModal(true);
 			} });
@@ -6908,7 +6914,7 @@ init_use_query_params();
 
 //#endregion
 //#region app/assets/js/hooks/use-ajax.js
-	function ownKeys$37(e, r) {
+	function ownKeys$41(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -6918,12 +6924,12 @@ init_use_query_params();
 		}
 		return t;
 	}
-	function _objectSpread$36(e) {
+	function _objectSpread$40(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$37(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$41(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$37(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$41(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -6954,7 +6960,7 @@ init_use_query_params();
 								for (var key in config.data) formData.append(key, config.data[key]);
 								if (!config.data.nonce) formData.append("_nonce", elementorCommon.config.ajax.nonce);
 							}
-							var options = _objectSpread$36(_objectSpread$36({
+							var options = _objectSpread$40(_objectSpread$40({
 								type: "post",
 								url: elementorCommon.config.ajax.url,
 								headers: {},
@@ -6985,7 +6991,7 @@ init_use_query_params();
 			if (ajax) runRequest(ajax).then(function(response) {
 				var status = response.success ? "success" : "error";
 				setAjaxState(function(prevState) {
-					return _objectSpread$36(_objectSpread$36({}, prevState), {}, {
+					return _objectSpread$40(_objectSpread$40({}, prevState), {}, {
 						status,
 						response: response === null || response === void 0 ? void 0 : response.data
 					});
@@ -6994,14 +7000,14 @@ init_use_query_params();
 				var _error$responseJSON;
 				var response = 408 === error.status ? "timeout" : (_error$responseJSON = error.responseJSON) === null || _error$responseJSON === void 0 ? void 0 : _error$responseJSON.data;
 				setAjaxState(function(prevState) {
-					return _objectSpread$36(_objectSpread$36({}, prevState), {}, {
+					return _objectSpread$40(_objectSpread$40({}, prevState), {}, {
 						status: "error",
 						response
 					});
 				});
 			}).finally(function() {
 				setAjaxState(function(prevState) {
-					return _objectSpread$36(_objectSpread$36({}, prevState), {}, { isComplete: true });
+					return _objectSpread$40(_objectSpread$40({}, prevState), {}, { isComplete: true });
 				});
 			});
 		}, [ajax]);
@@ -7019,8 +7025,8 @@ init_use_query_params();
 		init_asyncToGenerator();
 		init_slicedToArray();
 		import_regenerator$4 = /* @__PURE__ */ __toESM(require_regenerator());
-		__name(ownKeys$37, "ownKeys");
-		__name(_objectSpread$36, "_objectSpread");
+		__name(ownKeys$41, "ownKeys");
+		__name(_objectSpread$40, "_objectSpread");
 	}));
 
 //#endregion
@@ -7083,7 +7089,7 @@ init_use_query_params();
 		for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
 		return n;
 	}
-	function ownKeys$36(e, r) {
+	function ownKeys$40(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -7093,12 +7099,12 @@ init_use_query_params();
 		}
 		return t;
 	}
-	function _objectSpread$35(e) {
+	function _objectSpread$39(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$36(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$40(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$36(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$40(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
@@ -7121,7 +7127,7 @@ init_use_query_params();
 			var file = _ref.file;
 			var kitLibraryNonce = _ref.kitLibraryNonce;
 			var _ref$source = _ref.source;
-			setAjax({ data: _objectSpread$35(_objectSpread$35({
+			setAjax({ data: _objectSpread$39(_objectSpread$39({
 				action: UPLOAD_KIT_KEY,
 				source: _ref$source === void 0 ? "" : _ref$source
 			}, file ? { e_import_file: file } : null), {}, { kit_id: kitId }, kitLibraryNonce ? { e_kit_library_nonce: kitLibraryNonce } : {}) });
@@ -7155,7 +7161,7 @@ init_use_query_params();
 								var _error$responseJSON;
 								var response = 408 === error.status ? "timeout" : (_error$responseJSON = error.responseJSON) === null || _error$responseJSON === void 0 ? void 0 : _error$responseJSON.data;
 								setKitState(function(prevState) {
-									return _objectSpread$35(_objectSpread$35({}, prevState), {}, {
+									return _objectSpread$39(_objectSpread$39({}, prevState), {}, {
 										status: KIT_STATUS_MAP.ERROR,
 										data: response || {}
 									});
@@ -7219,7 +7225,7 @@ init_use_query_params();
 								stopIterations = true;
 								var response = 408 === error.status ? "timeout" : (_error$responseJSON2 = error.responseJSON) === null || _error$responseJSON2 === void 0 ? void 0 : _error$responseJSON2.data;
 								setKitState(function(prevState) {
-									return _objectSpread$35(_objectSpread$35({}, prevState), {
+									return _objectSpread$39(_objectSpread$39({}, prevState), {
 										status: KIT_STATUS_MAP.ERROR,
 										data: response || {}
 									});
@@ -7333,7 +7339,7 @@ init_use_query_params();
 				} else if ("error" === ajaxState.status) newState.status = KIT_STATUS_MAP.ERROR;
 				newState.data = ajaxState.response || {};
 				setKitState(function(prevState) {
-					return _objectSpread$35(_objectSpread$35({}, prevState), newState);
+					return _objectSpread$39(_objectSpread$39({}, prevState), newState);
 				});
 			}
 		}, [ajaxState.status]);
@@ -7358,8 +7364,8 @@ init_use_query_params();
 		__name(_createForOfIteratorHelper$3, "_createForOfIteratorHelper");
 		__name(_unsupportedIterableToArray$3, "_unsupportedIterableToArray");
 		__name(_arrayLikeToArray$3, "_arrayLikeToArray");
-		__name(ownKeys$36, "ownKeys");
-		__name(_objectSpread$35, "_objectSpread");
+		__name(ownKeys$40, "ownKeys");
+		__name(_objectSpread$39, "_objectSpread");
 		KIT_SOURCE_MAP = {
 			CLOUD: "cloud",
 			FILE: "file"
@@ -8320,7 +8326,7 @@ init_tooltip();
 //#endregion
 //#region app/assets/js/ui/molecules/select2.js
 	init_defineProperty$1();
-	function ownKeys$35(e, r) {
+	function ownKeys$39(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -8330,19 +8336,19 @@ init_tooltip();
 		}
 		return t;
 	}
-	__name(ownKeys$35, "ownKeys");
-	function _objectSpread$34(e) {
+	__name(ownKeys$39, "ownKeys");
+	function _objectSpread$38(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$35(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$39(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$35(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$39(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$34, "_objectSpread");
+	__name(_objectSpread$38, "_objectSpread");
 	/**
 	* Default settings of the select 2
 	*
@@ -8365,7 +8371,7 @@ init_tooltip();
 	function Select2(props) {
 		var ref = react.default.useRef(null);
 		react.default.useEffect(function() {
-			var $select2 = jQuery(ref.current).select2(_objectSpread$34(_objectSpread$34(_objectSpread$34({}, getDefaultSettings()), props.settings), {}, { placeholder: props.placeholder })).on("select2:select select2:unselect", props.onChange);
+			var $select2 = jQuery(ref.current).select2(_objectSpread$38(_objectSpread$38(_objectSpread$38({}, getDefaultSettings()), props.settings), {}, { placeholder: props.placeholder })).on("select2:select select2:unselect", props.onChange);
 			if (props.onReady) props.onReady($select2);
 			return function() {
 				$select2.select2("destroy").off("select2:select select2:unselect");
@@ -8404,7 +8410,7 @@ init_tooltip();
 	init_extends();
 	init_defineProperty$1();
 	init_utils$5();
-	function ownKeys$34(e, r) {
+	function ownKeys$38(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -8414,19 +8420,19 @@ init_tooltip();
 		}
 		return t;
 	}
-	__name(ownKeys$34, "ownKeys");
-	function _objectSpread$33(e) {
+	__name(ownKeys$38, "ownKeys");
+	function _objectSpread$37(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$34(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$38(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$34(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$38(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$33, "_objectSpread");
+	__name(_objectSpread$37, "_objectSpread");
 	function TextField(props) {
 		var classNameBase = "eps-text-field";
 		var classes = [
@@ -8435,7 +8441,7 @@ init_tooltip();
 			_defineProperty$1({}, classNameBase + "--outlined", "outlined" === props.variant),
 			_defineProperty$1({}, classNameBase + "--standard", "standard" === props.variant)
 		];
-		var validProps = _objectSpread$33(_objectSpread$33({}, props), {}, { className: arrayToClassName(classes) });
+		var validProps = _objectSpread$37(_objectSpread$37({}, props), {}, { className: arrayToClassName(classes) });
 		if (validProps.multiline) {
 			delete validProps.multiline;
 			return /*#__PURE__*/ react.default.createElement("textarea", validProps);
@@ -8533,7 +8539,7 @@ init_tooltip();
 //#endregion
 //#region app/assets/js/ui/atoms/box.js
 	init_utils$5();
-	function Box$22(props) {
+	function Box$23(props) {
 		var baseClassName = "eps-box";
 		var classes = [baseClassName, props.className];
 		var style = {};
@@ -8546,8 +8552,8 @@ init_tooltip();
 			className: arrayToClassName(classes)
 		}, props.children);
 	}
-	__name(Box$22, "Box");
-	Box$22.propTypes = {
+	__name(Box$23, "Box");
+	Box$23.propTypes = {
 		className: import_prop_types$82.default.string,
 		padding: import_prop_types$82.default.string,
 		children: import_prop_types$82.default.oneOfType([
@@ -8556,7 +8562,7 @@ init_tooltip();
 			import_prop_types$82.default.arrayOf(import_prop_types$82.default.object)
 		]).isRequired
 	};
-	Box$22.defaultProps = { className: "" };
+	Box$23.defaultProps = { className: "" };
 
 //#endregion
 //#region app/assets/js/ui/molecules/list-item.js
@@ -8616,7 +8622,7 @@ init_tooltip();
 	init_text();
 	init_grid();
 	init_apps_event_tracking();
-	function ownKeys$33(e, r) {
+	function ownKeys$37(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -8626,19 +8632,19 @@ init_tooltip();
 		}
 		return t;
 	}
-	__name(ownKeys$33, "ownKeys");
-	function _objectSpread$32(e) {
+	__name(ownKeys$37, "ownKeys");
+	function _objectSpread$36(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$33(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$37(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$33(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$37(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$32, "_objectSpread");
+	__name(_objectSpread$36, "_objectSpread");
 	function KitContent(_ref) {
 		var contentData = _ref.contentData;
 		var hasPro = _ref.hasPro;
@@ -8659,7 +8665,7 @@ init_tooltip();
 		};
 		var setContainerHoverState = function setContainerHoverState(index, state) {
 			setContainerHover(function(prevState) {
-				return _objectSpread$32(_objectSpread$32({}, prevState), {}, _defineProperty$1({}, index, state));
+				return _objectSpread$36(_objectSpread$36({}, prevState), {}, _defineProperty$1({}, index, state));
 			});
 		};
 		var eventTracking = function eventTracking(event, chosenPart) {
@@ -8674,7 +8680,7 @@ init_tooltip();
 			}
 		};
 		if (!contentData.length) return null;
-		return /*#__PURE__*/ react.default.createElement(Box$22, null, /*#__PURE__*/ react.default.createElement(List, {
+		return /*#__PURE__*/ react.default.createElement(Box$23, null, /*#__PURE__*/ react.default.createElement(List, {
 			separated: true,
 			className: "e-app-export-kit-content"
 		}, contentData.map(function(_ref2, index) {
@@ -9484,7 +9490,7 @@ init_tooltip();
 			className: "e-app-import-resolver__notice",
 			label: (0, _wordpress_i18n.__)("Note:", "elementor"),
 			color: "warning"
-		}, (0, _wordpress_i18n.__)("Your site's homepage will be determined by the kit. You can change this later.", "elementor")), /*#__PURE__*/ react.default.createElement(Panel$1, { isOpened: true }, /*#__PURE__*/ react.default.createElement(Panel$1.Header, { toggle: false }, /*#__PURE__*/ react.default.createElement(Panel$1.Headline, null, (0, _wordpress_i18n.__)("Select the items you want to keep and apply:", "elementor"))), /*#__PURE__*/ react.default.createElement(Panel$1.Body, { padding: "20" }, /*#__PURE__*/ react.default.createElement(Box$22, { className: "e-app-import-resolver-conflicts__container" }, /*#__PURE__*/ react.default.createElement(List, {
+		}, (0, _wordpress_i18n.__)("Your site's homepage will be determined by the kit. You can change this later.", "elementor")), /*#__PURE__*/ react.default.createElement(Panel$1, { isOpened: true }, /*#__PURE__*/ react.default.createElement(Panel$1.Header, { toggle: false }, /*#__PURE__*/ react.default.createElement(Panel$1.Headline, null, (0, _wordpress_i18n.__)("Select the items you want to keep and apply:", "elementor"))), /*#__PURE__*/ react.default.createElement(Panel$1.Body, { padding: "20" }, /*#__PURE__*/ react.default.createElement(Box$23, { className: "e-app-import-resolver-conflicts__container" }, /*#__PURE__*/ react.default.createElement(List, {
 			separated: true,
 			className: "e-app-import-resolver-conflicts"
 		}, Object.entries(conflicts).map(function(_ref2, index) {
@@ -9595,7 +9601,7 @@ init_tooltip();
 		NOT_INSTALLED: "Not Installed"
 	});
 	var baseEndpoint = elementorCommon.config.urls.rest + "wp/v2/plugins/";
-	var getInitialState$1 = function getInitialState() {
+	var getInitialState = function getInitialState() {
 		return {
 			status: PLUGINS_RESPONSE_MAP.INITIAL,
 			data: null
@@ -9603,7 +9609,7 @@ init_tooltip();
 	};
 	function usePlugins() {
 		var _useState2 = _slicedToArray((0, react.useState)(function() {
-			return getInitialState$1();
+			return getInitialState();
 		}), 2);
 		var response = _useState2[0];
 		var setResponse = _useState2[1];
@@ -9675,7 +9681,7 @@ init_tooltip();
 			});
 		};
 		var reset = function reset() {
-			return setResponse(getInitialState$1());
+			return setResponse(getInitialState());
 		};
 		(0, react.useEffect)(function() {
 			fetchData();
@@ -9735,7 +9741,7 @@ init_tooltip();
 	init_toConsumableArray();
 	init_defineProperty$1();
 	init_slicedToArray();
-	function ownKeys$32(e, r) {
+	function ownKeys$36(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -9745,19 +9751,19 @@ init_tooltip();
 		}
 		return t;
 	}
-	__name(ownKeys$32, "ownKeys");
-	function _objectSpread$31(e) {
+	__name(ownKeys$36, "ownKeys");
+	function _objectSpread$35(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$32(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$36(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$32(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$36(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$31, "_objectSpread");
+	__name(_objectSpread$35, "_objectSpread");
 	var ACTION_STATUS_MAP = Object.freeze({
 		ACTIVATED: "activated",
 		INSTALLED: "installed",
@@ -9817,7 +9823,7 @@ init_tooltip();
 		}, [response.status]);
 		(0, react.useEffect)(function() {
 			if (actionStatus) {
-				var pluginData = ACTION_STATUS_MAP.FAILED === actionStatus ? _objectSpread$31(_objectSpread$31({}, currentPlugin), {}, { status: ACTION_STATUS_MAP.FAILED }) : response.data;
+				var pluginData = ACTION_STATUS_MAP.FAILED === actionStatus ? _objectSpread$35(_objectSpread$35({}, currentPlugin), {}, { status: ACTION_STATUS_MAP.FAILED }) : response.data;
 				setBulk(function(prevState) {
 					var processedPlugins = _toConsumableArray(prevState);
 					processedPlugins[ready.length] = pluginData;
@@ -10017,7 +10023,7 @@ init_unfiltered_files_dialog();
 //#region app/modules/import-export/assets/js/pages/import/import-plugins/hooks/use-import-plugins-data.js
 	init_defineProperty$1();
 	init_utils$5();
-	function ownKeys$31(e, r) {
+	function ownKeys$35(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -10027,19 +10033,19 @@ init_unfiltered_files_dialog();
 		}
 		return t;
 	}
-	__name(ownKeys$31, "ownKeys");
-	function _objectSpread$30(e) {
+	__name(ownKeys$35, "ownKeys");
+	function _objectSpread$34(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$31(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$35(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$31(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$35(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$30, "_objectSpread");
+	__name(_objectSpread$34, "_objectSpread");
 	var MISSING_PLUGINS_KEY = "missing";
 	var EXISTING_PLUGINS_KEY = "existing";
 	var ELEMENTOR_PRO_PLUGIN_KEY = "Elementor Pro";
@@ -10058,7 +10064,7 @@ init_unfiltered_files_dialog();
 			pluginsToInstall.forEach(function(plugin) {
 				var installedPluginData = installedPluginsMap[plugin.name];
 				var group = PLUGIN_STATUS_MAP.ACTIVE === (installedPluginData === null || installedPluginData === void 0 ? void 0 : installedPluginData.status) ? EXISTING_PLUGINS_KEY : MISSING_PLUGINS_KEY;
-				var pluginData = installedPluginData || _objectSpread$30(_objectSpread$30({}, plugin), {}, { status: PLUGIN_STATUS_MAP.NOT_INSTALLED });
+				var pluginData = installedPluginData || _objectSpread$34(_objectSpread$34({}, plugin), {}, { status: PLUGIN_STATUS_MAP.NOT_INSTALLED });
 				if (installedPluginData && !getIsMinVersionExist(installedPluginData.version, plugin.version)) data.minVersionMissing.push(plugin);
 				if (ELEMENTOR_PRO_PLUGIN_KEY === pluginData.name) data.proData = pluginData;
 				data[group].push(pluginData);
@@ -10580,7 +10586,7 @@ init_unfiltered_files_dialog();
 //#region app/modules/import-export/assets/js/shared/kit-data/hooks/use-kit-data.js
 	init_defineProperty$1();
 	init_slicedToArray();
-	function ownKeys$30(e, r) {
+	function ownKeys$34(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -10590,19 +10596,19 @@ init_unfiltered_files_dialog();
 		}
 		return t;
 	}
-	__name(ownKeys$30, "ownKeys");
-	function _objectSpread$29(e) {
+	__name(ownKeys$34, "ownKeys");
+	function _objectSpread$33(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$30(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$34(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$30(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$34(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$29, "_objectSpread");
+	__name(_objectSpread$33, "_objectSpread");
 	function useKitData(kitData) {
 		var getLabel = function getLabel(type, key, amount) {
 			var _kitData$configData;
@@ -10639,9 +10645,9 @@ init_unfiltered_files_dialog();
 		var getContent = function getContent() {
 			var content = (kitData === null || kitData === void 0 ? void 0 : kitData.content) || {};
 			var wpContent = (kitData === null || kitData === void 0 ? void 0 : kitData["wp-content"]) || {};
-			var mergedContent = _objectSpread$29({}, content);
+			var mergedContent = _objectSpread$33({}, content);
 			for (var key in mergedContent) mergedContent[key] = Object.keys(mergedContent[key]).concat(wpContent[key] || []);
-			mergedContent = _objectSpread$29(_objectSpread$29({}, wpContent), mergedContent);
+			mergedContent = _objectSpread$33(_objectSpread$33({}, wpContent), mergedContent);
 			return Object.entries(mergedContent).map(function(_ref3) {
 				var _ref4 = _slicedToArray(_ref3, 2);
 				var key = _ref4[0];
@@ -11156,7 +11162,7 @@ init_unfiltered_files_dialog();
 		var heading = _ref.heading;
 		var description = _ref.description;
 		var button = _ref.button;
-		return /*#__PURE__*/ react.default.createElement(Box$22, {
+		return /*#__PURE__*/ react.default.createElement(Box$23, {
 			className: "e-app-import-export-message-banner",
 			padding: "20"
 		}, /*#__PURE__*/ react.default.createElement(Grid$14, {
@@ -11361,7 +11367,7 @@ init_unfiltered_files_dialog();
 //#endregion
 //#region app/modules/import-export/assets/js/context/export-context/export-context-reducer.js
 	init_defineProperty$1();
-	function ownKeys$29(e, r) {
+	function ownKeys$33(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -11371,30 +11377,30 @@ init_unfiltered_files_dialog();
 		}
 		return t;
 	}
-	__name(ownKeys$29, "ownKeys");
-	function _objectSpread$28(e) {
+	__name(ownKeys$33, "ownKeys");
+	function _objectSpread$32(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$29(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$33(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$29(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$33(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$28, "_objectSpread");
+	__name(_objectSpread$32, "_objectSpread");
 	var reducer$1 = function reducer(state, _ref) {
 		var type = _ref.type;
 		var payload = _ref.payload;
 		switch (type) {
-			case "SET_DOWNLOAD_URL": return _objectSpread$28(_objectSpread$28({}, state), {}, { downloadUrl: payload });
-			case "SET_EXPORTED_DATA": return _objectSpread$28(_objectSpread$28({}, state), {}, { exportedData: payload });
-			case "SET_PLUGINS": return _objectSpread$28(_objectSpread$28({}, state), {}, { plugins: payload });
-			case "SET_IS_EXPORT_PROCESS_STARTED": return _objectSpread$28(_objectSpread$28({}, state), {}, { isExportProcessStarted: payload });
-			case "SET_KIT_TITLE": return _objectSpread$28(_objectSpread$28({}, state), {}, { kitInfo: _objectSpread$28(_objectSpread$28({}, state.kitInfo), {}, { title: payload }) });
-			case "SET_KIT_DESCRIPTION": return _objectSpread$28(_objectSpread$28({}, state), {}, { kitInfo: _objectSpread$28(_objectSpread$28({}, state.kitInfo), {}, { description: payload }) });
-			case "SET_KIT_SAVE_SOURCE": return _objectSpread$28(_objectSpread$28({}, state), {}, { kitInfo: _objectSpread$28(_objectSpread$28({}, state.kitInfo), {}, { source: payload }) });
+			case "SET_DOWNLOAD_URL": return _objectSpread$32(_objectSpread$32({}, state), {}, { downloadUrl: payload });
+			case "SET_EXPORTED_DATA": return _objectSpread$32(_objectSpread$32({}, state), {}, { exportedData: payload });
+			case "SET_PLUGINS": return _objectSpread$32(_objectSpread$32({}, state), {}, { plugins: payload });
+			case "SET_IS_EXPORT_PROCESS_STARTED": return _objectSpread$32(_objectSpread$32({}, state), {}, { isExportProcessStarted: payload });
+			case "SET_KIT_TITLE": return _objectSpread$32(_objectSpread$32({}, state), {}, { kitInfo: _objectSpread$32(_objectSpread$32({}, state.kitInfo), {}, { title: payload }) });
+			case "SET_KIT_DESCRIPTION": return _objectSpread$32(_objectSpread$32({}, state), {}, { kitInfo: _objectSpread$32(_objectSpread$32({}, state.kitInfo), {}, { description: payload }) });
+			case "SET_KIT_SAVE_SOURCE": return _objectSpread$32(_objectSpread$32({}, state), {}, { kitInfo: _objectSpread$32(_objectSpread$32({}, state.kitInfo), {}, { source: payload }) });
 			default: return state;
 		}
 	};
@@ -13879,7 +13885,7 @@ init_es();
 //#region app/modules/import-export/assets/js/pages/export/export-kit/components/kit-information/kit-information.js
 	init_grid();
 	function KitInformation() {
-		return /*#__PURE__*/ react.default.createElement(react.default.Fragment, null, /*#__PURE__*/ react.default.createElement(Box$22, null, /*#__PURE__*/ react.default.createElement(List, {
+		return /*#__PURE__*/ react.default.createElement(react.default.Fragment, null, /*#__PURE__*/ react.default.createElement(Box$23, null, /*#__PURE__*/ react.default.createElement(List, {
 			padding: "24 40",
 			separated: true,
 			className: "e-app-export-kit-information"
@@ -14576,7 +14582,7 @@ init_use_cloud_kits_eligibility();
 	init_slicedToArray();
 	init_defineProperty$1();
 	init_toConsumableArray();
-	function ownKeys$28(e, r) {
+	function ownKeys$32(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -14586,19 +14592,19 @@ init_use_cloud_kits_eligibility();
 		}
 		return t;
 	}
-	__name(ownKeys$28, "ownKeys");
-	function _objectSpread$27(e) {
+	__name(ownKeys$32, "ownKeys");
+	function _objectSpread$31(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$28(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$32(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$28(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$32(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$27, "_objectSpread");
+	__name(_objectSpread$31, "_objectSpread");
 	var ExportContext = (0, react.createContext)();
 	var EXPORT_STATUS = {
 		PENDING: "PENDING",
@@ -14639,25 +14645,25 @@ init_use_cloud_kits_eligibility();
 		var type = _ref.type;
 		var payload = _ref.payload;
 		switch (type) {
-			case "SET_DOWNLOAD_URL": return _objectSpread$27(_objectSpread$27({}, state), {}, { downloadUrl: payload });
-			case "SET_EXPORTED_DATA": return _objectSpread$27(_objectSpread$27({}, state), {}, { exportedData: payload });
-			case "SET_PLUGINS": return _objectSpread$27(_objectSpread$27({}, state), {}, { plugins: payload });
-			case "SET_EXPORT_STATUS": return _objectSpread$27(_objectSpread$27({}, state), {}, { exportStatus: payload });
-			case "SET_KIT_TITLE": return _objectSpread$27(_objectSpread$27({}, state), {}, { kitInfo: _objectSpread$27(_objectSpread$27({}, state.kitInfo), {}, { title: payload }) });
-			case "SET_KIT_DESCRIPTION": return _objectSpread$27(_objectSpread$27({}, state), {}, { kitInfo: _objectSpread$27(_objectSpread$27({}, state.kitInfo), {}, { description: payload }) });
-			case "SET_KIT_SAVE_SOURCE": return _objectSpread$27(_objectSpread$27({}, state), {}, { kitInfo: _objectSpread$27(_objectSpread$27({}, state.kitInfo), {}, { source: payload }) });
-			case "ADD_INCLUDE": return _objectSpread$27(_objectSpread$27({}, state), {}, { includes: state.includes.includes(payload) ? state.includes : [].concat(_toConsumableArray(state.includes), [payload]) });
-			case "REMOVE_INCLUDE": return _objectSpread$27(_objectSpread$27({}, state), {}, {
+			case "SET_DOWNLOAD_URL": return _objectSpread$31(_objectSpread$31({}, state), {}, { downloadUrl: payload });
+			case "SET_EXPORTED_DATA": return _objectSpread$31(_objectSpread$31({}, state), {}, { exportedData: payload });
+			case "SET_PLUGINS": return _objectSpread$31(_objectSpread$31({}, state), {}, { plugins: payload });
+			case "SET_EXPORT_STATUS": return _objectSpread$31(_objectSpread$31({}, state), {}, { exportStatus: payload });
+			case "SET_KIT_TITLE": return _objectSpread$31(_objectSpread$31({}, state), {}, { kitInfo: _objectSpread$31(_objectSpread$31({}, state.kitInfo), {}, { title: payload }) });
+			case "SET_KIT_DESCRIPTION": return _objectSpread$31(_objectSpread$31({}, state), {}, { kitInfo: _objectSpread$31(_objectSpread$31({}, state.kitInfo), {}, { description: payload }) });
+			case "SET_KIT_SAVE_SOURCE": return _objectSpread$31(_objectSpread$31({}, state), {}, { kitInfo: _objectSpread$31(_objectSpread$31({}, state.kitInfo), {}, { source: payload }) });
+			case "ADD_INCLUDE": return _objectSpread$31(_objectSpread$31({}, state), {}, { includes: state.includes.includes(payload) ? state.includes : [].concat(_toConsumableArray(state.includes), [payload]) });
+			case "REMOVE_INCLUDE": return _objectSpread$31(_objectSpread$31({}, state), {}, {
 				includes: state.includes.filter(function(item) {
 					return item !== payload;
 				}),
-				customization: _objectSpread$27(_objectSpread$27({}, state.customization), {}, _defineProperty$1({}, payload, null))
+				customization: _objectSpread$31(_objectSpread$31({}, state.customization), {}, _defineProperty$1({}, payload, null))
 			});
-			case "SET_CUSTOMIZATION": return _objectSpread$27(_objectSpread$27({}, state), {}, { customization: _objectSpread$27(_objectSpread$27({}, state.customization), {}, _defineProperty$1({}, payload.key, payload.value)) });
-			case "SET_DATA_FOR_ANALYTICS": return _objectSpread$27(_objectSpread$27({}, state), {}, { analytics: { customization: _objectSpread$27(_objectSpread$27({}, (_state$analytics = state.analytics) === null || _state$analytics === void 0 ? void 0 : _state$analytics.customization), {}, _defineProperty$1({}, payload.key, payload.value)) } });
-			case "SET_MEDIA_FORMAT_VALIDATION": return _objectSpread$27(_objectSpread$27({}, state), {}, { showMediaFormatValidation: payload });
-			case "SET_VALIDATION_ERRORS": return _objectSpread$27(_objectSpread$27({}, state), {}, { validationErrors: _objectSpread$27(_objectSpread$27({}, state.validationErrors), payload) });
-			case "RESET_STATE": return _objectSpread$27({}, initialState$1);
+			case "SET_CUSTOMIZATION": return _objectSpread$31(_objectSpread$31({}, state), {}, { customization: _objectSpread$31(_objectSpread$31({}, state.customization), {}, _defineProperty$1({}, payload.key, payload.value)) });
+			case "SET_DATA_FOR_ANALYTICS": return _objectSpread$31(_objectSpread$31({}, state), {}, { analytics: { customization: _objectSpread$31(_objectSpread$31({}, (_state$analytics = state.analytics) === null || _state$analytics === void 0 ? void 0 : _state$analytics.customization), {}, _defineProperty$1({}, payload.key, payload.value)) } });
+			case "SET_MEDIA_FORMAT_VALIDATION": return _objectSpread$31(_objectSpread$31({}, state), {}, { showMediaFormatValidation: payload });
+			case "SET_VALIDATION_ERRORS": return _objectSpread$31(_objectSpread$31({}, state), {}, { validationErrors: _objectSpread$31(_objectSpread$31({}, state.validationErrors), payload) });
+			case "RESET_STATE": return _objectSpread$31({}, initialState$1);
 			default: return state;
 		}
 	}
@@ -14698,7 +14704,7 @@ init_use_cloud_kits_eligibility();
 		"footer",
 		"sx"
 	];
-	function ownKeys$27(e, r) {
+	function ownKeys$31(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -14708,19 +14714,19 @@ init_use_cloud_kits_eligibility();
 		}
 		return t;
 	}
-	__name(ownKeys$27, "ownKeys");
-	function _objectSpread$26(e) {
+	__name(ownKeys$31, "ownKeys");
+	function _objectSpread$30(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$27(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$31(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$27(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$31(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$26, "_objectSpread");
+	__name(_objectSpread$30, "_objectSpread");
 	function BaseLayout(props) {
 		var _elementorAppConfig$i;
 		var _elementorCommon;
@@ -14733,7 +14739,7 @@ init_use_cloud_kits_eligibility();
 		var uiTheme = ((_elementorAppConfig$i = elementorAppConfig["import-export-customization"]) === null || _elementorAppConfig$i === void 0 ? void 0 : _elementorAppConfig$i.uiTheme) || "auto";
 		var colorScheme = "dark" === uiTheme || "auto" === uiTheme && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 		var isRTL = ((_elementorCommon = elementorCommon) === null || _elementorCommon === void 0 || (_elementorCommon = _elementorCommon.config) === null || _elementorCommon === void 0 ? void 0 : _elementorCommon.isRTL) || false;
-		return /*#__PURE__*/ react.default.createElement(_elementor_ui.DirectionProvider, { rtl: isRTL }, /*#__PURE__*/ react.default.createElement(_elementor_ui.ThemeProvider, { colorScheme }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, _extends({ sx: _objectSpread$26({
+		return /*#__PURE__*/ react.default.createElement(_elementor_ui.DirectionProvider, { rtl: isRTL }, /*#__PURE__*/ react.default.createElement(_elementor_ui.ThemeProvider, { colorScheme }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, _extends({ sx: _objectSpread$30({
 			height: "100vh",
 			display: "flex",
 			flexDirection: "column",
@@ -14798,7 +14804,7 @@ init_use_cloud_kits_eligibility();
 	init_defineProperty$1();
 	init_objectWithoutProperties();
 	var _excluded$3 = ["children", "sx"];
-	function ownKeys$26(e, r) {
+	function ownKeys$30(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -14808,19 +14814,19 @@ init_use_cloud_kits_eligibility();
 		}
 		return t;
 	}
-	__name(ownKeys$26, "ownKeys");
-	function _objectSpread$25(e) {
+	__name(ownKeys$30, "ownKeys");
+	function _objectSpread$29(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$26(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$30(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$26(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$30(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$25, "_objectSpread");
+	__name(_objectSpread$29, "_objectSpread");
 	function Footer(props) {
 		var children = props.children;
 		var _props$sx = props.sx;
@@ -14828,7 +14834,7 @@ init_use_cloud_kits_eligibility();
 		var rest = _objectWithoutProperties(props, _excluded$3);
 		return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, _extends({
 			component: "footer",
-			sx: _objectSpread$25({
+			sx: _objectSpread$29({
 				mt: "auto",
 				py: 2,
 				px: 3,
@@ -14889,7 +14895,7 @@ init_use_cloud_kits_eligibility();
 	init_slicedToArray();
 	init_toConsumableArray();
 	init_defineProperty$1();
-	function ownKeys$25(e, r) {
+	function ownKeys$29(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -14899,19 +14905,19 @@ init_use_cloud_kits_eligibility();
 		}
 		return t;
 	}
-	__name(ownKeys$25, "ownKeys");
-	function _objectSpread$24(e) {
+	__name(ownKeys$29, "ownKeys");
+	function _objectSpread$28(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$25(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$29(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$25(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$29(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$24, "_objectSpread");
+	__name(_objectSpread$28, "_objectSpread");
 	var IMPORT_STATUS = {
 		PENDING: "PENDING",
 		UPLOADING: "UPLOADING",
@@ -14924,26 +14930,26 @@ init_use_cloud_kits_eligibility();
 		var type = _ref.type;
 		var payload = _ref.payload;
 		switch (type) {
-			case "SET_IMPORT_STATUS": return _objectSpread$24(_objectSpread$24({}, state), {}, { importStatus: payload });
-			case "SET_FILE": return _objectSpread$24(_objectSpread$24({}, state), {}, { file: payload });
-			case "SET_UPLOADED_DATA": return _objectSpread$24(_objectSpread$24({}, state), {}, { uploadedData: payload });
-			case "SET_IMPORTED_DATA": return _objectSpread$24(_objectSpread$24({}, state), {}, { importedData: payload });
-			case "SET_KIT_UPLOAD_PARAMS": return _objectSpread$24(_objectSpread$24({}, state), {}, { kitUploadParams: payload });
-			case "SET_ACTION_TYPE": return _objectSpread$24(_objectSpread$24({}, state), {}, { actionType: payload });
-			case "SET_RETURN_TO": return _objectSpread$24(_objectSpread$24({}, state), {}, { returnTo: payload });
-			case "SET_NO_AUTOMATIC_REDIRECT": return _objectSpread$24(_objectSpread$24({}, state), {}, { noAutomaticRedirect: payload });
-			case "SET_RUNNERS_STATE": return _objectSpread$24(_objectSpread$24({}, state), {}, { runnersState: _objectSpread$24(_objectSpread$24({}, state.runnersState), payload) });
-			case "ADD_INCLUDE": return _objectSpread$24(_objectSpread$24({}, state), {}, { includes: state.includes.includes(payload) ? state.includes : [].concat(_toConsumableArray(state.includes), [payload]) });
-			case "ADD_INCLUDES": return _objectSpread$24(_objectSpread$24({}, state), {}, { includes: Array.from(new Set([].concat(_toConsumableArray(state.includes), _toConsumableArray(payload)))) });
-			case "REMOVE_INCLUDE": return _objectSpread$24(_objectSpread$24({}, state), {}, {
+			case "SET_IMPORT_STATUS": return _objectSpread$28(_objectSpread$28({}, state), {}, { importStatus: payload });
+			case "SET_FILE": return _objectSpread$28(_objectSpread$28({}, state), {}, { file: payload });
+			case "SET_UPLOADED_DATA": return _objectSpread$28(_objectSpread$28({}, state), {}, { uploadedData: payload });
+			case "SET_IMPORTED_DATA": return _objectSpread$28(_objectSpread$28({}, state), {}, { importedData: payload });
+			case "SET_KIT_UPLOAD_PARAMS": return _objectSpread$28(_objectSpread$28({}, state), {}, { kitUploadParams: payload });
+			case "SET_ACTION_TYPE": return _objectSpread$28(_objectSpread$28({}, state), {}, { actionType: payload });
+			case "SET_RETURN_TO": return _objectSpread$28(_objectSpread$28({}, state), {}, { returnTo: payload });
+			case "SET_NO_AUTOMATIC_REDIRECT": return _objectSpread$28(_objectSpread$28({}, state), {}, { noAutomaticRedirect: payload });
+			case "SET_RUNNERS_STATE": return _objectSpread$28(_objectSpread$28({}, state), {}, { runnersState: _objectSpread$28(_objectSpread$28({}, state.runnersState), payload) });
+			case "ADD_INCLUDE": return _objectSpread$28(_objectSpread$28({}, state), {}, { includes: state.includes.includes(payload) ? state.includes : [].concat(_toConsumableArray(state.includes), [payload]) });
+			case "ADD_INCLUDES": return _objectSpread$28(_objectSpread$28({}, state), {}, { includes: Array.from(new Set([].concat(_toConsumableArray(state.includes), _toConsumableArray(payload)))) });
+			case "REMOVE_INCLUDE": return _objectSpread$28(_objectSpread$28({}, state), {}, {
 				includes: state.includes.filter(function(item) {
 					return item !== payload;
 				}),
-				customization: _objectSpread$24(_objectSpread$24({}, state.customization), {}, _defineProperty$1({}, payload, null))
+				customization: _objectSpread$28(_objectSpread$28({}, state.customization), {}, _defineProperty$1({}, payload, null))
 			});
-			case "RESET_STATE": return _objectSpread$24({}, initialState);
-			case "SET_CUSTOMIZATION": return _objectSpread$24(_objectSpread$24({}, state), {}, { customization: _objectSpread$24(_objectSpread$24({}, state.customization), {}, _defineProperty$1({}, payload.key, payload.value)) });
-			case "SET_DURATION": return _objectSpread$24(_objectSpread$24({}, state), {}, { duration: payload });
+			case "RESET_STATE": return _objectSpread$28({}, initialState);
+			case "SET_CUSTOMIZATION": return _objectSpread$28(_objectSpread$28({}, state), {}, { customization: _objectSpread$28(_objectSpread$28({}, state.customization), {}, _defineProperty$1({}, payload.key, payload.value)) });
+			case "SET_DURATION": return _objectSpread$28(_objectSpread$28({}, state), {}, { duration: payload });
 			default: return state;
 		}
 	};
@@ -15069,7 +15075,7 @@ init_use_cloud_kits_eligibility();
 	init_defineProperty$1();
 	init_objectWithoutProperties();
 	var _excluded$2 = ["children", "sx"];
-	function ownKeys$24(e, r) {
+	function ownKeys$28(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -15079,19 +15085,19 @@ init_use_cloud_kits_eligibility();
 		}
 		return t;
 	}
-	__name(ownKeys$24, "ownKeys");
-	function _objectSpread$23(e) {
+	__name(ownKeys$28, "ownKeys");
+	function _objectSpread$27(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$24(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$28(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$24(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$28(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$23, "_objectSpread");
+	__name(_objectSpread$27, "_objectSpread");
 	function TopBar(props) {
 		var children = props.children;
 		var _props$sx = props.sx;
@@ -15100,7 +15106,7 @@ init_use_cloud_kits_eligibility();
 		return /*#__PURE__*/ react.default.createElement(react.default.Fragment, null, /*#__PURE__*/ react.default.createElement(_elementor_ui.AppBar, _extends({
 			position: "static",
 			elevation: 0,
-			sx: _objectSpread$23({ backgroundColor: "background.default" }, sx)
+			sx: _objectSpread$27({ backgroundColor: "background.default" }, sx)
 		}, rest), /*#__PURE__*/ react.default.createElement(_elementor_ui.Toolbar, { sx: {
 			minHeight: {
 				xs: 56,
@@ -15288,11 +15294,124 @@ init_use_cloud_kits_eligibility();
 	};
 
 //#endregion
+//#region app/modules/import-export-customization/assets/js/shared/constants.js
+	var KIT_SECTIONS = Object.freeze({
+		CONTENT: "content",
+		TEMPLATES: "templates",
+		SETTINGS: "settings",
+		PLUGINS: "plugins"
+	});
+	var KIT_SECTION_ITEMS = Object.freeze({
+		CONTENT_CUSTOM_POST_TYPES: "content/custom-post-types",
+		CONTENT_MEDIA_FORMAT: "content/media-format",
+		SETTINGS_DESIGN_SYSTEM: "settings/design-system",
+		SETTINGS_THEME: "settings/theme",
+		SETTINGS_GLOBAL_CLASSES: "settings/design-system/global-classes",
+		SETTINGS_GLOBAL_VARIABLES: "settings/design-system/global-variables",
+		SETTINGS_DEFAULT_STYLES: "settings/design-system/default-styles",
+		SETTINGS_GLOBAL_COLORS: "settings/global-colors",
+		SETTINGS_GLOBAL_FONTS: "settings/global-fonts",
+		SETTINGS_THEME_STYLE_SETTINGS: "settings/theme-style-settings",
+		SETTINGS_GENERAL_SETTINGS: "settings/general-settings",
+		SETTINGS_EXPERIMENTS: "settings/experiments",
+		SETTINGS_CUSTOM_FONTS: "settings/custom-fonts",
+		SETTINGS_CUSTOM_ICONS: "settings/custom-icons",
+		SETTINGS_CUSTOM_CODE: "settings/custom-code",
+		PLUGINS_PLUGIN_LIST: "plugins/plugin-list"
+	});
+
+//#endregion
+//#region app/modules/import-export-customization/assets/js/shared/utils.js
+	function isExperimentActive(experimentName) {
+		var _common$config;
+		var common = typeof globalThis !== "undefined" ? globalThis.elementorCommon : void 0;
+		return !!(common !== null && common !== void 0 && (_common$config = common.config) !== null && _common$config !== void 0 && (_common$config = _common$config.experimentalFeatures) !== null && _common$config !== void 0 && _common$config[experimentName]);
+	}
+	function isAtomicElementsFeatureActive() {
+		return isExperimentActive("e_atomic_elements");
+	}
+	function getCustomizationDialogsRegistry() {
+		var _globalThis$elementor;
+		var _globalThis$elementor2;
+		return (_globalThis$elementor = (_globalThis$elementor2 = globalThis.elementorModules) === null || _globalThis$elementor2 === void 0 || (_globalThis$elementor2 = _globalThis$elementor2.importExport) === null || _globalThis$elementor2 === void 0 ? void 0 : _globalThis$elementor2.customizationDialogsRegistry) !== null && _globalThis$elementor !== void 0 ? _globalThis$elementor : null;
+	}
+	function getCustomizationDialog(dialogKey) {
+		var _getCustomizationDial;
+		var _getCustomizationDial2;
+		var _getCustomizationDial3;
+		return (_getCustomizationDial = (_getCustomizationDial2 = getCustomizationDialogsRegistry()) === null || _getCustomizationDial2 === void 0 || (_getCustomizationDial3 = _getCustomizationDial2.get) === null || _getCustomizationDial3 === void 0 ? void 0 : _getCustomizationDial3.call(_getCustomizationDial2, dialogKey)) !== null && _getCustomizationDial !== void 0 ? _getCustomizationDial : null;
+	}
+	function getCustomizationDialogChildren(dialogKey) {
+		var _getCustomizationDial4;
+		var _getCustomizationDial5;
+		var _getCustomizationDial6;
+		return (_getCustomizationDial4 = (_getCustomizationDial5 = getCustomizationDialogsRegistry()) === null || _getCustomizationDial5 === void 0 || (_getCustomizationDial6 = _getCustomizationDial5.getAll) === null || _getCustomizationDial6 === void 0 || (_getCustomizationDial6 = _getCustomizationDial6.call(_getCustomizationDial5)) === null || _getCustomizationDial6 === void 0 ? void 0 : _getCustomizationDial6.filter(function(dialog) {
+			return dialog.parentKey === dialogKey;
+		})) !== null && _getCustomizationDial4 !== void 0 ? _getCustomizationDial4 : [];
+	}
+	function getAvailableCustomizationDialogChildren(dialogKey) {
+		return getCustomizationDialogChildren(dialogKey).filter(function(child) {
+			return child.isAvailable();
+		}).sort(function(first, second) {
+			return first.order - second.order;
+		});
+	}
+	var SITE_SETTINGS_MANIFEST_KEY = "site-settings";
+	var WP_CONTENT_MANIFEST_KEY = "wp-content";
+	var CUSTOM_POST_TYPE_TITLES_MANIFEST_KEY = "custom-post-type-title";
+	function getImportManifest(contextData) {
+		var _contextData$data$upl;
+		var _contextData$data;
+		return (_contextData$data$upl = contextData === null || contextData === void 0 || (_contextData$data = contextData.data) === null || _contextData$data === void 0 || (_contextData$data = _contextData$data.uploadedData) === null || _contextData$data === void 0 ? void 0 : _contextData$data.manifest) !== null && _contextData$data$upl !== void 0 ? _contextData$data$upl : null;
+	}
+	function getManifestItem(contextData, manifestKey) {
+		var _getImportManifest;
+		return (_getImportManifest = getImportManifest(contextData)) === null || _getImportManifest === void 0 ? void 0 : _getImportManifest[manifestKey];
+	}
+	function getSiteSettingsManifest(contextData) {
+		return getManifestItem(contextData, SITE_SETTINGS_MANIFEST_KEY);
+	}
+	function isSiteSettingExported(contextData, settingKey) {
+		var _getSiteSettingsManif;
+		return !!((_getSiteSettingsManif = getSiteSettingsManifest(contextData)) !== null && _getSiteSettingsManif !== void 0 && _getSiteSettingsManif[settingKey]);
+	}
+	function isClassesExported(contextData) {
+		return isSiteSettingExported(contextData, "classes");
+	}
+	function isVariablesExported(contextData) {
+		return isSiteSettingExported(contextData, "variables");
+	}
+	function isDefaultStylesExported(contextData) {
+		return isSiteSettingExported(contextData, "defaultStyles");
+	}
+	function isThemeExported(contextData) {
+		if (contextData !== null && contextData !== void 0 && contextData.isOldExport) return !!getManifestItem(contextData, "theme");
+		return isSiteSettingExported(contextData, "theme");
+	}
+	function isSiteSettingsExported(contextData) {
+		var siteSettings = getSiteSettingsManifest(contextData);
+		return !!siteSettings && Object.values(siteSettings).some(Boolean);
+	}
+	function isContentSettingsExported(contextData) {
+		return !!(getManifestItem(contextData, "taxonomies") || getManifestItem(contextData, "content") || getManifestItem(contextData, WP_CONTENT_MANIFEST_KEY) || getManifestItem(contextData, CUSTOM_POST_TYPE_TITLES_MANIFEST_KEY));
+	}
+	function getImportedClassesCount(contextData) {
+		var _getSiteSettingsManif2;
+		var _getSiteSettingsManif3;
+		return (_getSiteSettingsManif2 = (_getSiteSettingsManif3 = getSiteSettingsManifest(contextData)) === null || _getSiteSettingsManif3 === void 0 ? void 0 : _getSiteSettingsManif3.classesCount) !== null && _getSiteSettingsManif2 !== void 0 ? _getSiteSettingsManif2 : 0;
+	}
+	function getImportedVariablesCount(contextData) {
+		var _getSiteSettingsManif4;
+		var _getSiteSettingsManif5;
+		return (_getSiteSettingsManif4 = (_getSiteSettingsManif5 = getSiteSettingsManifest(contextData)) === null || _getSiteSettingsManif5 === void 0 ? void 0 : _getSiteSettingsManif5.variablesCount) !== null && _getSiteSettingsManif4 !== void 0 ? _getSiteSettingsManif4 : 0;
+	}
+
+//#endregion
 //#region app/modules/import-export-customization/assets/js/shared/components/kit-plugins-customization-dialog.js
 	init_defineProperty$1();
 	init_slicedToArray();
 	init_apps_event_tracking();
-	function ownKeys$23(e, r) {
+	function ownKeys$27(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -15302,20 +15421,20 @@ init_use_cloud_kits_eligibility();
 		}
 		return t;
 	}
-	__name(ownKeys$23, "ownKeys");
-	function _objectSpread$22(e) {
+	__name(ownKeys$27, "ownKeys");
+	function _objectSpread$26(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$23(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$27(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$23(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$27(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$22, "_objectSpread");
-	var transformAnalyticsData$2 = function transformAnalyticsData(payload) {
+	__name(_objectSpread$26, "_objectSpread");
+	var transformAnalyticsData$3 = function transformAnalyticsData(payload) {
 		var transformed = {};
 		for (var _i = 0, _Object$entries = Object.entries(payload); _i < _Object$entries.length; _i++) {
 			var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2);
@@ -15326,19 +15445,113 @@ init_use_cloud_kits_eligibility();
 		return transformed;
 	};
 	var REQUIRED_PLUGINS = ["elementor/elementor"];
-	function KitPluginsCustomizationDialog(_ref) {
+	var pluginDataPropType = import_prop_types$82.default.shape({
+		name: import_prop_types$82.default.string.isRequired,
+		version: import_prop_types$82.default.string,
+		pluginUri: import_prop_types$82.default.string
+	});
+	function PluginListSection(_ref) {
+		var handleSelectAll = _ref.handleSelectAll;
+		var handleToggleChange = _ref.handleToggleChange;
+		var isAllSelected = _ref.isAllSelected;
+		var isIndeterminate = _ref.isIndeterminate;
+		var isLoading = _ref.isLoading;
+		var isRequiredPlugin = _ref.isRequiredPlugin;
+		var plugins = _ref.plugins;
+		var pluginsList = _ref.pluginsList;
+		return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
+			mb: 3,
+			border: 1,
+			borderRadius: 1,
+			borderColor: "action.focus",
+			p: 2.5
+		} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, { variant: "h6" }, (0, _wordpress_i18n.__)("Plugin name and version", "elementor")), isLoading ? /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, {
+			spacing: 3,
+			alignItems: "center",
+			sx: { py: 8 }
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.CircularProgress, { size: 30 })) : /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, { sx: { mt: 2 } }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: { py: 1.5 } }, /*#__PURE__*/ react.default.createElement(_elementor_ui.FormControlLabel, {
+			control: /*#__PURE__*/ react.default.createElement(_elementor_ui.Checkbox, {
+				checked: isAllSelected,
+				indeterminate: isIndeterminate,
+				onChange: handleSelectAll,
+				color: "info",
+				size: "medium",
+				sx: { py: 0 }
+			}),
+			label: /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
+				variant: "body1",
+				sx: { fontWeight: 500 }
+			}, (0, _wordpress_i18n.__)("All plugins", "elementor"))
+		})), Object.entries(pluginsList).map(function(_ref2) {
+			var _ref3 = _slicedToArray(_ref2, 2);
+			var pluginKey = _ref3[0];
+			var pluginData = _ref3[1];
+			var isRequired = isRequiredPlugin(pluginKey);
+			return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, {
+				key: pluginKey,
+				sx: { py: 1.5 }
+			}, /*#__PURE__*/ react.default.createElement(_elementor_ui.FormControlLabel, {
+				control: /*#__PURE__*/ react.default.createElement(_elementor_ui.Checkbox, {
+					checked: !!plugins[pluginKey],
+					onChange: function onChange() {
+						return handleToggleChange(pluginKey);
+					},
+					color: "info",
+					size: "medium",
+					sx: { py: 0 },
+					disabled: isRequired
+				}),
+				label: /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
+					variant: "body1",
+					sx: {
+						fontWeight: 400,
+						color: isRequired ? "text.disabled" : "inherit"
+					}
+				}, pluginData.name)
+			}), pluginData.version && /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
+				variant: "body1",
+				color: "text.secondary",
+				sx: {
+					fontWeight: 400,
+					ml: 4
+				}
+			}, pluginData.pluginUri ? /*#__PURE__*/ react.default.createElement(_elementor_ui.Link, {
+				href: pluginData.pluginUri,
+				target: "_blank",
+				rel: "noopener noreferrer",
+				color: "info.light",
+				underline: "hover",
+				sx: {
+					display: "inline-flex",
+					alignItems: "center",
+					gap: .5
+				}
+			}, (0, _wordpress_i18n.__)("Version", "elementor"), " ", pluginData.version, /*#__PURE__*/ react.default.createElement(_elementor_icons.ExternalLinkIcon, null)) : /*#__PURE__*/ react.default.createElement(react.default.Fragment, null, (0, _wordpress_i18n.__)("Version", "elementor"), " ", pluginData.version)));
+		})));
+	}
+	PluginListSection.propTypes = {
+		handleSelectAll: import_prop_types$82.default.func.isRequired,
+		handleToggleChange: import_prop_types$82.default.func.isRequired,
+		isAllSelected: import_prop_types$82.default.bool.isRequired,
+		isIndeterminate: import_prop_types$82.default.bool.isRequired,
+		isLoading: import_prop_types$82.default.bool.isRequired,
+		isRequiredPlugin: import_prop_types$82.default.func.isRequired,
+		plugins: import_prop_types$82.default.objectOf(import_prop_types$82.default.bool).isRequired,
+		pluginsList: import_prop_types$82.default.objectOf(pluginDataPropType).isRequired
+	};
+	function KitPluginsCustomizationDialog(_ref4) {
 		var _useContextDetection;
 		var _data$uploadedData2;
 		var _data$includes;
-		var _data$customization2;
-		var open = _ref.open;
-		var handleClose = _ref.handleClose;
-		var handleSaveChanges = _ref.handleSaveChanges;
-		var _ref2 = (_useContextDetection = useContextDetection()) !== null && _useContextDetection !== void 0 ? _useContextDetection : {};
-		var _ref2$isImport = _ref2.isImport;
-		var isImport = _ref2$isImport === void 0 ? false : _ref2$isImport;
-		var _ref2$contextData = _ref2.contextData;
-		var contextData = _ref2$contextData === void 0 ? {} : _ref2$contextData;
+		var _data$customization3;
+		var open = _ref4.open;
+		var handleClose = _ref4.handleClose;
+		var handleSaveChanges = _ref4.handleSaveChanges;
+		var _ref5 = (_useContextDetection = useContextDetection()) !== null && _useContextDetection !== void 0 ? _useContextDetection : {};
+		var _ref5$isImport = _ref5.isImport;
+		var isImport = _ref5$isImport === void 0 ? false : _ref5$isImport;
+		var _ref5$contextData = _ref5.contextData;
+		var contextData = _ref5$contextData === void 0 ? {} : _ref5$contextData;
 		var _contextData$data = contextData.data;
 		var data = _contextData$data === void 0 ? null : _contextData$data;
 		var _contextData$isOldEle = contextData.isOldElementorVersion;
@@ -15364,22 +15577,24 @@ init_use_cloud_kits_eligibility();
 		var _useState2 = _slicedToArray((0, react.useState)({}), 2);
 		var plugins = _useState2[0];
 		var setPlugins = _useState2[1];
-		var initialState = (data === null || data === void 0 || (_data$includes = data.includes) === null || _data$includes === void 0 ? void 0 : _data$includes.includes("plugins")) || false;
+		var initialState = (data === null || data === void 0 || (_data$includes = data.includes) === null || _data$includes === void 0 ? void 0 : _data$includes.includes(KIT_SECTIONS.PLUGINS)) || false;
 		(0, react.useEffect)(function() {
 			var _data$customization;
+			var _data$customization2;
 			if (0 === Object.keys(pluginsList).length) return;
-			var initialPluginsState = {};
-			if (data !== null && data !== void 0 && (_data$customization = data.customization) !== null && _data$customization !== void 0 && _data$customization.plugins) initialPluginsState = data.customization.plugins;
-			else Object.keys(pluginsList).forEach(function(pluginKey) {
-				initialPluginsState[pluginKey] = initialState;
-			});
+			var savedPluginsState = (data === null || data === void 0 || (_data$customization = data.customization) === null || _data$customization === void 0 ? void 0 : _data$customization.plugins) || {};
+			var hasSavedPluginsState = !!(data !== null && data !== void 0 && (_data$customization2 = data.customization) !== null && _data$customization2 !== void 0 && _data$customization2.plugins);
+			var initialPluginsState = Object.keys(pluginsList).reduce(function(acc, pluginKey) {
+				acc[pluginKey] = hasSavedPluginsState ? !!savedPluginsState[pluginKey] : initialState;
+				return acc;
+			}, {});
 			REQUIRED_PLUGINS.forEach(function(pluginKey) {
 				if (initialPluginsState.hasOwnProperty(pluginKey)) initialPluginsState[pluginKey] = true;
 			});
 			setPlugins(initialPluginsState);
 		}, [
 			pluginsList,
-			data === null || data === void 0 || (_data$customization2 = data.customization) === null || _data$customization2 === void 0 ? void 0 : _data$customization2.plugins,
+			data === null || data === void 0 || (_data$customization3 = data.customization) === null || _data$customization3 === void 0 ? void 0 : _data$customization3.plugins,
 			initialState
 		]);
 		var isRequiredPlugin = (0, react.useCallback)(function(pluginKey) {
@@ -15407,14 +15622,14 @@ init_use_cloud_kits_eligibility();
 		var handleToggleChange = (0, react.useCallback)(function(settingKey) {
 			if (isRequiredPlugin(settingKey)) return;
 			setPlugins(function(prev) {
-				return _objectSpread$22(_objectSpread$22({}, prev), {}, _defineProperty$1({}, settingKey, !prev[settingKey]));
+				return _objectSpread$26(_objectSpread$26({}, prev), {}, _defineProperty$1({}, settingKey, !prev[settingKey]));
 			});
 		}, [isRequiredPlugin]);
 		var handleSelectAll = (0, react.useCallback)(function() {
 			var allNonRequiredSelected = nonRequiredPlugins.every(function(pluginKey) {
 				return plugins[pluginKey];
 			});
-			var newState = _objectSpread$22({}, plugins);
+			var newState = _objectSpread$26({}, plugins);
 			nonRequiredPlugins.forEach(function(pluginKey) {
 				newState[pluginKey] = !allNonRequiredSelected;
 			});
@@ -15425,95 +15640,17 @@ init_use_cloud_kits_eligibility();
 		}, [plugins, nonRequiredPlugins]);
 		var getPluginsSelection = (0, react.useCallback)(function() {
 			var selectedPlugins = {};
-			Object.entries(plugins).forEach(function(_ref3) {
-				var _ref4 = _slicedToArray(_ref3, 2);
-				var pluginKey = _ref4[0];
-				selectedPlugins[pluginKey] = _ref4[1];
+			Object.entries(plugins).forEach(function(_ref6) {
+				var _ref7 = _slicedToArray(_ref6, 2);
+				var pluginKey = _ref7[0];
+				selectedPlugins[pluginKey] = _ref7[1];
 			});
 			return selectedPlugins;
 		}, [plugins]);
 		(0, react.useEffect)(function() {
 			if (open) AppsEventTracking.sendPageViewsWebsiteTemplates(elementorCommon.eventsManager.config.secondaryLocations.kitLibrary.kitExportCustomizationEdit);
 		}, [open]);
-		var SettingSection = function SettingSection(_ref5) {
-			var title = _ref5.title;
-			var description = _ref5.description;
-			var children = _ref5.children;
-			var settingKey = _ref5.settingKey;
-			return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, {
-				key: settingKey,
-				sx: {
-					mb: 3,
-					border: 1,
-					borderRadius: 1,
-					borderColor: "action.focus",
-					p: 2.5
-				}
-			}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
-				display: "flex",
-				justifyContent: "space-between",
-				alignItems: "center"
-			} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, null, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, { variant: "h6" }, title), description && /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
-				variant: "body1",
-				color: "text.secondary"
-			}, description))), children && /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: { mt: 2 } }, children));
-		};
-		SettingSection.propTypes = {
-			title: import_prop_types$82.default.string.isRequired,
-			description: import_prop_types$82.default.string,
-			children: import_prop_types$82.default.node,
-			settingKey: import_prop_types$82.default.string
-		};
-		var SubSetting = function SubSetting(_ref6) {
-			var label = _ref6.label;
-			var settingKey = _ref6.settingKey;
-			var version = _ref6.version;
-			var pluginUri = _ref6.pluginUri;
-			var isRequired = isRequiredPlugin(settingKey);
-			return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: { py: 1.5 } }, /*#__PURE__*/ react.default.createElement(_elementor_ui.FormControlLabel, {
-				control: /*#__PURE__*/ react.default.createElement(_elementor_ui.Checkbox, {
-					checked: plugins[settingKey],
-					onChange: function onChange() {
-						return handleToggleChange(settingKey);
-					},
-					color: "info",
-					size: "medium",
-					sx: { py: 0 },
-					disabled: isRequired
-				}),
-				label: /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
-					variant: "body1",
-					sx: {
-						fontWeight: 400,
-						color: isRequired ? "text.disabled" : "inherit"
-					}
-				}, label)
-			}), version && /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
-				variant: "body1",
-				color: "text.secondary",
-				sx: {
-					fontWeight: 400,
-					ml: 4
-				}
-			}, pluginUri ? /*#__PURE__*/ react.default.createElement(_elementor_ui.Link, {
-				href: pluginUri,
-				target: "_blank",
-				rel: "noopener noreferrer",
-				color: "info.light",
-				underline: "hover",
-				sx: {
-					display: "inline-flex",
-					alignItems: "center",
-					gap: .5
-				}
-			}, (0, _wordpress_i18n.__)("Version", "elementor"), " ", version, /*#__PURE__*/ react.default.createElement(_elementor_icons.ExternalLinkIcon, null)) : /*#__PURE__*/ react.default.createElement(react.default.Fragment, null, (0, _wordpress_i18n.__)("Version", "elementor"), " ", version)));
-		};
-		SubSetting.propTypes = {
-			label: import_prop_types$82.default.string.isRequired,
-			settingKey: import_prop_types$82.default.string.isRequired,
-			version: import_prop_types$82.default.string,
-			pluginUri: import_prop_types$82.default.string
-		};
+		var registeredSections = getAvailableCustomizationDialogChildren(KIT_SECTIONS.PLUGINS);
 		return /*#__PURE__*/ react.default.createElement(_elementor_ui.Dialog, {
 			open,
 			onClose: handleClose,
@@ -15523,41 +15660,28 @@ init_use_cloud_kits_eligibility();
 		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.DialogHeader, { onClose: handleClose }, /*#__PURE__*/ react.default.createElement(_elementor_ui.DialogTitle, null, (0, _wordpress_i18n.__)("Edit plugins", "elementor"))), /*#__PURE__*/ react.default.createElement(_elementor_ui.DialogContent, {
 			dividers: true,
 			sx: { p: 3 }
-		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, { gap: 2 }, isOldElementorVersion && /*#__PURE__*/ react.default.createElement(UpgradeVersionBanner, null), isLoading ? /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, {
-			spacing: 3,
-			alignItems: "center",
-			sx: { py: 8 }
-		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.CircularProgress, { size: 30 })) : /*#__PURE__*/ react.default.createElement(SettingSection, { title: (0, _wordpress_i18n.__)("Plugin name and version", "elementor") }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, null, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: { py: 1.5 } }, /*#__PURE__*/ react.default.createElement(_elementor_ui.FormControlLabel, {
-			control: /*#__PURE__*/ react.default.createElement(_elementor_ui.Checkbox, {
-				checked: isAllSelected,
-				indeterminate: isIndeterminate,
-				onChange: handleSelectAll,
-				color: "info",
-				size: "medium",
-				sx: { py: 0 }
-			}),
-			label: /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
-				variant: "body1",
-				sx: { fontWeight: 500 }
-			}, (0, _wordpress_i18n.__)("All plugins", "elementor"))
-		})), Object.entries(pluginsList).map(function(_ref7) {
-			var _ref8 = _slicedToArray(_ref7, 2);
-			var pluginKey = _ref8[0];
-			var pluginData = _ref8[1];
-			return /*#__PURE__*/ react.default.createElement(SubSetting, {
-				key: pluginKey,
-				label: pluginData.name,
-				settingKey: pluginKey,
-				version: pluginData.version,
-				pluginUri: pluginData.pluginUri
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, { gap: 2 }, isOldElementorVersion && /*#__PURE__*/ react.default.createElement(UpgradeVersionBanner, null), registeredSections.map(function(section) {
+			var SectionComponent = section.component;
+			return /*#__PURE__*/ react.default.createElement(SectionComponent, {
+				key: section.key,
+				handleSelectAll,
+				handleToggleChange,
+				isAllSelected,
+				isIndeterminate,
+				isLoading,
+				isRequiredPlugin,
+				plugins,
+				pluginsList
 			});
-		}))))), /*#__PURE__*/ react.default.createElement(_elementor_ui.DialogActions, null, /*#__PURE__*/ react.default.createElement(_elementor_ui.Button, {
+		}))), /*#__PURE__*/ react.default.createElement(_elementor_ui.DialogActions, null, /*#__PURE__*/ react.default.createElement(_elementor_ui.Button, {
 			onClick: handleClose,
 			color: "secondary"
 		}, (0, _wordpress_i18n.__)("Cancel", "elementor")), /*#__PURE__*/ react.default.createElement(_elementor_ui.Button, {
 			onClick: function onClick() {
 				var pluginsSelection = getPluginsSelection();
-				handleSaveChanges("plugins", pluginsSelection, Object.values(pluginsSelection).some(Boolean), transformAnalyticsData$2(pluginsSelection));
+				var hasEnabledCustomization = Object.values(pluginsSelection).some(Boolean);
+				var transformedAnalytics = transformAnalyticsData$3(pluginsSelection);
+				handleSaveChanges(KIT_SECTIONS.PLUGINS, pluginsSelection, hasEnabledCustomization, transformedAnalytics);
 				handleClose();
 			},
 			variant: "contained",
@@ -15873,7 +15997,7 @@ init_use_cloud_kits_eligibility();
 	init_defineProperty$1();
 	init_slicedToArray();
 	init_apps_event_tracking();
-	function ownKeys$22(e, r) {
+	function ownKeys$26(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -15883,20 +16007,20 @@ init_use_cloud_kits_eligibility();
 		}
 		return t;
 	}
-	__name(ownKeys$22, "ownKeys");
-	function _objectSpread$21(e) {
+	__name(ownKeys$26, "ownKeys");
+	function _objectSpread$25(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$22(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$26(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$22(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$26(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$21, "_objectSpread");
-	var transformAnalyticsData$1 = function transformAnalyticsData(payload, customPostTypes) {
+	__name(_objectSpread$25, "_objectSpread");
+	var transformAnalyticsData$2 = function transformAnalyticsData(payload, customPostTypes) {
 		var optionsArray = [{
 			key: "customPostTypes",
 			options: customPostTypes
@@ -15923,21 +16047,174 @@ init_use_cloud_kits_eligibility();
 		title: (0, _wordpress_i18n.__)("Save media to the cloud", "elementor"),
 		description: (0, _wordpress_i18n.__)("All images and files are stored with the template. Keeps everything intact, but the file is larger.", "elementor")
 	}];
-	function KitContentCustomizationDialog(_ref) {
+	var customPostTypePropType = import_prop_types$82.default.shape({
+		label: import_prop_types$82.default.string.isRequired,
+		value: import_prop_types$82.default.oneOfType([import_prop_types$82.default.string, import_prop_types$82.default.number]).isRequired
+	});
+	var refPropType = import_prop_types$82.default.oneOfType([import_prop_types$82.default.func, import_prop_types$82.default.shape({ current: import_prop_types$82.default.any })]);
+	var contentSettingsPropType = import_prop_types$82.default.shape({
+		customPostTypes: import_prop_types$82.default.arrayOf(import_prop_types$82.default.oneOfType([import_prop_types$82.default.string, import_prop_types$82.default.number])).isRequired,
+		mediaFormat: import_prop_types$82.default.string
+	});
+	function CustomPostTypesSection(_ref) {
+		var customPostTypes = _ref.customPostTypes;
+		var isImport = _ref.isImport;
+		var _onSettingChange = _ref.onSettingChange;
+		var settings = _ref.settings;
+		return isImport && !(customPostTypes !== null && customPostTypes !== void 0 && customPostTypes.length) ? /*#__PURE__*/ react.default.createElement(SettingSection, {
+			title: (0, _wordpress_i18n.__)("Custom post types", "elementor"),
+			settingKey: "customPostTypes",
+			notExported: true
+		}) : /*#__PURE__*/ react.default.createElement(ListSettingSection, {
+			settingKey: "customPostTypes",
+			title: (0, _wordpress_i18n.__)("Custom post types", "elementor"),
+			onSettingChange: function onSettingChange(selectedCustomPostTypes) {
+				_onSettingChange("customPostTypes", selectedCustomPostTypes);
+			},
+			settings: settings.customPostTypes,
+			items: customPostTypes
+		});
+	}
+	CustomPostTypesSection.propTypes = {
+		customPostTypes: import_prop_types$82.default.arrayOf(customPostTypePropType).isRequired,
+		isImport: import_prop_types$82.default.bool.isRequired,
+		onSettingChange: import_prop_types$82.default.func.isRequired,
+		settings: contentSettingsPropType.isRequired
+	};
+	function MediaFormatSection(_ref2) {
+		var alertRef = _ref2.alertRef;
+		var isCloudKitsEligible = _ref2.isCloudKitsEligible;
+		var isImport = _ref2.isImport;
+		var mediaFormatSectionRef = _ref2.mediaFormatSectionRef;
+		var onSettingChange = _ref2.onSettingChange;
+		var settings = _ref2.settings;
+		var showMediaFormatValidation = _ref2.showMediaFormatValidation;
+		if (isImport) return /*#__PURE__*/ react.default.createElement(SettingSection, {
+			title: (0, _wordpress_i18n.__)("Media format", "elementor"),
+			settingKey: "mediaFormat",
+			hasToggle: false
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Alert, {
+			icon: /*#__PURE__*/ react.default.createElement(_elementor_ui.SvgIcon, {
+				color: "info",
+				viewBox: "0 0 24 24"
+			}, /*#__PURE__*/ react.default.createElement("path", {
+				d: "M11.8623 14.7549C12.3665 14.8061 12.7598 15.2322 12.7598 15.75C12.7598 16.2678 12.3665 16.6939 11.8623 16.7451L11.7598 16.75H11.75C11.1977 16.75 10.75 16.3023 10.75 15.75C10.75 15.1977 11.1977 14.75 11.75 14.75H11.7598L11.8623 14.7549Z",
+				fill: "currentColor"
+			}), /*#__PURE__*/ react.default.createElement("path", {
+				d: "M11.75 7C12.1642 7 12.5 7.33579 12.5 7.75V12.75C12.5 13.1642 12.1642 13.5 11.75 13.5C11.3358 13.5 11 13.1642 11 12.75V7.75C11 7.33579 11.3358 7 11.75 7Z",
+				fill: "currentColor"
+			}), /*#__PURE__*/ react.default.createElement("path", {
+				fillRule: "evenodd",
+				clipRule: "evenodd",
+				d: "M11.75 2C17.1348 2 21.5 6.36522 21.5 11.75C21.5 17.1348 17.1348 21.5 11.75 21.5C6.36522 21.5 2 17.1348 2 11.75C2 6.36522 6.36522 2 11.75 2ZM11.75 3.5C7.19365 3.5 3.5 7.19365 3.5 11.75C3.5 16.3063 7.19365 20 11.75 20C16.3063 20 20 16.3063 20 11.75C20 7.19365 16.3063 3.5 11.75 3.5Z",
+				fill: "currentColor"
+			})),
+			sx: {
+				backgroundColor: "transparent",
+				p: 0
+			}
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
+			variant: "body2",
+			color: "text.primary"
+		}, /*#__PURE__*/ react.default.createElement("strong", null, (0, _wordpress_i18n.__)("Note:", "elementor")), " ", (0, _wordpress_i18n.__)("The media will be uploaded automatically, just as it was saved during export", "elementor"))));
+		if (!isCloudKitsEligible) return null;
+		return /*#__PURE__*/ react.default.createElement(SettingSection, {
+			ref: mediaFormatSectionRef,
+			description: (0, _wordpress_i18n.__)("Select how do you want to save & export the media files.", "elementor"),
+			title: (0, _wordpress_i18n.__)("Media format", "elementor"),
+			settingKey: "mediaFormat",
+			hasToggle: false
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: { pt: 2.5 } }, /*#__PURE__*/ react.default.createElement(_elementor_ui.FormControl, {
+			component: "fieldset",
+			sx: { width: "100%" }
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.RadioGroup, {
+			value: settings.mediaFormat,
+			onChange: function onChange(event) {
+				onSettingChange("mediaFormat", event.target.value);
+			},
+			sx: { width: "100%" }
+		}, MEDIA_FORMAT_CONFIG.map(function(option, index) {
+			return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, {
+				key: option.value,
+				sx: {
+					border: 1,
+					borderColor: settings.mediaFormat === option.value ? "info.light" : "divider",
+					borderRadius: 2,
+					p: 1,
+					mb: index < MEDIA_FORMAT_CONFIG.length - 1 ? 1.5 : 0,
+					width: "100%"
+				}
+			}, /*#__PURE__*/ react.default.createElement(_elementor_ui.FormControlLabel, {
+				value: option.value,
+				control: /*#__PURE__*/ react.default.createElement(_elementor_ui.Radio, {
+					color: "info",
+					"data-testid": "media-format-".concat(option.value)
+				}),
+				label: /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, null, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
+					variant: "body2",
+					sx: { mb: .25 }
+				}, option.title), /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
+					variant: "body2",
+					color: "text.secondary"
+				}, option.description)),
+				sx: {
+					alignItems: "flex-start",
+					m: 0,
+					width: "100%"
+				}
+			}));
+		}))), showMediaFormatValidation && /*#__PURE__*/ react.default.createElement(_elementor_ui.Alert, {
+			ref: alertRef,
+			icon: /*#__PURE__*/ react.default.createElement(_elementor_ui.SvgIcon, {
+				color: "error",
+				viewBox: "0 0 24 24"
+			}, /*#__PURE__*/ react.default.createElement("path", {
+				d: "M11.8623 14.7549C12.3665 14.8061 12.7598 15.2322 12.7598 15.75C12.7598 16.2678 12.3665 16.6939 11.8623 16.7451L11.7598 16.75H11.75C11.1977 16.75 10.75 16.3023 10.75 15.75C10.75 15.1977 11.1977 14.75 11.75 14.75H11.7598L11.8623 14.7549Z",
+				fill: "currentColor"
+			}), /*#__PURE__*/ react.default.createElement("path", {
+				d: "M11.75 7C12.1642 7 12.5 7.33579 12.5 7.75V12.75C12.5 13.1642 12.1642 13.5 11.75 13.5C11.3358 13.5 11 13.1642 11 12.75V7.75C11 7.33579 11.3358 7 11.75 7Z",
+				fill: "currentColor"
+			}), /*#__PURE__*/ react.default.createElement("path", {
+				fillRule: "evenodd",
+				clipRule: "evenodd",
+				d: "M11.75 2C17.1348 2 21.5 6.36522 21.5 11.75C21.5 17.1348 17.1348 21.5 11.75 21.5C6.36522 21.5 2 17.1348 2 11.75C2 6.36522 6.36522 2 11.75 2ZM11.75 3.5C7.19365 3.5 3.5 7.19365 3.5 11.75C3.5 16.3063 7.19365 20 11.75 20C16.3063 20 20 16.3063 20 11.75C20 7.19365 16.3063 3.5 11.75 3.5Z",
+				fill: "currentColor"
+			})),
+			sx: {
+				mt: 2,
+				ml: 1,
+				backgroundColor: "transparent",
+				p: 0
+			}
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
+			variant: "body2",
+			color: "text.primary"
+		}, /*#__PURE__*/ react.default.createElement("strong", null, (0, _wordpress_i18n.__)("Note:", "elementor")), " ", (0, _wordpress_i18n.__)("To export a ZIP, go to Edit Content, choose 'Link to Media', then Export as ZIP.", "elementor"), /*#__PURE__*/ react.default.createElement("br", null), (0, _wordpress_i18n.__)("Or, save this template to the cloud instead.", "elementor")))));
+	}
+	MediaFormatSection.propTypes = {
+		alertRef: refPropType,
+		isCloudKitsEligible: import_prop_types$82.default.bool.isRequired,
+		isImport: import_prop_types$82.default.bool.isRequired,
+		mediaFormatSectionRef: refPropType,
+		onSettingChange: import_prop_types$82.default.func.isRequired,
+		settings: contentSettingsPropType.isRequired,
+		showMediaFormatValidation: import_prop_types$82.default.bool.isRequired
+	};
+	function KitContentCustomizationDialog(_ref3) {
 		var _useContextDetection;
 		var _data$customization$c2;
-		var open = _ref.open;
-		var handleClose = _ref.handleClose;
-		var _handleSaveChanges = _ref.handleSaveChanges;
-		var _ref$isCloudKitsEligi = _ref.isCloudKitsEligible;
-		var isCloudKitsEligible = _ref$isCloudKitsEligi === void 0 ? false : _ref$isCloudKitsEligi;
-		var _ref$showMediaFormatV = _ref.showMediaFormatValidation;
-		var showMediaFormatValidation = _ref$showMediaFormatV === void 0 ? false : _ref$showMediaFormatV;
-		var _ref2 = (_useContextDetection = useContextDetection()) !== null && _useContextDetection !== void 0 ? _useContextDetection : {};
-		var _ref2$isImport = _ref2.isImport;
-		var isImport = _ref2$isImport === void 0 ? false : _ref2$isImport;
-		var _ref2$contextData = _ref2.contextData;
-		var contextData = _ref2$contextData === void 0 ? {} : _ref2$contextData;
+		var open = _ref3.open;
+		var handleClose = _ref3.handleClose;
+		var _handleSaveChanges = _ref3.handleSaveChanges;
+		var _ref3$isCloudKitsElig = _ref3.isCloudKitsEligible;
+		var isCloudKitsEligible = _ref3$isCloudKitsElig === void 0 ? false : _ref3$isCloudKitsElig;
+		var _ref3$showMediaFormat = _ref3.showMediaFormatValidation;
+		var showMediaFormatValidation = _ref3$showMediaFormat === void 0 ? false : _ref3$showMediaFormat;
+		var _ref4 = (_useContextDetection = useContextDetection()) !== null && _useContextDetection !== void 0 ? _useContextDetection : {};
+		var _ref4$isImport = _ref4.isImport;
+		var isImport = _ref4$isImport === void 0 ? false : _ref4$isImport;
+		var _ref4$contextData = _ref4.contextData;
+		var contextData = _ref4$contextData === void 0 ? {} : _ref4$contextData;
 		var _contextData$data = contextData.data;
 		var data = _contextData$data === void 0 ? null : _contextData$data;
 		var _contextData$isOldEle = contextData.isOldElementorVersion;
@@ -15957,14 +16234,14 @@ init_use_cloud_kits_eligibility();
 		(0, react.useEffect)(function() {
 			if (customPostTypes) setSettings(function(prevSettings) {
 				var _data$customization$c;
-				return _objectSpread$21(_objectSpread$21({}, prevSettings), {}, { customPostTypes: ((_data$customization$c = data.customization.content) === null || _data$customization$c === void 0 ? void 0 : _data$customization$c.customPostTypes) || customPostTypes.map(function(_ref3) {
-					return _ref3.value;
+				return _objectSpread$25(_objectSpread$25({}, prevSettings), {}, { customPostTypes: ((_data$customization$c = data.customization.content) === null || _data$customization$c === void 0 ? void 0 : _data$customization$c.customPostTypes) || customPostTypes.map(function(_ref5) {
+					return _ref5.value;
 				}) });
 			});
 		}, [customPostTypes, (_data$customization$c2 = data.customization.content) === null || _data$customization$c2 === void 0 ? void 0 : _data$customization$c2.customPostTypes]);
 		(0, react.useEffect)(function() {
 			if (open) setSettings(function(prevState) {
-				if (!data.includes.includes("content")) return {
+				if (!data.includes.includes(KIT_SECTIONS.CONTENT)) return {
 					customPostTypes: [],
 					mediaFormat: MEDIA_FORMAT_OPTIONS.LINK
 				};
@@ -15989,132 +16266,36 @@ init_use_cloud_kits_eligibility();
 		}, [showMediaFormatValidation]);
 		var handleSettingsChange = function handleSettingsChange(settingKey, payload) {
 			setSettings(function(prev) {
-				return _objectSpread$21(_objectSpread$21({}, prev), {}, _defineProperty$1({}, settingKey, payload));
+				return _objectSpread$25(_objectSpread$25({}, prev), {}, _defineProperty$1({}, settingKey, payload));
 			});
 		};
+		var registeredSections = getAvailableCustomizationDialogChildren(KIT_SECTIONS.CONTENT);
 		return /*#__PURE__*/ react.default.createElement(KitCustomizationDialog, {
 			open,
 			title: (0, _wordpress_i18n.__)("Edit content", "elementor"),
 			handleClose,
 			handleSaveChanges: function handleSaveChanges() {
-				_handleSaveChanges("content", settings, true, transformAnalyticsData$1(settings, customPostTypes));
+				var transformedAnalytics = transformAnalyticsData$2(settings, customPostTypes);
+				_handleSaveChanges(KIT_SECTIONS.CONTENT, settings, true, transformedAnalytics);
 				handleClose();
 			}
-		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, { gap: 2 }, isOldElementorVersion && /*#__PURE__*/ react.default.createElement(UpgradeVersionBanner, null), isImport && !(customPostTypes !== null && customPostTypes !== void 0 && customPostTypes.length) ? /*#__PURE__*/ react.default.createElement(SettingSection, {
-			title: (0, _wordpress_i18n.__)("Custom post types", "elementor"),
-			settingKey: "customPostTypes",
-			notExported: true
-		}) : /*#__PURE__*/ react.default.createElement(ListSettingSection, {
-			settingKey: "customPostTypes",
-			title: (0, _wordpress_i18n.__)("Custom post types", "elementor"),
-			onSettingChange: function onSettingChange(selectedCustomPostTypes) {
-				handleSettingsChange("customPostTypes", selectedCustomPostTypes);
-			},
-			settings: settings.customPostTypes,
-			items: customPostTypes
-		}), function renderMediaFormatSection() {
-			if (isImport) return /*#__PURE__*/ react.default.createElement(SettingSection, {
-				title: (0, _wordpress_i18n.__)("Media format", "elementor"),
-				settingKey: "mediaFormat",
-				hasToggle: false
-			}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Alert, {
-				icon: /*#__PURE__*/ react.default.createElement(_elementor_ui.SvgIcon, {
-					color: "info",
-					viewBox: "0 0 24 24"
-				}, /*#__PURE__*/ react.default.createElement("path", {
-					d: "M11.8623 14.7549C12.3665 14.8061 12.7598 15.2322 12.7598 15.75C12.7598 16.2678 12.3665 16.6939 11.8623 16.7451L11.7598 16.75H11.75C11.1977 16.75 10.75 16.3023 10.75 15.75C10.75 15.1977 11.1977 14.75 11.75 14.75H11.7598L11.8623 14.7549Z",
-					fill: "currentColor"
-				}), /*#__PURE__*/ react.default.createElement("path", {
-					d: "M11.75 7C12.1642 7 12.5 7.33579 12.5 7.75V12.75C12.5 13.1642 12.1642 13.5 11.75 13.5C11.3358 13.5 11 13.1642 11 12.75V7.75C11 7.33579 11.3358 7 11.75 7Z",
-					fill: "currentColor"
-				}), /*#__PURE__*/ react.default.createElement("path", {
-					fillRule: "evenodd",
-					clipRule: "evenodd",
-					d: "M11.75 2C17.1348 2 21.5 6.36522 21.5 11.75C21.5 17.1348 17.1348 21.5 11.75 21.5C6.36522 21.5 2 17.1348 2 11.75C2 6.36522 6.36522 2 11.75 2ZM11.75 3.5C7.19365 3.5 3.5 7.19365 3.5 11.75C3.5 16.3063 7.19365 20 11.75 20C16.3063 20 20 16.3063 20 11.75C20 7.19365 16.3063 3.5 11.75 3.5Z",
-					fill: "currentColor"
-				})),
-				sx: {
-					backgroundColor: "transparent",
-					p: 0
-				}
-			}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
-				variant: "body2",
-				color: "text.primary"
-			}, /*#__PURE__*/ react.default.createElement("strong", null, (0, _wordpress_i18n.__)("Note:", "elementor")), " ", (0, _wordpress_i18n.__)("The media will be uploaded automatically, just as it was saved during export", "elementor"))));
-			if (!isImport && !isCloudKitsEligible) return null;
-			return /*#__PURE__*/ react.default.createElement(SettingSection, {
-				ref: mediaFormatSectionRef,
-				description: (0, _wordpress_i18n.__)("Select how do you want to save & export the media files.", "elementor"),
-				title: (0, _wordpress_i18n.__)("Media format", "elementor"),
-				settingKey: "mediaFormat",
-				hasToggle: false
-			}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: { pt: 2.5 } }, /*#__PURE__*/ react.default.createElement(_elementor_ui.FormControl, {
-				component: "fieldset",
-				sx: { width: "100%" }
-			}, /*#__PURE__*/ react.default.createElement(_elementor_ui.RadioGroup, {
-				value: settings.mediaFormat,
-				onChange: function onChange(event) {
-					handleSettingsChange("mediaFormat", event.target.value);
-				},
-				sx: { width: "100%" }
-			}, MEDIA_FORMAT_CONFIG.map(function(option, index) {
-				return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, {
-					key: option.value,
-					sx: {
-						border: 1,
-						borderColor: settings.mediaFormat === option.value ? "info.light" : "divider",
-						borderRadius: 2,
-						p: 1,
-						mb: index < MEDIA_FORMAT_CONFIG.length - 1 ? 1.5 : 0,
-						width: "100%"
-					}
-				}, /*#__PURE__*/ react.default.createElement(_elementor_ui.FormControlLabel, {
-					value: option.value,
-					control: /*#__PURE__*/ react.default.createElement(_elementor_ui.Radio, {
-						color: "info",
-						"data-testid": "media-format-".concat(option.value)
-					}),
-					label: /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, null, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
-						variant: "body2",
-						sx: { mb: .25 }
-					}, option.title), /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
-						variant: "body2",
-						color: "text.secondary"
-					}, option.description)),
-					sx: {
-						alignItems: "flex-start",
-						m: 0,
-						width: "100%"
-					}
-				}));
-			}))), showMediaFormatValidation && /*#__PURE__*/ react.default.createElement(_elementor_ui.Alert, {
-				ref: alertRef,
-				icon: /*#__PURE__*/ react.default.createElement(_elementor_ui.SvgIcon, {
-					color: "error",
-					viewBox: "0 0 24 24"
-				}, /*#__PURE__*/ react.default.createElement("path", {
-					d: "M11.8623 14.7549C12.3665 14.8061 12.7598 15.2322 12.7598 15.75C12.7598 16.2678 12.3665 16.6939 11.8623 16.7451L11.7598 16.75H11.75C11.1977 16.75 10.75 16.3023 10.75 15.75C10.75 15.1977 11.1977 14.75 11.75 14.75H11.7598L11.8623 14.7549Z",
-					fill: "currentColor"
-				}), /*#__PURE__*/ react.default.createElement("path", {
-					d: "M11.75 7C12.1642 7 12.5 7.33579 12.5 7.75V12.75C12.5 13.1642 12.1642 13.5 11.75 13.5C11.3358 13.5 11 13.1642 11 12.75V7.75C11 7.33579 11.3358 7 11.75 7Z",
-					fill: "currentColor"
-				}), /*#__PURE__*/ react.default.createElement("path", {
-					fillRule: "evenodd",
-					clipRule: "evenodd",
-					d: "M11.75 2C17.1348 2 21.5 6.36522 21.5 11.75C21.5 17.1348 17.1348 21.5 11.75 21.5C6.36522 21.5 2 17.1348 2 11.75C2 6.36522 6.36522 2 11.75 2ZM11.75 3.5C7.19365 3.5 3.5 7.19365 3.5 11.75C3.5 16.3063 7.19365 20 11.75 20C16.3063 20 20 16.3063 20 11.75C20 7.19365 16.3063 3.5 11.75 3.5Z",
-					fill: "currentColor"
-				})),
-				sx: {
-					mt: 2,
-					ml: 1,
-					backgroundColor: "transparent",
-					p: 0
-				}
-			}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
-				variant: "body2",
-				color: "text.primary"
-			}, /*#__PURE__*/ react.default.createElement("strong", null, (0, _wordpress_i18n.__)("Note:", "elementor")), " ", (0, _wordpress_i18n.__)("To export a ZIP, go to Edit Content, choose 'Link to Media', then Export as ZIP.", "elementor"), /*#__PURE__*/ react.default.createElement("br", null), (0, _wordpress_i18n.__)("Or, save this template to the cloud instead.", "elementor")))));
-		}()));
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, { gap: 2 }, isOldElementorVersion && /*#__PURE__*/ react.default.createElement(UpgradeVersionBanner, null), registeredSections.map(function(section) {
+			var SectionComponent = section.component;
+			return /*#__PURE__*/ react.default.createElement(SectionComponent, {
+				key: section.key,
+				alertRef,
+				customPostTypes,
+				data,
+				isCloudKitsEligible,
+				isImport,
+				isOldExport: contextData === null || contextData === void 0 ? void 0 : contextData.isOldExport,
+				mediaFormatSectionRef,
+				onSettingChange: handleSettingsChange,
+				open,
+				settings,
+				showMediaFormatValidation
+			});
+		})));
 	}
 	KitContentCustomizationDialog.propTypes = {
 		open: import_prop_types$82.default.bool.isRequired,
@@ -16122,256 +16303,6 @@ init_use_cloud_kits_eligibility();
 		handleSaveChanges: import_prop_types$82.default.func.isRequired,
 		isCloudKitsEligible: import_prop_types$82.default.bool,
 		showMediaFormatValidation: import_prop_types$82.default.bool
-	};
-
-//#endregion
-//#region app/modules/import-export-customization/assets/js/shared/components/classes-variables-section.js
-	init_slicedToArray();
-	var SubSettingRow = function SubSettingRow(_ref) {
-		var label = _ref.label;
-		var checked = _ref.checked;
-		var _onChange = _ref.onChange;
-		var _ref$disabled = _ref.disabled;
-		var disabled = _ref$disabled === void 0 ? false : _ref$disabled;
-		var _ref$limitExceeded = _ref.limitExceeded;
-		var limitExceeded = _ref$limitExceeded === void 0 ? false : _ref$limitExceeded;
-		var _ref$overLimitCount = _ref.overLimitCount;
-		var overLimitCount = _ref$overLimitCount === void 0 ? 0 : _ref$overLimitCount;
-		var onReviewClick = _ref.onReviewClick;
-		var _ref$overrideAll = _ref.overrideAll;
-		var overrideAll = _ref$overrideAll === void 0 ? false : _ref$overrideAll;
-		var onOverrideAllChange = _ref.onOverrideAllChange;
-		var _ref$showOverrideOpti = _ref.showOverrideOption;
-		var showOverrideOption = _ref$showOverrideOpti === void 0 ? false : _ref$showOverrideOpti;
-		var _ref$notExported = _ref.notExported;
-		if (_ref$notExported === void 0 ? false : _ref$notExported) return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
-			display: "flex",
-			justifyContent: "space-between",
-			alignItems: "center",
-			px: 1.25
-		} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
-			variant: "body1",
-			color: "text.primary"
-		}, label), /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
-			variant: "body1",
-			color: "text.secondary"
-		}, (0, _wordpress_i18n.__)("Not exported", "elementor")));
-		return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
-			display: "flex",
-			justifyContent: "space-between",
-			alignItems: "center",
-			px: 1.25
-		} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, {
-			direction: "row",
-			alignItems: "center",
-			spacing: 1,
-			sx: { flex: 1 }
-		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
-			variant: "body1",
-			color: "text.primary"
-		}, label), limitExceeded && overLimitCount > 0 && /*#__PURE__*/ react.default.createElement(_elementor_ui.Chip, {
-			label: "".concat(overLimitCount, " ").concat((0, _wordpress_i18n.__)("over limit", "elementor")),
-			size: "tiny",
-			sx: {
-				height: 20,
-				borderColor: "warning.main",
-				color: "warning.main",
-				backgroundColor: "transparent",
-				"& .MuiChip-label": {
-					px: .75,
-					fontSize: 12
-				}
-			},
-			variant: "outlined"
-		}), limitExceeded && onReviewClick && /*#__PURE__*/ react.default.createElement(_elementor_ui.Link, {
-			component: "button",
-			variant: "body2",
-			color: "info.main",
-			onClick: onReviewClick,
-			sx: {
-				display: "flex",
-				alignItems: "center",
-				gap: .5,
-				textDecoration: "none",
-				"&:hover": { textDecoration: "underline" }
-			}
-		}, (0, _wordpress_i18n.__)("Review", "elementor"), /*#__PURE__*/ react.default.createElement(_elementor_icons.ExternalLinkIcon, { sx: { fontSize: 16 } }))), /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, {
-			direction: "row",
-			alignItems: "center",
-			spacing: 1
-		}, showOverrideOption && limitExceeded && /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, {
-			direction: "row",
-			alignItems: "center",
-			spacing: .5
-		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.FormControlLabel, {
-			control: /*#__PURE__*/ react.default.createElement(_elementor_ui.Checkbox, {
-				checked: overrideAll,
-				onChange: function onChange(e) {
-					return onOverrideAllChange === null || onOverrideAllChange === void 0 ? void 0 : onOverrideAllChange(e.target.checked);
-				},
-				color: "info",
-				size: "small",
-				sx: { p: 0 }
-			}),
-			label: (0, _wordpress_i18n.__)("Override all", "elementor"),
-			sx: {
-				gap: 1,
-				mr: 0,
-				"& .MuiFormControlLabel-label": { fontSize: 14 }
-			}
-		}), /*#__PURE__*/ react.default.createElement(_elementor_ui.Tooltip, {
-			title: (0, _wordpress_i18n.__)("This will delete all existing items and replace them with the imported ones", "elementor"),
-			placement: "top",
-			arrow: true
-		}, /*#__PURE__*/ react.default.createElement(_elementor_icons.AlertTriangleFilledIcon, { sx: {
-			fontSize: 16,
-			color: "warning.main",
-			cursor: "pointer"
-		} }))), /*#__PURE__*/ react.default.createElement(_elementor_ui.Switch, {
-			checked,
-			onChange: function onChange(e, isChecked) {
-				return _onChange === null || _onChange === void 0 ? void 0 : _onChange(isChecked);
-			},
-			color: "info",
-			size: "medium",
-			disabled: disabled || limitExceeded && !overrideAll
-		})));
-	};
-	SubSettingRow.propTypes = {
-		label: import_prop_types$82.default.string.isRequired,
-		checked: import_prop_types$82.default.bool,
-		onChange: import_prop_types$82.default.func,
-		disabled: import_prop_types$82.default.bool,
-		limitExceeded: import_prop_types$82.default.bool,
-		overLimitCount: import_prop_types$82.default.number,
-		onReviewClick: import_prop_types$82.default.func,
-		overrideAll: import_prop_types$82.default.bool,
-		onOverrideAllChange: import_prop_types$82.default.func,
-		showOverrideOption: import_prop_types$82.default.bool,
-		notExported: import_prop_types$82.default.bool
-	};
-	function ClassesVariablesSection(_ref2) {
-		var _settings$classesOver;
-		var _settings$variablesOv;
-		var _settings$classes;
-		var _settings$variables;
-		var settings = _ref2.settings;
-		var onSettingChange = _ref2.onSettingChange;
-		var _ref2$isImport = _ref2.isImport;
-		var isImport = _ref2$isImport === void 0 ? false : _ref2$isImport;
-		var _ref2$classesExported = _ref2.classesExported;
-		var classesExported = _ref2$classesExported === void 0 ? true : _ref2$classesExported;
-		var _ref2$variablesExport = _ref2.variablesExported;
-		var variablesExported = _ref2$variablesExport === void 0 ? true : _ref2$variablesExport;
-		var _ref2$classesLimitExc = _ref2.classesLimitExceeded;
-		var classesLimitExceeded = _ref2$classesLimitExc === void 0 ? false : _ref2$classesLimitExc;
-		var _ref2$variablesLimitE = _ref2.variablesLimitExceeded;
-		var variablesLimitExceeded = _ref2$variablesLimitE === void 0 ? false : _ref2$variablesLimitE;
-		var _ref2$classesOverLimi = _ref2.classesOverLimitCount;
-		var classesOverLimitCount = _ref2$classesOverLimi === void 0 ? 0 : _ref2$classesOverLimi;
-		var _ref2$variablesOverLi = _ref2.variablesOverLimitCount;
-		var variablesOverLimitCount = _ref2$variablesOverLi === void 0 ? 0 : _ref2$variablesOverLi;
-		var onClassesReviewClick = _ref2.onClassesReviewClick;
-		var onVariablesReviewClick = _ref2.onVariablesReviewClick;
-		var _ref2$disabled = _ref2.disabled;
-		var disabled = _ref2$disabled === void 0 ? false : _ref2$disabled;
-		var _ref2$notExported = _ref2.notExported;
-		var notExported = _ref2$notExported === void 0 ? false : _ref2$notExported;
-		var _useState2 = _slicedToArray((0, react.useState)((_settings$classesOver = settings.classesOverrideAll) !== null && _settings$classesOver !== void 0 ? _settings$classesOver : false), 2);
-		var classesOverrideAll = _useState2[0];
-		var setClassesOverrideAll = _useState2[1];
-		var _useState4 = _slicedToArray((0, react.useState)((_settings$variablesOv = settings.variablesOverrideAll) !== null && _settings$variablesOv !== void 0 ? _settings$variablesOv : false), 2);
-		var variablesOverrideAll = _useState4[0];
-		var setVariablesOverrideAll = _useState4[1];
-		var hasLimitWarning = isImport && (classesLimitExceeded || variablesLimitExceeded);
-		var classesNotExported = isImport && !classesExported;
-		var variablesNotExported = isImport && !variablesExported;
-		return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
-			mb: 3,
-			border: 1,
-			borderRadius: 1,
-			borderColor: "action.focus",
-			p: 2.5
-		} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, { spacing: 2.5 }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
-			display: "flex",
-			justifyContent: "space-between",
-			alignItems: "center"
-		} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, { variant: "h6" }, (0, _wordpress_i18n.__)("Classes & variables", "elementor"))), hasLimitWarning && !notExported && /*#__PURE__*/ react.default.createElement(_elementor_ui.Alert, {
-			severity: "warning",
-			icon: /*#__PURE__*/ react.default.createElement(_elementor_icons.AlertTriangleFilledIcon, { sx: { color: "warning.main" } }),
-			sx: {
-				alignItems: "center",
-				backgroundColor: "warning.background",
-				"& .MuiAlert-message": {
-					display: "flex",
-					alignItems: "center",
-					gap: .75
-				}
-			}
-		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
-			variant: "body2",
-			component: "span",
-			sx: { fontWeight: 500 },
-			color: "text.secondary"
-		}, (0, _wordpress_i18n.__)("Import limit reached.", "elementor")), /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
-			variant: "body2",
-			component: "span",
-			color: "text.secondary"
-		}, (0, _wordpress_i18n.__)("To resolve this, review existing items or choose to override", "elementor"))), /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, { spacing: 1.5 }, /*#__PURE__*/ react.default.createElement(SubSettingRow, {
-			label: (0, _wordpress_i18n.__)("Classes", "elementor"),
-			checked: (_settings$classes = settings.classes) !== null && _settings$classes !== void 0 ? _settings$classes : false,
-			onChange: function onChange(isChecked) {
-				return onSettingChange("classes", isChecked);
-			},
-			disabled,
-			limitExceeded: isImport && classesLimitExceeded && !classesNotExported,
-			overLimitCount: classesOverLimitCount,
-			onReviewClick: onClassesReviewClick,
-			overrideAll: classesOverrideAll,
-			onOverrideAllChange: function onOverrideAllChange(checked) {
-				setClassesOverrideAll(checked);
-				onSettingChange("classesOverrideAll", checked);
-			},
-			showOverrideOption: isImport && !classesNotExported,
-			notExported: classesNotExported
-		}), /*#__PURE__*/ react.default.createElement(SubSettingRow, {
-			label: (0, _wordpress_i18n.__)("Variables", "elementor"),
-			checked: (_settings$variables = settings.variables) !== null && _settings$variables !== void 0 ? _settings$variables : false,
-			onChange: function onChange(isChecked) {
-				return onSettingChange("variables", isChecked);
-			},
-			disabled,
-			limitExceeded: isImport && variablesLimitExceeded && !variablesNotExported,
-			overLimitCount: variablesOverLimitCount,
-			onReviewClick: onVariablesReviewClick,
-			overrideAll: variablesOverrideAll,
-			onOverrideAllChange: function onOverrideAllChange(checked) {
-				setVariablesOverrideAll(checked);
-				onSettingChange("variablesOverrideAll", checked);
-			},
-			showOverrideOption: isImport && !variablesNotExported,
-			notExported: variablesNotExported
-		}))));
-	}
-	ClassesVariablesSection.propTypes = {
-		settings: import_prop_types$82.default.shape({
-			classes: import_prop_types$82.default.bool,
-			variables: import_prop_types$82.default.bool,
-			classesOverrideAll: import_prop_types$82.default.bool,
-			variablesOverrideAll: import_prop_types$82.default.bool
-		}).isRequired,
-		onSettingChange: import_prop_types$82.default.func.isRequired,
-		isImport: import_prop_types$82.default.bool,
-		classesExported: import_prop_types$82.default.bool,
-		variablesExported: import_prop_types$82.default.bool,
-		classesLimitExceeded: import_prop_types$82.default.bool,
-		variablesLimitExceeded: import_prop_types$82.default.bool,
-		classesOverLimitCount: import_prop_types$82.default.number,
-		variablesOverLimitCount: import_prop_types$82.default.number,
-		onClassesReviewClick: import_prop_types$82.default.func,
-		onVariablesReviewClick: import_prop_types$82.default.func,
-		disabled: import_prop_types$82.default.bool,
-		notExported: import_prop_types$82.default.bool
 	};
 
 //#endregion
@@ -16617,12 +16548,460 @@ init_use_cloud_kits_eligibility();
 	}
 
 //#endregion
-//#region app/modules/import-export-customization/assets/js/shared/components/kit-settings-customization-dialog.js
-	init_defineProperty$1();
-	init_asyncToGenerator();
+//#region app/modules/import-export-customization/assets/js/shared/components/classes-variables-section.js
 	init_slicedToArray();
-	init_apps_event_tracking();
-	function ownKeys$21(e, r) {
+	var SubSettingRow = function SubSettingRow(_ref) {
+		var label = _ref.label;
+		var checked = _ref.checked;
+		var _onChange = _ref.onChange;
+		var _ref$disabled = _ref.disabled;
+		var disabled = _ref$disabled === void 0 ? false : _ref$disabled;
+		var _ref$limitExceeded = _ref.limitExceeded;
+		var limitExceeded = _ref$limitExceeded === void 0 ? false : _ref$limitExceeded;
+		var _ref$overLimitCount = _ref.overLimitCount;
+		var overLimitCount = _ref$overLimitCount === void 0 ? 0 : _ref$overLimitCount;
+		var onReviewClick = _ref.onReviewClick;
+		var _ref$overrideAll = _ref.overrideAll;
+		var overrideAll = _ref$overrideAll === void 0 ? false : _ref$overrideAll;
+		var onOverrideAllChange = _ref.onOverrideAllChange;
+		var _ref$showOverrideOpti = _ref.showOverrideOption;
+		var showOverrideOption = _ref$showOverrideOpti === void 0 ? false : _ref$showOverrideOpti;
+		var _ref$notExported = _ref.notExported;
+		var notExported = _ref$notExported === void 0 ? false : _ref$notExported;
+		var switchId = (0, react.useId)();
+		if (notExported) return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
+			display: "flex",
+			justifyContent: "space-between",
+			alignItems: "center",
+			px: 1.25
+		} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
+			variant: "body1",
+			color: "text.primary"
+		}, label), /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
+			variant: "body1",
+			color: "text.secondary"
+		}, (0, _wordpress_i18n.__)("Not exported", "elementor")));
+		return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
+			display: "flex",
+			justifyContent: "space-between",
+			alignItems: "center",
+			px: 1.25
+		} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, {
+			direction: "row",
+			alignItems: "center",
+			spacing: 1,
+			sx: { flex: 1 }
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
+			variant: "body1",
+			color: "text.primary",
+			component: "label",
+			htmlFor: switchId
+		}, label), limitExceeded && overLimitCount > 0 && /*#__PURE__*/ react.default.createElement(_elementor_ui.Chip, {
+			label: "".concat(overLimitCount, " ").concat((0, _wordpress_i18n.__)("over limit", "elementor")),
+			size: "tiny",
+			sx: {
+				height: 20,
+				borderColor: "warning.main",
+				color: "warning.main",
+				backgroundColor: "transparent",
+				"& .MuiChip-label": {
+					px: .75,
+					fontSize: 12
+				}
+			},
+			variant: "outlined"
+		}), limitExceeded && onReviewClick && /*#__PURE__*/ react.default.createElement(_elementor_ui.Link, {
+			component: "button",
+			variant: "body2",
+			color: "info.main",
+			onClick: onReviewClick,
+			sx: {
+				display: "flex",
+				alignItems: "center",
+				gap: .5,
+				textDecoration: "none",
+				"&:hover": { textDecoration: "underline" }
+			}
+		}, (0, _wordpress_i18n.__)("Review", "elementor"), /*#__PURE__*/ react.default.createElement(_elementor_icons.ExternalLinkIcon, { sx: { fontSize: 16 } }))), /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, {
+			direction: "row",
+			alignItems: "center",
+			spacing: 1
+		}, showOverrideOption && limitExceeded && /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, {
+			direction: "row",
+			alignItems: "center",
+			spacing: .5
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.FormControlLabel, {
+			control: /*#__PURE__*/ react.default.createElement(_elementor_ui.Checkbox, {
+				checked: overrideAll,
+				onChange: function onChange(e) {
+					return onOverrideAllChange === null || onOverrideAllChange === void 0 ? void 0 : onOverrideAllChange(e.target.checked);
+				},
+				color: "info",
+				size: "small",
+				sx: { p: 0 }
+			}),
+			label: (0, _wordpress_i18n.__)("Override all", "elementor"),
+			sx: {
+				gap: 1,
+				mr: 0,
+				"& .MuiFormControlLabel-label": { fontSize: 14 }
+			}
+		}), /*#__PURE__*/ react.default.createElement(_elementor_ui.Tooltip, {
+			title: (0, _wordpress_i18n.__)("This will delete all existing items and replace them with the imported ones", "elementor"),
+			placement: "top",
+			arrow: true
+		}, /*#__PURE__*/ react.default.createElement(_elementor_icons.AlertTriangleFilledIcon, { sx: {
+			fontSize: 16,
+			color: "warning.main",
+			cursor: "pointer"
+		} }))), /*#__PURE__*/ react.default.createElement(_elementor_ui.Switch, {
+			checked,
+			onChange: function onChange(e, isChecked) {
+				return _onChange === null || _onChange === void 0 ? void 0 : _onChange(isChecked);
+			},
+			color: "info",
+			size: "medium",
+			disabled: disabled || limitExceeded && !overrideAll,
+			inputProps: { id: switchId }
+		})));
+	};
+	SubSettingRow.propTypes = {
+		label: import_prop_types$82.default.string.isRequired,
+		checked: import_prop_types$82.default.bool,
+		onChange: import_prop_types$82.default.func,
+		disabled: import_prop_types$82.default.bool,
+		limitExceeded: import_prop_types$82.default.bool,
+		overLimitCount: import_prop_types$82.default.number,
+		onReviewClick: import_prop_types$82.default.func,
+		overrideAll: import_prop_types$82.default.bool,
+		onOverrideAllChange: import_prop_types$82.default.func,
+		showOverrideOption: import_prop_types$82.default.bool,
+		notExported: import_prop_types$82.default.bool
+	};
+	function ClassesVariablesSection(_ref2) {
+		var _settings$classesOver;
+		var _settings$variablesOv;
+		var _settings$classes;
+		var _settings$variables;
+		var _settings$defaultStyl;
+		var settings = _ref2.settings;
+		var onSettingChange = _ref2.onSettingChange;
+		var _ref2$isImport = _ref2.isImport;
+		var isImport = _ref2$isImport === void 0 ? false : _ref2$isImport;
+		var _ref2$classesExported = _ref2.classesExported;
+		var classesExported = _ref2$classesExported === void 0 ? true : _ref2$classesExported;
+		var _ref2$defaultStylesEx = _ref2.defaultStylesExported;
+		var defaultStylesExported = _ref2$defaultStylesEx === void 0 ? true : _ref2$defaultStylesEx;
+		var _ref2$variablesExport = _ref2.variablesExported;
+		var variablesExported = _ref2$variablesExport === void 0 ? true : _ref2$variablesExport;
+		var _ref2$classesLimitExc = _ref2.classesLimitExceeded;
+		var classesLimitExceeded = _ref2$classesLimitExc === void 0 ? false : _ref2$classesLimitExc;
+		var _ref2$variablesLimitE = _ref2.variablesLimitExceeded;
+		var variablesLimitExceeded = _ref2$variablesLimitE === void 0 ? false : _ref2$variablesLimitE;
+		var _ref2$classesOverLimi = _ref2.classesOverLimitCount;
+		var classesOverLimitCount = _ref2$classesOverLimi === void 0 ? 0 : _ref2$classesOverLimi;
+		var _ref2$variablesOverLi = _ref2.variablesOverLimitCount;
+		var variablesOverLimitCount = _ref2$variablesOverLi === void 0 ? 0 : _ref2$variablesOverLi;
+		var onClassesReviewClick = _ref2.onClassesReviewClick;
+		var onVariablesReviewClick = _ref2.onVariablesReviewClick;
+		var _ref2$disabled = _ref2.disabled;
+		var disabled = _ref2$disabled === void 0 ? false : _ref2$disabled;
+		var _ref2$notExported = _ref2.notExported;
+		var notExported = _ref2$notExported === void 0 ? false : _ref2$notExported;
+		var _useState2 = _slicedToArray((0, react.useState)((_settings$classesOver = settings.classesOverrideAll) !== null && _settings$classesOver !== void 0 ? _settings$classesOver : false), 2);
+		var classesOverrideAll = _useState2[0];
+		var setClassesOverrideAll = _useState2[1];
+		var _useState4 = _slicedToArray((0, react.useState)((_settings$variablesOv = settings.variablesOverrideAll) !== null && _settings$variablesOv !== void 0 ? _settings$variablesOv : false), 2);
+		var variablesOverrideAll = _useState4[0];
+		var setVariablesOverrideAll = _useState4[1];
+		var hasLimitWarning = isImport && (classesLimitExceeded || variablesLimitExceeded);
+		var classesNotExported = isImport && !classesExported;
+		var defaultStylesNotExported = isImport && !defaultStylesExported;
+		var variablesNotExported = isImport && !variablesExported;
+		return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
+			mb: 3,
+			border: 1,
+			borderRadius: 1,
+			borderColor: "action.focus",
+			p: 2.5
+		} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, { spacing: 2.5 }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
+			display: "flex",
+			justifyContent: "space-between",
+			alignItems: "center"
+		} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, { variant: "h6" }, (0, _wordpress_i18n.__)("Classes, variables & default styles", "elementor"))), hasLimitWarning && !notExported && /*#__PURE__*/ react.default.createElement(_elementor_ui.Alert, {
+			severity: "warning",
+			icon: /*#__PURE__*/ react.default.createElement(_elementor_icons.AlertTriangleFilledIcon, { sx: { color: "warning.main" } }),
+			sx: {
+				alignItems: "center",
+				backgroundColor: "warning.background",
+				"& .MuiAlert-message": {
+					display: "flex",
+					alignItems: "center",
+					gap: .75
+				}
+			}
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
+			variant: "body2",
+			component: "span",
+			sx: { fontWeight: 500 },
+			color: "text.secondary"
+		}, (0, _wordpress_i18n.__)("Import limit reached.", "elementor")), /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
+			variant: "body2",
+			component: "span",
+			color: "text.secondary"
+		}, (0, _wordpress_i18n.__)("To resolve this, review existing items or choose to override", "elementor"))), /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, { spacing: 1.5 }, /*#__PURE__*/ react.default.createElement(SubSettingRow, {
+			label: (0, _wordpress_i18n.__)("Classes", "elementor"),
+			checked: (_settings$classes = settings.classes) !== null && _settings$classes !== void 0 ? _settings$classes : false,
+			onChange: function onChange(isChecked) {
+				return onSettingChange("classes", isChecked);
+			},
+			disabled,
+			limitExceeded: isImport && classesLimitExceeded && !classesNotExported,
+			overLimitCount: classesOverLimitCount,
+			onReviewClick: onClassesReviewClick,
+			overrideAll: classesOverrideAll,
+			onOverrideAllChange: function onOverrideAllChange(checked) {
+				setClassesOverrideAll(checked);
+				onSettingChange("classesOverrideAll", checked);
+			},
+			showOverrideOption: isImport && !classesNotExported,
+			notExported: classesNotExported
+		}), /*#__PURE__*/ react.default.createElement(SubSettingRow, {
+			label: (0, _wordpress_i18n.__)("Variables", "elementor"),
+			checked: (_settings$variables = settings.variables) !== null && _settings$variables !== void 0 ? _settings$variables : false,
+			onChange: function onChange(isChecked) {
+				return onSettingChange("variables", isChecked);
+			},
+			disabled,
+			limitExceeded: isImport && variablesLimitExceeded && !variablesNotExported,
+			overLimitCount: variablesOverLimitCount,
+			onReviewClick: onVariablesReviewClick,
+			overrideAll: variablesOverrideAll,
+			onOverrideAllChange: function onOverrideAllChange(checked) {
+				setVariablesOverrideAll(checked);
+				onSettingChange("variablesOverrideAll", checked);
+			},
+			showOverrideOption: isImport && !variablesNotExported,
+			notExported: variablesNotExported
+		}), /*#__PURE__*/ react.default.createElement(SubSettingRow, {
+			label: (0, _wordpress_i18n.__)("Default Styles", "elementor"),
+			checked: (_settings$defaultStyl = settings.defaultStyles) !== null && _settings$defaultStyl !== void 0 ? _settings$defaultStyl : false,
+			onChange: function onChange(isChecked) {
+				return onSettingChange("defaultStyles", isChecked);
+			},
+			disabled,
+			notExported: defaultStylesNotExported
+		}))));
+	}
+	ClassesVariablesSection.propTypes = {
+		settings: import_prop_types$82.default.shape({
+			classes: import_prop_types$82.default.bool,
+			defaultStyles: import_prop_types$82.default.bool,
+			variables: import_prop_types$82.default.bool,
+			classesOverrideAll: import_prop_types$82.default.bool,
+			variablesOverrideAll: import_prop_types$82.default.bool
+		}).isRequired,
+		onSettingChange: import_prop_types$82.default.func.isRequired,
+		isImport: import_prop_types$82.default.bool,
+		classesExported: import_prop_types$82.default.bool,
+		defaultStylesExported: import_prop_types$82.default.bool,
+		variablesExported: import_prop_types$82.default.bool,
+		classesLimitExceeded: import_prop_types$82.default.bool,
+		variablesLimitExceeded: import_prop_types$82.default.bool,
+		classesOverLimitCount: import_prop_types$82.default.number,
+		variablesOverLimitCount: import_prop_types$82.default.number,
+		onClassesReviewClick: import_prop_types$82.default.func,
+		onVariablesReviewClick: import_prop_types$82.default.func,
+		disabled: import_prop_types$82.default.bool,
+		notExported: import_prop_types$82.default.bool
+	};
+
+//#endregion
+//#region app/modules/import-export-customization/assets/js/shared/components/settings-customization-sections.js
+	function SettingsGroupSection(_ref) {
+		var children = _ref.children;
+		var title = _ref.title;
+		return /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
+			mb: 3,
+			border: 1,
+			borderRadius: 1,
+			borderColor: "action.focus",
+			p: 2.5
+		} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, { spacing: 1.5 }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, { variant: "h6" }, title), children));
+	}
+	SettingsGroupSection.propTypes = {
+		children: import_prop_types$82.default.node,
+		title: import_prop_types$82.default.string.isRequired
+	};
+	function DesignSystemLimitAlert() {
+		return /*#__PURE__*/ react.default.createElement(_elementor_ui.Alert, {
+			severity: "warning",
+			icon: /*#__PURE__*/ react.default.createElement(_elementor_icons.AlertTriangleFilledIcon, { sx: { color: "warning.main" } }),
+			sx: {
+				alignItems: "center",
+				backgroundColor: "warning.background",
+				"& .MuiAlert-message": {
+					display: "flex",
+					alignItems: "center",
+					gap: .75
+				}
+			}
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
+			variant: "body2",
+			component: "span",
+			sx: { fontWeight: 500 },
+			color: "text.secondary"
+		}, (0, _wordpress_i18n.__)("Import limit reached.", "elementor")), /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
+			variant: "body2",
+			component: "span",
+			color: "text.secondary"
+		}, (0, _wordpress_i18n.__)("To resolve this, review existing items or choose to override", "elementor")));
+	}
+	function DesignSystemSettingsSection(_ref2) {
+		var children = _ref2.children;
+		var isImport = _ref2.isImport;
+		var classesLimitExceeded = _ref2.classesLimitExceeded;
+		var notExported = _ref2.notExported;
+		var variablesLimitExceeded = _ref2.variablesLimitExceeded;
+		return /*#__PURE__*/ react.default.createElement(SettingsGroupSection, { title: (0, _wordpress_i18n.__)("Classes, variables & default styles", "elementor") }, isImport && (classesLimitExceeded || variablesLimitExceeded) && !notExported && /*#__PURE__*/ react.default.createElement(DesignSystemLimitAlert, null), children);
+	}
+	DesignSystemSettingsSection.propTypes = {
+		children: import_prop_types$82.default.node,
+		isImport: import_prop_types$82.default.bool,
+		classesLimitExceeded: import_prop_types$82.default.bool,
+		notExported: import_prop_types$82.default.bool,
+		variablesLimitExceeded: import_prop_types$82.default.bool
+	};
+	function ThemeSettingsRow(_ref3) {
+		var contextData = _ref3.contextData;
+		var isImport = _ref3.isImport;
+		var onSettingChange = _ref3.onSettingChange;
+		var settings = _ref3.settings;
+		var themeExported = isThemeExported(contextData);
+		return isImport && !themeExported ? /*#__PURE__*/ react.default.createElement(SettingSection, {
+			title: (0, _wordpress_i18n.__)("Theme", "elementor"),
+			settingKey: "theme",
+			notExported: true
+		}) : /*#__PURE__*/ react.default.createElement(SettingSection, {
+			checked: settings.theme,
+			title: (0, _wordpress_i18n.__)("Theme", "elementor"),
+			description: (0, _wordpress_i18n.__)("Only public WordPress themes are supported", "elementor"),
+			settingKey: "theme",
+			onSettingChange,
+			disabled: isImport && !themeExported
+		});
+	}
+	ThemeSettingsRow.propTypes = {
+		contextData: import_prop_types$82.default.object,
+		isImport: import_prop_types$82.default.bool,
+		onSettingChange: import_prop_types$82.default.func.isRequired,
+		settings: import_prop_types$82.default.object.isRequired
+	};
+	function GlobalClassesSettingsRow(_ref4) {
+		var _settings$classes;
+		var _settings$classesOver;
+		var classesLimitExceeded = _ref4.classesLimitExceeded;
+		var classesOverLimitCount = _ref4.classesOverLimitCount;
+		var classesReviewClick = _ref4.classesReviewClick;
+		var contextData = _ref4.contextData;
+		var isImport = _ref4.isImport;
+		var onSettingChange = _ref4.onSettingChange;
+		var settings = _ref4.settings;
+		var classesExported = isClassesExported(contextData);
+		var classesNotExported = isImport && !classesExported;
+		return /*#__PURE__*/ react.default.createElement(SubSettingRow, {
+			label: (0, _wordpress_i18n.__)("Classes", "elementor"),
+			checked: (_settings$classes = settings.classes) !== null && _settings$classes !== void 0 ? _settings$classes : false,
+			onChange: function onChange(isChecked) {
+				return onSettingChange("classes", isChecked);
+			},
+			limitExceeded: isImport && classesLimitExceeded && !classesNotExported,
+			overLimitCount: classesOverLimitCount,
+			onReviewClick: classesReviewClick,
+			overrideAll: (_settings$classesOver = settings.classesOverrideAll) !== null && _settings$classesOver !== void 0 ? _settings$classesOver : false,
+			onOverrideAllChange: function onOverrideAllChange(checked) {
+				return onSettingChange("classesOverrideAll", checked);
+			},
+			showOverrideOption: isImport && !classesNotExported,
+			notExported: classesNotExported
+		});
+	}
+	GlobalClassesSettingsRow.propTypes = {
+		classesLimitExceeded: import_prop_types$82.default.bool,
+		classesOverLimitCount: import_prop_types$82.default.number,
+		classesReviewClick: import_prop_types$82.default.func,
+		contextData: import_prop_types$82.default.object,
+		isImport: import_prop_types$82.default.bool,
+		onSettingChange: import_prop_types$82.default.func.isRequired,
+		settings: import_prop_types$82.default.object.isRequired
+	};
+	function GlobalVariablesSettingsRow(_ref5) {
+		var _settings$variables;
+		var _settings$variablesOv;
+		var contextData = _ref5.contextData;
+		var isImport = _ref5.isImport;
+		var onSettingChange = _ref5.onSettingChange;
+		var settings = _ref5.settings;
+		var variablesLimitExceeded = _ref5.variablesLimitExceeded;
+		var variablesOverLimitCount = _ref5.variablesOverLimitCount;
+		var variablesReviewClick = _ref5.variablesReviewClick;
+		var variablesExported = isVariablesExported(contextData);
+		var variablesNotExported = isImport && !variablesExported;
+		return /*#__PURE__*/ react.default.createElement(SubSettingRow, {
+			label: (0, _wordpress_i18n.__)("Variables", "elementor"),
+			checked: (_settings$variables = settings.variables) !== null && _settings$variables !== void 0 ? _settings$variables : false,
+			onChange: function onChange(isChecked) {
+				return onSettingChange("variables", isChecked);
+			},
+			limitExceeded: isImport && variablesLimitExceeded && !variablesNotExported,
+			overLimitCount: variablesOverLimitCount,
+			onReviewClick: variablesReviewClick,
+			overrideAll: (_settings$variablesOv = settings.variablesOverrideAll) !== null && _settings$variablesOv !== void 0 ? _settings$variablesOv : false,
+			onOverrideAllChange: function onOverrideAllChange(checked) {
+				return onSettingChange("variablesOverrideAll", checked);
+			},
+			showOverrideOption: isImport && !variablesNotExported,
+			notExported: variablesNotExported
+		});
+	}
+	GlobalVariablesSettingsRow.propTypes = {
+		contextData: import_prop_types$82.default.object,
+		isImport: import_prop_types$82.default.bool,
+		onSettingChange: import_prop_types$82.default.func.isRequired,
+		settings: import_prop_types$82.default.object.isRequired,
+		variablesLimitExceeded: import_prop_types$82.default.bool,
+		variablesOverLimitCount: import_prop_types$82.default.number,
+		variablesReviewClick: import_prop_types$82.default.func
+	};
+	function DefaultStylesSettingsRow(_ref6) {
+		var _settings$defaultStyl;
+		var contextData = _ref6.contextData;
+		var isImport = _ref6.isImport;
+		var onSettingChange = _ref6.onSettingChange;
+		var settings = _ref6.settings;
+		var defaultStylesExported = isDefaultStylesExported(contextData);
+		return /*#__PURE__*/ react.default.createElement(SubSettingRow, {
+			label: (0, _wordpress_i18n.__)("Default Styles", "elementor"),
+			checked: (_settings$defaultStyl = settings.defaultStyles) !== null && _settings$defaultStyl !== void 0 ? _settings$defaultStyl : false,
+			onChange: function onChange(isChecked) {
+				return onSettingChange("defaultStyles", isChecked);
+			},
+			notExported: isImport && !defaultStylesExported
+		});
+	}
+	DefaultStylesSettingsRow.propTypes = {
+		contextData: import_prop_types$82.default.object,
+		isImport: import_prop_types$82.default.bool,
+		onSettingChange: import_prop_types$82.default.func.isRequired,
+		settings: import_prop_types$82.default.object.isRequired
+	};
+
+//#endregion
+//#region app/modules/import-export-customization/assets/js/shared/registry/base.js
+	init_defineProperty$1();
+	init_classCallCheck();
+	init_createClass();
+	function ownKeys$25(e, r) {
 		var t = Object.keys(e);
 		if (Object.getOwnPropertySymbols) {
 			var o = Object.getOwnPropertySymbols(e);
@@ -16632,33 +17011,324 @@ init_use_cloud_kits_eligibility();
 		}
 		return t;
 	}
-	__name(ownKeys$21, "ownKeys");
-	function _objectSpread$20(e) {
+	__name(ownKeys$25, "ownKeys");
+	function _objectSpread$24(e) {
 		for (var r = 1; r < arguments.length; r++) {
 			var t = null != arguments[r] ? arguments[r] : {};
-			r % 2 ? ownKeys$21(Object(t), !0).forEach(function(r) {
+			r % 2 ? ownKeys$25(Object(t), !0).forEach(function(r) {
 				_defineProperty$1(e, r, t[r]);
-			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$21(Object(t)).forEach(function(r) {
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$25(Object(t)).forEach(function(r) {
 				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
 			});
 		}
 		return e;
 	}
-	__name(_objectSpread$20, "_objectSpread");
-	function isExperimentActive$1(experimentName) {
-		var _elementorCommon;
-		return !!((_elementorCommon = elementorCommon) !== null && _elementorCommon !== void 0 && (_elementorCommon = _elementorCommon.config) !== null && _elementorCommon !== void 0 && (_elementorCommon = _elementorCommon.experimentalFeatures) !== null && _elementorCommon !== void 0 && _elementorCommon[experimentName]);
+	__name(_objectSpread$24, "_objectSpread");
+	var BaseRegistry = /*#__PURE__*/ function() {
+		function BaseRegistry() {
+			_classCallCheck(this, BaseRegistry);
+			this.sections = /* @__PURE__ */ new Map();
+		}
+		return _createClass(BaseRegistry, [
+			{
+				key: "register",
+				value: function register(section) {
+					if (!section.key || !section.title) throw new Error("Template type must have key and title");
+					var existingSection = this.get(section.key);
+					var formattedSection = this.formatSection(_objectSpread$24(_objectSpread$24({}, existingSection), section));
+					this.sections.set(section.key, formattedSection);
+				}
+			},
+			{
+				key: "formatSection",
+				value: function formatSection(section) {
+					return _objectSpread$24({
+						key: section.key,
+						parentKey: section.parentKey || null,
+						title: section.title,
+						description: section.description || "",
+						isPlaceholder: !!section.isPlaceholder,
+						useParentDefault: section.useParentDefault !== false,
+						getInitialState: section.getInitialState || null,
+						component: section.component || null,
+						order: section.order || 10,
+						isAvailable: section.isAvailable || function() {
+							return true;
+						}
+					}, section);
+				}
+			},
+			{
+				key: "getAll",
+				value: function getAll() {
+					return Array.from(this.sections.values()).filter(function(type) {
+						return type.isAvailable();
+					}).sort(function(first, second) {
+						return first.order - second.order;
+					});
+				}
+			},
+			{
+				key: "get",
+				value: function get(key) {
+					return this.sections.get(key);
+				}
+			}
+		]);
+	}();
+
+//#endregion
+//#region app/modules/import-export-customization/assets/js/shared/registry/customization-dialogs-base.js
+	function getThemeInitialState(_ref) {
+		var contextData = _ref.contextData;
+		var includesSettings = _ref.includesSettings;
+		if (!_ref.isImport) return includesSettings;
+		return includesSettings && isThemeExported(contextData);
 	}
-	__name(isExperimentActive$1, "isExperimentActive");
-	function isClassesFeatureActive$1() {
-		return isExperimentActive$1("e_atomic_elements");
+	function createSiteSettingsInitialStateResolver(manifestKey) {
+		return function(_ref2) {
+			var _getSiteSettingsManif;
+			var contextData = _ref2.contextData;
+			var includesSettings = _ref2.includesSettings;
+			if (!_ref2.isImport) return includesSettings;
+			return includesSettings && !!((_getSiteSettingsManif = getSiteSettingsManifest(contextData)) !== null && _getSiteSettingsManif !== void 0 && _getSiteSettingsManif[manifestKey]);
+		};
 	}
-	__name(isClassesFeatureActive$1, "isClassesFeatureActive");
-	function isVariablesFeatureActive$1() {
-		return isExperimentActive$1("e_atomic_elements");
+	function createCustomizationDialogsRegistry() {
+		var customizationDialogsRegistry = new BaseRegistry();
+		[
+			{
+				key: KIT_SECTIONS.CONTENT,
+				title: "Content"
+			},
+			{
+				key: KIT_SECTION_ITEMS.CONTENT_CUSTOM_POST_TYPES,
+				parentKey: KIT_SECTIONS.CONTENT,
+				title: "Custom post types",
+				order: 20
+			},
+			{
+				key: KIT_SECTION_ITEMS.CONTENT_MEDIA_FORMAT,
+				parentKey: KIT_SECTIONS.CONTENT,
+				title: "Media format",
+				order: 30
+			},
+			{
+				key: KIT_SECTIONS.TEMPLATES,
+				title: "Templates"
+			},
+			{
+				key: KIT_SECTIONS.SETTINGS,
+				title: "Settings"
+			},
+			{
+				key: KIT_SECTION_ITEMS.SETTINGS_THEME,
+				parentKey: KIT_SECTIONS.SETTINGS,
+				title: "Theme",
+				order: 10,
+				settingKey: "theme",
+				getInitialState: getThemeInitialState
+			},
+			{
+				key: KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM,
+				parentKey: KIT_SECTIONS.SETTINGS,
+				title: "Classes, variables & default styles",
+				order: 20,
+				isAvailable: isAtomicElementsFeatureActive
+			},
+			{
+				key: KIT_SECTION_ITEMS.SETTINGS_GLOBAL_CLASSES,
+				parentKey: KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM,
+				title: "Classes",
+				order: 10,
+				settingKey: "classes",
+				isAvailable: isAtomicElementsFeatureActive,
+				getInitialState: createSiteSettingsInitialStateResolver("classes")
+			},
+			{
+				key: KIT_SECTION_ITEMS.SETTINGS_GLOBAL_VARIABLES,
+				parentKey: KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM,
+				title: "Variables",
+				order: 20,
+				settingKey: "variables",
+				isAvailable: isAtomicElementsFeatureActive,
+				getInitialState: createSiteSettingsInitialStateResolver("variables")
+			},
+			{
+				key: KIT_SECTION_ITEMS.SETTINGS_DEFAULT_STYLES,
+				parentKey: KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM,
+				title: "Default styles",
+				order: 30,
+				settingKey: "defaultStyles",
+				isAvailable: isAtomicElementsFeatureActive,
+				getInitialState: createSiteSettingsInitialStateResolver("defaultStyles")
+			},
+			{
+				key: KIT_SECTIONS.PLUGINS,
+				title: "Plugins"
+			},
+			{
+				key: KIT_SECTION_ITEMS.PLUGINS_PLUGIN_LIST,
+				parentKey: KIT_SECTIONS.PLUGINS,
+				title: "Plugin list",
+				order: 10
+			}
+		].forEach(function(entry) {
+			return customizationDialogsRegistry.register(entry);
+		});
+		return customizationDialogsRegistry;
 	}
-	__name(isVariablesFeatureActive$1, "isVariablesFeatureActive");
-	var transformAnalyticsData = function transformAnalyticsData(payload) {
+	var customizationDialogsRegistry = createCustomizationDialogsRegistry();
+
+//#endregion
+//#region app/modules/import-export-customization/assets/js/shared/registry/customization-dialogs.js
+	init_defineProperty$1();
+	function ownKeys$24(e, r) {
+		var t = Object.keys(e);
+		if (Object.getOwnPropertySymbols) {
+			var o = Object.getOwnPropertySymbols(e);
+			r && (o = o.filter(function(r) {
+				return Object.getOwnPropertyDescriptor(e, r).enumerable;
+			})), t.push.apply(t, o);
+		}
+		return t;
+	}
+	__name(ownKeys$24, "ownKeys");
+	function _objectSpread$23(e) {
+		for (var r = 1; r < arguments.length; r++) {
+			var t = null != arguments[r] ? arguments[r] : {};
+			r % 2 ? ownKeys$24(Object(t), !0).forEach(function(r) {
+				_defineProperty$1(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$24(Object(t)).forEach(function(r) {
+				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+			});
+		}
+		return e;
+	}
+	__name(_objectSpread$23, "_objectSpread");
+	var CUSTOMIZATION_DIALOGS_READY_EVENT = "elementor/import-export-customization/ready";
+	var REGISTRY_STATE_KEY = "__elementorImportExportCustomization";
+	var coreCustomizationDialogsBase = createCustomizationDialogsRegistry();
+	var UI_REGISTRATIONS = [
+		{
+			key: KIT_SECTION_ITEMS.CONTENT_CUSTOM_POST_TYPES,
+			title: "Custom post types",
+			component: CustomPostTypesSection
+		},
+		{
+			key: KIT_SECTION_ITEMS.CONTENT_MEDIA_FORMAT,
+			title: "Media format",
+			component: MediaFormatSection
+		},
+		{
+			key: KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM,
+			title: "Classes, variables & default styles",
+			component: DesignSystemSettingsSection
+		},
+		{
+			key: KIT_SECTION_ITEMS.SETTINGS_THEME,
+			title: "Theme",
+			component: ThemeSettingsRow
+		},
+		{
+			key: KIT_SECTION_ITEMS.SETTINGS_GLOBAL_CLASSES,
+			title: "Classes",
+			component: GlobalClassesSettingsRow
+		},
+		{
+			key: KIT_SECTION_ITEMS.SETTINGS_GLOBAL_VARIABLES,
+			title: "Variables",
+			component: GlobalVariablesSettingsRow
+		},
+		{
+			key: KIT_SECTION_ITEMS.SETTINGS_DEFAULT_STYLES,
+			title: "Default styles",
+			component: DefaultStylesSettingsRow
+		},
+		{
+			key: KIT_SECTION_ITEMS.PLUGINS_PLUGIN_LIST,
+			title: "Plugin list",
+			component: PluginListSection
+		}
+	];
+	function createCoreUiRegistration(registration) {
+		return _objectSpread$23(_objectSpread$23(_objectSpread$23({}, coreCustomizationDialogsBase.get(registration.key)), registration), {}, { isPlaceholder: false });
+	}
+	function registerCustomizationDialogs(registry) {
+		if (!(registry !== null && registry !== void 0 && registry.register)) return registry;
+		UI_REGISTRATIONS.map(createCoreUiRegistration).forEach(function(registration) {
+			return registry.register(registration);
+		});
+		var state = getRegistryState(registry);
+		if (state) state.supportsComponentOverrides = true;
+		return registry;
+	}
+	function getRegistryState(registry) {
+		if (!registry) return null;
+		registry[REGISTRY_STATE_KEY] = registry[REGISTRY_STATE_KEY] || {
+			hasDispatchedReadyEvent: false,
+			hasRegisteredUi: false,
+			isInitialized: false,
+			supportsComponentOverrides: false
+		};
+		return registry[REGISTRY_STATE_KEY];
+	}
+	function initializeCustomizationDialogsRegistration() {
+		var registry = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : getCustomizationDialogsRegistry();
+		var state = getRegistryState(registry);
+		if (!state || state.isInitialized) return registry;
+		state.isInitialized = true;
+		return registry;
+	}
+	function createRegisteredCustomizationDialogsRegistry() {
+		return registerCustomizationDialogs(createCustomizationDialogsRegistry());
+	}
+	function prepareCustomizationDialogsForRender() {
+		var registry = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : getCustomizationDialogsRegistry();
+		var currentState = getRegistryState(registry);
+		if (!currentState) return registry;
+		if (currentState.hasRegisteredUi) return registry;
+		registerCustomizationDialogs(registry);
+		currentState.hasRegisteredUi = true;
+		if (!currentState.hasDispatchedReadyEvent) {
+			globalThis.dispatchEvent(new CustomEvent(CUSTOMIZATION_DIALOGS_READY_EVENT));
+			currentState.hasDispatchedReadyEvent = true;
+		}
+		return registry;
+	}
+
+//#endregion
+//#region app/modules/import-export-customization/assets/js/shared/components/kit-settings-customization-dialog.js
+	init_extends();
+	init_defineProperty$1();
+	init_toConsumableArray();
+	init_asyncToGenerator();
+	init_slicedToArray();
+	init_apps_event_tracking();
+	function ownKeys$23(e, r) {
+		var t = Object.keys(e);
+		if (Object.getOwnPropertySymbols) {
+			var o = Object.getOwnPropertySymbols(e);
+			r && (o = o.filter(function(r) {
+				return Object.getOwnPropertyDescriptor(e, r).enumerable;
+			})), t.push.apply(t, o);
+		}
+		return t;
+	}
+	__name(ownKeys$23, "ownKeys");
+	function _objectSpread$22(e) {
+		for (var r = 1; r < arguments.length; r++) {
+			var t = null != arguments[r] ? arguments[r] : {};
+			r % 2 ? ownKeys$23(Object(t), !0).forEach(function(r) {
+				_defineProperty$1(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$23(Object(t)).forEach(function(r) {
+				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+			});
+		}
+		return e;
+	}
+	__name(_objectSpread$22, "_objectSpread");
+	var transformAnalyticsData$1 = function transformAnalyticsData(payload) {
 		var transformed = {};
 		for (var _i = 0, _Object$entries = Object.entries(payload); _i < _Object$entries.length; _i++) {
 			var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2);
@@ -16707,54 +17377,62 @@ init_use_cloud_kits_eligibility();
 		}));
 		return _fetchManagerUrl.apply(this, arguments);
 	}
-	function getInitialState(contextData, isImport) {
-		var _data$uploadedData;
-		var data = contextData.data;
-		var initialState = data.includes.includes("settings");
-		if (isImport && !(contextData !== null && contextData !== void 0 && contextData.isOldExport) && !(data !== null && data !== void 0 && (_data$uploadedData = data.uploadedData) !== null && _data$uploadedData !== void 0 && (_data$uploadedData = _data$uploadedData.manifest) !== null && _data$uploadedData !== void 0 && (_data$uploadedData = _data$uploadedData["site-settings"]) !== null && _data$uploadedData !== void 0 && _data$uploadedData.theme)) initialState = false;
-		return initialState;
+	function getRegistryChildren(registry, parentKey) {
+		return registry.getAll().filter(function(item) {
+			return item.parentKey === parentKey;
+		}).sort(function(first, second) {
+			return first.order - second.order;
+		});
 	}
-	function isExported(contextData) {
+	var coreSettingsRegistry = createRegisteredCustomizationDialogsRegistry();
+	function mergeCoreSettingsEntries(parentKey, registeredEntries) {
+		var coreEntries = getRegistryChildren(coreSettingsRegistry, parentKey);
+		if (!coreEntries.length) return registeredEntries;
+		var coreEntryByKey = new Set(coreEntries.map(function(entry) {
+			return entry.key;
+		}));
+		var registeredEntriesMap = new Map(registeredEntries.map(function(entry) {
+			return [entry.key, entry];
+		}));
+		return [].concat(_toConsumableArray(coreEntries.map(function(entry) {
+			return _objectSpread$22(_objectSpread$22({}, entry), registeredEntriesMap.get(entry.key));
+		})), _toConsumableArray(registeredEntries.filter(function(entry) {
+			return !coreEntryByKey.has(entry.key);
+		}))).sort(function(first, second) {
+			return first.order - second.order;
+		});
+	}
+	function getRegisteredSettingsChildren(parentKey) {
+		return mergeCoreSettingsEntries(parentKey, getAvailableCustomizationDialogChildren(parentKey));
+	}
+	function buildSettingsTree() {
+		return getRegisteredSettingsChildren(arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : KIT_SECTIONS.SETTINGS).map(function(item) {
+			return _objectSpread$22(_objectSpread$22({}, item), {}, { children: buildSettingsTree(item.key) });
+		});
+	}
+	function collectSettingRows(tree) {
+		return tree.flatMap(function(item) {
+			if (item.children.length) return collectSettingRows(item.children);
+			return item.settingKey ? [item] : [];
+		});
+	}
+	function getInitialSettings(contextData, isImport, registeredRows) {
+		var _contextData$data;
+		var _contextData$data$cus;
 		var _contextData$data2;
-		if (contextData !== null && contextData !== void 0 && contextData.isOldExport) {
-			var _contextData$data;
-			return contextData === null || contextData === void 0 || (_contextData$data = contextData.data) === null || _contextData$data === void 0 || (_contextData$data = _contextData$data.uploadedData) === null || _contextData$data === void 0 || (_contextData$data = _contextData$data.manifest) === null || _contextData$data === void 0 ? void 0 : _contextData$data.theme;
-		}
-		return contextData === null || contextData === void 0 || (_contextData$data2 = contextData.data) === null || _contextData$data2 === void 0 || (_contextData$data2 = _contextData$data2.uploadedData) === null || _contextData$data2 === void 0 || (_contextData$data2 = _contextData$data2.manifest) === null || _contextData$data2 === void 0 || (_contextData$data2 = _contextData$data2["site-settings"]) === null || _contextData$data2 === void 0 ? void 0 : _contextData$data2.theme;
-	}
-	function isClassesExported(contextData) {
-		var _contextData$data3;
-		return !!(contextData !== null && contextData !== void 0 && (_contextData$data3 = contextData.data) !== null && _contextData$data3 !== void 0 && (_contextData$data3 = _contextData$data3.uploadedData) !== null && _contextData$data3 !== void 0 && (_contextData$data3 = _contextData$data3.manifest) !== null && _contextData$data3 !== void 0 && (_contextData$data3 = _contextData$data3["site-settings"]) !== null && _contextData$data3 !== void 0 && _contextData$data3.classes);
-	}
-	function isVariablesExported(contextData) {
-		var _contextData$data4;
-		return !!(contextData !== null && contextData !== void 0 && (_contextData$data4 = contextData.data) !== null && _contextData$data4 !== void 0 && (_contextData$data4 = _contextData$data4.uploadedData) !== null && _contextData$data4 !== void 0 && (_contextData$data4 = _contextData$data4.manifest) !== null && _contextData$data4 !== void 0 && (_contextData$data4 = _contextData$data4["site-settings"]) !== null && _contextData$data4 !== void 0 && _contextData$data4.variables);
-	}
-	function getClassesVariablesInitialState(contextData, isImport) {
-		var _contextData$data5;
-		var includesSettings = contextData === null || contextData === void 0 || (_contextData$data5 = contextData.data) === null || _contextData$data5 === void 0 || (_contextData$data5 = _contextData$data5.includes) === null || _contextData$data5 === void 0 ? void 0 : _contextData$data5.includes("settings");
-		return {
-			classes: includesSettings && (!isImport || isClassesExported(contextData)),
-			variables: includesSettings && (!isImport || isVariablesExported(contextData)),
-			classesOverrideAll: false,
-			variablesOverrideAll: false
-		};
+		var includesSettings = contextData === null || contextData === void 0 || (_contextData$data = contextData.data) === null || _contextData$data === void 0 || (_contextData$data = _contextData$data.includes) === null || _contextData$data === void 0 ? void 0 : _contextData$data.includes(KIT_SECTIONS.SETTINGS);
+		var customization = (_contextData$data$cus = contextData === null || contextData === void 0 || (_contextData$data2 = contextData.data) === null || _contextData$data2 === void 0 || (_contextData$data2 = _contextData$data2.customization) === null || _contextData$data2 === void 0 ? void 0 : _contextData$data2.settings) !== null && _contextData$data$cus !== void 0 ? _contextData$data$cus : {};
+		return _objectSpread$22(_objectSpread$22({}, registeredRows.reduce(function(state, row) {
+			if (!row.settingKey) return state;
+			return _objectSpread$22(_objectSpread$22({}, state), {}, _defineProperty$1({}, row.settingKey, row.getInitialState ? row.getInitialState({
+				contextData,
+				includesSettings,
+				isImport
+			}) : includesSettings));
+		}, {})), customization);
 	}
 	function KitSettingsCustomizationDialog(_ref) {
 		var _useContextDetection;
-		var _contextData$data7;
-		var _contextData$data8;
-		var _contextData$data9;
-		var _contextData$data0;
-		var _contextData$data$upl;
-		var _contextData$data1;
-		var _contextData$data$upl2;
-		var _contextData$data10;
-		var _contextData$data11;
-		var _settings$classes;
-		var _settings$variables;
-		var _settings$classesOver;
-		var _settings$variablesOv;
 		var open = _ref.open;
 		var handleClose = _ref.handleClose;
 		var handleSaveChanges = _ref.handleSaveChanges;
@@ -16763,26 +17441,17 @@ init_use_cloud_kits_eligibility();
 		var isImport = _ref2$isImport === void 0 ? false : _ref2$isImport;
 		var _ref2$contextData = _ref2.contextData;
 		var contextData = _ref2$contextData === void 0 ? {} : _ref2$contextData;
-		var _contextData$data6 = contextData.data;
-		var data = _contextData$data6 === void 0 ? null : _contextData$data6;
-		var showClassesSection = isClassesFeatureActive$1();
-		var showVariablesSection = isVariablesFeatureActive$1();
-		var showClassesVariablesSection = showClassesSection || showVariablesSection;
-		var initialState = (0, react.useMemo)(function() {
-			return getInitialState(contextData, isImport);
-		}, [
-			contextData === null || contextData === void 0 || (_contextData$data7 = contextData.data) === null || _contextData$data7 === void 0 ? void 0 : _contextData$data7.includes,
-			contextData === null || contextData === void 0 ? void 0 : contextData.isOldExport,
-			contextData === null || contextData === void 0 || (_contextData$data8 = contextData.data) === null || _contextData$data8 === void 0 || (_contextData$data8 = _contextData$data8.uploadedData) === null || _contextData$data8 === void 0 ? void 0 : _contextData$data8.manifest,
-			isImport
-		]);
-		var classesVariablesInitialState = (0, react.useMemo)(function() {
-			return getClassesVariablesInitialState(contextData, isImport);
-		}, [
-			contextData === null || contextData === void 0 || (_contextData$data9 = contextData.data) === null || _contextData$data9 === void 0 ? void 0 : _contextData$data9.includes,
-			contextData === null || contextData === void 0 || (_contextData$data0 = contextData.data) === null || _contextData$data0 === void 0 || (_contextData$data0 = _contextData$data0.uploadedData) === null || _contextData$data0 === void 0 ? void 0 : _contextData$data0.manifest,
-			isImport
-		]);
+		var _contextData$data3 = contextData.data;
+		var data = _contextData$data3 === void 0 ? null : _contextData$data3;
+		var settingsTree = (0, react.useMemo)(buildSettingsTree);
+		var registeredRows = (0, react.useMemo)(function() {
+			return collectSettingRows(settingsTree);
+		}, [settingsTree]);
+		var rowByKey = (0, react.useMemo)(function() {
+			return new Map(registeredRows.map(function(row) {
+				return [row.key, row];
+			}));
+		}, [registeredRows]);
 		var _useClassesVariablesL = useClassesVariablesLimits({
 			open,
 			isImport
@@ -16792,8 +17461,8 @@ init_use_cloud_kits_eligibility();
 		var classesLimit = _useClassesVariablesL.classesLimit;
 		var variablesLimit = _useClassesVariablesL.variablesLimit;
 		var calculateLimitInfo = _useClassesVariablesL.calculateLimitInfo;
-		var importedClassesCount = (_contextData$data$upl = contextData === null || contextData === void 0 || (_contextData$data1 = contextData.data) === null || _contextData$data1 === void 0 || (_contextData$data1 = _contextData$data1.uploadedData) === null || _contextData$data1 === void 0 || (_contextData$data1 = _contextData$data1.manifest) === null || _contextData$data1 === void 0 || (_contextData$data1 = _contextData$data1["site-settings"]) === null || _contextData$data1 === void 0 ? void 0 : _contextData$data1.classesCount) !== null && _contextData$data$upl !== void 0 ? _contextData$data$upl : 0;
-		var importedVariablesCount = (_contextData$data$upl2 = contextData === null || contextData === void 0 || (_contextData$data10 = contextData.data) === null || _contextData$data10 === void 0 || (_contextData$data10 = _contextData$data10.uploadedData) === null || _contextData$data10 === void 0 || (_contextData$data10 = _contextData$data10.manifest) === null || _contextData$data10 === void 0 || (_contextData$data10 = _contextData$data10["site-settings"]) === null || _contextData$data10 === void 0 ? void 0 : _contextData$data10.variablesCount) !== null && _contextData$data$upl2 !== void 0 ? _contextData$data$upl2 : 0;
+		var importedClassesCount = getImportedClassesCount(contextData);
+		var importedVariablesCount = getImportedVariablesCount(contextData);
 		var classesLimitInfo = (0, react.useMemo)(function() {
 			return calculateLimitInfo(existingClassesCount, importedClassesCount, classesLimit);
 		}, [
@@ -16811,26 +17480,24 @@ init_use_cloud_kits_eligibility();
 			calculateLimitInfo
 		]);
 		var _useState2 = _slicedToArray((0, react.useState)(function() {
-			if (data.customization.settings) return _objectSpread$20({}, data.customization.settings);
-			return _objectSpread$20({ theme: initialState }, showClassesVariablesSection ? classesVariablesInitialState : {});
+			return getInitialSettings(contextData, isImport, registeredRows);
 		}), 2);
 		var settings = _useState2[0];
 		var setSettings = _useState2[1];
 		(0, react.useEffect)(function() {
-			if (open) if (data.customization.settings) setSettings(_objectSpread$20({}, data.customization.settings));
-			else setSettings(_objectSpread$20({ theme: initialState }, showClassesVariablesSection ? classesVariablesInitialState : {}));
+			if (open) setSettings(getInitialSettings(contextData, isImport, registeredRows));
 		}, [open]);
 		(0, react.useEffect)(function() {
 			if (open) AppsEventTracking.sendPageViewsWebsiteTemplates(elementorCommon.eventsManager.config.secondaryLocations.kitLibrary.kitExportCustomizationEdit);
 		}, [open]);
-		var handleToggleChange = function handleToggleChange(settingKey) {
+		var handleToggleChange = function handleToggleChange(settingKey, isChecked) {
 			setSettings(function(prev) {
-				return _objectSpread$20(_objectSpread$20({}, prev), {}, _defineProperty$1({}, settingKey, !prev[settingKey]));
+				return _objectSpread$22(_objectSpread$22({}, prev), {}, _defineProperty$1({}, settingKey, void 0 === isChecked ? !prev[settingKey] : isChecked));
 			});
 		};
-		var handleClassesVariablesChange = function handleClassesVariablesChange(settingKey, value) {
+		var handleSettingChange = function handleSettingChange(settingKey, value) {
 			setSettings(function(prev) {
-				return _objectSpread$20(_objectSpread$20({}, prev), {}, _defineProperty$1({}, settingKey, value));
+				return _objectSpread$22(_objectSpread$22({}, prev), {}, _defineProperty$1({}, settingKey, value));
 			});
 		};
 		var handleReviewClick = (0, react.useCallback)(/*#__PURE__*/ function() {
@@ -16841,8 +17508,8 @@ init_use_cloud_kits_eligibility();
 				return import_regenerator$1.default.wrap(function(_context) {
 					while (1) switch (_context.prev = _context.next) {
 						case 0:
-							transformedAnalytics = transformAnalyticsData(settings);
-							handleSaveChanges("settings", settings, true, transformedAnalytics);
+							transformedAnalytics = transformAnalyticsData$1(settings);
+							handleSaveChanges(KIT_SECTIONS.SETTINGS, settings, true, transformedAnalytics);
 							handleClose();
 							_context.prev = 1;
 							_context.next = 2;
@@ -16877,11 +17544,78 @@ init_use_cloud_kits_eligibility();
 		}, [handleReviewClick]);
 		var classesNotExported = isImport && !isClassesExported(contextData);
 		var variablesNotExported = isImport && !isVariablesExported(contextData);
-		var classesVariablesNotExported = classesNotExported && variablesNotExported;
+		var defaultStylesNotExported = isImport && !isDefaultStylesExported(contextData);
+		var designSystemSettingsNotExported = classesNotExported && variablesNotExported && defaultStylesNotExported;
 		var classesLimitExceeded = isImport && classesLimitInfo.isExceeded;
 		var variablesLimitExceeded = isImport && variablesLimitInfo.isExceeded;
 		var classesOverLimitCount = classesLimitInfo.overLimitCount;
 		var variablesOverLimitCount = variablesLimitInfo.overLimitCount;
+		var hasThemeRow = rowByKey.has(KIT_SECTION_ITEMS.SETTINGS_THEME);
+		var topLevelSettingsKeys = (0, react.useMemo)(function() {
+			return new Set(settingsTree.map(function(item) {
+				return item.key;
+			}));
+		}, [settingsTree]);
+		var hasSiteSettingsRows = rowByKey.has(KIT_SECTION_ITEMS.SETTINGS_GLOBAL_COLORS) || rowByKey.has(KIT_SECTION_ITEMS.SETTINGS_GLOBAL_FONTS) || rowByKey.has(KIT_SECTION_ITEMS.SETTINGS_THEME_STYLE_SETTINGS);
+		var hasCustomFilesRows = rowByKey.has(KIT_SECTION_ITEMS.SETTINGS_CUSTOM_FONTS) || rowByKey.has(KIT_SECTION_ITEMS.SETTINGS_CUSTOM_ICONS) || rowByKey.has(KIT_SECTION_ITEMS.SETTINGS_CUSTOM_CODE);
+		var getRegisteredRowProps = function getRegisteredRowProps(rowKey) {
+			var props = {
+				data,
+				contextData,
+				isImport,
+				settings
+			};
+			switch (rowKey) {
+				case KIT_SECTION_ITEMS.SETTINGS_GLOBAL_CLASSES: return _objectSpread$22(_objectSpread$22({}, props), {}, {
+					classesLimitExceeded,
+					classesOverLimitCount,
+					classesReviewClick: handleClassesReviewClick,
+					onSettingChange: handleSettingChange
+				});
+				case KIT_SECTION_ITEMS.SETTINGS_GLOBAL_VARIABLES: return _objectSpread$22(_objectSpread$22({}, props), {}, {
+					onSettingChange: handleSettingChange,
+					variablesLimitExceeded,
+					variablesOverLimitCount,
+					variablesReviewClick: handleVariablesReviewClick
+				});
+				case KIT_SECTION_ITEMS.SETTINGS_DEFAULT_STYLES: return _objectSpread$22(_objectSpread$22({}, props), {}, { onSettingChange: handleSettingChange });
+				default: return _objectSpread$22(_objectSpread$22({}, props), {}, { onSettingChange: handleToggleChange });
+			}
+		};
+		var getRegisteredSectionProps = function getRegisteredSectionProps(sectionKey) {
+			if (KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM === sectionKey) return {
+				isImport,
+				classesLimitExceeded,
+				variablesLimitExceeded,
+				notExported: designSystemSettingsNotExported,
+				settings,
+				onSettingChange: handleSettingChange,
+				classesExported: !classesNotExported,
+				defaultStylesExported: !defaultStylesNotExported,
+				variablesExported: !variablesNotExported,
+				classesOverLimitCount,
+				variablesOverLimitCount,
+				onClassesReviewClick: handleClassesReviewClick,
+				onVariablesReviewClick: handleVariablesReviewClick
+			};
+			return {};
+		};
+		var renderRegisteredRow = function renderRegisteredRow(rowKey) {
+			var row = rowByKey.get(rowKey);
+			if (!(row !== null && row !== void 0 && row.component) || row.isPlaceholder) return null;
+			var RowComponent = row.component;
+			return /*#__PURE__*/ react.default.createElement(RowComponent, _extends({ key: row.key }, getRegisteredRowProps(rowKey)));
+		};
+		var _renderSettingsTreeItem = function renderSettingsTreeItem(item) {
+			if (!item.children.length) return renderRegisteredRow(item.key);
+			var renderedChildren = item.children.map(function(child) {
+				return _renderSettingsTreeItem(child);
+			}).filter(Boolean);
+			if (!renderedChildren.length && item.isPlaceholder) return null;
+			if (!item.component) return renderedChildren;
+			var SectionComponent = item.component;
+			return /*#__PURE__*/ react.default.createElement(SectionComponent, _extends({ key: item.key }, getRegisteredSectionProps(item.key)), renderedChildren);
+		};
 		var _useState4 = _slicedToArray((0, react.useState)({
 			open: false,
 			type: "classes"
@@ -16889,7 +17623,8 @@ init_use_cloud_kits_eligibility();
 		var confirmationDialog = _useState4[0];
 		var setConfirmationDialog = _useState4[1];
 		var performSave = (0, react.useCallback)(function() {
-			handleSaveChanges("settings", settings, true, transformAnalyticsData(settings));
+			var transformedAnalytics = transformAnalyticsData$1(settings);
+			handleSaveChanges(KIT_SECTIONS.SETTINGS, settings, true, transformedAnalytics);
 			handleClose();
 		}, [
 			settings,
@@ -16940,37 +17675,9 @@ init_use_cloud_kits_eligibility();
 			title: (0, _wordpress_i18n.__)("Edit settings & configurations", "elementor"),
 			handleClose,
 			handleSaveChanges: handleSaveClick
-		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, { gap: 2 }, (contextData === null || contextData === void 0 ? void 0 : contextData.isOldElementorVersion) && /*#__PURE__*/ react.default.createElement(UpgradeVersionBanner, null), isImport && !isExported(contextData) ? /*#__PURE__*/ react.default.createElement(SettingSection, {
-			title: (0, _wordpress_i18n.__)("Theme", "elementor"),
-			settingKey: "theme",
-			notExported: true
-		}) : /*#__PURE__*/ react.default.createElement(SettingSection, {
-			key: "theme",
-			checked: settings.theme,
-			title: (0, _wordpress_i18n.__)("Theme", "elementor"),
-			description: (0, _wordpress_i18n.__)("Only public WordPress themes are supported", "elementor"),
-			settingKey: "theme",
-			onSettingChange: handleToggleChange,
-			disabled: isImport && !(contextData !== null && contextData !== void 0 && (_contextData$data11 = contextData.data) !== null && _contextData$data11 !== void 0 && (_contextData$data11 = _contextData$data11.uploadedData) !== null && _contextData$data11 !== void 0 && (_contextData$data11 = _contextData$data11.manifest) !== null && _contextData$data11 !== void 0 && (_contextData$data11 = _contextData$data11["site-settings"]) !== null && _contextData$data11 !== void 0 && _contextData$data11.theme)
-		}), showClassesVariablesSection && /*#__PURE__*/ react.default.createElement(ClassesVariablesSection, {
-			settings: {
-				classes: (_settings$classes = settings.classes) !== null && _settings$classes !== void 0 ? _settings$classes : false,
-				variables: (_settings$variables = settings.variables) !== null && _settings$variables !== void 0 ? _settings$variables : false,
-				classesOverrideAll: (_settings$classesOver = settings.classesOverrideAll) !== null && _settings$classesOver !== void 0 ? _settings$classesOver : false,
-				variablesOverrideAll: (_settings$variablesOv = settings.variablesOverrideAll) !== null && _settings$variablesOv !== void 0 ? _settings$variablesOv : false
-			},
-			onSettingChange: handleClassesVariablesChange,
-			isImport,
-			classesExported: !classesNotExported && showClassesSection,
-			variablesExported: !variablesNotExported && showVariablesSection,
-			classesLimitExceeded,
-			variablesLimitExceeded,
-			classesOverLimitCount,
-			variablesOverLimitCount,
-			onClassesReviewClick: handleClassesReviewClick,
-			onVariablesReviewClick: handleVariablesReviewClick,
-			notExported: classesVariablesNotExported
-		}))), /*#__PURE__*/ react.default.createElement(OverrideConfirmationDialog, {
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, { gap: 2 }, (contextData === null || contextData === void 0 ? void 0 : contextData.isOldElementorVersion) && /*#__PURE__*/ react.default.createElement(UpgradeVersionBanner, null), hasThemeRow && renderRegisteredRow(KIT_SECTION_ITEMS.SETTINGS_THEME), topLevelSettingsKeys.has(KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM) && _renderSettingsTreeItem(settingsTree.find(function(item) {
+			return item.key === KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM;
+		})), hasSiteSettingsRows && /*#__PURE__*/ react.default.createElement(SettingsGroupSection, { title: (0, _wordpress_i18n.__)("Site settings", "elementor") }, renderRegisteredRow(KIT_SECTION_ITEMS.SETTINGS_GLOBAL_COLORS), renderRegisteredRow(KIT_SECTION_ITEMS.SETTINGS_GLOBAL_FONTS), renderRegisteredRow(KIT_SECTION_ITEMS.SETTINGS_THEME_STYLE_SETTINGS)), renderRegisteredRow(KIT_SECTION_ITEMS.SETTINGS_GENERAL_SETTINGS), renderRegisteredRow(KIT_SECTION_ITEMS.SETTINGS_EXPERIMENTS), hasCustomFilesRows && /*#__PURE__*/ react.default.createElement(SettingsGroupSection, { title: (0, _wordpress_i18n.__)("Custom files", "elementor") }, renderRegisteredRow(KIT_SECTION_ITEMS.SETTINGS_CUSTOM_FONTS), renderRegisteredRow(KIT_SECTION_ITEMS.SETTINGS_CUSTOM_ICONS), renderRegisteredRow(KIT_SECTION_ITEMS.SETTINGS_CUSTOM_CODE)))), /*#__PURE__*/ react.default.createElement(OverrideConfirmationDialog, {
 			open: confirmationDialog.open,
 			onClose: handleConfirmationClose,
 			onConfirm: handleConfirmationConfirm,
@@ -16984,10 +17691,135 @@ init_use_cloud_kits_eligibility();
 	};
 
 //#endregion
+//#region app/modules/import-export-customization/assets/js/shared/components/kit-templates-customization-dialog.js
+	init_slicedToArray();
+	init_defineProperty$1();
+	init_apps_event_tracking();
+	function ownKeys$22(e, r) {
+		var t = Object.keys(e);
+		if (Object.getOwnPropertySymbols) {
+			var o = Object.getOwnPropertySymbols(e);
+			r && (o = o.filter(function(r) {
+				return Object.getOwnPropertyDescriptor(e, r).enumerable;
+			})), t.push.apply(t, o);
+		}
+		return t;
+	}
+	__name(ownKeys$22, "ownKeys");
+	function _objectSpread$21(e) {
+		for (var r = 1; r < arguments.length; r++) {
+			var t = null != arguments[r] ? arguments[r] : {};
+			r % 2 ? ownKeys$22(Object(t), !0).forEach(function(r) {
+				_defineProperty$1(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$22(Object(t)).forEach(function(r) {
+				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+			});
+		}
+		return e;
+	}
+	__name(_objectSpread$21, "_objectSpread");
+	function getRegisteredSections() {
+		return getAvailableCustomizationDialogChildren(KIT_SECTIONS.TEMPLATES);
+	}
+	function getInitialTemplatesState(contextData, isImport, registeredSections) {
+		var _contextData$data;
+		var _contextData$data$cus;
+		var _contextData$data2;
+		var includesTemplates = contextData === null || contextData === void 0 || (_contextData$data = contextData.data) === null || _contextData$data === void 0 || (_contextData$data = _contextData$data.includes) === null || _contextData$data === void 0 ? void 0 : _contextData$data.includes(KIT_SECTIONS.TEMPLATES);
+		var customization = (_contextData$data$cus = contextData === null || contextData === void 0 || (_contextData$data2 = contextData.data) === null || _contextData$data2 === void 0 || (_contextData$data2 = _contextData$data2.customization) === null || _contextData$data2 === void 0 ? void 0 : _contextData$data2.templates) !== null && _contextData$data$cus !== void 0 ? _contextData$data$cus : {};
+		var sectionStates = registeredSections.reduce(function(state, section) {
+			var _customization$sectio;
+			if (!section.settingKey) return state;
+			var initialValue = section.getInitialState ? section.getInitialState({
+				contextData,
+				includesTemplates,
+				isImport
+			}) : { enabled: includesTemplates };
+			return _objectSpread$21(_objectSpread$21({}, state), {}, _defineProperty$1({}, section.settingKey, (_customization$sectio = customization[section.settingKey]) !== null && _customization$sectio !== void 0 ? _customization$sectio : initialValue));
+		}, {});
+		return _objectSpread$21(_objectSpread$21({}, customization), sectionStates);
+	}
+	var transformAnalyticsData = function transformAnalyticsData(payload) {
+		var transformed = {};
+		for (var _i = 0, _Object$entries = Object.entries(payload); _i < _Object$entries.length; _i++) {
+			var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2);
+			var key = _Object$entries$_i[0];
+			var value = _Object$entries$_i[1];
+			transformed[key] = transformValueForAnalytics(key, value, []);
+		}
+		return transformed;
+	};
+	function KitTemplatesCustomizationDialog(_ref) {
+		var _useContextDetection;
+		var open = _ref.open;
+		var handleClose = _ref.handleClose;
+		var _handleSaveChanges = _ref.handleSaveChanges;
+		var _ref2 = (_useContextDetection = useContextDetection()) !== null && _useContextDetection !== void 0 ? _useContextDetection : {};
+		var _ref2$isImport = _ref2.isImport;
+		var isImport = _ref2$isImport === void 0 ? false : _ref2$isImport;
+		var _ref2$contextData = _ref2.contextData;
+		var contextData = _ref2$contextData === void 0 ? {} : _ref2$contextData;
+		var _contextData$data3 = contextData.data;
+		var data = _contextData$data3 === void 0 ? null : _contextData$data3;
+		var _contextData$isOldExp = contextData.isOldExport;
+		var isOldExport = _contextData$isOldExp === void 0 ? false : _contextData$isOldExp;
+		var _contextData$isOldEle = contextData.isOldElementorVersion;
+		var isOldElementorVersion = _contextData$isOldEle === void 0 ? false : _contextData$isOldEle;
+		var registeredSections = (0, react.useMemo)(function() {
+			return getRegisteredSections();
+		}, []);
+		var _useState2 = _slicedToArray((0, react.useState)(function() {
+			return getInitialTemplatesState(contextData, isImport, registeredSections);
+		}), 2);
+		var templates = _useState2[0];
+		var setTemplates = _useState2[1];
+		(0, react.useEffect)(function() {
+			if (open) setTemplates(getInitialTemplatesState(contextData, isImport, registeredSections));
+		}, [open]);
+		(0, react.useEffect)(function() {
+			if (open) AppsEventTracking.sendPageViewsWebsiteTemplates(elementorCommon.eventsManager.config.secondaryLocations.kitLibrary.kitExportCustomizationEdit);
+		}, [open]);
+		var handleSectionStateChange = (0, react.useCallback)(function(settingKey, newState) {
+			var mergeMode = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : false;
+			setTemplates(function(prev) {
+				return _objectSpread$21(_objectSpread$21({}, prev), {}, _defineProperty$1({}, settingKey, mergeMode ? _objectSpread$21(_objectSpread$21({}, prev[settingKey]), newState) : newState));
+			});
+		}, []);
+		return /*#__PURE__*/ react.default.createElement(KitCustomizationDialog, {
+			open,
+			title: (0, _wordpress_i18n.__)("Edit templates", "elementor"),
+			handleClose,
+			handleSaveChanges: function handleSaveChanges() {
+				var hasEnabledCustomization = Object.values(templates).some(function(sectionState) {
+					return sectionState === null || sectionState === void 0 ? void 0 : sectionState.enabled;
+				});
+				_handleSaveChanges(KIT_SECTIONS.TEMPLATES, templates, hasEnabledCustomization, transformAnalyticsData(templates));
+				handleClose();
+			},
+			minHeight: "auto"
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, { gap: 2 }, isOldElementorVersion && /*#__PURE__*/ react.default.createElement(UpgradeVersionBanner, null), registeredSections.map(function(section) {
+			var SectionComponent = section.component;
+			return /*#__PURE__*/ react.default.createElement(SectionComponent, {
+				key: section.key,
+				data,
+				isImport,
+				isOldExport,
+				onSectionStateChange: handleSectionStateChange,
+				templates
+			});
+		})));
+	}
+	KitTemplatesCustomizationDialog.propTypes = {
+		open: import_prop_types$82.default.bool.isRequired,
+		handleClose: import_prop_types$82.default.func.isRequired,
+		handleSaveChanges: import_prop_types$82.default.func.isRequired
+	};
+
+//#endregion
 //#region app/modules/import-export-customization/assets/js/shared/kit-content-data.js
 	var kitContentData = [
 		{
-			type: "content",
+			type: KIT_SECTIONS.CONTENT,
 			data: {
 				title: (0, _wordpress_i18n.__)("Content", "elementor"),
 				features: { open: [
@@ -17003,7 +17835,7 @@ init_use_cloud_kits_eligibility();
 			required: false
 		},
 		{
-			type: "templates",
+			type: KIT_SECTIONS.TEMPLATES,
 			data: {
 				title: (0, _wordpress_i18n.__)("Templates", "elementor"),
 				features: {
@@ -17022,15 +17854,16 @@ init_use_cloud_kits_eligibility();
 					tooltip: (0, _wordpress_i18n.__)("To import or export these components, you’ll need Elementor Pro.", "elementor")
 				}
 			},
-			dialog: null,
+			dialog: KitTemplatesCustomizationDialog,
 			required: false
 		},
 		{
-			type: "settings",
+			type: KIT_SECTIONS.SETTINGS,
 			data: {
 				title: (0, _wordpress_i18n.__)("Settings & configurations", "elementor"),
 				features: { open: [
 					(0, _wordpress_i18n.__)("Classes", "elementor"),
+					(0, _wordpress_i18n.__)("Default Styles", "elementor"),
 					(0, _wordpress_i18n.__)("Variables", "elementor"),
 					(0, _wordpress_i18n.__)("Global Colors", "elementor"),
 					(0, _wordpress_i18n.__)("Global Fonts", "elementor"),
@@ -17047,7 +17880,7 @@ init_use_cloud_kits_eligibility();
 			required: false
 		},
 		{
-			type: "plugins",
+			type: KIT_SECTIONS.PLUGINS,
 			data: {
 				title: (0, _wordpress_i18n.__)("Plugins", "elementor"),
 				features: { open: [(0, _wordpress_i18n.__)("All plugins are required for this website templates to work", "elementor")] }
@@ -17093,46 +17926,175 @@ init_use_cloud_kits_eligibility();
 
 //#endregion
 //#region app/modules/import-export-customization/assets/js/shared/components/kit-parts-selection.js
+	init_defineProperty$1();
 	init_slicedToArray();
 	init_apps_event_tracking();
-	function isExperimentActive(experimentName) {
-		var _common$config;
-		var common = typeof globalThis !== "undefined" ? globalThis.elementorCommon : void 0;
-		return !!(common !== null && common !== void 0 && (_common$config = common.config) !== null && _common$config !== void 0 && (_common$config = _common$config.experimentalFeatures) !== null && _common$config !== void 0 && _common$config[experimentName]);
+	function ownKeys$21(e, r) {
+		var t = Object.keys(e);
+		if (Object.getOwnPropertySymbols) {
+			var o = Object.getOwnPropertySymbols(e);
+			r && (o = o.filter(function(r) {
+				return Object.getOwnPropertyDescriptor(e, r).enumerable;
+			})), t.push.apply(t, o);
+		}
+		return t;
 	}
-	function isClassesFeatureActive() {
-		return isExperimentActive("e_atomic_elements");
+	__name(ownKeys$21, "ownKeys");
+	function _objectSpread$20(e) {
+		for (var r = 1; r < arguments.length; r++) {
+			var t = null != arguments[r] ? arguments[r] : {};
+			r % 2 ? ownKeys$21(Object(t), !0).forEach(function(r) {
+				_defineProperty$1(e, r, t[r]);
+			}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$21(Object(t)).forEach(function(r) {
+				Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+			});
+		}
+		return e;
 	}
-	function isVariablesFeatureActive() {
-		return isExperimentActive("e_atomic_elements");
-	}
-	function KitPartsSelection(_ref) {
-		var _useContextDetection;
-		var _contextData$data$upl;
-		var _contextData$data2;
-		var _contextData$data$upl2;
-		var _contextData$data3;
-		var _contextData$data4;
-		var _contextData$data5;
+	__name(_objectSpread$20, "_objectSpread");
+	var kitPartItemPropType = import_prop_types$82.default.shape({
+		type: import_prop_types$82.default.string.isRequired,
+		checked: import_prop_types$82.default.bool.isRequired,
+		data: import_prop_types$82.default.shape({
+			title: import_prop_types$82.default.string.isRequired,
+			features: import_prop_types$82.default.shape({
+				open: import_prop_types$82.default.arrayOf(import_prop_types$82.default.string).isRequired,
+				locked: import_prop_types$82.default.arrayOf(import_prop_types$82.default.string),
+				tooltip: import_prop_types$82.default.string
+			}).isRequired
+		}).isRequired
+	});
+	function DefaultKitPartSelectionSection(_ref) {
+		var data = _ref.data;
+		var item = _ref.item;
+		var DialogComponent = _ref.DialogComponent;
+		var isActive = _ref.isActive;
+		var disabled = _ref.disabled;
+		var isLockedFeaturesNoPro = _ref.isLockedFeaturesNoPro;
+		var hasSettingsLimitWarning = _ref.hasSettingsLimitWarning;
 		var onCheckboxChange = _ref.onCheckboxChange;
-		var testId = _ref.testId;
+		var onOpenDialog = _ref.onOpenDialog;
+		var onCloseDialog = _ref.onCloseDialog;
 		var handleSaveCustomization = _ref.handleSaveCustomization;
-		var _ref$isCloudKitsEligi = _ref.isCloudKitsEligible;
-		var isCloudKitsEligible = _ref$isCloudKitsEligi === void 0 ? false : _ref$isCloudKitsEligi;
-		var _ref$showMediaFormatV = _ref.showMediaFormatValidation;
-		var showMediaFormatValidation = _ref$showMediaFormatV === void 0 ? false : _ref$showMediaFormatV;
+		var isImport = _ref.isImport;
+		var isOldExport = _ref.isOldExport;
+		var isOldElementorVersion = _ref.isOldElementorVersion;
+		var isCloudKitsEligible = _ref.isCloudKitsEligible;
+		var showMediaFormatValidation = _ref.showMediaFormatValidation;
+		var renderFeatureDescription = _ref.renderFeatureDescription;
+		var renderEditControl = _ref.renderEditControl;
+		return /*#__PURE__*/ react.default.createElement(react.default.Fragment, null, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, {
+			"data-testid": "KitPartsSelectionRow-".concat(item.type),
+			sx: {
+				mb: 3,
+				border: 1,
+				borderRadius: 1,
+				borderColor: "action.focus",
+				p: 2.5
+			}
+		}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
+			display: "flex",
+			justifyContent: "space-between",
+			alignItems: "flex-start"
+		} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
+			flex: 1,
+			opacity: isLockedFeaturesNoPro ? .5 : 1
+		} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
+			display: "flex",
+			alignItems: "center"
+		} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.FormControlLabel, {
+			control: /*#__PURE__*/ react.default.createElement(_elementor_ui.Checkbox, {
+				color: "info",
+				checked: item.checked,
+				onChange: onCheckboxChange,
+				disabled,
+				sx: {
+					p: 0,
+					mx: 1
+				},
+				"data-testid": "KitContentDataSelection-".concat(item.type),
+				"data-type": item.type
+			}),
+			label: /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
+				color: "text.primary",
+				variant: "body1",
+				sx: { fontWeight: 500 }
+			}, item.data.title),
+			sx: { "& .MuiFormControlLabel-label.Mui-disabled": { color: "text.primary" } }
+		}), KIT_SECTIONS.SETTINGS === item.type && hasSettingsLimitWarning && /*#__PURE__*/ react.default.createElement(_elementor_ui.Tooltip, {
+			title: (0, _wordpress_i18n.__)("Limit exceeded. Click 'Edit' to review conflicts or override existing items", "elementor"),
+			placement: "top",
+			arrow: true
+		}, /*#__PURE__*/ react.default.createElement(_elementor_icons.AlertTriangleFilledIcon, {
+			sx: {
+				fontSize: 20,
+				color: "warning.main",
+				ml: .5
+			},
+			"aria-hidden": true
+		}))), renderFeatureDescription(item, isLockedFeaturesNoPro)), renderEditControl(item, isLockedFeaturesNoPro, onOpenDialog))), DialogComponent && /*#__PURE__*/ react.default.createElement(DialogComponent, {
+			data,
+			open: isActive,
+			handleClose: onCloseDialog,
+			handleSaveChanges: handleSaveCustomization,
+			isImport,
+			isOldExport,
+			isOldElementorVersion,
+			isCloudKitsEligible,
+			showMediaFormatValidation
+		}));
+	}
+	DefaultKitPartSelectionSection.propTypes = {
+		data: import_prop_types$82.default.object,
+		item: kitPartItemPropType.isRequired,
+		DialogComponent: import_prop_types$82.default.elementType,
+		isActive: import_prop_types$82.default.bool.isRequired,
+		disabled: import_prop_types$82.default.bool.isRequired,
+		isLockedFeaturesNoPro: import_prop_types$82.default.bool.isRequired,
+		hasSettingsLimitWarning: import_prop_types$82.default.bool.isRequired,
+		onCheckboxChange: import_prop_types$82.default.func.isRequired,
+		onOpenDialog: import_prop_types$82.default.func.isRequired,
+		onCloseDialog: import_prop_types$82.default.func.isRequired,
+		handleSaveCustomization: import_prop_types$82.default.func.isRequired,
+		isImport: import_prop_types$82.default.bool.isRequired,
+		isOldExport: import_prop_types$82.default.bool.isRequired,
+		isOldElementorVersion: import_prop_types$82.default.bool.isRequired,
+		isCloudKitsEligible: import_prop_types$82.default.bool.isRequired,
+		showMediaFormatValidation: import_prop_types$82.default.bool.isRequired,
+		renderFeatureDescription: import_prop_types$82.default.func.isRequired,
+		renderEditControl: import_prop_types$82.default.func.isRequired
+	};
+	function KitPartsSelection(_ref2) {
+		var _useContextDetection;
+		var _onCheckboxChange = _ref2.onCheckboxChange;
+		var testId = _ref2.testId;
+		var handleSaveCustomization = _ref2.handleSaveCustomization;
+		var _ref2$isCloudKitsElig = _ref2.isCloudKitsEligible;
+		var isCloudKitsEligible = _ref2$isCloudKitsElig === void 0 ? false : _ref2$isCloudKitsElig;
+		var _ref2$showMediaFormat = _ref2.showMediaFormatValidation;
+		var showMediaFormatValidation = _ref2$showMediaFormat === void 0 ? false : _ref2$showMediaFormat;
 		var _useState2 = _slicedToArray((0, react.useState)(null), 2);
 		var activeDialog = _useState2[0];
 		var setActiveDialog = _useState2[1];
-		var _ref2 = (_useContextDetection = useContextDetection()) !== null && _useContextDetection !== void 0 ? _useContextDetection : {};
-		var _ref2$isImport = _ref2.isImport;
-		var isImport = _ref2$isImport === void 0 ? false : _ref2$isImport;
-		var _ref2$contextData = _ref2.contextData;
-		var contextData = _ref2$contextData === void 0 ? {} : _ref2$contextData;
+		var _useState4 = _slicedToArray((0, react.useState)(false), 2);
+		var isRegistryPrepared = _useState4[0];
+		var setIsRegistryPrepared = _useState4[1];
+		var _ref3 = (_useContextDetection = useContextDetection()) !== null && _useContextDetection !== void 0 ? _useContextDetection : {};
+		var _ref3$isImport = _ref3.isImport;
+		var isImport = _ref3$isImport === void 0 ? false : _ref3$isImport;
+		var _ref3$contextData = _ref3.contextData;
+		var contextData = _ref3$contextData === void 0 ? {} : _ref3$contextData;
 		var _contextData$data = contextData.data;
 		var data = _contextData$data === void 0 ? null : _contextData$data;
-		var showClassesSection = isClassesFeatureActive();
-		var showVariablesSection = isVariablesFeatureActive();
+		var _contextData$isOldExp = contextData.isOldExport;
+		var isOldExport = _contextData$isOldExp === void 0 ? false : _contextData$isOldExp;
+		var _contextData$isOldEle = contextData.isOldElementorVersion;
+		var isOldElementorVersion = _contextData$isOldEle === void 0 ? false : _contextData$isOldEle;
+		(0, react.useLayoutEffect)(function() {
+			prepareCustomizationDialogsForRender();
+			setIsRegistryPrepared(true);
+		}, []);
+		var showDesignSystemSettingsSection = isAtomicElementsFeatureActive();
 		var _useClassesVariablesL = useClassesVariablesLimits({
 			open: true,
 			isImport
@@ -17142,10 +18104,10 @@ init_use_cloud_kits_eligibility();
 		var classesLimit = _useClassesVariablesL.classesLimit;
 		var variablesLimit = _useClassesVariablesL.variablesLimit;
 		var calculateLimitInfo = _useClassesVariablesL.calculateLimitInfo;
-		var importedClassesCount = (_contextData$data$upl = contextData === null || contextData === void 0 || (_contextData$data2 = contextData.data) === null || _contextData$data2 === void 0 || (_contextData$data2 = _contextData$data2.uploadedData) === null || _contextData$data2 === void 0 || (_contextData$data2 = _contextData$data2.manifest) === null || _contextData$data2 === void 0 || (_contextData$data2 = _contextData$data2["site-settings"]) === null || _contextData$data2 === void 0 ? void 0 : _contextData$data2.classesCount) !== null && _contextData$data$upl !== void 0 ? _contextData$data$upl : 0;
-		var importedVariablesCount = (_contextData$data$upl2 = contextData === null || contextData === void 0 || (_contextData$data3 = contextData.data) === null || _contextData$data3 === void 0 || (_contextData$data3 = _contextData$data3.uploadedData) === null || _contextData$data3 === void 0 || (_contextData$data3 = _contextData$data3.manifest) === null || _contextData$data3 === void 0 || (_contextData$data3 = _contextData$data3["site-settings"]) === null || _contextData$data3 === void 0 ? void 0 : _contextData$data3.variablesCount) !== null && _contextData$data$upl2 !== void 0 ? _contextData$data$upl2 : 0;
-		var isClassesExportedInManifest = !!(contextData !== null && contextData !== void 0 && (_contextData$data4 = contextData.data) !== null && _contextData$data4 !== void 0 && (_contextData$data4 = _contextData$data4.uploadedData) !== null && _contextData$data4 !== void 0 && (_contextData$data4 = _contextData$data4.manifest) !== null && _contextData$data4 !== void 0 && (_contextData$data4 = _contextData$data4["site-settings"]) !== null && _contextData$data4 !== void 0 && _contextData$data4.classes);
-		var isVariablesExportedInManifest = !!(contextData !== null && contextData !== void 0 && (_contextData$data5 = contextData.data) !== null && _contextData$data5 !== void 0 && (_contextData$data5 = _contextData$data5.uploadedData) !== null && _contextData$data5 !== void 0 && (_contextData$data5 = _contextData$data5.manifest) !== null && _contextData$data5 !== void 0 && (_contextData$data5 = _contextData$data5["site-settings"]) !== null && _contextData$data5 !== void 0 && _contextData$data5.variables);
+		var importedClassesCount = getImportedClassesCount(contextData);
+		var importedVariablesCount = getImportedVariablesCount(contextData);
+		var isClassesExportedInManifest = isClassesExported(contextData);
+		var isVariablesExportedInManifest = isVariablesExported(contextData);
 		var classesLimitInfo = (0, react.useMemo)(function() {
 			return calculateLimitInfo(existingClassesCount, importedClassesCount, classesLimit);
 		}, [
@@ -17162,56 +18124,34 @@ init_use_cloud_kits_eligibility();
 			variablesLimit,
 			calculateLimitInfo
 		]);
-		var hasSettingsLimitWarning = isImport && (showClassesSection && isClassesExportedInManifest && classesLimitInfo.isExceeded || showVariablesSection && isVariablesExportedInManifest && variablesLimitInfo.isExceeded);
+		var hasSettingsLimitWarning = showDesignSystemSettingsSection && isImport && (isClassesExportedInManifest && classesLimitInfo.isExceeded || isVariablesExportedInManifest && variablesLimitInfo.isExceeded);
 		(0, react.useEffect)(function() {
-			if (showMediaFormatValidation && !isImport) setActiveDialog("content");
+			if (showMediaFormatValidation && !isImport) setActiveDialog(KIT_SECTIONS.CONTENT);
 		}, [showMediaFormatValidation, isImport]);
-		var isSiteSettingsExported = function isSiteSettingsExported() {
-			var _contextData$data6;
-			var siteSettings = contextData === null || contextData === void 0 || (_contextData$data6 = contextData.data) === null || _contextData$data6 === void 0 || (_contextData$data6 = _contextData$data6.uploadedData) === null || _contextData$data6 === void 0 || (_contextData$data6 = _contextData$data6.manifest) === null || _contextData$data6 === void 0 ? void 0 : _contextData$data6["site-settings"];
-			if (!siteSettings) return false;
-			return Object.values(siteSettings).some(Boolean);
-		};
-		var isContentSettingsExported = function isContentSettingsExported() {
-			var _contextData$data7;
-			var _contextData$data8;
-			var _contextData$data9;
-			var _contextData$data0;
-			var taxonomies = contextData === null || contextData === void 0 || (_contextData$data7 = contextData.data) === null || _contextData$data7 === void 0 || (_contextData$data7 = _contextData$data7.uploadedData) === null || _contextData$data7 === void 0 || (_contextData$data7 = _contextData$data7.manifest) === null || _contextData$data7 === void 0 ? void 0 : _contextData$data7.taxonomies;
-			var content = contextData === null || contextData === void 0 || (_contextData$data8 = contextData.data) === null || _contextData$data8 === void 0 || (_contextData$data8 = _contextData$data8.uploadedData) === null || _contextData$data8 === void 0 || (_contextData$data8 = _contextData$data8.manifest) === null || _contextData$data8 === void 0 ? void 0 : _contextData$data8.content;
-			var wpContent = contextData === null || contextData === void 0 || (_contextData$data9 = contextData.data) === null || _contextData$data9 === void 0 || (_contextData$data9 = _contextData$data9.uploadedData) === null || _contextData$data9 === void 0 || (_contextData$data9 = _contextData$data9.manifest) === null || _contextData$data9 === void 0 ? void 0 : _contextData$data9["wp-content"];
-			var customPostTypes = contextData === null || contextData === void 0 || (_contextData$data0 = contextData.data) === null || _contextData$data0 === void 0 || (_contextData$data0 = _contextData$data0.uploadedData) === null || _contextData$data0 === void 0 || (_contextData$data0 = _contextData$data0.manifest) === null || _contextData$data0 === void 0 ? void 0 : _contextData$data0["custom-post-type-title"];
-			return taxonomies || content || wpContent || customPostTypes;
-		};
 		var isExported = function isExported(item) {
-			var _contextData$data1;
 			switch (item.type) {
-				case "settings": return isSiteSettingsExported();
-				case "content": return isContentSettingsExported();
-				default: return contextData === null || contextData === void 0 || (_contextData$data1 = contextData.data) === null || _contextData$data1 === void 0 || (_contextData$data1 = _contextData$data1.uploadedData) === null || _contextData$data1 === void 0 || (_contextData$data1 = _contextData$data1.manifest) === null || _contextData$data1 === void 0 ? void 0 : _contextData$data1[item.type];
+				case KIT_SECTIONS.SETTINGS: return isSiteSettingsExported(contextData);
+				case KIT_SECTIONS.CONTENT: return isContentSettingsExported(contextData);
+				default: return getManifestItem(contextData, item.type);
 			}
+		};
+		var hasLockedFeatures = function hasLockedFeatures(item) {
+			var _item$data$features$l;
+			var _item$data$features;
+			return ((_item$data$features$l = (_item$data$features = item.data.features) === null || _item$data$features === void 0 || (_item$data$features = _item$data$features.locked) === null || _item$data$features === void 0 ? void 0 : _item$data$features.length) !== null && _item$data$features$l !== void 0 ? _item$data$features$l : 0) > 0;
 		};
 		var isDisabled = function isDisabled(item) {
-			var _item$data$features;
-			var _contextData$data10;
-			if ((_item$data$features = item.data.features) !== null && _item$data$features !== void 0 && _item$data$features.locked && !elementorAppConfig.hasPro) return true;
+			var _contextData$data2;
+			if (hasLockedFeatures(item) && !elementorAppConfig.hasPro) return true;
 			if (isImport) return !isExported(item) || item.required;
-			return item.required && (contextData === null || contextData === void 0 || (_contextData$data10 = contextData.data) === null || _contextData$data10 === void 0 || (_contextData$data10 = _contextData$data10.includes) === null || _contextData$data10 === void 0 ? void 0 : _contextData$data10.includes(item.type));
+			return item.required && (contextData === null || contextData === void 0 || (_contextData$data2 = contextData.data) === null || _contextData$data2 === void 0 || (_contextData$data2 = _contextData$data2.includes) === null || _contextData$data2 === void 0 ? void 0 : _contextData$data2.includes(item.type));
 		};
 		var isEditDisabled = function isEditDisabled(item) {
-			if (isImport) {
-				var _contextData$data11;
-				var manifestKey = "settings" === item.type ? "site-settings" : item.type;
-				return !(contextData !== null && contextData !== void 0 && (_contextData$data11 = contextData.data) !== null && _contextData$data11 !== void 0 && (_contextData$data11 = _contextData$data11.uploadedData) !== null && _contextData$data11 !== void 0 && (_contextData$data11 = _contextData$data11.manifest) !== null && _contextData$data11 !== void 0 && _contextData$data11[manifestKey]);
-			}
+			if (isImport) return !getManifestItem(contextData, KIT_SECTIONS.SETTINGS === item.type ? "site-settings" : item.type);
 			return false;
 		};
-		var getDialogComponent = function getDialogComponent(item) {
-			var _window$elementorModu;
-			var _reg$get;
-			var reg = (_window$elementorModu = window.elementorModules) === null || _window$elementorModu === void 0 || (_window$elementorModu = _window$elementorModu.importExport) === null || _window$elementorModu === void 0 ? void 0 : _window$elementorModu.customizationDialogsRegistry;
-			var registered = reg === null || reg === void 0 || (_reg$get = reg.get) === null || _reg$get === void 0 ? void 0 : _reg$get.call(reg, item.type);
-			return (registered === null || registered === void 0 ? void 0 : registered.component) || item.dialog;
+		var getRegistryEntry = function getRegistryEntry(item) {
+			return getCustomizationDialog(item.type);
 		};
 		var renderFeatureDescription = function renderFeatureDescription(item, isLockedFeaturesNoPro) {
 			var _item$data$features2;
@@ -17236,31 +18176,7 @@ init_use_cloud_kits_eligibility();
 				placement: "top"
 			}, description) : description;
 		};
-		var renderCheckboxControl = function renderCheckboxControl(item, disabled) {
-			return /*#__PURE__*/ react.default.createElement(_elementor_ui.FormControlLabel, {
-				control: /*#__PURE__*/ react.default.createElement(_elementor_ui.Checkbox, {
-					color: "info",
-					checked: data.includes.includes(item.type),
-					onChange: function onChange() {
-						return onCheckboxChange(item.type);
-					},
-					disabled,
-					sx: {
-						p: 0,
-						mx: 1
-					},
-					"data-testid": "KitContentDataSelection-".concat(item.type),
-					"data-type": item.type
-				}),
-				label: /*#__PURE__*/ react.default.createElement(_elementor_ui.Typography, {
-					color: "text.primary",
-					variant: "body1",
-					sx: { fontWeight: 500 }
-				}, item.data.title),
-				sx: { "& .MuiFormControlLabel-label.Mui-disabled": { color: "text.primary" } }
-			});
-		};
-		var getSectionEditButton = function getSectionEditButton(item, isLockedFeaturesNoPro) {
+		var renderEditControl = function renderEditControl(item, isLockedFeaturesNoPro, onOpenDialog) {
 			if (isLockedFeaturesNoPro) return /*#__PURE__*/ react.default.createElement(_elementor_ui.Button, {
 				variant: "contained",
 				color: "promotion",
@@ -17275,18 +18191,14 @@ init_use_cloud_kits_eligibility();
 			}, (0, _wordpress_i18n.__)("Upgrade", "elementor"));
 			if (!isImport) return /*#__PURE__*/ react.default.createElement(_elementor_ui.Button, {
 				color: "secondary",
-				onClick: function onClick() {
-					return setActiveDialog(item.type);
-				},
+				onClick: onOpenDialog,
 				sx: { alignSelf: "center" },
 				"data-type": item.type,
 				disabled: isEditDisabled(item)
 			}, (0, _wordpress_i18n.__)("Edit", "elementor"));
 			return isExported(item) ? /*#__PURE__*/ react.default.createElement(_elementor_ui.Button, {
 				color: "secondary",
-				onClick: function onClick() {
-					return setActiveDialog(item.type);
-				},
+				onClick: onOpenDialog,
 				sx: { alignSelf: "center" },
 				"data-type": item.type,
 				disabled: isEditDisabled(item)
@@ -17296,57 +18208,41 @@ init_use_cloud_kits_eligibility();
 				sx: { alignSelf: "center" }
 			}, (0, _wordpress_i18n.__)("Not exported", "elementor"));
 		};
+		if (!isRegistryPrepared) return null;
 		return /*#__PURE__*/ react.default.createElement(_elementor_ui.Stack, {
 			spacing: 2,
 			"data-testid": testId
 		}, (contextData === null || contextData === void 0 ? void 0 : contextData.isOldExport) && /*#__PURE__*/ react.default.createElement(ReExportBanner, null), (contextData === null || contextData === void 0 ? void 0 : contextData.isOldElementorVersion) && /*#__PURE__*/ react.default.createElement(UpgradeVersionBanner, null), kitContentData.map(function(item) {
-			var _item$data$features5;
-			var isLockedFeaturesNoPro = ((_item$data$features5 = item.data.features) === null || _item$data$features5 === void 0 ? void 0 : _item$data$features5.locked) && !elementorAppConfig.hasPro;
+			var registryEntry = getRegistryEntry(item);
+			var isLockedFeaturesNoPro = hasLockedFeatures(item) && !elementorAppConfig.hasPro;
 			var disabled = isDisabled(item);
-			var DialogComponent = getDialogComponent(item);
-			return /*#__PURE__*/ react.default.createElement(react.Fragment, { key: item.type }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, {
-				"data-testid": "KitPartsSelectionRow-".concat(item.type),
-				key: item.type,
-				sx: {
-					mb: 3,
-					border: 1,
-					borderRadius: 1,
-					borderColor: "action.focus",
-					p: 2.5
-				}
-			}, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
-				display: "flex",
-				justifyContent: "space-between",
-				alignItems: "flex-start"
-			} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
-				flex: 1,
-				opacity: isLockedFeaturesNoPro ? .5 : 1
-			} }, /*#__PURE__*/ react.default.createElement(_elementor_ui.Box, { sx: {
-				display: "flex",
-				alignItems: "center"
-			} }, renderCheckboxControl(item, disabled), "settings" === item.type && hasSettingsLimitWarning && /*#__PURE__*/ react.default.createElement(_elementor_ui.Tooltip, {
-				title: (0, _wordpress_i18n.__)("Limit exceeded. Click 'Edit' to review conflicts or override existing items", "elementor"),
-				placement: "top",
-				arrow: true
-			}, /*#__PURE__*/ react.default.createElement(_elementor_icons.AlertTriangleFilledIcon, {
-				sx: {
-					fontSize: 20,
-					color: "warning.main",
-					ml: .5
+			var DialogComponent = (registryEntry === null || registryEntry === void 0 ? void 0 : registryEntry.component) || item.dialog;
+			var SectionComponent = (registryEntry === null || registryEntry === void 0 ? void 0 : registryEntry.section) || DefaultKitPartSelectionSection;
+			return /*#__PURE__*/ react.default.createElement(react.Fragment, { key: item.type }, /*#__PURE__*/ react.default.createElement(SectionComponent, {
+				data,
+				item: _objectSpread$20(_objectSpread$20({}, item), {}, { checked: data.includes.includes(item.type) }),
+				DialogComponent,
+				isActive: activeDialog === item.type,
+				disabled,
+				isLockedFeaturesNoPro,
+				hasSettingsLimitWarning,
+				onCheckboxChange: function onCheckboxChange() {
+					return _onCheckboxChange(item.type);
 				},
-				"aria-hidden": true
-			}))), renderFeatureDescription(item, isLockedFeaturesNoPro)), getSectionEditButton(item, isLockedFeaturesNoPro))), DialogComponent && /*#__PURE__*/ react.default.createElement(DialogComponent, {
-				open: activeDialog === item.type,
-				handleClose: function handleClose() {
+				onOpenDialog: function onOpenDialog() {
+					return setActiveDialog(item.type);
+				},
+				onCloseDialog: function onCloseDialog() {
 					return setActiveDialog(null);
 				},
-				data,
-				handleSaveChanges: handleSaveCustomization,
+				handleSaveCustomization,
 				isImport,
-				isOldExport: contextData.isOldExport,
-				isOldElementorVersion: contextData.isOldElementorVersion,
+				isOldExport,
+				isOldElementorVersion,
 				isCloudKitsEligible,
-				showMediaFormatValidation
+				showMediaFormatValidation,
+				renderFeatureDescription,
+				renderEditControl
 			}));
 		}));
 	}
@@ -18651,6 +19547,7 @@ init_use_cloud_kits_eligibility();
 		}).map(function(_ref3) {
 			return _slicedToArray(_ref3, 1)[0];
 		})).map(function(setting) {
+			if ("defaultStyles" === setting) return (0, _wordpress_i18n.__)("Default Styles", "elementor");
 			return formatToTitleCase(setting);
 		});
 		return formattedSettings.length > 0 ? formattedSettings.join(" | ") : "";
@@ -20436,6 +21333,7 @@ init_use_cloud_kits_eligibility();
 			path: "/import-customization/*",
 			component: Import
 		}]);
+		initializeCustomizationDialogsRegistration();
 		var _iterator = _createForOfIteratorHelper(this.routes);
 		var _step;
 		try {
@@ -31004,8 +31902,52 @@ searchFilter: function searchFilter(data, queryParams) {
 	}));
 
 //#endregion
+//#region app/modules/onboarding/assets/js/utils/account-screen-config.js
+	function getDefaultIllustrationUrl() {
+		return elementorCommon.config.urls.assets + "images/app/onboarding/Illustration_Account.svg";
+	}
+	function getLegacyAccountScreenConfig() {
+		var _elementorAppConfig$o;
+		var _elementorAppConfig$o2;
+		return (_elementorAppConfig$o = (_elementorAppConfig$o2 = elementorAppConfig.onboarding) === null || _elementorAppConfig$o2 === void 0 ? void 0 : _elementorAppConfig$o2.accountScreen) !== null && _elementorAppConfig$o !== void 0 ? _elementorAppConfig$o : null;
+	}
+	function resolveDisconnectedAccountHeadlines(accountScreen) {
+		if (accountScreen) return {
+			title: accountScreen.headlineLine1,
+			secondLineTitle: accountScreen.headlineLine2
+		};
+		if (elementorAppConfig.onboarding.experiment) return {
+			title: (0, _wordpress_i18n.__)("You're here!", "elementor"),
+			secondLineTitle: (0, _wordpress_i18n.__)("Let's get connected.", "elementor")
+		};
+		return {
+			title: (0, _wordpress_i18n.__)("You're here! Let's set things up.", "elementor"),
+			secondLineTitle: ""
+		};
+	}
+	function resolveAccountScreenImage(accountScreen) {
+		if (!accountScreen) return getDefaultIllustrationUrl();
+		return getAccountScreenIllustrationUrl(accountScreen);
+	}
+	function getAccountScreenIllustrationUrl(config) {
+		if (!(config !== null && config !== void 0 && config.showIllustration)) return null;
+		if (config.illustrationUrl) return config.illustrationUrl;
+		return getDefaultIllustrationUrl();
+	}
+	function buildDisconnectedPageTexts(config) {
+		if (!config) return null;
+		var pageTexts = { listItems: config.benefits.map(function(text, index) {
+			return config.showBenefits[index] ? text : null;
+		}).filter(Boolean) };
+		if (config.showDescription && config.description) pageTexts.firstLine = config.description;
+		return pageTexts;
+	}
+	var init_account_screen_config = __esmMin((() => {}));
+
+//#endregion
 //#region app/modules/onboarding/assets/js/components/account-content-a.js
 	function AccountContentA(_ref) {
+		var _pageTexts$listItems;
 		var actionButton = _ref.actionButton;
 		var skipButton = _ref.skipButton;
 		var noticeState = _ref.noticeState;
@@ -31013,10 +31955,15 @@ searchFilter: function searchFilter(data, queryParams) {
 		var state = _ref.state;
 		var connectSuccessCallback = _ref.connectSuccessCallback;
 		var connectFailureCallback = _ref.connectFailureCallback;
+		var accountScreen = !state.isLibraryConnected ? getLegacyAccountScreenConfig() : null;
+		var _resolveDisconnectedA = resolveDisconnectedAccountHeadlines(accountScreen);
+		var title = _resolveDisconnectedA.title;
+		var secondLineTitle = _resolveDisconnectedA.secondLineTitle;
+		var image = resolveAccountScreenImage(accountScreen);
 		return /*#__PURE__*/ react.default.createElement(PageContentLayout, {
-			image: elementorCommon.config.urls.assets + "images/app/onboarding/Illustration_Account.svg",
-			title: elementorAppConfig.onboarding.experiment ? (0, _wordpress_i18n.__)("You're here!", "elementor") : (0, _wordpress_i18n.__)("You're here! Let's set things up.", "elementor"),
-			secondLineTitle: elementorAppConfig.onboarding.experiment ? (0, _wordpress_i18n.__)("Let's get connected.", "elementor") : "",
+			image,
+			title,
+			secondLineTitle,
 			actionButton,
 			skipButton,
 			noticeState
@@ -31026,7 +31973,7 @@ searchFilter: function searchFilter(data, queryParams) {
 				return connectSuccessCallback(event, data);
 			},
 			errorCallback: connectFailureCallback
-		}), /*#__PURE__*/ react.default.createElement("span", null, pageTexts.firstLine), /*#__PURE__*/ react.default.createElement("ul", null, pageTexts.listItems.map(function(listItem, index) {
+		}), pageTexts.firstLine && /*#__PURE__*/ react.default.createElement("span", null, pageTexts.firstLine), ((_pageTexts$listItems = pageTexts.listItems) === null || _pageTexts$listItems === void 0 ? void 0 : _pageTexts$listItems.length) > 0 && /*#__PURE__*/ react.default.createElement("ul", null, pageTexts.listItems.map(function(listItem, index) {
 			return /*#__PURE__*/ react.default.createElement("li", { key: "listItem" + index }, listItem);
 		})));
 	}
@@ -31035,6 +31982,7 @@ searchFilter: function searchFilter(data, queryParams) {
 		import_prop_types$5 = /* @__PURE__ */ __toESM(require_prop_types());
 		init_connect();
 		init_page_content_layout();
+		init_account_screen_config();
 		AccountContentA.propTypes = {
 			actionButton: import_prop_types$5.default.shape({ ref: import_prop_types$5.default.object }).isRequired,
 			skipButton: import_prop_types$5.default.object,
@@ -31129,6 +32077,8 @@ searchFilter: function searchFilter(data, queryParams) {
 //#endregion
 //#region app/modules/onboarding/assets/js/pages/account.js
 	function Account() {
+		var _accountScreen$existi;
+		var _accountScreen$existi2;
 		var _useContext = (0, react.useContext)(OnboardingContext);
 		var state = _useContext.state;
 		var updateState = _useContext.updateState;
@@ -31155,24 +32105,29 @@ searchFilter: function searchFilter(data, queryParams) {
 			OnboardingEventTracking.setupAllUpgradeButtons(state.currentStep);
 			OnboardingEventTracking.onStepLoad(1);
 		}, []);
+		var experiment101Variant = localStorage.getItem(ONBOARDING_STORAGE_KEYS.EXPERIMENT101_VARIANT);
+		var accountScreen = !state.isLibraryConnected && "B" !== experiment101Variant ? getLegacyAccountScreenConfig() : null;
 		var skipButton;
-		if ("completed" !== state.steps[pageId]) skipButton = {
-			text: (0, _wordpress_i18n.__)("Skip setup", "elementor"),
-			action: function action() {
-				var _elementorCommon$even2;
-				OnboardingEventTracking.trackStepAction(1, "skip");
-				OnboardingEventTracking.sendEventOrStore("SKIP", { currentStep: 1 });
-				OnboardingEventTracking.sendStepEndState(1);
-				safeDispatchEvent("skip_setup", {
-					location: "plugin_onboarding",
-					trigger: ((_elementorCommon$even2 = elementorCommon.eventsManager) === null || _elementorCommon$even2 === void 0 || (_elementorCommon$even2 = _elementorCommon$even2.config) === null || _elementorCommon$even2 === void 0 || (_elementorCommon$even2 = _elementorCommon$even2.triggers) === null || _elementorCommon$even2 === void 0 ? void 0 : _elementorCommon$even2.click) || "click",
-					step_number: 1,
-					step_name: "account_setup"
-				});
-				updateState(getStateObjectToUpdate(state, "steps", pageId, "skipped"));
-				navigate("onboarding/" + nextStep);
-			}
-		};
+		if ("completed" !== state.steps[pageId]) {
+			var _accountScreen$skipCt;
+			skipButton = {
+				text: (_accountScreen$skipCt = accountScreen === null || accountScreen === void 0 ? void 0 : accountScreen.skipCtaLabel) !== null && _accountScreen$skipCt !== void 0 ? _accountScreen$skipCt : (0, _wordpress_i18n.__)("Skip setup", "elementor"),
+				action: function action() {
+					var _elementorCommon$even2;
+					OnboardingEventTracking.trackStepAction(1, "skip");
+					OnboardingEventTracking.sendEventOrStore("SKIP", { currentStep: 1 });
+					OnboardingEventTracking.sendStepEndState(1);
+					safeDispatchEvent("skip_setup", {
+						location: "plugin_onboarding",
+						trigger: ((_elementorCommon$even2 = elementorCommon.eventsManager) === null || _elementorCommon$even2 === void 0 || (_elementorCommon$even2 = _elementorCommon$even2.config) === null || _elementorCommon$even2 === void 0 || (_elementorCommon$even2 = _elementorCommon$even2.triggers) === null || _elementorCommon$even2 === void 0 ? void 0 : _elementorCommon$even2.click) || "click",
+						step_number: 1,
+						step_name: "account_setup"
+					});
+					updateState(getStateObjectToUpdate(state, "steps", pageId, "skipped"));
+					navigate("onboarding/" + nextStep);
+				}
+			};
+		}
 		var pageTexts = {};
 		if (state.isLibraryConnected) pageTexts = {
 			firstLine: /*#__PURE__*/ react.default.createElement(react.default.Fragment, null, (0, _wordpress_i18n.__)("To get the most out of Elementor, we'll help you take your", "elementor"), " ", /*#__PURE__*/ react.default.createElement("br", null), " ", (0, _wordpress_i18n.__)("first steps:", "elementor")),
@@ -31186,21 +32141,26 @@ searchFilter: function searchFilter(data, queryParams) {
 				(0, _wordpress_i18n.__)("Choose how to start creating", "elementor")
 			]
 		};
-		else pageTexts = elementorAppConfig.onboarding.experiment ? {
-			firstLine: /*#__PURE__*/ react.default.createElement(react.default.Fragment, null, (0, _wordpress_i18n.__)("To get the most of Elementor, we'll connect your account.", "elementor"), "  ", /*#__PURE__*/ react.default.createElement("br", null), " ", (0, _wordpress_i18n.__)("Then you can:", "elementor")),
-			listItems: [
-				(0, _wordpress_i18n.__)("Access dozens of professionally designed templates", "elementor"),
-				(0, _wordpress_i18n.__)("Manage all your sites from the My Elementor dashboard", "elementor"),
-				(0, _wordpress_i18n.__)("Unlock tools that streamline your workflow and site setup", "elementor")
-			]
-		} : {
-			firstLine: (0, _wordpress_i18n.__)("To get the most out of Elementor, we'll connect your account.", "elementor") + " " + (0, _wordpress_i18n.__)("Then you can:", "elementor"),
-			listItems: [
-				(0, _wordpress_i18n.__)("Choose from countless professional templates", "elementor"),
-				(0, _wordpress_i18n.__)("Manage your site with our handy dashboard", "elementor"),
-				(0, _wordpress_i18n.__)("Take part in the community forum, share & grow together", "elementor")
-			]
-		};
+		else {
+			var cdnPageTexts = buildDisconnectedPageTexts(accountScreen);
+			if (cdnPageTexts) pageTexts = cdnPageTexts;
+			else if (elementorAppConfig.onboarding.experiment) pageTexts = {
+				firstLine: /*#__PURE__*/ react.default.createElement(react.default.Fragment, null, (0, _wordpress_i18n.__)("To get the most of Elementor, we'll connect your account.", "elementor"), "  ", /*#__PURE__*/ react.default.createElement("br", null), " ", (0, _wordpress_i18n.__)("Then you can:", "elementor")),
+				listItems: [
+					(0, _wordpress_i18n.__)("Access dozens of professionally designed templates", "elementor"),
+					(0, _wordpress_i18n.__)("Manage all your sites from the My Elementor dashboard", "elementor"),
+					(0, _wordpress_i18n.__)("Unlock tools that streamline your workflow and site setup", "elementor")
+				]
+			};
+			else pageTexts = {
+				firstLine: (0, _wordpress_i18n.__)("To get the most out of Elementor, we'll connect your account.", "elementor") + " " + (0, _wordpress_i18n.__)("Then you can:", "elementor"),
+				listItems: [
+					(0, _wordpress_i18n.__)("Choose from countless professional templates", "elementor"),
+					(0, _wordpress_i18n.__)("Manage your site with our handy dashboard", "elementor"),
+					(0, _wordpress_i18n.__)("Take part in the community forum, share & grow together", "elementor")
+				]
+			};
+		}
 		var actionButton = { role: "button" };
 		if (state.isLibraryConnected) {
 			actionButton.text = (0, _wordpress_i18n.__)("Let's do it", "elementor");
@@ -31217,7 +32177,8 @@ searchFilter: function searchFilter(data, queryParams) {
 				navigate("onboarding/" + nextStep);
 			};
 		} else {
-			actionButton.text = (0, _wordpress_i18n.__)("Start setup", "elementor");
+			var _accountScreen$primar;
+			actionButton.text = (_accountScreen$primar = accountScreen === null || accountScreen === void 0 ? void 0 : accountScreen.primaryCtaLabel) !== null && _accountScreen$primar !== void 0 ? _accountScreen$primar : (0, _wordpress_i18n.__)("Start setup", "elementor");
 			actionButton.href = elementorAppConfig.onboarding.urls.signUp + elementorAppConfig.onboarding.utms.connectCta;
 			actionButton.ref = actionButtonRef;
 			actionButton.onClick = function() {
@@ -31281,7 +32242,6 @@ searchFilter: function searchFilter(data, queryParams) {
 			});
 			navigate("onboarding/" + nextStep);
 		};
-		var experiment101Variant = localStorage.getItem(ONBOARDING_STORAGE_KEYS.EXPERIMENT101_VARIANT);
 		var ContentComponent = "B" === experiment101Variant ? AccountContentB : AccountContentA;
 		return /*#__PURE__*/ react.default.createElement(Layout, {
 			pageId,
@@ -31300,7 +32260,7 @@ searchFilter: function searchFilter(data, queryParams) {
 			navigate,
 			nextStep,
 			pageId
-		}), !state.isLibraryConnected && "B" !== experiment101Variant && /*#__PURE__*/ react.default.createElement("div", { className: "e-onboarding__footnote" }, /*#__PURE__*/ react.default.createElement("p", null, (0, _wordpress_i18n.__)("Already have an account?", "elementor") + " ", /*#__PURE__*/ react.default.createElement("a", {
+		}), !state.isLibraryConnected && "B" !== experiment101Variant && (!accountScreen || accountScreen.showExistingAccount) && /*#__PURE__*/ react.default.createElement("div", { className: "e-onboarding__footnote" }, /*#__PURE__*/ react.default.createElement("p", null, ((_accountScreen$existi = accountScreen === null || accountScreen === void 0 ? void 0 : accountScreen.existingAccountPrefix) !== null && _accountScreen$existi !== void 0 ? _accountScreen$existi : (0, _wordpress_i18n.__)("Already have an account?", "elementor")) + " ", /*#__PURE__*/ react.default.createElement("a", {
 			ref: alreadyHaveAccountLinkRef,
 			href: elementorAppConfig.onboarding.urls.connect + elementorAppConfig.onboarding.utms.connectCtaLink,
 			onClick: function onClick() {
@@ -31315,7 +32275,7 @@ searchFilter: function searchFilter(data, queryParams) {
 					button_text: "Click here to connect"
 				});
 			}
-		}, (0, _wordpress_i18n.__)("Click here to connect", "elementor"))), /*#__PURE__*/ react.default.createElement(Connect, {
+		}, (_accountScreen$existi2 = accountScreen === null || accountScreen === void 0 ? void 0 : accountScreen.existingAccountLinkText) !== null && _accountScreen$existi2 !== void 0 ? _accountScreen$existi2 : (0, _wordpress_i18n.__)("Click here to connect", "elementor"))), /*#__PURE__*/ react.default.createElement(Connect, {
 			buttonRef: alreadyHaveAccountLinkRef,
 			successCallback: connectSuccessCallback,
 			errorCallback: connectFailureCallback
@@ -31331,6 +32291,7 @@ searchFilter: function searchFilter(data, queryParams) {
 		init_account_content_b();
 		init_utils();
 		init_onboarding_event_tracking();
+		init_account_screen_config();
 	}));
 
 //#endregion

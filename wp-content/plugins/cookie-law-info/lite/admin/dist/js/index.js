@@ -19148,6 +19148,1978 @@ var __async = (__this, __arguments, generator) => {
     return resolver;
   }
   __name(useBlocker, "useBlocker");
+  const scriptRel = "modulepreload";
+  const assetsURL = /* @__PURE__ */ __name(function(dep, importerUrl) {
+    return new URL(dep, importerUrl).href;
+  }, "assetsURL");
+  const seen = {};
+  const __vitePreload = /* @__PURE__ */ __name(function preload(baseModule, deps, importerUrl) {
+    let promise = Promise.resolve();
+    if (false) {
+      let allSettled = function(promises$2) {
+        return Promise.all(promises$2.map((p2) => Promise.resolve(p2).then((value$1) => ({
+          status: "fulfilled",
+          value: value$1
+        }), (reason) => ({
+          status: "rejected",
+          reason
+        }))));
+      };
+      __name(allSettled, "allSettled");
+      const links = document.getElementsByTagName("link");
+      const cspNonceMeta = document.querySelector("meta[property=csp-nonce]");
+      const cspNonce = (cspNonceMeta == null ? void 0 : cspNonceMeta.nonce) || (cspNonceMeta == null ? void 0 : cspNonceMeta.getAttribute("nonce"));
+      promise = allSettled(deps.map((dep) => {
+        dep = assetsURL(dep, importerUrl);
+        if (dep in seen) return;
+        seen[dep] = true;
+        const isCss = dep.endsWith(".css");
+        const cssSelector = isCss ? '[rel="stylesheet"]' : "";
+        if (!!importerUrl) for (let i$1 = links.length - 1; i$1 >= 0; i$1--) {
+          const link$1 = links[i$1];
+          if (link$1.href === dep && (!isCss || link$1.rel === "stylesheet")) return;
+        }
+        else if (document.querySelector(`link[href="${dep}"]${cssSelector}`)) return;
+        const link = document.createElement("link");
+        link.rel = isCss ? "stylesheet" : scriptRel;
+        if (!isCss) link.as = "script";
+        link.crossOrigin = "";
+        link.href = dep;
+        if (cspNonce) link.setAttribute("nonce", cspNonce);
+        document.head.appendChild(link);
+        if (isCss) return new Promise((res, rej) => {
+          link.addEventListener("load", res);
+          link.addEventListener("error", () => rej(/* @__PURE__ */ new Error(`Unable to preload CSS for ${dep}`)));
+        });
+      }));
+    }
+    function handlePreloadError(err$2) {
+      const e$1 = new Event("vite:preloadError", { cancelable: true });
+      e$1.payload = err$2;
+      window.dispatchEvent(e$1);
+      if (!e$1.defaultPrevented) throw err$2;
+    }
+    __name(handlePreloadError, "handlePreloadError");
+    return promise.then((res) => {
+      for (const item of res || []) {
+        if (item.status !== "rejected") continue;
+        handlePreloadError(item.reason);
+      }
+      return baseModule().catch(handlePreloadError);
+    });
+  }, "preload");
+  const createStoreImpl = /* @__PURE__ */ __name((createState) => {
+    let state;
+    const listeners = /* @__PURE__ */ new Set();
+    const setState = /* @__PURE__ */ __name((partial, replace) => {
+      const nextState = typeof partial === "function" ? partial(state) : partial;
+      if (!Object.is(nextState, state)) {
+        const previousState = state;
+        state = (replace != null ? replace : typeof nextState !== "object" || nextState === null) ? nextState : Object.assign({}, state, nextState);
+        listeners.forEach((listener) => listener(state, previousState));
+      }
+    }, "setState");
+    const getState2 = /* @__PURE__ */ __name(() => state, "getState");
+    const getInitialState = /* @__PURE__ */ __name(() => initialState, "getInitialState");
+    const subscribe2 = /* @__PURE__ */ __name((listener) => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    }, "subscribe");
+    const api = { setState, getState: getState2, getInitialState, subscribe: subscribe2 };
+    const initialState = state = createState(setState, getState2, api);
+    return api;
+  }, "createStoreImpl");
+  const createStore = /* @__PURE__ */ __name(((createState) => createState ? createStoreImpl(createState) : createStoreImpl), "createStore");
+  const identity$5 = /* @__PURE__ */ __name((arg) => arg, "identity$5");
+  function useStore(api, selector = identity$5) {
+    const slice = React.useSyncExternalStore(
+      api.subscribe,
+      React.useCallback(() => selector(api.getState()), [api, selector]),
+      React.useCallback(() => selector(api.getInitialState()), [api, selector])
+    );
+    React.useDebugValue(slice);
+    return slice;
+  }
+  __name(useStore, "useStore");
+  const createImpl = /* @__PURE__ */ __name((createState) => {
+    const api = createStore(createState);
+    const useBoundStore = /* @__PURE__ */ __name((selector) => useStore(api, selector), "useBoundStore");
+    Object.assign(useBoundStore, api);
+    return useBoundStore;
+  }, "createImpl");
+  const create = /* @__PURE__ */ __name(((createState) => createImpl), "create");
+  const __vite_import_meta_env__ = { "BASE_URL": "./", "DEV": false, "MODE": "production", "PROD": true, "SSR": false };
+  const trackedConnections = /* @__PURE__ */ new Map();
+  const getTrackedConnectionState = /* @__PURE__ */ __name((name) => {
+    const api = trackedConnections.get(name);
+    if (!api) return {};
+    return Object.fromEntries(
+      Object.entries(api.stores).map(([key, api2]) => [key, api2.getState()])
+    );
+  }, "getTrackedConnectionState");
+  const extractConnectionInformation = /* @__PURE__ */ __name((store2, extensionConnector, options2) => {
+    if (store2 === void 0) {
+      return {
+        type: "untracked",
+        connection: extensionConnector.connect(options2)
+      };
+    }
+    const existingConnection = trackedConnections.get(options2.name);
+    if (existingConnection) {
+      return __spreadValues({ type: "tracked", store: store2 }, existingConnection);
+    }
+    const newConnection = {
+      connection: extensionConnector.connect(options2),
+      stores: {}
+    };
+    trackedConnections.set(options2.name, newConnection);
+    return __spreadValues({ type: "tracked", store: store2 }, newConnection);
+  }, "extractConnectionInformation");
+  const removeStoreFromTrackedConnections = /* @__PURE__ */ __name((name, store2) => {
+    if (store2 === void 0) return;
+    const connectionInfo = trackedConnections.get(name);
+    if (!connectionInfo) return;
+    delete connectionInfo.stores[store2];
+    if (Object.keys(connectionInfo.stores).length === 0) {
+      trackedConnections.delete(name);
+    }
+  }, "removeStoreFromTrackedConnections");
+  const findCallerName = /* @__PURE__ */ __name((stack) => {
+    var _a2, _b2;
+    if (!stack) return void 0;
+    const traceLines = stack.split("\n");
+    const apiSetStateLineIndex = traceLines.findIndex(
+      (traceLine) => traceLine.includes("api.setState")
+    );
+    if (apiSetStateLineIndex < 0) return void 0;
+    const callerLine = ((_a2 = traceLines[apiSetStateLineIndex + 1]) == null ? void 0 : _a2.trim()) || "";
+    return (_b2 = /.+ (.+) .+/.exec(callerLine)) == null ? void 0 : _b2[1];
+  }, "findCallerName");
+  const devtoolsImpl = /* @__PURE__ */ __name((fn, devtoolsOptions = {}) => (set2, get2, api) => {
+    const _a2 = devtoolsOptions, { enabled, anonymousActionType, store: store2 } = _a2, options2 = __objRest(_a2, ["enabled", "anonymousActionType", "store"]);
+    let extensionConnector;
+    try {
+      extensionConnector = (enabled != null ? enabled : (__vite_import_meta_env__ ? "production" : void 0) !== "production") && window.__REDUX_DEVTOOLS_EXTENSION__;
+    } catch (e) {
+    }
+    if (!extensionConnector) {
+      return fn(set2, get2, api);
+    }
+    const _b2 = extractConnectionInformation(store2, extensionConnector, options2), { connection } = _b2, connectionInformation = __objRest(_b2, ["connection"]);
+    let isRecording = true;
+    api.setState = ((state, replace, nameOrAction) => {
+      const r2 = set2(state, replace);
+      if (!isRecording) return r2;
+      const action = nameOrAction === void 0 ? {
+        type: anonymousActionType || findCallerName(new Error().stack) || "anonymous"
+      } : typeof nameOrAction === "string" ? { type: nameOrAction } : nameOrAction;
+      if (store2 === void 0) {
+        connection == null ? void 0 : connection.send(action, get2());
+        return r2;
+      }
+      connection == null ? void 0 : connection.send(
+        __spreadProps(__spreadValues({}, action), {
+          type: `${store2}/${action.type}`
+        }),
+        __spreadProps(__spreadValues({}, getTrackedConnectionState(options2.name)), {
+          [store2]: api.getState()
+        })
+      );
+      return r2;
+    });
+    api.devtools = {
+      cleanup: /* @__PURE__ */ __name(() => {
+        if (connection && typeof connection.unsubscribe === "function") {
+          connection.unsubscribe();
+        }
+        removeStoreFromTrackedConnections(options2.name, store2);
+      }, "cleanup")
+    };
+    const setStateFromDevtools = /* @__PURE__ */ __name((...a2) => {
+      const originalIsRecording = isRecording;
+      isRecording = false;
+      set2(...a2);
+      isRecording = originalIsRecording;
+    }, "setStateFromDevtools");
+    const initialState = fn(api.setState, get2, api);
+    if (connectionInformation.type === "untracked") {
+      connection == null ? void 0 : connection.init(initialState);
+    } else {
+      connectionInformation.stores[connectionInformation.store] = api;
+      connection == null ? void 0 : connection.init(
+        Object.fromEntries(
+          Object.entries(connectionInformation.stores).map(([key, store22]) => [
+            key,
+            key === connectionInformation.store ? initialState : store22.getState()
+          ])
+        )
+      );
+    }
+    if (api.dispatchFromDevtools && typeof api.dispatch === "function") {
+      let didWarnAboutReservedActionType = false;
+      const originalDispatch = api.dispatch;
+      api.dispatch = (...args) => {
+        if ((__vite_import_meta_env__ ? "production" : void 0) !== "production" && args[0].type === "__setState" && !didWarnAboutReservedActionType) {
+          console.warn(
+            '[zustand devtools middleware] "__setState" action type is reserved to set state from the devtools. Avoid using it.'
+          );
+          didWarnAboutReservedActionType = true;
+        }
+        originalDispatch(...args);
+      };
+    }
+    connection.subscribe((message) => {
+      var _a3;
+      switch (message.type) {
+        case "ACTION":
+          if (typeof message.payload !== "string") {
+            console.error(
+              "[zustand devtools middleware] Unsupported action format"
+            );
+            return;
+          }
+          return parseJsonThen(
+            message.payload,
+            (action) => {
+              if (action.type === "__setState") {
+                if (store2 === void 0) {
+                  setStateFromDevtools(action.state);
+                  return;
+                }
+                if (Object.keys(action.state).length !== 1) {
+                  console.error(
+                    `
+                    [zustand devtools middleware] Unsupported __setState action format.
+                    When using 'store' option in devtools(), the 'state' should have only one key, which is a value of 'store' that was passed in devtools(),
+                    and value of this only key should be a state object. Example: { "type": "__setState", "state": { "abc123Store": { "foo": "bar" } } }
+                    `
+                  );
+                }
+                const stateFromDevtools = action.state[store2];
+                if (stateFromDevtools === void 0 || stateFromDevtools === null) {
+                  return;
+                }
+                if (JSON.stringify(api.getState()) !== JSON.stringify(stateFromDevtools)) {
+                  setStateFromDevtools(stateFromDevtools);
+                }
+                return;
+              }
+              if (!api.dispatchFromDevtools) return;
+              if (typeof api.dispatch !== "function") return;
+              api.dispatch(action);
+            }
+          );
+        case "DISPATCH":
+          switch (message.payload.type) {
+            case "RESET":
+              setStateFromDevtools(initialState);
+              if (store2 === void 0) {
+                return connection == null ? void 0 : connection.init(api.getState());
+              }
+              return connection == null ? void 0 : connection.init(getTrackedConnectionState(options2.name));
+            case "COMMIT":
+              if (store2 === void 0) {
+                connection == null ? void 0 : connection.init(api.getState());
+                return;
+              }
+              return connection == null ? void 0 : connection.init(getTrackedConnectionState(options2.name));
+            case "ROLLBACK":
+              return parseJsonThen(message.state, (state) => {
+                if (store2 === void 0) {
+                  setStateFromDevtools(state);
+                  connection == null ? void 0 : connection.init(api.getState());
+                  return;
+                }
+                setStateFromDevtools(state[store2]);
+                connection == null ? void 0 : connection.init(getTrackedConnectionState(options2.name));
+              });
+            case "JUMP_TO_STATE":
+            case "JUMP_TO_ACTION":
+              return parseJsonThen(message.state, (state) => {
+                if (store2 === void 0) {
+                  setStateFromDevtools(state);
+                  return;
+                }
+                if (JSON.stringify(api.getState()) !== JSON.stringify(state[store2])) {
+                  setStateFromDevtools(state[store2]);
+                }
+              });
+            case "IMPORT_STATE": {
+              const { nextLiftedState } = message.payload;
+              const lastComputedState = (_a3 = nextLiftedState.computedStates.slice(-1)[0]) == null ? void 0 : _a3.state;
+              if (!lastComputedState) return;
+              if (store2 === void 0) {
+                setStateFromDevtools(lastComputedState);
+              } else {
+                setStateFromDevtools(lastComputedState[store2]);
+              }
+              connection == null ? void 0 : connection.send(
+                null,
+                // FIXME no-any
+                nextLiftedState
+              );
+              return;
+            }
+            case "PAUSE_RECORDING":
+              return isRecording = !isRecording;
+          }
+          return;
+      }
+    });
+    return initialState;
+  }, "devtoolsImpl");
+  const devtools = devtoolsImpl;
+  const parseJsonThen = /* @__PURE__ */ __name((stringified, fn) => {
+    let parsed;
+    try {
+      parsed = JSON.parse(stringified);
+    } catch (e) {
+      console.error(
+        "[zustand devtools middleware] Could not parse the received json",
+        e
+      );
+    }
+    if (parsed !== void 0) fn(parsed);
+  }, "parseJsonThen");
+  const isIterable = /* @__PURE__ */ __name((obj) => Symbol.iterator in obj, "isIterable");
+  const hasIterableEntries = /* @__PURE__ */ __name((value) => (
+    // HACK: avoid checking entries type
+    "entries" in value
+  ), "hasIterableEntries");
+  const compareEntries = /* @__PURE__ */ __name((valueA, valueB) => {
+    const mapA = valueA instanceof Map ? valueA : new Map(valueA.entries());
+    const mapB = valueB instanceof Map ? valueB : new Map(valueB.entries());
+    if (mapA.size !== mapB.size) {
+      return false;
+    }
+    for (const [key, value] of mapA) {
+      if (!mapB.has(key) || !Object.is(value, mapB.get(key))) {
+        return false;
+      }
+    }
+    return true;
+  }, "compareEntries");
+  const compareIterables = /* @__PURE__ */ __name((valueA, valueB) => {
+    const iteratorA = valueA[Symbol.iterator]();
+    const iteratorB = valueB[Symbol.iterator]();
+    let nextA = iteratorA.next();
+    let nextB = iteratorB.next();
+    while (!nextA.done && !nextB.done) {
+      if (!Object.is(nextA.value, nextB.value)) {
+        return false;
+      }
+      nextA = iteratorA.next();
+      nextB = iteratorB.next();
+    }
+    return !!nextA.done && !!nextB.done;
+  }, "compareIterables");
+  function shallow(valueA, valueB) {
+    if (Object.is(valueA, valueB)) {
+      return true;
+    }
+    if (typeof valueA !== "object" || valueA === null || typeof valueB !== "object" || valueB === null) {
+      return false;
+    }
+    if (Object.getPrototypeOf(valueA) !== Object.getPrototypeOf(valueB)) {
+      return false;
+    }
+    if (isIterable(valueA) && isIterable(valueB)) {
+      if (hasIterableEntries(valueA) && hasIterableEntries(valueB)) {
+        return compareEntries(valueA, valueB);
+      }
+      return compareIterables(valueA, valueB);
+    }
+    return compareEntries(
+      { entries: /* @__PURE__ */ __name(() => Object.entries(valueA), "entries") },
+      { entries: /* @__PURE__ */ __name(() => Object.entries(valueB), "entries") }
+    );
+  }
+  __name(shallow, "shallow");
+  function useShallow(selector) {
+    const prev = React.useRef(void 0);
+    return (state) => {
+      const next = selector(state);
+      return shallow(prev.current, next) ? prev.current : prev.current = next;
+    };
+  }
+  __name(useShallow, "useShallow");
+  function createNonceMiddleware(nonce) {
+    const middleware = /* @__PURE__ */ __name((options2, next) => {
+      const { headers = {} } = options2;
+      for (const headerName in headers) {
+        if (headerName.toLowerCase() === "x-wp-nonce" && headers[headerName] === middleware.nonce) {
+          return next(options2);
+        }
+      }
+      return next(__spreadProps(__spreadValues({}, options2), {
+        headers: __spreadProps(__spreadValues({}, headers), {
+          "X-WP-Nonce": middleware.nonce
+        })
+      }));
+    }, "middleware");
+    middleware.nonce = nonce;
+    return middleware;
+  }
+  __name(createNonceMiddleware, "createNonceMiddleware");
+  var nonce_default = createNonceMiddleware;
+  var namespaceAndEndpointMiddleware = /* @__PURE__ */ __name((options2, next) => {
+    let path = options2.path;
+    let namespaceTrimmed, endpointTrimmed;
+    if (typeof options2.namespace === "string" && typeof options2.endpoint === "string") {
+      namespaceTrimmed = options2.namespace.replace(/^\/|\/$/g, "");
+      endpointTrimmed = options2.endpoint.replace(/^\//, "");
+      if (endpointTrimmed) {
+        path = namespaceTrimmed + "/" + endpointTrimmed;
+      } else {
+        path = namespaceTrimmed;
+      }
+    }
+    delete options2.namespace;
+    delete options2.endpoint;
+    return next(__spreadProps(__spreadValues({}, options2), {
+      path
+    }));
+  }, "namespaceAndEndpointMiddleware");
+  var namespace_endpoint_default = namespaceAndEndpointMiddleware;
+  var createRootURLMiddleware = /* @__PURE__ */ __name((rootURL) => (options2, next) => {
+    return namespace_endpoint_default(options2, (optionsWithPath) => {
+      let url = optionsWithPath.url;
+      let path = optionsWithPath.path;
+      let apiRoot;
+      if (typeof path === "string") {
+        apiRoot = rootURL;
+        if (-1 !== rootURL.indexOf("?")) {
+          path = path.replace("?", "&");
+        }
+        path = path.replace(/^\//, "");
+        if ("string" === typeof apiRoot && -1 !== apiRoot.indexOf("?")) {
+          path = path.replace("?", "&");
+        }
+        url = apiRoot + path;
+      }
+      return next(__spreadProps(__spreadValues({}, optionsWithPath), {
+        url
+      }));
+    });
+  }, "createRootURLMiddleware");
+  var root_url_default = createRootURLMiddleware;
+  function getQueryString(url) {
+    let query;
+    try {
+      query = new URL(url, "http://example.com").search.substring(1);
+    } catch (e) {
+    }
+    if (query) {
+      return query;
+    }
+  }
+  __name(getQueryString, "getQueryString");
+  function buildQueryString(data) {
+    let string2 = "";
+    const stack = Object.entries(data);
+    let pair;
+    while (pair = stack.shift()) {
+      let [key, value] = pair;
+      const hasNestedData = Array.isArray(value) || value && value.constructor === Object;
+      if (hasNestedData) {
+        const valuePairs = Object.entries(value).reverse();
+        for (const [member, memberValue] of valuePairs) {
+          stack.unshift([`${key}[${member}]`, memberValue]);
+        }
+      } else if (value !== void 0) {
+        if (value === null) {
+          value = "";
+        }
+        string2 += "&" + [key, String(value)].map(encodeURIComponent).join("=");
+      }
+    }
+    return string2.substr(1);
+  }
+  __name(buildQueryString, "buildQueryString");
+  function getFragment(url) {
+    const matches = /^\S+?(#[^\s\?]*)/.exec(url);
+    if (matches) {
+      return matches[1];
+    }
+  }
+  __name(getFragment, "getFragment");
+  function safeDecodeURIComponent(uriComponent) {
+    try {
+      return decodeURIComponent(uriComponent);
+    } catch (e) {
+      return uriComponent;
+    }
+  }
+  __name(safeDecodeURIComponent, "safeDecodeURIComponent");
+  function setPath(object2, path, value) {
+    const length = path.length;
+    const lastIndex = length - 1;
+    for (let i2 = 0; i2 < length; i2++) {
+      let key = path[i2];
+      if (!key && Array.isArray(object2)) {
+        key = object2.length.toString();
+      }
+      key = ["__proto__", "constructor", "prototype"].includes(key) ? key.toUpperCase() : key;
+      const isNextKeyArrayIndex = !isNaN(Number(path[i2 + 1]));
+      object2[key] = i2 === lastIndex ? (
+        // If at end of path, assign the intended value.
+        value
+      ) : (
+        // Otherwise, advance to the next object in the path, creating
+        // it if it does not yet exist.
+        object2[key] || (isNextKeyArrayIndex ? [] : {})
+      );
+      if (Array.isArray(object2[key]) && !isNextKeyArrayIndex) {
+        object2[key] = __spreadValues({}, object2[key]);
+      }
+      object2 = object2[key];
+    }
+  }
+  __name(setPath, "setPath");
+  function getQueryArgs(url) {
+    return (getQueryString(url) || "").replace(/\+/g, "%20").split("&").reduce((accumulator, keyValue) => {
+      const [key, value = ""] = keyValue.split("=").filter(Boolean).map(safeDecodeURIComponent);
+      if (key) {
+        const segments = key.replace(/\]/g, "").split("[");
+        setPath(accumulator, segments, value);
+      }
+      return accumulator;
+    }, /* @__PURE__ */ Object.create(null));
+  }
+  __name(getQueryArgs, "getQueryArgs");
+  function addQueryArgs(url = "", args) {
+    if (!args || !Object.keys(args).length) {
+      return url;
+    }
+    const fragment = getFragment(url) || "";
+    let baseUrl = url.replace(fragment, "");
+    const queryStringIndex = url.indexOf("?");
+    if (queryStringIndex !== -1) {
+      args = Object.assign(getQueryArgs(url), args);
+      baseUrl = baseUrl.substr(0, queryStringIndex);
+    }
+    return baseUrl + "?" + buildQueryString(args) + fragment;
+  }
+  __name(addQueryArgs, "addQueryArgs");
+  function getQueryArg(url, arg) {
+    return getQueryArgs(url)[arg];
+  }
+  __name(getQueryArg, "getQueryArg");
+  function hasQueryArg(url, arg) {
+    return getQueryArg(url, arg) !== void 0;
+  }
+  __name(hasQueryArg, "hasQueryArg");
+  function removeQueryArgs(url, ...args) {
+    const fragment = url.replace(/^[^#]*/, "");
+    url = url.replace(/#.*/, "");
+    const queryStringIndex = url.indexOf("?");
+    if (queryStringIndex === -1) {
+      return url + fragment;
+    }
+    const query = getQueryArgs(url);
+    const baseURL = url.substr(0, queryStringIndex);
+    args.forEach((arg) => delete query[arg]);
+    const queryString = buildQueryString(query);
+    const updatedUrl = queryString ? baseURL + "?" + queryString : baseURL;
+    return updatedUrl + fragment;
+  }
+  __name(removeQueryArgs, "removeQueryArgs");
+  function normalizePath(path) {
+    const split = path.split("?");
+    const query = split[1];
+    const base = split[0];
+    if (!query) {
+      return base;
+    }
+    return base + "?" + query.split("&").map((entry) => entry.split("=")).map((pair) => pair.map(decodeURIComponent)).sort((a2, b) => a2[0].localeCompare(b[0])).map((pair) => pair.map(encodeURIComponent)).map((pair) => pair.join("=")).join("&");
+  }
+  __name(normalizePath, "normalizePath");
+  function createPreloadingMiddleware(preloadedData) {
+    const cache = Object.fromEntries(
+      Object.entries(preloadedData).map(([path, data]) => [
+        normalizePath(path),
+        data
+      ])
+    );
+    return (options2, next) => {
+      const { parse: parse2 = true } = options2;
+      let rawPath = options2.path;
+      if (!rawPath && options2.url) {
+        const _a2 = getQueryArgs(
+          options2.url
+        ), { rest_route: pathFromQuery } = _a2, queryArgs = __objRest(_a2, ["rest_route"]);
+        if (typeof pathFromQuery === "string") {
+          rawPath = addQueryArgs(pathFromQuery, queryArgs);
+        }
+      }
+      if (typeof rawPath !== "string") {
+        return next(options2);
+      }
+      const method = options2.method || "GET";
+      const path = normalizePath(rawPath);
+      if ("GET" === method && cache[path]) {
+        const cacheData = cache[path];
+        delete cache[path];
+        return prepareResponse(cacheData, !!parse2);
+      } else if ("OPTIONS" === method && cache[method] && cache[method][path]) {
+        const cacheData = cache[method][path];
+        delete cache[method][path];
+        return prepareResponse(cacheData, !!parse2);
+      }
+      return next(options2);
+    };
+  }
+  __name(createPreloadingMiddleware, "createPreloadingMiddleware");
+  function prepareResponse(responseData, parse2) {
+    if (parse2) {
+      return Promise.resolve(responseData.body);
+    }
+    try {
+      return Promise.resolve(
+        new window.Response(JSON.stringify(responseData.body), {
+          status: 200,
+          statusText: "OK",
+          headers: responseData.headers
+        })
+      );
+    } catch (e) {
+      Object.entries(
+        responseData.headers
+      ).forEach(([key, value]) => {
+        if (key.toLowerCase() === "link") {
+          responseData.headers[key] = value.replace(
+            /<([^>]+)>/,
+            (_, url) => `<${encodeURI(url)}>`
+          );
+        }
+      });
+      return Promise.resolve(
+        parse2 ? responseData.body : new window.Response(JSON.stringify(responseData.body), {
+          status: 200,
+          statusText: "OK",
+          headers: responseData.headers
+        })
+      );
+    }
+  }
+  __name(prepareResponse, "prepareResponse");
+  var preloading_default = createPreloadingMiddleware;
+  var modifyQuery = /* @__PURE__ */ __name((_h, queryArgs) => {
+    var _i = _h, { path, url } = _i, options2 = __objRest(_i, ["path", "url"]);
+    return __spreadProps(__spreadValues({}, options2), {
+      url: url && addQueryArgs(url, queryArgs),
+      path: path && addQueryArgs(path, queryArgs)
+    });
+  }, "modifyQuery");
+  var parseResponse = /* @__PURE__ */ __name((response) => response.json ? response.json() : Promise.reject(response), "parseResponse");
+  var parseLinkHeader = /* @__PURE__ */ __name((linkHeader) => {
+    if (!linkHeader) {
+      return {};
+    }
+    const match = linkHeader.match(/<([^>]+)>; rel="next"/);
+    return match ? {
+      next: match[1]
+    } : {};
+  }, "parseLinkHeader");
+  var getNextPageUrl = /* @__PURE__ */ __name((response) => {
+    const { next } = parseLinkHeader(response.headers.get("link"));
+    return next;
+  }, "getNextPageUrl");
+  var requestContainsUnboundedQuery = /* @__PURE__ */ __name((options2) => {
+    const pathIsUnbounded = !!options2.path && options2.path.indexOf("per_page=-1") !== -1;
+    const urlIsUnbounded = !!options2.url && options2.url.indexOf("per_page=-1") !== -1;
+    return pathIsUnbounded || urlIsUnbounded;
+  }, "requestContainsUnboundedQuery");
+  var fetchAllMiddleware = /* @__PURE__ */ __name((options2, next) => __async(null, null, function* () {
+    if (options2.parse === false) {
+      return next(options2);
+    }
+    if (!requestContainsUnboundedQuery(options2)) {
+      return next(options2);
+    }
+    const response = yield index_default(__spreadProps(__spreadValues({}, modifyQuery(options2, {
+      per_page: 100
+    })), {
+      // Ensure headers are returned for page 1.
+      parse: false
+    }));
+    const results = yield parseResponse(response);
+    if (!Array.isArray(results)) {
+      return results;
+    }
+    let nextPage = getNextPageUrl(response);
+    if (!nextPage) {
+      return results;
+    }
+    let mergedResults = [].concat(results);
+    while (nextPage) {
+      const nextResponse = yield index_default(__spreadProps(__spreadValues({}, options2), {
+        // Ensure the URL for the next page is used instead of any provided path.
+        path: void 0,
+        url: nextPage,
+        // Ensure we still get headers so we can identify the next page.
+        parse: false
+      }));
+      const nextResults = yield parseResponse(nextResponse);
+      mergedResults = mergedResults.concat(nextResults);
+      nextPage = getNextPageUrl(nextResponse);
+    }
+    return mergedResults;
+  }), "fetchAllMiddleware");
+  var fetch_all_middleware_default = fetchAllMiddleware;
+  var OVERRIDE_METHODS = /* @__PURE__ */ new Set(["PATCH", "PUT", "DELETE"]);
+  var DEFAULT_METHOD = "GET";
+  var httpV1Middleware = /* @__PURE__ */ __name((options2, next) => {
+    const { method = DEFAULT_METHOD } = options2;
+    if (OVERRIDE_METHODS.has(method.toUpperCase())) {
+      options2 = __spreadProps(__spreadValues({}, options2), {
+        headers: __spreadProps(__spreadValues({
+          "Content-Type": "application/json"
+        }, options2.headers), {
+          "X-HTTP-Method-Override": method
+        }),
+        method: "POST"
+      });
+    }
+    return next(options2);
+  }, "httpV1Middleware");
+  var http_v1_default = httpV1Middleware;
+  var userLocaleMiddleware = /* @__PURE__ */ __name((options2, next) => {
+    if (typeof options2.url === "string" && !hasQueryArg(options2.url, "_locale")) {
+      options2.url = addQueryArgs(options2.url, { _locale: "user" });
+    }
+    if (typeof options2.path === "string" && !hasQueryArg(options2.path, "_locale")) {
+      options2.path = addQueryArgs(options2.path, { _locale: "user" });
+    }
+    return next(options2);
+  }, "userLocaleMiddleware");
+  var user_locale_default = userLocaleMiddleware;
+  function parseJsonAndNormalizeError(response) {
+    return __async(this, null, function* () {
+      try {
+        return yield response.json();
+      } catch (e) {
+        throw {
+          code: "invalid_json",
+          message: __("The response is not a valid JSON response.")
+        };
+      }
+    });
+  }
+  __name(parseJsonAndNormalizeError, "parseJsonAndNormalizeError");
+  function parseResponseAndNormalizeError(response, shouldParseResponse = true) {
+    return __async(this, null, function* () {
+      if (!shouldParseResponse) {
+        return response;
+      }
+      if (response.status === 204) {
+        return null;
+      }
+      return yield parseJsonAndNormalizeError(response);
+    });
+  }
+  __name(parseResponseAndNormalizeError, "parseResponseAndNormalizeError");
+  function parseAndThrowError(response, shouldParseResponse = true) {
+    return __async(this, null, function* () {
+      if (!shouldParseResponse) {
+        throw response;
+      }
+      throw yield parseJsonAndNormalizeError(response);
+    });
+  }
+  __name(parseAndThrowError, "parseAndThrowError");
+  function isMediaUploadRequest(options2) {
+    const isCreateMethod = !!options2.method && options2.method === "POST";
+    const isMediaEndpoint = !!options2.path && options2.path.indexOf("/wp/v2/media") !== -1 || !!options2.url && options2.url.indexOf("/wp/v2/media") !== -1;
+    return isMediaEndpoint && isCreateMethod;
+  }
+  __name(isMediaUploadRequest, "isMediaUploadRequest");
+  var mediaUploadMiddleware = /* @__PURE__ */ __name((options2, next) => {
+    if (!isMediaUploadRequest(options2)) {
+      return next(options2);
+    }
+    let retries = 0;
+    const maxRetries = 5;
+    const postProcess = /* @__PURE__ */ __name((attachmentId) => {
+      retries++;
+      return next({
+        path: `/wp/v2/media/${attachmentId}/post-process`,
+        method: "POST",
+        data: { action: "create-image-subsizes" },
+        parse: false
+      }).catch(() => {
+        if (retries < maxRetries) {
+          return postProcess(attachmentId);
+        }
+        next({
+          path: `/wp/v2/media/${attachmentId}?force=true`,
+          method: "DELETE"
+        });
+        return Promise.reject();
+      });
+    }, "postProcess");
+    return next(__spreadProps(__spreadValues({}, options2), { parse: false })).catch((response) => {
+      if (!(response instanceof globalThis.Response)) {
+        return Promise.reject(response);
+      }
+      const attachmentId = response.headers.get(
+        "x-wp-upload-attachment-id"
+      );
+      if (response.status >= 500 && response.status < 600 && attachmentId) {
+        return postProcess(attachmentId).catch(() => {
+          if (options2.parse !== false) {
+            return Promise.reject({
+              code: "post_process",
+              message: __(
+                "Media upload failed. If this is a photo or a large image, please scale it down and try again."
+              )
+            });
+          }
+          return Promise.reject(response);
+        });
+      }
+      return parseAndThrowError(response, options2.parse);
+    }).then(
+      (response) => parseResponseAndNormalizeError(response, options2.parse)
+    );
+  }, "mediaUploadMiddleware");
+  var media_upload_default = mediaUploadMiddleware;
+  var createThemePreviewMiddleware = /* @__PURE__ */ __name((themePath) => (options2, next) => {
+    if (typeof options2.url === "string") {
+      const wpThemePreview = getQueryArg(
+        options2.url,
+        "wp_theme_preview"
+      );
+      if (wpThemePreview === void 0) {
+        options2.url = addQueryArgs(options2.url, {
+          wp_theme_preview: themePath
+        });
+      } else if (wpThemePreview === "") {
+        options2.url = removeQueryArgs(
+          options2.url,
+          "wp_theme_preview"
+        );
+      }
+    }
+    if (typeof options2.path === "string") {
+      const wpThemePreview = getQueryArg(
+        options2.path,
+        "wp_theme_preview"
+      );
+      if (wpThemePreview === void 0) {
+        options2.path = addQueryArgs(options2.path, {
+          wp_theme_preview: themePath
+        });
+      } else if (wpThemePreview === "") {
+        options2.path = removeQueryArgs(
+          options2.path,
+          "wp_theme_preview"
+        );
+      }
+    }
+    return next(options2);
+  }, "createThemePreviewMiddleware");
+  var theme_preview_default = createThemePreviewMiddleware;
+  var DEFAULT_HEADERS = {
+    // The backend uses the Accept header as a condition for considering an
+    // incoming request as a REST request.
+    //
+    // See: https://core.trac.wordpress.org/ticket/44534
+    Accept: "application/json, */*;q=0.1"
+  };
+  var DEFAULT_OPTIONS = {
+    credentials: "include"
+  };
+  var middlewares = [
+    user_locale_default,
+    namespace_endpoint_default,
+    http_v1_default,
+    fetch_all_middleware_default
+  ];
+  function registerMiddleware(middleware) {
+    middlewares.unshift(middleware);
+  }
+  __name(registerMiddleware, "registerMiddleware");
+  var defaultFetchHandler = /* @__PURE__ */ __name((nextOptions) => {
+    const _a2 = nextOptions, { url, path, data, parse: parse2 = true } = _a2, remainingOptions = __objRest(_a2, ["url", "path", "data", "parse"]);
+    let { body, headers } = nextOptions;
+    headers = __spreadValues(__spreadValues({}, DEFAULT_HEADERS), headers);
+    if (data) {
+      body = JSON.stringify(data);
+      headers["Content-Type"] = "application/json";
+    }
+    const responsePromise = globalThis.fetch(
+      // Fall back to explicitly passing `window.location` which is the behavior if `undefined` is passed.
+      url || path || window.location.href,
+      __spreadProps(__spreadValues(__spreadValues({}, DEFAULT_OPTIONS), remainingOptions), {
+        body,
+        headers
+      })
+    );
+    return responsePromise.then(
+      (response) => {
+        if (!response.ok) {
+          return parseAndThrowError(response, parse2);
+        }
+        return parseResponseAndNormalizeError(response, parse2);
+      },
+      (err) => {
+        if (err && err.name === "AbortError") {
+          throw err;
+        }
+        if (!globalThis.navigator.onLine) {
+          throw {
+            code: "offline_error",
+            message: __(
+              "Unable to connect. Please check your Internet connection."
+            )
+          };
+        }
+        throw {
+          code: "fetch_error",
+          message: __(
+            "Could not get a valid response from the server."
+          )
+        };
+      }
+    );
+  }, "defaultFetchHandler");
+  var fetchHandler = defaultFetchHandler;
+  function setFetchHandler(newFetchHandler) {
+    fetchHandler = newFetchHandler;
+  }
+  __name(setFetchHandler, "setFetchHandler");
+  var apiFetch = /* @__PURE__ */ __name((options2) => {
+    const enhancedHandler = middlewares.reduceRight(
+      (next, middleware) => {
+        return (workingOptions) => middleware(workingOptions, next);
+      },
+      fetchHandler
+    );
+    return enhancedHandler(options2).catch((error) => {
+      if (error.code !== "rest_cookie_invalid_nonce") {
+        return Promise.reject(error);
+      }
+      return globalThis.fetch(apiFetch.nonceEndpoint).then((response) => {
+        if (!response.ok) {
+          return Promise.reject(error);
+        }
+        return response.text();
+      }).then((text) => {
+        apiFetch.nonceMiddleware.nonce = text;
+        return apiFetch(options2);
+      });
+    });
+  }, "apiFetch");
+  apiFetch.use = registerMiddleware;
+  apiFetch.setFetchHandler = setFetchHandler;
+  apiFetch.createNonceMiddleware = nonce_default;
+  apiFetch.createPreloadingMiddleware = preloading_default;
+  apiFetch.createRootURLMiddleware = root_url_default;
+  apiFetch.fetchAllMiddleware = fetch_all_middleware_default;
+  apiFetch.mediaUploadMiddleware = media_upload_default;
+  apiFetch.createThemePreviewMiddleware = theme_preview_default;
+  var index_default = apiFetch;
+  function getApiBase() {
+    var _a2, _b2;
+    return ((_b2 = (_a2 = window.ckyGlobals) == null ? void 0 : _a2.api) == null ? void 0 : _b2.base) || "/wp-json/cky/v1/";
+  }
+  __name(getApiBase, "getApiBase");
+  function getNonce$1() {
+    var _a2, _b2;
+    return ((_b2 = (_a2 = window.ckyGlobals) == null ? void 0 : _a2.api) == null ? void 0 : _b2.nonce) || "";
+  }
+  __name(getNonce$1, "getNonce$1");
+  index_default.use(index_default.createNonceMiddleware(getNonce$1()));
+  index_default.use(index_default.createRootURLMiddleware(getApiBase()));
+  const activeRequests = /* @__PURE__ */ new Map();
+  const cancelResolvers = /* @__PURE__ */ new Set();
+  function mergeQueryParams(options2) {
+    if (!options2.params) return;
+    const urlParams = new URLSearchParams(Object.entries(options2.params));
+    options2.path = options2.path + "?" + urlParams;
+  }
+  __name(mergeQueryParams, "mergeQueryParams");
+  function createCancellableRequest(apiRequest) {
+    let cancelResolve = /* @__PURE__ */ __name(() => {
+    }, "cancelResolve");
+    const cancelPromise = new Promise((resolve) => {
+      cancelResolve = /* @__PURE__ */ __name(() => resolve(null), "cancelResolve");
+    });
+    cancelResolvers.add(cancelResolve);
+    return Promise.race([apiRequest, cancelPromise]).finally(() => {
+      cancelResolvers.delete(cancelResolve);
+    });
+  }
+  __name(createCancellableRequest, "createCancellableRequest");
+  function request(options2, fallbackId) {
+    const requestId = options2.path || `${fallbackId}_${Date.now()}`;
+    if (options2.method === "GET" && activeRequests.has(requestId)) {
+      return activeRequests.get(requestId);
+    }
+    const cancellableRequest = createCancellableRequest(index_default(options2));
+    activeRequests.set(requestId, cancellableRequest);
+    return cancellableRequest.finally(() => {
+      activeRequests.delete(requestId);
+    });
+  }
+  __name(request, "request");
+  const ckyRest = {
+    post(options2) {
+      options2 = options2 || {};
+      options2.method = "POST";
+      mergeQueryParams(options2);
+      try {
+        return request(options2, "post");
+      } catch (error) {
+        return error;
+      }
+    },
+    get(options2) {
+      options2 = options2 || {};
+      options2.method = "GET";
+      mergeQueryParams(options2);
+      try {
+        return request(options2, "get");
+      } catch (error) {
+        return error;
+      }
+    },
+    put(options2) {
+      options2 = options2 || {};
+      options2.method = "PUT";
+      mergeQueryParams(options2);
+      try {
+        return request(options2, "put");
+      } catch (error) {
+        return error;
+      }
+    },
+    delete(options2) {
+      options2 = options2 || {};
+      options2.method = "DELETE";
+      try {
+        return request(options2, "delete");
+      } catch (error) {
+        return error;
+      }
+    },
+    cancelAll() {
+      cancelResolvers.forEach((resolve) => resolve());
+      cancelResolvers.clear();
+      activeRequests.clear();
+    }
+  };
+  function getSettings() {
+    return __async(this, null, function* () {
+      try {
+        const response = yield ckyRest.get({
+          path: "settings"
+        });
+        return response;
+      } catch (error) {
+        console.error("Error fetching settings:", error);
+        throw error;
+      }
+    });
+  }
+  __name(getSettings, "getSettings");
+  function saveSettings(settings2, clear = true) {
+    return __async(this, null, function* () {
+      try {
+        const response = yield ckyRest.post({
+          path: "settings",
+          data: settings2,
+          params: { clear }
+        });
+        return response;
+      } catch (error) {
+        console.error("Error saving settings:", error);
+        throw error;
+      }
+    });
+  }
+  __name(saveSettings, "saveSettings");
+  function getSettingsInfo(force = false) {
+    return __async(this, null, function* () {
+      try {
+        const response = yield ckyRest.get({
+          path: "settings/info",
+          params: { force }
+        });
+        return response;
+      } catch (error) {
+        console.error("Error fetching settings info:", error);
+        throw error;
+      }
+    });
+  }
+  __name(getSettingsInfo, "getSettingsInfo");
+  function updateConnectNotice(status) {
+    return __async(this, null, function* () {
+      try {
+        yield ckyRest.post({
+          path: "/settings/connect_notice",
+          data: {
+            connect_notice: status
+          }
+        });
+      } catch (error) {
+        console.error("Error updating connect notice:", error);
+        throw error;
+      }
+    });
+  }
+  __name(updateConnectNotice, "updateConnectNotice");
+  function updateExpand(expand) {
+    return __async(this, null, function* () {
+      try {
+        yield ckyRest.post({
+          path: "/settings/expand",
+          data: {
+            expand
+          }
+        });
+      } catch (error) {
+        console.error("Error updating connect card expand status:", error);
+        throw error;
+      }
+    });
+  }
+  __name(updateExpand, "updateExpand");
+  function purgeCache$1() {
+    return __async(this, null, function* () {
+      try {
+        yield ckyRest.post({
+          path: "/settings/cache/purge",
+          data: {}
+        });
+      } catch (error) {
+        console.warn("Cache purge failed (non-critical):", error);
+      }
+    });
+  }
+  __name(purgeCache$1, "purgeCache$1");
+  const settingsService = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+    __proto__: null,
+    getSettings,
+    getSettingsInfo,
+    purgeCache: purgeCache$1,
+    saveSettings,
+    updateConnectNotice,
+    updateExpand
+  }, Symbol.toStringTag, { value: "Module" }));
+  function win() {
+    return window;
+  }
+  __name(win, "win");
+  function getAppStoreState() {
+    return __async(this, null, function* () {
+      try {
+        const { useAppStore: useAppStore2 } = yield __vitePreload(() => __async(null, null, function* () {
+          const { useAppStore: useAppStore3 } = yield Promise.resolve().then(() => store);
+          return { useAppStore: useAppStore3 };
+        }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
+        return useAppStore2.getState();
+      } catch (e) {
+        return null;
+      }
+    });
+  }
+  __name(getAppStoreState, "getAppStoreState");
+  function syncStoreWithSettingsResponse(response) {
+    return __async(this, null, function* () {
+      try {
+        const store2 = yield getAppStoreState();
+        if (store2 == null ? void 0 : store2.updateSettings) {
+          store2.updateSettings(response);
+        }
+      } catch (e) {
+      }
+    });
+  }
+  __name(syncStoreWithSettingsResponse, "syncStoreWithSettingsResponse");
+  function getOption(key, value = false) {
+    var _a2;
+    let current = value;
+    const settings2 = ((_a2 = win().ckyConfig) == null ? void 0 : _a2.settings) || {};
+    if (settings2[key]) {
+      current = settings2[key];
+    }
+    return current;
+  }
+  __name(getOption, "getOption");
+  function getInfo(key = false, value = false) {
+    var _a2;
+    let current = value;
+    const settings2 = ((_a2 = win().ckyConfig) == null ? void 0 : _a2.info) || {};
+    if (key === false) return settings2;
+    if (settings2[key]) {
+      current = settings2[key];
+    }
+    return current;
+  }
+  __name(getInfo, "getInfo");
+  function setOption(key, value) {
+    const w = win();
+    if (!w.ckyConfig) {
+      w.ckyConfig = {};
+    }
+    if (!w.ckyConfig.settings) {
+      w.ckyConfig.settings = {};
+    }
+    w.ckyConfig.settings[key] = value;
+  }
+  __name(setOption, "setOption");
+  function saveOptions(clear = true) {
+    return __async(this, null, function* () {
+      var _a2;
+      try {
+        let settings2 = ((_a2 = win().ckyConfig) == null ? void 0 : _a2.settings) || {};
+        if (!settings2 || Object.keys(settings2).length === 0) {
+          const store2 = yield getAppStoreState();
+          if (store2 == null ? void 0 : store2.options) {
+            settings2 = store2.options;
+          }
+        }
+        const response = yield saveSettings(settings2, clear);
+        if (response && typeof response === "object") {
+          win().ckyConfig.settings = response;
+          yield syncStoreWithSettingsResponse(response);
+        }
+        return !!response;
+      } catch (error) {
+        console.error("Error saving options:", error);
+        return false;
+      }
+    });
+  }
+  __name(saveOptions, "saveOptions");
+  function reloadSettings() {
+    return __async(this, null, function* () {
+      try {
+        const response = yield getSettings();
+        if (response && typeof response === "object") {
+          win().ckyConfig.settings = response;
+        }
+      } catch (error) {
+        console.error("Error reloading settings:", error);
+      }
+    });
+  }
+  __name(reloadSettings, "reloadSettings");
+  function getDefaultLanguage() {
+    var _a2, _b2, _c2;
+    const fromSettings = (_b2 = (_a2 = win().ckyConfig) == null ? void 0 : _a2.settings) == null ? void 0 : _b2.languages;
+    if (fromSettings && typeof fromSettings.default === "string") {
+      return fromSettings.default;
+    }
+    const legacy = (_c2 = win().ckyConfig) == null ? void 0 : _c2.languages;
+    return (legacy == null ? void 0 : legacy.default) || "en";
+  }
+  __name(getDefaultLanguage, "getDefaultLanguage");
+  function setDefaultLanguage(lang = "en") {
+    return __async(this, null, function* () {
+      const w = win();
+      if (!w.ckyConfig) {
+        w.ckyConfig = {};
+      }
+      if (!w.ckyConfig.settings) {
+        w.ckyConfig.settings = {};
+      }
+      if (!w.ckyConfig.settings.languages) {
+        w.ckyConfig.settings.languages = {};
+      }
+      w.ckyConfig.settings.languages.default = lang;
+      if (!w.ckyConfig.languages) {
+        w.ckyConfig.languages = {};
+      }
+      w.ckyConfig.languages.default = lang;
+    });
+  }
+  __name(setDefaultLanguage, "setDefaultLanguage");
+  function getAssetsURL() {
+    var _a2, _b2;
+    return ((_b2 = (_a2 = win().ckyGlobals) == null ? void 0 : _a2.app) == null ? void 0 : _b2.url) || "";
+  }
+  __name(getAssetsURL, "getAssetsURL");
+  function purgeCache() {
+    return __async(this, null, function* () {
+      yield purgeCache$1();
+    });
+  }
+  __name(purgeCache, "purgeCache");
+  function isRTLLanguage(language = false) {
+    var _a2, _b2;
+    const code = language === false ? ((_b2 = (_a2 = win().ckyConfig) == null ? void 0 : _a2.languages) == null ? void 0 : _b2.current) || "" : language;
+    return ["ar", "az", "dv", "he", "ku", "fa", "ur"].includes(code);
+  }
+  __name(isRTLLanguage, "isRTLLanguage");
+  function checkDomain() {
+    var _a2, _b2, _c2;
+    try {
+      const siteUrl2 = (_b2 = (_a2 = win().ckyGlobals) == null ? void 0 : _a2.site) == null ? void 0 : _b2.url;
+      if (!siteUrl2) return true;
+      const { hostname: actual } = new URL(siteUrl2);
+      const info = ((_c2 = win().ckyConfig) == null ? void 0 : _c2.info) || {};
+      if (!info.url) return true;
+      const registered = new URL(info.url);
+      const registeredDomain = registered.hostname;
+      const domains = actual.split(".");
+      let isValidDomain = false;
+      for (let index2 = 0; index2 < domains.length; index2++) {
+        const domain = domains.slice(index2).join(".");
+        isValidDomain = isValidDomain || domain === registeredDomain || domain.replace(/^www./, "") === registeredDomain.replace(/^www./, "");
+        if (isValidDomain) break;
+      }
+      return isValidDomain;
+    } catch (e) {
+      return false;
+    }
+  }
+  __name(checkDomain, "checkDomain");
+  const common = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+    __proto__: null,
+    checkDomain,
+    getAssetsURL,
+    getDefaultLanguage,
+    getInfo,
+    getOption,
+    isRTLLanguage,
+    purgeCache,
+    reloadSettings,
+    saveOptions,
+    setDefaultLanguage,
+    setOption
+  }, Symbol.toStringTag, { value: "Module" }));
+  const createAppState = /* @__PURE__ */ __name((set2, get2) => {
+    var _a2, _b2, _c2, _d;
+    return {
+      options: ((_a2 = window.ckyConfig) == null ? void 0 : _a2.settings) || {},
+      info: false,
+      status: true,
+      session_status: true,
+      errors: {},
+      expand: ((_b2 = window.ckyNoticeExpand) == null ? void 0 : _b2.status) || false,
+      gcm: ((_c2 = window.ckyGcmConfig) == null ? void 0 : _c2.settings) || {},
+      connect_notice: ((_d = window.ckyConnectNotice) == null ? void 0 : _d.status) || false,
+      disconnect_success_overlay: false,
+      affiliate_banner_visible: false,
+      info_loaded: false,
+      setOption: /* @__PURE__ */ __name((key, value) => set2((state) => __spreadProps(__spreadValues({}, state), {
+        options: __spreadProps(__spreadValues({}, state.options), { [key]: value })
+      })), "setOption"),
+      setInfo: /* @__PURE__ */ __name((data) => {
+        if (data && typeof data === "object") {
+          const w = window;
+          if (!w.ckyConfig) w.ckyConfig = {};
+          w.ckyConfig.info = data;
+        }
+        set2((state) => __spreadProps(__spreadValues({}, state), {
+          info: data
+        }));
+      }, "setInfo"),
+      setGcmInfo: /* @__PURE__ */ __name((data) => set2((state) => __spreadProps(__spreadValues({}, state), {
+        gcm: data
+      })), "setGcmInfo"),
+      updateSettings: /* @__PURE__ */ __name((data) => set2((state) => {
+        window.ckyConfig.settings = data;
+        if ((data == null ? void 0 : data.languages) && typeof data.languages === "object") {
+          const l = data.languages;
+          __vitePreload(() => __async(null, null, function* () {
+            const { useLanguageStore: useLanguageStore2 } = yield Promise.resolve().then(() => languageStore);
+            return { useLanguageStore: useLanguageStore2 };
+          }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href).then(({ useLanguageStore: useLanguageStore2 }) => {
+            useLanguageStore2.setState({
+              selected: Array.isArray(l.selected) ? l.selected : ["en"],
+              default: typeof l.default === "string" ? l.default : "en",
+              current: typeof l.current === "string" ? l.current : typeof l.default === "string" ? l.default : "en"
+            });
+            __vitePreload(() => __async(null, null, function* () {
+              const { syncLanguageMirrorFromSettings: syncLanguageMirrorFromSettings2 } = yield Promise.resolve().then(() => languageBootstrap);
+              return { syncLanguageMirrorFromSettings: syncLanguageMirrorFromSettings2 };
+            }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href).then(
+              ({ syncLanguageMirrorFromSettings: syncLanguageMirrorFromSettings2 }) => {
+                syncLanguageMirrorFromSettings2();
+              }
+            );
+          });
+        }
+        return __spreadProps(__spreadValues({}, state), {
+          options: data
+        });
+      }), "updateSettings"),
+      updateGcm: /* @__PURE__ */ __name((data) => set2((state) => {
+        window.ckyGcmConfig.settings = data;
+        return __spreadProps(__spreadValues({}, state), {
+          gcm: data
+        });
+      }), "updateGcm"),
+      updateStatus: /* @__PURE__ */ __name((status = true) => set2((state) => __spreadProps(__spreadValues({}, state), {
+        status
+      })), "updateStatus"),
+      updateSessionStatus: /* @__PURE__ */ __name((status) => set2((state) => __spreadProps(__spreadValues({}, state), {
+        session_status: status
+      })), "updateSessionStatus"),
+      setErrors: /* @__PURE__ */ __name((errors) => set2((state) => __spreadProps(__spreadValues({}, state), {
+        errors
+      })), "setErrors"),
+      setExpand: /* @__PURE__ */ __name((expand) => set2((state) => {
+        if (window.ckyNoticeExpand) {
+          window.ckyNoticeExpand.status = expand;
+        }
+        return __spreadProps(__spreadValues({}, state), {
+          expand
+        });
+      }), "setExpand"),
+      setConnectNotice: /* @__PURE__ */ __name((status) => set2((state) => {
+        if (window.ckyConnectNotice) {
+          window.ckyConnectNotice.status = status;
+        }
+        return __spreadProps(__spreadValues({}, state), {
+          connect_notice: status
+        });
+      }), "setConnectNotice"),
+      setDisconnectSuccessOverlay: /* @__PURE__ */ __name((show) => set2({ disconnect_success_overlay: show }), "setDisconnectSuccessOverlay"),
+      setAffiliateBannerVisible: /* @__PURE__ */ __name((visible) => set2({ affiliate_banner_visible: visible }), "setAffiliateBannerVisible"),
+      reInit: /* @__PURE__ */ __name(() => __async(null, null, function* () {
+        try {
+          const response = yield getSettings();
+          if (response && typeof response === "object") {
+            get2().updateSettings(response);
+          }
+        } catch (error) {
+          console.error("Error reinitializing:", error);
+          get2().setErrors({ reinit: "Failed to reinitialize settings" });
+        }
+      }), "reInit"),
+      loadInfo: /* @__PURE__ */ __name((force = false) => __async(null, null, function* () {
+        var _a3;
+        try {
+          const response = yield getSettingsInfo(force);
+          if (response) {
+            get2().setInfo(response);
+            get2().updateStatus(true);
+            set2({ info_loaded: true });
+            const state = get2();
+            const languages2 = state.info && state.info.languages ? state.info.languages : {};
+            const defaultLang = languages2 && languages2.default ? languages2.default : "en";
+            yield setDefaultLanguage(defaultLang);
+            get2().checkURLMismatch();
+            return true;
+          } else {
+            throw new Error("Failed to load info");
+          }
+        } catch (error) {
+          console.error("Error loading info:", error);
+          if ((_a3 = error == null ? void 0 : error.data) == null ? void 0 : _a3.status) {
+            get2().updateStatus(false);
+            if (error.data.status === 401) {
+              get2().updateSessionStatus(false);
+            }
+          }
+          get2().setErrors({ load: "Failed to load settings info" });
+          return false;
+        }
+      }), "loadInfo"),
+      save: /* @__PURE__ */ __name((clear = true) => __async(null, null, function* () {
+        try {
+          const value = get2().options;
+          const response = yield saveSettings(value, clear);
+          if (response) {
+            get2().updateSettings(response);
+            get2().loadInfo();
+            return true;
+          } else {
+            return false;
+          }
+        } catch (error) {
+          console.error("Error saving settings:", error);
+          get2().setErrors({ save: "Failed to save settings" });
+          return false;
+        }
+      }), "save"),
+      checkURLMismatch: /* @__PURE__ */ __name(() => {
+        var _a3, _b3;
+        const state = get2();
+        if (((_b3 = (_a3 = state.options) == null ? void 0 : _a3.account) == null ? void 0 : _b3.connected) === false) {
+          return;
+        }
+        if (!checkDomain()) {
+          get2().setErrors({
+            urlMismatch: true
+          });
+        }
+      }, "checkURLMismatch")
+    };
+  }, "createAppState");
+  const useAppStore = create()(
+    createAppState
+  );
+  const useSettingsStore = /* @__PURE__ */ __name(() => useAppStore(
+    useShallow((state) => ({
+      options: state.options,
+      info: state.info,
+      status: state.status,
+      session_status: state.session_status,
+      errors: state.errors,
+      expand: state.expand,
+      gcm: state.gcm,
+      connect_notice: state.connect_notice,
+      setOption: state.setOption,
+      setInfo: state.setInfo,
+      setGcmInfo: state.setGcmInfo,
+      updateSettings: state.updateSettings,
+      updateGcm: state.updateGcm,
+      updateStatus: state.updateStatus,
+      updateSessionStatus: state.updateSessionStatus,
+      setErrors: state.setErrors,
+      setExpand: state.setExpand,
+      setConnectNotice: state.setConnectNotice,
+      reInit: state.reInit,
+      loadInfo: state.loadInfo,
+      save: state.save,
+      checkURLMismatch: state.checkURLMismatch
+    }))
+  ), "useSettingsStore");
+  const store = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+    __proto__: null,
+    useAppStore,
+    useSettingsStore
+  }, Symbol.toStringTag, { value: "Module" }));
+  function getBootstrapLanguages() {
+    var _a2;
+    const w = typeof window !== "undefined" ? window.ckyConfig : null;
+    const fromSettings = (_a2 = w == null ? void 0 : w.settings) == null ? void 0 : _a2.languages;
+    const legacy = w == null ? void 0 : w.languages;
+    const src = fromSettings && typeof fromSettings === "object" ? fromSettings : legacy && typeof legacy === "object" ? legacy : null;
+    if (!src) {
+      return { selected: ["en"], default: "en", current: "en" };
+    }
+    const selected = Array.isArray(src.selected) ? src.selected : ["en"];
+    const def = typeof src.default === "string" ? src.default : "en";
+    const cur = typeof src.current === "string" ? src.current : def;
+    return { selected, default: def, current: cur };
+  }
+  __name(getBootstrapLanguages, "getBootstrapLanguages");
+  function getInitialAvailableLanguages() {
+    var _a2, _b2;
+    const w = typeof window !== "undefined" ? window.ckyLanguages : null;
+    if (Array.isArray(w) && w.length > 0) {
+      return w;
+    }
+    const fallback = (_b2 = (_a2 = window.ckyConfig) == null ? void 0 : _a2.languages) == null ? void 0 : _b2.available;
+    return Array.isArray(fallback) ? fallback : [];
+  }
+  __name(getInitialAvailableLanguages, "getInitialAvailableLanguages");
+  function syncLanguageMirrorFromSettings() {
+    if (typeof window === "undefined") return;
+    const b = getBootstrapLanguages();
+    const cfg = window.ckyConfig;
+    if (!cfg) return;
+    if (!cfg.languages) cfg.languages = {};
+    cfg.languages.selected = b.selected;
+    cfg.languages.default = b.default;
+    cfg.languages.current = b.current;
+  }
+  __name(syncLanguageMirrorFromSettings, "syncLanguageMirrorFromSettings");
+  function mirrorPendingLanguageState(state) {
+    var _a2;
+    if (typeof window === "undefined") return;
+    const cfg = window.ckyConfig;
+    if (!cfg) return;
+    if (!cfg.languages) cfg.languages = {};
+    cfg.languages.selected = state.selected;
+    cfg.languages.default = state.default;
+    cfg.languages.current = state.current;
+    if (((_a2 = cfg.settings) == null ? void 0 : _a2.languages) && typeof cfg.settings.languages === "object") {
+      cfg.settings.languages.selected = state.selected;
+      cfg.settings.languages.default = state.default;
+      cfg.settings.languages.current = state.current;
+    }
+  }
+  __name(mirrorPendingLanguageState, "mirrorPendingLanguageState");
+  const languageBootstrap = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+    __proto__: null,
+    getBootstrapLanguages,
+    getInitialAvailableLanguages,
+    mirrorPendingLanguageState,
+    syncLanguageMirrorFromSettings
+  }, Symbol.toStringTag, { value: "Module" }));
+  function getAvailableLanguages() {
+    return __async(this, null, function* () {
+      try {
+        const response = yield ckyRest.get({
+          path: "languages/available"
+        });
+        return response && Array.isArray(response) ? response : [];
+      } catch (error) {
+        console.error("Error fetching available languages:", error);
+        return [];
+      }
+    });
+  }
+  __name(getAvailableLanguages, "getAvailableLanguages");
+  function saveLanguageTranslations(selectedLanguages) {
+    return __async(this, null, function* () {
+      try {
+        yield ckyRest.post({
+          path: "languages/translations",
+          data: selectedLanguages
+        });
+      } catch (error) {
+        console.log("Translations API error (non-critical):", error);
+      }
+    });
+  }
+  __name(saveLanguageTranslations, "saveLanguageTranslations");
+  function getLanguageConfig() {
+    return __async(this, null, function* () {
+      return getBootstrapLanguages();
+    });
+  }
+  __name(getLanguageConfig, "getLanguageConfig");
+  const boot = getBootstrapLanguages();
+  const createLanguageState = /* @__PURE__ */ __name((set2, get2) => ({
+    available: getInitialAvailableLanguages(),
+    selected: boot.selected,
+    default: boot.default,
+    current: boot.current,
+    loading: false,
+    setAvailable: /* @__PURE__ */ __name((languages2) => set2((state) => __spreadProps(__spreadValues({}, state), {
+      available: languages2
+    })), "setAvailable"),
+    setSelected: /* @__PURE__ */ __name((selected) => set2((state) => {
+      const next = __spreadProps(__spreadValues({}, state), { selected });
+      mirrorPendingLanguageState(next);
+      return next;
+    }), "setSelected"),
+    setDefault: /* @__PURE__ */ __name((code) => set2((state) => {
+      const next = __spreadProps(__spreadValues({}, state), { default: code });
+      mirrorPendingLanguageState(next);
+      return next;
+    }), "setDefault"),
+    setCurrent: /* @__PURE__ */ __name((code) => set2((state) => {
+      const next = __spreadProps(__spreadValues({}, state), { current: code });
+      mirrorPendingLanguageState(next);
+      return next;
+    }), "setCurrent"),
+    setLoading: /* @__PURE__ */ __name((loading) => set2((state) => __spreadProps(__spreadValues({}, state), {
+      loading
+    })), "setLoading"),
+    loadAvailableLanguages: /* @__PURE__ */ __name(() => __async(null, null, function* () {
+      try {
+        const languages2 = yield getAvailableLanguages();
+        if (languages2 && languages2.length > 0) {
+          get2().setAvailable(languages2);
+          if (!window.ckyConfig) {
+            window.ckyConfig = {};
+          }
+          if (!window.ckyConfig.languages) {
+            window.ckyConfig.languages = {};
+          }
+          window.ckyConfig.languages.available = languages2;
+        }
+      } catch (error) {
+        console.error("Error loading available languages:", error);
+      }
+    }), "loadAvailableLanguages"),
+    saveSelected: /* @__PURE__ */ __name((..._0) => __async(null, [..._0], function* (options2 = {}) {
+      var _a2;
+      const {
+        remove = false,
+        clear = false,
+        selected: overrideSelected
+      } = options2;
+      try {
+        const selectedToSave = overrideSelected !== void 0 ? overrideSelected : get2().selected;
+        if (!remove) {
+          yield saveLanguageTranslations(selectedToSave);
+        }
+        const { setOption: setOption2 } = yield __vitePreload(() => __async(null, null, function* () {
+          const { setOption: setOption3 } = yield Promise.resolve().then(() => common);
+          return { setOption: setOption3 };
+        }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
+        const { useAppStore: useAppStore2 } = yield __vitePreload(() => __async(null, null, function* () {
+          const { useAppStore: useAppStore3 } = yield Promise.resolve().then(() => store);
+          return { useAppStore: useAppStore3 };
+        }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
+        const store$1 = useAppStore2.getState();
+        const currentSettings = (store$1 == null ? void 0 : store$1.options) || ((_a2 = window.ckyConfig) == null ? void 0 : _a2.settings) || {};
+        const languages2 = currentSettings.languages || {};
+        languages2.selected = selectedToSave;
+        setOption2("languages", languages2);
+        if (store$1 && store$1.setOption) {
+          store$1.setOption("languages", languages2);
+        }
+        const { saveOptions: saveOptions2 } = yield __vitePreload(() => __async(null, null, function* () {
+          const { saveOptions: saveOptions3 } = yield Promise.resolve().then(() => common);
+          return { saveOptions: saveOptions3 };
+        }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
+        const success = yield saveOptions2(clear);
+        return { success, selected: selectedToSave };
+      } catch (error) {
+        console.error("Error saving selected languages:", error);
+        throw error;
+      }
+    }), "saveSelected"),
+    saveDefault: /* @__PURE__ */ __name((..._0) => __async(null, [..._0], function* (options2 = {}) {
+      var _a2;
+      const { clear = false } = options2;
+      try {
+        const defaultCode = get2().default;
+        const { setOption: setOption2 } = yield __vitePreload(() => __async(null, null, function* () {
+          const { setOption: setOption3 } = yield Promise.resolve().then(() => common);
+          return { setOption: setOption3 };
+        }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
+        const { useAppStore: useAppStore2 } = yield __vitePreload(() => __async(null, null, function* () {
+          const { useAppStore: useAppStore3 } = yield Promise.resolve().then(() => store);
+          return { useAppStore: useAppStore3 };
+        }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
+        const store$1 = useAppStore2.getState();
+        const currentSettings = (store$1 == null ? void 0 : store$1.options) || ((_a2 = window.ckyConfig) == null ? void 0 : _a2.settings) || {};
+        const languages2 = currentSettings.languages || {};
+        languages2.default = defaultCode;
+        languages2.current = defaultCode;
+        setOption2("languages", languages2);
+        if (store$1 && store$1.setOption) {
+          store$1.setOption("languages", languages2);
+        }
+        const { saveOptions: saveOptions2 } = yield __vitePreload(() => __async(null, null, function* () {
+          const { saveOptions: saveOptions3 } = yield Promise.resolve().then(() => common);
+          return { saveOptions: saveOptions3 };
+        }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
+        yield saveOptions2(clear);
+        if (store$1 && store$1.setInfo) {
+          const currentInfo = store$1.info;
+          if (currentInfo && typeof currentInfo === "object") {
+            store$1.setInfo(__spreadProps(__spreadValues({}, currentInfo), {
+              defaultLanguage: defaultCode,
+              languages: __spreadProps(__spreadValues({}, currentInfo.languages || {}), {
+                default: defaultCode,
+                current: defaultCode
+              })
+            }));
+          }
+        }
+      } catch (error) {
+        console.error("Error saving default language:", error);
+        throw error;
+      }
+    }), "saveDefault"),
+    init: /* @__PURE__ */ __name(() => __async(null, null, function* () {
+      get2().setLoading(true);
+      try {
+        yield get2().loadAvailableLanguages();
+        const config2 = yield getLanguageConfig();
+        if (config2 && typeof config2 === "object") {
+          if (config2.selected && Array.isArray(config2.selected)) {
+            get2().setSelected(config2.selected);
+          }
+          if (config2.default) {
+            get2().setDefault(config2.default);
+          }
+          if (config2.current) {
+            get2().setCurrent(config2.current);
+          }
+        }
+      } catch (error) {
+        console.error("Error initializing languages:", error);
+      } finally {
+        get2().setLoading(false);
+      }
+    }), "init")
+  }), "createLanguageState");
+  const useLanguageStore = create()(
+    createLanguageState
+  );
+  const languageStore = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+    __proto__: null,
+    useLanguageStore
+  }, Symbol.toStringTag, { value: "Module" }));
+  const useBannerStore = create()(
+    devtools(
+      (set2, get2) => ({
+        // Initial state
+        items: false,
+        current: false,
+        preview: false,
+        presets: [],
+        configs: [],
+        template: {},
+        errors: {},
+        // Actions
+        setBanners: /* @__PURE__ */ __name((banners) => set2((state) => __spreadProps(__spreadValues({}, state), {
+          items: banners
+        })), "setBanners"),
+        setCurrentBanner: /* @__PURE__ */ __name((banner2) => set2((state) => __spreadProps(__spreadValues({}, state), {
+          current: banner2
+        })), "setCurrentBanner"),
+        setPreview: /* @__PURE__ */ __name((preview) => set2((state) => __spreadProps(__spreadValues({}, state), {
+          preview
+        })), "setPreview"),
+        setPresets: /* @__PURE__ */ __name((presets) => set2((state) => __spreadProps(__spreadValues({}, state), {
+          presets
+        })), "setPresets"),
+        setConfigs: /* @__PURE__ */ __name((configs) => set2((state) => __spreadProps(__spreadValues({}, state), {
+          configs
+        })), "setConfigs"),
+        setTemplate: /* @__PURE__ */ __name((template) => set2((state) => __spreadProps(__spreadValues({}, state), {
+          template
+        })), "setTemplate"),
+        setErrors: /* @__PURE__ */ __name((errors) => set2((state) => __spreadProps(__spreadValues({}, state), {
+          errors
+        })), "setErrors"),
+        // Async actions
+        reInit: /* @__PURE__ */ __name(() => __async(null, null, function* () {
+          try {
+            const response = yield ckyRest.get({
+              path: "banners"
+            });
+            if (response && Array.isArray(response)) {
+              const banners = response.map((item) => ({
+                id: item.id || 0,
+                name: item.name || "",
+                slug: item.slug || "",
+                default: item.default || false,
+                status: item.status == true,
+                properties: item.properties || {},
+                contents: item.contents || {}
+              }));
+              get2().setBanners(banners);
+            }
+          } catch (error) {
+            console.error("Error reinitializing banners:", error);
+          }
+        }), "reInit"),
+        getBanners: /* @__PURE__ */ __name(() => __async(null, null, function* () {
+          const items = get2().items;
+          if (items !== false) {
+            return JSON.parse(JSON.stringify(items));
+          }
+          yield get2().reInit();
+          return Array.isArray(get2().items) ? get2().items : [];
+        }), "getBanners"),
+        getCurrentBanner: /* @__PURE__ */ __name(() => __async(null, null, function* () {
+          const current = get2().current;
+          if (current && current.id > 0) {
+            return current;
+          }
+          try {
+            const banners = yield get2().getBanners();
+            if (Array.isArray(banners) && banners.length > 0) {
+              let banner2 = banners.find((b) => b.default === true);
+              if (!banner2) {
+                banner2 = banners[0];
+              }
+              if (banner2) {
+                get2().setCurrentBanner(banner2);
+                return banner2;
+              }
+            }
+          } catch (error) {
+            console.error("Error getting current banner:", error);
+          }
+          return false;
+        }), "getCurrentBanner"),
+        getActiveBanner: /* @__PURE__ */ __name(() => __async(null, null, function* () {
+          const banners = yield get2().getBanners();
+          if (Array.isArray(banners) && banners.length > 0) {
+            let banner2 = banners.find((b) => b.status == true);
+            if (!banner2) {
+              banner2 = banners[0];
+            }
+            if (banner2) {
+              get2().setCurrentBanner(banner2);
+              return banner2;
+            }
+          }
+          return false;
+        }), "getActiveBanner"),
+        saveBanner: /* @__PURE__ */ __name((banner2, language) => __async(null, null, function* () {
+          if (!banner2.id) {
+            return false;
+          }
+          try {
+            const params = language ? { language } : {};
+            const response = yield ckyRest.put({
+              path: `/banners/${banner2.id}`,
+              data: banner2,
+              params
+            });
+            if (response && response.id) {
+              yield get2().reInit();
+              return true;
+            }
+          } catch (error) {
+            console.error("Error saving banner:", error);
+          }
+          return false;
+        }), "saveBanner"),
+        loadConfigs: /* @__PURE__ */ __name(() => __async(null, null, function* () {
+          const configs = get2().configs;
+          if (configs.length > 0) {
+            return;
+          }
+          try {
+            const response = yield ckyRest.get({
+              path: "banners/configs"
+            });
+            if (response && Array.isArray(response)) {
+              get2().setConfigs(response);
+            }
+          } catch (error) {
+            console.error("Error loading configs:", error);
+          }
+        }), "loadConfigs"),
+        loadTemplate: /* @__PURE__ */ __name((force = false) => __async(null, null, function* () {
+          const current = get2().current;
+          if (!current || !current.properties) {
+            return null;
+          }
+          const type = current.properties.settings.type;
+          const law = current.properties.settings.applicableLaw;
+          const templates = get2().template;
+          if (templates[law] && templates[law][type] && force === false) {
+            return templates[law][type];
+          }
+          try {
+            const { useLanguageStore: useLanguageStore2 } = yield __vitePreload(() => __async(null, null, function* () {
+              const { useLanguageStore: useLanguageStore3 } = yield Promise.resolve().then(() => languageStore);
+              return { useLanguageStore: useLanguageStore3 };
+            }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
+            const currentLanguage = useLanguageStore2.getState().current;
+            const response = yield ckyRest.post({
+              path: "banners/preview",
+              params: {
+                language: currentLanguage
+              },
+              data: current
+            });
+            if (response && response.html) {
+              const updatedTemplates = __spreadValues({}, templates);
+              if (!updatedTemplates[law]) {
+                updatedTemplates[law] = {};
+              }
+              updatedTemplates[law][type] = response;
+              get2().setTemplate(updatedTemplates);
+              return updatedTemplates[law][type];
+            }
+          } catch (error) {
+            console.error("Error loading template:", error);
+          }
+          return null;
+        }), "loadTemplate")
+      }),
+      {
+        name: "banner-store"
+      }
+    )
+  );
+  const bannerStore = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+    __proto__: null,
+    useBannerStore
+  }, Symbol.toStringTag, { value: "Module" }));
   const CookieYes = /* @__PURE__ */ __name(({
     width = "18px",
     height = "100%",
@@ -19442,12 +21414,12 @@ var __async = (__this, __arguments, generator) => {
       }
     );
   }, "EditAlt");
-  const Edit = /* @__PURE__ */ __name((_h) => {
-    var _i = _h, {
+  const Edit = /* @__PURE__ */ __name((_j) => {
+    var _k = _j, {
       width = "18px",
       height = "100%",
       color: color2 = "currentColor"
-    } = _i, props = __objRest(_i, [
+    } = _k, props = __objRest(_k, [
       "width",
       "height",
       "color"
@@ -19500,12 +21472,12 @@ var __async = (__this, __arguments, generator) => {
       }
     );
   }, "Trash");
-  const Blank = /* @__PURE__ */ __name((_j) => {
-    var _k = _j, {
+  const Blank = /* @__PURE__ */ __name((_l) => {
+    var _m = _l, {
       width = "18px",
       height = "100%",
       color: color2 = "currentColor"
-    } = _k, props = __objRest(_k, [
+    } = _m, props = __objRest(_m, [
       "width",
       "height",
       "color"
@@ -20269,8 +22241,8 @@ var __async = (__this, __arguments, generator) => {
    * See the LICENSE file in the root directory of this source tree.
    */
   const Icon$1 = reactExports.forwardRef(
-    (_l, ref) => {
-      var _m = _l, {
+    (_n2, ref) => {
+      var _o = _n2, {
         color: color2 = "currentColor",
         size: size2 = 24,
         strokeWidth = 2,
@@ -20278,7 +22250,7 @@ var __async = (__this, __arguments, generator) => {
         className = "",
         children,
         iconNode
-      } = _m, rest = __objRest(_m, [
+      } = _o, rest = __objRest(_o, [
         "color",
         "size",
         "strokeWidth",
@@ -24462,18 +26434,18 @@ var __async = (__this, __arguments, generator) => {
     fullWidth: fullWidthClassName,
     zeroRight: zeroRightClassName
   };
-  var getNonce$1 = /* @__PURE__ */ __name(function() {
+  var getNonce = /* @__PURE__ */ __name(function() {
     if (typeof __webpack_nonce__ !== "undefined") {
       return __webpack_nonce__;
     }
     return void 0;
-  }, "getNonce$1");
+  }, "getNonce");
   function makeStyleTag() {
     if (!document)
       return null;
     var tag = document.createElement("style");
     tag.type = "text/css";
-    var nonce = getNonce$1();
+    var nonce = getNonce();
     if (nonce) {
       tag.setAttribute("nonce", nonce);
     }
@@ -28905,8 +30877,8 @@ var __async = (__this, __arguments, generator) => {
   __name(cn$1, "cn$1");
   const DropdownMenu = Root2$4;
   const DropdownMenuTrigger = Trigger$4;
-  const DropdownMenuSubTrigger = reactExports.forwardRef((_n2, ref) => {
-    var _o = _n2, { className, inset, children } = _o, props = __objRest(_o, ["className", "inset", "children"]);
+  const DropdownMenuSubTrigger = reactExports.forwardRef((_p, ref) => {
+    var _q = _p, { className, inset, children } = _q, props = __objRest(_q, ["className", "inset", "children"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(
       SubTrigger2,
       __spreadProps(__spreadValues({
@@ -28925,8 +30897,8 @@ var __async = (__this, __arguments, generator) => {
     );
   });
   DropdownMenuSubTrigger.displayName = SubTrigger2.displayName;
-  const DropdownMenuSubContent = reactExports.forwardRef((_p, ref) => {
-    var _q = _p, { className } = _q, props = __objRest(_q, ["className"]);
+  const DropdownMenuSubContent = reactExports.forwardRef((_r, ref) => {
+    var _s = _r, { className } = _s, props = __objRest(_s, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       SubContent2,
       __spreadValues({
@@ -28939,8 +30911,8 @@ var __async = (__this, __arguments, generator) => {
     );
   });
   DropdownMenuSubContent.displayName = SubContent2.displayName;
-  const DropdownMenuContent$1 = reactExports.forwardRef((_r, ref) => {
-    var _s = _r, { className, sideOffset = 4 } = _s, props = __objRest(_s, ["className", "sideOffset"]);
+  const DropdownMenuContent$1 = reactExports.forwardRef((_t, ref) => {
+    var _u = _t, { className, sideOffset = 4 } = _u, props = __objRest(_u, ["className", "sideOffset"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal2, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       Content2$3,
       __spreadValues({
@@ -28954,8 +30926,8 @@ var __async = (__this, __arguments, generator) => {
     ) });
   });
   DropdownMenuContent$1.displayName = Content2$3.displayName;
-  const DropdownMenuItem$1 = reactExports.forwardRef((_t, ref) => {
-    var _u = _t, { className, inset } = _u, props = __objRest(_u, ["className", "inset"]);
+  const DropdownMenuItem$1 = reactExports.forwardRef((_v, ref) => {
+    var _w = _v, { className, inset } = _w, props = __objRest(_w, ["className", "inset"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Item2$1,
       __spreadValues({
@@ -28969,8 +30941,8 @@ var __async = (__this, __arguments, generator) => {
     );
   });
   DropdownMenuItem$1.displayName = Item2$1.displayName;
-  const DropdownMenuCheckboxItem = reactExports.forwardRef((_v, ref) => {
-    var _w = _v, { className, children, checked } = _w, props = __objRest(_w, ["className", "children", "checked"]);
+  const DropdownMenuCheckboxItem = reactExports.forwardRef((_x, ref) => {
+    var _y = _x, { className, children, checked } = _y, props = __objRest(_y, ["className", "children", "checked"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(
       CheckboxItem2,
       __spreadProps(__spreadValues({
@@ -28989,8 +30961,8 @@ var __async = (__this, __arguments, generator) => {
     );
   });
   DropdownMenuCheckboxItem.displayName = CheckboxItem2.displayName;
-  const DropdownMenuRadioItem = reactExports.forwardRef((_x, ref) => {
-    var _y = _x, { className, children } = _y, props = __objRest(_y, ["className", "children"]);
+  const DropdownMenuRadioItem = reactExports.forwardRef((_z, ref) => {
+    var _A = _z, { className, children } = _A, props = __objRest(_A, ["className", "children"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(
       RadioItem2,
       __spreadProps(__spreadValues({
@@ -29008,8 +30980,8 @@ var __async = (__this, __arguments, generator) => {
     );
   });
   DropdownMenuRadioItem.displayName = RadioItem2.displayName;
-  const DropdownMenuLabel = reactExports.forwardRef((_z, ref) => {
-    var _A = _z, { className, inset } = _A, props = __objRest(_A, ["className", "inset"]);
+  const DropdownMenuLabel = reactExports.forwardRef((_B, ref) => {
+    var _C = _B, { className, inset } = _C, props = __objRest(_C, ["className", "inset"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Label2,
       __spreadValues({
@@ -29023,8 +30995,8 @@ var __async = (__this, __arguments, generator) => {
     );
   });
   DropdownMenuLabel.displayName = Label2.displayName;
-  const DropdownMenuSeparator = reactExports.forwardRef((_B, ref) => {
-    var _C = _B, { className } = _C, props = __objRest(_C, ["className"]);
+  const DropdownMenuSeparator = reactExports.forwardRef((_D, ref) => {
+    var _E = _D, { className } = _E, props = __objRest(_E, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Separator2,
       __spreadValues({
@@ -29036,8 +31008,8 @@ var __async = (__this, __arguments, generator) => {
   DropdownMenuSeparator.displayName = Separator2.displayName;
   const CKY_DROPDOWN_CONTENT_CLASS = "cky:z-[100050] cky:min-w-[130px] cky:overflow-hidden cky:rounded-[3px] cky:border cky:border-[#c9d0d6] cky:bg-white cky:p-0 cky:shadow-[0_3px_7px_0_rgba(0,0,0,0.07)]";
   const CKY_DROPDOWN_ITEM_CLASS = "cky:cursor-pointer cky:rounded-none cky:p-2.5 cky:text-sm cky:font-medium cky:text-[#3c434a] cky:outline-none cky:transition-colors cky:focus:bg-[#f8f9fa] cky:focus:text-[#3c434a] cky:data-[disabled]:pointer-events-none cky:data-[disabled]:opacity-60";
-  function DropdownMenuContent(_D) {
-    var _E = _D, { className } = _E, props = __objRest(_E, ["className"]);
+  function DropdownMenuContent(_F) {
+    var _G = _F, { className } = _G, props = __objRest(_G, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       DropdownMenuContent$1,
       __spreadValues({
@@ -29047,8 +31019,8 @@ var __async = (__this, __arguments, generator) => {
   }
   __name(DropdownMenuContent, "DropdownMenuContent");
   DropdownMenuContent.displayName = "DropdownMenuContent";
-  function DropdownMenuItem(_F) {
-    var _G = _F, { className } = _G, props = __objRest(_G, ["className"]);
+  function DropdownMenuItem(_H) {
+    var _I = _H, { className } = _I, props = __objRest(_I, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       DropdownMenuItem$1,
       __spreadValues({
@@ -29494,8 +31466,8 @@ var __async = (__this, __arguments, generator) => {
   var Trigger2 = AccordionTrigger$2;
   var Content2$2 = AccordionContent$1;
   const Accordion = Root2$3;
-  const AccordionItem = reactExports.forwardRef((_H, ref) => {
-    var _I = _H, { className } = _I, props = __objRest(_I, ["className"]);
+  const AccordionItem = reactExports.forwardRef((_J, ref) => {
+    var _K = _J, { className } = _K, props = __objRest(_K, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Item$1,
       __spreadValues({
@@ -29505,8 +31477,8 @@ var __async = (__this, __arguments, generator) => {
     );
   });
   AccordionItem.displayName = "AccordionItem";
-  const AccordionTrigger$1 = reactExports.forwardRef((_J, ref) => {
-    var _K = _J, { className, children } = _K, props = __objRest(_K, ["className", "children"]);
+  const AccordionTrigger$1 = reactExports.forwardRef((_L, ref) => {
+    var _M = _L, { className, children } = _M, props = __objRest(_M, ["className", "children"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { className: "cky:flex", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
       Trigger2,
       __spreadProps(__spreadValues({
@@ -29524,8 +31496,8 @@ var __async = (__this, __arguments, generator) => {
     ) });
   });
   AccordionTrigger$1.displayName = Trigger2.displayName;
-  const AccordionContent = reactExports.forwardRef((_L, ref) => {
-    var _M = _L, { className, children } = _M, props = __objRest(_M, ["className", "children"]);
+  const AccordionContent = reactExports.forwardRef((_N, ref) => {
+    var _O = _N, { className, children } = _O, props = __objRest(_O, ["className", "children"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Content2$2,
       __spreadProps(__spreadValues({
@@ -29537,14 +31509,14 @@ var __async = (__this, __arguments, generator) => {
     );
   });
   AccordionContent.displayName = Content2$2.displayName;
-  function AccordionTrigger(_N) {
-    var _O = _N, {
+  function AccordionTrigger(_P) {
+    var _Q = _P, {
       className,
       children,
       iconPosition = "right",
       hideChevron = false,
       ref
-    } = _O, props = __objRest(_O, [
+    } = _Q, props = __objRest(_Q, [
       "className",
       "children",
       "iconPosition",
@@ -29781,8 +31753,8 @@ var __async = (__this, __arguments, generator) => {
     ) });
   }
   __name(ButtonSpinner, "ButtonSpinner");
-  function Button(_P) {
-    var _Q = _P, {
+  function Button(_R) {
+    var _S = _R, {
       className,
       variant,
       size: size2,
@@ -29793,7 +31765,7 @@ var __async = (__this, __arguments, generator) => {
       disabled,
       children,
       ref
-    } = _Q, props = __objRest(_Q, [
+    } = _S, props = __objRest(_S, [
       "className",
       "variant",
       "size",
@@ -29826,8 +31798,8 @@ var __async = (__this, __arguments, generator) => {
   }
   __name(Button, "Button");
   Button.displayName = "Button";
-  const Card$1 = reactExports.forwardRef((_R, ref) => {
-    var _S = _R, { className } = _S, props = __objRest(_S, ["className"]);
+  const Card$1 = reactExports.forwardRef((_T, ref) => {
+    var _U = _T, { className } = _U, props = __objRest(_U, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
       __spreadValues({
@@ -29840,8 +31812,8 @@ var __async = (__this, __arguments, generator) => {
     );
   });
   Card$1.displayName = "Card";
-  const CardHeader$1 = reactExports.forwardRef((_T, ref) => {
-    var _U = _T, { className } = _U, props = __objRest(_U, ["className"]);
+  const CardHeader$1 = reactExports.forwardRef((_V, ref) => {
+    var _W = _V, { className } = _W, props = __objRest(_W, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
       __spreadValues({
@@ -29851,8 +31823,8 @@ var __async = (__this, __arguments, generator) => {
     );
   });
   CardHeader$1.displayName = "CardHeader";
-  const CardTitle$1 = reactExports.forwardRef((_V, ref) => {
-    var _W = _V, { className } = _W, props = __objRest(_W, ["className"]);
+  const CardTitle$1 = reactExports.forwardRef((_X, ref) => {
+    var _Y = _X, { className } = _Y, props = __objRest(_Y, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
       __spreadValues({
@@ -29865,8 +31837,8 @@ var __async = (__this, __arguments, generator) => {
     );
   });
   CardTitle$1.displayName = "CardTitle";
-  const CardDescription = reactExports.forwardRef((_X, ref) => {
-    var _Y = _X, { className } = _Y, props = __objRest(_Y, ["className"]);
+  const CardDescription = reactExports.forwardRef((_Z, ref) => {
+    var __2 = _Z, { className } = __2, props = __objRest(__2, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
       __spreadValues({
@@ -29876,13 +31848,13 @@ var __async = (__this, __arguments, generator) => {
     );
   });
   CardDescription.displayName = "CardDescription";
-  const CardContent$1 = reactExports.forwardRef((_Z, ref) => {
-    var __2 = _Z, { className } = __2, props = __objRest(__2, ["className"]);
+  const CardContent$1 = reactExports.forwardRef((_$, ref) => {
+    var _aa = _$, { className } = _aa, props = __objRest(_aa, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", __spreadValues({ ref, className: cn$1("cky:p-6 cky:pt-0", className) }, props));
   });
   CardContent$1.displayName = "CardContent";
-  const CardFooter$1 = reactExports.forwardRef((_$, ref) => {
-    var _aa = _$, { className } = _aa, props = __objRest(_aa, ["className"]);
+  const CardFooter$1 = reactExports.forwardRef((_ba, ref) => {
+    var _ca = _ba, { className } = _ca, props = __objRest(_ca, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
       __spreadValues({
@@ -29892,10 +31864,10 @@ var __async = (__this, __arguments, generator) => {
     );
   });
   CardFooter$1.displayName = "CardFooter";
-  function Skeleton(_ba) {
-    var _ca = _ba, {
+  function Skeleton(_da) {
+    var _ea = _da, {
       className
-    } = _ca, props = __objRest(_ca, [
+    } = _ea, props = __objRest(_ea, [
       "className"
     ]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -29906,13 +31878,13 @@ var __async = (__this, __arguments, generator) => {
     );
   }
   __name(Skeleton, "Skeleton");
-  function Card(_da) {
-    var _ea = _da, {
+  function Card(_fa) {
+    var _ga = _fa, {
       className,
       loading = false,
       fullWidth = false,
       ref
-    } = _ea, props = __objRest(_ea, [
+    } = _ga, props = __objRest(_ga, [
       "className",
       "loading",
       "fullWidth",
@@ -29933,11 +31905,11 @@ var __async = (__this, __arguments, generator) => {
   }
   __name(Card, "Card");
   Card.displayName = "Card";
-  function CardHeader(_fa) {
-    var _ga = _fa, {
+  function CardHeader(_ha) {
+    var _ia = _ha, {
       className,
       ref
-    } = _ga, props = __objRest(_ga, [
+    } = _ia, props = __objRest(_ia, [
       "className",
       "ref"
     ]);
@@ -29945,11 +31917,11 @@ var __async = (__this, __arguments, generator) => {
   }
   __name(CardHeader, "CardHeader");
   CardHeader.displayName = "CardHeader";
-  function CardTitle(_ha) {
-    var _ia = _ha, {
+  function CardTitle(_ja) {
+    var _ka = _ja, {
       className,
       ref
-    } = _ia, props = __objRest(_ia, [
+    } = _ka, props = __objRest(_ka, [
       "className",
       "ref"
     ]);
@@ -29966,11 +31938,11 @@ var __async = (__this, __arguments, generator) => {
   }
   __name(CardTitle, "CardTitle");
   CardTitle.displayName = "CardTitle";
-  function CardSubtitle(_ja) {
-    var _ka = _ja, {
+  function CardSubtitle(_la) {
+    var _ma = _la, {
       ref,
       className
-    } = _ka, props = __objRest(_ka, [
+    } = _ma, props = __objRest(_ma, [
       "ref",
       "className"
     ]);
@@ -29984,12 +31956,12 @@ var __async = (__this, __arguments, generator) => {
   }
   __name(CardSubtitle, "CardSubtitle");
   CardSubtitle.displayName = "CardSubtitle";
-  function CardContent(_la) {
-    var _ma = _la, {
+  function CardContent(_na) {
+    var _oa = _na, {
       className,
       fullWidth = false,
       ref
-    } = _ma, props = __objRest(_ma, [
+    } = _oa, props = __objRest(_oa, [
       "className",
       "fullWidth",
       "ref"
@@ -30008,11 +31980,11 @@ var __async = (__this, __arguments, generator) => {
   }
   __name(CardContent, "CardContent");
   CardContent.displayName = "CardContent";
-  function CardFooter(_na) {
-    var _oa = _na, {
+  function CardFooter(_pa) {
+    var _qa = _pa, {
       className,
       ref
-    } = _oa, props = __objRest(_oa, [
+    } = _qa, props = __objRest(_qa, [
       "className",
       "ref"
     ]);
@@ -30029,11 +32001,11 @@ var __async = (__this, __arguments, generator) => {
   }
   __name(CardFooter, "CardFooter");
   CardFooter.displayName = "CardFooter";
-  function CardLoader(_pa) {
-    var _qa = _pa, {
+  function CardLoader(_ra) {
+    var _sa = _ra, {
       className,
       ref
-    } = _qa, props = __objRest(_qa, [
+    } = _sa, props = __objRest(_sa, [
       "className",
       "ref"
     ]);
@@ -30060,8 +32032,8 @@ var __async = (__this, __arguments, generator) => {
       }
     }
   );
-  const Alert$1 = reactExports.forwardRef((_ra, ref) => {
-    var _sa = _ra, { className, variant } = _sa, props = __objRest(_sa, ["className", "variant"]);
+  const Alert$1 = reactExports.forwardRef((_ta, ref) => {
+    var _ua = _ta, { className, variant } = _ua, props = __objRest(_ua, ["className", "variant"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
       __spreadValues({
@@ -30072,8 +32044,8 @@ var __async = (__this, __arguments, generator) => {
     );
   });
   Alert$1.displayName = "Alert";
-  const AlertTitle$1 = reactExports.forwardRef((_ta, ref) => {
-    var _ua = _ta, { className } = _ua, props = __objRest(_ua, ["className"]);
+  const AlertTitle$1 = reactExports.forwardRef((_va, ref) => {
+    var _wa = _va, { className } = _wa, props = __objRest(_wa, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "h5",
       __spreadValues({
@@ -30083,8 +32055,8 @@ var __async = (__this, __arguments, generator) => {
     );
   });
   AlertTitle$1.displayName = "AlertTitle";
-  const AlertDescription = reactExports.forwardRef((_va, ref) => {
-    var _wa = _va, { className } = _wa, props = __objRest(_wa, ["className"]);
+  const AlertDescription = reactExports.forwardRef((_xa, ref) => {
+    var _ya = _xa, { className } = _ya, props = __objRest(_ya, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
       __spreadValues({
@@ -30111,8 +32083,8 @@ var __async = (__this, __arguments, generator) => {
       }
     }
   );
-  function Alert(_xa) {
-    var _ya = _xa, { className, variant, ref } = _ya, props = __objRest(_ya, ["className", "variant", "ref"]);
+  function Alert(_za) {
+    var _Aa = _za, { className, variant, ref } = _Aa, props = __objRest(_Aa, ["className", "variant", "ref"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
       __spreadValues({
@@ -30124,11 +32096,11 @@ var __async = (__this, __arguments, generator) => {
   }
   __name(Alert, "Alert");
   Alert.displayName = "Alert";
-  function AlertTitle(_za) {
-    var _Aa = _za, {
+  function AlertTitle(_Ba) {
+    var _Ca = _Ba, {
       className,
       ref
-    } = _Aa, props = __objRest(_Aa, [
+    } = _Ca, props = __objRest(_Ca, [
       "className",
       "ref"
     ]);
@@ -30158,8 +32130,8 @@ var __async = (__this, __arguments, generator) => {
       }
     }
   );
-  function Badge$1(_Ba) {
-    var _Ca = _Ba, { className, variant, ref } = _Ca, props = __objRest(_Ca, ["className", "variant", "ref"]);
+  function Badge$1(_Da) {
+    var _Ea = _Da, { className, variant, ref } = _Ea, props = __objRest(_Ea, ["className", "variant", "ref"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
       __spreadValues({
@@ -30186,8 +32158,8 @@ var __async = (__this, __arguments, generator) => {
       }
     }
   );
-  function Badge(_Da) {
-    var _Ea = _Da, { className, variant, ref } = _Ea, props = __objRest(_Ea, ["className", "variant", "ref"]);
+  function Badge(_Fa) {
+    var _Ga = _Fa, { className, variant, ref } = _Ga, props = __objRest(_Ga, ["className", "variant", "ref"]);
     if (variant === "premium") {
       return /* @__PURE__ */ jsxRuntimeExports.jsx(
         "div",
@@ -30208,11 +32180,11 @@ var __async = (__this, __arguments, generator) => {
   }
   __name(Badge, "Badge");
   Badge.displayName = "Badge";
-  function Table(_Fa) {
-    var _Ga = _Fa, {
+  function Table(_Ha) {
+    var _Ia = _Ha, {
       className,
       ref
-    } = _Ga, props = __objRest(_Ga, [
+    } = _Ia, props = __objRest(_Ia, [
       "className",
       "ref"
     ]);
@@ -30229,11 +32201,11 @@ var __async = (__this, __arguments, generator) => {
   }
   __name(Table, "Table");
   Table.displayName = "Table";
-  function TableHeader(_Ha) {
-    var _Ia = _Ha, {
+  function TableHeader(_Ja) {
+    var _Ka = _Ja, {
       className,
       ref
-    } = _Ia, props = __objRest(_Ia, [
+    } = _Ka, props = __objRest(_Ka, [
       "className",
       "ref"
     ]);
@@ -30247,11 +32219,11 @@ var __async = (__this, __arguments, generator) => {
   }
   __name(TableHeader, "TableHeader");
   TableHeader.displayName = "TableHeader";
-  function TableBody(_Ja) {
-    var _Ka = _Ja, {
+  function TableBody(_La) {
+    var _Ma = _La, {
       className,
       ref
-    } = _Ka, props = __objRest(_Ka, [
+    } = _Ma, props = __objRest(_Ma, [
       "className",
       "ref"
     ]);
@@ -30265,11 +32237,11 @@ var __async = (__this, __arguments, generator) => {
   }
   __name(TableBody, "TableBody");
   TableBody.displayName = "TableBody";
-  function TableRow(_La) {
-    var _Ma = _La, {
+  function TableRow(_Na) {
+    var _Oa = _Na, {
       className,
       ref
-    } = _Ma, props = __objRest(_Ma, [
+    } = _Oa, props = __objRest(_Oa, [
       "className",
       "ref"
     ]);
@@ -30286,11 +32258,11 @@ var __async = (__this, __arguments, generator) => {
   }
   __name(TableRow, "TableRow");
   TableRow.displayName = "TableRow";
-  function TableHead(_Na) {
-    var _Oa = _Na, {
+  function TableHead(_Pa) {
+    var _Qa = _Pa, {
       className,
       ref
-    } = _Oa, props = __objRest(_Oa, [
+    } = _Qa, props = __objRest(_Qa, [
       "className",
       "ref"
     ]);
@@ -30307,11 +32279,11 @@ var __async = (__this, __arguments, generator) => {
   }
   __name(TableHead, "TableHead");
   TableHead.displayName = "TableHead";
-  function TableCell(_Pa) {
-    var _Qa = _Pa, {
+  function TableCell(_Ra) {
+    var _Sa = _Ra, {
       className,
       ref
-    } = _Qa, props = __objRest(_Qa, [
+    } = _Sa, props = __objRest(_Sa, [
       "className",
       "ref"
     ]);
@@ -30722,8 +32694,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   var Close = DialogClose$1;
   const Dialog = Root$3;
   const DialogPortal = Portal$1;
-  const DialogOverlay$1 = reactExports.forwardRef((_Ra, ref) => {
-    var _Sa = _Ra, { className } = _Sa, props = __objRest(_Sa, ["className"]);
+  const DialogOverlay$1 = reactExports.forwardRef((_Ta, ref) => {
+    var _Ua = _Ta, { className } = _Ua, props = __objRest(_Ua, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Overlay,
       __spreadValues({
@@ -30736,8 +32708,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     );
   });
   DialogOverlay$1.displayName = Overlay.displayName;
-  const DialogContent$1 = reactExports.forwardRef((_Ta, ref) => {
-    var _Ua = _Ta, { className, children } = _Ua, props = __objRest(_Ua, ["className", "children"]);
+  const DialogContent$1 = reactExports.forwardRef((_Va, ref) => {
+    var _Wa = _Va, { className, children } = _Wa, props = __objRest(_Wa, ["className", "children"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogPortal, { children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(DialogOverlay$1, {}),
       /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -30761,8 +32733,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     ] });
   });
   DialogContent$1.displayName = Content$1.displayName;
-  const DialogTitle$1 = reactExports.forwardRef((_Va, ref) => {
-    var _Wa = _Va, { className } = _Wa, props = __objRest(_Wa, ["className"]);
+  const DialogTitle$1 = reactExports.forwardRef((_Xa, ref) => {
+    var _Ya = _Xa, { className } = _Ya, props = __objRest(_Ya, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Title,
       __spreadValues({
@@ -30775,8 +32747,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     );
   });
   DialogTitle$1.displayName = Title.displayName;
-  const DialogDescription$1 = reactExports.forwardRef((_Xa, ref) => {
-    var _Ya = _Xa, { className } = _Ya, props = __objRest(_Ya, ["className"]);
+  const DialogDescription$1 = reactExports.forwardRef((_Za, ref) => {
+    var __a = _Za, { className } = __a, props = __objRest(__a, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Description,
       __spreadValues({
@@ -30789,8 +32761,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   const DIALOG_CONTENT_CLASSES = "cky:relative cky:z-50 cky:flex cky:flex-col cky:gap-4 cky:w-full cky:max-w-lg cky:border cky:bg-background cky:shadow-lg cky:duration-200 cky:data-[state=open]:animate-in cky:data-[state=closed]:animate-out cky:data-[state=closed]:fade-out-0 cky:data-[state=open]:fade-in-0 cky:data-[state=closed]:zoom-out-95 cky:data-[state=open]:zoom-in-95 cky:data-[state=closed]:slide-out-to-left-1/2 cky:data-[state=closed]:slide-out-to-top-[48%] cky:data-[state=open]:slide-in-from-left-1/2 cky:data-[state=open]:slide-in-from-top-[48%] cky:sm:rounded-lg";
   const CKY_DIALOG_FOOTER_CLASS = "cky:p-[0_30px_20px_30px] cky:flex cky:flex-row cky:justify-end cky:gap-2";
   const CKY_DIALOG_CONTENT_CLASS = "cky:max-w-[660px] cky:rounded-[2px] cky:max-h-[calc(100%-3.5rem)] cky:transition-all cky:duration-[0.4s] cky:ease-[ease]";
-  function DialogOverlay(_Za) {
-    var __a = _Za, { className, children, ref } = __a, props = __objRest(__a, ["className", "children", "ref"]);
+  function DialogOverlay(_$a) {
+    var _ab = _$a, { className, children, ref } = _ab, props = __objRest(_ab, ["className", "children", "ref"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Overlay,
       __spreadProps(__spreadValues({
@@ -30806,8 +32778,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   }
   __name(DialogOverlay, "DialogOverlay");
   DialogOverlay.displayName = "DialogOverlay";
-  function DialogClose(_$a) {
-    var _ab = _$a, { className } = _ab, props = __objRest(_ab, ["className"]);
+  function DialogClose(_bb) {
+    var _cb = _bb, { className } = _cb, props = __objRest(_cb, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(
       Close,
       __spreadProps(__spreadValues({
@@ -30825,13 +32797,13 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   }
   __name(DialogClose, "DialogClose");
   DialogClose.displayName = "DialogClose";
-  const DialogHeader = /* @__PURE__ */ __name((_bb) => {
-    var _cb = _bb, {
+  const DialogHeader = /* @__PURE__ */ __name((_db) => {
+    var _eb = _db, {
       className,
       children,
       showClose = true,
       closeClassName
-    } = _cb, props = __objRest(_cb, [
+    } = _eb, props = __objRest(_eb, [
       "className",
       "children",
       "showClose",
@@ -30854,10 +32826,10 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     );
   }, "DialogHeader");
   DialogHeader.displayName = "DialogHeader";
-  const DialogFooter = /* @__PURE__ */ __name((_db) => {
-    var _eb = _db, {
+  const DialogFooter = /* @__PURE__ */ __name((_fb) => {
+    var _gb = _fb, {
       className
-    } = _eb, props = __objRest(_eb, [
+    } = _gb, props = __objRest(_gb, [
       "className"
     ]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -30871,8 +32843,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     );
   }, "DialogFooter");
   DialogFooter.displayName = "DialogFooter";
-  function DialogTitle(_fb) {
-    var _gb = _fb, { className, ref } = _gb, props = __objRest(_gb, ["className", "ref"]);
+  function DialogTitle(_hb) {
+    var _ib = _hb, { className, ref } = _ib, props = __objRest(_ib, ["className", "ref"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Title,
       __spreadValues({
@@ -30883,8 +32855,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   }
   __name(DialogTitle, "DialogTitle");
   DialogTitle.displayName = "DialogTitle";
-  function DialogDescription(_hb) {
-    var _ib = _hb, { className, ref } = _ib, props = __objRest(_ib, ["className", "ref"]);
+  function DialogDescription(_jb) {
+    var _kb = _jb, { className, ref } = _kb, props = __objRest(_kb, ["className", "ref"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Description,
       __spreadValues({
@@ -30895,15 +32867,15 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   }
   __name(DialogDescription, "DialogDescription");
   DialogDescription.displayName = "DialogDescription";
-  function DialogContent(_jb) {
-    var _kb = _jb, {
+  function DialogContent(_lb) {
+    var _mb = _lb, {
       className,
       overlayClassName,
       hideOverlay,
       container,
       children,
       ref
-    } = _kb, props = __objRest(_kb, [
+    } = _mb, props = __objRest(_mb, [
       "className",
       "overlayClassName",
       "hideOverlay",
@@ -31455,8 +33427,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   const TooltipProvider = Provider;
   const Tooltip$1 = Root3;
   const TooltipTrigger = Trigger$2;
-  const TooltipContent = reactExports.forwardRef((_lb, ref) => {
-    var _mb = _lb, { className, sideOffset = 4 } = _mb, props = __objRest(_mb, ["className", "sideOffset"]);
+  const TooltipContent = reactExports.forwardRef((_nb, ref) => {
+    var _ob = _nb, { className, sideOffset = 4 } = _ob, props = __objRest(_ob, ["className", "sideOffset"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Content2$1,
       __spreadValues({
@@ -31474,11 +33446,11 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   const CKY_TOOLTIP_CONSENT_ACTIONS_CLASS = "cky-tooltip-consent-actions";
   const TOOLTIP_ARROW_FILL = "cky:fill-[var(--cky-tooltip-bg)]";
   const TOOLTIP_ARROW_BOX = "cky:!w-[10px] cky:!h-[5px] cky:max-w-none cky:max-h-none cky:shrink-0";
-  const TooltipArrow = reactExports.memo(/* @__PURE__ */ __name(function TooltipArrow2(_nb) {
-    var _ob = _nb, {
+  const TooltipArrow = reactExports.memo(/* @__PURE__ */ __name(function TooltipArrow2(_pb) {
+    var _qb = _pb, {
       className,
       ref
-    } = _ob, props = __objRest(_ob, [
+    } = _qb, props = __objRest(_qb, [
       "className",
       "ref"
     ]);
@@ -31516,12 +33488,12 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
       )
     ] });
   }, "TooltipWithContent2"));
-  function TooltipContentWithArrow(_pb) {
-    var _qb = _pb, {
+  function TooltipContentWithArrow(_rb) {
+    var _sb = _rb, {
       ref,
       className,
       children
-    } = _qb, props = __objRest(_qb, [
+    } = _sb, props = __objRest(_sb, [
       "ref",
       "className",
       "children"
@@ -32708,8 +34680,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   SelectArrow.displayName = ARROW_NAME;
   var BUBBLE_INPUT_NAME$3 = "SelectBubbleInput";
   var SelectBubbleInput = reactExports.forwardRef(
-    (_rb, forwardedRef) => {
-      var _sb = _rb, { __scopeSelect, value } = _sb, props = __objRest(_sb, ["__scopeSelect", "value"]);
+    (_tb, forwardedRef) => {
+      var _ub = _tb, { __scopeSelect, value } = _ub, props = __objRest(_ub, ["__scopeSelect", "value"]);
       const ref = reactExports.useRef(null);
       const composedRefs = useComposedRefs(forwardedRef, ref);
       const prevValue = usePrevious(value);
@@ -32802,8 +34774,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   var Separator = SelectSeparator$1;
   const Select = Root2$2;
   const SelectValue = Value;
-  const SelectTrigger$1 = reactExports.forwardRef((_tb, ref) => {
-    var _ub = _tb, { className, children } = _ub, props = __objRest(_ub, ["className", "children"]);
+  const SelectTrigger$1 = reactExports.forwardRef((_vb, ref) => {
+    var _wb = _vb, { className, children } = _wb, props = __objRest(_wb, ["className", "children"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(
       Trigger$1,
       __spreadProps(__spreadValues({
@@ -32821,8 +34793,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     );
   });
   SelectTrigger$1.displayName = Trigger$1.displayName;
-  const SelectScrollUpButton = reactExports.forwardRef((_vb, ref) => {
-    var _wb = _vb, { className } = _wb, props = __objRest(_wb, ["className"]);
+  const SelectScrollUpButton = reactExports.forwardRef((_xb, ref) => {
+    var _yb = _xb, { className } = _yb, props = __objRest(_yb, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       ScrollUpButton,
       __spreadProps(__spreadValues({
@@ -32837,8 +34809,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     );
   });
   SelectScrollUpButton.displayName = ScrollUpButton.displayName;
-  const SelectScrollDownButton = reactExports.forwardRef((_xb, ref) => {
-    var _yb = _xb, { className } = _yb, props = __objRest(_yb, ["className"]);
+  const SelectScrollDownButton = reactExports.forwardRef((_zb, ref) => {
+    var _Ab = _zb, { className } = _Ab, props = __objRest(_Ab, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       ScrollDownButton,
       __spreadProps(__spreadValues({
@@ -32853,8 +34825,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     );
   });
   SelectScrollDownButton.displayName = ScrollDownButton.displayName;
-  const SelectContent$1 = reactExports.forwardRef((_zb, ref) => {
-    var _Ab = _zb, { className, children, position = "popper" } = _Ab, props = __objRest(_Ab, ["className", "children", "position"]);
+  const SelectContent$1 = reactExports.forwardRef((_Bb, ref) => {
+    var _Cb = _Bb, { className, children, position = "popper" } = _Cb, props = __objRest(_Cb, ["className", "children", "position"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
       Content2,
       __spreadProps(__spreadValues({
@@ -32884,8 +34856,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     ) });
   });
   SelectContent$1.displayName = Content2.displayName;
-  const SelectLabel = reactExports.forwardRef((_Bb, ref) => {
-    var _Cb = _Bb, { className } = _Cb, props = __objRest(_Cb, ["className"]);
+  const SelectLabel = reactExports.forwardRef((_Db, ref) => {
+    var _Eb = _Db, { className } = _Eb, props = __objRest(_Eb, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Label$4,
       __spreadValues({
@@ -32895,8 +34867,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     );
   });
   SelectLabel.displayName = Label$4.displayName;
-  const SelectItem$1 = reactExports.forwardRef((_Db, ref) => {
-    var _Eb = _Db, { className, children } = _Eb, props = __objRest(_Eb, ["className", "children"]);
+  const SelectItem$1 = reactExports.forwardRef((_Fb, ref) => {
+    var _Gb = _Fb, { className, children } = _Gb, props = __objRest(_Gb, ["className", "children"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(
       Item,
       __spreadProps(__spreadValues({
@@ -32914,8 +34886,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     );
   });
   SelectItem$1.displayName = Item.displayName;
-  const SelectSeparator = reactExports.forwardRef((_Fb, ref) => {
-    var _Gb = _Fb, { className } = _Gb, props = __objRest(_Gb, ["className"]);
+  const SelectSeparator = reactExports.forwardRef((_Hb, ref) => {
+    var _Ib = _Hb, { className } = _Ib, props = __objRest(_Ib, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Separator,
       __spreadValues({
@@ -32940,13 +34912,13 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     default: "cky:h-10 cky:rounded-[3px] cky:border cky:border-solid cky:border-[#d1d5db]",
     modal: "cky:h-10 cky:rounded-[3px] cky:border cky:border-solid cky:border-[#d1d5db] cky:py-[8px] cky:pl-[14px] cky:pr-[25px]"
   };
-  function SelectTrigger(_Hb) {
-    var _Ib = _Hb, {
+  function SelectTrigger(_Jb) {
+    var _Kb = _Jb, {
       className,
       variant = "default",
       children,
       ref
-    } = _Ib, props = __objRest(_Ib, [
+    } = _Kb, props = __objRest(_Kb, [
       "className",
       "variant",
       "children",
@@ -32965,8 +34937,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   }
   __name(SelectTrigger, "SelectTrigger");
   SelectTrigger.displayName = "SelectTrigger";
-  function SelectContent(_Jb) {
-    var _Kb = _Jb, { className, ref } = _Kb, props = __objRest(_Kb, ["className", "ref"]);
+  function SelectContent(_Lb) {
+    var _Mb = _Lb, { className, ref } = _Mb, props = __objRest(_Mb, ["className", "ref"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       SelectContent$1,
       __spreadValues({
@@ -32977,8 +34949,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   }
   __name(SelectContent, "SelectContent");
   SelectContent.displayName = "SelectContent";
-  function SelectItem(_Lb) {
-    var _Mb = _Lb, { className, variant = "default", ref } = _Mb, props = __objRest(_Mb, ["className", "variant", "ref"]);
+  function SelectItem(_Nb) {
+    var _Ob = _Nb, { className, variant = "default", ref } = _Ob, props = __objRest(_Ob, ["className", "variant", "ref"]);
     const itemClass = variant === "modal" ? CKY_SELECT_ITEM_MODAL_CLASS : CKY_SELECT_ITEM_CLASS;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       SelectItem$1,
@@ -32991,8 +34963,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   __name(SelectItem, "SelectItem");
   SelectItem.displayName = "SelectItem";
   const Input = reactExports.forwardRef(
-    (_Nb, ref) => {
-      var _Ob = _Nb, { className, type } = _Ob, props = __objRest(_Ob, ["className", "type"]);
+    (_Pb, ref) => {
+      var _Qb = _Pb, { className, type } = _Qb, props = __objRest(_Qb, ["className", "type"]);
       return /* @__PURE__ */ jsxRuntimeExports.jsx(
         "input",
         __spreadValues({
@@ -33009,8 +34981,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   Input.displayName = "Input";
   const CKY_INPUT_FORM_CLASS = "cky:box-border cky:border cky:border-solid cky:!border-[#d1d5db] cky:rounded-[3px] cky:bg-white cky:text-[#23282d] hover:cky:!border-[#b4b9be] focus-visible:cky:!border-[var(--cky-primary)] focus-visible:cky:shadow-[0_0_0_1px_var(--cky-primary)] focus-visible:cky:outline-none focus-visible:cky:ring-0 focus-visible:cky:ring-offset-0";
   const CKY_INPUT_FORM_PADDING = "cky:py-[9px] cky:px-[14px]";
-  function CkyInput(_Pb) {
-    var _Qb = _Pb, { className, ref } = _Qb, props = __objRest(_Qb, ["className", "ref"]);
+  function CkyInput(_Rb) {
+    var _Sb = _Rb, { className, ref } = _Sb, props = __objRest(_Sb, ["className", "ref"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Input,
       __spreadValues({
@@ -33116,13 +35088,13 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   SwitchThumb.displayName = THUMB_NAME;
   var BUBBLE_INPUT_NAME$2 = "SwitchBubbleInput";
   var SwitchBubbleInput = reactExports.forwardRef(
-    (_Rb, forwardedRef) => {
-      var _Sb = _Rb, {
+    (_Tb, forwardedRef) => {
+      var _Ub = _Tb, {
         __scopeSwitch,
         control,
         checked,
         bubbles = true
-      } = _Sb, props = __objRest(_Sb, [
+      } = _Ub, props = __objRest(_Ub, [
         "__scopeSwitch",
         "control",
         "checked",
@@ -33173,8 +35145,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   __name(getState$2, "getState$2");
   var Root$1 = Switch$2;
   var Thumb = SwitchThumb;
-  const Switch$1 = reactExports.forwardRef((_Tb, ref) => {
-    var _Ub = _Tb, { className } = _Ub, props = __objRest(_Ub, ["className"]);
+  const Switch$1 = reactExports.forwardRef((_Vb, ref) => {
+    var _Wb = _Vb, { className } = _Wb, props = __objRest(_Wb, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Root$1,
       __spreadProps(__spreadValues({
@@ -33206,8 +35178,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     "cky:[&>span]:cky:block cky:[&>span]:cky:!h-3 cky:[&>span]:cky:!w-3",
     "cky:[&>span]:cky:rounded-full cky:[&>span]:cky:bg-white cky:[&>span]:cky:shadow-none cky:[&>span]:cky:ring-0"
   ].join(" ");
-  function Switch(_Vb) {
-    var _Wb = _Vb, { className, ref } = _Wb, props = __objRest(_Wb, ["className", "ref"]);
+  function Switch(_Xb) {
+    var _Yb = _Xb, { className, ref } = _Yb, props = __objRest(_Yb, ["className", "ref"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Switch$1,
       __spreadValues({
@@ -33277,8 +35249,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   __name(CheckboxProvider, "CheckboxProvider");
   var TRIGGER_NAME$1 = "CheckboxTrigger";
   var CheckboxTrigger = reactExports.forwardRef(
-    (_Xb, forwardedRef) => {
-      var _Yb = _Xb, { __scopeCheckbox, onKeyDown, onClick } = _Yb, checkboxProps = __objRest(_Yb, ["__scopeCheckbox", "onKeyDown", "onClick"]);
+    (_Zb, forwardedRef) => {
+      var __b = _Zb, { __scopeCheckbox, onKeyDown, onClick } = __b, checkboxProps = __objRest(__b, ["__scopeCheckbox", "onKeyDown", "onClick"]);
       const {
         control,
         value,
@@ -33410,8 +35382,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   CheckboxIndicator.displayName = INDICATOR_NAME$1;
   var BUBBLE_INPUT_NAME$1 = "CheckboxBubbleInput";
   var CheckboxBubbleInput = reactExports.forwardRef(
-    (_Zb, forwardedRef) => {
-      var __b = _Zb, { __scopeCheckbox } = __b, props = __objRest(__b, ["__scopeCheckbox"]);
+    (_$b, forwardedRef) => {
+      var _ac = _$b, { __scopeCheckbox } = _ac, props = __objRest(_ac, ["__scopeCheckbox"]);
       const {
         control,
         hasConsumerStoppedPropagationRef,
@@ -33487,8 +35459,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     return isIndeterminate(checked) ? "indeterminate" : checked ? "checked" : "unchecked";
   }
   __name(getState$1, "getState$1");
-  const Checkbox = reactExports.forwardRef((_$b, ref) => {
-    var _ac = _$b, { className } = _ac, props = __objRest(_ac, ["className"]);
+  const Checkbox = reactExports.forwardRef((_bc, ref) => {
+    var _cc = _bc, { className } = _cc, props = __objRest(_cc, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Checkbox$1,
       __spreadProps(__spreadValues({
@@ -33509,8 +35481,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     );
   });
   Checkbox.displayName = Checkbox$1.displayName;
-  function CkyCheckbox(_bc) {
-    var _cc = _bc, { className, ref } = _cc, props = __objRest(_cc, ["className", "ref"]);
+  function CkyCheckbox(_dc) {
+    var _ec = _dc, { className, ref } = _ec, props = __objRest(_ec, ["className", "ref"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Checkbox,
       __spreadValues({
@@ -33578,8 +35550,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   const labelVariants = cva(
     "cky:text-sm cky:font-medium cky:leading-none cky:peer-disabled:cursor-not-allowed cky:peer-disabled:opacity-70"
   );
-  const Label$2 = reactExports.forwardRef((_dc, ref) => {
-    var _ec = _dc, { className } = _ec, props = __objRest(_ec, ["className"]);
+  const Label$2 = reactExports.forwardRef((_fc, ref) => {
+    var _gc = _fc, { className } = _gc, props = __objRest(_gc, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Root,
       __spreadValues({
@@ -33590,8 +35562,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   });
   Label$2.displayName = Root.displayName;
   const CKY_LABEL_CLASS = "cky:text-[var(--cky-text-primary,#23282d)]";
-  const Label$1 = reactExports.forwardRef((_fc, ref) => {
-    var _gc = _fc, { className } = _gc, props = __objRest(_gc, ["className"]);
+  const Label$1 = reactExports.forwardRef((_hc, ref) => {
+    var _ic = _hc, { className } = _ic, props = __objRest(_ic, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Label$2,
       __spreadValues({
@@ -34879,8 +36851,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   var Trigger = TabsTrigger$1;
   var Content = TabsContent$1;
   const Tabs = Root2$1;
-  const TabsList = reactExports.forwardRef((_hc, ref) => {
-    var _ic = _hc, { className } = _ic, props = __objRest(_ic, ["className"]);
+  const TabsList = reactExports.forwardRef((_jc, ref) => {
+    var _kc = _jc, { className } = _kc, props = __objRest(_kc, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       List,
       __spreadValues({
@@ -34893,8 +36865,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     );
   });
   TabsList.displayName = List.displayName;
-  const TabsTrigger = reactExports.forwardRef((_jc, ref) => {
-    var _kc = _jc, { className } = _kc, props = __objRest(_kc, ["className"]);
+  const TabsTrigger = reactExports.forwardRef((_lc, ref) => {
+    var _mc = _lc, { className } = _mc, props = __objRest(_mc, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Trigger,
       __spreadValues({
@@ -34907,8 +36879,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     );
   });
   TabsTrigger.displayName = Trigger.displayName;
-  const TabsContent = reactExports.forwardRef((_lc, ref) => {
-    var _mc = _lc, { className } = _mc, props = __objRest(_mc, ["className"]);
+  const TabsContent = reactExports.forwardRef((_nc, ref) => {
+    var _oc = _nc, { className } = _oc, props = __objRest(_oc, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Content,
       __spreadValues({
@@ -43450,10 +45422,10 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   }
   __name(number$1, "number$1");
   var unit = [0, 1];
-  function identity$5(x2) {
+  function identity$4(x2) {
     return x2;
   }
-  __name(identity$5, "identity$5");
+  __name(identity$4, "identity$4");
   function normalize(a2, b) {
     return (b -= a2 = +a2) ? function(x2) {
       return (x2 - a2) / b;
@@ -43498,10 +45470,10 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   }
   __name(copy$1, "copy$1");
   function transformer$2() {
-    var domain = unit, range2 = unit, interpolate$1 = interpolate, transform, untransform, unknown, clamp2 = identity$5, piecewise2, output, input;
+    var domain = unit, range2 = unit, interpolate$1 = interpolate, transform, untransform, unknown, clamp2 = identity$4, piecewise2, output, input;
     function rescale() {
       var n2 = Math.min(domain.length, range2.length);
-      if (clamp2 !== identity$5) clamp2 = clamper(domain[0], domain[n2 - 1]);
+      if (clamp2 !== identity$4) clamp2 = clamper(domain[0], domain[n2 - 1]);
       piecewise2 = n2 > 2 ? polymap : bimap;
       output = input = null;
       return scale;
@@ -43524,7 +45496,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
       return range2 = Array.from(_), interpolate$1 = interpolateRound, rescale();
     };
     scale.clamp = function(_) {
-      return arguments.length ? (clamp2 = _ ? true : identity$5, rescale()) : clamp2 !== identity$5;
+      return arguments.length ? (clamp2 = _ ? true : identity$4, rescale()) : clamp2 !== identity$4;
     };
     scale.interpolate = function(_) {
       return arguments.length ? (interpolate$1 = _, rescale()) : interpolate$1;
@@ -43539,7 +45511,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   }
   __name(transformer$2, "transformer$2");
   function continuous() {
-    return transformer$2()(identity$5, identity$5);
+    return transformer$2()(identity$4, identity$4);
   }
   __name(continuous, "continuous");
   function formatDecimal(x2) {
@@ -43664,13 +45636,13 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     "X": /* @__PURE__ */ __name((x2) => Math.round(x2).toString(16).toUpperCase(), "X"),
     "x": /* @__PURE__ */ __name((x2) => Math.round(x2).toString(16), "x")
   };
-  function identity$4(x2) {
+  function identity$3(x2) {
     return x2;
   }
-  __name(identity$4, "identity$4");
+  __name(identity$3, "identity$3");
   var map$1 = Array.prototype.map, prefixes = ["y", "z", "a", "f", "p", "n", "µ", "m", "", "k", "M", "G", "T", "P", "E", "Z", "Y"];
   function formatLocale$1(locale2) {
-    var group = locale2.grouping === void 0 || locale2.thousands === void 0 ? identity$4 : formatGroup(map$1.call(locale2.grouping, Number), locale2.thousands + ""), currencyPrefix = locale2.currency === void 0 ? "" : locale2.currency[0] + "", currencySuffix = locale2.currency === void 0 ? "" : locale2.currency[1] + "", decimal = locale2.decimal === void 0 ? "." : locale2.decimal + "", numerals = locale2.numerals === void 0 ? identity$4 : formatNumerals(map$1.call(locale2.numerals, String)), percent = locale2.percent === void 0 ? "%" : locale2.percent + "", minus = locale2.minus === void 0 ? "−" : locale2.minus + "", nan = locale2.nan === void 0 ? "NaN" : locale2.nan + "";
+    var group = locale2.grouping === void 0 || locale2.thousands === void 0 ? identity$3 : formatGroup(map$1.call(locale2.grouping, Number), locale2.thousands + ""), currencyPrefix = locale2.currency === void 0 ? "" : locale2.currency[0] + "", currencySuffix = locale2.currency === void 0 ? "" : locale2.currency[1] + "", decimal = locale2.decimal === void 0 ? "." : locale2.decimal + "", numerals = locale2.numerals === void 0 ? identity$3 : formatNumerals(map$1.call(locale2.numerals, String)), percent = locale2.percent === void 0 ? "%" : locale2.percent + "", minus = locale2.minus === void 0 ? "−" : locale2.minus + "", nan = locale2.nan === void 0 ? "NaN" : locale2.nan + "";
     function newFormat(specifier, options2) {
       specifier = formatSpecifier(specifier);
       var fill = specifier.fill, align = specifier.align, sign2 = specifier.sign, symbol = specifier.symbol, zero2 = specifier.zero, width = specifier.width, comma = specifier.comma, precision = specifier.precision, trim = specifier.trim, type = specifier.type;
@@ -43852,7 +45824,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     return linearish(scale);
   }
   __name(linear, "linear");
-  function identity$3(domain) {
+  function identity$2(domain) {
     var unknown;
     function scale(x2) {
       return x2 == null || isNaN(x2 = +x2) ? unknown : x2;
@@ -43866,12 +45838,12 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
       return arguments.length ? (unknown = _, scale) : unknown;
     };
     scale.copy = function() {
-      return identity$3(domain).unknown(unknown);
+      return identity$2(domain).unknown(unknown);
     };
     domain = arguments.length ? Array.from(domain, number$1) : [0, 1];
     return linearish(scale);
   }
-  __name(identity$3, "identity$3");
+  __name(identity$2, "identity$2");
   function nice(domain, interval) {
     domain = domain.slice();
     var i0 = 0, i1 = domain.length - 1, x0 = domain[i0], x1 = domain[i1], t2;
@@ -44049,9 +46021,9 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   }
   __name(transformSquare, "transformSquare");
   function powish(transform) {
-    var scale = transform(identity$5, identity$5), exponent2 = 1;
+    var scale = transform(identity$4, identity$4), exponent2 = 1;
     function rescale() {
-      return exponent2 === 1 ? transform(identity$5, identity$5) : exponent2 === 0.5 ? transform(transformSqrt, transformSquare) : transform(transformPow(exponent2), transformPow(1 / exponent2));
+      return exponent2 === 1 ? transform(identity$4, identity$4) : exponent2 === 0.5 ? transform(transformSqrt, transformSquare) : transform(transformPow(exponent2), transformPow(1 / exponent2));
     }
     __name(rescale, "rescale");
     scale.exponent = function(_) {
@@ -45236,7 +47208,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   }
   __name(utcTime, "utcTime");
   function transformer$1() {
-    var x0 = 0, x1 = 1, t02, t12, k10, transform, interpolator = identity$5, clamp2 = false, unknown;
+    var x0 = 0, x1 = 1, t02, t12, k10, transform, interpolator = identity$4, clamp2 = false, unknown;
     function scale(x2) {
       return x2 == null || isNaN(x2 = +x2) ? unknown : interpolator(k10 === 0 ? 0.5 : (x2 = (transform(x2) - t02) * k10, clamp2 ? Math.max(0, Math.min(1, x2)) : x2));
     }
@@ -45273,7 +47245,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   }
   __name(copy, "copy");
   function sequential() {
-    var scale = linearish(transformer$1()(identity$5));
+    var scale = linearish(transformer$1()(identity$4));
     scale.copy = function() {
       return copy(scale, sequential());
     };
@@ -45309,7 +47281,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   }
   __name(sequentialSqrt, "sequentialSqrt");
   function sequentialQuantile() {
-    var domain = [], interpolator = identity$5;
+    var domain = [], interpolator = identity$4;
     function scale(x2) {
       if (x2 != null && !isNaN(x2 = +x2)) return interpolator((bisectRight(domain, x2, 1) - 1) / (domain.length - 1));
     }
@@ -45337,7 +47309,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   }
   __name(sequentialQuantile, "sequentialQuantile");
   function transformer() {
-    var x0 = 0, x1 = 0.5, x2 = 1, s2 = 1, t02, t12, t2, k10, k21, interpolator = identity$5, transform, clamp2 = false, unknown;
+    var x0 = 0, x1 = 0.5, x2 = 1, s2 = 1, t02, t12, t2, k10, k21, interpolator = identity$4, transform, clamp2 = false, unknown;
     function scale(x3) {
       return isNaN(x3 = +x3) ? unknown : (x3 = 0.5 + ((x3 = +transform(x3)) - t12) * (s2 * x3 < s2 * t12 ? k10 : k21), interpolator(clamp2 ? Math.max(0, Math.min(1, x3)) : x3));
     }
@@ -45370,7 +47342,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   }
   __name(transformer, "transformer");
   function diverging() {
-    var scale = linearish(transformer()(identity$5));
+    var scale = linearish(transformer()(identity$4));
     scale.copy = function() {
       return copy(scale, diverging());
     };
@@ -45413,7 +47385,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     scaleDivergingPow: divergingPow,
     scaleDivergingSqrt: divergingSqrt,
     scaleDivergingSymlog: divergingSymlog,
-    scaleIdentity: identity$3,
+    scaleIdentity: identity$2,
     scaleImplicit: implicit,
     scaleLinear: linear,
     scaleLog: log,
@@ -46577,7 +48549,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     return arr2;
   }
   __name(_arrayLikeToArray$g, "_arrayLikeToArray$g");
-  var identity$2 = /* @__PURE__ */ __name(function identity2(i2) {
+  var identity$1 = /* @__PURE__ */ __name(function identity2(i2) {
     return i2;
   }, "identity");
   var PLACE_HOLDER = {};
@@ -46640,7 +48612,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
       args[_key3] = arguments[_key3];
     }
     if (!args.length) {
-      return identity$2;
+      return identity$1;
     }
     var fns = args.reverse();
     var firstFn = fns[0];
@@ -50325,7 +52297,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
       });
     });
   }, "getIntersectionKeys2");
-  var identity$1 = /* @__PURE__ */ __name(function identity2(param) {
+  var identity = /* @__PURE__ */ __name(function identity2(param) {
     return param;
   }, "identity2");
   var getDashCase = /* @__PURE__ */ __name(function getDashCase2(name) {
@@ -51145,7 +53117,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
           var newStyle = _objectSpread$l(_objectSpread$l(_objectSpread$l({}, preItem.style), style), {}, {
             transition
           });
-          return [].concat(_toConsumableArray$3(sequence), [newStyle, duration, onAnimationEnd]).filter(identity$1);
+          return [].concat(_toConsumableArray$3(sequence), [newStyle, duration, onAnimationEnd]).filter(identity);
         }, "addStyle");
         return this.manager.start([onAnimationStart].concat(_toConsumableArray$3(steps.reduce(addStyle, [initialStyle, Math.max(initialTime, begin)])), [props.onAnimationEnd]));
       }, "runStepAnimation")
@@ -61007,8 +62979,8 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     return context;
   }
   __name(useChart, "useChart");
-  const ChartContainer = reactExports.forwardRef((_nc, ref) => {
-    var _oc = _nc, { id, className, children, config: config2 } = _oc, props = __objRest(_oc, ["id", "className", "children", "config"]);
+  const ChartContainer = reactExports.forwardRef((_pc, ref) => {
+    var _qc = _pc, { id, className, children, config: config2 } = _qc, props = __objRest(_qc, ["id", "className", "children", "config"]);
     const uniqueId2 = reactExports.useId();
     const chartId = `chart-${id || uniqueId2.replace(/:/g, "")}`;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(ChartContext.Provider, { value: { config: config2 }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -61557,8 +63529,8 @@ ${colorConfig.map(([key, itemConfig]) => {
   }
   __name(B, "B");
   var Te = { position: "absolute", width: "1px", height: "1px", padding: "0", margin: "-1px", overflow: "hidden", clip: "rect(0, 0, 0, 0)", whiteSpace: "nowrap", borderWidth: "0" };
-  const Command = reactExports.forwardRef((_pc, ref) => {
-    var _qc = _pc, { className } = _qc, props = __objRest(_qc, ["className"]);
+  const Command = reactExports.forwardRef((_rc, ref) => {
+    var _sc = _rc, { className } = _sc, props = __objRest(_sc, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       _e,
       __spreadValues({
@@ -61571,8 +63543,8 @@ ${colorConfig.map(([key, itemConfig]) => {
     );
   });
   Command.displayName = _e.displayName;
-  const CommandInput = reactExports.forwardRef((_rc, ref) => {
-    var _sc = _rc, { className } = _sc, props = __objRest(_sc, ["className"]);
+  const CommandInput = reactExports.forwardRef((_tc, ref) => {
+    var _uc = _tc, { className } = _uc, props = __objRest(_uc, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "cky:flex cky:items-center cky:border-b cky:px-3", "cmdk-input-wrapper": "", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { className: "cky:mr-2 cky:h-4 cky:w-4 cky:shrink-0 cky:opacity-50" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -61588,8 +63560,8 @@ ${colorConfig.map(([key, itemConfig]) => {
     ] });
   });
   CommandInput.displayName = _e.Input.displayName;
-  const CommandList = reactExports.forwardRef((_tc, ref) => {
-    var _uc = _tc, { className } = _uc, props = __objRest(_uc, ["className"]);
+  const CommandList = reactExports.forwardRef((_vc, ref) => {
+    var _wc = _vc, { className } = _wc, props = __objRest(_wc, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       _e.List,
       __spreadValues({
@@ -61607,8 +63579,8 @@ ${colorConfig.map(([key, itemConfig]) => {
     }, props)
   ));
   CommandEmpty.displayName = _e.Empty.displayName;
-  const CommandGroup = reactExports.forwardRef((_vc, ref) => {
-    var _wc = _vc, { className } = _wc, props = __objRest(_wc, ["className"]);
+  const CommandGroup = reactExports.forwardRef((_xc, ref) => {
+    var _yc = _xc, { className } = _yc, props = __objRest(_yc, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       _e.Group,
       __spreadValues({
@@ -61621,8 +63593,8 @@ ${colorConfig.map(([key, itemConfig]) => {
     );
   });
   CommandGroup.displayName = _e.Group.displayName;
-  const CommandSeparator = reactExports.forwardRef((_xc, ref) => {
-    var _yc = _xc, { className } = _yc, props = __objRest(_yc, ["className"]);
+  const CommandSeparator = reactExports.forwardRef((_zc, ref) => {
+    var _Ac = _zc, { className } = _Ac, props = __objRest(_Ac, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       _e.Separator,
       __spreadValues({
@@ -61632,8 +63604,8 @@ ${colorConfig.map(([key, itemConfig]) => {
     );
   });
   CommandSeparator.displayName = _e.Separator.displayName;
-  const CommandItem = reactExports.forwardRef((_zc, ref) => {
-    var _Ac = _zc, { className } = _Ac, props = __objRest(_Ac, ["className"]);
+  const CommandItem = reactExports.forwardRef((_Bc, ref) => {
+    var _Cc = _Bc, { className } = _Cc, props = __objRest(_Cc, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       _e.Item,
       __spreadValues({
@@ -61762,13 +63734,13 @@ ${colorConfig.map(([key, itemConfig]) => {
   RadioIndicator.displayName = INDICATOR_NAME;
   var BUBBLE_INPUT_NAME = "RadioBubbleInput";
   var RadioBubbleInput = reactExports.forwardRef(
-    (_Bc, forwardedRef) => {
-      var _Cc = _Bc, {
+    (_Dc, forwardedRef) => {
+      var _Ec = _Dc, {
         __scopeRadio,
         control,
         checked,
         bubbles = true
-      } = _Cc, props = __objRest(_Cc, [
+      } = _Ec, props = __objRest(_Ec, [
         "__scopeRadio",
         "control",
         "checked",
@@ -61964,8 +63936,8 @@ ${colorConfig.map(([key, itemConfig]) => {
   var Root2 = RadioGroup$1;
   var Item2 = RadioGroupItem$1;
   var Indicator = RadioGroupIndicator;
-  const RadioGroup = reactExports.forwardRef((_Dc, ref) => {
-    var _Ec = _Dc, { className } = _Ec, props = __objRest(_Ec, ["className"]);
+  const RadioGroup = reactExports.forwardRef((_Fc, ref) => {
+    var _Gc = _Fc, { className } = _Gc, props = __objRest(_Gc, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Root2,
       __spreadValues({
@@ -61975,8 +63947,8 @@ ${colorConfig.map(([key, itemConfig]) => {
     );
   });
   RadioGroup.displayName = Root2.displayName;
-  const RadioGroupItem = reactExports.forwardRef((_Fc, ref) => {
-    var _Gc = _Fc, { className } = _Gc, props = __objRest(_Gc, ["className"]);
+  const RadioGroupItem = reactExports.forwardRef((_Hc, ref) => {
+    var _Ic = _Hc, { className } = _Ic, props = __objRest(_Ic, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Item2,
       __spreadProps(__spreadValues({
@@ -62005,8 +63977,8 @@ ${colorConfig.map(([key, itemConfig]) => {
       orientation: "vertical"
     }
   });
-  const Field = reactExports.forwardRef((_Hc, ref) => {
-    var _Ic = _Hc, { className, orientation, "data-invalid": dataInvalid } = _Ic, props = __objRest(_Ic, ["className", "orientation", "data-invalid"]);
+  const Field = reactExports.forwardRef((_Jc, ref) => {
+    var _Kc = _Jc, { className, orientation, "data-invalid": dataInvalid } = _Kc, props = __objRest(_Kc, ["className", "orientation", "data-invalid"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "fieldset",
       __spreadValues({
@@ -62022,8 +63994,8 @@ ${colorConfig.map(([key, itemConfig]) => {
     );
   });
   Field.displayName = "Field";
-  const FieldGroup = reactExports.forwardRef((_Jc, ref) => {
-    var _Kc = _Jc, { className } = _Kc, props = __objRest(_Kc, ["className"]);
+  const FieldGroup = reactExports.forwardRef((_Lc, ref) => {
+    var _Mc = _Lc, { className } = _Mc, props = __objRest(_Mc, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
       __spreadValues({
@@ -62034,8 +64006,8 @@ ${colorConfig.map(([key, itemConfig]) => {
     );
   });
   FieldGroup.displayName = "FieldGroup";
-  const FieldLabel = reactExports.forwardRef((_Lc, ref) => {
-    var _Mc = _Lc, { className } = _Mc, props = __objRest(_Mc, ["className"]);
+  const FieldLabel = reactExports.forwardRef((_Nc, ref) => {
+    var _Oc = _Nc, { className } = _Oc, props = __objRest(_Oc, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Label$2,
       __spreadValues({
@@ -62049,8 +64021,8 @@ ${colorConfig.map(([key, itemConfig]) => {
     );
   });
   FieldLabel.displayName = "FieldLabel";
-  const FieldDescription = reactExports.forwardRef((_Nc, ref) => {
-    var _Oc = _Nc, { className } = _Oc, props = __objRest(_Oc, ["className"]);
+  const FieldDescription = reactExports.forwardRef((_Pc, ref) => {
+    var _Qc = _Pc, { className } = _Qc, props = __objRest(_Qc, ["className"]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "p",
       __spreadValues({
@@ -62064,12 +64036,12 @@ ${colorConfig.map(([key, itemConfig]) => {
     );
   });
   FieldDescription.displayName = "FieldDescription";
-  function FieldError(_Pc) {
-    var _Qc = _Pc, {
+  function FieldError(_Rc) {
+    var _Sc = _Rc, {
       className,
       children,
       errors
-    } = _Qc, props = __objRest(_Qc, [
+    } = _Sc, props = __objRest(_Sc, [
       "className",
       "children",
       "errors"
@@ -62094,1015 +64066,6 @@ ${colorConfig.map(([key, itemConfig]) => {
   }
   __name(FieldError, "FieldError");
   FieldError.displayName = "FieldError";
-  const scriptRel = "modulepreload";
-  const assetsURL = /* @__PURE__ */ __name(function(dep, importerUrl) {
-    return new URL(dep, importerUrl).href;
-  }, "assetsURL");
-  const seen = {};
-  const __vitePreload = /* @__PURE__ */ __name(function preload(baseModule, deps, importerUrl) {
-    let promise = Promise.resolve();
-    if (false) {
-      let allSettled = function(promises$2) {
-        return Promise.all(promises$2.map((p2) => Promise.resolve(p2).then((value$1) => ({
-          status: "fulfilled",
-          value: value$1
-        }), (reason) => ({
-          status: "rejected",
-          reason
-        }))));
-      };
-      __name(allSettled, "allSettled");
-      const links = document.getElementsByTagName("link");
-      const cspNonceMeta = document.querySelector("meta[property=csp-nonce]");
-      const cspNonce = (cspNonceMeta == null ? void 0 : cspNonceMeta.nonce) || (cspNonceMeta == null ? void 0 : cspNonceMeta.getAttribute("nonce"));
-      promise = allSettled(deps.map((dep) => {
-        dep = assetsURL(dep, importerUrl);
-        if (dep in seen) return;
-        seen[dep] = true;
-        const isCss = dep.endsWith(".css");
-        const cssSelector = isCss ? '[rel="stylesheet"]' : "";
-        if (!!importerUrl) for (let i$1 = links.length - 1; i$1 >= 0; i$1--) {
-          const link$1 = links[i$1];
-          if (link$1.href === dep && (!isCss || link$1.rel === "stylesheet")) return;
-        }
-        else if (document.querySelector(`link[href="${dep}"]${cssSelector}`)) return;
-        const link = document.createElement("link");
-        link.rel = isCss ? "stylesheet" : scriptRel;
-        if (!isCss) link.as = "script";
-        link.crossOrigin = "";
-        link.href = dep;
-        if (cspNonce) link.setAttribute("nonce", cspNonce);
-        document.head.appendChild(link);
-        if (isCss) return new Promise((res, rej) => {
-          link.addEventListener("load", res);
-          link.addEventListener("error", () => rej(/* @__PURE__ */ new Error(`Unable to preload CSS for ${dep}`)));
-        });
-      }));
-    }
-    function handlePreloadError(err$2) {
-      const e$1 = new Event("vite:preloadError", { cancelable: true });
-      e$1.payload = err$2;
-      window.dispatchEvent(e$1);
-      if (!e$1.defaultPrevented) throw err$2;
-    }
-    __name(handlePreloadError, "handlePreloadError");
-    return promise.then((res) => {
-      for (const item of res || []) {
-        if (item.status !== "rejected") continue;
-        handlePreloadError(item.reason);
-      }
-      return baseModule().catch(handlePreloadError);
-    });
-  }, "preload");
-  function createNonceMiddleware(nonce) {
-    const middleware = /* @__PURE__ */ __name((options2, next) => {
-      const { headers = {} } = options2;
-      for (const headerName in headers) {
-        if (headerName.toLowerCase() === "x-wp-nonce" && headers[headerName] === middleware.nonce) {
-          return next(options2);
-        }
-      }
-      return next(__spreadProps(__spreadValues({}, options2), {
-        headers: __spreadProps(__spreadValues({}, headers), {
-          "X-WP-Nonce": middleware.nonce
-        })
-      }));
-    }, "middleware");
-    middleware.nonce = nonce;
-    return middleware;
-  }
-  __name(createNonceMiddleware, "createNonceMiddleware");
-  var nonce_default = createNonceMiddleware;
-  var namespaceAndEndpointMiddleware = /* @__PURE__ */ __name((options2, next) => {
-    let path = options2.path;
-    let namespaceTrimmed, endpointTrimmed;
-    if (typeof options2.namespace === "string" && typeof options2.endpoint === "string") {
-      namespaceTrimmed = options2.namespace.replace(/^\/|\/$/g, "");
-      endpointTrimmed = options2.endpoint.replace(/^\//, "");
-      if (endpointTrimmed) {
-        path = namespaceTrimmed + "/" + endpointTrimmed;
-      } else {
-        path = namespaceTrimmed;
-      }
-    }
-    delete options2.namespace;
-    delete options2.endpoint;
-    return next(__spreadProps(__spreadValues({}, options2), {
-      path
-    }));
-  }, "namespaceAndEndpointMiddleware");
-  var namespace_endpoint_default = namespaceAndEndpointMiddleware;
-  var createRootURLMiddleware = /* @__PURE__ */ __name((rootURL) => (options2, next) => {
-    return namespace_endpoint_default(options2, (optionsWithPath) => {
-      let url = optionsWithPath.url;
-      let path = optionsWithPath.path;
-      let apiRoot;
-      if (typeof path === "string") {
-        apiRoot = rootURL;
-        if (-1 !== rootURL.indexOf("?")) {
-          path = path.replace("?", "&");
-        }
-        path = path.replace(/^\//, "");
-        if ("string" === typeof apiRoot && -1 !== apiRoot.indexOf("?")) {
-          path = path.replace("?", "&");
-        }
-        url = apiRoot + path;
-      }
-      return next(__spreadProps(__spreadValues({}, optionsWithPath), {
-        url
-      }));
-    });
-  }, "createRootURLMiddleware");
-  var root_url_default = createRootURLMiddleware;
-  function getQueryString(url) {
-    let query;
-    try {
-      query = new URL(url, "http://example.com").search.substring(1);
-    } catch (e) {
-    }
-    if (query) {
-      return query;
-    }
-  }
-  __name(getQueryString, "getQueryString");
-  function buildQueryString(data) {
-    let string2 = "";
-    const stack = Object.entries(data);
-    let pair;
-    while (pair = stack.shift()) {
-      let [key, value] = pair;
-      const hasNestedData = Array.isArray(value) || value && value.constructor === Object;
-      if (hasNestedData) {
-        const valuePairs = Object.entries(value).reverse();
-        for (const [member, memberValue] of valuePairs) {
-          stack.unshift([`${key}[${member}]`, memberValue]);
-        }
-      } else if (value !== void 0) {
-        if (value === null) {
-          value = "";
-        }
-        string2 += "&" + [key, String(value)].map(encodeURIComponent).join("=");
-      }
-    }
-    return string2.substr(1);
-  }
-  __name(buildQueryString, "buildQueryString");
-  function getFragment(url) {
-    const matches = /^\S+?(#[^\s\?]*)/.exec(url);
-    if (matches) {
-      return matches[1];
-    }
-  }
-  __name(getFragment, "getFragment");
-  function safeDecodeURIComponent(uriComponent) {
-    try {
-      return decodeURIComponent(uriComponent);
-    } catch (e) {
-      return uriComponent;
-    }
-  }
-  __name(safeDecodeURIComponent, "safeDecodeURIComponent");
-  function setPath(object2, path, value) {
-    const length = path.length;
-    const lastIndex = length - 1;
-    for (let i2 = 0; i2 < length; i2++) {
-      let key = path[i2];
-      if (!key && Array.isArray(object2)) {
-        key = object2.length.toString();
-      }
-      key = ["__proto__", "constructor", "prototype"].includes(key) ? key.toUpperCase() : key;
-      const isNextKeyArrayIndex = !isNaN(Number(path[i2 + 1]));
-      object2[key] = i2 === lastIndex ? (
-        // If at end of path, assign the intended value.
-        value
-      ) : (
-        // Otherwise, advance to the next object in the path, creating
-        // it if it does not yet exist.
-        object2[key] || (isNextKeyArrayIndex ? [] : {})
-      );
-      if (Array.isArray(object2[key]) && !isNextKeyArrayIndex) {
-        object2[key] = __spreadValues({}, object2[key]);
-      }
-      object2 = object2[key];
-    }
-  }
-  __name(setPath, "setPath");
-  function getQueryArgs(url) {
-    return (getQueryString(url) || "").replace(/\+/g, "%20").split("&").reduce((accumulator, keyValue) => {
-      const [key, value = ""] = keyValue.split("=").filter(Boolean).map(safeDecodeURIComponent);
-      if (key) {
-        const segments = key.replace(/\]/g, "").split("[");
-        setPath(accumulator, segments, value);
-      }
-      return accumulator;
-    }, /* @__PURE__ */ Object.create(null));
-  }
-  __name(getQueryArgs, "getQueryArgs");
-  function addQueryArgs(url = "", args) {
-    if (!args || !Object.keys(args).length) {
-      return url;
-    }
-    const fragment = getFragment(url) || "";
-    let baseUrl = url.replace(fragment, "");
-    const queryStringIndex = url.indexOf("?");
-    if (queryStringIndex !== -1) {
-      args = Object.assign(getQueryArgs(url), args);
-      baseUrl = baseUrl.substr(0, queryStringIndex);
-    }
-    return baseUrl + "?" + buildQueryString(args) + fragment;
-  }
-  __name(addQueryArgs, "addQueryArgs");
-  function getQueryArg(url, arg) {
-    return getQueryArgs(url)[arg];
-  }
-  __name(getQueryArg, "getQueryArg");
-  function hasQueryArg(url, arg) {
-    return getQueryArg(url, arg) !== void 0;
-  }
-  __name(hasQueryArg, "hasQueryArg");
-  function removeQueryArgs(url, ...args) {
-    const fragment = url.replace(/^[^#]*/, "");
-    url = url.replace(/#.*/, "");
-    const queryStringIndex = url.indexOf("?");
-    if (queryStringIndex === -1) {
-      return url + fragment;
-    }
-    const query = getQueryArgs(url);
-    const baseURL = url.substr(0, queryStringIndex);
-    args.forEach((arg) => delete query[arg]);
-    const queryString = buildQueryString(query);
-    const updatedUrl = queryString ? baseURL + "?" + queryString : baseURL;
-    return updatedUrl + fragment;
-  }
-  __name(removeQueryArgs, "removeQueryArgs");
-  function normalizePath(path) {
-    const split = path.split("?");
-    const query = split[1];
-    const base = split[0];
-    if (!query) {
-      return base;
-    }
-    return base + "?" + query.split("&").map((entry) => entry.split("=")).map((pair) => pair.map(decodeURIComponent)).sort((a2, b) => a2[0].localeCompare(b[0])).map((pair) => pair.map(encodeURIComponent)).map((pair) => pair.join("=")).join("&");
-  }
-  __name(normalizePath, "normalizePath");
-  function createPreloadingMiddleware(preloadedData) {
-    const cache = Object.fromEntries(
-      Object.entries(preloadedData).map(([path, data]) => [
-        normalizePath(path),
-        data
-      ])
-    );
-    return (options2, next) => {
-      const { parse: parse2 = true } = options2;
-      let rawPath = options2.path;
-      if (!rawPath && options2.url) {
-        const _a2 = getQueryArgs(
-          options2.url
-        ), { rest_route: pathFromQuery } = _a2, queryArgs = __objRest(_a2, ["rest_route"]);
-        if (typeof pathFromQuery === "string") {
-          rawPath = addQueryArgs(pathFromQuery, queryArgs);
-        }
-      }
-      if (typeof rawPath !== "string") {
-        return next(options2);
-      }
-      const method = options2.method || "GET";
-      const path = normalizePath(rawPath);
-      if ("GET" === method && cache[path]) {
-        const cacheData = cache[path];
-        delete cache[path];
-        return prepareResponse(cacheData, !!parse2);
-      } else if ("OPTIONS" === method && cache[method] && cache[method][path]) {
-        const cacheData = cache[method][path];
-        delete cache[method][path];
-        return prepareResponse(cacheData, !!parse2);
-      }
-      return next(options2);
-    };
-  }
-  __name(createPreloadingMiddleware, "createPreloadingMiddleware");
-  function prepareResponse(responseData, parse2) {
-    if (parse2) {
-      return Promise.resolve(responseData.body);
-    }
-    try {
-      return Promise.resolve(
-        new window.Response(JSON.stringify(responseData.body), {
-          status: 200,
-          statusText: "OK",
-          headers: responseData.headers
-        })
-      );
-    } catch (e) {
-      Object.entries(
-        responseData.headers
-      ).forEach(([key, value]) => {
-        if (key.toLowerCase() === "link") {
-          responseData.headers[key] = value.replace(
-            /<([^>]+)>/,
-            (_, url) => `<${encodeURI(url)}>`
-          );
-        }
-      });
-      return Promise.resolve(
-        parse2 ? responseData.body : new window.Response(JSON.stringify(responseData.body), {
-          status: 200,
-          statusText: "OK",
-          headers: responseData.headers
-        })
-      );
-    }
-  }
-  __name(prepareResponse, "prepareResponse");
-  var preloading_default = createPreloadingMiddleware;
-  var modifyQuery = /* @__PURE__ */ __name((_Rc, queryArgs) => {
-    var _Sc = _Rc, { path, url } = _Sc, options2 = __objRest(_Sc, ["path", "url"]);
-    return __spreadProps(__spreadValues({}, options2), {
-      url: url && addQueryArgs(url, queryArgs),
-      path: path && addQueryArgs(path, queryArgs)
-    });
-  }, "modifyQuery");
-  var parseResponse = /* @__PURE__ */ __name((response) => response.json ? response.json() : Promise.reject(response), "parseResponse");
-  var parseLinkHeader = /* @__PURE__ */ __name((linkHeader) => {
-    if (!linkHeader) {
-      return {};
-    }
-    const match = linkHeader.match(/<([^>]+)>; rel="next"/);
-    return match ? {
-      next: match[1]
-    } : {};
-  }, "parseLinkHeader");
-  var getNextPageUrl = /* @__PURE__ */ __name((response) => {
-    const { next } = parseLinkHeader(response.headers.get("link"));
-    return next;
-  }, "getNextPageUrl");
-  var requestContainsUnboundedQuery = /* @__PURE__ */ __name((options2) => {
-    const pathIsUnbounded = !!options2.path && options2.path.indexOf("per_page=-1") !== -1;
-    const urlIsUnbounded = !!options2.url && options2.url.indexOf("per_page=-1") !== -1;
-    return pathIsUnbounded || urlIsUnbounded;
-  }, "requestContainsUnboundedQuery");
-  var fetchAllMiddleware = /* @__PURE__ */ __name((options2, next) => __async(null, null, function* () {
-    if (options2.parse === false) {
-      return next(options2);
-    }
-    if (!requestContainsUnboundedQuery(options2)) {
-      return next(options2);
-    }
-    const response = yield index_default(__spreadProps(__spreadValues({}, modifyQuery(options2, {
-      per_page: 100
-    })), {
-      // Ensure headers are returned for page 1.
-      parse: false
-    }));
-    const results = yield parseResponse(response);
-    if (!Array.isArray(results)) {
-      return results;
-    }
-    let nextPage = getNextPageUrl(response);
-    if (!nextPage) {
-      return results;
-    }
-    let mergedResults = [].concat(results);
-    while (nextPage) {
-      const nextResponse = yield index_default(__spreadProps(__spreadValues({}, options2), {
-        // Ensure the URL for the next page is used instead of any provided path.
-        path: void 0,
-        url: nextPage,
-        // Ensure we still get headers so we can identify the next page.
-        parse: false
-      }));
-      const nextResults = yield parseResponse(nextResponse);
-      mergedResults = mergedResults.concat(nextResults);
-      nextPage = getNextPageUrl(nextResponse);
-    }
-    return mergedResults;
-  }), "fetchAllMiddleware");
-  var fetch_all_middleware_default = fetchAllMiddleware;
-  var OVERRIDE_METHODS = /* @__PURE__ */ new Set(["PATCH", "PUT", "DELETE"]);
-  var DEFAULT_METHOD = "GET";
-  var httpV1Middleware = /* @__PURE__ */ __name((options2, next) => {
-    const { method = DEFAULT_METHOD } = options2;
-    if (OVERRIDE_METHODS.has(method.toUpperCase())) {
-      options2 = __spreadProps(__spreadValues({}, options2), {
-        headers: __spreadProps(__spreadValues({
-          "Content-Type": "application/json"
-        }, options2.headers), {
-          "X-HTTP-Method-Override": method
-        }),
-        method: "POST"
-      });
-    }
-    return next(options2);
-  }, "httpV1Middleware");
-  var http_v1_default = httpV1Middleware;
-  var userLocaleMiddleware = /* @__PURE__ */ __name((options2, next) => {
-    if (typeof options2.url === "string" && !hasQueryArg(options2.url, "_locale")) {
-      options2.url = addQueryArgs(options2.url, { _locale: "user" });
-    }
-    if (typeof options2.path === "string" && !hasQueryArg(options2.path, "_locale")) {
-      options2.path = addQueryArgs(options2.path, { _locale: "user" });
-    }
-    return next(options2);
-  }, "userLocaleMiddleware");
-  var user_locale_default = userLocaleMiddleware;
-  function parseJsonAndNormalizeError(response) {
-    return __async(this, null, function* () {
-      try {
-        return yield response.json();
-      } catch (e) {
-        throw {
-          code: "invalid_json",
-          message: __("The response is not a valid JSON response.")
-        };
-      }
-    });
-  }
-  __name(parseJsonAndNormalizeError, "parseJsonAndNormalizeError");
-  function parseResponseAndNormalizeError(response, shouldParseResponse = true) {
-    return __async(this, null, function* () {
-      if (!shouldParseResponse) {
-        return response;
-      }
-      if (response.status === 204) {
-        return null;
-      }
-      return yield parseJsonAndNormalizeError(response);
-    });
-  }
-  __name(parseResponseAndNormalizeError, "parseResponseAndNormalizeError");
-  function parseAndThrowError(response, shouldParseResponse = true) {
-    return __async(this, null, function* () {
-      if (!shouldParseResponse) {
-        throw response;
-      }
-      throw yield parseJsonAndNormalizeError(response);
-    });
-  }
-  __name(parseAndThrowError, "parseAndThrowError");
-  function isMediaUploadRequest(options2) {
-    const isCreateMethod = !!options2.method && options2.method === "POST";
-    const isMediaEndpoint = !!options2.path && options2.path.indexOf("/wp/v2/media") !== -1 || !!options2.url && options2.url.indexOf("/wp/v2/media") !== -1;
-    return isMediaEndpoint && isCreateMethod;
-  }
-  __name(isMediaUploadRequest, "isMediaUploadRequest");
-  var mediaUploadMiddleware = /* @__PURE__ */ __name((options2, next) => {
-    if (!isMediaUploadRequest(options2)) {
-      return next(options2);
-    }
-    let retries = 0;
-    const maxRetries = 5;
-    const postProcess = /* @__PURE__ */ __name((attachmentId) => {
-      retries++;
-      return next({
-        path: `/wp/v2/media/${attachmentId}/post-process`,
-        method: "POST",
-        data: { action: "create-image-subsizes" },
-        parse: false
-      }).catch(() => {
-        if (retries < maxRetries) {
-          return postProcess(attachmentId);
-        }
-        next({
-          path: `/wp/v2/media/${attachmentId}?force=true`,
-          method: "DELETE"
-        });
-        return Promise.reject();
-      });
-    }, "postProcess");
-    return next(__spreadProps(__spreadValues({}, options2), { parse: false })).catch((response) => {
-      if (!(response instanceof globalThis.Response)) {
-        return Promise.reject(response);
-      }
-      const attachmentId = response.headers.get(
-        "x-wp-upload-attachment-id"
-      );
-      if (response.status >= 500 && response.status < 600 && attachmentId) {
-        return postProcess(attachmentId).catch(() => {
-          if (options2.parse !== false) {
-            return Promise.reject({
-              code: "post_process",
-              message: __(
-                "Media upload failed. If this is a photo or a large image, please scale it down and try again."
-              )
-            });
-          }
-          return Promise.reject(response);
-        });
-      }
-      return parseAndThrowError(response, options2.parse);
-    }).then(
-      (response) => parseResponseAndNormalizeError(response, options2.parse)
-    );
-  }, "mediaUploadMiddleware");
-  var media_upload_default = mediaUploadMiddleware;
-  var createThemePreviewMiddleware = /* @__PURE__ */ __name((themePath) => (options2, next) => {
-    if (typeof options2.url === "string") {
-      const wpThemePreview = getQueryArg(
-        options2.url,
-        "wp_theme_preview"
-      );
-      if (wpThemePreview === void 0) {
-        options2.url = addQueryArgs(options2.url, {
-          wp_theme_preview: themePath
-        });
-      } else if (wpThemePreview === "") {
-        options2.url = removeQueryArgs(
-          options2.url,
-          "wp_theme_preview"
-        );
-      }
-    }
-    if (typeof options2.path === "string") {
-      const wpThemePreview = getQueryArg(
-        options2.path,
-        "wp_theme_preview"
-      );
-      if (wpThemePreview === void 0) {
-        options2.path = addQueryArgs(options2.path, {
-          wp_theme_preview: themePath
-        });
-      } else if (wpThemePreview === "") {
-        options2.path = removeQueryArgs(
-          options2.path,
-          "wp_theme_preview"
-        );
-      }
-    }
-    return next(options2);
-  }, "createThemePreviewMiddleware");
-  var theme_preview_default = createThemePreviewMiddleware;
-  var DEFAULT_HEADERS = {
-    // The backend uses the Accept header as a condition for considering an
-    // incoming request as a REST request.
-    //
-    // See: https://core.trac.wordpress.org/ticket/44534
-    Accept: "application/json, */*;q=0.1"
-  };
-  var DEFAULT_OPTIONS = {
-    credentials: "include"
-  };
-  var middlewares = [
-    user_locale_default,
-    namespace_endpoint_default,
-    http_v1_default,
-    fetch_all_middleware_default
-  ];
-  function registerMiddleware(middleware) {
-    middlewares.unshift(middleware);
-  }
-  __name(registerMiddleware, "registerMiddleware");
-  var defaultFetchHandler = /* @__PURE__ */ __name((nextOptions) => {
-    const _a2 = nextOptions, { url, path, data, parse: parse2 = true } = _a2, remainingOptions = __objRest(_a2, ["url", "path", "data", "parse"]);
-    let { body, headers } = nextOptions;
-    headers = __spreadValues(__spreadValues({}, DEFAULT_HEADERS), headers);
-    if (data) {
-      body = JSON.stringify(data);
-      headers["Content-Type"] = "application/json";
-    }
-    const responsePromise = globalThis.fetch(
-      // Fall back to explicitly passing `window.location` which is the behavior if `undefined` is passed.
-      url || path || window.location.href,
-      __spreadProps(__spreadValues(__spreadValues({}, DEFAULT_OPTIONS), remainingOptions), {
-        body,
-        headers
-      })
-    );
-    return responsePromise.then(
-      (response) => {
-        if (!response.ok) {
-          return parseAndThrowError(response, parse2);
-        }
-        return parseResponseAndNormalizeError(response, parse2);
-      },
-      (err) => {
-        if (err && err.name === "AbortError") {
-          throw err;
-        }
-        if (!globalThis.navigator.onLine) {
-          throw {
-            code: "offline_error",
-            message: __(
-              "Unable to connect. Please check your Internet connection."
-            )
-          };
-        }
-        throw {
-          code: "fetch_error",
-          message: __(
-            "Could not get a valid response from the server."
-          )
-        };
-      }
-    );
-  }, "defaultFetchHandler");
-  var fetchHandler = defaultFetchHandler;
-  function setFetchHandler(newFetchHandler) {
-    fetchHandler = newFetchHandler;
-  }
-  __name(setFetchHandler, "setFetchHandler");
-  var apiFetch = /* @__PURE__ */ __name((options2) => {
-    const enhancedHandler = middlewares.reduceRight(
-      (next, middleware) => {
-        return (workingOptions) => middleware(workingOptions, next);
-      },
-      fetchHandler
-    );
-    return enhancedHandler(options2).catch((error) => {
-      if (error.code !== "rest_cookie_invalid_nonce") {
-        return Promise.reject(error);
-      }
-      return globalThis.fetch(apiFetch.nonceEndpoint).then((response) => {
-        if (!response.ok) {
-          return Promise.reject(error);
-        }
-        return response.text();
-      }).then((text) => {
-        apiFetch.nonceMiddleware.nonce = text;
-        return apiFetch(options2);
-      });
-    });
-  }, "apiFetch");
-  apiFetch.use = registerMiddleware;
-  apiFetch.setFetchHandler = setFetchHandler;
-  apiFetch.createNonceMiddleware = nonce_default;
-  apiFetch.createPreloadingMiddleware = preloading_default;
-  apiFetch.createRootURLMiddleware = root_url_default;
-  apiFetch.fetchAllMiddleware = fetch_all_middleware_default;
-  apiFetch.mediaUploadMiddleware = media_upload_default;
-  apiFetch.createThemePreviewMiddleware = theme_preview_default;
-  var index_default = apiFetch;
-  function getApiBase() {
-    var _a2, _b2;
-    return ((_b2 = (_a2 = window.ckyGlobals) == null ? void 0 : _a2.api) == null ? void 0 : _b2.base) || "/wp-json/cky/v1/";
-  }
-  __name(getApiBase, "getApiBase");
-  function getNonce() {
-    var _a2, _b2;
-    return ((_b2 = (_a2 = window.ckyGlobals) == null ? void 0 : _a2.api) == null ? void 0 : _b2.nonce) || "";
-  }
-  __name(getNonce, "getNonce");
-  index_default.use(index_default.createNonceMiddleware(getNonce()));
-  index_default.use(index_default.createRootURLMiddleware(getApiBase()));
-  const activeRequests = /* @__PURE__ */ new Map();
-  const cancelResolvers = /* @__PURE__ */ new Set();
-  function mergeQueryParams(options2) {
-    if (!options2.params) return;
-    const urlParams = new URLSearchParams(Object.entries(options2.params));
-    options2.path = options2.path + "?" + urlParams;
-  }
-  __name(mergeQueryParams, "mergeQueryParams");
-  function createCancellableRequest(apiRequest) {
-    let cancelResolve = /* @__PURE__ */ __name(() => {
-    }, "cancelResolve");
-    const cancelPromise = new Promise((resolve) => {
-      cancelResolve = /* @__PURE__ */ __name(() => resolve(null), "cancelResolve");
-    });
-    cancelResolvers.add(cancelResolve);
-    return Promise.race([apiRequest, cancelPromise]).finally(() => {
-      cancelResolvers.delete(cancelResolve);
-    });
-  }
-  __name(createCancellableRequest, "createCancellableRequest");
-  function request(options2, fallbackId) {
-    const requestId = options2.path || `${fallbackId}_${Date.now()}`;
-    if (options2.method === "GET" && activeRequests.has(requestId)) {
-      return activeRequests.get(requestId);
-    }
-    const cancellableRequest = createCancellableRequest(index_default(options2));
-    activeRequests.set(requestId, cancellableRequest);
-    return cancellableRequest.finally(() => {
-      activeRequests.delete(requestId);
-    });
-  }
-  __name(request, "request");
-  const ckyRest = {
-    post(options2) {
-      options2 = options2 || {};
-      options2.method = "POST";
-      mergeQueryParams(options2);
-      try {
-        return request(options2, "post");
-      } catch (error) {
-        return error;
-      }
-    },
-    get(options2) {
-      options2 = options2 || {};
-      options2.method = "GET";
-      mergeQueryParams(options2);
-      try {
-        return request(options2, "get");
-      } catch (error) {
-        return error;
-      }
-    },
-    put(options2) {
-      options2 = options2 || {};
-      options2.method = "PUT";
-      mergeQueryParams(options2);
-      try {
-        return request(options2, "put");
-      } catch (error) {
-        return error;
-      }
-    },
-    delete(options2) {
-      options2 = options2 || {};
-      options2.method = "DELETE";
-      try {
-        return request(options2, "delete");
-      } catch (error) {
-        return error;
-      }
-    },
-    cancelAll() {
-      cancelResolvers.forEach((resolve) => resolve());
-      cancelResolvers.clear();
-      activeRequests.clear();
-    }
-  };
-  function getSettings() {
-    return __async(this, null, function* () {
-      try {
-        const response = yield ckyRest.get({
-          path: "settings"
-        });
-        return response;
-      } catch (error) {
-        console.error("Error fetching settings:", error);
-        throw error;
-      }
-    });
-  }
-  __name(getSettings, "getSettings");
-  function saveSettings(settings2, clear = true) {
-    return __async(this, null, function* () {
-      try {
-        const response = yield ckyRest.post({
-          path: "settings",
-          data: settings2,
-          params: { clear }
-        });
-        return response;
-      } catch (error) {
-        console.error("Error saving settings:", error);
-        throw error;
-      }
-    });
-  }
-  __name(saveSettings, "saveSettings");
-  function getSettingsInfo(force = false) {
-    return __async(this, null, function* () {
-      try {
-        const response = yield ckyRest.get({
-          path: "settings/info",
-          params: { force }
-        });
-        return response;
-      } catch (error) {
-        console.error("Error fetching settings info:", error);
-        throw error;
-      }
-    });
-  }
-  __name(getSettingsInfo, "getSettingsInfo");
-  function updateConnectNotice(status) {
-    return __async(this, null, function* () {
-      try {
-        yield ckyRest.post({
-          path: "/settings/connect_notice",
-          data: {
-            connect_notice: status
-          }
-        });
-      } catch (error) {
-        console.error("Error updating connect notice:", error);
-        throw error;
-      }
-    });
-  }
-  __name(updateConnectNotice, "updateConnectNotice");
-  function updateExpand(expand) {
-    return __async(this, null, function* () {
-      try {
-        yield ckyRest.post({
-          path: "/settings/expand",
-          data: {
-            expand
-          }
-        });
-      } catch (error) {
-        console.error("Error updating connect card expand status:", error);
-        throw error;
-      }
-    });
-  }
-  __name(updateExpand, "updateExpand");
-  function purgeCache$1() {
-    return __async(this, null, function* () {
-      try {
-        yield ckyRest.post({
-          path: "/settings/cache/purge",
-          data: {}
-        });
-      } catch (error) {
-        console.warn("Cache purge failed (non-critical):", error);
-      }
-    });
-  }
-  __name(purgeCache$1, "purgeCache$1");
-  const settingsService = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-    __proto__: null,
-    getSettings,
-    getSettingsInfo,
-    purgeCache: purgeCache$1,
-    saveSettings,
-    updateConnectNotice,
-    updateExpand
-  }, Symbol.toStringTag, { value: "Module" }));
-  function win() {
-    return window;
-  }
-  __name(win, "win");
-  function getAppStoreState() {
-    return __async(this, null, function* () {
-      try {
-        const { useAppStore: useAppStore2 } = yield __vitePreload(() => __async(null, null, function* () {
-          const { useAppStore: useAppStore3 } = yield Promise.resolve().then(() => store);
-          return { useAppStore: useAppStore3 };
-        }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
-        return useAppStore2.getState();
-      } catch (e) {
-        return null;
-      }
-    });
-  }
-  __name(getAppStoreState, "getAppStoreState");
-  function syncStoreWithSettingsResponse(response) {
-    return __async(this, null, function* () {
-      try {
-        const store2 = yield getAppStoreState();
-        if (store2 == null ? void 0 : store2.updateSettings) {
-          store2.updateSettings(response);
-        }
-      } catch (e) {
-      }
-    });
-  }
-  __name(syncStoreWithSettingsResponse, "syncStoreWithSettingsResponse");
-  function getOption(key, value = false) {
-    var _a2;
-    let current = value;
-    const settings2 = ((_a2 = win().ckyConfig) == null ? void 0 : _a2.settings) || {};
-    if (settings2[key]) {
-      current = settings2[key];
-    }
-    return current;
-  }
-  __name(getOption, "getOption");
-  function getInfo(key = false, value = false) {
-    var _a2;
-    let current = value;
-    const settings2 = ((_a2 = win().ckyConfig) == null ? void 0 : _a2.info) || {};
-    if (key === false) return settings2;
-    if (settings2[key]) {
-      current = settings2[key];
-    }
-    return current;
-  }
-  __name(getInfo, "getInfo");
-  function setOption(key, value) {
-    const w = win();
-    if (!w.ckyConfig) {
-      w.ckyConfig = {};
-    }
-    if (!w.ckyConfig.settings) {
-      w.ckyConfig.settings = {};
-    }
-    w.ckyConfig.settings[key] = value;
-  }
-  __name(setOption, "setOption");
-  function saveOptions(clear = true) {
-    return __async(this, null, function* () {
-      var _a2;
-      try {
-        let settings2 = ((_a2 = win().ckyConfig) == null ? void 0 : _a2.settings) || {};
-        if (!settings2 || Object.keys(settings2).length === 0) {
-          const store2 = yield getAppStoreState();
-          if (store2 == null ? void 0 : store2.options) {
-            settings2 = store2.options;
-          }
-        }
-        const response = yield saveSettings(settings2, clear);
-        if (response && typeof response === "object") {
-          win().ckyConfig.settings = response;
-          yield syncStoreWithSettingsResponse(response);
-        }
-        return !!response;
-      } catch (error) {
-        console.error("Error saving options:", error);
-        return false;
-      }
-    });
-  }
-  __name(saveOptions, "saveOptions");
-  function reloadSettings() {
-    return __async(this, null, function* () {
-      try {
-        const response = yield getSettings();
-        if (response && typeof response === "object") {
-          win().ckyConfig.settings = response;
-        }
-      } catch (error) {
-        console.error("Error reloading settings:", error);
-      }
-    });
-  }
-  __name(reloadSettings, "reloadSettings");
-  function getDefaultLanguage() {
-    var _a2, _b2, _c2;
-    const fromSettings = (_b2 = (_a2 = win().ckyConfig) == null ? void 0 : _a2.settings) == null ? void 0 : _b2.languages;
-    if (fromSettings && typeof fromSettings.default === "string") {
-      return fromSettings.default;
-    }
-    const legacy = (_c2 = win().ckyConfig) == null ? void 0 : _c2.languages;
-    return (legacy == null ? void 0 : legacy.default) || "en";
-  }
-  __name(getDefaultLanguage, "getDefaultLanguage");
-  function setDefaultLanguage(lang = "en") {
-    return __async(this, null, function* () {
-      const w = win();
-      if (!w.ckyConfig) {
-        w.ckyConfig = {};
-      }
-      if (!w.ckyConfig.settings) {
-        w.ckyConfig.settings = {};
-      }
-      if (!w.ckyConfig.settings.languages) {
-        w.ckyConfig.settings.languages = {};
-      }
-      w.ckyConfig.settings.languages.default = lang;
-      if (!w.ckyConfig.languages) {
-        w.ckyConfig.languages = {};
-      }
-      w.ckyConfig.languages.default = lang;
-    });
-  }
-  __name(setDefaultLanguage, "setDefaultLanguage");
-  function getAssetsURL() {
-    var _a2, _b2;
-    return ((_b2 = (_a2 = win().ckyGlobals) == null ? void 0 : _a2.app) == null ? void 0 : _b2.url) || "";
-  }
-  __name(getAssetsURL, "getAssetsURL");
-  function purgeCache() {
-    return __async(this, null, function* () {
-      yield purgeCache$1();
-    });
-  }
-  __name(purgeCache, "purgeCache");
-  function isRTLLanguage(language = false) {
-    var _a2, _b2;
-    const code = language === false ? ((_b2 = (_a2 = win().ckyConfig) == null ? void 0 : _a2.languages) == null ? void 0 : _b2.current) || "" : language;
-    return ["ar", "az", "dv", "he", "ku", "fa", "ur"].includes(code);
-  }
-  __name(isRTLLanguage, "isRTLLanguage");
-  function checkDomain() {
-    var _a2, _b2, _c2;
-    try {
-      const siteUrl2 = (_b2 = (_a2 = win().ckyGlobals) == null ? void 0 : _a2.site) == null ? void 0 : _b2.url;
-      if (!siteUrl2) return true;
-      const { hostname: actual } = new URL(siteUrl2);
-      const info = ((_c2 = win().ckyConfig) == null ? void 0 : _c2.info) || {};
-      if (!info.url) return true;
-      const registered = new URL(info.url);
-      const registeredDomain = registered.hostname;
-      const domains = actual.split(".");
-      let isValidDomain = false;
-      for (let index2 = 0; index2 < domains.length; index2++) {
-        const domain = domains.slice(index2).join(".");
-        isValidDomain = isValidDomain || domain === registeredDomain || domain.replace(/^www./, "") === registeredDomain.replace(/^www./, "");
-        if (isValidDomain) break;
-      }
-      return isValidDomain;
-    } catch (e) {
-      return false;
-    }
-  }
-  __name(checkDomain, "checkDomain");
-  const common = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-    __proto__: null,
-    checkDomain,
-    getAssetsURL,
-    getDefaultLanguage,
-    getInfo,
-    getOption,
-    isRTLLanguage,
-    purgeCache,
-    reloadSettings,
-    saveOptions,
-    setDefaultLanguage,
-    setOption
-  }, Symbol.toStringTag, { value: "Module" }));
   const sprintf$1 = /* @__PURE__ */ __name((format2, ...args) => {
     const rest = [...args];
     return format2.replace(/%[sdj%]/g, (match) => {
@@ -63183,969 +64146,6 @@ ${colorConfig.map(([key, itemConfig]) => {
     }
     return context;
   }, "useNotifications");
-  const createStoreImpl = /* @__PURE__ */ __name((createState) => {
-    let state;
-    const listeners = /* @__PURE__ */ new Set();
-    const setState = /* @__PURE__ */ __name((partial, replace) => {
-      const nextState = typeof partial === "function" ? partial(state) : partial;
-      if (!Object.is(nextState, state)) {
-        const previousState = state;
-        state = (replace != null ? replace : typeof nextState !== "object" || nextState === null) ? nextState : Object.assign({}, state, nextState);
-        listeners.forEach((listener) => listener(state, previousState));
-      }
-    }, "setState");
-    const getState2 = /* @__PURE__ */ __name(() => state, "getState");
-    const getInitialState = /* @__PURE__ */ __name(() => initialState, "getInitialState");
-    const subscribe2 = /* @__PURE__ */ __name((listener) => {
-      listeners.add(listener);
-      return () => listeners.delete(listener);
-    }, "subscribe");
-    const api = { setState, getState: getState2, getInitialState, subscribe: subscribe2 };
-    const initialState = state = createState(setState, getState2, api);
-    return api;
-  }, "createStoreImpl");
-  const createStore = /* @__PURE__ */ __name(((createState) => createState ? createStoreImpl(createState) : createStoreImpl), "createStore");
-  const identity = /* @__PURE__ */ __name((arg) => arg, "identity");
-  function useStore(api, selector = identity) {
-    const slice = React.useSyncExternalStore(
-      api.subscribe,
-      React.useCallback(() => selector(api.getState()), [api, selector]),
-      React.useCallback(() => selector(api.getInitialState()), [api, selector])
-    );
-    React.useDebugValue(slice);
-    return slice;
-  }
-  __name(useStore, "useStore");
-  const createImpl = /* @__PURE__ */ __name((createState) => {
-    const api = createStore(createState);
-    const useBoundStore = /* @__PURE__ */ __name((selector) => useStore(api, selector), "useBoundStore");
-    Object.assign(useBoundStore, api);
-    return useBoundStore;
-  }, "createImpl");
-  const create = /* @__PURE__ */ __name(((createState) => createImpl), "create");
-  const __vite_import_meta_env__ = { "BASE_URL": "./", "DEV": false, "MODE": "production", "PROD": true, "SSR": false };
-  const trackedConnections = /* @__PURE__ */ new Map();
-  const getTrackedConnectionState = /* @__PURE__ */ __name((name) => {
-    const api = trackedConnections.get(name);
-    if (!api) return {};
-    return Object.fromEntries(
-      Object.entries(api.stores).map(([key, api2]) => [key, api2.getState()])
-    );
-  }, "getTrackedConnectionState");
-  const extractConnectionInformation = /* @__PURE__ */ __name((store2, extensionConnector, options2) => {
-    if (store2 === void 0) {
-      return {
-        type: "untracked",
-        connection: extensionConnector.connect(options2)
-      };
-    }
-    const existingConnection = trackedConnections.get(options2.name);
-    if (existingConnection) {
-      return __spreadValues({ type: "tracked", store: store2 }, existingConnection);
-    }
-    const newConnection = {
-      connection: extensionConnector.connect(options2),
-      stores: {}
-    };
-    trackedConnections.set(options2.name, newConnection);
-    return __spreadValues({ type: "tracked", store: store2 }, newConnection);
-  }, "extractConnectionInformation");
-  const removeStoreFromTrackedConnections = /* @__PURE__ */ __name((name, store2) => {
-    if (store2 === void 0) return;
-    const connectionInfo = trackedConnections.get(name);
-    if (!connectionInfo) return;
-    delete connectionInfo.stores[store2];
-    if (Object.keys(connectionInfo.stores).length === 0) {
-      trackedConnections.delete(name);
-    }
-  }, "removeStoreFromTrackedConnections");
-  const findCallerName = /* @__PURE__ */ __name((stack) => {
-    var _a2, _b2;
-    if (!stack) return void 0;
-    const traceLines = stack.split("\n");
-    const apiSetStateLineIndex = traceLines.findIndex(
-      (traceLine) => traceLine.includes("api.setState")
-    );
-    if (apiSetStateLineIndex < 0) return void 0;
-    const callerLine = ((_a2 = traceLines[apiSetStateLineIndex + 1]) == null ? void 0 : _a2.trim()) || "";
-    return (_b2 = /.+ (.+) .+/.exec(callerLine)) == null ? void 0 : _b2[1];
-  }, "findCallerName");
-  const devtoolsImpl = /* @__PURE__ */ __name((fn, devtoolsOptions = {}) => (set2, get2, api) => {
-    const _a2 = devtoolsOptions, { enabled, anonymousActionType, store: store2 } = _a2, options2 = __objRest(_a2, ["enabled", "anonymousActionType", "store"]);
-    let extensionConnector;
-    try {
-      extensionConnector = (enabled != null ? enabled : (__vite_import_meta_env__ ? "production" : void 0) !== "production") && window.__REDUX_DEVTOOLS_EXTENSION__;
-    } catch (e) {
-    }
-    if (!extensionConnector) {
-      return fn(set2, get2, api);
-    }
-    const _b2 = extractConnectionInformation(store2, extensionConnector, options2), { connection } = _b2, connectionInformation = __objRest(_b2, ["connection"]);
-    let isRecording = true;
-    api.setState = ((state, replace, nameOrAction) => {
-      const r2 = set2(state, replace);
-      if (!isRecording) return r2;
-      const action = nameOrAction === void 0 ? {
-        type: anonymousActionType || findCallerName(new Error().stack) || "anonymous"
-      } : typeof nameOrAction === "string" ? { type: nameOrAction } : nameOrAction;
-      if (store2 === void 0) {
-        connection == null ? void 0 : connection.send(action, get2());
-        return r2;
-      }
-      connection == null ? void 0 : connection.send(
-        __spreadProps(__spreadValues({}, action), {
-          type: `${store2}/${action.type}`
-        }),
-        __spreadProps(__spreadValues({}, getTrackedConnectionState(options2.name)), {
-          [store2]: api.getState()
-        })
-      );
-      return r2;
-    });
-    api.devtools = {
-      cleanup: /* @__PURE__ */ __name(() => {
-        if (connection && typeof connection.unsubscribe === "function") {
-          connection.unsubscribe();
-        }
-        removeStoreFromTrackedConnections(options2.name, store2);
-      }, "cleanup")
-    };
-    const setStateFromDevtools = /* @__PURE__ */ __name((...a2) => {
-      const originalIsRecording = isRecording;
-      isRecording = false;
-      set2(...a2);
-      isRecording = originalIsRecording;
-    }, "setStateFromDevtools");
-    const initialState = fn(api.setState, get2, api);
-    if (connectionInformation.type === "untracked") {
-      connection == null ? void 0 : connection.init(initialState);
-    } else {
-      connectionInformation.stores[connectionInformation.store] = api;
-      connection == null ? void 0 : connection.init(
-        Object.fromEntries(
-          Object.entries(connectionInformation.stores).map(([key, store22]) => [
-            key,
-            key === connectionInformation.store ? initialState : store22.getState()
-          ])
-        )
-      );
-    }
-    if (api.dispatchFromDevtools && typeof api.dispatch === "function") {
-      let didWarnAboutReservedActionType = false;
-      const originalDispatch = api.dispatch;
-      api.dispatch = (...args) => {
-        if ((__vite_import_meta_env__ ? "production" : void 0) !== "production" && args[0].type === "__setState" && !didWarnAboutReservedActionType) {
-          console.warn(
-            '[zustand devtools middleware] "__setState" action type is reserved to set state from the devtools. Avoid using it.'
-          );
-          didWarnAboutReservedActionType = true;
-        }
-        originalDispatch(...args);
-      };
-    }
-    connection.subscribe((message) => {
-      var _a3;
-      switch (message.type) {
-        case "ACTION":
-          if (typeof message.payload !== "string") {
-            console.error(
-              "[zustand devtools middleware] Unsupported action format"
-            );
-            return;
-          }
-          return parseJsonThen(
-            message.payload,
-            (action) => {
-              if (action.type === "__setState") {
-                if (store2 === void 0) {
-                  setStateFromDevtools(action.state);
-                  return;
-                }
-                if (Object.keys(action.state).length !== 1) {
-                  console.error(
-                    `
-                    [zustand devtools middleware] Unsupported __setState action format.
-                    When using 'store' option in devtools(), the 'state' should have only one key, which is a value of 'store' that was passed in devtools(),
-                    and value of this only key should be a state object. Example: { "type": "__setState", "state": { "abc123Store": { "foo": "bar" } } }
-                    `
-                  );
-                }
-                const stateFromDevtools = action.state[store2];
-                if (stateFromDevtools === void 0 || stateFromDevtools === null) {
-                  return;
-                }
-                if (JSON.stringify(api.getState()) !== JSON.stringify(stateFromDevtools)) {
-                  setStateFromDevtools(stateFromDevtools);
-                }
-                return;
-              }
-              if (!api.dispatchFromDevtools) return;
-              if (typeof api.dispatch !== "function") return;
-              api.dispatch(action);
-            }
-          );
-        case "DISPATCH":
-          switch (message.payload.type) {
-            case "RESET":
-              setStateFromDevtools(initialState);
-              if (store2 === void 0) {
-                return connection == null ? void 0 : connection.init(api.getState());
-              }
-              return connection == null ? void 0 : connection.init(getTrackedConnectionState(options2.name));
-            case "COMMIT":
-              if (store2 === void 0) {
-                connection == null ? void 0 : connection.init(api.getState());
-                return;
-              }
-              return connection == null ? void 0 : connection.init(getTrackedConnectionState(options2.name));
-            case "ROLLBACK":
-              return parseJsonThen(message.state, (state) => {
-                if (store2 === void 0) {
-                  setStateFromDevtools(state);
-                  connection == null ? void 0 : connection.init(api.getState());
-                  return;
-                }
-                setStateFromDevtools(state[store2]);
-                connection == null ? void 0 : connection.init(getTrackedConnectionState(options2.name));
-              });
-            case "JUMP_TO_STATE":
-            case "JUMP_TO_ACTION":
-              return parseJsonThen(message.state, (state) => {
-                if (store2 === void 0) {
-                  setStateFromDevtools(state);
-                  return;
-                }
-                if (JSON.stringify(api.getState()) !== JSON.stringify(state[store2])) {
-                  setStateFromDevtools(state[store2]);
-                }
-              });
-            case "IMPORT_STATE": {
-              const { nextLiftedState } = message.payload;
-              const lastComputedState = (_a3 = nextLiftedState.computedStates.slice(-1)[0]) == null ? void 0 : _a3.state;
-              if (!lastComputedState) return;
-              if (store2 === void 0) {
-                setStateFromDevtools(lastComputedState);
-              } else {
-                setStateFromDevtools(lastComputedState[store2]);
-              }
-              connection == null ? void 0 : connection.send(
-                null,
-                // FIXME no-any
-                nextLiftedState
-              );
-              return;
-            }
-            case "PAUSE_RECORDING":
-              return isRecording = !isRecording;
-          }
-          return;
-      }
-    });
-    return initialState;
-  }, "devtoolsImpl");
-  const devtools = devtoolsImpl;
-  const parseJsonThen = /* @__PURE__ */ __name((stringified, fn) => {
-    let parsed;
-    try {
-      parsed = JSON.parse(stringified);
-    } catch (e) {
-      console.error(
-        "[zustand devtools middleware] Could not parse the received json",
-        e
-      );
-    }
-    if (parsed !== void 0) fn(parsed);
-  }, "parseJsonThen");
-  const isIterable = /* @__PURE__ */ __name((obj) => Symbol.iterator in obj, "isIterable");
-  const hasIterableEntries = /* @__PURE__ */ __name((value) => (
-    // HACK: avoid checking entries type
-    "entries" in value
-  ), "hasIterableEntries");
-  const compareEntries = /* @__PURE__ */ __name((valueA, valueB) => {
-    const mapA = valueA instanceof Map ? valueA : new Map(valueA.entries());
-    const mapB = valueB instanceof Map ? valueB : new Map(valueB.entries());
-    if (mapA.size !== mapB.size) {
-      return false;
-    }
-    for (const [key, value] of mapA) {
-      if (!mapB.has(key) || !Object.is(value, mapB.get(key))) {
-        return false;
-      }
-    }
-    return true;
-  }, "compareEntries");
-  const compareIterables = /* @__PURE__ */ __name((valueA, valueB) => {
-    const iteratorA = valueA[Symbol.iterator]();
-    const iteratorB = valueB[Symbol.iterator]();
-    let nextA = iteratorA.next();
-    let nextB = iteratorB.next();
-    while (!nextA.done && !nextB.done) {
-      if (!Object.is(nextA.value, nextB.value)) {
-        return false;
-      }
-      nextA = iteratorA.next();
-      nextB = iteratorB.next();
-    }
-    return !!nextA.done && !!nextB.done;
-  }, "compareIterables");
-  function shallow(valueA, valueB) {
-    if (Object.is(valueA, valueB)) {
-      return true;
-    }
-    if (typeof valueA !== "object" || valueA === null || typeof valueB !== "object" || valueB === null) {
-      return false;
-    }
-    if (Object.getPrototypeOf(valueA) !== Object.getPrototypeOf(valueB)) {
-      return false;
-    }
-    if (isIterable(valueA) && isIterable(valueB)) {
-      if (hasIterableEntries(valueA) && hasIterableEntries(valueB)) {
-        return compareEntries(valueA, valueB);
-      }
-      return compareIterables(valueA, valueB);
-    }
-    return compareEntries(
-      { entries: /* @__PURE__ */ __name(() => Object.entries(valueA), "entries") },
-      { entries: /* @__PURE__ */ __name(() => Object.entries(valueB), "entries") }
-    );
-  }
-  __name(shallow, "shallow");
-  function useShallow(selector) {
-    const prev = React.useRef(void 0);
-    return (state) => {
-      const next = selector(state);
-      return shallow(prev.current, next) ? prev.current : prev.current = next;
-    };
-  }
-  __name(useShallow, "useShallow");
-  const createAppState = /* @__PURE__ */ __name((set2, get2) => {
-    var _a2, _b2, _c2, _d;
-    return {
-      options: ((_a2 = window.ckyConfig) == null ? void 0 : _a2.settings) || {},
-      info: false,
-      status: true,
-      session_status: true,
-      errors: {},
-      expand: ((_b2 = window.ckyNoticeExpand) == null ? void 0 : _b2.status) || false,
-      gcm: ((_c2 = window.ckyGcmConfig) == null ? void 0 : _c2.settings) || {},
-      connect_notice: ((_d = window.ckyConnectNotice) == null ? void 0 : _d.status) || false,
-      disconnect_success_overlay: false,
-      affiliate_banner_visible: false,
-      info_loaded: false,
-      setOption: /* @__PURE__ */ __name((key, value) => set2((state) => __spreadProps(__spreadValues({}, state), {
-        options: __spreadProps(__spreadValues({}, state.options), { [key]: value })
-      })), "setOption"),
-      setInfo: /* @__PURE__ */ __name((data) => {
-        if (data && typeof data === "object") {
-          const w = window;
-          if (!w.ckyConfig) w.ckyConfig = {};
-          w.ckyConfig.info = data;
-        }
-        set2((state) => __spreadProps(__spreadValues({}, state), {
-          info: data
-        }));
-      }, "setInfo"),
-      setGcmInfo: /* @__PURE__ */ __name((data) => set2((state) => __spreadProps(__spreadValues({}, state), {
-        gcm: data
-      })), "setGcmInfo"),
-      updateSettings: /* @__PURE__ */ __name((data) => set2((state) => {
-        window.ckyConfig.settings = data;
-        if ((data == null ? void 0 : data.languages) && typeof data.languages === "object") {
-          const l = data.languages;
-          __vitePreload(() => __async(null, null, function* () {
-            const { useLanguageStore: useLanguageStore2 } = yield Promise.resolve().then(() => languageStore);
-            return { useLanguageStore: useLanguageStore2 };
-          }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href).then(({ useLanguageStore: useLanguageStore2 }) => {
-            useLanguageStore2.setState({
-              selected: Array.isArray(l.selected) ? l.selected : ["en"],
-              default: typeof l.default === "string" ? l.default : "en",
-              current: typeof l.current === "string" ? l.current : typeof l.default === "string" ? l.default : "en"
-            });
-            __vitePreload(() => __async(null, null, function* () {
-              const { syncLanguageMirrorFromSettings: syncLanguageMirrorFromSettings2 } = yield Promise.resolve().then(() => languageBootstrap);
-              return { syncLanguageMirrorFromSettings: syncLanguageMirrorFromSettings2 };
-            }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href).then(
-              ({ syncLanguageMirrorFromSettings: syncLanguageMirrorFromSettings2 }) => {
-                syncLanguageMirrorFromSettings2();
-              }
-            );
-          });
-        }
-        return __spreadProps(__spreadValues({}, state), {
-          options: data
-        });
-      }), "updateSettings"),
-      updateGcm: /* @__PURE__ */ __name((data) => set2((state) => {
-        window.ckyGcmConfig.settings = data;
-        return __spreadProps(__spreadValues({}, state), {
-          gcm: data
-        });
-      }), "updateGcm"),
-      updateStatus: /* @__PURE__ */ __name((status = true) => set2((state) => __spreadProps(__spreadValues({}, state), {
-        status
-      })), "updateStatus"),
-      updateSessionStatus: /* @__PURE__ */ __name((status) => set2((state) => __spreadProps(__spreadValues({}, state), {
-        session_status: status
-      })), "updateSessionStatus"),
-      setErrors: /* @__PURE__ */ __name((errors) => set2((state) => __spreadProps(__spreadValues({}, state), {
-        errors
-      })), "setErrors"),
-      setExpand: /* @__PURE__ */ __name((expand) => set2((state) => {
-        if (window.ckyNoticeExpand) {
-          window.ckyNoticeExpand.status = expand;
-        }
-        return __spreadProps(__spreadValues({}, state), {
-          expand
-        });
-      }), "setExpand"),
-      setConnectNotice: /* @__PURE__ */ __name((status) => set2((state) => {
-        if (window.ckyConnectNotice) {
-          window.ckyConnectNotice.status = status;
-        }
-        return __spreadProps(__spreadValues({}, state), {
-          connect_notice: status
-        });
-      }), "setConnectNotice"),
-      setDisconnectSuccessOverlay: /* @__PURE__ */ __name((show) => set2({ disconnect_success_overlay: show }), "setDisconnectSuccessOverlay"),
-      setAffiliateBannerVisible: /* @__PURE__ */ __name((visible) => set2({ affiliate_banner_visible: visible }), "setAffiliateBannerVisible"),
-      reInit: /* @__PURE__ */ __name(() => __async(null, null, function* () {
-        try {
-          const response = yield getSettings();
-          if (response && typeof response === "object") {
-            get2().updateSettings(response);
-          }
-        } catch (error) {
-          console.error("Error reinitializing:", error);
-          get2().setErrors({ reinit: "Failed to reinitialize settings" });
-        }
-      }), "reInit"),
-      loadInfo: /* @__PURE__ */ __name((force = false) => __async(null, null, function* () {
-        var _a3;
-        try {
-          const response = yield getSettingsInfo(force);
-          if (response) {
-            get2().setInfo(response);
-            get2().updateStatus(true);
-            set2({ info_loaded: true });
-            const state = get2();
-            const languages2 = state.info && state.info.languages ? state.info.languages : {};
-            const defaultLang = languages2 && languages2.default ? languages2.default : "en";
-            yield setDefaultLanguage(defaultLang);
-            get2().checkURLMismatch();
-            return true;
-          } else {
-            throw new Error("Failed to load info");
-          }
-        } catch (error) {
-          console.error("Error loading info:", error);
-          if ((_a3 = error == null ? void 0 : error.data) == null ? void 0 : _a3.status) {
-            get2().updateStatus(false);
-            if (error.data.status === 401) {
-              get2().updateSessionStatus(false);
-            }
-          }
-          get2().setErrors({ load: "Failed to load settings info" });
-          return false;
-        }
-      }), "loadInfo"),
-      save: /* @__PURE__ */ __name((clear = true) => __async(null, null, function* () {
-        try {
-          const value = get2().options;
-          const response = yield saveSettings(value, clear);
-          if (response) {
-            get2().updateSettings(response);
-            get2().loadInfo();
-            return true;
-          } else {
-            return false;
-          }
-        } catch (error) {
-          console.error("Error saving settings:", error);
-          get2().setErrors({ save: "Failed to save settings" });
-          return false;
-        }
-      }), "save"),
-      checkURLMismatch: /* @__PURE__ */ __name(() => {
-        var _a3, _b3;
-        const state = get2();
-        if (((_b3 = (_a3 = state.options) == null ? void 0 : _a3.account) == null ? void 0 : _b3.connected) === false) {
-          return;
-        }
-        if (!checkDomain()) {
-          get2().setErrors({
-            urlMismatch: true
-          });
-        }
-      }, "checkURLMismatch")
-    };
-  }, "createAppState");
-  const useAppStore = create()(
-    createAppState
-  );
-  const useSettingsStore = /* @__PURE__ */ __name(() => useAppStore(
-    useShallow((state) => ({
-      options: state.options,
-      info: state.info,
-      status: state.status,
-      session_status: state.session_status,
-      errors: state.errors,
-      expand: state.expand,
-      gcm: state.gcm,
-      connect_notice: state.connect_notice,
-      setOption: state.setOption,
-      setInfo: state.setInfo,
-      setGcmInfo: state.setGcmInfo,
-      updateSettings: state.updateSettings,
-      updateGcm: state.updateGcm,
-      updateStatus: state.updateStatus,
-      updateSessionStatus: state.updateSessionStatus,
-      setErrors: state.setErrors,
-      setExpand: state.setExpand,
-      setConnectNotice: state.setConnectNotice,
-      reInit: state.reInit,
-      loadInfo: state.loadInfo,
-      save: state.save,
-      checkURLMismatch: state.checkURLMismatch
-    }))
-  ), "useSettingsStore");
-  const store = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-    __proto__: null,
-    useAppStore,
-    useSettingsStore
-  }, Symbol.toStringTag, { value: "Module" }));
-  function getBootstrapLanguages() {
-    var _a2;
-    const w = typeof window !== "undefined" ? window.ckyConfig : null;
-    const fromSettings = (_a2 = w == null ? void 0 : w.settings) == null ? void 0 : _a2.languages;
-    const legacy = w == null ? void 0 : w.languages;
-    const src = fromSettings && typeof fromSettings === "object" ? fromSettings : legacy && typeof legacy === "object" ? legacy : null;
-    if (!src) {
-      return { selected: ["en"], default: "en", current: "en" };
-    }
-    const selected = Array.isArray(src.selected) ? src.selected : ["en"];
-    const def = typeof src.default === "string" ? src.default : "en";
-    const cur = typeof src.current === "string" ? src.current : def;
-    return { selected, default: def, current: cur };
-  }
-  __name(getBootstrapLanguages, "getBootstrapLanguages");
-  function getInitialAvailableLanguages() {
-    var _a2, _b2;
-    const w = typeof window !== "undefined" ? window.ckyLanguages : null;
-    if (Array.isArray(w) && w.length > 0) {
-      return w;
-    }
-    const fallback = (_b2 = (_a2 = window.ckyConfig) == null ? void 0 : _a2.languages) == null ? void 0 : _b2.available;
-    return Array.isArray(fallback) ? fallback : [];
-  }
-  __name(getInitialAvailableLanguages, "getInitialAvailableLanguages");
-  function syncLanguageMirrorFromSettings() {
-    if (typeof window === "undefined") return;
-    const b = getBootstrapLanguages();
-    const cfg = window.ckyConfig;
-    if (!cfg) return;
-    if (!cfg.languages) cfg.languages = {};
-    cfg.languages.selected = b.selected;
-    cfg.languages.default = b.default;
-    cfg.languages.current = b.current;
-  }
-  __name(syncLanguageMirrorFromSettings, "syncLanguageMirrorFromSettings");
-  function mirrorPendingLanguageState(state) {
-    var _a2;
-    if (typeof window === "undefined") return;
-    const cfg = window.ckyConfig;
-    if (!cfg) return;
-    if (!cfg.languages) cfg.languages = {};
-    cfg.languages.selected = state.selected;
-    cfg.languages.default = state.default;
-    cfg.languages.current = state.current;
-    if (((_a2 = cfg.settings) == null ? void 0 : _a2.languages) && typeof cfg.settings.languages === "object") {
-      cfg.settings.languages.selected = state.selected;
-      cfg.settings.languages.default = state.default;
-      cfg.settings.languages.current = state.current;
-    }
-  }
-  __name(mirrorPendingLanguageState, "mirrorPendingLanguageState");
-  const languageBootstrap = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-    __proto__: null,
-    getBootstrapLanguages,
-    getInitialAvailableLanguages,
-    mirrorPendingLanguageState,
-    syncLanguageMirrorFromSettings
-  }, Symbol.toStringTag, { value: "Module" }));
-  function getAvailableLanguages() {
-    return __async(this, null, function* () {
-      try {
-        const response = yield ckyRest.get({
-          path: "languages/available"
-        });
-        return response && Array.isArray(response) ? response : [];
-      } catch (error) {
-        console.error("Error fetching available languages:", error);
-        return [];
-      }
-    });
-  }
-  __name(getAvailableLanguages, "getAvailableLanguages");
-  function saveLanguageTranslations(selectedLanguages) {
-    return __async(this, null, function* () {
-      try {
-        yield ckyRest.post({
-          path: "languages/translations",
-          data: selectedLanguages
-        });
-      } catch (error) {
-        console.log("Translations API error (non-critical):", error);
-      }
-    });
-  }
-  __name(saveLanguageTranslations, "saveLanguageTranslations");
-  function getLanguageConfig() {
-    return __async(this, null, function* () {
-      return getBootstrapLanguages();
-    });
-  }
-  __name(getLanguageConfig, "getLanguageConfig");
-  const boot = getBootstrapLanguages();
-  const createLanguageState = /* @__PURE__ */ __name((set2, get2) => ({
-    available: getInitialAvailableLanguages(),
-    selected: boot.selected,
-    default: boot.default,
-    current: boot.current,
-    loading: false,
-    setAvailable: /* @__PURE__ */ __name((languages2) => set2((state) => __spreadProps(__spreadValues({}, state), {
-      available: languages2
-    })), "setAvailable"),
-    setSelected: /* @__PURE__ */ __name((selected) => set2((state) => {
-      const next = __spreadProps(__spreadValues({}, state), { selected });
-      mirrorPendingLanguageState(next);
-      return next;
-    }), "setSelected"),
-    setDefault: /* @__PURE__ */ __name((code) => set2((state) => {
-      const next = __spreadProps(__spreadValues({}, state), { default: code });
-      mirrorPendingLanguageState(next);
-      return next;
-    }), "setDefault"),
-    setCurrent: /* @__PURE__ */ __name((code) => set2((state) => {
-      const next = __spreadProps(__spreadValues({}, state), { current: code });
-      mirrorPendingLanguageState(next);
-      return next;
-    }), "setCurrent"),
-    setLoading: /* @__PURE__ */ __name((loading) => set2((state) => __spreadProps(__spreadValues({}, state), {
-      loading
-    })), "setLoading"),
-    loadAvailableLanguages: /* @__PURE__ */ __name(() => __async(null, null, function* () {
-      try {
-        const languages2 = yield getAvailableLanguages();
-        if (languages2 && languages2.length > 0) {
-          get2().setAvailable(languages2);
-          if (!window.ckyConfig) {
-            window.ckyConfig = {};
-          }
-          if (!window.ckyConfig.languages) {
-            window.ckyConfig.languages = {};
-          }
-          window.ckyConfig.languages.available = languages2;
-        }
-      } catch (error) {
-        console.error("Error loading available languages:", error);
-      }
-    }), "loadAvailableLanguages"),
-    saveSelected: /* @__PURE__ */ __name((..._0) => __async(null, [..._0], function* (options2 = {}) {
-      var _a2;
-      const {
-        remove = false,
-        clear = false,
-        selected: overrideSelected
-      } = options2;
-      try {
-        const selectedToSave = overrideSelected !== void 0 ? overrideSelected : get2().selected;
-        if (!remove) {
-          yield saveLanguageTranslations(selectedToSave);
-        }
-        const { setOption: setOption2 } = yield __vitePreload(() => __async(null, null, function* () {
-          const { setOption: setOption3 } = yield Promise.resolve().then(() => common);
-          return { setOption: setOption3 };
-        }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
-        const { useAppStore: useAppStore2 } = yield __vitePreload(() => __async(null, null, function* () {
-          const { useAppStore: useAppStore3 } = yield Promise.resolve().then(() => store);
-          return { useAppStore: useAppStore3 };
-        }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
-        const store$1 = useAppStore2.getState();
-        const currentSettings = (store$1 == null ? void 0 : store$1.options) || ((_a2 = window.ckyConfig) == null ? void 0 : _a2.settings) || {};
-        const languages2 = currentSettings.languages || {};
-        languages2.selected = selectedToSave;
-        setOption2("languages", languages2);
-        if (store$1 && store$1.setOption) {
-          store$1.setOption("languages", languages2);
-        }
-        const { saveOptions: saveOptions2 } = yield __vitePreload(() => __async(null, null, function* () {
-          const { saveOptions: saveOptions3 } = yield Promise.resolve().then(() => common);
-          return { saveOptions: saveOptions3 };
-        }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
-        const success = yield saveOptions2(clear);
-        return { success, selected: selectedToSave };
-      } catch (error) {
-        console.error("Error saving selected languages:", error);
-        throw error;
-      }
-    }), "saveSelected"),
-    saveDefault: /* @__PURE__ */ __name((..._0) => __async(null, [..._0], function* (options2 = {}) {
-      var _a2;
-      const { clear = false } = options2;
-      try {
-        const defaultCode = get2().default;
-        const { setOption: setOption2 } = yield __vitePreload(() => __async(null, null, function* () {
-          const { setOption: setOption3 } = yield Promise.resolve().then(() => common);
-          return { setOption: setOption3 };
-        }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
-        const { useAppStore: useAppStore2 } = yield __vitePreload(() => __async(null, null, function* () {
-          const { useAppStore: useAppStore3 } = yield Promise.resolve().then(() => store);
-          return { useAppStore: useAppStore3 };
-        }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
-        const store$1 = useAppStore2.getState();
-        const currentSettings = (store$1 == null ? void 0 : store$1.options) || ((_a2 = window.ckyConfig) == null ? void 0 : _a2.settings) || {};
-        const languages2 = currentSettings.languages || {};
-        languages2.default = defaultCode;
-        languages2.current = defaultCode;
-        setOption2("languages", languages2);
-        if (store$1 && store$1.setOption) {
-          store$1.setOption("languages", languages2);
-        }
-        const { saveOptions: saveOptions2 } = yield __vitePreload(() => __async(null, null, function* () {
-          const { saveOptions: saveOptions3 } = yield Promise.resolve().then(() => common);
-          return { saveOptions: saveOptions3 };
-        }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
-        yield saveOptions2(clear);
-        if (store$1 && store$1.setInfo) {
-          const currentInfo = store$1.info;
-          if (currentInfo && typeof currentInfo === "object") {
-            store$1.setInfo(__spreadProps(__spreadValues({}, currentInfo), {
-              defaultLanguage: defaultCode,
-              languages: __spreadProps(__spreadValues({}, currentInfo.languages || {}), {
-                default: defaultCode,
-                current: defaultCode
-              })
-            }));
-          }
-        }
-      } catch (error) {
-        console.error("Error saving default language:", error);
-        throw error;
-      }
-    }), "saveDefault"),
-    init: /* @__PURE__ */ __name(() => __async(null, null, function* () {
-      get2().setLoading(true);
-      try {
-        yield get2().loadAvailableLanguages();
-        const config2 = yield getLanguageConfig();
-        if (config2 && typeof config2 === "object") {
-          if (config2.selected && Array.isArray(config2.selected)) {
-            get2().setSelected(config2.selected);
-          }
-          if (config2.default) {
-            get2().setDefault(config2.default);
-          }
-          if (config2.current) {
-            get2().setCurrent(config2.current);
-          }
-        }
-      } catch (error) {
-        console.error("Error initializing languages:", error);
-      } finally {
-        get2().setLoading(false);
-      }
-    }), "init")
-  }), "createLanguageState");
-  const useLanguageStore = create()(
-    createLanguageState
-  );
-  const languageStore = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-    __proto__: null,
-    useLanguageStore
-  }, Symbol.toStringTag, { value: "Module" }));
-  const useBannerStore = create()(
-    devtools(
-      (set2, get2) => ({
-        // Initial state
-        items: false,
-        current: false,
-        preview: false,
-        presets: [],
-        configs: [],
-        template: {},
-        errors: {},
-        // Actions
-        setBanners: /* @__PURE__ */ __name((banners) => set2((state) => __spreadProps(__spreadValues({}, state), {
-          items: banners
-        })), "setBanners"),
-        setCurrentBanner: /* @__PURE__ */ __name((banner2) => set2((state) => __spreadProps(__spreadValues({}, state), {
-          current: banner2
-        })), "setCurrentBanner"),
-        setPreview: /* @__PURE__ */ __name((preview) => set2((state) => __spreadProps(__spreadValues({}, state), {
-          preview
-        })), "setPreview"),
-        setPresets: /* @__PURE__ */ __name((presets) => set2((state) => __spreadProps(__spreadValues({}, state), {
-          presets
-        })), "setPresets"),
-        setConfigs: /* @__PURE__ */ __name((configs) => set2((state) => __spreadProps(__spreadValues({}, state), {
-          configs
-        })), "setConfigs"),
-        setTemplate: /* @__PURE__ */ __name((template) => set2((state) => __spreadProps(__spreadValues({}, state), {
-          template
-        })), "setTemplate"),
-        setErrors: /* @__PURE__ */ __name((errors) => set2((state) => __spreadProps(__spreadValues({}, state), {
-          errors
-        })), "setErrors"),
-        // Async actions
-        reInit: /* @__PURE__ */ __name(() => __async(null, null, function* () {
-          try {
-            const response = yield ckyRest.get({
-              path: "banners"
-            });
-            if (response && Array.isArray(response)) {
-              const banners = response.map((item) => ({
-                id: item.id || 0,
-                name: item.name || "",
-                slug: item.slug || "",
-                default: item.default || false,
-                status: item.status == true,
-                properties: item.properties || {},
-                contents: item.contents || {}
-              }));
-              get2().setBanners(banners);
-            }
-          } catch (error) {
-            console.error("Error reinitializing banners:", error);
-          }
-        }), "reInit"),
-        getBanners: /* @__PURE__ */ __name(() => __async(null, null, function* () {
-          const items = get2().items;
-          if (items !== false) {
-            return JSON.parse(JSON.stringify(items));
-          }
-          yield get2().reInit();
-          return Array.isArray(get2().items) ? get2().items : [];
-        }), "getBanners"),
-        getCurrentBanner: /* @__PURE__ */ __name(() => __async(null, null, function* () {
-          const current = get2().current;
-          if (current && current.id > 0) {
-            return current;
-          }
-          try {
-            const banners = yield get2().getBanners();
-            if (Array.isArray(banners) && banners.length > 0) {
-              let banner2 = banners.find((b) => b.default === true);
-              if (!banner2) {
-                banner2 = banners[0];
-              }
-              if (banner2) {
-                get2().setCurrentBanner(banner2);
-                return banner2;
-              }
-            }
-          } catch (error) {
-            console.error("Error getting current banner:", error);
-          }
-          return false;
-        }), "getCurrentBanner"),
-        getActiveBanner: /* @__PURE__ */ __name(() => __async(null, null, function* () {
-          const banners = yield get2().getBanners();
-          if (Array.isArray(banners) && banners.length > 0) {
-            let banner2 = banners.find((b) => b.status == true);
-            if (!banner2) {
-              banner2 = banners[0];
-            }
-            if (banner2) {
-              get2().setCurrentBanner(banner2);
-              return banner2;
-            }
-          }
-          return false;
-        }), "getActiveBanner"),
-        saveBanner: /* @__PURE__ */ __name((banner2, language) => __async(null, null, function* () {
-          if (!banner2.id) {
-            return false;
-          }
-          try {
-            const params = language ? { language } : {};
-            const response = yield ckyRest.put({
-              path: `/banners/${banner2.id}`,
-              data: banner2,
-              params
-            });
-            if (response && response.id) {
-              yield get2().reInit();
-              return true;
-            }
-          } catch (error) {
-            console.error("Error saving banner:", error);
-          }
-          return false;
-        }), "saveBanner"),
-        loadConfigs: /* @__PURE__ */ __name(() => __async(null, null, function* () {
-          const configs = get2().configs;
-          if (configs.length > 0) {
-            return;
-          }
-          try {
-            const response = yield ckyRest.get({
-              path: "banners/configs"
-            });
-            if (response && Array.isArray(response)) {
-              get2().setConfigs(response);
-            }
-          } catch (error) {
-            console.error("Error loading configs:", error);
-          }
-        }), "loadConfigs"),
-        loadTemplate: /* @__PURE__ */ __name((force = false) => __async(null, null, function* () {
-          const current = get2().current;
-          if (!current || !current.properties) {
-            return null;
-          }
-          const type = current.properties.settings.type;
-          const law = current.properties.settings.applicableLaw;
-          const templates = get2().template;
-          if (templates[law] && templates[law][type] && force === false) {
-            return templates[law][type];
-          }
-          try {
-            const { useLanguageStore: useLanguageStore2 } = yield __vitePreload(() => __async(null, null, function* () {
-              const { useLanguageStore: useLanguageStore3 } = yield Promise.resolve().then(() => languageStore);
-              return { useLanguageStore: useLanguageStore3 };
-            }), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("js/index.js", document.baseURI).href);
-            const currentLanguage = useLanguageStore2.getState().current;
-            const response = yield ckyRest.post({
-              path: "banners/preview",
-              params: {
-                language: currentLanguage
-              },
-              data: current
-            });
-            if (response && response.html) {
-              const updatedTemplates = __spreadValues({}, templates);
-              if (!updatedTemplates[law]) {
-                updatedTemplates[law] = {};
-              }
-              updatedTemplates[law][type] = response;
-              get2().setTemplate(updatedTemplates);
-              return updatedTemplates[law][type];
-            }
-          } catch (error) {
-            console.error("Error loading template:", error);
-          }
-          return null;
-        }), "loadTemplate")
-      }),
-      {
-        name: "banner-store"
-      }
-    )
-  );
-  const bannerStore = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-    __proto__: null,
-    useBannerStore
-  }, Symbol.toStringTag, { value: "Module" }));
   const globals$1 = /* @__PURE__ */ __name(() => {
     var _a2;
     return (_a2 = window.ckyGlobals) != null ? _a2 : {};
@@ -65345,19 +65345,28 @@ ${colorConfig.map(([key, itemConfig]) => {
       ) })
     ] }, key)) })
   ] }), "CkyBecomePartner");
+  const SUPPORT_URL$1 = "https://www.cookieyes.com/support/";
+  const WP_FORUM_SUPPORT_URL = "https://wordpress.org/support/plugin/cookie-law-info/#new-topic-0";
+  const FREE_PLAN_SLUGS = ["free", "plan_f"];
   const HEADER_NAV_LINKS = [
     {
-      href: "https://www.cookieyes.com/documentation/how-to-install-cookieyes-wordpress-plugin/",
+      href: "https://www.cookieyes.com/documentation/install-cookieyes-wordpress-plugin/",
       icon: "help",
       label: __("Help Guides", "cookie-law-info")
     },
     {
-      href: "https://www.cookieyes.com/support/",
+      href: SUPPORT_URL$1,
       icon: "chat",
       label: __("Support", "cookie-law-info")
     }
   ];
   const CkyHeader = /* @__PURE__ */ __name(() => {
+    const isPaid = useAppStore((s2) => {
+      var _a2, _b2, _c2, _d, _e2, _f;
+      if (!((_b2 = (_a2 = s2.options) == null ? void 0 : _a2.account) == null ? void 0 : _b2.connected)) return false;
+      const slug = String(((_d = (_c2 = s2.info) == null ? void 0 : _c2.plan) == null ? void 0 : _d.slug) || ((_f = (_e2 = s2.options) == null ? void 0 : _e2.account) == null ? void 0 : _f.plan) || "free").toLowerCase();
+      return !FREE_PLAN_SLUGS.includes(slug);
+    });
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "cky:px-5 cky:py-4 cky-header-gradient", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "cky:flex cky:items-center", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "cky:w-1/3", children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "https://www.cookieyes.com/", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CkyIcon, { width: "120px", icon: "logo", color: "#ffffff" }) }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "cky:w-2/3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "cky:flex cky:items-center cky:justify-end cky:gap-4", children: [
@@ -65367,7 +65376,7 @@ ${colorConfig.map(([key, itemConfig]) => {
           {
             className: "cky:flex cky:items-center cky:text-white cky:hover:text-gray-200 cky:transition-colors",
             target: "_blank",
-            href,
+            href: href === SUPPORT_URL$1 && !isPaid ? WP_FORUM_SUPPORT_URL : href,
             rel: "noopener noreferrer",
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(CkyIcon, { width: "15px", icon, color: "#ffffff" }),
@@ -65814,9 +65823,9 @@ ${colorConfig.map(([key, itemConfig]) => {
           if (banners.laws === "ccpa") {
             return "US State Laws";
           } else if (laws.includes("ccpa") && laws.includes("gdpr")) {
-            return banners.is_iab_enabled ? "GDPR (IAB TCF v2.3) & US State Laws" : "GDPR & US State Laws";
+            return banners.is_iab_enabled ? "GDPR (IAB TCF v2.4) & US State Laws" : "GDPR & US State Laws";
           }
-          return banners.is_iab_enabled ? "GDPR (IAB TCF v2.3)" : "GDPR";
+          return banners.is_iab_enabled ? "GDPR (IAB TCF v2.4)" : "GDPR";
         }
         return "GDPR";
       }
@@ -82695,7 +82704,7 @@ ${colorConfig.map(([key, itemConfig]) => {
     "cookie-law-info"
   );
   const IAB_TCF_LABEL = __(
-    "Support IAB TCF v2.3",
+    "Support IAB TCF v2.4",
     "cookie-law-info"
   );
   const IAB_TCF_TOOLTIP = __(

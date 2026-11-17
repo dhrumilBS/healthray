@@ -459,6 +459,8 @@ class Controller extends Cloud {
 					'overage_view_count' => isset( $response['overage']['overage_view_count'] ) ? absint( $response['overage']['overage_view_count'] ) : 0,
 				),
 			);
+			// Keep the Installed Plugins row in step with the latest plan, e.g. right after an upgrade or downgrade.
+			set_transient( $this->get_plan_cache_key(), $this->get_cacheable_plan( $data['plan'] ), HOUR_IN_SECONDS );
 			return $data;
 		} elseif ( 401 === $response_code ) {
 			return new WP_Error(
@@ -471,6 +473,28 @@ class Controller extends Cloud {
 			'cky_api_fetching_failed',
 			__( 'Failed to fetch data from the API', 'cookie-law-info' ),
 			array( 'status' => 400 )
+		);
+	}
+
+	/**
+	 * Transient key for the connected plan shown in the Installed Plugins row.
+	 *
+	 * @return string
+	 */
+	public function get_plan_cache_key() {
+		return 'cky_plugin_row_plan_' . md5( (string) $this->get_website_id() );
+	}
+
+	/**
+	 * The part of the web app plan the Installed Plugins row needs.
+	 *
+	 * @param array $plan Plan from the web app.
+	 * @return array Array with 'slug' and 'name'.
+	 */
+	public function get_cacheable_plan( $plan ) {
+		return array(
+			'slug' => isset( $plan['slug'] ) ? (string) $plan['slug'] : '',
+			'name' => isset( $plan['name'] ) ? (string) $plan['name'] : '',
 		);
 	}
 

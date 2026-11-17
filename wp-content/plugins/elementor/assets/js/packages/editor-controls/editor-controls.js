@@ -1,4 +1,4 @@
-(function(react, _elementor_editor_props, _elementor_ui, _wordpress_i18n, _elementor_utils, _elementor_query, _elementor_http_client, _elementor_icons, _elementor_wp_media, _elementor_editor_ui, react_dom, _elementor_editor_responsive, _elementor_locations, _elementor_editor_elements, _elementor_editor_v1_adapters, _elementor_session, _elementor_editor_current_user, _elementor_env, _elementor_events, _elementor_schema) {
+(function(react, _elementor_editor_props, _elementor_ui, _wordpress_i18n, _elementor_utils, _elementor_query, _elementor_http_client, _elementor_wp_media, _elementor_editor_ui, _elementor_icons, _elementor_editor_v1_adapters, react_dom, _elementor_editor_responsive, _elementor_locations, _elementor_editor_elements, _elementor_session, _elementor_editor_current_user, _elementor_events, _elementor_env, _elementor_schema) {
 
 //#region \0rolldown/runtime.js
 	var __create = Object.create;
@@ -362,8 +362,90 @@ react_dom = __toESM(react_dom);
 	}
 
 //#endregion
+//#region packages/packages/libs/editor-controls/src/controls/media-select-actions.tsx
+	var SELECT_AREA_WIDTH = 72;
+	var UPLOAD_AREA_WIDTH = 48;
+	var SPLIT_BUTTON_MIN_HEIGHT = 32;
+	var SPLIT_BUTTON_CORNER_RADIUS = "8px";
+	var actionButtonSx = {
+		minWidth: 0,
+		minHeight: SPLIT_BUTTON_MIN_HEIGHT,
+		px: 2,
+		fontSize: "14px",
+		fontWeight: 500,
+		lineHeight: 1
+	};
+	var SplitButtonGroup$1 = (0, _elementor_ui.styled)(_elementor_ui.Stack)({
+		display: "inline-flex",
+		flexDirection: "row",
+		alignItems: "stretch",
+		border: "1px solid currentColor",
+		borderRadius: SPLIT_BUTTON_CORNER_RADIUS,
+		overflow: "hidden",
+		"& .MuiButton-root": {
+			border: "none",
+			borderRadius: 0,
+			lineHeight: 1
+		}
+	});
+	var MediaActionGroup = ({ label, onSelect, uploadSlot, groupRef, testId }) => /* @__PURE__ */ react.createElement(SplitButtonGroup$1, {
+		ref: groupRef,
+		role: "group",
+		"aria-label": label,
+		direction: "row",
+		"data-testid": testId
+	}, /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
+		size: "tiny",
+		color: "inherit",
+		variant: "text",
+		onClick: onSelect,
+		sx: {
+			...actionButtonSx,
+			minWidth: SELECT_AREA_WIDTH
+		}
+	}, (0, _wordpress_i18n.__)("Select", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
+		width: "1px",
+		alignSelf: "stretch",
+		bgcolor: "currentColor",
+		flexShrink: 0
+	} }), /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+		component: "span",
+		sx: {
+			display: "flex",
+			width: UPLOAD_AREA_WIDTH
+		}
+	}, uploadSlot));
+	var MediaUploadButton = ({ disabled = false, onClick }) => /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
+		sx: {
+			...actionButtonSx,
+			width: "100%"
+		},
+		size: "tiny",
+		color: "inherit",
+		variant: "text",
+		disabled,
+		onClick,
+		"aria-label": (0, _wordpress_i18n.__)("Upload", "elementor")
+	}, /* @__PURE__ */ react.createElement(_elementor_icons.UploadIcon, { fontSize: "small" }));
+	var MediaSelectActions = ({ label, onSelect, onUpload, onInsertUrl }) => /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
+		alignItems: "center",
+		gap: 1
+	}, /* @__PURE__ */ react.createElement(MediaActionGroup, {
+		label,
+		onSelect,
+		uploadSlot: /* @__PURE__ */ react.createElement(MediaUploadButton, { onClick: onUpload })
+	}), /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
+		size: "tiny",
+		variant: "text",
+		color: "inherit",
+		onClick: onInsertUrl
+	}, (0, _wordpress_i18n.__)("Insert URL", "elementor")));
+
+//#endregion
 //#region packages/packages/libs/editor-controls/src/controls/image-media-control.tsx
-	var ImageMediaControl = createControl(({ mediaTypes = ["image"] }) => {
+	var ImageMediaControl = createControl(({ mediaTypes, label }) => {
+		const resolvedMediaTypes = mediaTypes ?? ["image"];
+		const groupLabel = label ?? (0, _wordpress_i18n.__)("Image", "elementor");
 		const { value, setValue, propType, placeholder } = useBoundProp(_elementor_editor_props.imageSrcPropTypeUtil);
 		const { id, url } = value ?? {};
 		const { data: attachment, isFetching } = (0, _elementor_wp_media.useWpMediaAttachment)(id?.value || null);
@@ -373,7 +455,7 @@ react_dom = __toESM(react_dom);
 		const currentUrlForModal = url?.value && url.value !== defaultUrl ? url.value : void 0;
 		const currentAltForModal = value?.alt?.value;
 		const { open } = (0, _elementor_wp_media.useWpMediaFrame)({
-			mediaTypes,
+			mediaTypes: resolvedMediaTypes,
 			multiple: false,
 			selected: id?.value || null,
 			allowUrlImport: true,
@@ -402,28 +484,224 @@ react_dom = __toESM(react_dom);
 			alignItems: "center",
 			width: "100%",
 			height: "100%"
-		}, /* @__PURE__ */ react.createElement(_elementor_ui.CircularProgress, null)) : /* @__PURE__ */ react.createElement(react.Fragment, null)), /* @__PURE__ */ react.createElement(_elementor_ui.CardOverlay, null, /* @__PURE__ */ react.createElement(_elementor_ui.Stack, { gap: 1 }, /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
-			size: "tiny",
-			color: "inherit",
-			variant: "outlined",
-			onClick: () => open({ mode: "browse" })
-		}, (0, _wordpress_i18n.__)("Select image", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
-			size: "tiny",
-			variant: "text",
-			color: "inherit",
-			startIcon: /* @__PURE__ */ react.createElement(_elementor_icons.UploadIcon, null),
-			onClick: () => open({ mode: "upload" })
-		}, (0, _wordpress_i18n.__)("Upload", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
-			size: "tiny",
-			variant: "text",
-			color: "inherit",
-			onClick: () => open({
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.CircularProgress, null)) : /* @__PURE__ */ react.createElement(react.Fragment, null)), /* @__PURE__ */ react.createElement(_elementor_ui.CardOverlay, null, /* @__PURE__ */ react.createElement(MediaSelectActions, {
+			label: groupLabel,
+			onSelect: () => open({ mode: "browse" }),
+			onUpload: () => open({ mode: "upload" }),
+			onInsertUrl: () => open({
 				mode: "url",
 				currentUrl: currentUrlForModal,
 				currentAlt: currentAltForModal
 			})
-		}, (0, _wordpress_i18n.__)("Insert from URL", "elementor"))))));
+		}))));
 	});
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/notice-control.tsx
+	var NoticeTitle = (0, _elementor_ui.styled)(_elementor_ui.AlertTitle)({ "&.MuiAlertTitle-root.MuiAlertTitle-root": {
+		marginBottom: 4,
+		fontStyle: "italic"
+	} });
+	var markNoticeAsDismissedInSession = (dismissId) => {
+		const dismissedNotices = window.elementor?.config?.user?.dismissed_editor_notices;
+		if (dismissedNotices && !dismissedNotices.includes(dismissId)) dismissedNotices.push(dismissId);
+	};
+	var isNoticeDismissed = (dismissId) => {
+		if (!dismissId) return false;
+		return !!(window.elementor?.config?.user?.dismissed_editor_notices)?.includes(dismissId);
+	};
+	var NoticeControl = createControl(({ noticeType = "info", heading, content, dismissible, buttonText, buttonUrl }) => {
+		const [isDismissed, setIsDismissed] = (0, react.useState)(() => isNoticeDismissed(dismissible));
+		if (isDismissed || !content) return null;
+		const severity = noticeType === "danger" ? "error" : noticeType;
+		const icon = noticeType === "info" ? /* @__PURE__ */ react.createElement(_elementor_icons.BulbIcon, { fontSize: "inherit" }) : void 0;
+		const handleDismiss = () => {
+			setIsDismissed(true);
+			if (!dismissible) return;
+			markNoticeAsDismissedInSession(dismissible);
+			_elementor_editor_v1_adapters.ajax.load({
+				action: "dismissed_editor_notices",
+				unique_id: `dismiss-editor-notice-${dismissible}`,
+				data: { dismissId: dismissible }
+			}).catch(() => {});
+		};
+		const handleActionClick = () => {
+			if (!dismissible) return;
+			setIsDismissed(true);
+			markNoticeAsDismissedInSession(dismissible);
+		};
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Alert, {
+			variant: "outlined",
+			severity,
+			icon,
+			size: "small",
+			onClose: dismissible ? handleDismiss : void 0
+		}, heading && /* @__PURE__ */ react.createElement(NoticeTitle, null, heading), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
+			variant: "caption",
+			color: "textSecondary",
+			sx: { fontStyle: "italic" }
+		}, content), buttonText && buttonUrl && /* @__PURE__ */ react.createElement(_elementor_ui.AlertAction, {
+			variant: "contained",
+			color: severity,
+			target: "_blank",
+			rel: "noopener noreferrer",
+			href: buttonUrl,
+			onClick: handleActionClick,
+			sx: { mt: 2 }
+		}, buttonText));
+	});
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/image-optimize-trigger.tsx
+	var POPOVER_WIDTH = 296;
+	var POPOVER_OFFSET = [-24, 12];
+	var OptimizeInfotip = _elementor_ui.Infotip;
+	var isEventInside = (target, anchor) => {
+		if (!(target instanceof Element)) return false;
+		return !!anchor?.contains(target) || !!target.closest("[data-image-optimize-popover], .MuiTooltip-popper");
+	};
+	var ImageOptimizeTrigger = ({ promotion }) => {
+		const [open, setOpen] = (0, react.useState)(false);
+		const [dismissed, setDismissed] = (0, react.useState)(() => isNoticeDismissed(promotion?.dismissible));
+		const anchorRef = (0, react.useRef)(null);
+		const placement = "rtl" === (0, _elementor_ui.useTheme)().direction ? "left-start" : "right-start";
+		(0, react.useEffect)(() => {
+			if (!open) return;
+			const closeOnPointerDown = (event) => {
+				if (isEventInside(event.target, anchorRef.current)) return;
+				setOpen(false);
+			};
+			const closeOnEscape = (event) => {
+				if ("Escape" !== event.key) return;
+				event.preventDefault();
+				event.stopPropagation();
+				event.stopImmediatePropagation();
+				if ("keydown" === event.type) setOpen(false);
+			};
+			const iframeDocument = window.elementor?.$preview?.[0]?.contentDocument;
+			document.addEventListener("mousedown", closeOnPointerDown, true);
+			document.addEventListener("keydown", closeOnEscape, true);
+			document.addEventListener("keyup", closeOnEscape, true);
+			iframeDocument?.addEventListener("mousedown", closeOnPointerDown, true);
+			iframeDocument?.addEventListener("keydown", closeOnEscape, true);
+			iframeDocument?.addEventListener("keyup", closeOnEscape, true);
+			return () => {
+				document.removeEventListener("mousedown", closeOnPointerDown, true);
+				document.removeEventListener("keydown", closeOnEscape, true);
+				document.removeEventListener("keyup", closeOnEscape, true);
+				iframeDocument?.removeEventListener("mousedown", closeOnPointerDown, true);
+				iframeDocument?.removeEventListener("keydown", closeOnEscape, true);
+				iframeDocument?.removeEventListener("keyup", closeOnEscape, true);
+			};
+		}, [open]);
+		if (dismissed || !promotion?.content) return null;
+		const dismiss = () => {
+			setDismissed(true);
+			setOpen(false);
+			if (!promotion.dismissible) return;
+			markNoticeAsDismissedInSession(promotion.dismissible);
+			_elementor_editor_v1_adapters.ajax.load({
+				action: "dismissed_editor_notices",
+				unique_id: `dismiss-editor-notice-${promotion.dismissible}`,
+				data: { dismissId: promotion.dismissible }
+			}).catch(() => {});
+		};
+		const hideForSession = () => {
+			setDismissed(true);
+			setOpen(false);
+			if (promotion.dismissible) markNoticeAsDismissedInSession(promotion.dismissible);
+		};
+		return /* @__PURE__ */ react.createElement(OptimizeInfotip, {
+			arrow: true,
+			disableFocusListener: true,
+			disableHoverListener: true,
+			disableTouchListener: true,
+			content: /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+				className: "dialog-widget",
+				"data-image-optimize-popover": "",
+				sx: { width: POPOVER_WIDTH }
+			}, /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
+				direction: "row",
+				alignItems: "center",
+				gap: 1,
+				py: 1,
+				px: 2
+			}, /* @__PURE__ */ react.createElement(_elementor_icons.BulbIcon, {
+				fontSize: "small",
+				color: "info"
+			}), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, { variant: "subtitle2" }, promotion.title || (0, _wordpress_i18n.__)("Optimize your images", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.CloseButton, {
+				edge: "end",
+				sx: { ml: "auto" },
+				slotProps: { icon: { fontSize: "small" } },
+				onClick: () => setOpen(false)
+			})), /* @__PURE__ */ react.createElement(_elementor_ui.Stack, { px: 2 }, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
+				variant: "body2",
+				color: "secondary",
+				sx: {
+					pt: .5,
+					pb: 1
+				}
+			}, promotion.content)), /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
+				direction: "row",
+				alignItems: "center",
+				pt: 1,
+				pb: 1.5,
+				px: 2
+			}, /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
+				variant: "text",
+				size: "small",
+				color: "secondary",
+				onClick: dismiss,
+				sx: { ml: -1 }
+			}, (0, _wordpress_i18n.__)("Dismiss", "elementor")), promotion.buttonText && promotion.buttonUrl && /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
+				variant: "contained",
+				size: "small",
+				color: "info",
+				href: promotion.buttonUrl,
+				target: "_blank",
+				rel: "noopener noreferrer",
+				onClick: hideForSession,
+				sx: { ml: "auto" }
+			}, promotion.buttonText))),
+			open,
+			placement,
+			PopperProps: { modifiers: [{
+				name: "offset",
+				options: { offset: POPOVER_OFFSET }
+			}] }
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
+			ref: anchorRef,
+			variant: "text",
+			size: "small",
+			color: "info",
+			"aria-expanded": open,
+			onClick: () => setOpen((current) => !current),
+			startIcon: /* @__PURE__ */ react.createElement(_elementor_icons.BulbIcon, {
+				fontSize: "tiny",
+				sx: {
+					display: "block",
+					position: "relative",
+					top: "-3px"
+				}
+			}),
+			sx: {
+				display: "inline-flex",
+				alignItems: "center",
+				minWidth: 0,
+				minHeight: 0,
+				px: .75,
+				py: .25,
+				lineHeight: 1,
+				fontWeight: 400,
+				"& .MuiButton-startIcon": {
+					display: "inline-flex",
+					alignItems: "center",
+					margin: 0,
+					mr: .5
+				}
+			}
+		}, promotion.label || (0, _wordpress_i18n.__)("Optimize", "elementor")));
+	};
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/controls/select-control.tsx
@@ -491,9 +769,13 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/controls/image-control.tsx
-	var ImageControl = createControl(({ sizes, label = (0, _wordpress_i18n.__)("Image", "elementor") }) => {
+	var ImageControl = createControl(({ sizes, promotion, label = (0, _wordpress_i18n.__)("Image", "elementor") }) => {
 		const propContext = useBoundProp(_elementor_editor_props.imagePropTypeUtil);
-		return /* @__PURE__ */ react.createElement(PropProvider, { ...propContext }, /* @__PURE__ */ react.createElement(_elementor_ui.Stack, { gap: 1.5 }, /* @__PURE__ */ react.createElement(ControlLabel, null, label), /* @__PURE__ */ react.createElement(ImageSrcControl, null), /* @__PURE__ */ react.createElement(_elementor_ui.Grid, {
+		return /* @__PURE__ */ react.createElement(PropProvider, { ...propContext }, /* @__PURE__ */ react.createElement(_elementor_ui.Stack, { gap: 1.5 }, /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
+			direction: "row",
+			alignItems: "center",
+			justifyContent: "space-between"
+		}, /* @__PURE__ */ react.createElement(ControlLabel, null, label), /* @__PURE__ */ react.createElement(ImageOptimizeTrigger, { promotion })), /* @__PURE__ */ react.createElement(ImageSrcControl, { label }), /* @__PURE__ */ react.createElement(_elementor_ui.Grid, {
 			container: true,
 			gap: 1.5,
 			alignItems: "center",
@@ -507,10 +789,13 @@ react_dom = __toESM(react_dom);
 			sx: { overflow: "hidden" }
 		}, /* @__PURE__ */ react.createElement(ImageSizeControl, { sizes })))));
 	});
-	var ImageSrcControl = () => {
+	var ImageSrcControl = ({ label }) => {
 		const { data: allowSvgUpload } = useUnfilteredFilesUpload();
 		const mediaTypes = allowSvgUpload ? ["image", "svg"] : ["image"];
-		return /* @__PURE__ */ react.createElement(PropKeyProvider, { bind: "src" }, /* @__PURE__ */ react.createElement(ImageMediaControl, { mediaTypes }));
+		return /* @__PURE__ */ react.createElement(PropKeyProvider, { bind: "src" }, /* @__PURE__ */ react.createElement(ImageMediaControl, {
+			mediaTypes,
+			label
+		}));
 	};
 	var ImageSizeControl = ({ sizes }) => {
 		return /* @__PURE__ */ react.createElement(PropKeyProvider, { bind: "size" }, /* @__PURE__ */ react.createElement(SelectControl, { options: sizes }));
@@ -6020,7 +6305,7 @@ react_dom = __toESM(react_dom);
 		return e;
 	}
 	__name(_objectSpread$3, "_objectSpread");
-	var Tooltip$14 = /*#__PURE__*/ react.memo(/*#__PURE__*/ react.forwardRef(function(inProps, ref) {
+	var Tooltip$18 = /*#__PURE__*/ react.memo(/*#__PURE__*/ react.forwardRef(function(inProps, ref) {
 		var mergeProps = useMergeProps();
 		var context = react.useContext(PrimeReactContext);
 		var props = TooltipBase.getProps(inProps, context);
@@ -6480,7 +6765,7 @@ react_dom = __toESM(react_dom);
 		}
 		return null;
 	}));
-	Tooltip$14.displayName = "Tooltip";
+	Tooltip$18.displayName = "Tooltip";
 
 //#endregion
 //#region node_modules/primereact/overlayservice/overlayservice.esm.js
@@ -6969,7 +7254,7 @@ react_dom = __toESM(react_dom);
 			onInput,
 			onPaste
 		}, InputTextareaBase.getOtherProps(props), ptm("root"));
-		return /*#__PURE__*/ react.createElement(react.Fragment, null, /*#__PURE__*/ react.createElement("textarea", rootProps), hasTooltip && /*#__PURE__*/ react.createElement(Tooltip$14, _extends({
+		return /*#__PURE__*/ react.createElement(react.Fragment, null, /*#__PURE__*/ react.createElement("textarea", rootProps), hasTooltip && /*#__PURE__*/ react.createElement(Tooltip$18, _extends({
 			target: elementRef,
 			content: props.tooltip,
 			pt: ptm("tooltip")
@@ -7847,7 +8132,7 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/components/text-field-popover.tsx
-	var SIZE$11 = "tiny";
+	var SIZE$12 = "tiny";
 	var TextFieldPopover$1 = /* @__PURE__ */ __name((props) => {
 		const { popupState, restoreValue, anchorRef, value, onChange } = props;
 		const inputRef = (0, react.useRef)(null);
@@ -7882,7 +8167,7 @@ react_dom = __toESM(react_dom);
 		}, /* @__PURE__ */ react.createElement(_elementor_editor_ui.PopoverHeader, {
 			title: (0, _wordpress_i18n.__)("CSS function", "elementor"),
 			onClose: handleClose,
-			icon: /* @__PURE__ */ react.createElement(_elementor_icons.MathFunctionIcon, { fontSize: SIZE$11 })
+			icon: /* @__PURE__ */ react.createElement(_elementor_icons.MathFunctionIcon, { fontSize: SIZE$12 })
 		}), /* @__PURE__ */ react.createElement(_elementor_ui.TextField, {
 			value,
 			onChange,
@@ -7959,13 +8244,13 @@ react_dom = __toESM(react_dom);
 		const actualUnits = resolveUnits(propType, enablePropTypeUnits, variant, units, useSizeExtendedOptions(extendedOptions || [], disableCustom ?? false));
 		const popupState = (0, _elementor_ui.usePopupState)({ variant: "popover" });
 		const [state, setState] = useSyncExternalState({
-			external: (0, react.useMemo)(() => createStateFromSizeProp(sizeValue, actualDefaultUnit), [sizeValue, actualDefaultUnit]),
+			external: (0, react.useMemo)(() => sizeValue ? createStateFromSizeProp(sizeValue, actualDefaultUnit) : null, [sizeValue, actualDefaultUnit]),
 			setExternal: (newState, options, meta) => setSizeValue(extractValueFromState(newState), options, meta),
 			persistWhen: (newState) => !!extractValueFromState(newState),
-			fallback: (newState) => ({
-				unit: newState?.unit ?? actualDefaultUnit,
-				numeric: newState?.numeric ?? NaN,
-				custom: newState?.custom ?? ""
+			fallback: (prevState) => ({
+				unit: prevState?.unit && !isUnitExtendedOption(prevState.unit) ? prevState.unit : actualDefaultUnit,
+				numeric: DEFAULT_SIZE$2,
+				custom: ""
 			})
 		});
 		const { size: controlSize = DEFAULT_SIZE$2, unit: controlUnit = actualDefaultUnit } = extractValueFromState(state, true) || {};
@@ -8103,7 +8388,10 @@ react_dom = __toESM(react_dom);
 					},
 					slotProps: {
 						colorIndicator: { value: value ?? placeholder ?? "" },
-						colorBox: { value: value ?? placeholder ?? "" }
+						colorBox: {
+							value: value ?? placeholder ?? "",
+							slotProps: { formatSelection: { MenuProps: { disablePortal: true } } }
+						}
 					}
 				}
 			}
@@ -8337,7 +8625,7 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/components/control-repeater/actions/tooltip-add-item-action.tsx
-	var SIZE$10 = "tiny";
+	var SIZE$11 = "tiny";
 	var TooltipAddItemAction = ({ disabled = false, enableTooltip = false, tooltipContent = null, newItemIndex, ariaLabel }) => {
 		const { addItem } = useRepeaterContext();
 		const onClick = (ev) => addItem(ev, { index: newItemIndex });
@@ -8348,11 +8636,11 @@ react_dom = __toESM(react_dom);
 			component: "span",
 			sx: { cursor: disabled ? "not-allowed" : "pointer" }
 		}, /* @__PURE__ */ react.createElement(_elementor_ui.IconButton, {
-			size: SIZE$10,
+			size: SIZE$11,
 			disabled,
 			onClick,
 			"aria-label": (0, _wordpress_i18n.sprintf)((0, _wordpress_i18n.__)("Add %s item", "elementor"), ariaLabel?.toLowerCase())
-		}, /* @__PURE__ */ react.createElement(_elementor_icons.PlusIcon, { fontSize: SIZE$10 }))));
+		}, /* @__PURE__ */ react.createElement(_elementor_icons.PlusIcon, { fontSize: SIZE$11 }))));
 	};
 	var ConditionalToolTip = ({ children, enable, content }) => enable && content ? /* @__PURE__ */ react.createElement(_elementor_ui.Infotip, {
 		placement: "right",
@@ -8543,7 +8831,7 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/components/control-repeater/actions/disable-item-action.tsx
-	var SIZE$9 = "tiny";
+	var SIZE$10 = "tiny";
 	var DisableItemAction = () => {
 		const { items, updateItem, index = -1 } = useRepeaterContext();
 		if (index === -1) return null;
@@ -8559,15 +8847,15 @@ react_dom = __toESM(react_dom);
 			title: toggleLabel,
 			placement: "top"
 		}, /* @__PURE__ */ react.createElement(_elementor_ui.IconButton, {
-			size: SIZE$9,
+			size: SIZE$10,
 			onClick,
 			"aria-label": toggleLabel
-		}, propDisabled ? /* @__PURE__ */ react.createElement(_elementor_icons.EyeOffIcon, { fontSize: SIZE$9 }) : /* @__PURE__ */ react.createElement(_elementor_icons.EyeIcon, { fontSize: SIZE$9 })));
+		}, propDisabled ? /* @__PURE__ */ react.createElement(_elementor_icons.EyeOffIcon, { fontSize: SIZE$10 }) : /* @__PURE__ */ react.createElement(_elementor_icons.EyeIcon, { fontSize: SIZE$10 })));
 	};
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/components/control-repeater/actions/duplicate-item-action.tsx
-	var SIZE$8 = "tiny";
+	var SIZE$9 = "tiny";
 	var DuplicateItemAction = () => {
 		const { items, addItem, index = -1, isItemDisabled } = useRepeaterContext();
 		if (index === -1) return null;
@@ -8584,16 +8872,16 @@ react_dom = __toESM(react_dom);
 			title: duplicateLabel,
 			placement: "top"
 		}, /* @__PURE__ */ react.createElement(_elementor_ui.IconButton, {
-			size: SIZE$8,
+			size: SIZE$9,
 			onClick,
 			"aria-label": duplicateLabel,
 			disabled: isItemDisabled(index)
-		}, /* @__PURE__ */ react.createElement(_elementor_icons.CopyIcon, { fontSize: SIZE$8 })));
+		}, /* @__PURE__ */ react.createElement(_elementor_icons.CopyIcon, { fontSize: SIZE$9 })));
 	};
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/components/control-repeater/actions/remove-item-action.tsx
-	var SIZE$7 = "tiny";
+	var SIZE$8 = "tiny";
 	var RemoveItemAction = () => {
 		const { removeItem, index = -1 } = useRepeaterContext();
 		if (index === -1) return null;
@@ -8603,10 +8891,10 @@ react_dom = __toESM(react_dom);
 			title: removeLabel,
 			placement: "top"
 		}, /* @__PURE__ */ react.createElement(_elementor_ui.IconButton, {
-			size: SIZE$7,
+			size: SIZE$8,
 			onClick,
 			"aria-label": removeLabel
-		}, /* @__PURE__ */ react.createElement(_elementor_icons.XIcon, { fontSize: SIZE$7 })));
+		}, /* @__PURE__ */ react.createElement(_elementor_icons.XIcon, { fontSize: SIZE$8 })));
 	};
 
 //#endregion
@@ -9037,14 +9325,14 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/controls/filter-control/filter-icon.tsx
-	var FilterIcon = ({ value }) => {
+	var FilterIcon$1 = /* @__PURE__ */ __name(({ value }) => {
 		if (value.value.func.value !== "drop-shadow") return null;
 		return /* @__PURE__ */ react.createElement(StyledUnstableColorIndicator$1, {
 			size: "inherit",
 			component: "span",
 			value: value.value.args.value?.color.value
 		});
-	};
+	}, "FilterIcon");
 	var StyledUnstableColorIndicator$1 = (0, _elementor_ui.styled)(_elementor_ui.UnstableColorIndicator)(({ theme }) => ({ borderRadius: `${theme.shape.borderRadius / 2}px` }));
 
 //#endregion
@@ -9122,7 +9410,7 @@ react_dom = __toESM(react_dom);
 			ariaLabel: filterPropName === "backdrop-filter" ? "backdrop filter" : "filter"
 		})), /* @__PURE__ */ react.createElement(ItemsContainer, null, /* @__PURE__ */ react.createElement(Item, {
 			Label: FilterLabel,
-			Icon: FilterIcon,
+			Icon: FilterIcon$1,
 			actions: /* @__PURE__ */ react.createElement(react.Fragment, null, /* @__PURE__ */ react.createElement(DuplicateItemAction, null), /* @__PURE__ */ react.createElement(DisableItemAction, null), /* @__PURE__ */ react.createElement(RemoveItemAction, null))
 		})), /* @__PURE__ */ react.createElement(EditItemPopover, null, /* @__PURE__ */ react.createElement(FilterContent, null)));
 	}, "Repeater");
@@ -9201,7 +9489,7 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/controls/chips-control.tsx
-	var SIZE$6 = "tiny";
+	var SIZE$7 = "tiny";
 	var toChipsOption = (val, options) => options.find((opt) => opt.value === val) ?? {
 		label: val,
 		value: val
@@ -9216,7 +9504,7 @@ react_dom = __toESM(react_dom);
 			fullWidth: true,
 			multiple: true,
 			freeSolo: freeChips,
-			size: SIZE$6,
+			size: SIZE$7,
 			disabled,
 			value: selectedOptions,
 			filterSelectedOptions: true,
@@ -9458,6 +9746,18 @@ react_dom = __toESM(react_dom);
 	});
 
 //#endregion
+//#region packages/packages/libs/editor-controls/src/utils/number-value.ts
+	var isEmptyDraft = (raw) => raw.trim() === "";
+	var parseNumberDraft = (raw, shouldForceInt = false) => {
+		const trimmed = raw.trim();
+		if (trimmed === "") return null;
+		const parsed = shouldForceInt ? parseInt(trimmed, 10) : Number(trimmed);
+		return Number.isFinite(parsed) ? parsed : null;
+	};
+	var isInRange = (value, min, max) => value >= min && value <= max;
+	var clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+//#endregion
 //#region packages/packages/libs/editor-controls/src/controls/number-control.tsx
 	var isEmptyOrNaN = (value) => value === null || value === void 0 || value === "" || Number.isNaN(Number(value));
 	var renderSuffix = (propType) => {
@@ -9467,30 +9767,58 @@ react_dom = __toESM(react_dom);
 		}, propType.meta.suffix));
 		return /* @__PURE__ */ react.createElement(react.Fragment, null);
 	};
-	var NumberControl = createControl(({ placeholder: labelPlaceholder, max = Number.MAX_SAFE_INTEGER, min = -Number.MAX_SAFE_INTEGER, step = 1, shouldForceInt = false, startIcon, disabled: inputDisabled }) => {
+	var NumberControl = createControl(({ placeholder: labelPlaceholder, max: maxProp, min: minProp, step: stepProp, shouldForceInt = false, startIcon, disabled: inputDisabled }) => {
+		const max = maxProp ?? Number.MAX_SAFE_INTEGER;
+		const min = minProp ?? -Number.MAX_SAFE_INTEGER;
+		const step = stepProp ?? 1;
 		const { value, setValue, placeholder, disabled, restoreValue, propType } = useBoundProp(_elementor_editor_props.numberPropTypeUtil);
-		const handleChange = (event) => {
-			const { value: eventValue, validity: { valid: isInputValid } } = event.target;
-			let updatedValue;
-			if (isEmptyOrNaN(eventValue)) updatedValue = null;
-			else {
-				const formattedValue = shouldForceInt ? +parseInt(eventValue) : Number(eventValue);
-				updatedValue = Math.min(Math.max(formattedValue, min ?? Number.MIN_SAFE_INTEGER), max ?? Number.MAX_SAFE_INTEGER);
+		const [draft, setDraft] = (0, react.useState)(null);
+		const committedNullOnInputRef = (0, react.useRef)(false);
+		const handleInput = (event) => {
+			const raw = event.target.value;
+			setDraft(raw);
+			if (isEmptyDraft(raw)) {
+				if (!propType.settings.required) {
+					setValue(null);
+					committedNullOnInputRef.current = true;
+				}
+				return;
 			}
-			setValue(updatedValue, void 0, { validation: () => isInputValid });
+			committedNullOnInputRef.current = false;
+			const parsed = parseNumberDraft(raw, shouldForceInt);
+			if (parsed === null) return;
+			if (isInRange(parsed, min, max)) setValue(parsed);
 		};
+		const handleBlur = () => {
+			const raw = draft;
+			const committedNullOnInput = committedNullOnInputRef.current;
+			committedNullOnInputRef.current = false;
+			setDraft(null);
+			restoreValue();
+			if (raw === null) return;
+			if (isEmptyDraft(raw)) {
+				if (!propType.settings.required && !committedNullOnInput) setValue(null);
+				return;
+			}
+			const parsed = parseNumberDraft(raw, shouldForceInt);
+			if (parsed === null) return;
+			if (isInRange(parsed, min, max)) return;
+			setValue(clamp(parsed, min, max));
+		};
+		const displayValue = draft ?? (isEmptyOrNaN(value) ? "" : String(value));
 		return /* @__PURE__ */ react.createElement(ControlActions, null, /* @__PURE__ */ react.createElement(NumberInput, {
 			size: "tiny",
 			type: "number",
 			fullWidth: true,
 			disabled: inputDisabled ?? disabled,
-			value: isEmptyOrNaN(value) ? "" : value,
-			onInput: handleChange,
-			onBlur: restoreValue,
+			value: displayValue,
+			onInput: handleInput,
+			onBlur: handleBlur,
 			placeholder: labelPlaceholder ?? (isEmptyOrNaN(placeholder) ? "" : String(placeholder)),
 			inputProps: {
 				step,
-				min
+				min,
+				...maxProp !== null && maxProp !== void 0 && { max }
 			},
 			InputProps: {
 				startAdornment: startIcon ? /* @__PURE__ */ react.createElement(_elementor_ui.InputAdornment, {
@@ -9715,6 +10043,14 @@ react_dom = __toESM(react_dom);
 			unit
 		};
 	};
+	var createEmptySizeValue = (previousValue, units, defaultUnit) => {
+		const previousUnit = previousValue?.unit;
+		if (!previousUnit || isExtendedUnit(previousUnit) || !units.includes(previousUnit)) return createDefaultSizeValue(units, defaultUnit);
+		return {
+			size: DEFAULT_SIZE$1,
+			unit: previousUnit
+		};
+	};
 	var resolveFallbackUnit = (unit, units, defaultUnit) => {
 		if (units.includes(unit)) return unit;
 		if (defaultUnit && units.includes(defaultUnit)) return defaultUnit;
@@ -9756,7 +10092,7 @@ react_dom = __toESM(react_dom);
 				if (newState !== null) setValue(newState, options, meta);
 			},
 			persistWhen: (next) => hasChanged(next, resolvedValue),
-			fallback: () => createDefaultSizeValue(units, defaultUnit)
+			fallback: (previousValue) => createEmptySizeValue(previousValue, units, defaultUnit)
 		});
 		const [unit, setUnit] = useUnitSync({
 			sizeValue,
@@ -9932,7 +10268,7 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/controls/size-control/ui/text-field-popover.tsx
-	var SIZE$5 = "tiny";
+	var SIZE$6 = "tiny";
 	var TextFieldPopover = ({ popupState, anchorRef, value, onChange, onClose }) => {
 		const inputRef = (0, react.useRef)(null);
 		(0, react.useEffect)(() => {
@@ -9966,7 +10302,7 @@ react_dom = __toESM(react_dom);
 		}, /* @__PURE__ */ react.createElement(_elementor_editor_ui.PopoverHeader, {
 			title: (0, _wordpress_i18n.__)("CSS function", "elementor"),
 			onClose: handleClose,
-			icon: /* @__PURE__ */ react.createElement(_elementor_icons.MathFunctionIcon, { fontSize: SIZE$5 })
+			icon: /* @__PURE__ */ react.createElement(_elementor_icons.MathFunctionIcon, { fontSize: SIZE$6 })
 		}), /* @__PURE__ */ react.createElement(_elementor_ui.TextField, {
 			value,
 			onChange,
@@ -10108,15 +10444,21 @@ react_dom = __toESM(react_dom);
 	var UnstableSizeControl = createControl(({ variant = "length", placeholder: propPlaceholder, anchorRef, startIcon, ariaLabel, min }) => {
 		const { value, setValue, propType, placeholder: boundPropPlaceholder, restoreValue } = useBoundProp(_elementor_editor_props.sizePropTypeUtil);
 		const lastNonAutoValue = (0, react.useRef)(null);
-		const { sizeValue, placeholder } = resolveBoundPropValue(value ?? lastNonAutoValue.current, boundPropPlaceholder, propPlaceholder);
+		const clearedUnit = (0, react.useRef)(null);
+		const { sizeValue: resolvedSizeValue, placeholder } = resolveBoundPropValue(value ?? lastNonAutoValue.current, boundPropPlaceholder, propPlaceholder);
+		const sizeValue = applyClearedUnit(resolvedSizeValue, value, clearedUnit.current);
 		const units = getSizeUnits(propType, variant);
 		const defaultUnit = getDefaultUnit(propType);
 		const handleBlur = () => {
 			const isRequired = propType.settings.required;
-			if (shouldNullifyValue(value) && !isRequired) setValue(null);
+			if (shouldNullifyValue(value) && !isRequired) {
+				clearedUnit.current = value?.unit ?? null;
+				setValue(null);
+			}
 			if (isRequired) restoreValue();
 		};
 		const handleChange = (newValue, options, meta) => {
+			clearedUnit.current = null;
 			if (isTransitioningFromExtendedUnit(newValue, value)) {
 				lastNonAutoValue.current = newValue;
 				setValue(null);
@@ -10144,6 +10486,13 @@ react_dom = __toESM(react_dom);
 			min
 		});
 	});
+	var applyClearedUnit = (resolvedValue, boundValue, clearedUnit) => {
+		if (boundValue || !resolvedValue || !clearedUnit) return resolvedValue;
+		return {
+			...resolvedValue,
+			unit: clearedUnit
+		};
+	};
 	var isTransitioningFromExtendedUnit = (nextValue, previousValue) => {
 		return !isExtendedUnit(nextValue.unit) && isExtendedUnit(previousValue?.unit) && nextValue.size === "";
 	};
@@ -10556,7 +10905,7 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/components/autocomplete.tsx
-	var Autocomplete$2 = (0, react.forwardRef)((props, ref) => {
+	var Autocomplete$3 = (0, react.forwardRef)((props, ref) => {
 		const { options, onOptionChange, onTextChange, allowCustomValues = false, placeholder = "", minInputLength = 2, value = "", startAdornment, disablePortal = true, inputProps, ...restProps } = props;
 		const optionKeys = factoryFilter(value, options, minInputLength).map(({ id }) => id);
 		const allowClear = !!value;
@@ -10650,9 +10999,12 @@ react_dom = __toESM(react_dom);
 		const debounceFetch = (0, react.useMemo)(() => (0, _elementor_utils.debounce)((queryParams) => fetchOptions(url, queryParams).then((newOptions) => {
 			setOptions(formatOptions(filterExcludedOptions(newOptions, excludeIdSet)));
 		}), 400), [url, excludeIdSet]);
+		const paramsKey = (0, react.useMemo)(() => JSON.stringify(params), [params]);
+		const paramsRef = (0, react.useRef)(params);
+		paramsRef.current = params;
 		(0, react.useEffect)(() => {
 			if (minInputLength === 0 && url) fetchOptions(url, {
-				...params,
+				...paramsRef.current,
 				term: ""
 			}).then((newOptions) => {
 				setOptions(formatOptions(filterExcludedOptions(newOptions, excludeIdSet)));
@@ -10661,7 +11013,7 @@ react_dom = __toESM(react_dom);
 			url,
 			minInputLength,
 			excludeIdSet,
-			params
+			paramsKey
 		]);
 		const updateOptions = (term) => {
 			const termStr = term ?? "";
@@ -10744,7 +11096,7 @@ react_dom = __toESM(react_dom);
 			updateOptions(newValue);
 		};
 		const displayValue = queryValue?.id?.value ?? urlValue;
-		return /* @__PURE__ */ react.createElement(ControlActions, null, /* @__PURE__ */ react.createElement(Autocomplete$2, {
+		return /* @__PURE__ */ react.createElement(ControlActions, null, /* @__PURE__ */ react.createElement(Autocomplete$3, {
 			options,
 			allowCustomValues,
 			placeholder: urlPlaceholder ?? placeholder,
@@ -10779,7 +11131,7 @@ react_dom = __toESM(react_dom);
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/controls/link-control.tsx
-	var SIZE$4 = "tiny";
+	var SIZE$5 = "tiny";
 	var LinkControl = createControl((props) => {
 		const { value, path, setValue, ...propContext } = useBoundProp(_elementor_editor_props.linkPropTypeUtil);
 		const linkPlaceholder = propContext.placeholder;
@@ -10848,11 +11200,11 @@ react_dom = __toESM(react_dom);
 			isVisible: !isActive,
 			linkInLinkRestriction
 		}, /* @__PURE__ */ react.createElement(_elementor_ui.IconButton, {
-			size: SIZE$4,
+			size: SIZE$5,
 			onClick: onEnabledChange,
 			"aria-label": (0, _wordpress_i18n.__)("Toggle link", "elementor"),
 			disabled: shouldDisableAddingLink
-		}, isActive ? /* @__PURE__ */ react.createElement(_elementor_icons.MinusIcon, { fontSize: SIZE$4 }) : /* @__PURE__ */ react.createElement(_elementor_icons.PlusIcon, { fontSize: SIZE$4 })))), /* @__PURE__ */ react.createElement(_elementor_ui.Collapse, {
+		}, isActive ? /* @__PURE__ */ react.createElement(_elementor_icons.MinusIcon, { fontSize: SIZE$5 }) : /* @__PURE__ */ react.createElement(_elementor_icons.PlusIcon, { fontSize: SIZE$5 })))), /* @__PURE__ */ react.createElement(_elementor_ui.Collapse, {
 			in: isActive,
 			timeout: "auto",
 			unmountOnExit: true
@@ -10957,7 +11309,7 @@ react_dom = __toESM(react_dom);
 //#endregion
 //#region packages/packages/libs/editor-controls/src/controls/query-chips-control.tsx
 	var queryArrayPropTypeUtil = (0, _elementor_editor_props.createArrayPropUtils)(_elementor_editor_props.queryPropTypeUtil.key, _elementor_editor_props.queryPropTypeUtil.schema);
-	var SIZE$3 = "tiny";
+	var SIZE$4 = "tiny";
 	var QueryChipsControl = createControl((props) => {
 		const { queryOptions, placeholder, minInputLength = 2 } = props;
 		const { value, setValue, disabled } = useBoundProp(queryArrayPropTypeUtil);
@@ -10984,7 +11336,7 @@ react_dom = __toESM(react_dom);
 			disableClearable: true,
 			forcePopupIcon: false,
 			disabled,
-			size: SIZE$3,
+			size: SIZE$4,
 			value: selectedChips,
 			options,
 			onChange: handleChange,
@@ -11162,6 +11514,65 @@ react_dom = __toESM(react_dom);
 	function getUsedKeys(items) {
 		const keys = items.map((item) => _elementor_editor_props.stringPropTypeUtil.extract(item?.value?.key)).filter((key) => !!key);
 		return new Set(keys);
+	}
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/query-select-control.tsx
+	var SIZE$3 = "tiny";
+	var QuerySelectControl = createControl((props) => {
+		const { queryOptions, placeholder, minInputLength = 0, ariaLabel } = props;
+		const { value, setValue, disabled } = useBoundProp(_elementor_editor_props.queryPropTypeUtil);
+		const selectedOption = (0, react.useMemo)(() => extractFlatOptionFromQueryValue(value), [value]);
+		const { options, updateOptions } = useQueryAutocomplete({
+			url: queryOptions.url,
+			params: queryOptions.params,
+			minInputLength,
+			initialQueryValue: value
+		});
+		const optionsWithSelected = (0, react.useMemo)(() => withSelectedOption(options, selectedOption), [options, selectedOption]);
+		const handleChange = (_, newValue) => {
+			if (!newValue) {
+				setValue(null);
+				return;
+			}
+			setValue({
+				id: _elementor_editor_props.numberPropTypeUtil.create(Number(newValue.id)),
+				label: _elementor_editor_props.stringPropTypeUtil.create(newValue.label)
+			});
+		};
+		const handleInputChange = (_, term, reason) => {
+			if ("reset" === reason || "clear" === reason) {
+				updateOptions(null);
+				return;
+			}
+			if ("input" !== reason) return;
+			updateOptions(term || null);
+		};
+		return /* @__PURE__ */ react.createElement(ControlActions, null, /* @__PURE__ */ react.createElement(_elementor_ui.Autocomplete, {
+			fullWidth: true,
+			openOnFocus: true,
+			disabled,
+			size: SIZE$3,
+			value: selectedOption,
+			options: optionsWithSelected,
+			onChange: handleChange,
+			onInputChange: handleInputChange,
+			getOptionLabel: (option) => option.label,
+			isOptionEqualToValue: (option, val) => option.id === val.id,
+			filterOptions: (opts) => opts,
+			renderInput: (params) => /* @__PURE__ */ react.createElement(_elementor_ui.TextField, {
+				...params,
+				placeholder: placeholder ?? (0, _wordpress_i18n.__)("Search", "elementor"),
+				inputProps: {
+					...params.inputProps,
+					...ariaLabel ? { "aria-label": ariaLabel } : {}
+				}
+			})
+		}));
+	});
+	function withSelectedOption(options, selectedOption) {
+		if (!selectedOption || options.some((option) => option.id === selectedOption.id)) return options;
+		return [selectedOption, ...options];
 	}
 
 //#endregion
@@ -11479,32 +11890,2022 @@ react_dom = __toESM(react_dom);
 	}, isPending ? /* @__PURE__ */ react.createElement(_elementor_ui.CircularProgress, { size: 24 }) : (0, _wordpress_i18n.__)("Enable", "elementor"))));
 
 //#endregion
+//#region packages/packages/libs/editor-controls/src/controls/icon-library/get-icon-library-anchor.ts
+	function getIconLibraryAnchor(containerRect, buttonGroupRect) {
+		if (!containerRect || containerRect.width <= 0) return null;
+		return {
+			top: buttonGroupRect?.top ?? containerRect.top,
+			left: containerRect.left,
+			width: containerRect.width
+		};
+	}
+	function measureIconLibraryAnchor(container, buttonGroup) {
+		return getIconLibraryAnchor(container?.getBoundingClientRect(), buttonGroup?.getBoundingClientRect());
+	}
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/icon-library/font-awesome-7-data.ts
+	var FONT_AWESOME_7_LIBRARIES = [
+		{
+			file: "solid",
+			library: "fa-solid"
+		},
+		{
+			file: "regular",
+			library: "fa-regular"
+		},
+		{
+			file: "brands",
+			library: "fa-brands"
+		}
+	];
+	var FONT_AWESOME_JSON = {
+		width: 0,
+		height: 1,
+		aliases: 2,
+		unicode: 3,
+		path: 4
+	};
+	var libraryCache = /* @__PURE__ */ new Map();
+	function getFontAwesome7EditorConfig() {
+		const config = window.elementorCommon?.config?.fontAwesome?.v7;
+		if (!config || !Array.isArray(config.jsonFiles)) return null;
+		const jsonBaseUrl = getAllowedJsonBaseUrl(config.jsonBaseUrl);
+		if (!jsonBaseUrl) return null;
+		return {
+			jsonFiles: config.jsonFiles,
+			jsonBaseUrl,
+			filter: config.filter
+		};
+	}
+	var FONT_AWESOME_ICON_NAME_PATTERN = /^fa\S*\s+fa-([^\s]+)/;
+	function getFontAwesome7IconName(iconValue) {
+		return iconValue.match(FONT_AWESOME_ICON_NAME_PATTERN)?.[1] ?? null;
+	}
+	function resetFontAwesome7IconsCache() {
+		libraryCache.clear();
+	}
+	async function loadFontAwesome7Library(file, signal) {
+		return (await getCachedLibrary(file, signal))?.icons ?? [];
+	}
+	async function resolveFontAwesome7Icon(library, iconName, signal) {
+		const file = getLibraryFileName(library);
+		if (!file) return null;
+		return (await getCachedLibrary(file, signal))?.lookup[iconName] ?? null;
+	}
+	async function getCachedLibrary(file, signal) {
+		const cached = libraryCache.get(file);
+		if (cached) return cached;
+		const loaded = await fetchLibrary(file, signal);
+		if (loaded) libraryCache.set(file, loaded);
+		return loaded;
+	}
+	function getLibraryFileName(library) {
+		const config = getFontAwesome7EditorConfig();
+		const match = FONT_AWESOME_7_LIBRARIES.find((item) => item.library === library);
+		if (!config || !match || !config.jsonFiles.includes(match.file)) return null;
+		return match.file;
+	}
+	async function fetchLibrary(file, signal) {
+		const config = getFontAwesome7EditorConfig();
+		if (!config?.jsonFiles.includes(file)) return null;
+		const catalogUrl = getCatalogFileUrl(config.jsonBaseUrl, file);
+		if (!catalogUrl) return null;
+		try {
+			const response = await fetch(catalogUrl, { signal });
+			if (!response.ok) return null;
+			const icons = (await response.json()).icons;
+			if (!icons || typeof icons !== "object") return null;
+			return indexLibrary(icons);
+		} catch {
+			return null;
+		}
+	}
+	function indexLibrary(icons) {
+		const definitions = [];
+		const lookup = /* @__PURE__ */ Object.create(null);
+		for (const [name, iconData] of Object.entries(icons)) {
+			const definition = toIconDefinition(name, iconData);
+			if (!definition) continue;
+			definitions.push(definition);
+			lookup[name] = definition;
+			for (const alias of definition.aliases) if (!lookup[alias]) lookup[alias] = definition;
+		}
+		return {
+			icons: definitions,
+			lookup
+		};
+	}
+	function toIconDefinition(name, iconData) {
+		if (!isValidIconTuple(iconData)) return null;
+		const paths = normalizePaths(iconData[FONT_AWESOME_JSON.path]);
+		if (paths.length === 0) return null;
+		return {
+			name,
+			aliases: iconData[FONT_AWESOME_JSON.aliases].filter((alias) => typeof alias === "string" && alias !== ""),
+			width: iconData[FONT_AWESOME_JSON.width],
+			height: iconData[FONT_AWESOME_JSON.height],
+			paths
+		};
+	}
+	function isValidIconTuple(iconData) {
+		return Array.isArray(iconData) && iconData.length > FONT_AWESOME_JSON.path && typeof iconData[FONT_AWESOME_JSON.width] === "number" && typeof iconData[FONT_AWESOME_JSON.height] === "number" && Array.isArray(iconData[FONT_AWESOME_JSON.aliases]);
+	}
+	function normalizePaths(pathData) {
+		if (typeof pathData === "string" && isSafeSvgPath(pathData)) return [pathData];
+		if (!Array.isArray(pathData)) return [];
+		return pathData.filter((path) => typeof path === "string" && isSafeSvgPath(path));
+	}
+	function isSafeSvgPath(path) {
+		return path !== "" && !/[<>"'`]/.test(path);
+	}
+	function getAllowedJsonBaseUrl(jsonBaseUrl) {
+		if (typeof jsonBaseUrl !== "string" || jsonBaseUrl === "") return null;
+		try {
+			const url = new URL(jsonBaseUrl);
+			if (url.protocol !== "http:" && url.protocol !== "https:") return null;
+			return url.href;
+		} catch {
+			return null;
+		}
+	}
+	function getCatalogFileUrl(jsonBaseUrl, file) {
+		try {
+			const baseUrl = new URL(jsonBaseUrl);
+			const fileUrl = new URL(`${file}.json`, jsonBaseUrl);
+			if (fileUrl.origin !== baseUrl.origin || !fileUrl.pathname.startsWith(baseUrl.pathname)) return null;
+			if (fileUrl.protocol !== "http:" && fileUrl.protocol !== "https:") return null;
+			return fileUrl.href;
+		} catch {
+			return null;
+		}
+	}
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/icon-library/font-awesome-7-catalog.ts
+	async function loadFontAwesome7Catalog(signal) {
+		const config = getFontAwesome7EditorConfig();
+		if (!config) return [];
+		return (await Promise.all(FONT_AWESOME_7_LIBRARIES.map(async ({ file, library }) => {
+			if (!config.jsonFiles.includes(file)) return [];
+			return (await loadFontAwesome7Library(file, signal)).map((icon) => toCatalogIcon(icon, library));
+		}))).flat();
+	}
+	function filterFontAwesome7Icons(icons, searchValue, libraries = []) {
+		const query = searchValue?.trim().toLowerCase() ?? "";
+		const libraryIcons = libraries.length === 0 ? icons : icons.filter((icon) => libraries.includes(icon.library));
+		if (query === "") return libraryIcons;
+		return libraryIcons.filter((icon) => {
+			if (icon.name.includes(query) || icon.label.toLowerCase().includes(query)) return true;
+			return icon.aliases.some((alias) => alias.toLowerCase().includes(query));
+		});
+	}
+	function createIconSelectionValue(library, name) {
+		return `${library} fa-${name}`;
+	}
+	function getSelectedIconId(iconClass, library) {
+		if (!iconClass || !library) return;
+		const name = getFontAwesome7IconName(iconClass);
+		if (!name) return;
+		return `${library}:${name}`;
+	}
+	function findFontAwesome7Icon(icons, iconClass, library) {
+		if (!iconClass || !library) return;
+		const selectedId = getSelectedIconId(iconClass, library);
+		const selectedName = selectedId?.slice(`${library}:`.length);
+		return icons.find((icon) => {
+			if (icon.library !== library) return false;
+			if (icon.value === iconClass || icon.id === selectedId) return true;
+			if (!selectedName) return false;
+			return icon.name === selectedName || icon.aliases.includes(selectedName);
+		});
+	}
+	function toCatalogIcon(icon, library) {
+		return {
+			...icon,
+			id: `${library}:${icon.name}`,
+			label: icon.name.replace(/-/g, " "),
+			library,
+			value: createIconSelectionValue(library, icon.name)
+		};
+	}
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/icon-library/icon-library-providers.ts
+	var PROVIDER_ICON_SVG_QUERY_KEY = "icon-library-provider-svg";
+	var providers = /* @__PURE__ */ new Map();
+	function registerIconLibraryProvider(provider) {
+		providers.set(provider.id, provider);
+	}
+	function unregisterIconLibraryProvider(id) {
+		providers.delete(id);
+	}
+	function useIconLibraryProviderIcons(enabled) {
+		const [snapshot] = (0, react.useState)(() => [...providers.values()]);
+		const states = snapshot.map((provider) => provider.useIcons(enabled));
+		return {
+			data: useStableConcat(states.map((state) => state.data)),
+			isLoading: states.some((state) => state.isLoading)
+		};
+	}
+	function resolveProviderIconSvg(library, iconValue, signal) {
+		return resolveFromProviders((provider) => provider.resolveSvg, library, iconValue, signal);
+	}
+	function resolveProviderIconPreviewSvg(library, iconValue, signal) {
+		return resolveFromProviders((provider) => provider.resolvePreviewSvg ?? provider.resolveSvg, library, iconValue, signal);
+	}
+	async function resolveFromProviders(pickResolver, library, iconValue, signal) {
+		for (const provider of providers.values()) try {
+			const markup = await pickResolver(provider)?.(library, iconValue, signal);
+			if (markup) return markup;
+		} catch (error) {
+			if (signal?.aborted) throw error;
+		}
+		return null;
+	}
+	function useStableConcat(lists) {
+		const previous = (0, react.useRef)(null);
+		if (!previous.current || !areSameLists(previous.current.lists, lists)) previous.current = {
+			lists,
+			merged: lists.flatMap((list) => list ?? [])
+		};
+		return previous.current.merged;
+	}
+	function areSameLists(a, b) {
+		return a.length === b.length && a.every((item, index) => item === b[index]);
+	}
+	function useProviderIconSvg(library, iconValue, enabled) {
+		return (0, _elementor_query.useQuery)({
+			queryKey: [
+				PROVIDER_ICON_SVG_QUERY_KEY,
+				library,
+				iconValue
+			],
+			queryFn: ({ signal }) => resolveProviderIconSvg(library, iconValue, signal),
+			enabled: enabled && Boolean(library && iconValue),
+			staleTime: Infinity
+		});
+	}
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/icon-library/sanitize-icon-svg-markup.ts
+	var ALLOWED_SVG_TAGS = /* @__PURE__ */ new Set([
+		"svg",
+		"g",
+		"path",
+		"title",
+		"desc"
+	]);
+	var ALLOWED_SVG_ATTRS = /* @__PURE__ */ new Set([
+		"d",
+		"fill",
+		"viewbox",
+		"xmlns",
+		"width",
+		"height",
+		"transform",
+		"overflow",
+		"aria-hidden",
+		"aria-label",
+		"role"
+	]);
+	function sanitizeIconSvgMarkup(markup) {
+		if (typeof markup !== "string" || markup === "") return "";
+		const doc = new DOMParser().parseFromString(markup, "image/svg+xml");
+		if (doc.querySelector("parsererror")) return "";
+		const svg = doc.querySelector("svg");
+		if (!svg) return "";
+		pruneNode(svg);
+		return svg.tagName.toLowerCase() === "svg" ? svg.outerHTML : "";
+	}
+	function pruneNode(node) {
+		[...node.children].forEach((child) => {
+			if (!ALLOWED_SVG_TAGS.has(child.tagName.toLowerCase())) {
+				child.remove();
+				return;
+			}
+			pruneNode(child);
+		});
+		[...node.attributes].forEach((attribute) => {
+			if (!ALLOWED_SVG_ATTRS.has(attribute.name.toLowerCase())) node.removeAttribute(attribute.name);
+		});
+	}
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/icon-library/font-awesome-glyph.tsx
+	var FontAwesomeGlyph = (props) => {
+		const { icon } = props;
+		if (icon.lazySvg && !icon.svgMarkup) return /* @__PURE__ */ react.createElement(LazyProviderGlyph, { ...props });
+		return /* @__PURE__ */ react.createElement(ResolvedGlyph, { ...props });
+	};
+	var LazyProviderGlyph = (props) => {
+		const { icon, size } = props;
+		const [resolved, setResolved] = (0, react.useState)(null);
+		const [isVisible, setIsVisible] = (0, react.useState)(typeof IntersectionObserver === "undefined");
+		const placeholderRef = (0, react.useRef)(null);
+		const svgMarkup = resolved?.id === icon.id ? resolved.markup : null;
+		(0, react.useEffect)(() => {
+			const element = placeholderRef.current;
+			if (isVisible || !element) return;
+			const observer = new IntersectionObserver((entries) => {
+				if (entries.some((entry) => entry.isIntersecting)) {
+					setIsVisible(true);
+					observer.disconnect();
+				}
+			});
+			observer.observe(element);
+			return () => observer.disconnect();
+		}, [isVisible]);
+		(0, react.useEffect)(() => {
+			if (!isVisible) return;
+			const controller = new AbortController();
+			resolveProviderIconPreviewSvg(icon.library, icon.value, controller.signal).then((markup) => !controller.signal.aborted && setResolved({
+				id: icon.id,
+				markup
+			})).catch(() => {});
+			return () => controller.abort();
+		}, [
+			isVisible,
+			icon.id,
+			icon.library,
+			icon.value
+		]);
+		if (!svgMarkup) return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+			component: "span",
+			ref: placeholderRef,
+			"aria-hidden": "true",
+			sx: {
+				display: "inline-block",
+				width: size,
+				height: size
+			}
+		});
+		return /* @__PURE__ */ react.createElement(ResolvedGlyph, {
+			...props,
+			icon: {
+				...icon,
+				svgMarkup
+			}
+		});
+	};
+	var ResolvedGlyph = ({ icon, size, color, label }) => {
+		const svgMarkup = sanitizeIconSvgMarkup(icon.svgMarkup);
+		if (svgMarkup) return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+			component: "span",
+			"aria-hidden": label ? void 0 : true,
+			"aria-label": label,
+			role: label ? "img" : void 0,
+			sx: {
+				width: size,
+				height: size,
+				color,
+				display: "inline-flex",
+				"& svg": {
+					width: "100%",
+					height: "100%",
+					fill: "currentColor"
+				},
+				"& path": { fill: "currentColor" }
+			},
+			dangerouslySetInnerHTML: { __html: svgMarkup }
+		});
+		if (icon.paths.length > 0) return /* @__PURE__ */ react.createElement("svg", {
+			xmlns: "http://www.w3.org/2000/svg",
+			viewBox: `0 0 ${icon.width} ${icon.height}`,
+			width: size,
+			height: size,
+			fill: color,
+			overflow: "visible",
+			"aria-hidden": label ? void 0 : true,
+			"aria-label": label,
+			role: label ? "img" : void 0
+		}, icon.paths.map((path, index) => /* @__PURE__ */ react.createElement("path", {
+			key: `${index}-${path}`,
+			d: path
+		})));
+		if (icon.glyphClass) return /* @__PURE__ */ react.createElement("i", {
+			className: icon.glyphClass,
+			"aria-hidden": label ? void 0 : true,
+			"aria-label": label,
+			style: {
+				fontSize: size,
+				color,
+				lineHeight: 1
+			}
+		});
+		return null;
+	};
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/icon-library/icon-library-filter.tsx
+	var FILTER_MENU_WIDTH = 280;
+	var FILTER_INDICATOR_SIZE = 6;
+	var FILTER_INDICATOR_CORNER_OFFSET = -3;
+	var FILTER_TYPE_ALL = "all";
+	var FILTER_TYPE_GROUP = "group";
+	var FILTER_TYPE_ITEM = "item";
+	var FILTER_ICONS = {
+		list: _elementor_icons.MenuIcon,
+		star: _elementor_icons.StarIcon,
+		"star-filled": _elementor_icons.StarFilledIcon,
+		library: _elementor_icons.LibraryIcon,
+		rosette: _elementor_icons.RosetteDiscountCheckIcon
+	};
+	var DEFAULT_FILTER = [
+		{
+			type: FILTER_TYPE_ALL,
+			label: "All icons",
+			icon: "list"
+		},
+		{
+			type: FILTER_TYPE_ITEM,
+			value: "fa-regular",
+			label: "Font Awesome - Regular",
+			icon: "star"
+		},
+		{
+			type: FILTER_TYPE_ITEM,
+			value: "fa-solid",
+			label: "Font Awesome - Solid",
+			icon: "star-filled"
+		},
+		{
+			type: FILTER_TYPE_ITEM,
+			value: "fa-brands",
+			label: "Font Awesome - Brands",
+			icon: "rosette"
+		}
+	];
+	var IconLibraryFilter = ({ value, onChange }) => {
+		const popupState = (0, _elementor_ui.usePopupState)({
+			variant: "popover",
+			popupId: (0, react.useId)()
+		});
+		const entries = getFilterEntries();
+		const selectableValues = entries.flatMap((entry) => entry.type === FILTER_TYPE_ITEM ? [entry.value] : []);
+		const isFiltered = value.length > 0;
+		const filterButtonLabel = isFiltered ? (0, _wordpress_i18n.__)("Filter by library, active", "elementor") : (0, _wordpress_i18n.__)("Filter by library", "elementor");
+		const handleLibraryClick = (library) => {
+			const nextValue = value.includes(library) ? value.filter((selectedLibrary) => selectedLibrary !== library) : [...value, library];
+			onChange(nextValue.length === selectableValues.length ? [] : nextValue);
+		};
+		return /* @__PURE__ */ react.createElement(react.Fragment, null, /* @__PURE__ */ react.createElement(_elementor_ui.Tooltip, {
+			title: (0, _wordpress_i18n.__)("Filter by library", "elementor"),
+			placement: "top",
+			enterDelay: 0,
+			enterNextDelay: 0,
+			disableInteractive: true
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.ToggleButton, {
+			"aria-label": filterButtonLabel,
+			value: "filter",
+			size: "tiny",
+			selected: popupState.isOpen,
+			sx: {
+				position: "relative",
+				flexShrink: 0,
+				overflow: "visible"
+			},
+			...(0, _elementor_ui.bindToggle)(popupState),
+			"aria-expanded": popupState.isOpen
+		}, /* @__PURE__ */ react.createElement(_elementor_icons.FilterIcon, { fontSize: "tiny" }), isFiltered ? /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+			component: "span",
+			"aria-hidden": "true",
+			sx: {
+				position: "absolute",
+				insetBlockStart: FILTER_INDICATOR_CORNER_OFFSET,
+				insetInlineEnd: FILTER_INDICATOR_CORNER_OFFSET,
+				width: FILTER_INDICATOR_SIZE,
+				height: FILTER_INDICATOR_SIZE,
+				borderRadius: "50%",
+				bgcolor: "text.primary"
+			}
+		}) : null)), /* @__PURE__ */ react.createElement(_elementor_ui.Menu, {
+			...(0, _elementor_ui.bindMenu)(popupState),
+			MenuListProps: {
+				dense: true,
+				autoFocusItem: true,
+				"aria-label": (0, _wordpress_i18n.__)("Filter by library", "elementor")
+			},
+			sx: { "& .MuiPaper-root": { minWidth: FILTER_MENU_WIDTH } }
+		}, entries.flatMap((entry, index) => renderFilterEntry(entry, index, value, isFiltered, () => onChange([]), handleLibraryClick))));
+	};
+	var renderFilterEntry = (entry, index, selectedLibraries, isFiltered, onAllIconsClick, onLibraryClick) => {
+		if (entry.type === FILTER_TYPE_GROUP) return [/* @__PURE__ */ react.createElement(_elementor_ui.Divider, { key: `divider-${index}` }), /* @__PURE__ */ react.createElement(_elementor_ui.ListSubheader, {
+			key: `group-${index}`,
+			disableSticky: true
+		}, entry.label)];
+		if (entry.type === FILTER_TYPE_ALL) return [/* @__PURE__ */ react.createElement(_elementor_ui.MenuItem, {
+			key: `all-${index}`,
+			role: "menuitemcheckbox",
+			"aria-checked": !isFiltered,
+			selected: !isFiltered,
+			onClick: onAllIconsClick
+		}, renderFilterMenuItemContent(entry.label, getFilterIcon(entry.icon), !isFiltered))];
+		const isSelected = selectedLibraries.includes(entry.value);
+		return [/* @__PURE__ */ react.createElement(_elementor_ui.MenuItem, {
+			key: entry.value,
+			role: "menuitemcheckbox",
+			"aria-checked": isSelected,
+			selected: isSelected,
+			onClick: () => onLibraryClick(entry.value)
+		}, renderFilterMenuItemContent(entry.label, getFilterIcon(entry.icon), isSelected))];
+	};
+	var getFilterIcon = (icon) => FILTER_ICONS[icon ?? ""] ?? _elementor_icons.LibraryIcon;
+	var renderFilterMenuItemContent = (label, Icon, selected) => /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
+		direction: "row",
+		alignItems: "center",
+		gap: 1,
+		width: "100%"
+	}, /* @__PURE__ */ react.createElement(Icon, { fontSize: "tiny" }), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
+		variant: "caption",
+		sx: { flex: 1 }
+	}, label), selected ? /* @__PURE__ */ react.createElement(_elementor_icons.CheckIcon, {
+		fontSize: "tiny",
+		"aria-hidden": "true"
+	}) : null);
+	function getFilterEntries() {
+		const filter = window.elementorCommon?.config?.fontAwesome?.v7?.filter;
+		if (!Array.isArray(filter)) return [...DEFAULT_FILTER];
+		const entries = filter.map(parseFilterEntry).filter((entry) => entry !== null);
+		return entries.length > 0 ? entries : [...DEFAULT_FILTER];
+	}
+	function parseFilterEntry(value) {
+		if (!value || typeof value !== "object") return null;
+		const entry = value;
+		if (typeof entry.label !== "string" || entry.label === "") return null;
+		if (entry.type === FILTER_TYPE_GROUP) return {
+			type: FILTER_TYPE_GROUP,
+			label: entry.label
+		};
+		if (entry.type === FILTER_TYPE_ALL) return {
+			type: FILTER_TYPE_ALL,
+			label: entry.label,
+			icon: typeof entry.icon === "string" ? entry.icon : void 0
+		};
+		if (entry.type === FILTER_TYPE_ITEM && typeof entry.value === "string" && entry.value !== "") return {
+			type: FILTER_TYPE_ITEM,
+			value: entry.value,
+			label: entry.label,
+			icon: typeof entry.icon === "string" ? entry.icon : void 0
+		};
+		return null;
+	}
+
+//#endregion
+//#region packages/node_modules/@tanstack/virtual-core/dist/esm/utils.js
+	function memo$1(getDeps, fn, opts) {
+		let deps = opts.initialDeps ?? [];
+		let result;
+		let isInitial = true;
+		function memoizedFunction() {
+			var _a;
+			var _b;
+			var _c;
+			let depTime;
+			if (opts.key && ((_a = opts.debug) == null ? void 0 : _a.call(opts))) depTime = Date.now();
+			const newDeps = getDeps();
+			if (!(newDeps.length !== deps.length || newDeps.some((dep, index) => deps[index] !== dep))) return result;
+			deps = newDeps;
+			let resultTime;
+			if (opts.key && ((_b = opts.debug) == null ? void 0 : _b.call(opts))) resultTime = Date.now();
+			result = fn(...newDeps);
+			if (opts.key && ((_c = opts.debug) == null ? void 0 : _c.call(opts))) {
+				const depEndTime = Math.round((Date.now() - depTime) * 100) / 100;
+				const resultEndTime = Math.round((Date.now() - resultTime) * 100) / 100;
+				const resultFpsPercentage = resultEndTime / 16;
+				const pad = (str, num) => {
+					str = String(str);
+					while (str.length < num) str = " " + str;
+					return str;
+				};
+				console.info(`%c⏱ ${pad(resultEndTime, 5)} /${pad(depEndTime, 5)} ms`, `
+            font-size: .6rem;
+            font-weight: bold;
+            color: hsl(${Math.max(0, Math.min(120 - 120 * resultFpsPercentage, 120))}deg 100% 31%);`, opts == null ? void 0 : opts.key);
+			}
+			if ((opts == null ? void 0 : opts.onChange) && !(isInitial && opts.skipInitialOnChange)) opts.onChange(result);
+			isInitial = false;
+			return result;
+		}
+		memoizedFunction.updateDeps = (newDeps) => {
+			deps = newDeps;
+		};
+		return memoizedFunction;
+	}
+	__name(memo$1, "memo");
+	function notUndefined(value, msg) {
+		if (value === void 0) throw new Error(`Unexpected undefined${msg ? `: ${msg}` : ""}`);
+		else return value;
+	}
+	var approxEqual = (a, b) => Math.abs(a - b) < 1.01;
+	var debounce = (targetWindow, fn, ms) => {
+		let timeoutId;
+		return function(...args) {
+			targetWindow.clearTimeout(timeoutId);
+			timeoutId = targetWindow.setTimeout(() => fn.apply(this, args), ms);
+		};
+	};
+
+//#endregion
+//#region packages/node_modules/@tanstack/virtual-core/dist/esm/index.js
+	var getRect = (element) => {
+		const { offsetWidth, offsetHeight } = element;
+		return {
+			width: offsetWidth,
+			height: offsetHeight
+		};
+	};
+	var defaultKeyExtractor = (index) => index;
+	var defaultRangeExtractor = (range) => {
+		const start = Math.max(range.startIndex - range.overscan, 0);
+		const end = Math.min(range.endIndex + range.overscan, range.count - 1);
+		const arr = [];
+		for (let i = start; i <= end; i++) arr.push(i);
+		return arr;
+	};
+	var observeElementRect = (instance, cb) => {
+		const element = instance.scrollElement;
+		if (!element) return;
+		const targetWindow = instance.targetWindow;
+		if (!targetWindow) return;
+		const handler = (rect) => {
+			const { width, height } = rect;
+			cb({
+				width: Math.round(width),
+				height: Math.round(height)
+			});
+		};
+		handler(getRect(element));
+		if (!targetWindow.ResizeObserver) return () => {};
+		const observer = new targetWindow.ResizeObserver((entries) => {
+			const run = () => {
+				const entry = entries[0];
+				if (entry == null ? void 0 : entry.borderBoxSize) {
+					const box = entry.borderBoxSize[0];
+					if (box) {
+						handler({
+							width: box.inlineSize,
+							height: box.blockSize
+						});
+						return;
+					}
+				}
+				handler(getRect(element));
+			};
+			instance.options.useAnimationFrameWithResizeObserver ? requestAnimationFrame(run) : run();
+		});
+		observer.observe(element, { box: "border-box" });
+		return () => {
+			observer.unobserve(element);
+		};
+	};
+	var addEventListenerOptions = { passive: true };
+	var supportsScrollend = typeof window == "undefined" ? true : "onscrollend" in window;
+	var observeElementOffset = (instance, cb) => {
+		const element = instance.scrollElement;
+		if (!element) return;
+		const targetWindow = instance.targetWindow;
+		if (!targetWindow) return;
+		let offset = 0;
+		const fallback = instance.options.useScrollendEvent && supportsScrollend ? () => void 0 : debounce(targetWindow, () => {
+			cb(offset, false);
+		}, instance.options.isScrollingResetDelay);
+		const createHandler = (isScrolling) => () => {
+			const { horizontal, isRtl } = instance.options;
+			offset = horizontal ? element["scrollLeft"] * (isRtl && -1 || 1) : element["scrollTop"];
+			fallback();
+			cb(offset, isScrolling);
+		};
+		const handler = createHandler(true);
+		const endHandler = createHandler(false);
+		element.addEventListener("scroll", handler, addEventListenerOptions);
+		const registerScrollendEvent = instance.options.useScrollendEvent && supportsScrollend;
+		if (registerScrollendEvent) element.addEventListener("scrollend", endHandler, addEventListenerOptions);
+		return () => {
+			element.removeEventListener("scroll", handler);
+			if (registerScrollendEvent) element.removeEventListener("scrollend", endHandler);
+		};
+	};
+	var measureElement = (element, entry, instance) => {
+		if (entry == null ? void 0 : entry.borderBoxSize) {
+			const box = entry.borderBoxSize[0];
+			if (box) return Math.round(box[instance.options.horizontal ? "inlineSize" : "blockSize"]);
+		}
+		return element[instance.options.horizontal ? "offsetWidth" : "offsetHeight"];
+	};
+	var elementScroll = (offset, { adjustments = 0, behavior }, instance) => {
+		var _a;
+		var _b;
+		const toOffset = offset + adjustments;
+		(_b = (_a = instance.scrollElement) == null ? void 0 : _a.scrollTo) == null || _b.call(_a, {
+			[instance.options.horizontal ? "left" : "top"]: toOffset,
+			behavior
+		});
+	};
+	var Virtualizer = class {
+		constructor(opts) {
+			this.unsubs = [];
+			this.scrollElement = null;
+			this.targetWindow = null;
+			this.isScrolling = false;
+			this.scrollState = null;
+			this.measurementsCache = [];
+			this.itemSizeCache = /* @__PURE__ */ new Map();
+			this.laneAssignments = /* @__PURE__ */ new Map();
+			this.pendingMeasuredCacheIndexes = [];
+			this.prevLanes = void 0;
+			this.lanesChangedFlag = false;
+			this.lanesSettling = false;
+			this.scrollRect = null;
+			this.scrollOffset = null;
+			this.scrollDirection = null;
+			this.scrollAdjustments = 0;
+			this.elementsCache = /* @__PURE__ */ new Map();
+			this.now = () => {
+				var _a;
+				var _b;
+				var _c;
+				return ((_c = (_b = (_a = this.targetWindow) == null ? void 0 : _a.performance) == null ? void 0 : _b.now) == null ? void 0 : _c.call(_b)) ?? Date.now();
+			};
+			this.observer = /* @__PURE__ */ (() => {
+				let _ro = null;
+				const get = () => {
+					if (_ro) return _ro;
+					if (!this.targetWindow || !this.targetWindow.ResizeObserver) return null;
+					return _ro = new this.targetWindow.ResizeObserver((entries) => {
+						entries.forEach((entry) => {
+							const run = () => {
+								const node = entry.target;
+								const index = this.indexFromElement(node);
+								if (!node.isConnected) {
+									this.observer.unobserve(node);
+									return;
+								}
+								if (this.shouldMeasureDuringScroll(index)) this.resizeItem(index, this.options.measureElement(node, entry, this));
+							};
+							this.options.useAnimationFrameWithResizeObserver ? requestAnimationFrame(run) : run();
+						});
+					});
+				};
+				return {
+					disconnect: () => {
+						var _a;
+						(_a = get()) == null || _a.disconnect();
+						_ro = null;
+					},
+					observe: (target) => {
+						var _a;
+						return (_a = get()) == null ? void 0 : _a.observe(target, { box: "border-box" });
+					},
+					unobserve: (target) => {
+						var _a;
+						return (_a = get()) == null ? void 0 : _a.unobserve(target);
+					}
+				};
+			})();
+			this.range = null;
+			this.setOptions = (opts2) => {
+				Object.entries(opts2).forEach(([key, value]) => {
+					if (typeof value === "undefined") delete opts2[key];
+				});
+				this.options = {
+					debug: false,
+					initialOffset: 0,
+					overscan: 1,
+					paddingStart: 0,
+					paddingEnd: 0,
+					scrollPaddingStart: 0,
+					scrollPaddingEnd: 0,
+					horizontal: false,
+					getItemKey: defaultKeyExtractor,
+					rangeExtractor: defaultRangeExtractor,
+					onChange: () => {},
+					measureElement,
+					initialRect: {
+						width: 0,
+						height: 0
+					},
+					scrollMargin: 0,
+					gap: 0,
+					indexAttribute: "data-index",
+					initialMeasurementsCache: [],
+					lanes: 1,
+					isScrollingResetDelay: 150,
+					enabled: true,
+					isRtl: false,
+					useScrollendEvent: false,
+					useAnimationFrameWithResizeObserver: false,
+					laneAssignmentMode: "estimate",
+					...opts2
+				};
+			};
+			this.notify = (sync) => {
+				var _a;
+				var _b;
+				(_b = (_a = this.options).onChange) == null || _b.call(_a, this, sync);
+			};
+			this.maybeNotify = memo$1(() => {
+				this.calculateRange();
+				return [
+					this.isScrolling,
+					this.range ? this.range.startIndex : null,
+					this.range ? this.range.endIndex : null
+				];
+			}, (isScrolling) => {
+				this.notify(isScrolling);
+			}, {
+				key: "maybeNotify",
+				debug: () => this.options.debug,
+				initialDeps: [
+					this.isScrolling,
+					this.range ? this.range.startIndex : null,
+					this.range ? this.range.endIndex : null
+				]
+			});
+			this.cleanup = () => {
+				this.unsubs.filter(Boolean).forEach((d) => d());
+				this.unsubs = [];
+				this.observer.disconnect();
+				if (this.rafId != null && this.targetWindow) {
+					this.targetWindow.cancelAnimationFrame(this.rafId);
+					this.rafId = null;
+				}
+				this.scrollState = null;
+				this.scrollElement = null;
+				this.targetWindow = null;
+			};
+			this._didMount = () => {
+				return () => {
+					this.cleanup();
+				};
+			};
+			this._willUpdate = () => {
+				var _a;
+				const scrollElement = this.options.enabled ? this.options.getScrollElement() : null;
+				if (this.scrollElement !== scrollElement) {
+					this.cleanup();
+					if (!scrollElement) {
+						this.maybeNotify();
+						return;
+					}
+					this.scrollElement = scrollElement;
+					if (this.scrollElement && "ownerDocument" in this.scrollElement) this.targetWindow = this.scrollElement.ownerDocument.defaultView;
+					else this.targetWindow = ((_a = this.scrollElement) == null ? void 0 : _a.window) ?? null;
+					this.elementsCache.forEach((cached) => {
+						this.observer.observe(cached);
+					});
+					this.unsubs.push(this.options.observeElementRect(this, (rect) => {
+						this.scrollRect = rect;
+						this.maybeNotify();
+					}));
+					this.unsubs.push(this.options.observeElementOffset(this, (offset, isScrolling) => {
+						this.scrollAdjustments = 0;
+						this.scrollDirection = isScrolling ? this.getScrollOffset() < offset ? "forward" : "backward" : null;
+						this.scrollOffset = offset;
+						this.isScrolling = isScrolling;
+						if (this.scrollState) this.scheduleScrollReconcile();
+						this.maybeNotify();
+					}));
+					this._scrollToOffset(this.getScrollOffset(), {
+						adjustments: void 0,
+						behavior: void 0
+					});
+				}
+			};
+			this.rafId = null;
+			this.getSize = () => {
+				if (!this.options.enabled) {
+					this.scrollRect = null;
+					return 0;
+				}
+				this.scrollRect = this.scrollRect ?? this.options.initialRect;
+				return this.scrollRect[this.options.horizontal ? "width" : "height"];
+			};
+			this.getScrollOffset = () => {
+				if (!this.options.enabled) {
+					this.scrollOffset = null;
+					return 0;
+				}
+				this.scrollOffset = this.scrollOffset ?? (typeof this.options.initialOffset === "function" ? this.options.initialOffset() : this.options.initialOffset);
+				return this.scrollOffset;
+			};
+			this.getFurthestMeasurement = (measurements, index) => {
+				const furthestMeasurementsFound = /* @__PURE__ */ new Map();
+				const furthestMeasurements = /* @__PURE__ */ new Map();
+				for (let m = index - 1; m >= 0; m--) {
+					const measurement = measurements[m];
+					if (furthestMeasurementsFound.has(measurement.lane)) continue;
+					const previousFurthestMeasurement = furthestMeasurements.get(measurement.lane);
+					if (previousFurthestMeasurement == null || measurement.end > previousFurthestMeasurement.end) furthestMeasurements.set(measurement.lane, measurement);
+					else if (measurement.end < previousFurthestMeasurement.end) furthestMeasurementsFound.set(measurement.lane, true);
+					if (furthestMeasurementsFound.size === this.options.lanes) break;
+				}
+				return furthestMeasurements.size === this.options.lanes ? Array.from(furthestMeasurements.values()).sort((a, b) => {
+					if (a.end === b.end) return a.index - b.index;
+					return a.end - b.end;
+				})[0] : void 0;
+			};
+			this.getMeasurementOptions = memo$1(() => [
+				this.options.count,
+				this.options.paddingStart,
+				this.options.scrollMargin,
+				this.options.getItemKey,
+				this.options.enabled,
+				this.options.lanes,
+				this.options.laneAssignmentMode
+			], (count, paddingStart, scrollMargin, getItemKey, enabled, lanes, laneAssignmentMode) => {
+				if (this.prevLanes !== void 0 && this.prevLanes !== lanes) this.lanesChangedFlag = true;
+				this.prevLanes = lanes;
+				this.pendingMeasuredCacheIndexes = [];
+				return {
+					count,
+					paddingStart,
+					scrollMargin,
+					getItemKey,
+					enabled,
+					lanes,
+					laneAssignmentMode
+				};
+			}, { key: false });
+			this.getMeasurements = memo$1(() => [this.getMeasurementOptions(), this.itemSizeCache], ({ count, paddingStart, scrollMargin, getItemKey, enabled, lanes, laneAssignmentMode }, itemSizeCache) => {
+				if (!enabled) {
+					this.measurementsCache = [];
+					this.itemSizeCache.clear();
+					this.laneAssignments.clear();
+					return [];
+				}
+				if (this.laneAssignments.size > count) {
+					for (const index of this.laneAssignments.keys()) if (index >= count) this.laneAssignments.delete(index);
+				}
+				if (this.lanesChangedFlag) {
+					this.lanesChangedFlag = false;
+					this.lanesSettling = true;
+					this.measurementsCache = [];
+					this.itemSizeCache.clear();
+					this.laneAssignments.clear();
+					this.pendingMeasuredCacheIndexes = [];
+				}
+				if (this.measurementsCache.length === 0 && !this.lanesSettling) {
+					this.measurementsCache = this.options.initialMeasurementsCache;
+					this.measurementsCache.forEach((item) => {
+						this.itemSizeCache.set(item.key, item.size);
+					});
+				}
+				const min = this.lanesSettling ? 0 : this.pendingMeasuredCacheIndexes.length > 0 ? Math.min(...this.pendingMeasuredCacheIndexes) : 0;
+				this.pendingMeasuredCacheIndexes = [];
+				if (this.lanesSettling && this.measurementsCache.length === count) this.lanesSettling = false;
+				const measurements = this.measurementsCache.slice(0, min);
+				const laneLastIndex = new Array(lanes).fill(void 0);
+				for (let m = 0; m < min; m++) {
+					const item = measurements[m];
+					if (item) laneLastIndex[item.lane] = m;
+				}
+				for (let i = min; i < count; i++) {
+					const key = getItemKey(i);
+					const cachedLane = this.laneAssignments.get(i);
+					let lane;
+					let start;
+					const shouldCacheLane = laneAssignmentMode === "estimate" || itemSizeCache.has(key);
+					if (cachedLane !== void 0 && this.options.lanes > 1) {
+						lane = cachedLane;
+						const prevIndex = laneLastIndex[lane];
+						const prevInLane = prevIndex !== void 0 ? measurements[prevIndex] : void 0;
+						start = prevInLane ? prevInLane.end + this.options.gap : paddingStart + scrollMargin;
+					} else {
+						const furthestMeasurement = this.options.lanes === 1 ? measurements[i - 1] : this.getFurthestMeasurement(measurements, i);
+						start = furthestMeasurement ? furthestMeasurement.end + this.options.gap : paddingStart + scrollMargin;
+						lane = furthestMeasurement ? furthestMeasurement.lane : i % this.options.lanes;
+						if (this.options.lanes > 1 && shouldCacheLane) this.laneAssignments.set(i, lane);
+					}
+					const measuredSize = itemSizeCache.get(key);
+					const size = typeof measuredSize === "number" ? measuredSize : this.options.estimateSize(i);
+					const end = start + size;
+					measurements[i] = {
+						index: i,
+						start,
+						size,
+						end,
+						key,
+						lane
+					};
+					laneLastIndex[lane] = i;
+				}
+				this.measurementsCache = measurements;
+				return measurements;
+			}, {
+				key: "getMeasurements",
+				debug: () => this.options.debug
+			});
+			this.calculateRange = memo$1(() => [
+				this.getMeasurements(),
+				this.getSize(),
+				this.getScrollOffset(),
+				this.options.lanes
+			], (measurements, outerSize, scrollOffset, lanes) => {
+				return this.range = measurements.length > 0 && outerSize > 0 ? calculateRange({
+					measurements,
+					outerSize,
+					scrollOffset,
+					lanes
+				}) : null;
+			}, {
+				key: "calculateRange",
+				debug: () => this.options.debug
+			});
+			this.getVirtualIndexes = memo$1(() => {
+				let startIndex = null;
+				let endIndex = null;
+				const range = this.calculateRange();
+				if (range) {
+					startIndex = range.startIndex;
+					endIndex = range.endIndex;
+				}
+				this.maybeNotify.updateDeps([
+					this.isScrolling,
+					startIndex,
+					endIndex
+				]);
+				return [
+					this.options.rangeExtractor,
+					this.options.overscan,
+					this.options.count,
+					startIndex,
+					endIndex
+				];
+			}, (rangeExtractor, overscan, count, startIndex, endIndex) => {
+				return startIndex === null || endIndex === null ? [] : rangeExtractor({
+					startIndex,
+					endIndex,
+					overscan,
+					count
+				});
+			}, {
+				key: "getVirtualIndexes",
+				debug: () => this.options.debug
+			});
+			this.indexFromElement = (node) => {
+				const attributeName = this.options.indexAttribute;
+				const indexStr = node.getAttribute(attributeName);
+				if (!indexStr) {
+					console.warn(`Missing attribute name '${attributeName}={index}' on measured element.`);
+					return -1;
+				}
+				return parseInt(indexStr, 10);
+			};
+			this.shouldMeasureDuringScroll = (index) => {
+				var _a;
+				if (!this.scrollState || this.scrollState.behavior !== "smooth") return true;
+				const scrollIndex = this.scrollState.index ?? ((_a = this.getVirtualItemForOffset(this.scrollState.lastTargetOffset)) == null ? void 0 : _a.index);
+				if (scrollIndex !== void 0 && this.range) {
+					const bufferSize = Math.max(this.options.overscan, Math.ceil((this.range.endIndex - this.range.startIndex) / 2));
+					const minIndex = Math.max(0, scrollIndex - bufferSize);
+					const maxIndex = Math.min(this.options.count - 1, scrollIndex + bufferSize);
+					return index >= minIndex && index <= maxIndex;
+				}
+				return true;
+			};
+			this.measureElement = (node) => {
+				if (!node) {
+					this.elementsCache.forEach((cached, key2) => {
+						if (!cached.isConnected) {
+							this.observer.unobserve(cached);
+							this.elementsCache.delete(key2);
+						}
+					});
+					return;
+				}
+				const index = this.indexFromElement(node);
+				const key = this.options.getItemKey(index);
+				const prevNode = this.elementsCache.get(key);
+				if (prevNode !== node) {
+					if (prevNode) this.observer.unobserve(prevNode);
+					this.observer.observe(node);
+					this.elementsCache.set(key, node);
+				}
+				if ((!this.isScrolling || this.scrollState) && this.shouldMeasureDuringScroll(index)) this.resizeItem(index, this.options.measureElement(node, void 0, this));
+			};
+			this.resizeItem = (index, size) => {
+				var _a;
+				const item = this.measurementsCache[index];
+				if (!item) return;
+				const delta = size - (this.itemSizeCache.get(item.key) ?? item.size);
+				if (delta !== 0) {
+					if (((_a = this.scrollState) == null ? void 0 : _a.behavior) !== "smooth" && (this.shouldAdjustScrollPositionOnItemSizeChange !== void 0 ? this.shouldAdjustScrollPositionOnItemSizeChange(item, delta, this) : item.start < this.getScrollOffset() + this.scrollAdjustments)) {
+						if (this.options.debug) console.info("correction", delta);
+						this._scrollToOffset(this.getScrollOffset(), {
+							adjustments: this.scrollAdjustments += delta,
+							behavior: void 0
+						});
+					}
+					this.pendingMeasuredCacheIndexes.push(item.index);
+					this.itemSizeCache = new Map(this.itemSizeCache.set(item.key, size));
+					this.notify(false);
+				}
+			};
+			this.getVirtualItems = memo$1(() => [this.getVirtualIndexes(), this.getMeasurements()], (indexes, measurements) => {
+				const virtualItems = [];
+				for (let k = 0, len = indexes.length; k < len; k++) {
+					const measurement = measurements[indexes[k]];
+					virtualItems.push(measurement);
+				}
+				return virtualItems;
+			}, {
+				key: "getVirtualItems",
+				debug: () => this.options.debug
+			});
+			this.getVirtualItemForOffset = (offset) => {
+				const measurements = this.getMeasurements();
+				if (measurements.length === 0) return;
+				return notUndefined(measurements[findNearestBinarySearch(0, measurements.length - 1, (index) => notUndefined(measurements[index]).start, offset)]);
+			};
+			this.getMaxScrollOffset = () => {
+				if (!this.scrollElement) return 0;
+				if ("scrollHeight" in this.scrollElement) return this.options.horizontal ? this.scrollElement.scrollWidth - this.scrollElement.clientWidth : this.scrollElement.scrollHeight - this.scrollElement.clientHeight;
+				else {
+					const doc = this.scrollElement.document.documentElement;
+					return this.options.horizontal ? doc.scrollWidth - this.scrollElement.innerWidth : doc.scrollHeight - this.scrollElement.innerHeight;
+				}
+			};
+			this.getOffsetForAlignment = (toOffset, align, itemSize = 0) => {
+				if (!this.scrollElement) return 0;
+				const size = this.getSize();
+				const scrollOffset = this.getScrollOffset();
+				if (align === "auto") align = toOffset >= scrollOffset + size ? "end" : "start";
+				if (align === "center") toOffset += (itemSize - size) / 2;
+				else if (align === "end") toOffset -= size;
+				const maxOffset = this.getMaxScrollOffset();
+				return Math.max(Math.min(maxOffset, toOffset), 0);
+			};
+			this.getOffsetForIndex = (index, align = "auto") => {
+				index = Math.max(0, Math.min(index, this.options.count - 1));
+				const size = this.getSize();
+				const scrollOffset = this.getScrollOffset();
+				const item = this.measurementsCache[index];
+				if (!item) return;
+				if (align === "auto") if (item.end >= scrollOffset + size - this.options.scrollPaddingEnd) align = "end";
+				else if (item.start <= scrollOffset + this.options.scrollPaddingStart) align = "start";
+				else return [scrollOffset, align];
+				if (align === "end" && index === this.options.count - 1) return [this.getMaxScrollOffset(), align];
+				const toOffset = align === "end" ? item.end + this.options.scrollPaddingEnd : item.start - this.options.scrollPaddingStart;
+				return [this.getOffsetForAlignment(toOffset, align, item.size), align];
+			};
+			this.scrollToOffset = (toOffset, { align = "start", behavior = "auto" } = {}) => {
+				const offset = this.getOffsetForAlignment(toOffset, align);
+				const now = this.now();
+				this.scrollState = {
+					index: null,
+					align,
+					behavior,
+					startedAt: now,
+					lastTargetOffset: offset,
+					stableFrames: 0
+				};
+				this._scrollToOffset(offset, {
+					adjustments: void 0,
+					behavior
+				});
+				this.scheduleScrollReconcile();
+			};
+			this.scrollToIndex = (index, { align: initialAlign = "auto", behavior = "auto" } = {}) => {
+				index = Math.max(0, Math.min(index, this.options.count - 1));
+				const offsetInfo = this.getOffsetForIndex(index, initialAlign);
+				if (!offsetInfo) return;
+				const [offset, align] = offsetInfo;
+				const now = this.now();
+				this.scrollState = {
+					index,
+					align,
+					behavior,
+					startedAt: now,
+					lastTargetOffset: offset,
+					stableFrames: 0
+				};
+				this._scrollToOffset(offset, {
+					adjustments: void 0,
+					behavior
+				});
+				this.scheduleScrollReconcile();
+			};
+			this.scrollBy = (delta, { behavior = "auto" } = {}) => {
+				const offset = this.getScrollOffset() + delta;
+				const now = this.now();
+				this.scrollState = {
+					index: null,
+					align: "start",
+					behavior,
+					startedAt: now,
+					lastTargetOffset: offset,
+					stableFrames: 0
+				};
+				this._scrollToOffset(offset, {
+					adjustments: void 0,
+					behavior
+				});
+				this.scheduleScrollReconcile();
+			};
+			this.getTotalSize = () => {
+				var _a;
+				const measurements = this.getMeasurements();
+				let end;
+				if (measurements.length === 0) end = this.options.paddingStart;
+				else if (this.options.lanes === 1) end = ((_a = measurements[measurements.length - 1]) == null ? void 0 : _a.end) ?? 0;
+				else {
+					const endByLane = Array(this.options.lanes).fill(null);
+					let endIndex = measurements.length - 1;
+					while (endIndex >= 0 && endByLane.some((val) => val === null)) {
+						const item = measurements[endIndex];
+						if (endByLane[item.lane] === null) endByLane[item.lane] = item.end;
+						endIndex--;
+					}
+					end = Math.max(...endByLane.filter((val) => val !== null));
+				}
+				return Math.max(end - this.options.scrollMargin + this.options.paddingEnd, 0);
+			};
+			this._scrollToOffset = (offset, { adjustments, behavior }) => {
+				this.options.scrollToFn(offset, {
+					behavior,
+					adjustments
+				}, this);
+			};
+			this.measure = () => {
+				this.itemSizeCache = /* @__PURE__ */ new Map();
+				this.laneAssignments = /* @__PURE__ */ new Map();
+				this.notify(false);
+			};
+			this.setOptions(opts);
+		}
+		scheduleScrollReconcile() {
+			if (!this.targetWindow) {
+				this.scrollState = null;
+				return;
+			}
+			if (this.rafId != null) return;
+			this.rafId = this.targetWindow.requestAnimationFrame(() => {
+				this.rafId = null;
+				this.reconcileScroll();
+			});
+		}
+		reconcileScroll() {
+			if (!this.scrollState) return;
+			if (!this.scrollElement) return;
+			if (this.now() - this.scrollState.startedAt > 5e3) {
+				this.scrollState = null;
+				return;
+			}
+			const offsetInfo = this.scrollState.index != null ? this.getOffsetForIndex(this.scrollState.index, this.scrollState.align) : void 0;
+			const targetOffset = offsetInfo ? offsetInfo[0] : this.scrollState.lastTargetOffset;
+			const STABLE_FRAMES = 1;
+			const targetChanged = targetOffset !== this.scrollState.lastTargetOffset;
+			if (!targetChanged && approxEqual(targetOffset, this.getScrollOffset())) {
+				this.scrollState.stableFrames++;
+				if (this.scrollState.stableFrames >= STABLE_FRAMES) {
+					this.scrollState = null;
+					return;
+				}
+			} else {
+				this.scrollState.stableFrames = 0;
+				if (targetChanged) {
+					this.scrollState.lastTargetOffset = targetOffset;
+					this.scrollState.behavior = "auto";
+					this._scrollToOffset(targetOffset, {
+						adjustments: void 0,
+						behavior: "auto"
+					});
+				}
+			}
+			this.scheduleScrollReconcile();
+		}
+	};
+	var findNearestBinarySearch = (low, high, getCurrentValue, value) => {
+		while (low <= high) {
+			const middle = (low + high) / 2 | 0;
+			const currentValue = getCurrentValue(middle);
+			if (currentValue < value) low = middle + 1;
+			else if (currentValue > value) high = middle - 1;
+			else return middle;
+		}
+		if (low > 0) return low - 1;
+		else return 0;
+	};
+	function calculateRange({ measurements, outerSize, scrollOffset, lanes }) {
+		const lastIndex = measurements.length - 1;
+		const getOffset = (index) => measurements[index].start;
+		if (measurements.length <= lanes) return {
+			startIndex: 0,
+			endIndex: lastIndex
+		};
+		let startIndex = findNearestBinarySearch(0, lastIndex, getOffset, scrollOffset);
+		let endIndex = startIndex;
+		if (lanes === 1) while (endIndex < lastIndex && measurements[endIndex].end < scrollOffset + outerSize) endIndex++;
+		else if (lanes > 1) {
+			const endPerLane = Array(lanes).fill(0);
+			while (endIndex < lastIndex && endPerLane.some((pos) => pos < scrollOffset + outerSize)) {
+				const item = measurements[endIndex];
+				endPerLane[item.lane] = item.end;
+				endIndex++;
+			}
+			const startPerLane = Array(lanes).fill(scrollOffset + outerSize);
+			while (startIndex >= 0 && startPerLane.some((pos) => pos >= scrollOffset)) {
+				const item = measurements[startIndex];
+				startPerLane[item.lane] = item.start;
+				startIndex--;
+			}
+			startIndex = Math.max(0, startIndex - startIndex % lanes);
+			endIndex = Math.min(lastIndex, endIndex + (lanes - 1 - endIndex % lanes));
+		}
+		return {
+			startIndex,
+			endIndex
+		};
+	}
+
+//#endregion
+//#region packages/node_modules/@tanstack/react-virtual/dist/esm/index.js
+	var useIsomorphicLayoutEffect$1 = typeof document !== "undefined" ? react$1.useLayoutEffect : react$1.useEffect;
+	function useVirtualizerBase({ useFlushSync = true, ...options }) {
+		const rerender = react$1.useReducer(() => ({}), {})[1];
+		const resolvedOptions = {
+			...options,
+			onChange: (instance2, sync) => {
+				var _a;
+				if (useFlushSync && sync) (0, react_dom$1.flushSync)(rerender);
+				else rerender();
+				(_a = options.onChange) == null || _a.call(options, instance2, sync);
+			}
+		};
+		const [instance] = react$1.useState(() => new Virtualizer(resolvedOptions));
+		instance.setOptions(resolvedOptions);
+		useIsomorphicLayoutEffect$1(() => {
+			return instance._didMount();
+		}, []);
+		useIsomorphicLayoutEffect$1(() => {
+			return instance._willUpdate();
+		});
+		return instance;
+	}
+	function useVirtualizer(options) {
+		return useVirtualizerBase({
+			observeElementRect,
+			observeElementOffset,
+			scrollToFn: elementScroll,
+			...options
+		});
+	}
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/icon-library/icon-library-grid.tsx
+	var ICON_LIBRARY_GRID_FALLBACK_COLUMN_COUNT = 4;
+	var ICON_LIBRARY_GRID_MIN_CELL_SIZE = 52;
+	var ICON_LIBRARY_GRID_TOOLTIP_ENTER_DELAY = 1e3;
+	var ICON_GLYPH_SIZE$1 = 20;
+	var GRID_OVERSCAN = 6;
+	var GRID_CELL_GAP = 1;
+	var GRID_HORIZONTAL_PADDING = 2;
+	var GRID_VERTICAL_PADDING = 1.5;
+	var HOME_END_KEYS = /* @__PURE__ */ new Set(["Home", "End"]);
+	var getGridMetrics = (containerWidth, columnGap, inlinePadding) => {
+		const availableWidth = containerWidth - inlinePadding;
+		if (availableWidth <= 0) return {
+			columnCount: 4,
+			cellSize: 52
+		};
+		const columnCount = Math.max(1, Math.floor((availableWidth + columnGap) / (52 + columnGap)));
+		const cellSize = Math.floor((availableWidth - columnGap * (columnCount - 1)) / columnCount);
+		return {
+			columnCount,
+			cellSize: Math.max(cellSize, 1)
+		};
+	};
+	var IconLibraryGrid = ({ items, selectedValue, onSelect, onClose, noResultsComponent }) => {
+		const theme = (0, _elementor_ui.useTheme)();
+		const containerRef = (0, react.useRef)(null);
+		const selectedIndex = items.findIndex((item) => item.id === selectedValue);
+		const [focusedIndex, setFocusedIndex] = (0, react.useState)(selectedIndex >= 0 ? selectedIndex : 0);
+		const [{ columnCount, cellSize }, setGridMetrics] = (0, react.useState)(() => getGridMetrics(0, 0, 0));
+		const rowCount = Math.ceil(items.length / columnCount);
+		const cellGap = Number.parseFloat(theme.spacing(GRID_CELL_GAP));
+		const verticalPadding = Number.parseFloat(theme.spacing(GRID_VERTICAL_PADDING));
+		const virtualizer = useVirtualizer({
+			count: rowCount,
+			getScrollElement: () => containerRef.current,
+			estimateSize: () => cellSize,
+			gap: cellGap,
+			paddingStart: verticalPadding,
+			paddingEnd: verticalPadding,
+			overscan: GRID_OVERSCAN,
+			rangeExtractor: (range) => {
+				const rowIndexes = defaultRangeExtractor(range);
+				const focusedRow = Math.floor(focusedIndex / columnCount);
+				if (items.length === 0 || rowIndexes.includes(focusedRow)) return rowIndexes;
+				return [...rowIndexes, focusedRow].sort((a, b) => a - b);
+			}
+		});
+		const focusedItem = items[focusedIndex];
+		const visibleRowIndexes = virtualizer.getVirtualIndexes().join(",");
+		(0, react.useLayoutEffect)(() => {
+			setFocusedIndex((current) => {
+				if (items.length === 0) return 0;
+				if (selectedIndex >= 0) return selectedIndex;
+				return Math.min(current, items.length - 1);
+			});
+			if (selectedIndex >= 0) {
+				virtualizer.measure();
+				virtualizer.scrollToIndex(Math.floor(selectedIndex / columnCount), { align: "center" });
+			}
+		}, [
+			cellSize,
+			columnCount,
+			items,
+			selectedIndex,
+			selectedValue
+		]);
+		const { registerRef, requestFocus } = (0, _elementor_editor_ui.useRovingFocus)({
+			tabbableKey: focusedItem?.id,
+			mountedSignature: visibleRowIndexes
+		});
+		(0, react.useLayoutEffect)(() => {
+			const container = containerRef.current;
+			if (!container) return;
+			const measureGrid = () => {
+				const inlinePadding = Number.parseFloat(theme.spacing(GRID_HORIZONTAL_PADDING)) * 2;
+				setGridMetrics(getGridMetrics(container.clientWidth, cellGap, inlinePadding));
+			};
+			measureGrid();
+			const resizeObserver = new ResizeObserver(measureGrid);
+			resizeObserver.observe(container);
+			return () => {
+				resizeObserver.disconnect();
+			};
+		}, [
+			theme,
+			cellGap,
+			items.length
+		]);
+		(0, react.useLayoutEffect)(() => {
+			virtualizer.measure();
+		}, [cellSize, columnCount]);
+		const horizontalOffset = theme.direction === "rtl" || document.documentElement.dir === "rtl" ? -1 : 1;
+		const moveFocus = (nextIndex) => {
+			if (nextIndex < 0 || nextIndex >= items.length) return;
+			requestFocus();
+			setFocusedIndex(nextIndex);
+			virtualizer.scrollToIndex(Math.floor(nextIndex / columnCount));
+		};
+		const handleKeyDown = (event, index) => {
+			if (event.key === "Enter" || event.key === " ") {
+				event.preventDefault();
+				onSelect(items[index].id);
+				onClose();
+				return;
+			}
+			if (event.key === "ArrowRight") {
+				event.preventDefault();
+				moveFocus(index + horizontalOffset);
+				return;
+			}
+			if (event.key === "ArrowLeft") {
+				event.preventDefault();
+				moveFocus(index - horizontalOffset);
+				return;
+			}
+			if (event.key === "ArrowDown") {
+				event.preventDefault();
+				moveFocus(index + columnCount);
+				return;
+			}
+			if (event.key === "ArrowUp") {
+				event.preventDefault();
+				moveFocus(index - columnCount);
+				return;
+			}
+			if (HOME_END_KEYS.has(event.key)) {
+				event.preventDefault();
+				if (event.ctrlKey) {
+					moveFocus(event.key === "Home" ? 0 : items.length - 1);
+					return;
+				}
+				const rowStart = Math.floor(index / columnCount) * columnCount;
+				const rowEnd = Math.min(rowStart + columnCount - 1, items.length - 1);
+				moveFocus(event.key === "Home" ? rowStart : rowEnd);
+			}
+		};
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+			ref: containerRef,
+			sx: {
+				width: "100%",
+				height: "100%",
+				minWidth: 0,
+				overflowX: "hidden",
+				overflowY: "auto"
+			}
+		}, items.length === 0 && noResultsComponent ? noResultsComponent : /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+			role: "grid",
+			"aria-label": (0, _wordpress_i18n.__)("Icons", "elementor"),
+			"aria-rowcount": rowCount,
+			"aria-colcount": columnCount,
+			"data-testid": "icon-library-grid",
+			sx: {
+				width: "100%",
+				minWidth: 0,
+				height: virtualizer.getTotalSize(),
+				position: "relative"
+			}
+		}, virtualizer.getVirtualItems().map((virtualRow) => {
+			const startIndex = virtualRow.index * columnCount;
+			const rowItems = items.slice(startIndex, startIndex + columnCount);
+			return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+				key: virtualRow.key,
+				role: "row",
+				"aria-rowindex": virtualRow.index + 1,
+				sx: {
+					position: "absolute",
+					top: 0,
+					left: 0,
+					width: "100%",
+					height: virtualRow.size,
+					transform: `translateY(${virtualRow.start}px)`,
+					display: "grid",
+					gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
+					gap: GRID_CELL_GAP,
+					px: GRID_HORIZONTAL_PADDING,
+					boxSizing: "border-box"
+				}
+			}, rowItems.map((item, columnIndex) => {
+				const index = startIndex + columnIndex;
+				const isSelected = selectedValue === item.id;
+				const tabIndex = focusedIndex === index ? 0 : -1;
+				return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+					key: item.id,
+					role: "presentation",
+					sx: {
+						minWidth: 0,
+						minHeight: 0,
+						width: "100%",
+						height: "100%"
+					}
+				}, /* @__PURE__ */ react.createElement(_elementor_ui.Tooltip, {
+					title: item.label,
+					placement: "top",
+					enterDelay: ICON_LIBRARY_GRID_TOOLTIP_ENTER_DELAY,
+					enterNextDelay: ICON_LIBRARY_GRID_TOOLTIP_ENTER_DELAY,
+					disableInteractive: true,
+					disableFocusListener: true
+				}, /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+					component: "button",
+					type: "button",
+					role: "gridcell",
+					"aria-colindex": columnIndex + 1,
+					"aria-label": item.label,
+					"aria-selected": isSelected,
+					tabIndex,
+					ref: registerRef(item.id),
+					onClick: () => {
+						onSelect(item.id);
+						onClose();
+					},
+					onFocus: () => setFocusedIndex(index),
+					onKeyDown: (event) => handleKeyDown(event, index),
+					sx: {
+						boxSizing: "border-box",
+						appearance: "none",
+						m: 0,
+						width: "100%",
+						height: "100%",
+						minWidth: 0,
+						minHeight: 0,
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "center",
+						border: "1px solid",
+						borderColor: "divider",
+						borderRadius: 1,
+						color: "text.tertiary",
+						bgcolor: "transparent",
+						p: 0,
+						cursor: "pointer",
+						font: "inherit",
+						lineHeight: 0,
+						overflow: "hidden",
+						"&:hover, &:focus": { bgcolor: "action.hover" },
+						"&[aria-selected=\"true\"]": { bgcolor: "action.selected" },
+						"&[aria-selected=\"true\"]:hover, &[aria-selected=\"true\"]:focus": { bgcolor: "action.selected" }
+					}
+				}, /* @__PURE__ */ react.createElement(FontAwesomeGlyph, {
+					icon: {
+						...item,
+						value: item.iconValue ?? item.value
+					},
+					size: ICON_GLYPH_SIZE$1,
+					color: "currentColor"
+				}))));
+			}));
+		})));
+	};
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/utils/tracking.ts
+	var getBaseEventProperties = (data, config) => ({
+		window_name: config?.appTypes?.editor ?? "editor",
+		interaction_type: config?.triggers?.click ?? "Click",
+		target_name: data.target_name,
+		target_location: data.target_location ?? "widget_panel",
+		location_l1: data.location_l1 ?? (0, _elementor_editor_elements.getSelectedElements)()[0]?.type ?? "",
+		...data.location_l2 && { location_l2: data.location_l2 }
+	});
+	var dispatchPromotionEvent = (data, resolveOptions) => {
+		const { dispatchEvent, config } = (0, _elementor_events.getMixpanel)();
+		const { eventName, interactionResult, interactionDescription } = resolveOptions(config);
+		if (!eventName) return;
+		dispatchEvent?.(eventName, {
+			...getBaseEventProperties(data, config),
+			interaction_result: interactionResult,
+			interaction_description: interactionDescription
+		});
+	};
+	var trackViewPromotion = (data) => {
+		dispatchPromotionEvent(data, (config) => ({
+			eventName: config?.names?.promotions?.viewPromotion,
+			interactionResult: config?.interactionResults?.promotionViewed ?? "promotion_viewed",
+			interactionDescription: "user_viewed_promotion"
+		}));
+	};
+	var trackUpgradePromotionClick = (data) => {
+		dispatchPromotionEvent(data, (config) => ({
+			eventName: config?.names?.promotions?.upgradePromotionClick,
+			interactionResult: config?.interactionResults?.upgradeNow ?? "upgrade_now",
+			interactionDescription: "user_clicked_upgrade_now"
+		}));
+	};
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/icon-library/icon-library-upload-action.tsx
+	var ICON_LIBRARY_UPLOAD_UPGRADE_URL = "https://go.elementor.com/go-pro-svg-library-upload-upgrade/";
+	var TRACKING_DATA$2 = {
+		target_name: "icon_library_upload",
+		location_l2: "general"
+	};
+	var { Slot: IconLibraryUploadActionSlot, inject: injectIntoIconLibraryUploadAction } = (0, _elementor_locations.createReplaceableLocation)();
+	var IconLibraryUploadButton = (0, react.forwardRef)((props, ref) => {
+		const label = (0, _wordpress_i18n.__)("Upload library", "elementor");
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Tooltip, {
+			title: label,
+			placement: "top"
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.IconButton, {
+			ref,
+			size: "tiny",
+			"aria-label": label,
+			...props
+		}, /* @__PURE__ */ react.createElement(_elementor_icons.UploadIcon, { fontSize: "tiny" })));
+	});
+	var IconLibraryUploadPromotion = ({ ctaUrl = ICON_LIBRARY_UPLOAD_UPGRADE_URL, ctaText = (0, _wordpress_i18n.__)("Upgrade now", "elementor"), title = (0, _wordpress_i18n.__)("Upload custom icons", "elementor"), content = (0, _wordpress_i18n.__)("Add your own icon font library to use across your site.", "elementor") }) => {
+		const [isOpen, setIsOpen] = (0, react.useState)(false);
+		const triggerRef = (0, react.useRef)(null);
+		const canSeePromotions = !!window.elementor?.config?.v4Promotions;
+		const close = () => {
+			setIsOpen(false);
+			triggerRef.current?.focus();
+		};
+		(0, _elementor_editor_ui.useCanvasClickHandler)(isOpen, close);
+		const toggle = () => {
+			if (!isOpen) trackViewPromotion(TRACKING_DATA$2);
+			setIsOpen(!isOpen);
+		};
+		if (!canSeePromotions) return null;
+		return /* @__PURE__ */ react.createElement(_elementor_editor_ui.PromotionPopover, {
+			open: isOpen,
+			placement: "top",
+			arrow: true,
+			title,
+			content,
+			ctaText,
+			ctaUrl,
+			onClose: (event) => {
+				event.stopPropagation();
+				close();
+			},
+			onCtaClick: () => trackUpgradePromotionClick(TRACKING_DATA$2)
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+			component: "span",
+			sx: { display: "inline-flex" }
+		}, /* @__PURE__ */ react.createElement(IconLibraryUploadButton, {
+			ref: triggerRef,
+			"aria-haspopup": "dialog",
+			"aria-expanded": isOpen,
+			onClick: toggle
+		})));
+	};
+	var IconLibraryUploadAction = () => {
+		if (window.elementorPro) return null;
+		return /* @__PURE__ */ react.createElement(IconLibraryUploadPromotion, null);
+	};
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/icon-library/icon-library-view-toggle.tsx
+	var HEADER_ACTION_GAP = .5;
+	var IconLibraryViewToggle = ({ value, onChange }) => {
+		const isGrid = value === "grid";
+		const nextView = isGrid ? "list" : "grid";
+		const ViewIcon = isGrid ? _elementor_icons.WidgetsIcon : _elementor_icons.ListIcon;
+		const viewButtonLabel = isGrid ? (0, _wordpress_i18n.__)("Grid view", "elementor") : (0, _wordpress_i18n.__)("List view", "elementor");
+		const viewButtonAction = isGrid ? (0, _wordpress_i18n.__)("Switch to list view", "elementor") : (0, _wordpress_i18n.__)("Switch to grid view", "elementor");
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Tooltip, {
+			title: viewButtonLabel,
+			placement: "top",
+			enterDelay: 0,
+			enterNextDelay: 0,
+			disableInteractive: true
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.IconButton, {
+			"aria-label": viewButtonAction,
+			size: "tiny",
+			onClick: () => onChange(nextView),
+			sx: {
+				flexShrink: 0,
+				mr: HEADER_ACTION_GAP
+			}
+		}, /* @__PURE__ */ react.createElement(ViewIcon, { fontSize: "tiny" })));
+	};
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/icon-library/merge-icons-by-id.ts
+	var getNames = (icon) => [icon.name, ...icon.aliases ?? []].filter(Boolean);
+	function mergeIconsById(primary, secondary) {
+		const ids = new Set(primary.map((icon) => icon.id));
+		const names = new Set(primary.flatMap((icon) => getNames(icon).map((name) => `${icon.library}:${name}`)));
+		return [...primary, ...secondary.filter((icon) => !ids.has(icon.id) && !getNames(icon).some((name) => names.has(`${icon.library}:${name}`)))];
+	}
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/icon-library/svg-element-icon.tsx
+	var SVG_ELEMENT_ICON_PATH = "M502 772c10 0 19-6 24-14l201-351c4-9 4-19 0-27-5-9-14-14-24-14h-401c-10 0-19 5-24 14-4 8-5 18 0 27l201 351c5 8 14 14 23 14z m0-82l-154-270h309l-154 270z m-323-471c-6 0-12-2-16-7-4-4-7-10-7-16v-201c0-6 3-12 7-16 4-5 10-7 16-7h201c6 0 12 2 16 7 5 4 7 10 7 16v201c0 6-2 12-7 16-4 5-10 7-16 7h-201z m-54 32c14 14 34 22 54 22h201c20 0 40-8 55-22 14-15 22-35 22-55v-201c0-20-8-40-22-54-15-15-35-23-55-23h-201c-20 0-40 8-54 23-15 14-23 34-23 54v201c0 20 8 40 23 55z m480-30c34 33 79 52 126 52s92-19 125-52c34-33 52-78 52-125s-18-93-52-126c-33-33-78-52-125-52s-92 19-126 52c-33 33-52 78-52 126s19 92 52 125z m126-2c-33 0-64-13-87-36-24-23-37-55-37-87s13-65 37-88c23-23 54-36 87-36s64 13 87 36c23 23 36 55 36 88s-13 64-36 87c-23 23-54 36-87 36z";
+	var SvgElementIcon = react.forwardRef((props, ref) => /* @__PURE__ */ react.createElement(_elementor_ui.SvgIcon, {
+		viewBox: "0 0 1000 1000",
+		...props,
+		ref
+	}, /* @__PURE__ */ react.createElement("g", { transform: "translate(0, 850) scale(1, -1)" }, /* @__PURE__ */ react.createElement("path", { d: SVG_ELEMENT_ICON_PATH }))));
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/icon-library/use-font-awesome-7-catalog.ts
+	var FONT_AWESOME_7_CATALOG_QUERY_KEY = ["font-awesome-7-catalog"];
+	function useFontAwesome7Catalog(enabled) {
+		return (0, _elementor_query.useQuery)({
+			queryKey: FONT_AWESOME_7_CATALOG_QUERY_KEY,
+			queryFn: ({ signal }) => loadFontAwesome7Catalog(signal),
+			enabled,
+			staleTime: Infinity
+		});
+	}
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/icon-library/icon-library-popover.tsx
+	var ICON_LIBRARY_POPOVER_WIDTH = 300;
+	var ICON_LIBRARY_SEARCH_DEBOUNCE_DELAY = 300;
+	var ICON_LIBRARY_VIEW_STORAGE_KEY = "icon-library-view";
+	var ICON_LIBRARY_VIEW_STORAGE_PREFIX = "editor-controls";
+	var DEFAULT_ICON_LIBRARY_VIEW = "grid";
+	var isIconLibraryView = (value) => {
+		return value === "grid" || value === "list";
+	};
+	var ICON_TILE_SIZE = 40;
+	var ICON_LIBRARY_ROW_VERTICAL_PADDING = .5;
+	var ICON_LIBRARY_ROW_HEIGHT = 48;
+	var ICON_GLYPH_SIZE = 20;
+	var ICON_LIBRARY_INLINE_SPACING = 2;
+	var ICON_LIBRARY_SEARCH_PADDING_BOTTOM = 2;
+	var ICON_LIBRARY_TITLE_SIZE = "14px";
+	var CompactIconLibraryMenuList = (0, _elementor_ui.styled)(_elementor_editor_ui.StyledMenuList)(({ theme }) => ({ "& > [role=\"option\"]": { padding: theme.spacing(ICON_LIBRARY_ROW_VERTICAL_PADDING, ICON_LIBRARY_INLINE_SPACING) } }));
+	var IconLibraryPopover = ({ open, selectedIconClass, selectedIconLibrary, onSelect, onClose, width = 300 }) => {
+		const { debouncedValue: searchValue, inputValue: searchInputValue, handleChange: handleSearchChange, setImmediateValue: setSearchValue } = (0, _elementor_utils.useDebounceState)({ delay: 300 });
+		const [activeLibraries, setActiveLibraries] = (0, react.useState)([]);
+		const [storedView, setStoredView] = (0, _elementor_session.useSessionStorage)(ICON_LIBRARY_VIEW_STORAGE_KEY, ICON_LIBRARY_VIEW_STORAGE_PREFIX);
+		const view = isIconLibraryView(storedView) ? storedView : DEFAULT_ICON_LIBRARY_VIEW;
+		const { data: fontAwesomeIcons = [], isLoading: isFontAwesomeLoading } = useFontAwesome7Catalog(open);
+		const { data: providerIcons = [], isLoading: isProviderLoading } = useIconLibraryProviderIcons(open);
+		const icons = (0, react.useMemo)(() => mergeIconsById(fontAwesomeIcons, providerIcons), [providerIcons, fontAwesomeIcons]);
+		const items = (0, react.useMemo)(() => createIconLibraryItems(icons, searchValue, activeLibraries), [
+			activeLibraries,
+			icons,
+			searchValue
+		]);
+		const isLoading = isFontAwesomeLoading || isProviderLoading && items.length === 0;
+		const selectedValue = (0, react.useMemo)(() => findFontAwesome7Icon(icons, selectedIconClass, selectedIconLibrary)?.id, [
+			icons,
+			selectedIconClass,
+			selectedIconLibrary
+		]);
+		const contentRef = (0, react.useRef)(null);
+		const handleClose = () => {
+			setSearchValue("");
+			setActiveLibraries([]);
+			onClose();
+		};
+		const handleSelect = (id) => {
+			const icon = items.find((item) => item.id === id);
+			if (!icon) return;
+			onSelect({
+				value: icon.glyphClass ?? createIconSelectionValue(icon.library, icon.name),
+				library: icon.library
+			});
+		};
+		const handleSearchKeyDown = (event) => {
+			if (event.key !== "ArrowDown" || view !== "list") return;
+			const option = contentRef.current?.querySelector("[role=\"option\"][tabindex=\"0\"]");
+			if (option) {
+				event.preventDefault();
+				option.focus();
+			}
+		};
+		const handleClearSearch = () => {
+			setSearchValue("");
+		};
+		return /* @__PURE__ */ react.createElement(_elementor_editor_ui.PopoverBody, {
+			width,
+			fillWidth: true,
+			id: "icon-library"
+		}, /* @__PURE__ */ react.createElement(_elementor_editor_ui.PopoverHeader, {
+			title: (0, _wordpress_i18n.__)("Icon library", "elementor"),
+			onClose: handleClose,
+			icon: /* @__PURE__ */ react.createElement(_elementor_icons.LibraryIcon, { fontSize: "tiny" }),
+			actions: [/* @__PURE__ */ react.createElement(IconLibraryViewToggle, {
+				key: "view",
+				value: view,
+				onChange: setStoredView
+			}), /* @__PURE__ */ react.createElement(IconLibraryUploadActionSlot, { key: "upload" }, /* @__PURE__ */ react.createElement(IconLibraryUploadAction, null))],
+			sx: {
+				pl: ICON_LIBRARY_INLINE_SPACING,
+				pr: 1,
+				"& .MuiTypography-subtitle2": { fontSize: ICON_LIBRARY_TITLE_SIZE }
+			}
+		}), /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
+			direction: "row",
+			alignItems: "center",
+			gap: 1,
+			sx: {
+				px: ICON_LIBRARY_INLINE_SPACING,
+				pb: ICON_LIBRARY_SEARCH_PADDING_BOTTOM
+			}
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+			onKeyDown: handleSearchKeyDown,
+			sx: {
+				flex: 1,
+				minWidth: 0
+			}
+		}, /* @__PURE__ */ react.createElement(_elementor_editor_ui.SearchField, {
+			value: searchInputValue,
+			onSearch: handleSearchChange,
+			placeholder: (0, _wordpress_i18n.__)("Search", "elementor"),
+			id: "icon-library-search",
+			sx: {
+				width: "100%",
+				px: 0,
+				pb: 0
+			}
+		})), /* @__PURE__ */ react.createElement(IconLibraryFilter, {
+			value: activeLibraries,
+			onChange: setActiveLibraries
+		})), /* @__PURE__ */ react.createElement(_elementor_ui.Divider, null), /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+			ref: contentRef,
+			sx: {
+				flex: 1,
+				overflow: "hidden",
+				minHeight: 0,
+				minWidth: 0
+			}
+		}, /* @__PURE__ */ react.createElement(IconLibraryContent, {
+			isLoading,
+			items,
+			selectedValue,
+			searchValue,
+			isCatalogAvailable: icons.length > 0,
+			view,
+			onSelect: handleSelect,
+			onClose: handleClose,
+			onClearSearch: handleClearSearch
+		})));
+	};
+	var IconLibraryContent = ({ isLoading, items, selectedValue, searchValue, isCatalogAvailable, view, onSelect, onClose, onClearSearch }) => {
+		if (isLoading) return /* @__PURE__ */ react.createElement(IconLibraryLoadingState, null);
+		const emptyState = /* @__PURE__ */ react.createElement(IconLibraryEmptyState, {
+			searchValue,
+			isCatalogAvailable,
+			onClear: onClearSearch
+		});
+		if (view === "grid") return /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
+			width: "100%",
+			height: "100%",
+			minWidth: 0,
+			minHeight: 0
+		} }, /* @__PURE__ */ react.createElement(IconLibraryGrid, {
+			items,
+			selectedValue,
+			onSelect,
+			onClose,
+			noResultsComponent: emptyState
+		}));
+		return /* @__PURE__ */ react.createElement(_elementor_editor_ui.PopoverMenuList, {
+			items,
+			selectedValue,
+			menuListTemplate: CompactIconLibraryMenuList,
+			onSelect,
+			onClose,
+			itemHeight: 48,
+			menuItemContentTemplate: IconLibraryRow,
+			rovingFocus: true,
+			noResultsComponent: emptyState,
+			"data-testid": "icon-library-list"
+		});
+	};
+	var IconLibraryLoadingState = () => /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
+		alignItems: "center",
+		justifyContent: "center",
+		height: "100%"
+	}, /* @__PURE__ */ react.createElement(_elementor_ui.CircularProgress, {
+		role: "progressbar",
+		size: 24,
+		"aria-label": (0, _wordpress_i18n.__)("Loading icons", "elementor")
+	}));
+	var IconLibraryEmptyState = ({ searchValue, isCatalogAvailable, onClear }) => {
+		if (!isCatalogAvailable) return /* @__PURE__ */ react.createElement(CatalogUnavailable, null);
+		return /* @__PURE__ */ react.createElement(NoResults, {
+			searchValue,
+			onClear
+		});
+	};
+	var IconLibraryRow = (item) => {
+		const icon = item;
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
+			direction: "row",
+			alignItems: "center",
+			gap: 1,
+			sx: { width: "100%" }
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
+			width: ICON_TILE_SIZE,
+			height: ICON_TILE_SIZE,
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "center",
+			border: 1,
+			borderColor: "divider",
+			borderRadius: 1,
+			color: "text.tertiary",
+			flexShrink: 0
+		} }, /* @__PURE__ */ react.createElement(FontAwesomeGlyph, {
+			icon: {
+				...icon,
+				value: icon.iconValue
+			},
+			size: ICON_GLYPH_SIZE,
+			color: "currentColor"
+		})), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
+			variant: "caption",
+			color: "text.primary",
+			noWrap: true
+		}, icon.label));
+	};
+	var CatalogUnavailable = () => /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
+		alignItems: "center",
+		justifyContent: "center",
+		height: "100%",
+		p: 2.5,
+		gap: 1.5
+	}, /* @__PURE__ */ react.createElement(SvgElementIcon, { fontSize: "large" }), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
+		align: "center",
+		variant: "subtitle2",
+		color: "text.secondary"
+	}, (0, _wordpress_i18n.__)("Icons couldn't be loaded.", "elementor")));
+	var NoResults = ({ searchValue, onClear }) => /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
+		alignItems: "center",
+		justifyContent: "center",
+		height: "100%",
+		p: 2.5,
+		gap: 1.5
+	}, /* @__PURE__ */ react.createElement(SvgElementIcon, { fontSize: "large" }), /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
+		align: "center",
+		variant: "subtitle2",
+		color: "text.secondary"
+	}, (0, _wordpress_i18n.__)("Sorry, nothing matched", "elementor")), searchValue ? /* @__PURE__ */ react.createElement(react.Fragment, null, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, {
+		align: "center",
+		variant: "subtitle2",
+		color: "text.secondary",
+		noWrap: true,
+		sx: { maxWidth: "80%" }
+	}, "“", searchValue, "”."), /* @__PURE__ */ react.createElement(_elementor_ui.Link, {
+		color: "secondary",
+		variant: "caption",
+		component: "button",
+		type: "button",
+		onClick: onClear
+	}, (0, _wordpress_i18n.__)("Clear & try again", "elementor"))) : null);
+	var createIconLibraryItems = (icons, searchValue, libraries) => filterFontAwesome7Icons(icons, searchValue, libraries).map((icon) => ({
+		...icon,
+		type: "item",
+		value: icon.id,
+		iconValue: icon.value
+	}));
+
+//#endregion
 //#region packages/packages/libs/editor-controls/src/controls/open-icon-library.ts
-	var SVG_ICON_LIBRARY = "svg";
-	function isSvgLibrarySelection(icon) {
-		return icon.library === "svg" && typeof icon.value === "object" && icon.value !== null;
-	}
-	function openIconLibrary({ selected, onSelect } = {}) {
-		const iconManager = window.elementor?.iconManager;
-		if (!iconManager) return;
-		iconManager.loadIconLibraries();
-		iconManager.show({ view: createIconManagerControlView(selected, onSelect) });
-	}
 	function enqueueIconFonts(library) {
 		window.elementor?.helpers?.enqueueIconFonts?.(library);
-	}
-	function createIconManagerControlView(selected, onSelect) {
-		return {
-			model: { get: () => false },
-			getControlValue: () => selected ?? {
-				value: "",
-				library: ""
-			},
-			setValue: (icon) => {
-				onSelect?.(icon);
-			},
-			applySavedValue: () => void 0
-		};
 	}
 	function createIconPropValue(icon, library) {
 		return {
@@ -11514,13 +13915,136 @@ react_dom = __toESM(react_dom);
 	}
 
 //#endregion
+//#region packages/packages/libs/editor-controls/src/controls/svg-media-overlay.tsx
+	var SVG_MEDIA_CONTROL_CONTAINER_TEST_ID = "svg-media-control-container";
+	var SVG_MEDIA_ACTION_GROUP_TEST_ID = "svg-media-action-group";
+	var ICON_LIBRARY_PADDING = .625;
+	var SvgMediaOverlay = ({ label, isAdmin, buttonGroupRef, onSelectSvg, onUpload, onOpenIconLibrary, infotipTitle, infotipDescription }) => /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
+		alignItems: "center",
+		gap: 1
+	}, /* @__PURE__ */ react.createElement(MediaActionGroup, {
+		label,
+		onSelect: onSelectSvg,
+		groupRef: buttonGroupRef,
+		testId: SVG_MEDIA_ACTION_GROUP_TEST_ID,
+		uploadSlot: /* @__PURE__ */ react.createElement(ConditionalControlInfotip, {
+			title: infotipTitle,
+			description: infotipDescription,
+			isEnabled: !isAdmin
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+			component: "span",
+			sx: {
+				display: "flex",
+				width: "100%"
+			}
+		}, /* @__PURE__ */ react.createElement(UploadControl, {
+			isAdmin,
+			onUpload
+		})))
+	}), /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
+		size: "tiny",
+		color: "inherit",
+		variant: "text",
+		startIcon: /* @__PURE__ */ react.createElement(_elementor_icons.LibraryIcon, { sx: {
+			height: "18px",
+			width: "16px"
+		} }),
+		"aria-label": (0, _wordpress_i18n.__)("Icon library", "elementor"),
+		onClick: onOpenIconLibrary,
+		sx: {
+			height: "28px",
+			p: ICON_LIBRARY_PADDING,
+			".MuiButton-icon": { ml: 0 }
+		}
+	}, /* @__PURE__ */ react.createElement(_elementor_ui.Typography, null, (0, _wordpress_i18n.__)("Icon library", "elementor"))));
+	var UploadControl = ({ isAdmin, onUpload }) => {
+		if (isAdmin) return /* @__PURE__ */ react.createElement(MediaUploadButton, { onClick: onUpload });
+		return /* @__PURE__ */ react.createElement(_elementor_editor_ui.ThemeProvider, { colorScheme: "dark" }, /* @__PURE__ */ react.createElement(MediaUploadButton, { disabled: true }));
+	};
+
+//#endregion
+//#region packages/packages/libs/editor-controls/src/controls/svg-media-preview.tsx
+	var ICON_PREVIEW_SIZE = 50;
+	var ICON_PREVIEW_COLOR = "#000000";
+	var SvgMediaPreview = ({ isFetching, src, iconClassName, iconLibrary }) => {
+		const shouldLoadIconCatalog = Boolean(iconClassName && iconLibrary);
+		const { data: fontAwesomeIcons = [], isLoading: isFontAwesomeLoading } = useFontAwesome7Catalog(shouldLoadIconCatalog);
+		const isFontAwesomeLibrary = Boolean(iconLibrary?.startsWith("fa-"));
+		const { data: providerIcons = [], isLoading: isProviderLoading } = useIconLibraryProviderIcons(shouldLoadIconCatalog && !isFontAwesomeLibrary);
+		const selectedIcon = findFontAwesome7Icon((0, react.useMemo)(() => mergeIconsById(fontAwesomeIcons, providerIcons), [fontAwesomeIcons, providerIcons]), iconClassName, iconLibrary);
+		const isLoadingCatalog = shouldLoadIconCatalog && (isFontAwesomeLoading || !isFontAwesomeLibrary && isProviderLoading);
+		const { data: savedIconSvg, isLoading: isSavedIconLoading } = useProviderIconSvg(iconLibrary, iconClassName, shouldLoadIconCatalog && !isLoadingCatalog && !selectedIcon && !isFontAwesomeLibrary);
+		if (isFetching || isLoadingCatalog || isSavedIconLoading) return /* @__PURE__ */ react.createElement(_elementor_ui.CircularProgress, {
+			role: "progressbar",
+			"aria-label": (0, _wordpress_i18n.__)("Loading icon", "elementor")
+		});
+		if (selectedIcon) return /* @__PURE__ */ react.createElement(IconPreview, { icon: selectedIcon });
+		if (shouldLoadIconCatalog && iconClassName && iconLibrary && isFontAwesomeLibrary) return /* @__PURE__ */ react.createElement(IconPreview, { icon: createLazyIcon(iconLibrary, iconClassName) });
+		if (savedIconSvg) return /* @__PURE__ */ react.createElement(IconPreview, { icon: toSvgMarkupIcon(savedIconSvg, iconLibrary, iconClassName) });
+		if (shouldLoadIconCatalog) return /* @__PURE__ */ react.createElement(IconPreviewPlaceholder, null);
+		return /* @__PURE__ */ react.createElement(SvgPreview, { src });
+	};
+	var createLazyIcon = (library, value) => ({
+		id: `${library}:${value}`,
+		name: value,
+		label: value,
+		library,
+		value,
+		aliases: [],
+		width: ICON_PREVIEW_SIZE,
+		height: ICON_PREVIEW_SIZE,
+		paths: [],
+		lazySvg: true
+	});
+	var toSvgMarkupIcon = (svgMarkup, library, value) => ({
+		id: `${library}:${value}`,
+		label: value ?? "",
+		library: library ?? "",
+		value: value ?? "",
+		name: value ?? "",
+		aliases: [],
+		width: 0,
+		height: 0,
+		paths: [],
+		svgMarkup
+	});
+	var IconPreview = ({ icon }) => /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: {
+		color: ICON_PREVIEW_COLOR,
+		minWidth: ICON_PREVIEW_SIZE,
+		minHeight: ICON_PREVIEW_SIZE
+	} }, /* @__PURE__ */ react.createElement(FontAwesomeGlyph, {
+		icon,
+		size: ICON_PREVIEW_SIZE,
+		color: ICON_PREVIEW_COLOR,
+		label: (0, _wordpress_i18n.__)("Preview icon", "elementor")
+	}));
+	var IconPreviewPlaceholder = () => /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+		"aria-hidden": true,
+		sx: {
+			width: ICON_PREVIEW_SIZE,
+			height: ICON_PREVIEW_SIZE,
+			color: ICON_PREVIEW_COLOR
+		}
+	});
+	var SvgPreview = ({ src }) => /* @__PURE__ */ react.createElement(_elementor_ui.CardMedia, {
+		component: "img",
+		image: src,
+		alt: (0, _wordpress_i18n.__)("Preview SVG", "elementor"),
+		sx: {
+			maxHeight: "140px",
+			width: `${ICON_PREVIEW_SIZE}px`,
+			color: ICON_PREVIEW_COLOR
+		}
+	});
+
+//#endregion
 //#region packages/packages/libs/editor-controls/src/controls/svg-media-control.tsx
 	var TILE_SIZE = 8;
 	var TILE_WHITE = "transparent";
 	var TILE_BLACK = "#c1c1c1";
-	var ICON_PREVIEW_FONT_SIZE = 50;
 	var TILES_GRADIENT_FORMULA = `linear-gradient(45deg, ${TILE_BLACK} 25%, ${TILE_WHITE} 0, ${TILE_WHITE} 75%, ${TILE_BLACK} 0, ${TILE_BLACK})`;
 	var StyledCard = (0, _elementor_ui.styled)(_elementor_ui.Card)`
+	position: relative;
 	background-color: white;
 	background-image: ${TILES_GRADIENT_FORMULA}, ${TILES_GRADIENT_FORMULA};
 	background-size: ${TILE_SIZE}px ${TILE_SIZE}px;
@@ -11537,21 +14061,29 @@ react_dom = __toESM(react_dom);
 	justify-content: center;
 	align-items: center;
 	background-color: rgba( 255, 255, 255, 0.37 );
+	color: ${"#000000"};
 `;
 	var MODE_BROWSE = { mode: "browse" };
 	var MODE_UPLOAD = { mode: "upload" };
-	var SvgMediaControl = createControl(({ showIconLibrary = false }) => {
-		const { value: svgValue, setValue: setSvgValue } = useBoundProp(_elementor_editor_props.svgSrcPropTypeUtil);
-		const { value: iconValue, setValue: setIconValue } = useBoundProp(_elementor_editor_props.iconPropTypeUtil);
+	var SvgMediaControl = createControl(({ label }) => {
+		const groupLabel = label ?? (0, _wordpress_i18n.__)("SVG", "elementor");
+		const { value: svgValue, setValue: setSvgValue, placeholder: svgPlaceholder } = useBoundProp(_elementor_editor_props.svgSrcPropTypeUtil);
+		const { value: iconValue, setValue: setIconValue, placeholder: iconPlaceholder } = useBoundProp(_elementor_editor_props.iconPropTypeUtil);
 		const id = svgValue?.id;
-		const url = svgValue?.url;
-		const { data: attachment, isFetching } = (0, _elementor_wp_media.useWpMediaAttachment)(id?.value || null);
-		const src = attachment?.url ?? url?.value ?? null;
+		const hasOwnValue = svgValue !== null && svgValue !== void 0 || iconValue !== null && iconValue !== void 0;
+		const previewSvgValue = hasOwnValue ? svgValue : svgPlaceholder;
+		const previewIconValue = hasOwnValue ? iconValue : iconPlaceholder;
+		const { data: attachment, isFetching } = (0, _elementor_wp_media.useWpMediaAttachment)(previewSvgValue?.id?.value || null);
+		const src = attachment?.url ?? previewSvgValue?.url?.value ?? null;
 		const { data: allowSvgUpload } = useUnfilteredFilesUpload();
 		const [unfilteredModalOpenState, setUnfilteredModalOpenState] = (0, react.useState)(false);
+		const iconLibraryPopoverState = (0, _elementor_ui.usePopupState)({ variant: "popover" });
+		const controlContainerRef = (0, react.useRef)(null);
+		const buttonGroupRef = (0, react.useRef)(null);
+		const [iconLibraryAnchor, setIconLibraryAnchor] = (0, react.useState)(null);
 		const { isAdmin } = (0, _elementor_editor_current_user.useCurrentUserCapabilities)();
-		const selectedIconClass = showIconLibrary && typeof iconValue?.value?.value === "string" ? iconValue.value.value : null;
-		const selectedIconLibrary = showIconLibrary && typeof iconValue?.library?.value === "string" ? iconValue.library.value : null;
+		const selectedIconClass = typeof previewIconValue?.value?.value === "string" ? previewIconValue.value.value : null;
+		const selectedIconLibrary = typeof previewIconValue?.library?.value === "string" ? previewIconValue.library.value : null;
 		const { open } = (0, _elementor_wp_media.useWpMediaFrame)({
 			mediaTypes: ["svg"],
 			multiple: false,
@@ -11566,7 +14098,7 @@ react_dom = __toESM(react_dom);
 				});
 			}
 		});
-		const onCloseUnfilteredModal = (enabled) => {
+		const handleCloseUnfilteredModal = (enabled) => {
 			setUnfilteredModalOpenState(false);
 			if (enabled) open(MODE_UPLOAD);
 		};
@@ -11574,90 +14106,100 @@ react_dom = __toESM(react_dom);
 			if (!allowSvgUpload && openOptions === MODE_UPLOAD) setUnfilteredModalOpenState(true);
 			else open(openOptions);
 		};
+		const handleSelectSvg = () => {
+			handleClick(MODE_BROWSE);
+		};
+		const handleUpload = () => {
+			handleClick(MODE_UPLOAD);
+		};
+		const handleCloseIconLibrary = () => {
+			iconLibraryPopoverState.close();
+			setIconLibraryAnchor(null);
+		};
 		const handleIconLibrarySelect = (icon) => {
-			if (!showIconLibrary) return;
-			if (isSvgLibrarySelection(icon)) {
-				setSvgValue({
-					id: icon.value.id ? {
-						$$type: "image-attachment-id",
-						value: icon.value.id
-					} : null,
-					url: icon.value.url ? _elementor_editor_props.urlPropTypeUtil.create(icon.value.url) : null
-				});
-				return;
-			}
-			if (typeof icon.value === "string") setIconValue(createIconPropValue(icon.value, icon.library));
+			setIconValue(createIconPropValue(icon.value, icon.library));
 		};
-		const infotipProps = {
-			title: (0, _wordpress_i18n.__)("Sorry, you can't upload that file yet.", "elementor"),
-			description: /* @__PURE__ */ react.createElement(react.Fragment, null, (0, _wordpress_i18n.__)("To upload them anyway, ask the site administrator to enable unfiltered", "elementor"), /* @__PURE__ */ react.createElement("br", null), (0, _wordpress_i18n.__)("file uploads.", "elementor")),
-			isEnabled: !isAdmin
+		const handleOpenIconLibrary = (event) => {
+			const anchor = measureIconLibraryAnchor(controlContainerRef.current, buttonGroupRef.current);
+			if (!anchor) return;
+			setIconLibraryAnchor(anchor);
+			iconLibraryPopoverState.open(event);
 		};
+		(0, react.useEffect)(() => {
+			if (!iconLibraryPopoverState.isOpen) return;
+			const handleResize = () => {
+				const nextAnchor = measureIconLibraryAnchor(controlContainerRef.current, buttonGroupRef.current);
+				if (nextAnchor) setIconLibraryAnchor(nextAnchor);
+			};
+			window.addEventListener("resize", handleResize);
+			return () => {
+				window.removeEventListener("resize", handleResize);
+			};
+		}, [iconLibraryPopoverState.isOpen]);
+		const iconLibraryWidth = iconLibraryAnchor?.width ?? 300;
 		return /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
 			gap: 1,
-			"aria-label": "SVG Control"
+			"aria-label": (0, _wordpress_i18n.__)("SVG control", "elementor")
 		}, /* @__PURE__ */ react.createElement(EnableUnfilteredModal, {
 			open: unfilteredModalOpenState,
-			onClose: onCloseUnfilteredModal
-		}), /* @__PURE__ */ react.createElement(ControlActions, null, /* @__PURE__ */ react.createElement(StyledCard, { variant: "outlined" }, /* @__PURE__ */ react.createElement(StyledCardMediaContainer, null, /* @__PURE__ */ react.createElement(SvgMediaPreview, {
+			onClose: handleCloseUnfilteredModal
+		}), iconLibraryAnchor ? /* @__PURE__ */ react.createElement(_elementor_ui.Popover, {
+			disableScrollLock: true,
+			open: iconLibraryPopoverState.isOpen,
+			onClose: handleCloseIconLibrary,
+			anchorReference: "anchorPosition",
+			anchorPosition: {
+				top: iconLibraryAnchor.top,
+				left: iconLibraryAnchor.left
+			},
+			anchorOrigin: {
+				vertical: "top",
+				horizontal: "left"
+			},
+			transformOrigin: {
+				vertical: "top",
+				horizontal: "left"
+			},
+			marginThreshold: 0,
+			PaperProps: { sx: {
+				width: iconLibraryWidth,
+				minWidth: iconLibraryWidth,
+				maxWidth: iconLibraryWidth,
+				m: 0
+			} }
+		}, /* @__PURE__ */ react.createElement(IconLibraryPopover, {
+			open: iconLibraryPopoverState.isOpen,
+			selectedIconClass,
+			selectedIconLibrary,
+			onSelect: handleIconLibrarySelect,
+			onClose: handleCloseIconLibrary,
+			width: iconLibraryWidth
+		})) : null, /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
+			ref: controlContainerRef,
+			"data-testid": SVG_MEDIA_CONTROL_CONTAINER_TEST_ID,
+			sx: { width: "100%" }
+		}, /* @__PURE__ */ react.createElement(ControlActions, null, /* @__PURE__ */ react.createElement(StyledCard, { variant: "outlined" }, /* @__PURE__ */ react.createElement(StyledCardMediaContainer, null, /* @__PURE__ */ react.createElement(SvgMediaPreview, {
 			isFetching,
 			src,
 			iconClassName: selectedIconClass,
 			iconLibrary: selectedIconLibrary
-		})), /* @__PURE__ */ react.createElement(_elementor_ui.CardOverlay, { sx: { "&:hover": { backgroundColor: "rgba( 0, 0, 0, 0.75 )" } } }, /* @__PURE__ */ react.createElement(_elementor_ui.Stack, { gap: 1 }, /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
-			size: "tiny",
-			color: "inherit",
-			variant: "outlined",
-			onClick: () => handleClick(MODE_BROWSE),
-			"aria-label": "Select SVG"
-		}, (0, _wordpress_i18n.__)("Select SVG", "elementor")), showIconLibrary ? /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
-			size: "tiny",
-			variant: "text",
-			color: "inherit",
-			onClick: () => openIconLibrary({
-				selected: selectedIconClass && selectedIconLibrary ? {
-					value: selectedIconClass,
-					library: selectedIconLibrary
-				} : void 0,
-				onSelect: handleIconLibrarySelect
-			}),
-			"aria-label": (0, _wordpress_i18n.__)("Icon library", "elementor")
-		}, (0, _wordpress_i18n.__)("Icon library", "elementor")) : null, /* @__PURE__ */ react.createElement(ConditionalControlInfotip, { ...infotipProps }, /* @__PURE__ */ react.createElement("span", null, /* @__PURE__ */ react.createElement(_elementor_ui.ThemeProvider, { colorScheme: isAdmin ? "light" : "dark" }, /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
-			size: "tiny",
-			variant: "text",
-			color: "inherit",
-			startIcon: /* @__PURE__ */ react.createElement(_elementor_icons.UploadIcon, null),
-			disabled: !isAdmin,
-			onClick: () => isAdmin && handleClick(MODE_UPLOAD),
-			"aria-label": "Upload SVG"
-		}, (0, _wordpress_i18n.__)("Upload", "elementor"))))))))));
+		})), /* @__PURE__ */ react.createElement(_elementor_ui.CardOverlay, { sx: { "&:hover": { backgroundColor: "rgba( 0, 0, 0, 0.75 )" } } }, /* @__PURE__ */ react.createElement(SvgMediaOverlay, {
+			label: groupLabel,
+			isAdmin,
+			buttonGroupRef,
+			onSelectSvg: handleSelectSvg,
+			onUpload: handleUpload,
+			onOpenIconLibrary: handleOpenIconLibrary,
+			infotipTitle: (0, _wordpress_i18n.__)("Sorry, you can't upload that file yet.", "elementor"),
+			infotipDescription: /* @__PURE__ */ react.createElement(UnfilteredUploadInfotipDescription, null)
+		}))))));
 	});
-	function SvgMediaPreview({ isFetching, src, iconClassName, iconLibrary }) {
-		(0, react.useEffect)(() => {
-			if (iconLibrary) enqueueIconFonts(iconLibrary);
-		}, [iconLibrary]);
-		if (isFetching) return /* @__PURE__ */ react.createElement(_elementor_ui.CircularProgress, { role: "progressbar" });
-		if (iconClassName) return /* @__PURE__ */ react.createElement(_elementor_ui.Box, {
-			component: "i",
-			className: iconClassName,
-			"aria-label": (0, _wordpress_i18n.__)("Preview icon", "elementor"),
-			sx: { fontSize: ICON_PREVIEW_FONT_SIZE }
-		});
-		return /* @__PURE__ */ react.createElement(_elementor_ui.CardMedia, {
-			component: "img",
-			image: src,
-			alt: (0, _wordpress_i18n.__)("Preview SVG", "elementor"),
-			sx: {
-				maxHeight: "140px",
-				width: `${ICON_PREVIEW_FONT_SIZE}px`
-			}
-		});
-	}
+	var UnfilteredUploadInfotipDescription = () => /* @__PURE__ */ react.createElement(react.Fragment, null, (0, _wordpress_i18n.__)("To upload them anyway, ask the site administrator to enable unfiltered", "elementor"), /* @__PURE__ */ react.createElement("br", null), (0, _wordpress_i18n.__)("file uploads.", "elementor"));
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/controls/video-media-control.tsx
 	var PLACEHOLDER_IMAGE = window.elementorCommon?.config?.urls?.assets + "/shapes/play-triangle.svg";
-	var VideoMediaControl = createControl(() => {
+	var VideoMediaControl = createControl(({ label = (0, _wordpress_i18n.__)("Video", "elementor") }) => {
 		const { value, setValue, propType } = useBoundProp(_elementor_editor_props.videoSrcPropTypeUtil);
 		const { id, url } = value ?? {};
 		const { data: attachment, isFetching } = (0, _elementor_wp_media.useWpMediaAttachment)(id?.value || null);
@@ -11698,26 +14240,15 @@ react_dom = __toESM(react_dom);
 		} }, /* @__PURE__ */ react.createElement(VideoPreview, {
 			isFetching,
 			videoUrl
-		})), /* @__PURE__ */ react.createElement(_elementor_ui.CardOverlay, null, /* @__PURE__ */ react.createElement(_elementor_ui.Stack, { gap: 1 }, /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
-			size: "tiny",
-			color: "inherit",
-			variant: "outlined",
-			onClick: () => open({ mode: "browse" })
-		}, (0, _wordpress_i18n.__)("Select video", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
-			size: "tiny",
-			variant: "text",
-			color: "inherit",
-			startIcon: /* @__PURE__ */ react.createElement(_elementor_icons.UploadIcon, null),
-			onClick: () => open({ mode: "upload" })
-		}, (0, _wordpress_i18n.__)("Upload", "elementor")), /* @__PURE__ */ react.createElement(_elementor_ui.Button, {
-			size: "tiny",
-			variant: "text",
-			color: "inherit",
-			onClick: () => open({
+		})), /* @__PURE__ */ react.createElement(_elementor_ui.CardOverlay, null, /* @__PURE__ */ react.createElement(MediaSelectActions, {
+			label,
+			onSelect: () => open({ mode: "browse" }),
+			onUpload: () => open({ mode: "upload" }),
+			onInsertUrl: () => open({
 				mode: "url",
 				currentUrl: currentUrlForModal
 			})
-		}, (0, _wordpress_i18n.__)("Insert from URL", "elementor"))))));
+		}))));
 	});
 	var VideoPreview = ({ isFetching = false, videoUrl }) => {
 		if (isFetching) return /* @__PURE__ */ react.createElement(_elementor_ui.CircularProgress, null);
@@ -12296,7 +14827,11 @@ react_dom = __toESM(react_dom);
 	var getGradientValue = (value) => {
 		const gradient = value.value;
 		const stops = gradient.stops.value?.map(({ value: { color, offset } }) => offset ? `${color.value} ${offset.value ?? 0}%` : `${color.value}`)?.join(",");
-		if (gradient.type.value === "linear") return `linear-gradient(${gradient.angle.value}deg, ${stops})`;
+		if (gradient.type.value === "linear") {
+			const angle = gradient.angle?.value;
+			if (typeof angle !== "number") return `linear-gradient(${stops})`;
+			return `linear-gradient(${angle}deg, ${stops})`;
+		}
 		return `radial-gradient(circle at ${gradient.positions.value}, ${stops})`;
 	};
 
@@ -13784,41 +16319,6 @@ react_dom = __toESM(react_dom);
 			});
 		});
 	}
-
-//#endregion
-//#region packages/packages/libs/editor-controls/src/utils/tracking.ts
-	var getBaseEventProperties = (data, config) => ({
-		window_name: config?.appTypes?.editor ?? "editor",
-		interaction_type: config?.triggers?.click ?? "Click",
-		target_name: data.target_name,
-		target_location: data.target_location ?? "widget_panel",
-		location_l1: data.location_l1 ?? (0, _elementor_editor_elements.getSelectedElements)()[0]?.type ?? "",
-		...data.location_l2 && { location_l2: data.location_l2 }
-	});
-	var dispatchPromotionEvent = (data, resolveOptions) => {
-		const { dispatchEvent, config } = (0, _elementor_events.getMixpanel)();
-		const { eventName, interactionResult, interactionDescription } = resolveOptions(config);
-		if (!eventName) return;
-		dispatchEvent?.(eventName, {
-			...getBaseEventProperties(data, config),
-			interaction_result: interactionResult,
-			interaction_description: interactionDescription
-		});
-	};
-	var trackViewPromotion = (data) => {
-		dispatchPromotionEvent(data, (config) => ({
-			eventName: config?.names?.promotions?.viewPromotion,
-			interactionResult: config?.interactionResults?.promotionViewed ?? "promotion_viewed",
-			interactionDescription: "user_viewed_promotion"
-		}));
-	};
-	var trackUpgradePromotionClick = (data) => {
-		dispatchPromotionEvent(data, (config) => ({
-			eventName: config?.names?.promotions?.upgradePromotionClick,
-			interactionResult: config?.interactionResults?.upgradeNow ?? "upgrade_now",
-			interactionDescription: "user_clicked_upgrade_now"
-		}));
-	};
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/controls/transition-control/transition-selector.tsx
@@ -35059,7 +37559,7 @@ Content: TiptapContent });
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/controls/inline-editing-control.tsx
-	var InlineEditingControl = createControl(({ sx, attributes, props, context: { elementId } }) => {
+	var InlineEditingControl = createControl(({ sx, attributes, props, label, promotion, context: { elementId } }) => {
 		const { setValue, placeholder, value } = useBoundProp(_elementor_editor_props.escapedHtmlPropTypeUtil);
 		const { value: rawValue } = usePropKeyContext();
 		const content = value ?? extractInlineHtmlContent(rawValue);
@@ -35067,7 +37567,7 @@ Content: TiptapContent });
 		const handleChange = (0, react.useCallback)((newValue) => {
 			setValue(newValue ?? "");
 		}, [setValue]);
-		return /* @__PURE__ */ react.createElement(ControlActions, null, /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: { position: "relative" } }, editor && editor.isEditable && /* @__PURE__ */ react.createElement(InlineEditorToolbar, {
+		const editorField = /* @__PURE__ */ react.createElement(ControlActions, null, /* @__PURE__ */ react.createElement(_elementor_ui.Box, { sx: { position: "relative" } }, editor && editor.isEditable && /* @__PURE__ */ react.createElement(InlineEditorToolbar, {
 			editor,
 			elementId,
 			sx: (theme) => ({
@@ -35119,6 +37619,12 @@ Content: TiptapContent });
 			onEditorDestroy: () => setEditor(null),
 			sx: { paddingBlockStart: 5 }
 		}))));
+		if (!promotion) return editorField;
+		return /* @__PURE__ */ react.createElement(_elementor_ui.Stack, { gap: 1 }, /* @__PURE__ */ react.createElement(_elementor_ui.Stack, {
+			direction: "row",
+			alignItems: "center",
+			justifyContent: "space-between"
+		}, /* @__PURE__ */ react.createElement(ControlLabel, null, label), /* @__PURE__ */ react.createElement(ImageOptimizeTrigger, { promotion })), editorField);
 	});
 
 //#endregion
@@ -35149,12 +37655,7 @@ Content: TiptapContent });
 		return extractStringPropValue(getSettingWithDefault(child, widgetType, CSS_ID_PROP_KEY));
 	}
 	function getFormContainer(elementId) {
-		let container = (0, _elementor_editor_elements.getContainer)(elementId);
-		while (container) {
-			if (container.model.get("elType") === FORM_ELEMENT_TYPE) return container;
-			container = container.parent ?? null;
-		}
-		return null;
+		return (0, _elementor_editor_elements.findClosestContainer)((0, _elementor_editor_elements.getContainer)(elementId), (container) => container.model.get("elType") === FORM_ELEMENT_TYPE);
 	}
 	function useFormFieldSuggestions(options) {
 		return (0, _elementor_editor_v1_adapters.__privateUseListenTo)([
@@ -35298,6 +37799,18 @@ Content: TiptapContent });
 
 //#endregion
 //#region packages/packages/libs/editor-controls/src/controls/email-form-action-control/fields.tsx
+	var FieldValueMentionField = ({ bind, label, placeholder }) => {
+		const suggestions = useFormFieldSuggestions();
+		return /* @__PURE__ */ react.createElement(PropKeyProvider, { bind }, /* @__PURE__ */ react.createElement(_elementor_ui.Grid, {
+			container: true,
+			direction: "column",
+			gap: .5
+		}, /* @__PURE__ */ react.createElement(_elementor_ui.Grid, { item: true }, /* @__PURE__ */ react.createElement(ControlFormLabel, null, label)), /* @__PURE__ */ react.createElement(_elementor_ui.Grid, { item: true }, /* @__PURE__ */ react.createElement(MentionTextAreaControl, {
+			suggestions,
+			rows: 1,
+			placeholder
+		}))));
+	};
 	var SendToField = ({ placeholder }) => {
 		const suggestions = useFormFieldSuggestions({ inputType: "email" });
 		return /* @__PURE__ */ react.createElement(PropKeyProvider, { bind: "to" }, /* @__PURE__ */ react.createElement(_elementor_ui.Stack, { gap: .5 }, /* @__PURE__ */ react.createElement(EmailChipsField, {
@@ -35306,7 +37819,7 @@ Content: TiptapContent });
 			suggestions
 		}), shouldShowMentionsInfo() && /* @__PURE__ */ react.createElement(_elementor_editor_ui.InfoAlert, null, (0, _wordpress_i18n.__)("Type @ or an email field name to insert its submitted value.", "elementor"))));
 	};
-	var SubjectField = () => /* @__PURE__ */ react.createElement(EmailField, {
+	var SubjectField = () => /* @__PURE__ */ react.createElement(FieldValueMentionField, {
 		bind: "subject",
 		label: (0, _wordpress_i18n.__)("Email subject", "elementor"),
 		placeholder: (0, _wordpress_i18n.__)("New form submission", "elementor")
@@ -35324,7 +37837,7 @@ Content: TiptapContent });
 		label: (0, _wordpress_i18n.__)("From email", "elementor"),
 		placeholder: (0, _wordpress_i18n.__)("What email should appear as the sender?", "elementor")
 	});
-	var FromNameField = () => /* @__PURE__ */ react.createElement(EmailField, {
+	var FromNameField = () => /* @__PURE__ */ react.createElement(FieldValueMentionField, {
 		bind: "from-name",
 		label: (0, _wordpress_i18n.__)("From name", "elementor"),
 		placeholder: (0, _wordpress_i18n.__)("What name should appear as the sender?", "elementor")
@@ -35949,6 +38462,8 @@ Content: TiptapContent });
 		GapControl: () => GapControl,
 		GridSpanControl: () => GridSpanControl,
 		HtmlTagControl: () => HtmlTagControl,
+		IconLibraryUploadButton: () => IconLibraryUploadButton,
+		IconLibraryUploadPromotion: () => IconLibraryUploadPromotion,
 		ImageControl: () => ImageControl,
 		InlineEditingControl: () => InlineEditingControl,
 		InlineEditor: () => InlineEditor,
@@ -35958,6 +38473,7 @@ Content: TiptapContent });
 		LinkControl: () => LinkControl,
 		LinkedDimensionsControl: () => LinkedDimensionsControl,
 		MentionTextAreaControl: () => MentionTextAreaControl,
+		NoticeControl: () => NoticeControl,
 		NumberControl: () => NumberControl,
 		NumberInput: () => NumberInput,
 		PopoverContent: () => PopoverContent,
@@ -35969,6 +38485,7 @@ Content: TiptapContent });
 		QueryChipsControl: () => QueryChipsControl,
 		QueryControl: () => QueryControl,
 		QueryFilterRepeaterControl: () => QueryFilterRepeaterControl,
+		QuerySelectControl: () => QuerySelectControl,
 		RepeatableControl: () => RepeatableControl,
 		Repeater: () => Repeater,
 		SelectControl: () => SelectControl,
@@ -35996,16 +38513,25 @@ Content: TiptapContent });
 		createControl: () => createControl,
 		createControlReplacementsRegistry: () => createControlReplacementsRegistry,
 		enqueueFont: () => enqueueFont,
+		enqueueIconFonts: () => enqueueIconFonts,
 		getControlReplacements: () => getControlReplacements,
+		getFontAwesome7IconName: () => getFontAwesome7IconName,
+		injectIntoIconLibraryUploadAction: () => injectIntoIconLibraryUploadAction,
 		injectIntoRepeaterItemActions: () => injectIntoRepeaterItemActions,
 		injectIntoRepeaterItemIcon: () => injectIntoRepeaterItemIcon,
 		injectIntoRepeaterItemLabel: () => injectIntoRepeaterItemLabel,
 		isUnitExtendedOption: () => isUnitExtendedOption,
 		registerControlReplacement: () => registerControlReplacement,
+		registerIconLibraryProvider: () => registerIconLibraryProvider,
+		resetFontAwesome7IconsCache: () => resetFontAwesome7IconsCache,
+		resolveFontAwesome7Icon: () => resolveFontAwesome7Icon,
+		resolveProviderIconPreviewSvg: () => resolveProviderIconPreviewSvg,
+		resolveProviderIconSvg: () => resolveProviderIconSvg,
 		trackUpgradePromotionClick: () => trackUpgradePromotionClick,
 		trackViewPromotion: () => trackViewPromotion,
 		transitionProperties: () => transitionProperties,
 		transitionsItemsList: () => transitionsItemsList,
+		unregisterIconLibraryProvider: () => unregisterIconLibraryProvider,
 		useBoundProp: () => useBoundProp,
 		useControlActions: () => useControlActions,
 		useControlReplacement: () => useControlReplacement,
@@ -36019,6 +38545,6 @@ Content: TiptapContent });
 	(window.elementorV2 = window.elementorV2 || {}).editorControls = src_exports;
 
 //#endregion
-})(React, elementorV2.editorProps, elementorV2.ui, wp.i18n, elementorV2.utils, elementorV2.query, elementorV2.httpClient, elementorV2.icons, elementorV2.wpMedia, elementorV2.editorUi, ReactDOM, elementorV2.editorResponsive, elementorV2.locations, elementorV2.editorElements, elementorV2.editorV1Adapters, elementorV2.session, elementorV2.editorCurrentUser, elementorV2.env, elementorV2.events, elementorV2.schema);
+})(React, elementorV2.editorProps, elementorV2.ui, wp.i18n, elementorV2.utils, elementorV2.query, elementorV2.httpClient, elementorV2.wpMedia, elementorV2.editorUi, elementorV2.icons, elementorV2.editorV1Adapters, ReactDOM, elementorV2.editorResponsive, elementorV2.locations, elementorV2.editorElements, elementorV2.session, elementorV2.editorCurrentUser, elementorV2.events, elementorV2.env, elementorV2.schema);
 window.elementorV2.editorControls?.init?.();
 //# sourceMappingURL=editor-controls.js.map

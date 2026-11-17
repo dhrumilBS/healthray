@@ -1,0 +1,156 @@
+<?php
+// phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong
+// phpcs:disable Yoast.NamingConventions.NamespaceName.MaxExceeded
+namespace Yoast\WP\SEO\Premium\AI\Summarize\User_Interface;
+
+use WPSEO_Admin_Asset_Manager;
+use Yoast\WP\SEO\Conditionals\AI_Conditional;
+use Yoast\WP\SEO\Helpers\Options_Helper;
+use Yoast\WP\SEO\Integrations\Integration_Interface;
+use Yoast\WP\SEO\Premium\Conditionals\AI_Summarize_Support_Conditional;
+
+/**
+ * AI_Summarize_Integration class.
+ *
+ * @phpcs:disable Yoast.NamingConventions.ObjectNameDepth.MaxExceeded
+ */
+class AI_Summarize_Integration implements Integration_Interface {
+
+	/**
+	 * Represents the options manager.
+	 *
+	 * @var Options_Helper
+	 */
+	private $options_helper;
+
+	/**
+	 * Returns the conditionals based in which this loadable should be active.
+	 *
+	 * @return array<string>
+	 */
+	public static function get_conditionals(): array {
+		return [ AI_Conditional::class, AI_Summarize_Support_Conditional::class ];
+	}
+
+	/**
+	 * Constructs the class.
+	 *
+	 * @param Options_Helper $options_helper The options helper.
+	 */
+	public function __construct( Options_Helper $options_helper ) {
+		$this->options_helper = $options_helper;
+	}
+
+	/**
+	 * Checks if we should load the AI Summarize block based on the current screen.
+	 *
+	 * @return bool True if we should load, false otherwise.
+	 */
+	private function should_load_on_current_screen(): bool {
+		$screen = \get_current_screen();
+
+		if ( ! $screen ) {
+			return false;
+		}
+
+		// Don't load in the widgets editor (legacy).
+		if ( $screen->base === 'widgets' || $screen->id === 'widgets' ) {
+			return false;
+		}
+
+		// Don't load in customizer (block-based widgets in Twenty Twenty-One).
+		if ( $screen->base === 'customize' ) {
+			return false;
+		}
+
+		// Load on post-editing screens (both block editor and classic editor).
+		// This includes posts, pages, and custom post types.
+		// We need to support the classic editor for the cleanup functionality.
+		// This is necessary so that the script is not loaded unnecessarily, e.g., on plugin.php or on admin pages.
+		if ( $screen->base === 'post' ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Initializes the integration.
+	 *
+	 * This is the place to register hooks and filters.
+	 *
+	 * @return void
+	 */
+	public function register_hooks() {
+		// Ensure the AI generator feature is enabled before proceeding.
+		if ( ! $this->options_helper->get( 'enable_ai_generator', false ) ) {
+			return;
+		}
+
+		// Use current_screen action to conditionally register block and enqueue assets.
+		\add_action( 'current_screen', [ $this, 'conditionally_register_block' ], 10 );
+	}
+
+	/**
+	 * Conditionally registers the block and enqueues assets based on current screen.
+	 *
+	 * @return void
+	 */
+	public function conditionally_register_block() {
+		// Don't load in widgets/customizer screens.
+		if ( ! $this->should_load_on_current_screen() ) {
+			return;
+		}
+
+		\add_filter( 'block_categories_all', [ $this, 'add_block_categories' ] );
+
+		// Add the assets to the editor, for the default and the classic editor.
+		\add_action( 'enqueue_block_assets', [ $this, 'enqueue_assets' ] );
+		\add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+
+		// Register the block.
+		$base_path = \WPSEO_PREMIUM_PATH . 'assets/blocks/ai-blocks/';
+		\register_block_type(
+			$base_path . 'summary/block.json',
+			[
+				'editor_script_handles' => [ 'wp-seo-premium-ai-blocks' ],
+				'editor_style_handles'  => [ WPSEO_Admin_Asset_Manager::PREFIX . 'premium-ai-summarize' ],
+			],
+		);
+	}
+
+	/**
+	 * Enqueues the AI blocks script.
+	 *
+	 * This ensures the script is loaded in both Gutenberg and Classic Editor,
+	 * which is necessary for the Classic Editor cleanup functionality.
+	 *
+	 * @return void
+	 */
+	public function enqueue_assets() {
+		\wp_enqueue_script( 'wp-seo-premium-ai-blocks' );
+	}
+
+	/**
+	 * Adds a custom block category for AI blocks.
+	 *
+	 * @param array<array<string, string>> $block_categories Array of categories for block types.
+	 *
+	 * @return array<array<string, string>> Array of categories for block types with added custom category.
+	 */
+	public function add_block_categories( array $block_categories ): array {
+		return \array_merge(
+			$block_categories,
+			[
+				[
+					'slug'  => 'yoast-ai-blocks',
+					'title' => \sprintf(
+						/* translators: %1$s expands to Yoast. */
+						\__( '%1$s AI Blocks', 'wordpress-seo-premium' ),
+						'Yoast',
+					),
+				],
+			],
+		);
+	}
+}

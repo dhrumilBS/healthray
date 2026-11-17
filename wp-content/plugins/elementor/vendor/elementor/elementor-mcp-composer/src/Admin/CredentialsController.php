@@ -2,6 +2,8 @@
 
 namespace Elementor\MCP\Composer\Admin;
 
+use Elementor\MCP\Composer\Mcp\Server_Bootstrap;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -213,7 +215,7 @@ class CredentialsController extends RestController {
 				'data'    => [
 					'username'            => $username,
 					'password'            => $chunked_pwd,
-					'serverUrl'           => \rest_url( 'elementor/mcp/' ),
+					'serverUrl'           => Server_Bootstrap::get_default_server_rest_url(),
 					'serverName'          => \sanitize_title( $site_name ) . '-elementor',
 					'encodedCredentials'  => $encoded_credentials,
 				],

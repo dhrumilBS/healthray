@@ -1,4 +1,4 @@
-(function(react, react_dom, _elementor_ui, _elementor_icons_ChevronRightIcon, _elementor_icons_AdjustmentsIcon, _elementor_icons_FolderIcon, _elementor_icons_RocketIcon, _elementor_icons_HomeIcon, _elementor_icons_SendIcon, _elementor_icons_SettingsIcon, _elementor_icons_UsersIcon, _elementor_icons_PlugIcon, _elementor_icons_FileSettingsIcon, _elementor_icons_ChevronDownSmallIcon, _elementor_icons, _elementor_icons_SearchIcon) {
+(function(react, react_dom, _elementor_ui, _elementor_icons_ChevronRightIcon, _elementor_icons_AdjustmentsIcon, _elementor_icons_FolderIcon, _elementor_icons_RocketIcon, _elementor_icons_HomeIcon, _elementor_icons_SendIcon, _elementor_icons_SettingsIcon, _elementor_icons_UsersIcon, _elementor_icons_PlugIcon, _elementor_icons_FileSettingsIcon, _elementor_icons_ChevronDownSmallIcon, _elementor_icons, _elementor_icons_SearchIcon, _elementor_ui_Chip) {
 
 //#region \0rolldown/runtime.js
 	var __create = Object.create;
@@ -46,6 +46,7 @@ _elementor_icons_PlugIcon = __toESM(_elementor_icons_PlugIcon);
 _elementor_icons_FileSettingsIcon = __toESM(_elementor_icons_FileSettingsIcon);
 _elementor_icons_ChevronDownSmallIcon = __toESM(_elementor_icons_ChevronDownSmallIcon);
 _elementor_icons_SearchIcon = __toESM(_elementor_icons_SearchIcon);
+_elementor_ui_Chip = __toESM(_elementor_ui_Chip);
 
 //#region node_modules/react-dom/client.js
 	var require_client = /* @__PURE__ */ __commonJSMin(((exports) => {
@@ -990,6 +991,7 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 		}
 		return e;
 	}
+	var ADMIN_NAV_CLICK_EVENT = "elementor/admin/nav-click";
 	var EditorOneEventManager = /*#__PURE__*/ function() {
 		function EditorOneEventManager() {
 			_classCallCheck(this, EditorOneEventManager);
@@ -1474,6 +1476,9 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 						var _config$targetTypes14;
 						var _config$interactionRe16;
 						var _config$locations12;
+						var _window$crypto$random;
+						var _window$crypto;
+						var _window$crypto$random2;
 						var _config$names13;
 						var config = this.getConfig();
 						var payload = this.createBasePayload({
@@ -1485,7 +1490,15 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 							target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations12 = config.locations) === null || _config$locations12 === void 0 ? void 0 : _config$locations12.sidebar)
 						});
 						if (groupEventId) payload.location_l1 = groupEventId;
-						return this.dispatchEvent(config === null || config === void 0 || (_config$names13 = config.names) === null || _config$names13 === void 0 || (_config$names13 = _config$names13.editorOne) === null || _config$names13 === void 0 ? void 0 : _config$names13.sidebarMenuItemClicked, payload);
+						var navClickId = (_window$crypto$random = (_window$crypto = window.crypto) === null || _window$crypto === void 0 || (_window$crypto$random2 = _window$crypto.randomUUID) === null || _window$crypto$random2 === void 0 ? void 0 : _window$crypto$random2.call(_window$crypto)) !== null && _window$crypto$random !== void 0 ? _window$crypto$random : "".concat(Date.now(), "-").concat(Math.random().toString(36).slice(2));
+						payload.nav_click_id = navClickId;
+						var dispatched = this.dispatchEvent(config === null || config === void 0 || (_config$names13 = config.names) === null || _config$names13 === void 0 || (_config$names13 = _config$names13.editorOne) === null || _config$names13 === void 0 ? void 0 : _config$names13.sidebarMenuItemClicked, payload);
+						window.dispatchEvent(new CustomEvent(ADMIN_NAV_CLICK_EVENT, { detail: {
+							itemId: eventId,
+							rootItem: groupEventId,
+							navClickId
+						} }));
+						return dispatched;
 					} catch (error) {
 						return false;
 					}
@@ -2062,7 +2075,10 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 	var SidebarHeader = function SidebarHeader(_ref) {
 		var siteTitle = _ref.siteTitle;
 		var onCollapse = _ref.onCollapse;
-		return /*#__PURE__*/ react.default.createElement(HeaderContainer, null, /*#__PURE__*/ react.default.createElement(HeaderContent, null, /*#__PURE__*/ react.default.createElement(SiteIconBox, null, /*#__PURE__*/ react.default.createElement(EditorIcon, null)), /*#__PURE__*/ react.default.createElement(SiteTitle, { variant: "subtitle1" }, siteTitle), /*#__PURE__*/ react.default.createElement(SearchButton, { onClick: function finderAction() {
+		return /*#__PURE__*/ react.default.createElement(HeaderContainer, null, /*#__PURE__*/ react.default.createElement(HeaderContent, null, /*#__PURE__*/ react.default.createElement(SiteIconBox, null, /*#__PURE__*/ react.default.createElement(EditorIcon, null)), /*#__PURE__*/ react.default.createElement(SiteTitle, {
+			variant: "subtitle1",
+			component: "div"
+		}, siteTitle), /*#__PURE__*/ react.default.createElement(SearchButton, { onClick: function finderAction() {
 			$e.route("finder");
 		} }, /*#__PURE__*/ react.default.createElement(_elementor_icons_SearchIcon.default, null))), /*#__PURE__*/ react.default.createElement(CollapseButton, {
 			onClick: onCollapse,
@@ -2136,6 +2152,11 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 		}, /*#__PURE__*/ react.default.createElement(MenuIcon, null, /*#__PURE__*/ react.default.createElement(IconComponent, null)), /*#__PURE__*/ react.default.createElement(_elementor_ui.ListItemText, {
 			primary: item.label,
 			primaryTypographyProps: { variant: "body2" }
+		}), item.tag && /*#__PURE__*/ react.default.createElement(_elementor_ui_Chip.default, {
+			size: "tiny",
+			shape: "rounded",
+			variant: "outlined",
+			label: item.tag
 		}), hasChildren && /*#__PURE__*/ react.default.createElement(ExpandIcon, { expanded: isExpanded }))), hasChildren && /*#__PURE__*/ react.default.createElement(_elementor_ui.Collapse, {
 			in: isExpanded,
 			timeout: "auto",
@@ -2313,6 +2334,7 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 		var isCollapsed = _useSidebarCollapse.isCollapsed;
 		var toggleCollapse = _useSidebarCollapse.toggleCollapse;
 		useAdminMenuOffset();
+		var showUpgradeCta = !config.isMinimal;
 		if (isCollapsed) return /*#__PURE__*/ react.default.createElement(NavContainer, {
 			component: "nav",
 			collapsed: true
@@ -2324,12 +2346,12 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 			level4Groups: config.level4Groups,
 			activeMenuSlug: config.activeMenuSlug,
 			activeChildSlug: config.activeChildSlug
-		})), /*#__PURE__*/ react.default.createElement(_elementor_ui.Divider, null), /*#__PURE__*/ react.default.createElement(SidebarUpgradeCta, {
+		})), showUpgradeCta && /*#__PURE__*/ react.default.createElement(react.default.Fragment, null, /*#__PURE__*/ react.default.createElement(_elementor_ui.Divider, null), /*#__PURE__*/ react.default.createElement(SidebarUpgradeCta, {
 			upgradeUrl: config.upgradeUrl,
 			upgradeText: config.upgradeText,
 			hasPro: config.hasPro,
 			collapsed: true
-		}));
+		})));
 		return /*#__PURE__*/ react.default.createElement(NavContainer, { component: "nav" }, /*#__PURE__*/ react.default.createElement(SidebarHeader, {
 			siteTitle: config.siteTitle,
 			onCollapse: toggleCollapse
@@ -2338,11 +2360,11 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 			level4Groups: config.level4Groups,
 			activeMenuSlug: config.activeMenuSlug,
 			activeChildSlug: config.activeChildSlug
-		})), /*#__PURE__*/ react.default.createElement(_elementor_ui.Divider, null), /*#__PURE__*/ react.default.createElement(SidebarUpgradeCta, {
+		})), showUpgradeCta && /*#__PURE__*/ react.default.createElement(react.default.Fragment, null, /*#__PURE__*/ react.default.createElement(_elementor_ui.Divider, null), /*#__PURE__*/ react.default.createElement(SidebarUpgradeCta, {
 			upgradeUrl: config.upgradeUrl,
 			upgradeText: config.upgradeText,
 			hasPro: config.hasPro
-		}));
+		})));
 	};
 	SidebarNavigation.propTypes = { config: import_prop_types.default.object.isRequired };
 
@@ -2358,5 +2380,5 @@ var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types());
 	if (rootElement && window.editorOneSidebarConfig) react_default.render(/*#__PURE__*/ react.default.createElement(App, { config: window.editorOneSidebarConfig }), rootElement);
 
 //#endregion
-})(React, ReactDOM, elementorV2.ui, elementorV2.icons['ChevronRightIcon'], elementorV2.icons['AdjustmentsIcon'], elementorV2.icons['FolderIcon'], elementorV2.icons['RocketIcon'], elementorV2.icons['HomeIcon'], elementorV2.icons['SendIcon'], elementorV2.icons['SettingsIcon'], elementorV2.icons['UsersIcon'], elementorV2.icons['PlugIcon'], elementorV2.icons['FileSettingsIcon'], elementorV2.icons['ChevronDownSmallIcon'], elementorV2.icons, elementorV2.icons['SearchIcon']);
+})(React, ReactDOM, elementorV2.ui, elementorV2.icons['ChevronRightIcon'], elementorV2.icons['AdjustmentsIcon'], elementorV2.icons['FolderIcon'], elementorV2.icons['RocketIcon'], elementorV2.icons['HomeIcon'], elementorV2.icons['SendIcon'], elementorV2.icons['SettingsIcon'], elementorV2.icons['UsersIcon'], elementorV2.icons['PlugIcon'], elementorV2.icons['FileSettingsIcon'], elementorV2.icons['ChevronDownSmallIcon'], elementorV2.icons, elementorV2.icons['SearchIcon'], elementorV2.ui['Chip']);
 //# sourceMappingURL=editor-one-sidebar-navigation.js.map

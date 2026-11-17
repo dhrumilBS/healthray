@@ -2464,33 +2464,45 @@
 	}));
 
 //#endregion
-//#region \0@oxc-project+runtime@0.140.0/helpers/esm/objectWithoutPropertiesLoose.js
-	function _objectWithoutPropertiesLoose(r, e) {
-		if (null == r) return {};
-		var t = {};
-		for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-			if (e.includes(n)) continue;
-			t[n] = r[n];
-		}
-		return t;
-	}
-	var init_objectWithoutPropertiesLoose = __esmMin((() => {}));
-
-//#endregion
-//#region \0@oxc-project+runtime@0.140.0/helpers/esm/objectWithoutProperties.js
-	function _objectWithoutProperties(e, t) {
-		if (null == e) return {};
-		var o;
-		var r;
-		var i = _objectWithoutPropertiesLoose(e, t);
-		if (Object.getOwnPropertySymbols) {
-			var s = Object.getOwnPropertySymbols(e);
-			for (r = 0; r < s.length; r++) o = s[r], t.includes(o) || {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
-		}
-		return i;
-	}
-	var init_objectWithoutProperties = __esmMin((() => {
-		init_objectWithoutPropertiesLoose();
+//#region app/modules/import-export-customization/assets/js/shared/registry/base.js
+	var require_base$1 = /* @__PURE__ */ __commonJSMin(((exports) => {
+		init_objectSpread2();
+		Object.defineProperty(exports, "__esModule", { value: true });
+		exports.BaseRegistry = void 0;
+		require_esnext_iterator_constructor();
+		require_esnext_iterator_filter();
+		var BaseRegistry = class {
+			constructor() {
+				this.sections = /* @__PURE__ */ new Map();
+			}
+			register(section) {
+				if (!section.key || !section.title) throw new Error("Template type must have key and title");
+				const existingSection = this.get(section.key);
+				const formattedSection = this.formatSection(_objectSpread2(_objectSpread2({}, existingSection), section));
+				this.sections.set(section.key, formattedSection);
+			}
+			formatSection(section) {
+				return _objectSpread2({
+					key: section.key,
+					parentKey: section.parentKey || null,
+					title: section.title,
+					description: section.description || "",
+					isPlaceholder: !!section.isPlaceholder,
+					useParentDefault: section.useParentDefault !== false,
+					getInitialState: section.getInitialState || null,
+					component: section.component || null,
+					order: section.order || 10,
+					isAvailable: section.isAvailable || (() => true)
+				}, section);
+			}
+			getAll() {
+				return Array.from(this.sections.values()).filter((type) => type.isAvailable()).sort((first, second) => first.order - second.order);
+			}
+			get(key) {
+				return this.sections.get(key);
+			}
+		};
+		exports.BaseRegistry = BaseRegistry;
 	}));
 
 //#endregion
@@ -2539,67 +2551,318 @@
 	}));
 
 //#endregion
-//#region app/modules/import-export-customization/assets/js/shared/registry/base.js
-	var require_base$1 = /* @__PURE__ */ __commonJSMin(((exports) => {
-		init_objectWithoutProperties();
-		init_objectSpread2();
-		var _excluded = ["children"];
-		Object.defineProperty(exports, "__esModule", { value: true });
-		exports.BaseRegistry = void 0;
-		require_esnext_iterator_constructor();
-		require_esnext_iterator_filter();
-		require_esnext_iterator_for_each();
-		require_esnext_iterator_map();
-		var BaseRegistry = class {
-			constructor() {
-				this.sections = /* @__PURE__ */ new Map();
+//#region node_modules/core-js/modules/es.iterator.some.js
+	var require_es_iterator_some = /* @__PURE__ */ __commonJSMin((() => {
+		var $ = require_export();
+		var call = require_function_call();
+		var iterate = require_iterate();
+		var aCallable = require_a_callable();
+		var anObject = require_an_object();
+		var getIteratorDirect = require_get_iterator_direct();
+		var iteratorClose = require_iterator_close();
+		var someWithoutClosingOnEarlyError = require_iterator_helper_without_closing_on_early_error()("some", TypeError);
+		$({
+			target: "Iterator",
+			proto: true,
+			real: true,
+			forced: someWithoutClosingOnEarlyError
+		}, { some: function some(predicate) {
+			anObject(this);
+			try {
+				aCallable(predicate);
+			} catch (error) {
+				iteratorClose(this, "throw", error);
 			}
-			register(section) {
-				if (!section.key || !section.title) throw new Error("Template type must have key and title");
-				const formattedSection = this.get(section.key) || this.formatSection(section);
-				if (section.children) if (formattedSection.children) {
-					const existingChildrenMap = new Map(formattedSection.children.map((child) => [child.key, child]));
-					section.children.forEach((childSection) => {
-						const formattedChild = this.formatSection(childSection);
-						existingChildrenMap.set(childSection.key, formattedChild);
-					});
-					formattedSection.children = Array.from(existingChildrenMap.values());
-				} else formattedSection.children = section.children.map((childSection) => this.formatSection(childSection));
-				this.sections.set(section.key, formattedSection);
-			}
-			formatSection(_ref) {
-				let { children } = _ref, section = _objectWithoutProperties(_ref, _excluded);
-				return _objectSpread2({
-					key: section.key,
-					title: section.title,
-					description: section.description || "",
-					useParentDefault: section.useParentDefault !== false,
-					getInitialState: section.getInitialState || null,
-					component: section.component || null,
-					order: section.order || 10,
-					isAvailable: section.isAvailable || (() => true)
-				}, section);
-			}
-			getAll() {
-				return Array.from(this.sections.values()).filter((type) => type.isAvailable()).map((type) => {
-					if (type.children) return _objectSpread2(_objectSpread2({}, type), {}, { children: [...type.children].sort((a, b) => a.order - b.order) });
-					return type;
-				}).sort((a, b) => a.order - b.order);
-			}
-			get(key) {
-				return this.sections.get(key);
-			}
-		};
-		exports.BaseRegistry = BaseRegistry;
+			if (someWithoutClosingOnEarlyError) return call(someWithoutClosingOnEarlyError, this, predicate);
+			var record = getIteratorDirect(this);
+			var counter = 0;
+			return iterate(record, function(value, stop) {
+				if (predicate(value, counter++)) return stop();
+			}, {
+				IS_RECORD: true,
+				INTERRUPTED: true
+			}).stopped;
+		} });
 	}));
 
 //#endregion
-//#region app/modules/import-export-customization/assets/js/shared/registry/customization-dialogs.js
-	var require_customization_dialogs = /* @__PURE__ */ __commonJSMin(((exports) => {
+//#region node_modules/core-js/modules/esnext.iterator.some.js
+	var require_esnext_iterator_some = /* @__PURE__ */ __commonJSMin((() => {
+		require_es_iterator_some();
+	}));
+
+//#endregion
+//#region app/modules/import-export-customization/assets/js/shared/utils.js
+	var require_utils = /* @__PURE__ */ __commonJSMin(((exports) => {
 		Object.defineProperty(exports, "__esModule", { value: true });
+		exports.IMPORT_EXPORT_CUSTOMIZATION_DEBUG_STORAGE_KEY = void 0;
+		exports.getAvailableCustomizationDialogChildren = getAvailableCustomizationDialogChildren;
+		exports.getCustomizationDialog = getCustomizationDialog;
+		exports.getCustomizationDialogChildren = getCustomizationDialogChildren;
+		exports.getCustomizationDialogSnapshot = getCustomizationDialogSnapshot;
+		exports.getCustomizationDialogsRegistry = getCustomizationDialogsRegistry;
+		exports.getImportManifest = getImportManifest;
+		exports.getImportedClassesCount = getImportedClassesCount;
+		exports.getImportedVariablesCount = getImportedVariablesCount;
+		exports.getManifestItem = getManifestItem;
+		exports.getSiteSettingsManifest = getSiteSettingsManifest;
+		exports.isAtomicElementsFeatureActive = isAtomicElementsFeatureActive;
+		exports.isClassesExported = isClassesExported;
+		exports.isContentSettingsExported = isContentSettingsExported;
+		exports.isDefaultStylesExported = isDefaultStylesExported;
+		exports.isExperimentActive = isExperimentActive;
+		exports.isImportExportCustomizationDebugEnabled = isImportExportCustomizationDebugEnabled;
+		exports.isSiteSettingExported = isSiteSettingExported;
+		exports.isSiteSettingsExported = isSiteSettingsExported;
+		exports.isThemeExported = isThemeExported;
+		exports.isVariablesExported = isVariablesExported;
+		require_esnext_iterator_constructor();
+		require_esnext_iterator_filter();
+		require_esnext_iterator_map();
+		require_esnext_iterator_some();
+		function isExperimentActive(experimentName) {
+			var _common$config;
+			const common = typeof globalThis !== "undefined" ? globalThis.elementorCommon : void 0;
+			return !!(common === null || common === void 0 || (_common$config = common.config) === null || _common$config === void 0 || (_common$config = _common$config.experimentalFeatures) === null || _common$config === void 0 ? void 0 : _common$config[experimentName]);
+		}
+		function isAtomicElementsFeatureActive() {
+			return isExperimentActive("e_atomic_elements");
+		}
+		var IMPORT_EXPORT_CUSTOMIZATION_DEBUG_STORAGE_KEY = exports.IMPORT_EXPORT_CUSTOMIZATION_DEBUG_STORAGE_KEY = "elementor:import-export-customization:debug";
+		function isImportExportCustomizationDebugEnabled() {
+			var _globalThis$localStor;
+			var _globalThis$localStor2;
+			if ("undefined" === typeof globalThis) return false;
+			const debugFlag = globalThis.__ELEMENTOR_IMPORT_EXPORT_CUSTOMIZATION_DEBUG__;
+			const storageValue = (_globalThis$localStor = globalThis.localStorage) === null || _globalThis$localStor === void 0 || (_globalThis$localStor2 = _globalThis$localStor.getItem) === null || _globalThis$localStor2 === void 0 ? void 0 : _globalThis$localStor2.call(_globalThis$localStor, IMPORT_EXPORT_CUSTOMIZATION_DEBUG_STORAGE_KEY);
+			return true === debugFlag || "1" === storageValue || "true" === storageValue;
+		}
+		function getCustomizationDialogsRegistry() {
+			var _globalThis$elementor;
+			var _globalThis$elementor2;
+			return (_globalThis$elementor = (_globalThis$elementor2 = globalThis.elementorModules) === null || _globalThis$elementor2 === void 0 || (_globalThis$elementor2 = _globalThis$elementor2.importExport) === null || _globalThis$elementor2 === void 0 ? void 0 : _globalThis$elementor2.customizationDialogsRegistry) !== null && _globalThis$elementor !== void 0 ? _globalThis$elementor : null;
+		}
+		function getCustomizationDialog(dialogKey) {
+			var _getCustomizationDial;
+			var _getCustomizationDial2;
+			var _getCustomizationDial3;
+			return (_getCustomizationDial = (_getCustomizationDial2 = getCustomizationDialogsRegistry()) === null || _getCustomizationDial2 === void 0 || (_getCustomizationDial3 = _getCustomizationDial2.get) === null || _getCustomizationDial3 === void 0 ? void 0 : _getCustomizationDial3.call(_getCustomizationDial2, dialogKey)) !== null && _getCustomizationDial !== void 0 ? _getCustomizationDial : null;
+		}
+		function getCustomizationDialogSnapshot(dialogKey) {
+			const dialog = getCustomizationDialog(dialogKey);
+			if (!dialog) return null;
+			return {
+				key: dialog.key,
+				parentKey: dialog.parentKey,
+				title: dialog.title,
+				order: dialog.order,
+				children: getCustomizationDialogChildren(dialogKey).map((child) => {
+					var _child$component;
+					return {
+						key: child.key,
+						parentKey: child.parentKey,
+						title: child.title,
+						order: child.order,
+						settingKey: child.settingKey,
+						component: ((_child$component = child.component) === null || _child$component === void 0 ? void 0 : _child$component.name) || null
+					};
+				})
+			};
+		}
+		function getCustomizationDialogChildren(dialogKey) {
+			var _getCustomizationDial4;
+			var _getCustomizationDial5;
+			var _getCustomizationDial6;
+			return (_getCustomizationDial4 = (_getCustomizationDial5 = getCustomizationDialogsRegistry()) === null || _getCustomizationDial5 === void 0 || (_getCustomizationDial6 = _getCustomizationDial5.getAll) === null || _getCustomizationDial6 === void 0 || (_getCustomizationDial6 = _getCustomizationDial6.call(_getCustomizationDial5)) === null || _getCustomizationDial6 === void 0 ? void 0 : _getCustomizationDial6.filter((dialog) => dialog.parentKey === dialogKey)) !== null && _getCustomizationDial4 !== void 0 ? _getCustomizationDial4 : [];
+		}
+		function getAvailableCustomizationDialogChildren(dialogKey) {
+			return getCustomizationDialogChildren(dialogKey).filter((child) => child.isAvailable()).sort((first, second) => first.order - second.order);
+		}
+		var SITE_SETTINGS_MANIFEST_KEY = "site-settings";
+		var WP_CONTENT_MANIFEST_KEY = "wp-content";
+		var CUSTOM_POST_TYPE_TITLES_MANIFEST_KEY = "custom-post-type-title";
+		function getImportManifest(contextData) {
+			var _contextData$data$upl;
+			var _contextData$data;
+			return (_contextData$data$upl = contextData === null || contextData === void 0 || (_contextData$data = contextData.data) === null || _contextData$data === void 0 || (_contextData$data = _contextData$data.uploadedData) === null || _contextData$data === void 0 ? void 0 : _contextData$data.manifest) !== null && _contextData$data$upl !== void 0 ? _contextData$data$upl : null;
+		}
+		function getManifestItem(contextData, manifestKey) {
+			var _getImportManifest;
+			return (_getImportManifest = getImportManifest(contextData)) === null || _getImportManifest === void 0 ? void 0 : _getImportManifest[manifestKey];
+		}
+		function getSiteSettingsManifest(contextData) {
+			return getManifestItem(contextData, SITE_SETTINGS_MANIFEST_KEY);
+		}
+		function isSiteSettingExported(contextData, settingKey) {
+			var _getSiteSettingsManif;
+			return !!((_getSiteSettingsManif = getSiteSettingsManifest(contextData)) === null || _getSiteSettingsManif === void 0 ? void 0 : _getSiteSettingsManif[settingKey]);
+		}
+		function isClassesExported(contextData) {
+			return isSiteSettingExported(contextData, "classes");
+		}
+		function isVariablesExported(contextData) {
+			return isSiteSettingExported(contextData, "variables");
+		}
+		function isDefaultStylesExported(contextData) {
+			return isSiteSettingExported(contextData, "defaultStyles");
+		}
+		function isThemeExported(contextData) {
+			if (contextData === null || contextData === void 0 ? void 0 : contextData.isOldExport) return !!getManifestItem(contextData, "theme");
+			return isSiteSettingExported(contextData, "theme");
+		}
+		function isSiteSettingsExported(contextData) {
+			const siteSettings = getSiteSettingsManifest(contextData);
+			return !!siteSettings && Object.values(siteSettings).some(Boolean);
+		}
+		function isContentSettingsExported(contextData) {
+			return !!(getManifestItem(contextData, "taxonomies") || getManifestItem(contextData, "content") || getManifestItem(contextData, WP_CONTENT_MANIFEST_KEY) || getManifestItem(contextData, CUSTOM_POST_TYPE_TITLES_MANIFEST_KEY));
+		}
+		function getImportedClassesCount(contextData) {
+			var _getSiteSettingsManif2;
+			var _getSiteSettingsManif3;
+			return (_getSiteSettingsManif2 = (_getSiteSettingsManif3 = getSiteSettingsManifest(contextData)) === null || _getSiteSettingsManif3 === void 0 ? void 0 : _getSiteSettingsManif3.classesCount) !== null && _getSiteSettingsManif2 !== void 0 ? _getSiteSettingsManif2 : 0;
+		}
+		function getImportedVariablesCount(contextData) {
+			var _getSiteSettingsManif4;
+			var _getSiteSettingsManif5;
+			return (_getSiteSettingsManif4 = (_getSiteSettingsManif5 = getSiteSettingsManifest(contextData)) === null || _getSiteSettingsManif5 === void 0 ? void 0 : _getSiteSettingsManif5.variablesCount) !== null && _getSiteSettingsManif4 !== void 0 ? _getSiteSettingsManif4 : 0;
+		}
+	}));
+
+//#endregion
+//#region app/modules/import-export-customization/assets/js/shared/constants.js
+	var require_constants = /* @__PURE__ */ __commonJSMin(((exports) => {
+		Object.defineProperty(exports, "__esModule", { value: true });
+		exports.KIT_SECTION_ITEMS = exports.KIT_SECTIONS = void 0;
+		exports.KIT_SECTIONS = Object.freeze({
+			CONTENT: "content",
+			TEMPLATES: "templates",
+			SETTINGS: "settings",
+			PLUGINS: "plugins"
+		});
+		exports.KIT_SECTION_ITEMS = Object.freeze({
+			CONTENT_CUSTOM_POST_TYPES: "content/custom-post-types",
+			CONTENT_MEDIA_FORMAT: "content/media-format",
+			SETTINGS_DESIGN_SYSTEM: "settings/design-system",
+			SETTINGS_THEME: "settings/theme",
+			SETTINGS_GLOBAL_CLASSES: "settings/design-system/global-classes",
+			SETTINGS_GLOBAL_VARIABLES: "settings/design-system/global-variables",
+			SETTINGS_DEFAULT_STYLES: "settings/design-system/default-styles",
+			SETTINGS_GLOBAL_COLORS: "settings/global-colors",
+			SETTINGS_GLOBAL_FONTS: "settings/global-fonts",
+			SETTINGS_THEME_STYLE_SETTINGS: "settings/theme-style-settings",
+			SETTINGS_GENERAL_SETTINGS: "settings/general-settings",
+			SETTINGS_EXPERIMENTS: "settings/experiments",
+			SETTINGS_CUSTOM_FONTS: "settings/custom-fonts",
+			SETTINGS_CUSTOM_ICONS: "settings/custom-icons",
+			SETTINGS_CUSTOM_CODE: "settings/custom-code",
+			PLUGINS_PLUGIN_LIST: "plugins/plugin-list"
+		});
+	}));
+
+//#endregion
+//#region app/modules/import-export-customization/assets/js/shared/registry/customization-dialogs-base.js
+	var require_customization_dialogs_base = /* @__PURE__ */ __commonJSMin(((exports) => {
+		Object.defineProperty(exports, "__esModule", { value: true });
+		exports.createCustomizationDialogsRegistry = createCustomizationDialogsRegistry;
 		exports.customizationDialogsRegistry = void 0;
 		var _base = require_base$1();
-		exports.customizationDialogsRegistry = new _base.BaseRegistry();
+		var _utils = require_utils();
+		var _constants = require_constants();
+		function getThemeInitialState({ contextData, includesSettings, isImport }) {
+			if (!isImport) return includesSettings;
+			return includesSettings && (0, _utils.isThemeExported)(contextData);
+		}
+		function createSiteSettingsInitialStateResolver(manifestKey) {
+			return ({ contextData, includesSettings, isImport }) => {
+				var _ref;
+				if (!isImport) return includesSettings;
+				return includesSettings && !!((_ref = (0, _utils.getSiteSettingsManifest)(contextData)) === null || _ref === void 0 ? void 0 : _ref[manifestKey]);
+			};
+		}
+		function createCustomizationDialogsRegistry() {
+			const customizationDialogsRegistry = new _base.BaseRegistry();
+			[
+				{
+					key: _constants.KIT_SECTIONS.CONTENT,
+					title: "Content"
+				},
+				{
+					key: _constants.KIT_SECTION_ITEMS.CONTENT_CUSTOM_POST_TYPES,
+					parentKey: _constants.KIT_SECTIONS.CONTENT,
+					title: "Custom post types",
+					order: 20
+				},
+				{
+					key: _constants.KIT_SECTION_ITEMS.CONTENT_MEDIA_FORMAT,
+					parentKey: _constants.KIT_SECTIONS.CONTENT,
+					title: "Media format",
+					order: 30
+				},
+				{
+					key: _constants.KIT_SECTIONS.TEMPLATES,
+					title: "Templates"
+				},
+				{
+					key: _constants.KIT_SECTIONS.SETTINGS,
+					title: "Settings"
+				},
+				{
+					key: _constants.KIT_SECTION_ITEMS.SETTINGS_THEME,
+					parentKey: _constants.KIT_SECTIONS.SETTINGS,
+					title: "Theme",
+					order: 10,
+					settingKey: "theme",
+					getInitialState: getThemeInitialState
+				},
+				{
+					key: _constants.KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM,
+					parentKey: _constants.KIT_SECTIONS.SETTINGS,
+					title: "Classes, variables & default styles",
+					order: 20,
+					isAvailable: _utils.isAtomicElementsFeatureActive
+				},
+				{
+					key: _constants.KIT_SECTION_ITEMS.SETTINGS_GLOBAL_CLASSES,
+					parentKey: _constants.KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM,
+					title: "Classes",
+					order: 10,
+					settingKey: "classes",
+					isAvailable: _utils.isAtomicElementsFeatureActive,
+					getInitialState: createSiteSettingsInitialStateResolver("classes")
+				},
+				{
+					key: _constants.KIT_SECTION_ITEMS.SETTINGS_GLOBAL_VARIABLES,
+					parentKey: _constants.KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM,
+					title: "Variables",
+					order: 20,
+					settingKey: "variables",
+					isAvailable: _utils.isAtomicElementsFeatureActive,
+					getInitialState: createSiteSettingsInitialStateResolver("variables")
+				},
+				{
+					key: _constants.KIT_SECTION_ITEMS.SETTINGS_DEFAULT_STYLES,
+					parentKey: _constants.KIT_SECTION_ITEMS.SETTINGS_DESIGN_SYSTEM,
+					title: "Default styles",
+					order: 30,
+					settingKey: "defaultStyles",
+					isAvailable: _utils.isAtomicElementsFeatureActive,
+					getInitialState: createSiteSettingsInitialStateResolver("defaultStyles")
+				},
+				{
+					key: _constants.KIT_SECTIONS.PLUGINS,
+					title: "Plugins"
+				},
+				{
+					key: _constants.KIT_SECTION_ITEMS.PLUGINS_PLUGIN_LIST,
+					parentKey: _constants.KIT_SECTIONS.PLUGINS,
+					title: "Plugin list",
+					order: 10
+				}
+			].forEach((entry) => customizationDialogsRegistry.register(entry));
+			return customizationDialogsRegistry;
+		}
+		exports.customizationDialogsRegistry = createCustomizationDialogsRegistry();
 	}));
 
 //#endregion
@@ -2615,7 +2878,7 @@
 		var _scroll = _interopRequireDefault(require_scroll());
 		var _forceMethodImplementation = _interopRequireDefault(require_force_method_implementation());
 		var _templateRegistryHelpers = require_template_registry_helpers();
-		var _customizationDialogs = require_customization_dialogs();
+		var _customizationDialogsBase = require_customization_dialogs_base();
 		var baseModules = {
 			Module: _module.default,
 			ViewModule: _viewModule.default,
@@ -2627,7 +2890,7 @@
 			},
 			importExport: {
 				createGetInitialState: _templateRegistryHelpers.createGetInitialState,
-				customizationDialogsRegistry: _customizationDialogs.customizationDialogsRegistry
+				customizationDialogsRegistry: _customizationDialogsBase.customizationDialogsRegistry
 			}
 		};
 		if (!window.elementorModules) window.elementorModules = baseModules;
@@ -3286,10 +3549,12 @@
 				const directionStart = isRTL ? "ArrowRight" : "ArrowLeft";
 				const directionEnd = isRTL ? "ArrowLeft" : "ArrowRight";
 				if (!isDirectionInlineKeydown) return true;
-				else if (directionStart === currentKeydown) this.swiper.slidePrev();
+				if (!this.swiper) return;
+				if (directionStart === currentKeydown) this.swiper.slidePrev();
 				else if (directionEnd === currentKeydown) this.swiper.slideNext();
 			}
 			onFocusDisableAutoplay() {
+				if (!this.swiper) return;
 				this.swiper.autoplay.stop();
 			}
 			updateSwiperOption(propertyName) {

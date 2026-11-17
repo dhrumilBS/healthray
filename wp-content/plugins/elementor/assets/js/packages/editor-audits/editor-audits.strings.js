@@ -5,6 +5,22 @@ __(
 	);
 __( 'Install the Ally plugin to add an accessibility policy to your website.', 'elementor' );
 __( 'Ally plugin is not installed or active.', 'elementor' );
+__( 'Create an accessibility statement', 'elementor' );
+__(
+		'An accessibility statement showcases your efforts to create an inclusive online space, highlighting helpful features and a commitment to accessibility.',
+		'elementor'
+	);
+__( 'Use Ally to create and publish an accessibility statement for your site.', 'elementor' );
+__( 'No accessibility statement has been created for this site.', 'elementor' );
+__( 'Create', 'elementor' );
+__( 'Learn more', 'elementor' );
+__( 'Add an accessibility widget', 'elementor' );
+__( 'Make your site more inclusive by adding an accessibility widget.', 'elementor' );
+__( 'Activate Ally’s accessibility widget to give visitors on-page accessibility tools.', 'elementor' );
+__( 'Page is not published.', 'elementor' );
+__( 'Could not fetch the published page.', 'elementor' );
+__( 'No accessibility widget is active on this site.', 'elementor' );
+__( 'Activate', 'elementor' );
 __( 'Cookie policy', 'elementor' );
 __(
 		'A cookie policy is required by privacy regulations such as GDPR (EU) or CCPA (US) to inform visitors about tracking and data collection.',
@@ -12,6 +28,7 @@ __(
 	);
 __( 'Install the Cookiez plugin to add a cookie policy to your website.', 'elementor' );
 __( 'Cookiez plugin is not installed or active.', 'elementor' );
+__( 'Set up cookie consent', 'elementor' );
 __( 'Deep container nesting', 'elementor' );
 __(
 		'Container nesting exceeds the recommended depth. Deep DOM trees hurt rendering performance and readability.',
@@ -34,6 +51,20 @@ __(
 	);
 __( 'Replace each deprecated widget with the recommended new widget shown in its panel.', 'elementor' );
 __( 'Using deprecated widget.', 'elementor' );
+__( 'Google Consent Mode', 'elementor' );
+__(
+		'Google Analytics, Ads, or Tag Manager are running on this site and may not receive a consent signal, which risks losing conversion/analytics data and compliance exposure.',
+		'elementor'
+	);
+__(
+		'Turn on Google Consent Mode in your cookie consent plugin so Google tags respect visitor consent choices.',
+		'elementor'
+	);
+__( 'Page is not published.', 'elementor' );
+__( 'Could not fetch the published page.', 'elementor' );
+__( 'No Google tracking product detected.', 'elementor' );
+__( 'No Google Consent Mode signal was found on the page.', 'elementor' );
+__( 'Enable', 'elementor' );
 __( 'Heading structure', 'elementor' );
 __( 'Pages should have exactly one H1 and a non-skipping heading order.', 'elementor' );
 __( 'Ensure your page has one H1 and that heading levels do not skip (no H2 → H4).', 'elementor' );
@@ -55,17 +86,29 @@ __( 'Every image needs a meaningful alt attribute for screen readers and image-s
 __( "Open the image's settings and add an Alt Text describing the image.", 'elementor' );
 __( 'No images', 'elementor' );
 __( 'Image is missing alt text.', 'elementor' );
+__( 'Fix with Ally', 'elementor' );
+__( 'Inefficient image format', 'elementor' );
+__( "Image isn't served in a modern, efficient format like WebP or AVIF.", 'elementor' );
+__( 'Convert the image to a modern format like WebP or AVIF, or enable image optimization.', 'elementor' );
+__( 'No images', 'elementor' );
+__( "Image isn't served in a modern format like WebP or AVIF.", 'elementor' );
+__( 'Optimize all', 'elementor' );
 __( 'Oversized images', 'elementor' );
 __( 'Large image files slow down the page.', 'elementor' );
 __( 'Replace the image with a smaller version or enable image optimization.', 'elementor' );
 __( 'No images', 'elementor' );
 /* translators: %d is the image file size in kilobytes. */
 __( 'Image is %d KB (over 500 KB).', 'elementor' );
+__( 'Optimize all', 'elementor' );
 __( 'Boxed container nested inside a boxed parent', 'elementor' );
 __( 'An inner container does not need to be boxed when its parent already is.', 'elementor' );
 __( "Change the inner container's content width to Full Width.", 'elementor' );
 __( 'No elements', 'elementor' );
 __( 'Nested boxed container.', 'elementor' );
+__(
+						'Find containers that have nested containers. Containers can be deep-nested. Update the nested container styling so that when a parent container already uses a boxed setting, any inner container inside it is set to Full Width. Keep the first parent container boxed, remove all boxed styling from the nested inner containers, and preserve the inner container’s content, spacing, alignment, and hierarchy.',
+						'elementor'
+					);
 __( 'Page excerpt', 'elementor' );
 __( 'A descriptive excerpt helps search engines and previews summarize the page.', 'elementor' );
 __( 'Open Page Settings and write a short excerpt.', 'elementor' );
@@ -78,6 +121,10 @@ __( 'Page title', 'elementor' );
 __( 'Pages need a clear title for SEO and screen-reader navigation.', 'elementor' );
 __( 'Open Page Settings and add a title.', 'elementor' );
 __( 'Page has no title.', 'elementor' );
+__(
+							"Based on this page's contents, generate a title for this page.",
+							'elementor'
+						);
 __( 'Page title is too long.', 'elementor' );
 __( 'Prefer global colors', 'elementor' );
 __( 'Global colors make the design consistent and easy to update site-wide.', 'elementor' );
@@ -103,6 +150,7 @@ __(
 		'elementor'
 	);
 __( 'No privacy policy page is set.', 'elementor' );
+__( 'Create', 'elementor' );
 __( 'Search engine visibility', 'elementor' );
 __(
 		'When search engine visibility is checked in WordPress Settings -> Reading -> Search Engine Visibility, search engines are discouraged from indexing the website.',
@@ -113,6 +161,13 @@ __(
 		'elementor'
 	);
 __( 'Search engines are discouraged from indexing this website.', 'elementor' );
+__( 'Scan for cookies', 'elementor' );
+__(
+		"Your site may be setting cookies you haven't disclosed. Some countries require a banner even without a full consent policy. Scan to see what needs disclosure.",
+		'elementor'
+	);
+__( 'Run a Cookiez scan on this page to see which cookies need disclosure.', 'elementor' );
+__( 'This page has not been scanned for cookies yet.', 'elementor' );
 __( 'Sections and columns', 'elementor' );
 __(
 		'Sections and columns are legacy elements. Containers render fewer DOM nodes and are more flexible.',
@@ -132,11 +187,6 @@ __( 'Site name is missing or still uses the default.', 'elementor' );
 __( 'Site description is missing or still uses the default.', 'elementor' );
 __( 'Site logo is not set.', 'elementor' );
 __( 'Site favicon is not set.', 'elementor' );
-__( 'Too many widgets', 'elementor' );
-__( 'Excessive DOM size caused by too many widgets degrades rendering performance.', 'elementor' );
-__( 'Reduce the number of widgets on the page by removing or combining elements.', 'elementor' );
-__( 'No elements', 'elementor' );
-__( 'Page has too many widgets.', 'elementor' );
 __( 'Page Audit Tool', 'elementor' );
 __( 'Feedback sent. Thanks for helping us out.', 'elementor' );
 __( 'Something went wrong. Please try sending your feedback again.', 'elementor' );
@@ -155,70 +205,47 @@ __( 'Send', 'elementor' );
 __( 'Page Audit', 'elementor' );
 __( 'Beta', 'elementor' );
 __( 'Last scan:', 'elementor' );
-__( 'Re-scan', 'elementor' );
-__( 'Run page audit', 'elementor' );
 __( 'Fix with Angie', 'elementor' );
-__( 'All audits', 'elementor' );
 __( 'Back to all issues', 'elementor' );
 __( 'Failed audits', 'elementor' );
 __( 'Passed audits', 'elementor' );
+__( 'Skipped audits', 'elementor' );
 __( 'Try again', 'elementor' );
-__( 'All issues', 'elementor' );
 __( 'Audit in progress.', 'elementor' );
-/* translators: %d: number of passed audits. */
-__( '%d passed audits, view all', 'elementor' );
-/* translators: %d: number of failed audit violations. */
-__( '%d failed audits, view all', 'elementor' );
-/* translators: %d: number of skipped audits. */
-__( '%d skipped audits, view all', 'elementor' );
-__( 'Overall score', 'elementor' );
-__( 'Audit statuses', 'elementor' );
-__( 'Remaining issues', 'elementor' );
+__( 'All issues', 'elementor' );
 __( 'Elementor', 'elementor' );
 __( 'Audit your page!', 'elementor' );
 __(
 					'Check SEO, accessibility, performance, and best practices. Click "Run page audit" to begin.',
 					'elementor'
 				);
-__( 'Quick wins', 'elementor' );
-__( 'Audit navigation', 'elementor' );
-__( 'Overview', 'elementor' );
-__( 'Issues', 'elementor' );
+__( 'Quick actions', 'elementor' );
+__( 'Page content changed - rescan advised', 'elementor' );
+__( 'Rescan', 'elementor' );
+__( 'Run page audit', 'elementor' );
 __( 'Collapse', 'elementor' );
 __( 'Expand', 'elementor' );
 __( 'Back', 'elementor' );
 __( 'Collapse', 'elementor' );
 __( 'Expand', 'elementor' );
-__( "What's the issue", 'elementor' );
-__( 'How to resolve', 'elementor' );
 __( 'Best Practices', 'elementor' );
 __( 'SEO', 'elementor' );
 __( 'Accessibility', 'elementor' );
 __( 'Performance', 'elementor' );
-__( 'Compliance', 'elementor' );
+__( 'Site compliance', 'elementor' );
 __( 'Audit Page', 'elementor' );
 __( 'Fix with Ally', 'elementor' );
 /* translators: %d: number of images missing alt text. */
 _n( '%d image', '%d images', count, 'elementor' );
 __( 'Fix with Cookiez', 'elementor' );
 __( 'Generate cookie policy', 'elementor' );
+__( 'Scan', 'elementor' );
+__( 'Scan this page for cookies', 'elementor' );
 __( 'Optimize all', 'elementor' );
 /* translators: %d: number of oversized images. */
 _n( '%d image', '%d images', count, 'elementor' );
-__( 'Failed audits', 'elementor' );
-__( 'Passed audits', 'elementor' );
-__( 'Skipped audits', 'elementor' );
 /* translators: %s: audit violation description. */
 __( 'Help me fix: %s', 'elementor' );
-__( 'Good', 'elementor' );
-__( 'Needs work', 'elementor' );
-__( 'At risk', 'elementor' );
 __( 'Errors', 'elementor' );
 __( 'Warnings', 'elementor' );
-__( 'Info', 'elementor' );
-/* translators: %d: number of remaining error violations. */
-__( '%d errors', 'elementor' );
-/* translators: %d: number of remaining warning violations. */
-__( '%d warnings', 'elementor' );
-/* translators: %d: number of remaining info violations. */
-__( '%d info', 'elementor' );
+__( 'Suggestions', 'elementor' );

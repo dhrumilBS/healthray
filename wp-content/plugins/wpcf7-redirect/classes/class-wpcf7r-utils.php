@@ -439,7 +439,7 @@ class WPCF7r_Utils {
 					$actions = $this->convert_to_action( $action_type, $post_id, $rule_name, $rule_id );
 					$this->cf7r_form->update_migration( $action_type );
 				}
-			} else {
+			} elseif ( array_key_exists( $action_type, wpcf7r_get_available_actions() ) ) {
 				$actions[] = $this->create_action( $post_id, $rule_name, $rule_id, $action_type );
 			}
 
