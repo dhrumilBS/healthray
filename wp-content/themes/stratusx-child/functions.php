@@ -277,6 +277,13 @@ add_filter('wpseo_canonical', function ($canonical) {
 	if (is_home() && is_paged() && get_option('page_for_posts')) {
 		return get_permalink((int) get_option('page_for_posts'));
 	}
+	// Category pagination (/blog/category/{slug}/page/N/) points to the category's first page.
+	if (is_category() && is_paged()) {
+		$term_link = get_term_link(get_queried_object());
+		if (! is_wp_error($term_link)) {
+			return $term_link;
+		}
+	}
 	if (is_paged() && get_query_var('paged') > 1) {
 		return get_pagenum_link(get_query_var('paged'));
 	}
