@@ -42,7 +42,7 @@ require_once get_stylesheet_directory() . '/lib/acf-speciality.php';
 // require_once get_stylesheet_directory() . '/lib/speciality-migrate.php';
 
 if (!defined('HR_LANDING_PAGE_IDS')) {
-	define('HR_LANDING_PAGE_IDS', [167, 32399, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468, 82361, 82363]);
+	define('HR_LANDING_PAGE_IDS', [167, 32399, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468, 82361, 82363, 82472, 82361, 82363, 82372]);
 }
 
 
@@ -88,6 +88,12 @@ function hr_asset_version($relative_path, $use_parent = false)
 	$dir = $use_parent ? get_template_directory() : get_stylesheet_directory();
 	$file = $dir . $relative_path;
 	return file_exists($file) ? filemtime($file) : '1';
+}
+
+// Home page (template page-home-hms.php, page ID 82432 on live): loads css/home-hms.css and js/home-hms.js.
+function hr_is_home_hms_page()
+{
+	return is_page(82432) || is_page_template('page-home-hms.php');
 }
 
 add_action('wp_enqueue_scripts', function () {
@@ -156,6 +162,10 @@ add_action('wp_enqueue_scripts', function () {
 	if (is_page(82372)) {
 		wp_enqueue_script('modules-hub', get_stylesheet_directory_uri() . '/js/modules-hub.js', array(), hr_asset_version('/js/modules-hub.js'), true);
 	}
+	if (hr_is_home_hms_page()) {
+		wp_enqueue_script('home-hms', get_stylesheet_directory_uri() . '/js/home-hms.js', array(), hr_asset_version('/js/home-hms.js'), true);
+		wp_enqueue_style('home-hms', get_stylesheet_directory_uri() . '/css/home-hms.css', array(), hr_asset_version('/css/home-hms.css'));
+	}
 
 	wp_enqueue_script('child-script', get_stylesheet_directory_uri() . '/js/script.js', ['jquery'], hr_asset_version('/js/script.js'), true);
 	wp_localize_script('child-script', 'siteData', [
@@ -202,7 +212,7 @@ function remove_from_homepage()
 	);
 
 	// Remove only on the homepage.
-	if (is_page(79691) || is_page(79713) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81834) || is_page(167) || is_single() || is_page(28110) || is_page(82361) || is_page(82363) || hr_is_modules_hub() || hr_is_login_portal_page()) {
+	if (is_page(79691) || is_page(79713) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81834) || is_page(167) || is_single() || is_page(28110) || is_page(82361) || is_page(82363) || hr_is_modules_hub() || hr_is_login_portal_page() || is_page(82472) || hr_is_home_hms_page()) {
 		$styles = array_merge($styles, array('abha-card', 'common-theme', 'owl.carousal', 'my-elements'));
 		$scripts = array_merge($scripts, array('abha-card', 'common-theme', 'owl.carousal', 'toggle-tabs', 'my-element'));
 	}
@@ -263,6 +273,10 @@ add_filter('wpseo_sitemap_entries_per_page', function ($entries) {
 });
 
 add_filter('wpseo_canonical', function ($canonical) {
+	// Blog listing pagination (/blog/page/2/ and later) points to /blog/ itself.
+	if (is_home() && is_paged() && get_option('page_for_posts')) {
+		return get_permalink((int) get_option('page_for_posts'));
+	}
 	if (is_paged() && get_query_var('paged') > 1) {
 		return get_pagenum_link(get_query_var('paged'));
 	}
@@ -275,7 +289,6 @@ add_filter('wpseo_opengraph_type', function ($type) {
 	}
 	return $type;
 });
-
 
 // =============================================================================
 // 5. BODY CLASSES
@@ -310,6 +323,7 @@ add_filter('body_class', function ($classes) {
 		59820 => 'hr-partner-landing',
 		82361 => 'ipd-landing',
 		82363 => 'opd-landing',
+		82472 => 'author-hub-page',
 
 	];
 	foreach ($landing_pages as $page_id => $class) {
@@ -339,23 +353,23 @@ add_filter('body_class', function ($classes) {
 
 // Remove Elementor kit 394 class only on these three pharmacy pages.
 add_filter('body_class', static function ($classes) {
-    $is_pharmacy_page = is_page(array(
-        'pharma-google',
-        'pharma-meta',
-        'pharma-chatgpt',
-    ));
+	$is_pharmacy_page = is_page(array(
+		'pharma-google',
+		'pharma-meta',
+		'pharma-chatgpt',
+	));
 
-    $is_pharmacy_template = is_page_template(array(
-        'page-pharma-google.php',
-        'page-pharma-meta.php',
-        'page-pharma-chatgpt.php',
-    ));
+	$is_pharmacy_template = is_page_template(array(
+		'page-pharma-google.php',
+		'page-pharma-meta.php',
+		'page-pharma-chatgpt.php',
+	));
 
-    if ($is_pharmacy_page || $is_pharmacy_template) {
-        $classes = array_values(array_diff($classes, array('elementor-kit-394')));
-    }
+	if ($is_pharmacy_page || $is_pharmacy_template) {
+		$classes = array_values(array_diff($classes, array('elementor-kit-394')));
+	}
 
-    return $classes;
+	return $classes;
 }, PHP_INT_MAX);
 
 // =============================================================================
@@ -391,13 +405,9 @@ function hr_get_inline_css($path)
 // 6. LANDING PAGES - Inline CSS + Software/Video Schema (wp_head, priority 50)
 // =============================================================================
 
-// =============================================================================
-// 6. LANDING PAGES - Inline CSS + Software/Video Schema (wp_head, priority 50)
-// =============================================================================
-
 add_action('wp_head', function () {
-		// Speciality pages skip this file: css/speciality-landing.css carries the container and section rules they share.
-        if (is_page(79713) || is_page(79691) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81468) || is_page(81773) || is_page(81775)) {
+	// Speciality pages skip this file: css/speciality-landing.css carries the container and section rules they share.
+	if (is_page(79713) || is_page(79691) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81468) || is_page(81773) || is_page(81775)) {
 		$common_css_path = get_stylesheet_directory() . '/css/common-landing.css';
 		if (file_exists($common_css_path)) {
 			echo '<style id="common-landing-css-inline">' . file_get_contents($common_css_path) . '</style>' . "\n";
@@ -449,9 +459,10 @@ add_action('wp_head', function () {
 	}
 
 	// Home / HMS Landing Page
-	if (is_page(79691)) {
+	// The new home template (page-home-hms.php) shares this schema but brings its own CSS file.
+	if (is_page(79691) || hr_is_home_hms_page()) {
 		$hr_css_path = get_stylesheet_directory() . '/css/home-landing.css';
-		if (file_exists($hr_css_path)) {
+		if (is_page(79691) && file_exists($hr_css_path)) {
 			echo '<style id="home-landing-css-inline">' . file_get_contents($hr_css_path) . '</style>' . "\n";
 		}
 		$page_url = 'https://healthray.com/';

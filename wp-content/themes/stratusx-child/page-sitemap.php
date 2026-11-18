@@ -164,14 +164,14 @@ $speciality_pages = new WP_Query($speciality_args);
 			<h2>HIMS Compare With</h2>
 			<ul class="link-list">
 				<li><a href="https://healthray.com/advancedmd-alternative/">AdvancedMD Alternative</a></li>
-				<li><a href="https://healthray.com/docon-alternative/">Docon Alternative</a></li>
-				<li><a href="https://healthray.com/docpulse-alternative/">Docpulse Alternative</a></li>
-				<li><a href="https://healthray.com/healthplix-alternative/">Healthplix Alternative</a></li>
-				<li><a href="https://healthray.com/karexpert-alternative/">Karexpert Alternative</a></li>
-				<li><a href="https://healthray.com/mocdoc-alternative/">MocDoc Alternative</a></li>
+				<li><a href="https://healthray.com/alternatives/docon/">Docon Alternative</a></li>
+				<li><a href="https://healthray.com/alternatives/docpulse/">Docpulse Alternative</a></li>
+				<li><a href="https://healthray.com/alternatives/healthplix/">Healthplix Alternative</a></li>
+				<li><a href="https://healthray.com/alternatives/karexpert/">Karexpert Alternative</a></li>
+				<li><a href="https://healthray.com/alternatives/mocdoc/">MocDoc Alternative</a></li>
 				<li><a href="https://healthray.com/practo-alternative/">Practo Alternative</a></li>
-				<li><a href="https://healthray.com/akhil-system-alternative/">Akhil System Alternative</a></li>
-				<li><a href="https://healthray.com/ezovion-alternative/">Ezovion Alternative</a></li>
+				<li><a href="https://healthray.com/alternatives/miracle-his/">Akhil System Alternative</a></li>
+				<li><a href="https://healthray.com/alternatives/ezovion/">Ezovion Alternative</a></li>
 				<li><a href="https://healthray.com/epic-emr-alternative/">Epic EMR Alternative</a></li>
 			</ul>
 		</section>
@@ -179,13 +179,14 @@ $speciality_pages = new WP_Query($speciality_args);
 		<section class="block" id="lims-alternatives">
 			<h2>LIMS Compare With</h2>
 			<ul class="link-list">
-				<li><a href="https://healthray.com/crelio-laboratory-alternative/">Crelio Alternative</a></li>
+				<li><a href="https://healthray.com/alternatives/creliohealth/">Crelio Alternative</a></li>
 				<li><a href="https://healthray.com/alternatives/labsmart/">LabSmart Alternative</a></li>
 				<li><a href="https://healthray.com/alternatives/labguru/">Labguru Alternative</a></li>
 				<li><a href="https://healthray.com/elabassist-alternative/">eLabAssist Alternative</a></li>
 				<li><a href="https://healthray.com/flabs-alternative/">Flabs Alternative</a></li>
 			</ul>
 		</section>
+
 
 		<section class="block" id="pharmacy-alternatives">
 			<h2>Pharmacy Management Compare With</h2>

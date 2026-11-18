@@ -147,6 +147,7 @@ function healthray_reading_time($content)
 								</div>
 
 								<div class="hr-author-details">
+								    <span class="hr-reviewer-label">Written by</span>
 									<a href="<?= esc_url($author_url); ?>"
 										class="hr-author-name"
 										rel="author">

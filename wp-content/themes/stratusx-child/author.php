@@ -218,7 +218,7 @@ $schema = [
 			<nav class="hr-author-breadcrumb" aria-label="Breadcrumb">
 				<a href="<?php echo esc_url(home_url('/')); ?>">Home</a>
 				<span aria-hidden="true">›</span>
-				<a href="<?php echo esc_url(home_url('/blog/')); ?>">Blog</a>
+				<a href="<?php echo esc_url(home_url('/author/')); ?>">Author</a>
 				<span aria-hidden="true">›</span>
 				<span class="hr-author-breadcrumb__current"><?php echo $display_name; ?></span>
 			</nav>
