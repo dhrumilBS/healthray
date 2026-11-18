@@ -56,7 +56,16 @@ function healthray_hub_author_photo($user_id, $size = 240)
     if (is_string($photo) && filter_var($photo, FILTER_VALIDATE_URL)) {
         return $photo;
     }
-    return get_avatar_url($user_id, ['size' => $size]);
+
+    /* Gravatar: build the URL directly from the user's email (d=mp = mystery person if no Gravatar exists). */
+    $user = get_userdata($user_id);
+    if ($user && !empty($user->user_email)) {
+        $hash = md5(strtolower(trim($user->user_email)));
+        return 'https://secure.gravatar.com/avatar/' . $hash . '?s=' . (int) $size . '&d=mp&r=g';
+    }
+
+    /* No email at all: Gravatar's default silhouette. */
+    return 'https://secure.gravatar.com/avatar/00000000000000000000000000000000?s=' . (int) $size . '&d=mp&f=y';
 }
 
 $hub_authors = [];
@@ -110,11 +119,7 @@ $hub_page_url = get_permalink();
 ?>
 
 <style>
-	/* ═══ Author Hub - scoped to .author-hub; tokens from style.css :root ═══ */
 	.author-hub { --hub-radius: var(--hr-radius-card, 18px); --hub-shadow: var(--hr-shadow-card, 0 8px 24px rgba(15, 23, 42, .06)); background: #fff; }
-
-	/* Self-contained base: this page doesn't get the "landing-page" body class or common-landing.css,
-	   so the shared pieces it uses are defined here (same values as common-landing.css). */
 	.author-hub { font-family: var(--font-body, Mulish, system-ui, sans-serif); color: var(--ink, #122033); line-height: 1.6; font-size: 16px; -webkit-font-smoothing: antialiased; }
 	.author-hub *, .author-hub *::before, .author-hub *::after { box-sizing: border-box; }
 	.author-hub img, .author-hub svg { display: block; max-width: 100%; height: auto; }
@@ -249,7 +254,6 @@ $hub_page_url = get_permalink();
 			<nav class="crumbs" aria-label="Breadcrumb">
 				<ol>
 					<li><a href="<?php echo esc_url(home_url('/')); ?>">Home</a></li>
-					<li><a href="<?php echo esc_url(home_url('/blog/')); ?>">Blog</a></li>
 					<li aria-current="page">Our Authors</li>
 				</ol>
 			</nav>
@@ -297,7 +301,7 @@ $hub_page_url = get_permalink();
 							data-search="<?php echo esc_attr(strtolower($a['name'] . ' ' . $a['role'] . ' ' . $topic_names . ' ' . $a['bio'])); ?>">
 							<div class="hub-card-head">
 								<a class="hub-avatar" href="<?php echo esc_url($a['url']); ?>" tabindex="-1" aria-hidden="true">
-									<img src="<?php echo esc_url($a['photo']); ?>" alt="" width="84" height="84" loading="lazy" decoding="async">
+								    <img src="<?php echo esc_url($a['photo']); ?>" alt="" width="84" height="84" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://secure.gravatar.com/avatar/00000000000000000000000000000000?s=240&d=mp&f=y';">
 									<span class="hub-badge"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></svg></span>
 								</a>
 								<div>

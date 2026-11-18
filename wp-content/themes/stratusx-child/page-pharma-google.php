@@ -3,14 +3,6 @@
 /**
  * Template Name: Pharmacy Billing Software
  * Template Post Type: page
- * Description: Healthray pharmacy landing page for Google Ads.
- *
- * Install in the active child theme. This template supplies its own header/footer.
- *
- * Shared design and behaviour live in the child theme, used by all three pharmacy PPC pages:
- *   css/pharma-ppc.css  (inlined in <head> below)
- *   js/pharma-ppc.js    (loaded in the footer; reads window.hrPharmaPage set below)
- * Only this page's own content, headline variants, channel and a few CSS overrides stay in this file.
  */
 defined('ABSPATH') || exit;
 
@@ -32,9 +24,6 @@ if (shortcode_exists('contact-form-7')) {
   $hr_pharmacy_cf7 = do_shortcode('[contact-form-7 id="63d0105" title="Pharmacy - PPC"]');
 }
 
-// ---------- Per-page settings for the shared script (js/pharma-ppc.js) ----------
-// channel: sent with every dataLayer event. variants: headline per ad, picked with ?v= on the ad link.
-// The first variant is the default and should match the H1 written in the hero below.
 $hr_pharma_page = array(
   'channel'        => 'google',
   'defaultVariant' => 'a',
@@ -487,8 +476,8 @@ add_action('wp_enqueue_scripts', function () use ($hr_pharma_js_file, $hr_pharma
     © <span id="yr">2026</span> Healthray Technologies Pvt. Ltd.
     <nav aria-label="Legal">
       <a href="https://healthray.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
-      <a href="https://healthray.com/terms-and-conditions/" target="_blank" rel="noopener">Terms</a>
-      <a href="https://healthray.com/contact-us/" target="_blank" rel="noopener">Contact</a>
+      <a href="https://healthray.com/terms-condition/" target="_blank" rel="noopener">Terms</a>
+      <a href="https://healthray.com/contact/" target="_blank" rel="noopener">Contact</a>
     </nav>
   </div>
 </footer>

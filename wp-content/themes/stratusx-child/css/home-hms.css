@@ -61,11 +61,6 @@ html { scroll-behavior: smooth; }
 .ppc-hims h1,
 .ppc-hims h2,
 .ppc-hims h3 { color: var(--navy); line-height: 1.15; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
-/* style.css capitalises every heading site-wide; this page uses sentence case. */
-.ppc-hims h1,
-.ppc-hims h2,
-.ppc-hims h3,
-.ppc-hims .h2 { text-transform: none; }
 .ppc-hims p,
 .ppc-hims figure,
 .ppc-hims blockquote { margin: 0; }

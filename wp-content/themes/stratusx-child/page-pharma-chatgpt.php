@@ -3,18 +3,6 @@
 /**
  * Template Name: Pharmacy Billing Software - ChatGPT Ads
  * Template Post Type: page
- * Description: Healthray pharmacy landing page for ChatGPT ads.
- *
- * Install in the active child theme as a NEW file (page-pharma-chatgpt.php), next to the Google and Meta page
- * templates, and use it on its own page. This template supplies its own header/footer.
- *
- * Shared design and behaviour live in the child theme, used by all three pharmacy PPC pages:
- *   css/pharma-ppc.css  (inlined in <head> below)
- *   js/pharma-ppc.js    (loaded in the footer; reads window.hrPharmaPage set below)
- * Only this page's own content, headline variants, channel and a few CSS overrides stay in this file.
- *
- * Headline per ad: add ?v= to the ad link (main, free, switch, new, expiry, gst, rush, purchase, staff, hi).
- * See VARIANTS below. ChatGPT Ads has no pixel, so tag every ad link with utm_source=chatgpt as well.
  */
 defined('ABSPATH') || exit;
 
@@ -518,8 +506,8 @@ add_action('wp_enqueue_scripts', function () use ($hr_pharma_js_file, $hr_pharma
     © <span id="yr">2026</span> Healthray Technologies Pvt. Ltd.
     <nav aria-label="Legal">
       <a href="https://healthray.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
-      <a href="https://healthray.com/terms-and-conditions/" target="_blank" rel="noopener">Terms</a>
-      <a href="https://healthray.com/contact-us/" target="_blank" rel="noopener">Contact</a>
+      <a href="https://healthray.com/terms-condition/" target="_blank" rel="noopener">Terms</a>
+      <a href="https://healthray.com/contact/" target="_blank" rel="noopener">Contact</a>
     </nav>
   </div>
 </footer>
