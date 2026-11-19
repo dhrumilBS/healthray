@@ -3,9 +3,9 @@
    single-events.php. Enqueued by HR_CPT_Registry (lib/cpt/definitions.php).
 
    Both pages work fully without this file. It only adds:
-     1. Archive: filter the cards on the current page by format.
-     2. Single:  close the "Add to calendar" menu on outside click / Escape.
-     3. Single:  a "Copy link" share button.
+	 1. Archive: filter the cards on the current page by format.
+	 2. Single:  close the "Add to calendar" menu on outside click / Escape.
+	 3. Single:  a "Copy link" share button.
    ========================================================================== */
 (function () {
 	'use strict';
@@ -28,6 +28,24 @@
 		var status = document.querySelector('[data-ev-filter-status]');
 		if (!buttons.length || !items.length) return;
 
+		// Same rule as $ev_fill_attrs in archive-events.php: widen the cards of a part-empty last row.
+		function fillLastRow() {
+			var visible = items.filter(function (item) {
+				item.removeAttribute('data-ev-fill3');
+				item.removeAttribute('data-ev-fill2');
+				return !item.hidden && !item.classList.contains('ev-grid__item--featured');
+			});
+			var count = visible.length;
+			if (!count) return;
+			var last = visible[count - 1];
+			if (count % 3 === 1) last.setAttribute('data-ev-fill3', 'wide');
+			if (count % 3 === 2) {
+				last.setAttribute('data-ev-fill3', 'half');
+				visible[count - 2].setAttribute('data-ev-fill3', 'half');
+			}
+			if (count % 2 === 1) last.setAttribute('data-ev-fill2', 'wide');
+		}
+
 		function apply(type, label) {
 			var shown = 0;
 
@@ -36,6 +54,7 @@
 				item.hidden = !match;
 				if (match) shown++;
 			});
+			fillLastRow();
 
 			buttons.forEach(function (button) {
 				button.setAttribute('aria-pressed', String(button.getAttribute('data-ev-type') === type));

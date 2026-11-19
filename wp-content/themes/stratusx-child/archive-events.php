@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Events archive.
  *
@@ -22,20 +23,20 @@
 $is_first_page = ! is_paged();
 $contact_url   = hr_events_contact_url();
 $stats         = hr_events_stats();
-$spotlight     = $is_first_page ? hr_events_upcoming( 4 ) : array();
-$spotlight_ids = array_map( 'intval', wp_list_pluck( $spotlight, 'id' ) );
+$spotlight     = $is_first_page ? hr_events_upcoming(4) : array();
+$spotlight_ids = array_map('intval', wp_list_pluck($spotlight, 'id'));
 
 // Cards for the listing, minus anything the spotlight already shows.
 $listing = array();
-while ( have_posts() ) {
+while (have_posts()) {
 	the_post();
 
-	if ( $is_first_page && in_array( get_the_ID(), $spotlight_ids, true ) ) {
+	if ($is_first_page && in_array(get_the_ID(), $spotlight_ids, true)) {
 		continue;
 	}
 
 	$event = hr_event_data();
-	if ( $event ) {
+	if ($event) {
 		$listing[] = $event;
 	}
 }
@@ -43,24 +44,48 @@ rewind_posts();
 
 $has_events    = $listing || $spotlight;
 $has_pages     = $GLOBALS['wp_query']->max_num_pages > 1;
-$listing_live  = (bool) array_filter( $listing, fn( $event ) => hr_event_is_live( $event['status'] ) );
-$feature_first = $is_first_page && ! $spotlight && count( $listing ) > 2;
+$listing_live  = (bool) array_filter($listing, fn($event) => hr_event_is_live($event['status']));
+$feature_first = $is_first_page && ! $spotlight && count($listing) > 2;
 
 // Format filter options, counted from the cards on this page only.
 $formats = array();
-foreach ( $listing as $event ) {
-	if ( '' === $event['type_key'] ) {
+foreach ($listing as $event) {
+	if ('' === $event['type_key']) {
 		continue;
 	}
-	if ( ! isset( $formats[ $event['type_key'] ] ) ) {
-		$formats[ $event['type_key'] ] = array(
+	if (! isset($formats[$event['type_key']])) {
+		$formats[$event['type_key']] = array(
 			'label' => $event['type'],
 			'count' => 0,
 		);
 	}
-	++$formats[ $event['type_key'] ]['count'];
+	++$formats[$event['type_key']]['count'];
 }
-uasort( $formats, fn( $a, $b ) => $b['count'] <=> $a['count'] );
+uasort($formats, fn($a, $b) => $b['count'] <=> $a['count']);
+
+/*
+ * Last-row fill: the grid shows 3 cards per row (2 on tablets). When the last row would be part-empty,
+ * its cards get data attributes that widen them (css/events.css): 1 leftover card becomes a wide
+ * horizontal card, 2 leftover cards share the row half and half. js/events.js redoes this when the
+ * format filter changes which cards are visible.
+ *
+ * @param int $count Regular (non-featured) cards in the grid.
+ * @param int $index Position of this card among them, from 0.
+ */
+$ev_fill_attrs = static function (int $count, int $index): string {
+	$from_end = $count - 1 - $index;
+	$attrs    = '';
+	$left3    = $count % 3;
+	if (1 === $left3 && 0 === $from_end) {
+		$attrs .= ' data-ev-fill3="wide"';
+	} elseif (2 === $left3 && $from_end < 2) {
+		$attrs .= ' data-ev-fill3="half"';
+	}
+	if (1 === $count % 2 && 0 === $from_end) {
+		$attrs .= ' data-ev-fill2="wide"';
+	}
+	return $attrs;
+};
 ?>
 <main class="ev-page ev-archive">
 	<section class="blog-hero hero-section ev-hero">
@@ -75,22 +100,22 @@ uasort( $formats, fn( $a, $b ) => $b['count'] <=> $a['count'] );
 				<?php get_search_form(); ?>
 			</div>
 
-			<?php if ( $stats['total'] ) : ?>
+			<?php if ($stats['total']) : ?>
 				<ul class="ev-stats" aria-label="Events at a glance">
 					<li>
-						<?= hr_event_icon( 'calendar-days', 16 ); ?>
-						<span><strong><?= (int) $stats['total']; ?></strong> <?= 1 === (int) $stats['total'] ? 'event' : 'events'; ?><?php if ( $stats['since'] ) : ?> since <?= (int) $stats['since']; ?><?php endif; ?></span>
+						<?= hr_event_icon('calendar-days', 16); ?>
+						<span><strong><?= (int) $stats['total']; ?></strong> <?= 1 === (int) $stats['total'] ? 'event' : 'events'; ?><?php if ($stats['since']) : ?> since <?= (int) $stats['since']; ?><?php endif; ?></span>
 					</li>
-					<?php if ( $stats['upcoming'] ) : ?>
+					<?php if ($stats['upcoming']) : ?>
 						<li class="ev-stats__live">
-							<?= hr_event_icon( 'calendar-plus', 16 ); ?>
+							<?= hr_event_icon('calendar-plus', 16); ?>
 							<span><strong><?= (int) $stats['upcoming']; ?></strong> upcoming</span>
 						</li>
 					<?php endif; ?>
-					<?php if ( $stats['types'] ) : ?>
+					<?php if ($stats['types']) : ?>
 						<li>
-							<?= hr_event_icon( 'tag', 16 ); ?>
-							<span><?= esc_html( implode( ' · ', array_slice( $stats['types'], 0, 4 ) ) ); ?></span>
+							<?= hr_event_icon('tag', 16); ?>
+							<span><?= esc_html(implode(' · ', array_slice($stats['types'], 0, 4))); ?></span>
 						</li>
 					<?php endif; ?>
 				</ul>
@@ -98,20 +123,20 @@ uasort( $formats, fn( $a, $b ) => $b['count'] <=> $a['count'] );
 		</div>
 	</section>
 
-	<?php if ( ! $has_events ) : ?>
+	<?php if (! $has_events) : ?>
 		<section class="ev-section">
 			<div class="container">
 				<div class="ev-empty">
-					<span class="ev-empty__icon"><?= hr_event_icon( 'calendar-days', 30 ); ?></span>
+					<span class="ev-empty__icon"><?= hr_event_icon('calendar-days', 30); ?></span>
 					<h2 class="ev-empty__title">No events to show yet</h2>
 					<p class="ev-empty__text">We&rsquo;re lining up our next conferences, expos and webinars. In the meantime, see how Healthray can support your hospital, clinic, lab or pharmacy.</p>
 					<div class="ev-empty__actions">
-						<a class="ev-btn ev-btn--primary hr-cta-btn" href="<?= esc_url( $contact_url ); ?>">Book a Free Demo <?= hr_event_icon( 'arrow-right', 16 ); ?></a>
+						<a class="ev-btn ev-btn--primary hr-cta-btn" href="<?= esc_url($contact_url); ?>">Book a Free Demo <?= hr_event_icon('arrow-right', 16); ?></a>
 						<?php
-						$blog_page_id = (int) get_option( 'page_for_posts' );
-						if ( $blog_page_id && 'publish' === get_post_status( $blog_page_id ) ) :
-							?>
-							<a class="ev-btn ev-btn--ghost" href="<?= esc_url( get_permalink( $blog_page_id ) ); ?>">Read the Healthray Blog</a>
+						$blog_page_id = (int) get_option('page_for_posts');
+						if ($blog_page_id && 'publish' === get_post_status($blog_page_id)) :
+						?>
+							<a class="ev-btn ev-btn--ghost" href="<?= esc_url(get_permalink($blog_page_id)); ?>">Read the Healthray Blog</a>
 						<?php endif; ?>
 					</div>
 				</div>
@@ -119,13 +144,13 @@ uasort( $formats, fn( $a, $b ) => $b['count'] <=> $a['count'] );
 		</section>
 	<?php else : ?>
 
-		<?php if ( $spotlight ) : ?>
+		<?php if ($spotlight) : ?>
 			<section class="ev-section ev-spotlight" aria-labelledby="ev-spotlight-title">
 				<div class="container">
 					<div class="ev-section-head">
 						<div class="ev-section-head__text">
 							<span class="ev-eyebrow">Next up</span>
-							<h2 class="ev-section-title" id="ev-spotlight-title"><?= 1 === count( $spotlight ) ? 'Upcoming event' : 'Upcoming events'; ?></h2>
+							<h2 class="ev-section-title" id="ev-spotlight-title"><?= 1 === count($spotlight) ? 'Upcoming event' : 'Upcoming events'; ?></h2>
 							<p class="ev-section-lead">Save the date, then book time with the Healthray team before you go.</p>
 						</div>
 					</div>
@@ -142,80 +167,82 @@ uasort( $formats, fn( $a, $b ) => $b['count'] <=> $a['count'] );
 					);
 					?>
 
-					<?php if ( count( $spotlight ) > 1 ) : ?>
+					<?php if (count($spotlight) > 1) : ?>
 						<ul class="ev-grid ev-grid--spotlight">
-							<?php foreach ( array_slice( $spotlight, 1 ) as $event ) : ?>
-								<li><?php get_template_part( 'template-parts/event', 'card', array( 'event' => $event ) ); ?></li>
-							<?php endforeach; ?>
+							<?php $spot_rest = array_slice($spotlight, 1); ?>
+							<?php foreach ($spot_rest as $spot_index => $event) : ?>
+								<li<?= $ev_fill_attrs(count($spot_rest), $spot_index); ?>><?php get_template_part('template-parts/event', 'card', array('event' => $event)); ?></li>
+								<?php endforeach; ?>
 						</ul>
 					<?php endif; ?>
 				</div>
 			</section>
 		<?php endif; ?>
 
-		<?php if ( $listing || $has_pages ) : ?>
-		<section class="ev-section ev-listing"<?= $listing ? ' aria-labelledby="ev-listing-title"' : ' aria-label="More events"'; ?>>
-			<div class="container">
-				<?php if ( $is_first_page && ! $spotlight ) : ?>
-					<div class="ev-notice">
-						<span class="ev-notice__icon"><?= hr_event_icon( 'calendar-plus', 22 ); ?></span>
-						<div class="ev-notice__body">
-							<p class="ev-notice__title">No upcoming events announced yet</p>
-							<p class="ev-notice__text">New conferences, expos and webinars are listed here first. Want to meet the Healthray team sooner?</p>
-						</div>
-						<a class="ev-btn ev-btn--ghost hr-cta-btn" href="<?= esc_url( $contact_url ); ?>">Book a Meeting</a>
-					</div>
-				<?php endif; ?>
-
-				<?php if ( $listing ) : ?>
-					<div class="ev-section-head">
-						<div class="ev-section-head__text">
-							<h2 class="ev-section-title" id="ev-listing-title"><?= $listing_live ? 'All events' : 'Past events'; ?></h2>
-							<p class="ev-section-lead"><?= $listing_live ? 'Conferences, expos, workshops and webinars with Healthray, newest first.' : 'A look back at the conferences, expos, workshops and webinars Healthray has been part of.'; ?></p>
-						</div>
-
-						<?php if ( count( $formats ) > 1 ) : ?>
-							<div class="ev-filter" data-ev-filter hidden>
-								<span class="ev-filter__label" id="ev-filter-label">Format</span>
-								<div class="ev-filter__options" role="group" aria-labelledby="ev-filter-label">
-									<button type="button" class="ev-filter__btn" data-ev-type="all" data-ev-label="" aria-pressed="true">
-										All <span class="ev-filter__count"><?= count( $listing ); ?></span>
-									</button>
-									<?php foreach ( $formats as $key => $format ) : ?>
-										<button type="button" class="ev-filter__btn" data-ev-type="<?= esc_attr( $key ); ?>" data-ev-label="<?= esc_attr( $format['label'] ); ?>" aria-pressed="false">
-											<?= esc_html( $format['label'] ); ?> <span class="ev-filter__count"><?= (int) $format['count']; ?></span>
-										</button>
-									<?php endforeach; ?>
-								</div>
+		<?php if ($listing || $has_pages) : ?>
+			<section class="ev-section ev-listing" <?= $listing ? ' aria-labelledby="ev-listing-title"' : ' aria-label="More events"'; ?>>
+				<div class="container">
+					<?php if ($is_first_page && ! $spotlight) : ?>
+						<div class="ev-notice">
+							<span class="ev-notice__icon"><?= hr_event_icon('calendar-plus', 22); ?></span>
+							<div class="ev-notice__body">
+								<p class="ev-notice__title">No upcoming events announced yet</p>
+								<p class="ev-notice__text">New conferences, expos and webinars are listed here first. Want to meet the Healthray team sooner?</p>
 							</div>
-						<?php endif; ?>
-					</div>
+							<a class="ev-btn ev-btn--ghost hr-cta-btn" href="<?= esc_url($contact_url); ?>">Book a Meeting</a>
+						</div>
+					<?php endif; ?>
 
-					<p class="visually-hidden" role="status" data-ev-filter-status></p>
+					<?php if ($listing) : ?>
+						<div class="ev-section-head">
+							<div class="ev-section-head__text">
+								<h2 class="ev-section-title" id="ev-listing-title"><?= $listing_live ? 'All events' : 'Past events'; ?></h2>
+								<p class="ev-section-lead"><?= $listing_live ? 'Conferences, expos, workshops and webinars with Healthray, newest first.' : 'A look back at the conferences, expos, workshops and webinars Healthray has been part of.'; ?></p>
+							</div>
 
-					<ul class="ev-grid" data-ev-grid>
-						<?php foreach ( $listing as $index => $event ) : ?>
-							<?php $is_featured = $feature_first && 0 === $index; ?>
-							<li<?= $is_featured ? ' class="ev-grid__item--featured"' : ''; ?> data-ev-type="<?= esc_attr( $event['type_key'] ); ?>">
-								<?php
-								get_template_part(
-									'template-parts/event',
-									'card',
-									array(
-										'event'   => $event,
-										'variant' => $is_featured ? 'featured' : '',
-										'label'   => $is_featured ? 'Latest event' : '',
-									)
-								);
-								?>
-							</li>
-						<?php endforeach; ?>
-					</ul>
-				<?php endif; ?>
+							<?php if (count($formats) > 1) : ?>
+								<div class="ev-filter" data-ev-filter hidden>
+									<span class="ev-filter__label" id="ev-filter-label">Format</span>
+									<div class="ev-filter__options" role="group" aria-labelledby="ev-filter-label">
+										<button type="button" class="ev-filter__btn" data-ev-type="all" data-ev-label="" aria-pressed="true">
+											All <span class="ev-filter__count"><?= count($listing); ?></span>
+										</button>
+										<?php foreach ($formats as $key => $format) : ?>
+											<button type="button" class="ev-filter__btn" data-ev-type="<?= esc_attr($key); ?>" data-ev-label="<?= esc_attr($format['label']); ?>" aria-pressed="false">
+												<?= esc_html($format['label']); ?> <span class="ev-filter__count"><?= (int) $format['count']; ?></span>
+											</button>
+										<?php endforeach; ?>
+									</div>
+								</div>
+							<?php endif; ?>
+						</div>
 
-				<?php pagination_bar(); ?>
-			</div>
-		</section>
+						<p class="visually-hidden" role="status" data-ev-filter-status></p>
+
+						<ul class="ev-grid" data-ev-grid>
+							<?php $regular_count = count($listing) - ($feature_first ? 1 : 0); ?>
+							<?php foreach ($listing as $index => $event) : ?>
+								<?php $is_featured = $feature_first && 0 === $index; ?>
+								<li<?= $is_featured ? ' class="ev-grid__item--featured"' : $ev_fill_attrs($regular_count, $index - ($feature_first ? 1 : 0)); ?> data-ev-type="<?= esc_attr($event['type_key']); ?>">
+									<?php
+									get_template_part(
+										'template-parts/event',
+										'card',
+										array(
+											'event'   => $event,
+											'variant' => $is_featured ? 'featured' : '',
+											'label'   => $is_featured ? 'Latest event' : '',
+										)
+									);
+									?>
+									</li>
+								<?php endforeach; ?>
+						</ul>
+					<?php endif; ?>
+
+					<?php pagination_bar(); ?>
+				</div>
+			</section>
 		<?php endif; ?>
 
 		<section class="ev-section ev-section--cta" aria-labelledby="ev-cta-title">
@@ -232,8 +259,8 @@ uasort( $formats, fn( $a, $b ) => $b['count'] <=> $a['count'] );
 						</ul>
 					</div>
 					<div class="ev-cta__actions">
-						<a class="ev-btn ev-btn--light hr-cta-btn" href="<?= esc_url( $contact_url ); ?>">Book a Free Demo <?= hr_event_icon( 'arrow-right', 16 ); ?></a>
-						<a class="ev-btn ev-btn--outline-light" href="<?= esc_url( $contact_url ); ?>">Contact Our Team</a>
+						<a class="ev-btn ev-btn--light hr-cta-btn" href="<?= esc_url($contact_url); ?>">Book a Free Demo <?= hr_event_icon('arrow-right', 16); ?></a>
+						<a class="ev-btn ev-btn--outline-light" href="<?= esc_url($contact_url); ?>">Contact Our Team</a>
 					</div>
 				</div>
 			</div>

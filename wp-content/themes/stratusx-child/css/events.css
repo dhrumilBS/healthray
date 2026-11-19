@@ -169,7 +169,24 @@
 }
 
 @media (min-width: 1200px) {
-	.ev-page .ev-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	/* 6 tracks, each card spans 2 (= 3 per row), so a part-empty last row can be shared out evenly. */
+	.ev-page .ev-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+	.ev-page .ev-grid > li { grid-column: span 2; }
+	.ev-page .ev-grid > li.ev-grid__item--featured { grid-column: 1 / -1; }
+	.ev-page .ev-grid > li[data-ev-fill3="half"] { grid-column: span 3; }
+	.ev-page .ev-grid > li[data-ev-fill3="wide"] { grid-column: 1 / -1; }
+}
+
+/* Last-row fill (attributes set in archive-events.php and js/events.js):
+   a single leftover card spans the row as a horizontal card instead of leaving 2 empty slots. */
+@media (min-width: 700px) and (max-width: 1199.98px) {
+	.ev-page .ev-grid > li[data-ev-fill2="wide"] { grid-column: 1 / -1; }
+	.ev-page .ev-grid > li[data-ev-fill2="wide"] .ev-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); align-items: center; gap: 28px; padding: 16px 28px 16px 16px; }
+	.ev-page .ev-grid > li[data-ev-fill2="wide"] .ev-card__media { margin: 0; }
+}
+@media (min-width: 1200px) {
+	.ev-page .ev-grid > li[data-ev-fill3="wide"] .ev-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); align-items: center; gap: 36px; padding: 18px 36px 18px 18px; }
+	.ev-page .ev-grid > li[data-ev-fill3="wide"] .ev-card__media { margin: 0; }
 }
 
 /* -------------------------------------------------------------------------

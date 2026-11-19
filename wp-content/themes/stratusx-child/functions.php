@@ -284,6 +284,13 @@ add_filter('wpseo_canonical', function ($canonical) {
 			return $term_link;
 		}
 	}
+	// Events listing pagination (/events/page/2/ and later) points to /events/ itself.
+	if (is_post_type_archive('events') && is_paged()) {
+		$events_link = get_post_type_archive_link('events');
+		if ($events_link) {
+			return $events_link;
+		}
+	}
 	if (is_paged() && get_query_var('paged') > 1) {
 		return get_pagenum_link(get_query_var('paged'));
 	}
