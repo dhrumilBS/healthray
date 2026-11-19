@@ -32,6 +32,7 @@ require_once get_stylesheet_directory() . '/lib/acf-reviewer.php';
 require_once get_stylesheet_directory() . '/lib/case-studies-helpers.php';
 require_once get_stylesheet_directory() . '/lib/acf-case-studies.php';
 require_once get_stylesheet_directory() . '/lib/events-helpers.php';
+require_once get_stylesheet_directory() . '/lib/events-schema.php';
 require_once get_stylesheet_directory() . '/lib/whitepaper-helpers.php';
 require_once get_stylesheet_directory() . '/lib/blog-rewrites.php';
 require_once get_stylesheet_directory() . '/lib/blog-redirects.php';
@@ -270,6 +271,11 @@ add_filter('wpseo_enable_xml_sitemap_transient_caching', '__return_true');
 
 add_filter('wpseo_sitemap_entries_per_page', function ($entries) {
 	return 5000;
+});
+
+// Drop hentry microformat class.
+add_filter('post_class', function ($classes) {
+	return is_admin() ? $classes : array_values(array_diff($classes, array('hentry')));
 });
 
 add_filter('wpseo_canonical', function ($canonical) {
