@@ -175,10 +175,10 @@ $hr_circle = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0
   display:block;background:var(--white);color:var(--text);font:400 16px/1.6 Mulish,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;text-align:left}
 .hr-pmo *,.hr-pmo *::before,.hr-pmo *::after {box-sizing:border-box}
 .hr-pmo img,.hr-pmo svg,.hr-pmo video {max-width:100%}
-.hr-pmo h1,.hr-pmo h2,.hr-pmo h3 {color:var(--navy-dark);font-family:inherit;line-height:1.2;margin:0 0 .5em;padding:0;text-transform:none;text-wrap:balance}
+.hr-pmo h1,.hr-pmo h2,.hr-pmo h3,.hr-pmo .hr-h2 {color:var(--navy-dark);font-family:inherit;line-height:1.2;margin:0 0 .5em;padding:0;text-transform:none;text-wrap:balance}
 .hr-pmo .sec-head p,.hr-pmo .feature-copy p {text-wrap:pretty}
 .hr-pmo .hero h1 {font-size:clamp(1.9rem,4.6vw,2.9rem);font-weight:800;letter-spacing:-.01em}
-.hr-pmo h2 {font-size:clamp(1.5rem,3.2vw,2.1rem);font-weight:800;letter-spacing:-.005em}
+.hr-pmo h2,.hr-pmo .hr-h2 {font-size:clamp(1.5rem,3.2vw,2.1rem);font-weight:800;letter-spacing:-.005em}
 .hr-pmo h3 {font-size:clamp(1.2rem,2.2vw,1.45rem);font-weight:800;letter-spacing:normal}
 .hr-pmo p {margin:0 0 1em}
 .hr-pmo a {color:var(--navy)}
@@ -208,7 +208,7 @@ $hr_circle = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0
 .hr-pmo .trust li {display:flex;align-items:flex-start;gap:6px;margin:0}
 .hr-pmo .trust svg {flex:none;width:18px;height:18px;margin-top:2px;fill:var(--green)}
 .hr-pmo .form-card {background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:24px}
-.hr-pmo .form-card h2 {font-size:1.4rem;margin-bottom:4px}
+.hr-pmo .form-card h2,.hr-pmo .form-card .hr-h2 {font-size:1.4rem;margin-bottom:4px}
 .hr-pmo .form-card .hint {color:var(--muted);font-size:.95rem;margin-bottom:16px}
 /* Product tour video */
 .hr-pmo .tour {padding:16px 0 var(--section)}
@@ -314,7 +314,7 @@ $hr_circle = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0
 .hr-pmo .final-card {position:relative;overflow:hidden;max-width:1040px;margin:0 auto;padding:56px 32px;border-radius:20px;background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#E8F1FB;box-shadow:0 20px 50px rgba(18,62,107,.22)}
 .hr-pmo .final-card::before {content:"";position:absolute;inset:auto -80px -120px auto;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.10),transparent 70%);pointer-events:none}
 .hr-pmo .final-card>* {position:relative}
-.hr-pmo .final h2 {color:#fff}
+.hr-pmo .final h2,.hr-pmo .final .hr-h2 {color:#fff}
 .hr-pmo .final p {margin:0 auto;max-width:36em;color:#D6E6F7}
 .hr-pmo .final .btns {display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:24px 0 0}
 /* Sticky mobile bar */
@@ -335,7 +335,7 @@ $hr_circle = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0
 }
 @media (max-width:720px) {
   .hr-pmo {--section:52px;--gap:24px}
-  .hr-pmo h2 {font-size:1.4rem}
+  .hr-pmo h2,.hr-pmo .hr-h2 {font-size:1.4rem}
   .hr-pmo .hero {padding:20px 0 28px}
   .hr-pmo .hero .eyebrow {font-size:.72rem;letter-spacing:.06em;margin-bottom:.45rem}
   .hr-pmo .hero .sub {font-size:1.02rem;line-height:1.55;margin-bottom:16px}
@@ -516,7 +516,7 @@ html.hr-pharmacy-modal-open, html.hr-pharmacy-modal-open body {overflow:hidden !
 
     <!-- ============ FORM (moves into the popup when a button is clicked, then back) ============ -->
     <div class="form-card" id="hr-pmo-start">
-      <h2>Start free today</h2>
+      <div class="hr-h2">Start free today</div>
       <p class="hint">Takes 30 seconds. We'll help you set up and move your old data free.</p>
       <div id="hr-pharmacy-form-home">
         <div id="hr-pharmacy-cf7">
@@ -847,7 +847,7 @@ html.hr-pharmacy-modal-open, html.hr-pharmacy-modal-open body {overflow:hidden !
 <section class="final">
   <div class="wrap">
     <div class="final-card">
-      <h2>Try free pharmacy software in your medical store</h2>
+      <div class="hr-h2">Try free pharmacy software in your medical store</div>
       <p>10 free bills a month, forever. No card. We'll move your old data free.</p>
       <div class="btns">
         <a class="btn btn-cta js-start" href="#hr-pmo-start" data-cta="final_start">Start free</a>
@@ -864,7 +864,7 @@ html.hr-pharmacy-modal-open, html.hr-pharmacy-modal-open body {overflow:hidden !
 <!-- The one popup. Every .js-start / .js-demo button opens it with the same CF7 form. -->
 <dialog id="hr-pharmacy-modal" aria-labelledby="hr-pharmacy-modal-title" aria-describedby="hr-pharmacy-modal-hint">
   <button type="button" class="hr-pharmacy-modal-close" aria-label="Close form">×</button>
-  <h2 id="hr-pharmacy-modal-title">Start free today</h2>
+  <div class="hr-h2" id="hr-pharmacy-modal-title">Start free today</div>
   <p class="hint" id="hr-pharmacy-modal-hint">Fill in your details. Our team will help you get started.</p>
   <div id="hr-pharmacy-modal-slot"></div>
 </dialog>
