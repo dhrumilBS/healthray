@@ -213,3 +213,73 @@ html { scroll-behavior: smooth; }
 @media (max-width: 980px) {
     .landing-page .arch-grid { grid-template-columns: 1fr; }
 }
+
+/* Shared by several landing pages */
+.emr-landing .t-grid,
+.ehr-landing .t-grid,
+.clinic-landing .t-grid,
+.hims-landing .t-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.emr-landing .steps-track,
+.ehr-landing .steps-track { position: relative; height: 56px; margin-bottom: 6px; }
+.emr-landing .steps-track svg,
+.ehr-landing .steps-track svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.emr-landing .steps-track.in path,
+.ehr-landing .steps-track.in path { stroke-dashoffset: 0; }
+.emr-landing .steps-track.in i,
+.ehr-landing .steps-track.in i { transform: translate(-50%, -50%) scale(1); }
+.emr-landing .steps-track i:nth-child(5),
+.ehr-landing .steps-track i:nth-child(5) { left: 70%; transition-delay: 1.25s; }
+.emr-landing .steps-track i:nth-child(6),
+.ehr-landing .steps-track i:nth-child(6) { left: 90%; transition-delay: 1.55s; }
+.emr-landing .steps-grid,
+.ehr-landing .steps-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.emr-landing .steps-grid.in .step,
+.ehr-landing .steps-grid.in .step { opacity: 1; transform: none; }
+.emr-landing .steps-grid.in .step:nth-child(4),
+.ehr-landing .steps-grid.in .step:nth-child(4) { transition-delay: 1.15s; }
+.emr-landing .steps-grid.in .step:nth-child(5),
+.ehr-landing .steps-grid.in .step:nth-child(5) { transition-delay: 1.45s; }
+.emr-landing .step:hover::after,
+.ehr-landing .step:hover::after { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  .emr-landing .ecg-path,
+  .emr-landing .steps-track path,
+  .ehr-landing .ecg-path,
+  .ehr-landing .steps-track path { stroke-dasharray: none; stroke-dashoffset: 0; }
+  .emr-landing .steps-track i,
+  .ehr-landing .steps-track i { transform: translate(-50%, -50%) scale(1); }
+  .emr-landing .steps-grid .step,
+  .ehr-landing .steps-grid .step { opacity: 1; transform: none; }
+}
+@media (max-width:980px) {
+  .ehr-landing .t-grid,
+  .clinic-landing .t-grid { grid-template-columns: repeat(1, 1fr); }
+}
+.clinic-landing .outcomes,
+.hims-landing .outcomes { background: var(--brand-deep); color: #fff; padding: 72px 0; }
+.clinic-landing .outcomes .eyebrow,
+.hims-landing .outcomes .eyebrow { color: var(--hr-hero-accent); }
+.clinic-landing .outcomes .eyebrow::before,
+.hims-landing .outcomes .eyebrow::before { background: var(--hr-hero-accent); }
+.clinic-landing .outcomes h2,
+.hims-landing .outcomes h2 { color: #fff; }
+.clinic-landing .outcomes .section-head p,
+.hims-landing .outcomes .section-head p { color: var(--hr-hero-ink); }
+.clinic-landing .outcomes-grid,
+.hims-landing .outcomes-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; margin-top: 8px; }
+.clinic-landing .outcome b,
+.hims-landing .outcome b { display: block; font-family: var(--font-display); font-size: clamp(1.5rem, 2.4vw, 2rem); font-weight: 700; color: var(--hr-hero-success); }
+.clinic-landing .outcome b.down,
+.hims-landing .outcome b.down { color: var(--hr-hero-accent); }
+.clinic-landing .outcome span,
+.hims-landing .outcome span { font-size: .8rem; color: var(--hr-hero-ink); line-height: 1.35; display: block; margin-top: 4px; }
+.clinic-landing .outcomes-note,
+.hims-landing .outcomes-note { margin-top: 26px; font-size: .82rem; color: var(--hr-hero-muted); text-align: center; }
+@media (max-width: 980px) {
+  .clinic-landing .outcomes-grid,
+  .hims-landing .outcomes-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 720px) {
+  .clinic-landing .outcomes-grid,
+  .hims-landing .outcomes-grid { grid-template-columns: repeat(2, 1fr); }
+}
