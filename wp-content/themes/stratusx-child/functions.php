@@ -1,31 +1,29 @@
 <?php
 
-/**
- * Theme functions.php
- *
- * Structure (top to bottom follows real execution order):
- *   1. Includes
- *   2. Theme Setup & Init
- *   3. Assets (enqueue / dequeue)
- *   4. Performance & SEO Optimization
- *   5. Body Class
- *   6. Landing Pages - Inline CSS + Schema (wp_head)
- *   7. FAQ / Organization Schema (wp_head)
- *   8. Media (image alt text, attachment attributes)
- *   9. Blog Post Enhancements (video schema, progress bar, pagination, reading time)
- *  10. Template Assign 410.php
- *  11. Contact Form 7 - Phone Validation & Duplicate Submission Guard
- *  12. Standalone pages (Login Portal + PPC) - no site header / footer
- *  13. reCAPTCHA (Contact Form 7) - load on the first form interaction, not on page load
- *  14. HandL UTM Grabber - browser-only mode (so Cloudflare can cache pages)
- *  15. PPC pages - jQuery + HandL scripts in the footer, no jquery-migrate, CF7 CSS inlined
- */
+// Healthray child theme functions
+//
+// SECTIONS (search "== N.")
+//   1. INCLUDES & CONSTANTS
+//   2. THEME SETUP
+//   3. HELPERS (PAGE CHECKS, ASSETS, CSS)
+//   4. ASSETS & FONTS
+//   5. PERFORMANCE & SEO
+//   6. BODY CLASSES
+//   7. LANDING PAGES (CSS + SCHEMA)
+//   8. SITE SCHEMA (FAQ, ORG, YOAST EXTRA)
+//   9. MEDIA
+//  10. BLOG POSTS
+//  11. TEMPLATES (410)
+//  12. CONTACT FORM 7 (PHONE, EMAIL, RECAPTCHA)
+//  13. STANDALONE & PPC PAGES
+//  14. HANDL UTM (CACHE-SAFE MODE)
 
 
 // =============================================================================
-// 1. INCLUDES
+// == 1. INCLUDES & CONSTANTS
 // =============================================================================
 
+// Theme libraries
 require_once get_stylesheet_directory() . '/lib/widgets.php';
 require_once get_stylesheet_directory() . '/lib/customField.php';
 require_once get_stylesheet_directory() . '/lib/cpt.php';
@@ -45,17 +43,18 @@ require_once get_stylesheet_directory() . '/lib/virtual-urls.php';
 require_once get_stylesheet_directory() . '/lib/header.php';
 require_once get_stylesheet_directory() . '/lib/speciality-helpers.php';
 require_once get_stylesheet_directory() . '/lib/acf-speciality.php';
-// require_once get_stylesheet_directory() . '/lib/speciality-migrate.php';
 
+// Landing page IDs
 if (!defined('HR_LANDING_PAGE_IDS')) {
 	define('HR_LANDING_PAGE_IDS', [167, 32399, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468, 82361, 82363, 82472, 82361, 82363, 82372]);
 }
 
 
 // =============================================================================
-// 2. THEME SETUP & INIT
+// == 2. THEME SETUP
 // =============================================================================
 
+// Admin bar and footer menu
 add_action('after_setup_theme', function () {
 	if (!current_user_can('administrator') && !is_admin()) {
 		show_admin_bar(false);
@@ -64,6 +63,7 @@ add_action('after_setup_theme', function () {
 	register_nav_menus(['footer_navigation' => esc_html__('Footer Navigation', 'stratus')]);
 });
 
+// Load shortcodes folder
 add_action('init', function () {
 	$shortcode_dir = get_stylesheet_directory() . '/shortcodes/';
 
@@ -74,7 +74,7 @@ add_action('init', function () {
 	}
 });
 
-// Exclude certain post types from WP native search
+// Exclude post types from search
 add_action('init', function () {
 	global $wp_post_types;
 	if (isset($wp_post_types['page'])) {
@@ -87,8 +87,10 @@ add_action('init', function () {
 
 
 // =============================================================================
-// 3. ASSETS (enqueue / dequeue)
+// == 3. HELPERS (PAGE CHECKS, ASSETS, CSS)
 // =============================================================================
+
+// Asset version from file mtime
 function hr_asset_version($relative_path, $use_parent = false)
 {
 	$dir = $use_parent ? get_template_directory() : get_stylesheet_directory();
@@ -96,12 +98,113 @@ function hr_asset_version($relative_path, $use_parent = false)
 	return file_exists($file) ? filemtime($file) : '1';
 }
 
-// Home page (template page-home-hms.php, page ID 82432 on live): loads css/home-hms.css and js/home-hms.js.
+// Is new home page?
 function hr_is_home_hms_page()
 {
 	return is_page(82432) || is_page_template('page-home-hms.php');
 }
 
+// Read CSS file (object cached)
+function hr_get_inline_css($path)
+{
+	if (!file_exists($path)) {
+		return '';
+	}
+
+	$mtime = filemtime($path);
+	$cache_key = 'hr_css_' . md5($path);
+	$cached = wp_cache_get($cache_key, 'hr_theme');
+
+	if (is_array($cached) && isset($cached['mtime'], $cached['css']) && $cached['mtime'] === $mtime) {
+		return $cached['css'];
+	}
+
+	$css = file_get_contents($path);
+	wp_cache_set($cache_key, array('mtime' => $mtime, 'css' => $css), 'hr_theme', HOUR_IN_SECONDS);
+
+	return $css;
+}
+
+// Minify inline CSS
+function hr_minify_css($css)
+{
+	$parts = preg_split('/("(?:[^"\\\\]|\\\\.)*"|\'(?:[^\'\\\\]|\\\\.)*\')/s', (string) $css, -1, PREG_SPLIT_DELIM_CAPTURE);
+	if (false === $parts) {
+		return (string) $css; // Regex failed: serve unminified
+	}
+	$out = '';
+
+	foreach ($parts as $i => $part) {
+		if ($i % 2) {
+			$out .= $part; // Quoted string, kept as is
+			continue;
+		}
+		$part = preg_replace('#/\*.*?\*/#s', '', $part);
+		$part = preg_replace('/\s+/', ' ', $part);
+		$part = preg_replace('/\s*([{};,])\s*/', '$1', $part);
+		$part = preg_replace('/:\s+/', ':', $part);
+		$out .= $part;
+	}
+
+	return trim(str_replace(';}', '}', $out));
+}
+
+// Is Modules hub page?
+function hr_is_modules_hub()
+{
+	if (!is_page()) {
+		return false;
+	}
+	// Live Modules page ID first
+	if (is_page(82372)) {
+		return true;
+	}
+	$template = (string) get_page_template_slug(get_queried_object_id());
+	return '' !== $template && 'temp-modules-landing.php' === basename($template);
+}
+
+// Is Login Portal page?
+function hr_is_login_portal_page()
+{
+	return is_page(82169) || is_page(81468) || is_page(82198) || is_page(82196) || is_page(82183) || is_page(82202) || is_page(82251) || is_page_template('temp-login-landing.php');
+}
+
+// PPC page key or empty
+function hr_ppc_page_key()
+{
+	static $key = null;
+
+	if (null !== $key) {
+		return $key;
+	}
+
+	$found = '';
+	if (is_page()) {
+		$template = (string) get_page_template_slug(get_queried_object_id());
+		if (preg_match('/^temp-ppc-([a-z0-9]+)(?:-[a-z0-9-]+)?\.php$/', $template, $m)) {
+			$found = $m[1];
+		}
+	}
+
+	if (did_action('wp')) {
+		$key = $found;
+	}
+
+	return $found;
+}
+
+// Login Portal or PPC page
+function hr_is_standalone_page()
+{
+	return hr_is_login_portal_page() || '' !== hr_ppc_page_key();
+}
+
+
+// =============================================================================
+// == 4. ASSETS & FONTS
+// =============================================================================
+
+// Main theme styles and scripts
 add_action('wp_enqueue_scripts', function () {
 	wp_dequeue_style('themo-icons');
 	wp_deregister_style('themo-icons');
@@ -127,15 +230,15 @@ add_action('wp_enqueue_scripts', function () {
 	foreach ($defer_scripts as $handle) {
 		wp_script_add_data($handle, 'strategy', 'defer');
 	}
-	// -----------------------------------------
+	// Bootstrap
 	wp_enqueue_style('bootstrap', get_stylesheet_directory_uri() . '/css/bootstrap.min.css', array(), hr_asset_version('/css/bootstrap.min.css'));
 	wp_enqueue_script('bootstrap', get_stylesheet_directory_uri() . '/js/bootstrap.min.js', array(), hr_asset_version('/js/bootstrap.min.js'), true);
-	// -----------------------------------------
+	// Base theme styles
 	wp_enqueue_style('common-theme', get_stylesheet_directory_uri() . '/css/common.css', array(), hr_asset_version('/css/common.css'));
 	wp_enqueue_style('roots_app', get_template_directory_uri() . '/assets/css/app.css', array(), hr_asset_version('/assets/css/app.css', true));
 
 	wp_enqueue_style('main_style', get_stylesheet_uri(), array(), hr_asset_version('/style.css'), 'all');
-	// -----------------------------------------
+	// Carousel
 	wp_enqueue_style('owl.carousal', get_stylesheet_directory_uri() . '/css/owl.carousel.min.css', array(), hr_asset_version('/css/owl.carousel.min.css'));
 	wp_enqueue_script('owl.carousal', get_stylesheet_directory_uri() . '/js/owl.carousel.min.js', array('jquery'), hr_asset_version('/js/owl.carousel.min.js'), true);
 
@@ -146,7 +249,7 @@ add_action('wp_enqueue_scripts', function () {
 	if (is_author()) {
 		wp_enqueue_style('author', get_stylesheet_directory_uri() . '/css/author.css', array(), hr_asset_version('/css/author.css'));
 	}
-	// -----------------------------------------
+	// Blog archive styles
 	if (in_array('archive', get_body_class(), true) || is_page(array(23517, 32399, 61837, 65487)) || is_search() || is_home()) {
 		wp_enqueue_style('custom', get_stylesheet_directory_uri() . '/css/custom.css', array(), hr_asset_version('/css/custom.css'));
 	}
@@ -179,16 +282,17 @@ add_action('wp_enqueue_scripts', function () {
 		'pageId' => get_the_ID(),
 		'pageTitle' => get_the_title(get_queried_object_id()),
 		'isLoggedIn' => is_user_logged_in(),
-		// Pages where the lead popup does NOT auto-open on scroll (buttons still open it). PPC pages included.
+		// No auto-open popup on these
 		'pageIds' => array_merge([28110, 60060, 60090], hr_ppc_page_key() !== '' ? [get_the_ID()] : []),
 		'homeUrl' => home_url(),
 	]);
 });
 
+// Dequeue unused landing assets
 function remove_from_homepage()
 {
 
-	// Remove on all pages.
+	// Remove on all pages
 	$styles = array(
 		'aloha-hfe-widgets-style',
 		'hfe-widgets-style',
@@ -217,7 +321,7 @@ function remove_from_homepage()
 		'intl-tel-input-js',
 	);
 
-	// Remove only on the homepage.
+	// Remove only on landing pages
 	if (is_page(79691) || is_page(79713) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81834) || is_page(167) || is_single() || is_page(28110) || is_page(82361) || is_page(82363) || hr_is_modules_hub() || hr_is_login_portal_page() || is_page(82472) || hr_is_home_hms_page()) {
 		$styles = array_merge($styles, array('abha-card', 'common-theme', 'owl.carousal', 'my-elements'));
 		$scripts = array_merge($scripts, array('abha-card', 'common-theme', 'owl.carousal', 'toggle-tabs', 'my-element'));
@@ -241,16 +345,16 @@ function remove_from_homepage()
 		wp_scripts()->add_data($handle, 'strategy', 'defer');
 	}
 }
+
 add_action('wp_enqueue_scripts', 'remove_from_homepage', 100);
 
-
-// =============================================================================
-// 3b. SITE-WIDE FONT FAMILY (Mulish)
+// Site-wide Mulish font
 add_action('wp_enqueue_scripts', function () {
 	wp_enqueue_style('hr-mulish', 'https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap', array(), null);
 	wp_enqueue_style('hr-font-family', get_stylesheet_directory_uri() . '/css/font-family.css', array('hr-mulish'), hr_asset_version('/css/font-family.css'));
 }, 999);
 
+// Preconnect Google Fonts
 add_filter('wp_resource_hints', function ($hints, $relation) {
 	if ('preconnect' === $relation) {
 		$hints[] = array('href' => 'https://fonts.googleapis.com');
@@ -258,44 +362,50 @@ add_filter('wp_resource_hints', function ($hints, $relation) {
 	}
 	return $hints;
 }, 10, 2);
+
+// No Elementor Google Fonts
 add_filter('elementor/frontend/print_google_fonts', '__return_false');
 
 
 // =============================================================================
-// 4. PERFORMANCE & SEO OPTIMIZATION
+// == 5. PERFORMANCE & SEO
 // =============================================================================
 
+// Disable emoji scripts
 remove_action('wp_head', 'print_emoji_detection_script', 7);
 remove_action('wp_print_styles', 'print_emoji_styles');
 
+// Misc core/plugin tweaks
 add_filter('big_image_size_threshold', '__return_false');
 add_filter('wp_lazy_loading_enabled', '__return_false');
 add_filter('wpcf7_ajax_loader', '__return_false');
 
+// Yoast sitemap settings
 add_filter('wpseo_enable_xml_sitemap_transient_caching', '__return_true');
 
 add_filter('wpseo_sitemap_entries_per_page', function ($entries) {
 	return 5000;
 });
 
-// Drop hentry microformat class.
+// Drop hentry class
 add_filter('post_class', function ($classes) {
 	return is_admin() ? $classes : array_values(array_diff($classes, array('hentry')));
 });
 
+// Canonical for paginated listings
 add_filter('wpseo_canonical', function ($canonical) {
-	// Blog listing pagination (/blog/page/2/ and later) points to /blog/ itself.
+	// Blog pagination: canonical /blog/
 	if (is_home() && is_paged() && get_option('page_for_posts')) {
 		return get_permalink((int) get_option('page_for_posts'));
 	}
-	// Category pagination (/blog/category/{slug}/page/N/) points to the category's first page.
+	// Category pagination: first page
 	if (is_category() && is_paged()) {
 		$term_link = get_term_link(get_queried_object());
 		if (! is_wp_error($term_link)) {
 			return $term_link;
 		}
 	}
-	// Events listing pagination (/events/page/2/ and later) points to /events/ itself.
+	// Events pagination: canonical /events/
 	if (is_post_type_archive('events') && is_paged()) {
 		$events_link = get_post_type_archive_link('events');
 		if ($events_link) {
@@ -308,6 +418,7 @@ add_filter('wpseo_canonical', function ($canonical) {
 	return $canonical;
 });
 
+// Landing pages as og:website
 add_filter('wpseo_opengraph_type', function ($type) {
 	if (is_page(HR_LANDING_PAGE_IDS) || is_page(43917) || is_page(81834) || hr_is_login_portal_page() || hr_is_modules_hub()) {
 		return 'website';
@@ -315,11 +426,12 @@ add_filter('wpseo_opengraph_type', function ($type) {
 	return $type;
 });
 
+
 // =============================================================================
-// 5. BODY CLASSES
+// == 6. BODY CLASSES
 // =============================================================================
 
-// FIX: body_class is a *filter*, not an action.
+// Clean and add body classes
 add_filter('body_class', function ($classes) {
 	$remove = [
 		'wp-custom-logo',
@@ -360,7 +472,7 @@ add_filter('body_class', function ($classes) {
 			break;
 		}
 	}
-	// Modules hub: matched by template, so it works whatever its page ID is.
+	// Modules hub (by template)
 	if (hr_is_modules_hub()) {
 		$classes[] = 'landing-page';
 		$classes[] = 'modules-landing';
@@ -368,7 +480,7 @@ add_filter('body_class', function ($classes) {
 	if (is_single()) {
 		$classes[] = 'landing-page';
 	}
-	// Login Portal by template too, so it works whatever its page ID is.
+	// Login portal (by template)
 	if (hr_is_login_portal_page()) {
 		$classes[] = 'landing-page';
 	}
@@ -376,7 +488,7 @@ add_filter('body_class', function ($classes) {
 	return array_unique($classes);
 }, 999);
 
-// Remove Elementor kit 394 class only on these three pharmacy pages.
+// Pharmacy pages: drop Elementor kit
 add_filter('body_class', static function ($classes) {
 	$is_pharmacy_page = is_page(array(
 		'pharma-google',
@@ -397,41 +509,14 @@ add_filter('body_class', static function ($classes) {
 	return $classes;
 }, PHP_INT_MAX);
 
-// =============================================================================
-// INLINE CSS FILE CACHE HELPER
-// Wraps file_get_contents() with a persistent-object-cache layer keyed on
-// the file's mtime, so the same bytes aren't re-read from disk on every
-// single request. Falls back transparently to a plain disk read if no
-// persistent object cache (Redis/Memcached/etc.) is configured — output is
-// identical either way, this only changes how many times the disk is hit.
-// =============================================================================
-function hr_get_inline_css($path)
-{
-	if (!file_exists($path)) {
-		return '';
-	}
-
-	$mtime = filemtime($path);
-	$cache_key = 'hr_css_' . md5($path);
-	$cached = wp_cache_get($cache_key, 'hr_theme');
-
-	if (is_array($cached) && isset($cached['mtime'], $cached['css']) && $cached['mtime'] === $mtime) {
-		return $cached['css'];
-	}
-
-	$css = file_get_contents($path);
-	wp_cache_set($cache_key, array('mtime' => $mtime, 'css' => $css), 'hr_theme', HOUR_IN_SECONDS);
-
-	return $css;
-}
-
 
 // =============================================================================
-// 6. LANDING PAGES - Inline CSS + Software/Video Schema (wp_head, priority 50)
+// == 7. LANDING PAGES (CSS + SCHEMA)
 // =============================================================================
 
+// Landing CSS and schema
 add_action('wp_head', function () {
-	// Speciality pages skip this file: css/speciality-landing.css carries the container and section rules they share.
+	// Shared landing CSS (not speciality)
 	if (is_page(79713) || is_page(79691) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81468) || is_page(81773) || is_page(81775)) {
 		$common_css_path = get_stylesheet_directory() . '/css/common-landing.css';
 		if (file_exists($common_css_path)) {
@@ -483,8 +568,7 @@ add_action('wp_head', function () {
 		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 	}
 
-	// Home / HMS Landing Page
-	// The new home template (page-home-hms.php) shares this schema but brings its own CSS file.
+	// Home / HMS page
 	if (is_page(79691) || hr_is_home_hms_page()) {
 		$hr_css_path = get_stylesheet_directory() . '/css/home-landing.css';
 		if (is_page(79691) && file_exists($hr_css_path)) {
@@ -523,8 +607,8 @@ add_action('wp_head', function () {
 		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 	}
 
-	// EMR Page
-	// EMR CSS - shared by all pages using the EMR layout
+	// EMR pages
+	// EMR CSS (all EMR layouts)
 	if (is_page(79713) || is_page(81468) || is_page(81773)) {
 		$emr_css_path = get_stylesheet_directory() . '/css/emr-software.css';
 		if (file_exists($emr_css_path)) {
@@ -532,7 +616,7 @@ add_action('wp_head', function () {
 		}
 	}
 
-	// EMR Schema - only on the main EMR page
+	// EMR schema (main page only)
 	if (is_page(79713)) {
 		$page_url = 'https://healthray.com/emr-software/';
 		$schema = array(
@@ -562,7 +646,7 @@ add_action('wp_head', function () {
 						'ratingCount' => '180',
 					),
 				),
-				// Video Schema
+				// VideoObject
 				array(
 					'@type' => 'VideoObject',
 					'@id' => $page_url . '#video',
@@ -580,7 +664,7 @@ add_action('wp_head', function () {
 		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 	}
 
-	// EHR Page
+	// EHR page
 	if (is_page(79754)) {
 		$ehr_css_path = get_stylesheet_directory() . '/css/ehr-software.css';
 		if (file_exists($ehr_css_path)) {
@@ -620,7 +704,7 @@ add_action('wp_head', function () {
 		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 	}
 
-	// Clinic Page
+	// Clinic page
 	if (is_page(79865)) {
 		$clinic_css_path = get_stylesheet_directory() . '/css/clinic-landing.css';
 		if (file_exists($clinic_css_path)) {
@@ -660,7 +744,7 @@ add_action('wp_head', function () {
 		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 	}
 
-	// LIMS Page
+	// LIMS page
 	if (is_page(79924)) {
 		$lims_css_path = get_stylesheet_directory() . '/css/lims-software.css';
 		if (file_exists($lims_css_path)) {
@@ -698,7 +782,7 @@ add_action('wp_head', function () {
 		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 	}
 
-	// Pharmacy Page
+	// Pharmacy page
 	if (is_page(79928)) {
 		$pharmacy_css_path = get_stylesheet_directory() . '/css/pharmacy-software.css';
 		if (file_exists($pharmacy_css_path)) {
@@ -738,8 +822,8 @@ add_action('wp_head', function () {
 		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 	}
 
-	// HIMS Page
-	// HIMS CSS - shared by all pages using the HIMS layout
+	// HIMS pages
+	// HIMS CSS (all HIMS layouts)
 	if (is_page(81124) || is_page(81775)) {
 		$hims_css_path = get_stylesheet_directory() . '/css/hims-landing.css';
 		if (file_exists($hims_css_path)) {
@@ -747,7 +831,7 @@ add_action('wp_head', function () {
 		}
 	}
 
-	// HIMS Schema - only on the main HIMS page
+	// HIMS schema (main page only)
 	if (is_page(81124)) {
 		$page_url = 'https://healthray.com/hospital-information-management-software/';
 		$schema = array(
@@ -781,7 +865,7 @@ add_action('wp_head', function () {
 		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 	}
 
-	// IPD Page
+	// IPD page
 	if (is_page(82361)) {
 		$ipd_css_path = get_stylesheet_directory() . '/css/ipd-software.css';
 		if (file_exists($ipd_css_path)) {
@@ -807,7 +891,7 @@ add_action('wp_head', function () {
 		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 	}
 
-	// OPD Page
+	// OPD page
 	if (is_page(82363)) {
 		$opd_css_path = get_stylesheet_directory() . '/css/opd-software.css';
 		if (file_exists($opd_css_path)) {
@@ -833,7 +917,7 @@ add_action('wp_head', function () {
 		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 	}
 
-	// Modules hub: its CSS, and a list of the published module pages for search engines
+	// Modules hub CSS and ItemList
 	if (hr_is_modules_hub()) {
 		$modules_css_path = get_stylesheet_directory() . '/css/modules-hub.css';
 		if (file_exists($modules_css_path)) {
@@ -862,25 +946,7 @@ add_action('wp_head', function () {
 	}
 }, 50);
 
-/**
- * Is this the Modules hub page?
- * Page 82372, or any page whose template is temp-modules-landing.php. Matches the template by its FILE NAME, wherever it sits in the theme (theme root or a subfolder such as
- * templates/), and whatever the page ID is. is_page_template('temp-modules-landing.php') only matches a template
- * in the theme root, which is why the hub's CSS, script and body class could be skipped.
- */
-function hr_is_modules_hub()
-{
-	if (!is_page()) {
-		return false;
-	}
-	// The Modules page on the live site. Checked first, so its CSS, body class and schema never depend on the template check alone.
-	if (is_page(82372)) {
-		return true;
-	}
-	$template = (string) get_page_template_slug(get_queried_object_id());
-	return '' !== $template && 'temp-modules-landing.php' === basename($template);
-}
-
+// IPD FAQs
 function healthray_ipd_faq_items()
 {
 	return array(
@@ -941,6 +1007,7 @@ function healthray_ipd_faq_items()
 	);
 }
 
+// OPD FAQs
 function healthray_opd_faq_items()
 {
 	return array(
@@ -1012,14 +1079,7 @@ function healthray_opd_faq_items()
 	);
 }
 
-/**
- * Modules hub (template temp-modules-landing.php): the cards it shows.
- *
- * healthray_modules_registry(): the modules with hand-written card text, in the order they show.
- *   Add a line here when a new module page has its own card text. A module shows only when its page is published.
- * healthray_module_cards():     the registry modules whose pages are published, then every other published child
- *   page of the hub, automatically (title, Yoast meta description or excerpt, featured image). Drafts never show.
- */
+// Modules registry
 function healthray_modules_registry()
 {
 	$up = 'https://healthray.com/wp-content/uploads/2026/11/';
@@ -1057,6 +1117,7 @@ function healthray_modules_registry()
 	);
 }
 
+// Modules hub cards
 function healthray_module_cards($hub_id = 0)
 {
 	static $cache = array();
@@ -1108,6 +1169,7 @@ function healthray_module_cards($hub_id = 0)
 	return $cache[$hub_id] = $cards;
 }
 
+// Modules FAQs
 function healthray_modules_faq_items()
 {
 	return array(
@@ -1130,7 +1192,7 @@ function healthray_modules_faq_items()
 	);
 }
 
-// FAQ schema for the IPD, OPD and Modules pages, through the hr_head_faqs filter in healthray_head().
+// IPD/OPD/Modules FAQ schema
 add_filter('hr_head_faqs', function ($faqs) {
 	if (is_page(82361)) {
 		return healthray_ipd_faq_items();
@@ -1144,11 +1206,14 @@ add_filter('hr_head_faqs', function ($faqs) {
 	return $faqs;
 });
 
+
 // =============================================================================
-// 7. FAQ / ORGANIZATION SCHEMA (wp_head, priority 5)
+// == 8. SITE SCHEMA (FAQ, ORG, YOAST EXTRA)
 // =============================================================================
 
+// FAQ and Organization schema
 add_action('wp_head', 'healthray_head', 5);
+
 function healthray_head()
 {
 	$page_url = home_url('/');
@@ -1235,7 +1300,7 @@ function healthray_head()
 			array('q' => 'Can you migrate data from our existing hospital information system?', 'a' => 'Yes. Migration from legacy systems, spreadsheets or paper records is included in every implementation. Our team maps your existing patient master, tariffs, formulary and outstanding balances, runs a validation pass with your staff, and keeps the old system readable during the parallel-run period.',),
 		);
 	} elseif (is_page(167)) {
-		// Keep in sync with the FAQ section in temp-contact.php.
+		// Keep in sync with temp-contact.php
 		$faqs = array(
 			array('q' => 'How quickly will someone reply to my enquiry?', 'a' => '97% of enquiries get a first response in under 30 minutes during working hours, and every enquiry is answered within one business day. Phone is fastest if you need an answer the same day; email suits detailed requirements, tender documents and anything with an attachment.',),
 			array('q' => 'Is the demo free, and how long does it take?', 'a' => 'Yes, the demo is free and there is no credit card or commitment involved. It usually runs 30 to 45 minutes and is built around your own workflow - OPD and queues, IPD and billing, laboratory reporting or pharmacy counter - rather than a generic product tour. Most teams have a short discovery call first so the demo is worth the time.',),
@@ -1248,7 +1313,7 @@ function healthray_head()
 		);
 	}
 
-	// Templates that keep their FAQ in fields (e.g. speciality pages) add it here.
+	// Templates add FAQs via filter
 	$faqs = apply_filters('hr_head_faqs', $faqs);
 
 	$graph = array(
@@ -1352,10 +1417,100 @@ function healthray_head()
 	echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 }
 
+// Per-post extra schema field
+function hr_schema_extra()
+{
+	static $cache = null;
+	if (null !== $cache) {
+		return $cache;
+	}
+	$cache = array();
+	if (!is_singular()) {
+		return $cache;
+	}
+	$raw  = get_post_meta(get_queried_object_id(), '_hr_schema_extra', true);
+	$data = is_string($raw) && '' !== $raw ? json_decode($raw, true) : null;
+	return $cache = is_array($data) ? $data : array();
+}
+
+// Merge extras into Yoast Article
+add_filter('wpseo_schema_article', function ($data) {
+	$extra = hr_schema_extra();
+	if (!empty($extra['article']) && is_array($extra['article']) && is_array($data)) {
+		unset($extra['article']['@id'], $extra['article']['@type']); // Keep Yoast's article identity
+		$data = array_merge($data, hr_schema_drop_node_refs($extra['article'], $extra));
+	}
+	return $data;
+}, 20);
+
+// Drop Article/Dataset cross pointers
+function hr_schema_drop_refs(array $props, array $ids)
+{
+	if (!$ids) {
+		return $props;
+	}
+	$is_ref = static function ($value) use ($ids) {
+		return is_array($value) && 1 === count($value) && isset($value['@id']) && isset($ids[(string) $value['@id']]);
+	};
+
+	foreach ($props as $key => $value) {
+		if ('@id' === $key) {
+			continue;
+		}
+		if ($is_ref($value)) {
+			unset($props[$key]);
+		} elseif (is_array($value) && $value && array_keys($value) === range(0, count($value) - 1)) { // A JSON list
+			$kept = array_values(array_filter($value, static function ($item) use ($is_ref) {
+				return !$is_ref($item);
+			}));
+			if ($kept) {
+				$props[$key] = $kept;
+			} else {
+				unset($props[$key]);
+			}
+		}
+	}
+	return $props;
+}
+
+// Article side pointer drop
+function hr_schema_drop_node_refs(array $props, array $extra)
+{
+	$node_ids = array();
+	foreach ((array) ($extra['nodes'] ?? array()) as $node) {
+		if (is_array($node) && !empty($node['@id'])) {
+			$node_ids[(string) $node['@id']] = true;
+		}
+	}
+	return hr_schema_drop_refs($props, $node_ids);
+}
+
+// Append extra nodes to graph
+add_filter('wpseo_schema_graph', function ($graph) {
+	$extra = hr_schema_extra();
+	if (!empty($extra['nodes']) && is_array($extra['nodes']) && is_array($graph)) {
+		// Yoast's Article @id(s)
+		$article_ids = array();
+		foreach ($graph as $piece) {
+			if (is_array($piece) && !empty($piece['@id']) && in_array('Article', (array) ($piece['@type'] ?? array()), true)) {
+				$article_ids[(string) $piece['@id']] = true;
+			}
+		}
+		foreach ($extra['nodes'] as $node) {
+			if (is_array($node) && !empty($node['@type'])) {
+				$graph[] = hr_schema_drop_refs($node, $article_ids); // e.g. Dataset.isPartOf
+			}
+		}
+	}
+	return $graph;
+}, 20);
+
+
 // =============================================================================
-// 8. MEDIA
+// == 9. MEDIA
 // =============================================================================
 
+// Eager-load first images
 add_filter('wp_get_attachment_image_attributes', function ($attr, $attachment, $size) {
 	static $count = 0;
 	$count++;
@@ -1366,7 +1521,7 @@ add_filter('wp_get_attachment_image_attributes', function ($attr, $attachment, $
 	return $attr;
 }, 10, 3);
 
-// Auto-fill image title/alt text from the sanitized filename on upload
+// Alt/title from filename
 add_action('add_attachment', function ($post_ID) {
 	if (wp_attachment_is_image($post_ID)) {
 		$my_image_title = get_post($post_ID)->post_title;
@@ -1383,10 +1538,10 @@ add_action('add_attachment', function ($post_ID) {
 
 
 // =============================================================================
-// 9. BLOG POST ENHANCEMENTS
+// == 10. BLOG POSTS
 // =============================================================================
 
-// Schema - VideoObject for single posts containing a YouTube embed
+// VideoObject for YouTube posts
 add_action('wp_head', function () {
 	if (!is_single()) {
 		return;
@@ -1436,16 +1591,14 @@ add_action('wp_head', function () {
 	echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 });
 
-// Reading progress bar (single posts only)
+// Reading progress bar
 add_action('wp_body_open', function () {
 	if (is_single()) {
 		echo '<div id="hr-progress-bar" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100"></div>';
 	}
 });
 
-/**
- * Renders numbered pagination with ellipses for long ranges. Call this from a template, e.g. <?php pagination_bar(); ?>
- */
+// Numbered pagination
 function pagination_bar()
 {
 	global $wp_query;
@@ -1485,9 +1638,7 @@ function pagination_bar()
 	echo '</nav>';
 }
 
-/**
- * Returns "N minute"/"N minutes" reading time estimate for the current post.
- */
+// Reading time label
 function reading_time()
 {
 	global $post;
@@ -1495,9 +1646,12 @@ function reading_time()
 	return $readingtime . ($readingtime == 1 ? ' minute' : ' minutes');
 }
 
+
 // =============================================================================
-// 10. Template Assign 410.php
+// == 11. TEMPLATES (410)
 // =============================================================================
+
+// Use 410.php for 410
 function load_custom_410_template($template)
 {
 	if (http_response_code() === 410) {
@@ -1508,15 +1662,15 @@ function load_custom_410_template($template)
 	}
 	return $template;
 }
+
 add_filter('template_include', 'load_custom_410_template');
 
+
 // =============================================================================
-// 11. CONTACT FORM 7 - Phone Validation & Duplicate Submission Guard
+// == 12. CONTACT FORM 7 (PHONE, EMAIL, RECAPTCHA)
 // =============================================================================
 
-/**
- * Country dial-code rules: expected national number length per country.
- */
+// Dial-code length rules
 function cf7_country_rules()
 {
 	return [
@@ -1676,9 +1830,7 @@ function cf7_country_rules()
 	];
 }
 
-/**
- * Dial codes sorted longest-first so "971" is never mis-matched as "9".
- */
+// Dial codes, longest first
 function cf7_dial_codes_sorted()
 {
 	static $cache = null;
@@ -1694,6 +1846,7 @@ function cf7_dial_codes_sorted()
 	return $cache;
 }
 
+// Parse phone into parts
 function cf7_parse_phone($mobile_raw)
 {
 	$cleaned = preg_replace('/[\s\-\(\)]/', '', (string) $mobile_raw);
@@ -1733,6 +1886,7 @@ function cf7_parse_phone($mobile_raw)
 	);
 }
 
+// Phone format validation
 add_filter('wpcf7_validate_tel*', 'cf7_validate_mobile_unified', 20, 2);
 add_filter('wpcf7_validate_tel', 'cf7_validate_mobile_unified', 20, 2);
 
@@ -1772,6 +1926,7 @@ function cf7_validate_mobile_unified($result, $tag)
 	return $result;
 }
 
+// Duplicate phone validation
 add_filter('wpcf7_validate_tel*', 'cf7_validate_duplicate_mobile_unified', 25, 2);
 add_filter('wpcf7_validate_tel', 'cf7_validate_duplicate_mobile_unified', 25, 2);
 
@@ -1785,7 +1940,7 @@ function cf7_validate_duplicate_mobile_unified($result, $tag)
 
 	$parsed = cf7_parse_phone($mobile_raw);
 	if (!$parsed['ok'] || !$parsed['national']) {
-		return $result; // format validator above already flags this
+		return $result; // Format validator already flags it
 	}
 
 	if (cf7_mobile_exists_last_24_hours($parsed['national'], $parsed['code'])) {
@@ -1797,11 +1952,12 @@ function cf7_validate_duplicate_mobile_unified($result, $tag)
 	return $result;
 }
 
+// "Other" fields validation
 add_filter('wpcf7_validate_text', 'cf7_validate_other_fields', 20, 2);
 
 function cf7_validate_other_fields($result, $tag)
 {
-	// "Other" text field => the select it belongs to
+	// "Other" field => its select
 	$map = array(
 		'your-business-other' => 'your-business',
 		'your-speciality-other' => 'speciality',
@@ -1825,6 +1981,7 @@ function cf7_validate_other_fields($result, $tag)
 	return $result;
 }
 
+// Duplicate message in response
 add_filter('wpcf7_feedback_response', function ($response, $result) {
 	global $cf7_duplicate_mobile_flag;
 	if (($response['status'] ?? '') === 'validation_failed') {
@@ -1835,6 +1992,7 @@ add_filter('wpcf7_feedback_response', function ($response, $result) {
 	return $response;
 }, 10, 2);
 
+// Block duplicate phone submission
 function cf7_block_duplicate_mobile($contact_form, &$abort, $submission)
 {
 	$tags = $contact_form->scan_form_tags(array('name' => 'your-number'));
@@ -1856,13 +2014,14 @@ function cf7_block_duplicate_mobile($contact_form, &$abort, $submission)
 	}
 }
 
+// Phone used in last 24h?
 function cf7_mobile_exists_last_24_hours($mobile_national, $mobile_code)
 {
 	global $wpdb;
 	$table = $wpdb->prefix . 'cf7_data_entry';
 	$since = date('Y-m-d H:i:s', current_time('timestamp') - DAY_IN_SECONDS);
 
-	// Step 1: cheap, sargable filter — only rows submitted in the last 24 hours.
+	// 1. Submission IDs from last 24h
 	$recent_ids = $wpdb->get_col($wpdb->prepare("
 		SELECT data_id FROM {$table}
 		WHERE name = 'submit_time' AND value >= %s
@@ -1872,18 +2031,18 @@ function cf7_mobile_exists_last_24_hours($mobile_national, $mobile_code)
 		return false;
 	}
 
-	// Step 2: pull phone values only for those recent submissions (small set).
+	// 2. Phone values for those IDs
 	$placeholders = implode(',', array_fill(0, count($recent_ids), '%d'));
 	$numbers = $wpdb->get_col($wpdb->prepare("
 		SELECT value FROM {$table}
 		WHERE name = 'your-number' AND data_id IN ($placeholders)
 	", $recent_ids));
 
-	// Step 3: normalize each candidate through the SAME parser used for validation, then require an EXACT match on (dial code, national number) — not a substring match.
+	// 3. Exact parsed-number match
 	foreach ($numbers as $num) {
 		$stored = cf7_parse_phone($num);
 		if (!$stored['ok']) {
-			continue; // stored value doesn't parse as a valid +CC number; skip rather than guess
+			continue; // Unparseable stored value: skip
 		}
 		if ($stored['code'] === $mobile_code && $stored['national'] === $mobile_national) {
 			return true;
@@ -1893,31 +2052,20 @@ function cf7_mobile_exists_last_24_hours($mobile_national, $mobile_code)
 	return false;
 }
 
-// -----------------------------------------------------------------------------
-// DUPLICATE EMAIL GUARD (fixed)
-// Works for every [email] / [email*] field on every CF7 form, whatever the
-// field is named, and looks the value up in CFDB7 under that same field name.
-// -----------------------------------------------------------------------------
-
-/**
- * Trim + lowercase an email so duplicate checks compare like with like.
- */
+// Normalise email
 function cf7_normalize_email($email)
 {
 	return strtolower(trim((string) $email));
 }
 
-/**
- * $email must already be passed through cf7_normalize_email().
- * $field_name is the CF7 tag name of the email field (e.g. your-email, email).
- */
+// Email used in last 24h?
 function cf7_email_exists_last_24_hours($email, $field_name = 'your-email')
 {
 	global $wpdb;
 	$table = $wpdb->prefix . 'cf7_data_entry';
 	$since = date('Y-m-d H:i:s', current_time('timestamp') - DAY_IN_SECONDS);
 
-	// Step 1: only submissions from the last 24 hours.
+	// 1. Submission IDs from last 24h
 	$recent_ids = $wpdb->get_col($wpdb->prepare("
 		SELECT data_id FROM {$table}
 		WHERE name = 'submit_time' AND value >= %s
@@ -1927,14 +2075,14 @@ function cf7_email_exists_last_24_hours($email, $field_name = 'your-email')
 		return false;
 	}
 
-	// Step 2: email values for those submissions only.
+	// 2. Email values for those IDs
 	$placeholders = implode(',', array_fill(0, count($recent_ids), '%d'));
 	$emails = $wpdb->get_col($wpdb->prepare("
 		SELECT value FROM {$table}
 		WHERE name = %s AND data_id IN ($placeholders)
 	", array_merge(array($field_name), $recent_ids)));
 
-	// Step 3: exact compare after normalizing.
+	// 3. Exact normalised compare
 	foreach ($emails as $stored) {
 		if (cf7_normalize_email($stored) === $email) {
 			return true;
@@ -1944,9 +2092,7 @@ function cf7_email_exists_last_24_hours($email, $field_name = 'your-email')
 	return false;
 }
 
-/**
- * Runs after all per-field validators, on every form.
- */
+// Duplicate email validation
 add_filter('wpcf7_validate', 'cf7_validate_duplicate_email_any', 30, 2);
 
 function cf7_validate_duplicate_email_any($result, $tags)
@@ -1956,7 +2102,7 @@ function cf7_validate_duplicate_email_any($result, $tags)
 			continue;
 		}
 		if (!$result->is_valid($tag->name)) {
-			continue; // already has a required/format error
+			continue; // Already has an error
 		}
 
 		$raw = isset($_POST[$tag->name]) ? wp_unslash($_POST[$tag->name]) : '';
@@ -1971,7 +2117,7 @@ function cf7_validate_duplicate_email_any($result, $tags)
 
 		if (cf7_email_exists_last_24_hours($email, $tag->name)) {
 			$result->invalidate($tag, 'You have already submitted this form. Our team will contact you soon.');
-			// Same flag the mobile check uses, so the form-level message is shown too.
+			// Show form-level duplicate message
 			global $cf7_duplicate_mobile_flag;
 			$cf7_duplicate_mobile_flag = true;
 		}
@@ -1980,6 +2126,7 @@ function cf7_validate_duplicate_email_any($result, $tags)
 	return $result;
 }
 
+// Live phone check script
 add_action('wp_footer', function () {
 	if (!function_exists('wpcf7_enqueue_scripts')) {
 		return;
@@ -2032,44 +2179,51 @@ add_action('wp_footer', function () {
 <?php
 }, 20);
 
-/** =============================================================================
- * 12. STANDALONE PAGES (NO SITE HEADER / FOOTER) - Login Portal + PPC pages
- * Login Portal page: live ID 81325, or any page using its template
- * (the ID differs between local and live databases).
- */
-function hr_is_login_portal_page()
-{
-	return is_page(82169) || is_page(81468) || is_page(82198) || is_page(82196) || is_page(82183) || is_page(82202) || is_page(82251) || is_page_template('temp-login-landing.php');
-}
-
-function hr_ppc_page_key()
-{
-	static $key = null;
-
-	if (null !== $key) {
-		return $key;
+// Lazy-load reCAPTCHA
+add_action('wp_enqueue_scripts', function () {
+	if (!wp_script_is('wpcf7-recaptcha', 'enqueued') || !class_exists('WPCF7_RECAPTCHA')) {
+		return;
+	}
+	$service = WPCF7_RECAPTCHA::get_instance();
+	if (!$service->is_active()) {
+		return;
 	}
 
-	$found = '';
-	if (is_page()) {
-		$template = (string) get_page_template_slug(get_queried_object_id());
-		if (preg_match('/^temp-ppc-([a-z0-9]+)(?:-[a-z0-9-]+)?\.php$/', $template, $m)) {
-			$found = $m[1];
-		}
+	$api = apply_filters('wpcf7_use_recaptcha_net', false) ? 'https://www.recaptcha.net/recaptcha/api.js' : 'https://www.google.com/recaptcha/api.js';
+
+	wp_dequeue_script('wpcf7-recaptcha'); // Also drops google-recaptcha api.js
+
+	wp_enqueue_script('hr-recaptcha-lazy', get_stylesheet_directory_uri() . '/js/recaptcha-lazy.js', array('contact-form-7'), hr_asset_version('/js/recaptcha-lazy.js'), array('in_footer' => true, 'strategy' => 'defer'));
+	wp_add_inline_script('hr-recaptcha-lazy', 'var hrRecaptcha = ' . wp_json_encode(array(
+		'sitekey' => $service->get_sitekey(),
+		'src'     => add_query_arg('render', $service->get_sitekey(), $api),
+		'actions' => apply_filters('wpcf7_recaptcha_actions', array('homepage' => 'homepage', 'contactform' => 'contactform')),
+	)) . ';', 'before');
+}, 30);
+
+// Log last 100 spam rejections
+add_action('wpcf7_submit', function ($contact_form, $result) {
+	if (($result['status'] ?? '') !== 'spam' || !class_exists('WPCF7_Submission')) {
+		return;
 	}
+	$submission = WPCF7_Submission::get_instance();
+	$log = get_option('hr_cf7_spam_log', array());
+	$log = is_array($log) ? $log : array();
+	$log[] = array(
+		'time'    => current_time('mysql'),
+		'form_id' => $contact_form->id(),
+		'page'    => $submission ? (string) $submission->get_meta('url') : '',
+		'reasons' => $submission ? wp_list_pluck((array) $submission->get_spam_log(), 'reason') : array(),
+	);
+	update_option('hr_cf7_spam_log', array_slice($log, -100), false);
+}, 10, 2);
 
-	if (did_action('wp')) {
-		$key = $found;
-	}
 
-	return $found;
-}
+// =============================================================================
+// == 13. STANDALONE & PPC PAGES
+// =============================================================================
 
-function hr_is_standalone_page()
-{
-	return hr_is_login_portal_page() || '' !== hr_ppc_page_key();
-}
-
+// Standalone base template
 add_filter('roots_wrap_base', function ($templates) {
 	if (hr_is_standalone_page()) {
 		array_unshift($templates, 'templates/base-standalone.php');
@@ -2078,7 +2232,7 @@ add_filter('roots_wrap_base', function ($templates) {
 	return $templates;
 });
 
-// Login Portal: drop the site-header assets (it still uses the theme CSS).
+// Login Portal: drop header assets
 add_action('wp_enqueue_scripts', function () {
 	if (!hr_is_login_portal_page()) {
 		return;
@@ -2091,33 +2245,11 @@ add_action('wp_enqueue_scripts', function () {
 	wp_dequeue_script('hr-header');
 }, 111);
 
-function hr_minify_css($css)
-{
-	$parts = preg_split('/("(?:[^"\\\\]|\\\\.)*"|\'(?:[^\'\\\\]|\\\\.)*\')/s', (string) $css, -1, PREG_SPLIT_DELIM_CAPTURE);
-	if (false === $parts) {
-		return (string) $css; // regex failed (e.g. an apostrophe in a comment): serve it unminified, never empty
-	}
-	$out = '';
-
-	foreach ($parts as $i => $part) {
-		if ($i % 2) {
-			$out .= $part; // quoted string, as is
-			continue;
-		}
-		$part = preg_replace('#/\*.*?\*/#s', '', $part);
-		$part = preg_replace('/\s+/', ' ', $part);
-		$part = preg_replace('/\s*([{};,])\s*/', '$1', $part);
-		$part = preg_replace('/:\s+/', ':', $part);
-		$out .= $part;
-	}
-
-	return trim(str_replace(';}', '}', $out));
-}
-
+// PPC inline CSS
 function hr_ppc_inline_css($key)
 {
 	$dir = get_stylesheet_directory() . '/css/';
-	// Shared CSS already includes the popup base. Other PPC templates keep their existing files.
+	// KE/NG share one CSS file
 	$files = in_array($key, array('ke', 'ng'), true)
 		? array($dir . 'ppc-shared.css')
 		: array($dir . 'ppc-' . $key . '.css', $dir . 'ppc-popup.css');
@@ -2142,7 +2274,7 @@ function hr_ppc_inline_css($key)
 	return $css;
 }
 
-// PPC pages: body class "ppc-{key}".
+// PPC body class
 add_filter('body_class', function ($classes) {
 	$key = hr_ppc_page_key();
 	if ('' !== $key) {
@@ -2152,6 +2284,7 @@ add_filter('body_class', function ($classes) {
 	return $classes;
 }, 1000);
 
+// Print PPC inline CSS
 add_action('wp_head', function () {
 	$key = hr_ppc_page_key();
 	if ('' === $key) {
@@ -2160,7 +2293,7 @@ add_action('wp_head', function () {
 
 	$css = hr_ppc_inline_css($key);
 	if ('' !== $css) {
-		echo '<style id="ppc-' . esc_attr($key) . '-css">' . $css . '</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput -- theme CSS file.
+		echo '<style id="ppc-' . esc_attr($key) . '-css">' . $css . '</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 
 	wp_print_inline_script_tag(
@@ -2171,12 +2304,14 @@ add_action('wp_head', function () {
 	);
 }, 50);
 
+// PPC lead popup
 add_action('wp_footer', function () {
 	if ('' !== hr_ppc_page_key()) {
 		get_template_part('templates/lead-popup', null, (array) apply_filters('hr_ppc_popup_args', array()));
 	}
 }, 5);
 
+// PPC: dequeue unused assets
 add_action('wp_enqueue_scripts', function () {
 	$key = hr_ppc_page_key();
 	if ('' === $key) {
@@ -2205,7 +2340,7 @@ add_action('wp_enqueue_scripts', function () {
 		'base-mobile',
 	);
 	if (!is_admin_bar_showing()) {
-		$dead_styles[] = 'dashicons'; // only the admin bar uses it here
+		$dead_styles[] = 'dashicons'; // Only the admin bar uses it
 	}
 	foreach ($dead_styles as $handle) {
 		wp_dequeue_style($handle);
@@ -2223,10 +2358,10 @@ add_action('wp_enqueue_scripts', function () {
 		'hoverIntent',
 		'elementor-frontend',
 		'elementor-frontend-modules',
-		'elementor-webpack-runtime', // not an Elementor page
-		'themo-js-foot', // needs Bootstrap's $.tooltip
-		'roots_main',    // parent theme: only an Elementor menu-anchor hook
-		'jquery',        // only enqueued directly for HFE "scroll to top", which these pages do not have
+		'elementor-webpack-runtime', // Not an Elementor page
+		'themo-js-foot', // Needs Bootstrap's tooltip
+		'roots_main',    // Parent theme Elementor hook only
+		'jquery',        // Only for HFE scroll-to-top
 	);
 	foreach ($dead_scripts as $handle) {
 		wp_dequeue_script($handle);
@@ -2237,103 +2372,14 @@ add_action('wp_enqueue_scripts', function () {
 		$child->deps = array_values(array_diff($child->deps, array('jquery')));
 	}
 
-	// Keep the country handle: templates attach hrPpcKe/hrPpcNg inline settings to it.
+	// Keep handle for inline settings
 	$js = in_array($key, array('ke', 'ng'), true) ? '/js/ppc-shared.js' : '/js/ppc-' . $key . '.js';
 	if (file_exists(get_stylesheet_directory() . $js)) {
 		wp_enqueue_script('ppc-' . $key, get_stylesheet_directory_uri() . $js, array(), hr_asset_version($js), array('in_footer' => true, 'strategy' => 'defer'));
 	}
 }, 1000);
 
-// =============================================================================
-// 13. reCAPTCHA (Contact Form 7) - load on the first page interaction, not on page load (+ spam log)
-// CF7 loads Google's api.js (~350 KB of JS) on every page. js/recaptcha-lazy.js replaces CF7's own reCAPTCHA
-// script with the same behaviour, but api.js loads on the visitor's first interaction with the page (scroll,
-// mouse move, tap, key) instead of during page load, and a fresh token is always fetched right before each
-// submission (the server keeps verifying it, as before). Every spam rejection is logged - see hr_cf7_spam_log below.
-// To go back to CF7's default, delete this block.
-// =============================================================================
-add_action('wp_enqueue_scripts', function () {
-	if (!wp_script_is('wpcf7-recaptcha', 'enqueued') || !class_exists('WPCF7_RECAPTCHA')) {
-		return;
-	}
-	$service = WPCF7_RECAPTCHA::get_instance();
-	if (!$service->is_active()) {
-		return;
-	}
-
-	$api = apply_filters('wpcf7_use_recaptcha_net', false) ? 'https://www.recaptcha.net/recaptcha/api.js' : 'https://www.google.com/recaptcha/api.js';
-
-	wp_dequeue_script('wpcf7-recaptcha'); // its dependency, google-recaptcha (api.js), is then not printed either
-
-	wp_enqueue_script('hr-recaptcha-lazy', get_stylesheet_directory_uri() . '/js/recaptcha-lazy.js', array('contact-form-7'), hr_asset_version('/js/recaptcha-lazy.js'), array('in_footer' => true, 'strategy' => 'defer'));
-	wp_add_inline_script('hr-recaptcha-lazy', 'var hrRecaptcha = ' . wp_json_encode(array(
-		'sitekey' => $service->get_sitekey(),
-		'src'     => add_query_arg('render', $service->get_sitekey(), $api),
-		'actions' => apply_filters('wpcf7_recaptcha_actions', array('homepage' => 'homepage', 'contactform' => 'contactform')),
-	)) . ';', 'before');
-}, 30);
-
-// Keep a record of the last 100 submissions Contact Form 7 rejected as spam (form, time, reason, reCAPTCHA score),
-// so a lead that "failed to send" can be checked instead of guessed. Read it in the database: wp_options,
-// option_name 'hr_cf7_spam_log'. No personal data is stored - only the reasons.
-add_action('wpcf7_submit', function ($contact_form, $result) {
-	if (($result['status'] ?? '') !== 'spam' || !class_exists('WPCF7_Submission')) {
-		return;
-	}
-	$submission = WPCF7_Submission::get_instance();
-	$log = get_option('hr_cf7_spam_log', array());
-	$log = is_array($log) ? $log : array();
-	$log[] = array(
-		'time'    => current_time('mysql'),
-		'form_id' => $contact_form->id(),
-		'page'    => $submission ? (string) $submission->get_meta('url') : '',
-		'reasons' => $submission ? wp_list_pluck((array) $submission->get_spam_log(), 'reason') : array(),
-	);
-	update_option('hr_cf7_spam_log', array_slice($log, -100), false);
-}, 10, 2);
-
-// =============================================================================
-// 14. HandL UTM Grabber - browser-only mode (so Cloudflare can cache pages)
-// HandL captures UTMs twice: on the server (CaptureUTMs on init: Set-Cookie headers + UTM values written into
-// the form HTML) and in the browser (handl-utm-grabber.js: reads the URL, saves the cookies, fills every form
-// field - utm_*, gclid, matchtype, utm_device, utm_sitelink, utm_placement, handl_url, handl_url_base...).
-// The server half stops Cloudflare caching pages, and with caching on it could bake one visitor's UTMs into the
-// cached HTML. So: switch the server half off, keep HandL's shortcodes (forms use [utm_source_i]...) but always
-// empty on the server, and let the browser script do the work. Only handl_ip (not used by any form) is lost.
-// To go back to HandL's default, delete this block.
-// =============================================================================
-add_action('init', function () {
-	if (!function_exists('CaptureUTMs') || !function_exists('generateUTMFields') || !function_exists('HandlCreateShortcode')) {
-		return; // HandL not active
-	}
-	remove_action('init', 'CaptureUTMs'); // HandL hooks it at priority 10; this runs at 1
-	foreach (generateUTMFields() as $field) {
-		HandlCreateShortcode($field, ''); // shortcodes exist but render empty; the browser script fills the fields
-	}
-	// Not firing 'after_handl_capture_utms': its only listener (predefined variables, none configured) sets server cookies.
-}, 1);
-
-// HandL's CF7 tags (e.g. [handl_url_cf7]) read $_COOKIE while the page is built. Hide those cookies from page
-// rendering so cached HTML never carries one visitor's values. Form submissions (REST API) are unaffected.
-add_action('template_redirect', function () {
-	if (is_admin() || !function_exists('generateUTMFields')) {
-		return;
-	}
-	foreach (generateUTMFields() as $field) {
-		unset($_COOKIE[$field], $_COOKIE['first_' . $field]);
-	}
-}, 0);
-
-
-// =============================================================================
-// 15. PPC pages - nothing render-blocking from jQuery or CF7 in <head>
-// - jQuery + the scripts that need it (HandL UTM Grabber) print at the end of <body> instead of <head>. jQuery stays
-//   a normal (non-deferred) script there, so the inline code attached to it (header plugin scroll-to-top) still
-//   runs, and the deferred jQuery users (HandL, wpcf7-redirect) run after it as before.
-// - jquery-migrate removed: HandL, js.cookie and wpcf7-redirect use no deprecated jQuery APIs.
-// - Contact Form 7's small stylesheet (3 KB, no url() paths) is inlined instead of a blocking <link>.
-// To go back, delete this block.
-// =============================================================================
+// PPC: scripts to footer
 add_action('wp_enqueue_scripts', function () {
 	if ('' === hr_ppc_page_key()) {
 		return;
@@ -2355,114 +2401,39 @@ add_action('wp_enqueue_scripts', function () {
 	}
 }, 1001);
 
+// PPC: inline CF7 CSS
 add_action('wp_head', function () {
 	if ('' === hr_ppc_page_key() || !defined('WPCF7_PLUGIN_DIR')) {
 		return;
 	}
 	$css = hr_get_inline_css(WPCF7_PLUGIN_DIR . '/includes/css/styles.css');
 	if ('' !== $css) {
-		echo '<style id="contact-form-7-inline-css">' . hr_minify_css($css) . '</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput -- plugin CSS file.
+		echo '<style id="contact-form-7-inline-css">' . hr_minify_css($css) . '</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 }, 51);
 
+
 // =============================================================================
-// 16. Per-post extra schema, merged into Yoast's graph (no duplicate Organization / WebPage / Article / FAQ)
-// A post can carry extra structured data in the hidden custom field "_hr_schema_extra" (JSON):
-//   { "article": { ...properties added to Yoast's own Article node (about, citation, keywords, hasPart...) },
-//     "nodes":   [ ...extra nodes appended to Yoast's @graph, e.g. a Dataset ] }
-// Yoast keeps generating Organization, WebSite, WebPage, BreadcrumbList, Article and the author; the theme keeps the
-// FAQPage from the post's FAQ fields. Only what they don't cover goes in the field. Invalid JSON is ignored.
+// == 14. HANDL UTM (CACHE-SAFE MODE)
 // =============================================================================
-function hr_schema_extra()
-{
-	static $cache = null;
-	if (null !== $cache) {
-		return $cache;
-	}
-	$cache = array();
-	if (!is_singular()) {
-		return $cache;
-	}
-	$raw  = get_post_meta(get_queried_object_id(), '_hr_schema_extra', true);
-	$data = is_string($raw) && '' !== $raw ? json_decode($raw, true) : null;
-	return $cache = is_array($data) ? $data : array();
-}
 
-add_filter('wpseo_schema_article', function ($data) {
-	$extra = hr_schema_extra();
-	if (!empty($extra['article']) && is_array($extra['article']) && is_array($data)) {
-		unset($extra['article']['@id'], $extra['article']['@type']); // never change Yoast's identity of the article
-		$data = array_merge($data, hr_schema_drop_node_refs($extra['article'], $extra));
+// Turn off server-side capture
+add_action('init', function () {
+	if (!function_exists('CaptureUTMs') || !function_exists('generateUTMFields') || !function_exists('HandlCreateShortcode')) {
+		return; // HandL not active
 	}
-	return $data;
-}, 20);
-
-/**
- * Keep the Article and the extra nodes (e.g. the Dataset) as separate top-level items.
- * Schema validators show a node that another node points to *nested* under it, so a bare {"@id": ...} pointer
- * either way hides one of them: Article.hasPart -> Dataset hides the Dataset, Dataset.isPartOf -> Article hides
- * the Article. Bare pointers between the two are dropped, so the validator lists Dataset, Article and FAQPage
- * side by side. Inline objects and pointers to anything else (author, publisher, WebPage...) are kept.
- *
- * $ids is a set: array('https://...#dataset' => true, ...).
- */
-function hr_schema_drop_refs(array $props, array $ids)
-{
-	if (!$ids) {
-		return $props;
+	remove_action('init', 'CaptureUTMs'); // Runs before HandL (priority 10)
+	foreach (generateUTMFields() as $field) {
+		HandlCreateShortcode($field, ''); // Render empty; browser fills fields
 	}
+}, 1);
 
-	$is_ref = static function ($value) use ($ids) {
-		return is_array($value) && 1 === count($value) && isset($value['@id']) && isset($ids[(string) $value['@id']]);
-	};
-
-	foreach ($props as $key => $value) {
-		if ('@id' === $key) {
-			continue;
-		}
-		if ($is_ref($value)) {
-			unset($props[$key]);
-		} elseif (is_array($value) && $value && array_keys($value) === range(0, count($value) - 1)) { // a JSON list
-			$kept = array_values(array_filter($value, static function ($item) use ($is_ref) {
-				return !$is_ref($item);
-			}));
-			if ($kept) {
-				$props[$key] = $kept;
-			} else {
-				unset($props[$key]);
-			}
-		}
+// Hide UTM cookies while rendering
+add_action('template_redirect', function () {
+	if (is_admin() || !function_exists('generateUTMFields')) {
+		return;
 	}
-	return $props;
-}
-
-/** Article side: drop pointers from the Article to the post's extra nodes. */
-function hr_schema_drop_node_refs(array $props, array $extra)
-{
-	$node_ids = array();
-	foreach ((array) ($extra['nodes'] ?? array()) as $node) {
-		if (is_array($node) && !empty($node['@id'])) {
-			$node_ids[(string) $node['@id']] = true;
-		}
+	foreach (generateUTMFields() as $field) {
+		unset($_COOKIE[$field], $_COOKIE['first_' . $field]);
 	}
-	return hr_schema_drop_refs($props, $node_ids);
-}
-
-add_filter('wpseo_schema_graph', function ($graph) {
-	$extra = hr_schema_extra();
-	if (!empty($extra['nodes']) && is_array($extra['nodes']) && is_array($graph)) {
-		// Yoast's Article @id(s): @type may be "Article" or a list such as ["Article", "BlogPosting"].
-		$article_ids = array();
-		foreach ($graph as $piece) {
-			if (is_array($piece) && !empty($piece['@id']) && in_array('Article', (array) ($piece['@type'] ?? array()), true)) {
-				$article_ids[(string) $piece['@id']] = true;
-			}
-		}
-		foreach ($extra['nodes'] as $node) {
-			if (is_array($node) && !empty($node['@type'])) {
-				$graph[] = hr_schema_drop_refs($node, $article_ids); // e.g. Dataset.isPartOf -> Article
-			}
-		}
-	}
-	return $graph;
-}, 20);
+}, 0);
