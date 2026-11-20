@@ -24,12 +24,12 @@ $ppc_headlines = array(
 	'pharmacy' => array( 'Hospital pharmacy software', 'Hospital pharmacy software where stock and bills always match' ),
 	'cloud'    => array( 'Cloud hospital management software', 'Cloud hospital software your staff will actually use' ),
 	'abdm'     => array( 'ABDM compliant hospital software', 'ABDM-ready hospital software your staff will actually use' ),
-	'his'      => array( 'Hospital information system (HIS)', 'Run your whole hospital on one system your staff will actually use' ),
+	'his'      => array( 'Hospital information system (HIS)', 'Hospital Management Software your staff will actually use' ),
 );
 $ppc_lp   = isset( $_GET['lp'] ) ? sanitize_key( wp_unslash( $_GET['lp'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $ppc_head = isset( $ppc_headlines[ $ppc_lp ] )
 	? $ppc_headlines[ $ppc_lp ]
-	: array( 'Hospital management system (HMS) software', 'Run your whole hospital on one system your staff will actually use' );
+	: array( 'Hospital management system (HMS) software', 'Hospital Management Software your staff will actually use' );
 $ppc_hospitals = array(
 	array( 'name' => 'HZB Arogyam Multispeciality Hospital', 'place' => 'Hazaribagh, Jharkhand', 'beds' => '150 beds', 'logo' => $ppc_assets . '/hzb-arogyam-multispeciality-hospital.webp' ),
 	array( 'name' => 'Vibrant Multispecialty Hospital', 'place' => 'Vapi', 'beds' => '120 beds', 'logo' => $ppc_assets . '/vibrant-hospital.webp' ),
@@ -72,7 +72,7 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
         <p class="eyebrow"><?php echo esc_html($ppc_head[0]); ?></p>
         <h1><?php echo esc_html($ppc_head[1]); ?></h1>
         <?php // Phones show only the second part (.hs-b), css section 25. ?>
-        <p class="hero-sub"><span class="hs-a">One hospital management system (HMS / HIS) for OPD, IPD, billing, pharmacy, lab and TPA claims. </span><span
+        <p class="hero-sub"><span class="hs-a">Hospital management software (HMS) for 10 to 1500 bed hospitals: OPD, IPD, billing, pharmacy, lab and TPA claims in one system. </span><span
             class="hs-b">Moving from paper, Excel or separate software? Go live in 1 to 3 weeks, with your data moved,
             staff trained and 24×7 support.</span></p>
         <?php // Phones only (the full proof block sits below the form there). ?>

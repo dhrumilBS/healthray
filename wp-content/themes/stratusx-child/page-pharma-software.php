@@ -2,22 +2,6 @@
 /**
  * Template Name: Pharmacy Management Software - Site Header
  * Template Post Type: page
- *
- * Same design and content as the organic pharmacy page (page-pharma-organic.php), but with the
- * normal site header and footer. Everything for this page is in this ONE file: content arrays,
- * CSS (<style>), JS (<script>) and schema.
- *
- * How it renders: the Roots wrapper (stratusx/base.php) prints <head>, the site header and the site
- * footer, then includes this file inside <div class="content">. So this file must NOT print
- * <!doctype>, <head>, <body>, its own header or footer, and it can't use wp_head / wp_enqueue_scripts
- * hooks (they have already run when this file runs).
- *
- * CSS is scoped to <main class="hr-pmo"> so it never touches the site header/footer.
- * Every "Start free" / "Book a free demo" button opens the same popup, which holds the one CF7 form
- * (moved from the hero into the popup and back, so there is only ever one form on the page).
- *
- * Yoast (page editor) handles title, meta description, canonical, robots and the base schema.
- * This template adds SoftwareApplication + FAQPage schema.
  */
 defined('ABSPATH') || exit;
 

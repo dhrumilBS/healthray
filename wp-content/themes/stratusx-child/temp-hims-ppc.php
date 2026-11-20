@@ -82,7 +82,7 @@
         <h2 id="define-title">What HIMS software does for a hospital</h2>
         <p style="margin-top:14px">A hospital information management system is the single platform a hospital runs on: patients are registered once, and that record travels through OPD, wards, theatre, laboratory, pharmacy and billing without being retyped at any desk. Departments stop reconciling their own registers, and management stops assembling reports from six sources.</p>
         <p>The practical difference shows up in three places. Revenue leakage falls because charges are captured where care happens instead of being remembered at discharge. Accreditation stops being a fire drill, because the documentation assessors ask for is produced by daily work. And a chain can open a new facility without buying a new system.</p>
-        <p>New to the terminology? Our guide explains the <a href="https://healthray.com/blog/hims/hims-full-form/" target="_blank" style="color:var(--brand);font-weight:600">HIMS full form and what it means in medical settings</a> in plain language.</p>
+        <p>New to the terminology? Our guide explains the <a href="https://healthray.com/blog/hims-full-form/" target="_blank" style="color:var(--brand);font-weight:600">HIMS full form and what it means in medical settings</a> in plain language.</p>
       </div>
       <img src="https://healthray.com/wp-content/uploads/2026/08/healthray-hims-software.svg" alt="Healthray HIMS software connecting OPD, IPD, theatre, laboratory, pharmacy and billing on one dashboard" width="690" height="500" loading="lazy" decoding="async">
     </div>

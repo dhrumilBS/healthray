@@ -16,7 +16,11 @@
  *  10. Template Assign 410.php
  *  11. Contact Form 7 - Phone Validation & Duplicate Submission Guard
  *  12. Standalone pages (Login Portal + PPC) - no site header / footer
+ *  13. reCAPTCHA (Contact Form 7) - load on the first form interaction, not on page load
+ *  14. HandL UTM Grabber - browser-only mode (so Cloudflare can cache pages)
+ *  15. PPC pages - jQuery + HandL scripts in the footer, no jquery-migrate, CF7 CSS inlined
  */
+
 
 // =============================================================================
 // 1. INCLUDES
@@ -2238,3 +2242,168 @@ add_action('wp_enqueue_scripts', function () {
 		wp_enqueue_script('ppc-' . $key, get_stylesheet_directory_uri() . $js, array(), hr_asset_version($js), array('in_footer' => true, 'strategy' => 'defer'));
 	}
 }, 1000);
+
+// =============================================================================
+// 13. reCAPTCHA (Contact Form 7) - load on the first page interaction, not on page load (+ spam log)
+// CF7 loads Google's api.js (~350 KB of JS) on every page. js/recaptcha-lazy.js replaces CF7's own reCAPTCHA
+// script with the same behaviour, but api.js loads on the visitor's first interaction with the page (scroll,
+// mouse move, tap, key) instead of during page load, and a fresh token is always fetched right before each
+// submission (the server keeps verifying it, as before). Every spam rejection is logged - see hr_cf7_spam_log below.
+// To go back to CF7's default, delete this block.
+// =============================================================================
+add_action('wp_enqueue_scripts', function () {
+	if (!wp_script_is('wpcf7-recaptcha', 'enqueued') || !class_exists('WPCF7_RECAPTCHA')) {
+		return;
+	}
+	$service = WPCF7_RECAPTCHA::get_instance();
+	if (!$service->is_active()) {
+		return;
+	}
+
+	$api = apply_filters('wpcf7_use_recaptcha_net', false) ? 'https://www.recaptcha.net/recaptcha/api.js' : 'https://www.google.com/recaptcha/api.js';
+
+	wp_dequeue_script('wpcf7-recaptcha'); // its dependency, google-recaptcha (api.js), is then not printed either
+
+	wp_enqueue_script('hr-recaptcha-lazy', get_stylesheet_directory_uri() . '/js/recaptcha-lazy.js', array('contact-form-7'), hr_asset_version('/js/recaptcha-lazy.js'), array('in_footer' => true, 'strategy' => 'defer'));
+	wp_add_inline_script('hr-recaptcha-lazy', 'var hrRecaptcha = ' . wp_json_encode(array(
+		'sitekey' => $service->get_sitekey(),
+		'src'     => add_query_arg('render', $service->get_sitekey(), $api),
+		'actions' => apply_filters('wpcf7_recaptcha_actions', array('homepage' => 'homepage', 'contactform' => 'contactform')),
+	)) . ';', 'before');
+}, 30);
+
+// Keep a record of the last 100 submissions Contact Form 7 rejected as spam (form, time, reason, reCAPTCHA score),
+// so a lead that "failed to send" can be checked instead of guessed. Read it in the database: wp_options,
+// option_name 'hr_cf7_spam_log'. No personal data is stored - only the reasons.
+add_action('wpcf7_submit', function ($contact_form, $result) {
+	if (($result['status'] ?? '') !== 'spam' || !class_exists('WPCF7_Submission')) {
+		return;
+	}
+	$submission = WPCF7_Submission::get_instance();
+	$log = get_option('hr_cf7_spam_log', array());
+	$log = is_array($log) ? $log : array();
+	$log[] = array(
+		'time'    => current_time('mysql'),
+		'form_id' => $contact_form->id(),
+		'page'    => $submission ? (string) $submission->get_meta('url') : '',
+		'reasons' => $submission ? wp_list_pluck((array) $submission->get_spam_log(), 'reason') : array(),
+	);
+	update_option('hr_cf7_spam_log', array_slice($log, -100), false);
+}, 10, 2);
+
+// =============================================================================
+// 14. HandL UTM Grabber - browser-only mode (so Cloudflare can cache pages)
+// HandL captures UTMs twice: on the server (CaptureUTMs on init: Set-Cookie headers + UTM values written into
+// the form HTML) and in the browser (handl-utm-grabber.js: reads the URL, saves the cookies, fills every form
+// field - utm_*, gclid, matchtype, utm_device, utm_sitelink, utm_placement, handl_url, handl_url_base...).
+// The server half stops Cloudflare caching pages, and with caching on it could bake one visitor's UTMs into the
+// cached HTML. So: switch the server half off, keep HandL's shortcodes (forms use [utm_source_i]...) but always
+// empty on the server, and let the browser script do the work. Only handl_ip (not used by any form) is lost.
+// To go back to HandL's default, delete this block.
+// =============================================================================
+add_action('init', function () {
+	if (!function_exists('CaptureUTMs') || !function_exists('generateUTMFields') || !function_exists('HandlCreateShortcode')) {
+		return; // HandL not active
+	}
+	remove_action('init', 'CaptureUTMs'); // HandL hooks it at priority 10; this runs at 1
+	foreach (generateUTMFields() as $field) {
+		HandlCreateShortcode($field, ''); // shortcodes exist but render empty; the browser script fills the fields
+	}
+	// Not firing 'after_handl_capture_utms': its only listener (predefined variables, none configured) sets server cookies.
+}, 1);
+
+// HandL's CF7 tags (e.g. [handl_url_cf7]) read $_COOKIE while the page is built. Hide those cookies from page
+// rendering so cached HTML never carries one visitor's values. Form submissions (REST API) are unaffected.
+add_action('template_redirect', function () {
+	if (is_admin() || !function_exists('generateUTMFields')) {
+		return;
+	}
+	foreach (generateUTMFields() as $field) {
+		unset($_COOKIE[$field], $_COOKIE['first_' . $field]);
+	}
+}, 0);
+
+
+// =============================================================================
+// 15. PPC pages - nothing render-blocking from jQuery or CF7 in <head>
+// - jQuery + the scripts that need it (HandL UTM Grabber) print at the end of <body> instead of <head>. jQuery stays
+//   a normal (non-deferred) script there, so the inline code attached to it (header plugin scroll-to-top) still
+//   runs, and the deferred jQuery users (HandL, wpcf7-redirect) run after it as before.
+// - jquery-migrate removed: HandL, js.cookie and wpcf7-redirect use no deprecated jQuery APIs.
+// - Contact Form 7's small stylesheet (3 KB, no url() paths) is inlined instead of a blocking <link>.
+// To go back, delete this block.
+// =============================================================================
+add_action('wp_enqueue_scripts', function () {
+	if ('' === hr_ppc_page_key()) {
+		return;
+	}
+	$scripts = wp_scripts();
+
+	$jquery = $scripts->query('jquery', 'registered');
+	if ($jquery) {
+		$jquery->deps = array_values(array_diff($jquery->deps, array('jquery-migrate')));
+	}
+	foreach (array('jquery', 'jquery-core', 'js.cookie', 'handl-utm-grabber') as $handle) {
+		if ($scripts->query($handle, 'registered')) {
+			$scripts->add_data($handle, 'group', 1); // 1 = footer
+		}
+	}
+
+	if (wp_style_is('contact-form-7', 'enqueued')) {
+		wp_dequeue_style('contact-form-7');
+	}
+}, 1001);
+
+add_action('wp_head', function () {
+	if ('' === hr_ppc_page_key() || !defined('WPCF7_PLUGIN_DIR')) {
+		return;
+	}
+	$css = hr_get_inline_css(WPCF7_PLUGIN_DIR . '/includes/css/styles.css');
+	if ('' !== $css) {
+		echo '<style id="contact-form-7-inline-css">' . hr_minify_css($css) . '</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput -- plugin CSS file.
+	}
+}, 51);
+
+// =============================================================================
+// 16. Per-post extra schema, merged into Yoast's graph (no duplicate Organization / WebPage / Article / FAQ)
+// A post can carry extra structured data in the hidden custom field "_hr_schema_extra" (JSON):
+//   { "article": { ...properties added to Yoast's own Article node (about, citation, keywords, hasPart...) },
+//     "nodes":   [ ...extra nodes appended to Yoast's @graph, e.g. a Dataset ] }
+// Yoast keeps generating Organization, WebSite, WebPage, BreadcrumbList, Article and the author; the theme keeps the
+// FAQPage from the post's FAQ fields. Only what they don't cover goes in the field. Invalid JSON is ignored.
+// =============================================================================
+function hr_schema_extra()
+{
+	static $cache = null;
+	if (null !== $cache) {
+		return $cache;
+	}
+	$cache = array();
+	if (!is_singular()) {
+		return $cache;
+	}
+	$raw  = get_post_meta(get_queried_object_id(), '_hr_schema_extra', true);
+	$data = is_string($raw) && '' !== $raw ? json_decode($raw, true) : null;
+	return $cache = is_array($data) ? $data : array();
+}
+
+add_filter('wpseo_schema_article', function ($data) {
+	$extra = hr_schema_extra();
+	if (!empty($extra['article']) && is_array($extra['article']) && is_array($data)) {
+		unset($extra['article']['@id'], $extra['article']['@type']); // never change Yoast's identity of the article
+		$data = array_merge($data, $extra['article']);
+	}
+	return $data;
+}, 20);
+
+add_filter('wpseo_schema_graph', function ($graph) {
+	$extra = hr_schema_extra();
+	if (!empty($extra['nodes']) && is_array($extra['nodes']) && is_array($graph)) {
+		foreach ($extra['nodes'] as $node) {
+			if (is_array($node) && !empty($node['@type'])) {
+				$graph[] = $node;
+			}
+		}
+	}
+	return $graph;
+}, 20);
