@@ -51,7 +51,7 @@ if (is_author()) {
 	});
 
 	foreach ($hr_all_cats as $hr_term) {
-		if ((int) $hr_term->term_id === $hr_blog_cat_id) {
+		if ((int) $hr_term->term_id === $hr_blog_cat_id || (int) $hr_term->term_id === hr_default_category_id()) { // default "Uncategorized" is never shown
 			continue;
 		}
 

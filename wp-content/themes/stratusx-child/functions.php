@@ -40,6 +40,7 @@ require_once get_stylesheet_directory() . '/lib/events-schema.php';
 require_once get_stylesheet_directory() . '/lib/whitepaper-helpers.php';
 require_once get_stylesheet_directory() . '/lib/blog-rewrites.php';
 require_once get_stylesheet_directory() . '/lib/blog-redirects.php';
+require_once get_stylesheet_directory() . '/lib/hide-default-category.php';
 require_once get_stylesheet_directory() . '/lib/virtual-urls.php';
 require_once get_stylesheet_directory() . '/lib/header.php';
 require_once get_stylesheet_directory() . '/lib/speciality-helpers.php';
@@ -2391,17 +2392,75 @@ add_filter('wpseo_schema_article', function ($data) {
 	$extra = hr_schema_extra();
 	if (!empty($extra['article']) && is_array($extra['article']) && is_array($data)) {
 		unset($extra['article']['@id'], $extra['article']['@type']); // never change Yoast's identity of the article
-		$data = array_merge($data, $extra['article']);
+		$data = array_merge($data, hr_schema_drop_node_refs($extra['article'], $extra));
 	}
 	return $data;
 }, 20);
 
+/**
+ * Keep the Article and the extra nodes (e.g. the Dataset) as separate top-level items.
+ * Schema validators show a node that another node points to *nested* under it, so a bare {"@id": ...} pointer
+ * either way hides one of them: Article.hasPart -> Dataset hides the Dataset, Dataset.isPartOf -> Article hides
+ * the Article. Bare pointers between the two are dropped, so the validator lists Dataset, Article and FAQPage
+ * side by side. Inline objects and pointers to anything else (author, publisher, WebPage...) are kept.
+ *
+ * $ids is a set: array('https://...#dataset' => true, ...).
+ */
+function hr_schema_drop_refs(array $props, array $ids)
+{
+	if (!$ids) {
+		return $props;
+	}
+
+	$is_ref = static function ($value) use ($ids) {
+		return is_array($value) && 1 === count($value) && isset($value['@id']) && isset($ids[(string) $value['@id']]);
+	};
+
+	foreach ($props as $key => $value) {
+		if ('@id' === $key) {
+			continue;
+		}
+		if ($is_ref($value)) {
+			unset($props[$key]);
+		} elseif (is_array($value) && $value && array_keys($value) === range(0, count($value) - 1)) { // a JSON list
+			$kept = array_values(array_filter($value, static function ($item) use ($is_ref) {
+				return !$is_ref($item);
+			}));
+			if ($kept) {
+				$props[$key] = $kept;
+			} else {
+				unset($props[$key]);
+			}
+		}
+	}
+	return $props;
+}
+
+/** Article side: drop pointers from the Article to the post's extra nodes. */
+function hr_schema_drop_node_refs(array $props, array $extra)
+{
+	$node_ids = array();
+	foreach ((array) ($extra['nodes'] ?? array()) as $node) {
+		if (is_array($node) && !empty($node['@id'])) {
+			$node_ids[(string) $node['@id']] = true;
+		}
+	}
+	return hr_schema_drop_refs($props, $node_ids);
+}
+
 add_filter('wpseo_schema_graph', function ($graph) {
 	$extra = hr_schema_extra();
 	if (!empty($extra['nodes']) && is_array($extra['nodes']) && is_array($graph)) {
+		// Yoast's Article @id(s): @type may be "Article" or a list such as ["Article", "BlogPosting"].
+		$article_ids = array();
+		foreach ($graph as $piece) {
+			if (is_array($piece) && !empty($piece['@id']) && in_array('Article', (array) ($piece['@type'] ?? array()), true)) {
+				$article_ids[(string) $piece['@id']] = true;
+			}
+		}
 		foreach ($extra['nodes'] as $node) {
 			if (is_array($node) && !empty($node['@type'])) {
-				$graph[] = $node;
+				$graph[] = hr_schema_drop_refs($node, $article_ids); // e.g. Dataset.isPartOf -> Article
 			}
 		}
 	}
