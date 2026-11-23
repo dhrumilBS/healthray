@@ -2306,7 +2306,8 @@ add_action('wp_head', function () {
 
 // PPC lead popup
 add_action('wp_footer', function () {
-	if ('' !== hr_ppc_page_key()) {
+	// Lab page: its CF7 form is on the page and no button opens the popup, so no second copy of the form
+	if ('' !== hr_ppc_page_key() && 'lab' !== hr_ppc_page_key()) {
 		get_template_part('templates/lead-popup', null, (array) apply_filters('hr_ppc_popup_args', array()));
 	}
 }, 5);
@@ -2411,6 +2412,7 @@ add_action('wp_head', function () {
 		echo '<style id="contact-form-7-inline-css">' . hr_minify_css($css) . '</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 }, 51);
+
 
 
 // =============================================================================
