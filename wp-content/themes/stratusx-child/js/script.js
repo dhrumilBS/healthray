@@ -464,6 +464,9 @@ function initTrackingParamPreserver() {
 		'utm_term',
 		'utm_content',
 		'utm_placement',
+		'utm_device',
+		'utm_sitelink',
+		'matchtype',
 		'gclid',
 		'fbclid',
 		'msclkid'
@@ -524,6 +527,38 @@ function initTrackingParamPreserver() {
 		});
 
 		if (changed) link.href = url.toString();
+	}, true);
+}
+
+/* **** 7b. Contact Form 7: UTM / page-link fields without cookie consent
+   HandL fills these from cookies, so it waits for CookieYes consent. Right before a CF7 form is sent,
+   any of them still empty is filled from the page address (section 7 carries the UTMs to internal links).
+   A value HandL already filled is kept. **** */
+
+function initUtmFieldFallback() {
+	var KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_device', 'utm_placement', 'utm_sitelink', 'matchtype'];
+
+	// formdata does not bubble, so listen in the capture phase
+	document.addEventListener('formdata', function (event) {
+		var form = event.target;
+		if (!form || !form.classList || !form.classList.contains('wpcf7-form')) return;
+
+		var fd = event.formData;
+		var query = new URLSearchParams(window.location.search);
+
+		KEYS.forEach(function (key) {
+			if (fd.has(key) && !fd.get(key) && query.get(key)) {
+				fd.set(key, query.get(key));
+			}
+		});
+
+		// handl_url_cf7 = full address, handl_url_base_cf7 (page-name) = address without the query
+		form.querySelectorAll('input.wpcf7-handl_url_cf7, input.wpcf7-handl_url_base_cf7').forEach(function (input) {
+			if (!input.name || fd.get(input.name)) return;
+			fd.set(input.name, input.classList.contains('wpcf7-handl_url_cf7')
+				? window.location.href
+				: window.location.origin + window.location.pathname);
+		});
 	}, true);
 }
 
@@ -705,6 +740,7 @@ initFormSubmitHandling();
 initFormButtons();
 initOtherFieldToggle();
 initTrackingParamPreserver();
+initUtmFieldFallback();
 
 document.addEventListener('DOMContentLoaded', function () {
 	initNestedLists();
