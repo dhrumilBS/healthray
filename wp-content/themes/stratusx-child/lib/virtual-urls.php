@@ -56,6 +56,7 @@ function hr_virtual_url_map()
 			82202,
 			82251,
 			82606,
+			82618,
 		),
 	);
 }

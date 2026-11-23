@@ -2306,8 +2306,8 @@ add_action('wp_head', function () {
 
 // PPC lead popup
 add_action('wp_footer', function () {
-	// Lab page: its CF7 form is on the page and no button opens the popup, so no second copy of the form
-	if ('' !== hr_ppc_page_key() && 'lab' !== hr_ppc_page_key()) {
+	// Lab and clinic pages have their own popup (js/ppc-lab.js, js/ppc-clinic.js)
+	if ('' !== hr_ppc_page_key() && !in_array(hr_ppc_page_key(), array('lab', 'clinic'), true)) {
 		get_template_part('templates/lead-popup', null, (array) apply_filters('hr_ppc_popup_args', array()));
 	}
 }, 5);
