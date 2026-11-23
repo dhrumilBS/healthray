@@ -23,8 +23,6 @@ $hr_lab_heads = array(
 $hr_lab_k    = isset($_GET['k']) ? sanitize_key(wp_unslash($_GET['k'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $hr_lab_head = isset($hr_lab_heads[$hr_lab_k]) ? $hr_lab_heads[$hr_lab_k] : array('Pathology lab software', 'Easy pathology lab software for your bill, report and WhatsApp.');
 
-// Sales WhatsApp number (TO CONFIRM)
-$hr_lab_whatsapp = '918980880819';
 ?>
 <script>
   window.HR_LAB = <?php echo wp_json_encode(array('uploads' => $hr_lab_up)); ?>;
@@ -323,7 +321,7 @@ $hr_lab_whatsapp = '918980880819';
       </div>
       <div class="wa-box">
         <p class="wa-msg">Hi, I run a lab. I want a free demo of Healthray Lab.<small>Your message, ready to send</small></p>
-        <a class="wa-bt" href="https://wa.me/<?php echo esc_attr($hr_lab_whatsapp); ?>?text=Hi%2C%20I%20run%20a%20lab.%20I%20want%20a%20free%20demo%20of%20Healthray%20Lab." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <a class="wa-bt" href="<?php echo esc_url(hr_ppc_wa_url('Hi, I run a lab. I want a free demo of Healthray Lab.')); ?>" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.7-5A8.5 8.5 0 1 1 21 11.5z" />
           </svg>Send it on WhatsApp</a>
         <p class="wa-alt"><a href="#demo" data-lab-pop>Or fill the short form</a></p>

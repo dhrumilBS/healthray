@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Template Name: Healthray Partner Program - Meta Ads
+ * Template Name: PPC - Partner Meta
  * Template Post Type: page
  */
 defined('ABSPATH') || exit;

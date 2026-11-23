@@ -6,12 +6,24 @@
  * /solutions/multispeciality-hospitals/ (page 82553). Also picked up by slug (page-{slug}.php).
  * Everything for this page is in this ONE file: images, FAQs, schema, CSS (<style>) and JS (<script>).
  * The Roots wrapper prints <head>, the site header and footer, so no wp_head / enqueue hooks here.
- * CSS is scoped to .msh. Yoast handles title, meta, canonical and base schema; this adds FAQPage.
+ * CSS is scoped to .msh, and to #myPopup for the popup. Yoast handles title, meta, canonical and base schema; this adds FAQPage.
+ * Lead form: the PPC Form (CF7 11eec7d), in the hero card and in the site popup (#myPopup). Every "Book a demo"
+ * button has .hr-cta-btn, so js/script.js opens that popup; the popup gets this form through hr_ppc_popup_args.
  */
 defined('ABSPATH') || exit;
 
 $msh_up   = 'https://healthray.com/wp-content/uploads/';
 $msh_logo = get_stylesheet_directory_uri() . '/assets/ppc-hims/';
+$msh_form = '[contact-form-7 id="11eec7d" title="PPC Form"]';
+
+// Site popup: same form, heading and line as the hero card.
+add_filter('hr_ppc_popup_args', static function () use ($msh_form) {
+	return array(
+		'form'  => $msh_form,
+		'title' => 'Book a free demo',
+		'text'  => 'A free 30-minute demo, set up for your departments. Bring your administrator and billing head.',
+	);
+});
 
 // Images (media library + theme logos)
 $msh_img = array(
@@ -75,7 +87,7 @@ $msh_schema = array(
 <style id="msh-css">
 /* Healthray solutions page: multispeciality hospitals.
    Every rule is scoped to .msh so nothing leaks into the theme. Light theme only, like healthray.com. */
-.msh{--navy:#0D1B3E; --navy2:#1B3C74; --blue:#0F68EA; --ink:#14284F; --body:#4A5D73; --muted:#6C8093;
+.msh, #myPopup{--navy:#0D1B3E; --navy2:#1B3C74; --blue:#0F68EA; --ink:#14284F; --body:#4A5D73; --muted:#6C8093;
   --tint:#EFF4FF; --line:#D9E2F2; --white:#FFFFFF; --sky:#8FB2F5; --soft:#C8D5E3;
   --peach:#FDF1E7; --mint:#E7F6F1; --lilac:#EFEBFC; --sun:#FFF6DF; --green:#157A4A;
   --note-bg:#FFF6D6; --note-line:#E0B33A; --note-ink:#6B4E00;
@@ -326,6 +338,51 @@ $msh_schema = array(
 .msh .marquee-track{animation:none}
 .msh .marquee ul[aria-hidden]{display:none}
 }
+/* PPC Form (CF7 11eec7d) in the hero card and in the site popup (same rules as the small-hospitals page) */
+:is(.msh, #myPopup) .lead-form.hr-demo-form{display:block;color:var(--body);font-size:16px;line-height:1.6}
+:is(.msh, #myPopup) .hr-form-step{display:flex;flex-direction:column;gap:12px}
+:is(.msh, #myPopup) .hr-progress{display:flex;flex-direction:column;gap:6px;margin:0 0 2px}
+:is(.msh, #myPopup) .hr-progress-label{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--muted)}
+:is(.msh, #myPopup) .hr-progress-bar{height:4px;border-radius:2px;background:var(--line);overflow:hidden}
+:is(.msh, #myPopup) .hr-progress-bar span{display:block;height:100%;border-radius:2px;background:var(--blue)}
+:is(.msh, #myPopup) .hr-step-title{font-weight:800;color:var(--ink);font-size:16.5px}
+:is(.msh, #myPopup) .hr-bed-options{display:flex;flex-direction:column;gap:9px}
+:is(.msh, #myPopup) .hr-bed-option{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;min-height:0;margin:0;padding:13px 16px;border:1.5px solid var(--line);border-radius:12px;background:#fff;box-shadow:none;color:var(--ink);font-family:var(--font);font-size:15.5px;font-weight:800;line-height:normal;letter-spacing:normal;text-align:left;text-transform:none;cursor:pointer}
+:is(.msh, #myPopup) .hr-bed-option:hover{border-color:var(--blue);background:#F2F7FF}
+:is(.msh, #myPopup) .hr-bed-option strong{font-weight:inherit}
+:is(.msh, #myPopup) .hr-bed-option.hr-bed-full{font-weight:700;color:var(--muted)}
+:is(.msh, #myPopup) .hr-arrow{flex:none;color:var(--blue);font-size:22px;line-height:1}
+:is(.msh, #myPopup) .hr-selected-bed{display:flex;align-items:center;gap:8px;background:var(--tint);border-radius:10px;padding:9px 12px;color:var(--ink);font-size:14px;font-weight:800}
+:is(.msh, #myPopup) .hr-selected-bed-value{flex:1;min-width:0}
+:is(.msh, #myPopup) .hr-selected-bed button{margin:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;color:var(--blue);font-family:var(--font);font-size:14px;font-weight:800;line-height:1.2;letter-spacing:normal;text-transform:none;cursor:pointer}
+:is(.msh, #myPopup) .hr-selected-bed .hr-back-step{padding:0 2px;font-size:22px;line-height:1}
+:is(.msh, #myPopup) .hr-demo-form button:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+:is(.msh, #myPopup) .hr-demo-form .row-2{display:flex;flex-direction:column;gap:12px}
+:is(.msh, #myPopup) .hr-demo-form .field{display:flex;flex-direction:column;gap:4px;min-width:0;margin:0}
+:is(.msh, #myPopup) .hr-demo-form .field label{position:static;display:block;width:auto;height:auto;margin:0;padding:0;overflow:visible;clip:auto;clip-path:none;white-space:normal;color:var(--ink);font-size:12.5px;font-weight:800;line-height:inherit}
+:is(.msh, #myPopup) .lead-form .row-2 .field .wpcf7-form-control{width:100%;min-width:0;height:auto;margin:0;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;box-shadow:none;color:var(--body);font-family:var(--font);font-size:15px;line-height:normal;transition:none}
+:is(.msh, #myPopup) .lead-form .row-2 .field .wpcf7-form-control:focus{border-color:var(--line);outline:0}
+:is(.msh, #myPopup) .lead-form .row-2 .field .wpcf7-form-control:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+/* Mobile number: "+91" box in front of the field (built by the script below) */
+:is(.msh, #myPopup) .hr-phone{display:flex;border:1px solid var(--line);border-radius:10px;background:#fff;overflow:hidden}
+:is(.msh, #myPopup) .hr-phone:focus-within{outline:3px solid var(--sky);outline-offset:2px}
+:is(.msh, #myPopup) .hr-phone:has(.wpcf7-not-valid){border-color:#DC3232}
+:is(.msh, #myPopup) .hr-cc{flex:none;display:flex;align-items:center;padding:0 10px 0 12px;border-right:1px solid var(--line);background:var(--tint);color:var(--ink);font-size:15px;font-weight:700}
+:is(.msh, #myPopup) .lead-form .row-2 .field .hr-phone .wpcf7-form-control{flex:1;border:0;border-radius:0;outline:0}
+:is(.msh, #myPopup) .hr-demo-form .wpcf7-not-valid-tip{margin-top:4px;color:#B42318;font-size:12.5px;font-weight:700;line-height:1.3}
+:is(.msh, #myPopup) .hr-demo-form .form-submit-btn{display:flex;flex-direction:column;position:relative;margin:0}
+:is(.msh, #myPopup) .hr-demo-form .form-submit-btn .wpcf7-submit{display:block;width:100%;height:auto;margin:0;padding:15px 26px;border:0;border-radius:12px;background:var(--blue);box-shadow:none;color:#fff;font-family:var(--font);font-size:16px;font-weight:800;line-height:1.2;letter-spacing:normal;text-transform:none;cursor:pointer}
+:is(.msh, #myPopup) .hr-demo-form .form-submit-btn .wpcf7-submit:hover{background:#0B57C7;box-shadow:none}
+:is(.msh, #myPopup) .hr-demo-form .form-submit-btn .wpcf7-submit:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+:is(.msh, #myPopup) .hr-demo-form .form-note{margin:0;color:var(--muted);font-size:13.5px;line-height:inherit;text-align:center}
+/* Site popup (#myPopup, templates/lead-popup.php) on this page: drawn like the hero form card */
+body #myPopup{max-width:480px;padding:28px;border-radius:20px;color:var(--body);font-family:var(--font)}
+body #myPopup .widget-heading{margin:0 0 14px;padding-right:32px;text-align:left}
+body #myPopup .widget-heading .heading-title{margin:0;color:var(--ink);font-size:24px;font-weight:900;line-height:1.15;letter-spacing:-.015em}
+body #myPopup .widget-heading .description-text{margin:8px 0 0;color:var(--body);font-size:14.5px;line-height:1.6}
+@media (max-width:600px){
+  body #myPopup{padding:22px}
+}
 </style>
 <div class="msh">
 <div class="msh-main">
@@ -354,7 +411,7 @@ $msh_schema = array(
     <div class="form" id="demo">
       <h2>Book a free demo</h2>
       <p class="sub">A free 30-minute demo, set up for your departments. Bring your administrator and billing head.</p>
-      <?php echo do_shortcode( '[contact-form-7 id="9a13f7a" title="NEW LEAD FORM - Home Page"]' ); ?>
+      <?php if ( shortcode_exists( 'contact-form-7' ) ) { echo do_shortcode( $msh_form ); } ?>
     </div>
   </div>
 </section>
@@ -400,7 +457,7 @@ $msh_schema = array(
       </div>
       <div class="vid-foot">
         <p class="vid-line">Want to see it with your own departments and rates? Book a free 30-minute demo and we will set it up for your hospital.</p>
-        <a class="btn" href="#demo">Book a free demo</a>
+        <a class="btn hr-cta-btn" href="#demo">Book a free demo</a>
       </div>
     </div>
   </div>
@@ -527,7 +584,7 @@ $msh_schema = array(
         <span class="label">Included in every price</span>
         <ul><li>Moving your old data</li><li>Training for every department at your hospital</li><li>Your price in writing within 24 hours of the demo</li></ul>
         <p class="small">WhatsApp and SMS messages are paid separately.</p>
-        <a class="btn" href="#demo">Get a price for my hospital</a>
+        <a class="btn hr-cta-btn" href="#demo">Get a price for my hospital</a>
       </div>
     </div>
   </div>
@@ -550,7 +607,7 @@ $msh_schema = array(
   <div class="in">
     <h2>See Your Departments Working on One Patient File</h2>
     <p>A free 30-minute video call, set up with your own departments. Your price comes in writing within 24 hours, and you do not have to buy.</p>
-    <div class="ctas"><a class="btn" href="#demo">Book a free demo</a><a class="btn line" href="#" id="shareAll">Send this page to your partners</a></div>
+    <div class="ctas"><a class="btn hr-cta-btn" href="#demo">Book a free demo</a><a class="btn line" href="#" id="shareAll">Send this page to your partners</a></div>
     <p class="alt">Under 50 beds? <a href="<?php echo esc_url( home_url( '/solutions/small-hospitals-nursing-homes/' ) ); ?>">See software for small hospitals</a> · More than one hospital? <a href="<?php echo esc_url( home_url( '/solutions/hospital-chains/' ) ); ?>">See software for hospital chains</a></p>
   </div>
 </section>
@@ -612,6 +669,53 @@ $msh_schema = array(
   var base=location.href.split('#')[0];
   function wa(text,hash){return 'https://wa.me/?text='+encodeURIComponent(text+'\n'+base+(hash?'#'+hash:''));}
   var sa=document.getElementById('shareAll'); sa.addEventListener('click',function(){push('whatsapp_share',{place:'final_section'});}); sa.href=wa('Have a look: Healthray for multispeciality hospitals. Every department on one patient file.');sa.target='_blank';sa.rel='noopener';
+
+  /* PPC Form steps and mobile box (as on the small-hospitals page). The popup is printed in the footer, after
+     this script, so this runs once the page has loaded. */
+  function hrForm(){
+  /* PPC Form, hero card and popup. Its own script (js/ppc-hims.js) loads only on the PPC templates, so its steps
+     run here: a bed button fills the hidden bed_size field and opens step 2, "change" goes back to step 1. */
+  document.querySelectorAll('.msh .hr-demo-form, #myPopup .hr-demo-form').forEach(function(box){
+    var s1=box.querySelector('.hr-step-1'),s2=box.querySelector('.hr-step-2'),wrap=box.closest('.wpcf7');
+    if(!s1||!s2) return;
+    var bed=box.querySelector('[name="bed_size"]'),pick=box.querySelector('.hr-selected-bed-value'); // by name: CF7 drops the id on the popup copy
+    function step(n){s1.style.display=n===1?'':'none';s2.style.display=n===2?'':'none';}
+    box.querySelectorAll('.hr-bed-option').forEach(function(b){b.addEventListener('click',function(){
+      var val=b.getAttribute('data-bed'); if(!val) return;
+      if(bed) bed.value=val; if(pick) pick.textContent=val;
+      step(2); var first=s2.querySelector('input:not([type="hidden"])'); if(first) first.focus();
+    });});
+    box.querySelectorAll('.hr-back-step, .hr-change-bed').forEach(function(b){b.addEventListener('click',function(){
+      step(1); var opt=s1.querySelector('.hr-bed-option'); if(opt) opt.focus();
+    });});
+    /* the form's labels are not tied to their fields: give each field its label as its name */
+    box.querySelectorAll('.field').forEach(function(f){
+      var l=f.querySelector('label'),i=f.querySelector('input:not([type="hidden"])');
+      if(l&&i&&!i.hasAttribute('aria-label')) i.setAttribute('aria-label',l.textContent.replace('*','').trim());
+    });
+    /* CF7 empties the fields after a sent form: start again at step 1. The form reset leaves a hidden field's
+       value as set by script, so bed_size is cleared here. */
+    if(wrap) wrap.addEventListener('wpcf7reset',function(){if(bed) bed.value='';if(pick) pick.textContent='';step(1);});
+  });
+
+  /* Mobile number, as in js/ppc-hims.js: "+91" in its own box, the field takes the 10-digit number, and "+91 " is
+     added to the value CF7 sends (the server check needs the country code). Pasted numbers keep their last 10 digits. */
+  var CODE='+91',MAX=10;
+  function digits(val){var d=val.replace(/\D/g,'').replace(/^0+/,'');return d.length>MAX?d.slice(-MAX):d;}
+  document.querySelectorAll('.msh .hr-demo-form input[name="your-number"], #myPopup .hr-demo-form input[name="your-number"]').forEach(function(input){
+    var box=document.createElement('span'),cc=document.createElement('span'),f=input.closest('form');
+    box.className='hr-phone';cc.className='hr-cc';cc.textContent=CODE;cc.setAttribute('aria-hidden','true');
+    input.parentNode.insertBefore(box,input);box.appendChild(cc);box.appendChild(input);
+    input.value=digits(input.value);input.placeholder='98765 43210';
+    input.setAttribute('inputmode','numeric');input.setAttribute('autocomplete','tel-national');input.setAttribute('aria-label','Mobile number, India '+CODE);
+    input.addEventListener('input',function(e){
+      var next=e.inputType==='insertText'?input.value.replace(/\D/g,'').replace(/^0+/,'').slice(0,MAX):digits(input.value);
+      if(next!==input.value) input.value=next;
+    });
+    if(f) f.addEventListener('formdata',function(e){var d=digits(input.value);e.formData.set('your-number',d?CODE+' '+d:'');});
+  });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',hrForm); else hrForm();
 
   /* FAQ: first one open by default, only one open at a time */
   var fq=document.querySelectorAll('.msh .faq details');

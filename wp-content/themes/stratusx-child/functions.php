@@ -101,8 +101,39 @@ function hr_asset_version($relative_path, $use_parent = false)
 // Is new home page?
 function hr_is_home_hms_page()
 {
-	return is_page(82432) || is_page_template('page-home-hms.php');
+	return is_page(82432) || is_page_template(array('temp-home-hms.php', 'page-home-hms.php'));
 }
+
+// Page templates renamed page-*.php -> temp-*.php: old name => new file
+function hr_renamed_page_templates()
+{
+	return array(
+		'page-become-a-partner.php'              => 'temp-become-a-partner.php',
+		'page-home-hms.php'                      => 'temp-home-hms.php',
+		'page-hospital-chains.php'               => 'temp-hospital-chains.php',
+		'page-multispeciality-hospitals.php'     => 'temp-multispeciality-hospitals.php',
+		'page-small-hospitals-nursing-homes.php' => 'temp-small-hospitals-nursing-homes.php',
+		'page-pharma-software.php'               => 'temp-pharma-software.php',
+		'page-pharma-google.php'                 => 'temp-ppc-pharma-google.php',
+		'page-pharma-meta.php'                   => 'temp-ppc-pharma-meta.php',
+		'page-pharma-chatgpt.php'                => 'temp-ppc-pharma-chatgpt.php',
+		'page-partner-meta.php'                  => 'temp-ppc-partner-meta.php',
+	);
+}
+
+// Pages still saved with an old name (or matched by slug) load the renamed file, so no page changes look
+add_filter('page_template_hierarchy', function ($templates) {
+	$map = hr_renamed_page_templates();
+	$out = array();
+	foreach ($templates as $template) {
+		if (isset($map[$template])) {
+			$out[] = $map[$template];
+		}
+		$out[] = $template;
+	}
+
+	return $out;
+});
 
 // Read CSS file (object cached)
 function hr_get_inline_css($path)
@@ -169,6 +200,15 @@ function hr_is_login_portal_page()
 	return is_page(82169) || is_page(81468) || is_page(82198) || is_page(82196) || is_page(82183) || is_page(82202) || is_page(82251) || is_page_template('temp-login-landing.php');
 }
 
+// One sales WhatsApp number for every PPC page (country code + number, digits only)
+define('HR_PPC_WHATSAPP', '919687459826');
+
+// WhatsApp chat link to that number, with a ready message
+function hr_ppc_wa_url($text = '')
+{
+	return 'https://wa.me/' . HR_PPC_WHATSAPP . ('' !== $text ? '?text=' . rawurlencode($text) : '');
+}
+
 // PPC page key or empty
 function hr_ppc_page_key()
 {
@@ -181,7 +221,8 @@ function hr_ppc_page_key()
 	$found = '';
 	if (is_page()) {
 		$template = (string) get_page_template_slug(get_queried_object_id());
-		if (preg_match('/^temp-ppc-([a-z0-9]+)(?:-[a-z0-9-]+)?\.php$/', $template, $m)) {
+		// Pharmacy and partner pages load their own CSS, JS and popup (standalone via hr_is_login_portal_page())
+		if (preg_match('/^temp-ppc-([a-z0-9]+)(?:-[a-z0-9-]+)?\.php$/', $template, $m) && !in_array($m[1], array('pharma', 'partner'), true)) {
 			$found = $m[1];
 		}
 	}
@@ -497,6 +538,9 @@ add_filter('body_class', static function ($classes) {
 	));
 
 	$is_pharmacy_template = is_page_template(array(
+		'temp-ppc-pharma-google.php',
+		'temp-ppc-pharma-meta.php',
+		'temp-ppc-pharma-chatgpt.php',
 		'page-pharma-google.php',
 		'page-pharma-meta.php',
 		'page-pharma-chatgpt.php',

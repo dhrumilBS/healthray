@@ -1,6 +1,6 @@
 /*
  * Healthray Pharmacy PPC landing pages: shared script.
- * Used by page-pharma-meta.php, page-pharma-google.php and page-pharma-chatgpt.php.
+ * Used by temp-ppc-pharma-google.php, temp-ppc-pharma-meta.php and temp-ppc-pharma-chatgpt.php.
  * Each template sets window.hrPharmaPage = { channel, defaultVariant, variants } just before
  * this file loads (wp_add_inline_script 'before'). Everything else is identical on all pages.
  */

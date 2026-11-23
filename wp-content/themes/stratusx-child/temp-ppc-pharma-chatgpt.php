@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Template Name: Pharmacy Billing Software - Meta Ads
+ * Template Name: PPC - Pharmacy ChatGPT
  * Template Post Type: page
  */
 defined('ABSPATH') || exit;
@@ -28,16 +28,18 @@ if (shortcode_exists('contact-form-7')) {
 // channel: sent with every dataLayer event. variants: headline per ad, picked with ?v= on the ad link.
 // The first variant is the default and should match the H1 written in the hero below.
 $hr_pharma_page = array(
-  'channel'        => 'meta',
+  'channel'        => 'chatgpt',
   'defaultVariant' => 'main',
   'variants'       => array(
-    'main'     => array('h' => 'Easy Billing Software for Your Medical Store. Free to Start.'),
+    'main'     => array('h' => 'Pharmacy Billing Software for Medical Stores, With a Free Plan'),
+    'free'     => array('h' => 'Free Pharmacy Billing Software. Not a Trial, No Time Limit.', 's' => '10 bills a month and 1 user, free forever. No card, no auto payment. Upgrade only when you need more bills or users.'),
+    'switch'   => array('h' => 'Looking for a Marg Alternative? We Move Your Data Free', 's' => 'Our team moves your medicines, stock, suppliers and customers. Free plan to start, paid plans from ₹4,999 + GST a year, and 24×7 help.'),
+    'new'      => array('h' => 'Opening a Medical Store? Start Billing Free From Day One', 's' => 'Ready medicine list, GST bills with your DL and GST numbers, H1 register and batch-wise stock. Free plan with no time limit.'),
+    'gst'      => array('h' => 'GST Billing Software for Pharmacy, With Reports Your CA Needs', 's' => 'Every bill has the HSN code and GST. Export GSTR-1, GSTR-2B and GSTR-3B as Excel (Basic plan and above). Free plan to start.'),
     'expiry'   => array('h' => 'Find Near-Expiry Medicines Before It’s Too Late to Return Them', 's' => 'See near-expiry stock batch-wise with the party name, so you can send it for expiry return on time. The list comes to your WhatsApp by itself.'),
     'rush'     => array('h' => 'Fast Billing, Even When 5 Customers Are Waiting at the Counter', 's' => 'Find any medicine by name, salt or barcode. Sell a full strip or loose tablets, and the price is calculated for you. The bill goes to the customer on WhatsApp.'),
     'purchase' => array('h' => 'Upload the Distributor Bill. Purchase Entry Done, No Typing.', 's' => 'Take a photo of the bill, or upload the PDF or CSV. Batch, expiry, MRP, PTR and free qty are filled in for you. Photo and PDF upload are on paid plans.'),
     'staff'    => array('h' => 'Know What Your Staff Bill, Even When You’re Not at the Counter', 's' => 'Each staff member gets their own login. Hide profit, stop discount changes, and get cash, UPI, card and udhaar totals on WhatsApp every night.'),
-    'free'     => array('h' => 'Free Billing Software for Your Medical Store. Really Free.', 's' => 'GST bills, stock and the expiry list on your computer or mobile. Upgrade only when you need more bills or users.'),
-    'switch'   => array('h' => 'Switching From Marg or Other Software? We Move Your Data Free', 's' => 'Our team moves your medicines, stock, suppliers and customers. 24×7 help and a clear yearly price.'),
     'hi'       => array('h' => 'Medical Store ki Billing, Stock aur Expiry, Ek Hi Software Mein', 'k' => 'Medical store owners ke liye', 's' => 'Counter par fast billing, expiry se pehle WhatsApp par list, aur raat ko din ka poora hisaab. Computer ya mobile, dono par chalta hai.'),
   ),
 );
@@ -75,6 +77,33 @@ add_action('wp_enqueue_scripts', function () use ($hr_pharma_js_file, $hr_pharma
 <?php if ($hr_pharma_css) : ?>
 <style id="hr-pharma-ppc-css"><?php echo $hr_pharma_css; // Theme file, trusted. ?></style>
 <?php endif; ?>
+<style id="hr-pharma-chatgpt-css">
+/* Straight answers: one row per thing chemists compare. Green tick = yes, amber = yes with a plan limit, grey = no. */
+.answers {background:var(--sky-2)}
+.facts {display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:980px;margin:0 auto}
+.fact {position:relative;margin:0;padding:14px 16px 14px 50px;background:#fff;border:1px solid var(--line);border-radius:10px}
+.fact::before {content:"";position:absolute;left:16px;top:16px;width:22px;height:22px;border-radius:50%;background:var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M9.5 16.2 5.3 12l-1.4 1.4 5.6 5.6 11-11-1.4-1.4z'/%3E%3C/svg%3E") center/16px no-repeat}
+.fact.part::before {background-color:#B45309}
+.fact.no::before {background:#6B7280 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7l-1.4-1.4L9.2 12 2.9 5.7l1.4-1.4 6.3 6.3 6.3-6.3z'/%3E%3C/svg%3E") center/14px no-repeat}
+.fact dt {font-size:.8rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--navy);margin:0 0 2px}
+.fact dd {margin:0;color:var(--muted);line-height:1.5}
+.fact dd b {color:var(--navy-dark)}
+.answers-cta {display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 18px;margin-top:28px}
+.answers-cta p {margin:0;color:var(--muted);font-weight:600}
+@media (max-width:720px) {
+  .facts {grid-template-columns:1fr;gap:8px}
+  .fact {padding:12px 14px 12px 46px}
+  .fact::before {left:14px;top:14px}
+  .fact dd {font-size:.95rem}
+  .answers-cta {margin-top:22px}
+  .answers-cta .btn {width:100%}
+}
+/* ChatGPT page only: line under testimonials, slightly smaller hero headline on phones. */
+.testi {border-bottom:1px solid var(--line)}
+@media (max-width:720px) {
+  .hero .hero-grid h1 {font-size:1.85rem}
+}
+</style>
 </head>
 <body <?php body_class('hr-pharmacy-landing'); ?>>
 <?php wp_body_open(); ?>
@@ -98,10 +127,10 @@ add_action('wp_enqueue_scripts', function () use ($hr_pharma_js_file, $hr_pharma
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <!-- Meta visitors were scrolling, not searching: say who this is for first, then one clear promise. -->
-      <span class="eyebrow" id="hero-eyebrow">For medical store owners</span>
-      <h1 id="hero-title">Easy Billing Software for Your Medical Store. Free to Start.</h1>
-      <p class="sub" id="hero-sub">Fast GST bills, the near-expiry list on WhatsApp, and the day's collection every night. Works on your computer or mobile.</p>
+      <!-- ChatGPT visitors were comparing options: name the category, the difference, and the plain facts. No hype. -->
+      <span class="eyebrow" id="hero-eyebrow">For medical stores and chemists</span>
+      <h1 id="hero-title">Pharmacy Billing Software for Medical Stores, With a Free Plan</h1>
+      <p class="sub" id="hero-sub">GST billing, batch-wise stock and expiry, purchase entry and GST reports in one place. Works online on your computer, laptop or mobile.</p>
       <p class="free-line">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.5 14.5-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4z"/></svg>
         <span>Free forever: 10 bills a month, 1 user. No card needed. No auto payment.</span>
@@ -131,26 +160,41 @@ add_action('wp_enqueue_scripts', function () use ($hr_pharma_js_file, $hr_pharma
   </div>
 </section>
 
-<!-- ============ PROBLEMS (first after the hero: a Meta visitor needs to see their own counter before the product) ============ -->
-<section class="problems">
+<!-- ============ STRAIGHT ANSWERS (first after the hero: a ChatGPT visitor arrives with a checklist from their chat) ============ -->
+<!-- Facts only, each one also stated elsewhere on this page. The "no" row is on purpose: it is what makes the rest believable. -->
+<section class="answers" id="answers" aria-labelledby="answers-title">
   <div class="wrap">
-    <div class="sec-head"><h2>Does this happen at your counter?</h2></div>
-    <ul class="pain-list">
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2zm0-4h-2V7h2z"/></svg>Expired stock is found too late, and the company won't take it back.</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2zm0-4h-2V7h2z"/></svg>The software hangs at 8 pm when 5 customers are waiting.</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2zm0-4h-2V7h2z"/></svg>Hours go in purchase entry of distributor bills.</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2zm0-4h-2V7h2z"/></svg>Your CA keeps asking for the same GST data again.</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2zm0-4h-2V7h2z"/></svg>You don't know what discount and udhaar your staff are giving.</li>
-    </ul>
+    <div class="sec-head">
+      <span class="eyebrow">Comparing pharmacy software?</span>
+      <h2 id="answers-title">Straight answers to what you're checking</h2>
+      <p class="lead">What chemists compare most, answered for Healthray. Including what it doesn't do.</p>
+    </div>
+    <dl class="facts">
+      <div class="fact yes"><dt>Price</dt><dd><b>Free plan with no time limit.</b> 10 bills a month and 1 user. Paid plans from ₹4,999 + GST a year.</dd></div>
+      <div class="fact yes"><dt>Billing</dt><dd><b>Fast, even at rush hour.</b> Search by name, salt or barcode. Sell a full strip or loose tablets.</dd></div>
+      <div class="fact yes"><dt>Batch &amp; expiry</dt><dd><b>Batch-wise stock with expiry date.</b> Near-expiry list with party name, sent to your WhatsApp.</dd></div>
+      <div class="fact part"><dt>Purchase entry</dt><dd><b>From the distributor bill.</b> Upload a photo, PDF or CSV. Photo and PDF upload on paid plans.</dd></div>
+      <div class="fact part"><dt>GST reports</dt><dd><b>GSTR-1, GSTR-2B and GSTR-3B</b> as Excel for your CA. Basic plan and above.</dd></div>
+      <div class="fact yes"><dt>H1 register &amp; medicine list</dt><dd><b>Both included,</b> so you can start billing from day one.</dd></div>
+      <div class="fact yes"><dt>Staff control</dt><dd><b>Own login for each staff.</b> Hide profit, stop discount changes, see who did what.</dd></div>
+      <div class="fact yes"><dt>Old data</dt><dd><b>Moved free</b> from Marg, other software or Excel: medicines, stock, suppliers and customers.</dd></div>
+      <div class="fact yes"><dt>Support</dt><dd><b>24×7 on phone,</b> also in the evening and on Sunday.</dd></div>
+      <div class="fact part"><dt>More than one store</dt><dd><b>Yes, on the Enterprise plan:</b> all your stores from one place.</dd></div>
+      <div class="fact no"><dt>Works without internet</dt><dd><b>No, it works online.</b> On computer, laptop or mobile. If Wi-Fi stops, use your phone's hotspot.</dd></div>
+    </dl>
+    <div class="answers-cta">
+      <a class="btn btn-cta js-start" href="#start" data-cta="answers_start">Start free</a>
+      <p>Takes 30 seconds. No card needed.</p>
+    </div>
   </div>
 </section>
 
-<!-- ============ PRODUCT TOUR VIDEO (right after the problems: the answer, shown not told) ============ -->
+<!-- ============ PRODUCT TOUR VIDEO (after the facts: see it is real) ============ -->
 <section class="tour" id="tour" aria-labelledby="tour-title">
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow">1-minute video</span>
-      <h2 id="tour-title">See it work in 1 minute</h2>
+      <h2 id="tour-title">See the real software in 1 minute</h2>
       <p class="lead">Watch a bill being made and sent on WhatsApp, a purchase being added, and the expiry list. This is the real software.</p>
     </div>
     <div class="tour-frame">
@@ -378,26 +422,11 @@ add_action('wp_enqueue_scripts', function () use ($hr_pharma_js_file, $hr_pharma
 </section>
 <?php endif; ?>
 
-<!-- ============ INTERNET QUESTION (after the proof: by now the visitor is interested, so answer the big doubt) ============ -->
-<section class="internet" id="internet">
-  <div class="wrap internet-grid">
-    <div>
-      <span class="eyebrow" style="color:#9CC3EA">Every chemist asks this</span>
-      <h2>“What if the internet goes down?”</h2>
-      <p style="margin:0">Healthray works online, so you need internet. Here is why medical stores are fine with it:</p>
-    </div>
-    <ul class="internet-points">
-      <li><strong>Works on any device</strong>Use it on your counter computer, laptop or mobile. If Wi-Fi stops, use your phone's hotspot.</li>
-      <li><strong>Your data is safe</strong>Data is saved online, so a broken computer or a virus can't delete it.</li>
-      <li><strong>Help any time</strong>Our team is available 24×7.</li>
-    </ul>
-  </div>
-</section>
 
 <!-- ============ PRICING ============ -->
 <section id="pricing">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">Pricing</span><h2>Simple prices. Start at ₹0.</h2><p class="lead">Start free. Upgrade only when you need more bills or users.</p></div>
+    <div class="sec-head"><span class="eyebrow">Pricing</span><h2>Healthray prices, with GST shown</h2><p class="lead">Start free. Upgrade only when you need more bills or users.</p></div>
     <!-- Monthly price is the yearly price ÷ 12 (as shown in the app's own pricing). The yearly amount and GST stay right under it. -->
     <div class="pricing-grid">
       <div class="plan">
@@ -444,15 +473,15 @@ add_action('wp_enqueue_scripts', function () use ($hr_pharma_js_file, $hr_pharma
   <div class="wrap">
     <div class="sec-head"><h2>Questions chemists ask us</h2></div>
     <div class="faq">
-      <!-- Order follows the doubts of someone who came from an ad: "Is free really free?" first, then "Who will call me?". -->
-      <details name="hr-pharmacy-faq" open><summary>Is the free plan really free?</summary><p>Yes. 10 bills a month and 1 user, with no time limit. No card needed, no auto payment. Upgrade only if you want to.</p></details>
-      <details name="hr-pharmacy-faq"><summary>What happens after I fill the form?</summary><p>Someone from our team calls you to set up your account, printer and bill format, and to move your old data free. There is nothing to pay to start.</p></details>
-      <details name="hr-pharmacy-faq"><summary>Can I use it on my mobile?</summary><p>Yes. It works on your counter computer, laptop or mobile, so you can check sales and stock even when you are not at the store.</p></details>
+      <!-- Order follows someone comparing options: is free real, the honest limit, why this one, then switching. -->
+      <details name="hr-pharmacy-faq" open><summary>Is the free plan really free?</summary><p>Yes. 10 bills a month and 1 user, with no time limit. It is not a trial. No card needed, no auto payment. Upgrade only if you want to.</p></details>
+      <details name="hr-pharmacy-faq"><summary>Does it work without internet?</summary><p>No. Healthray Pharmacy works online, so you need internet. It works on any computer, laptop or mobile, so if Wi-Fi stops you can use your phone's hotspot. Your data stays safe online even if a computer breaks, and our team is available 24×7.</p></details>
+      <details name="hr-pharmacy-faq"><summary>Why choose Healthray over other pharmacy software?</summary><p>It depends on what matters to you. Healthray has a free plan with no time limit, the near-expiry list and the day's collection on WhatsApp, purchase entry from a bill photo (paid plans), free data move and 24×7 support. It works online only, so if you need software that runs without internet, it is not the right fit.</p></details>
       <details name="hr-pharmacy-faq"><summary>Can you move my data from Marg or my current software?</summary><p>Yes, free. Our team moves your medicines, stock, suppliers and customers from Marg, any other software or Excel, so everything is ready from day one.</p></details>
-      <details name="hr-pharmacy-faq"><summary>What if the internet goes down?</summary><p>Healthray Pharmacy works online, so you need internet. It works on any computer, laptop or mobile, so if Wi-Fi stops you can use your phone's hotspot. Your data stays safe online even if a computer breaks, and our team is available 24×7.</p></details>
-      <details name="hr-pharmacy-faq"><summary>Is it only for billing?</summary><p>No. Billing, batch-wise stock and expiry, purchase entry, GST reports and staff control are all in one place. Start with billing and use the rest when you need it.</p></details>
+      <details name="hr-pharmacy-faq"><summary>What happens after I fill the form?</summary><p>Someone from our team calls you to set up your account, printer and bill format, and to move your old data free. There is nothing to pay to start.</p></details>
+      <details name="hr-pharmacy-faq"><summary>Can I manage more than one store?</summary><p>Yes, with the Enterprise plan: unlimited users and bills, all your stores from one place, Tally export and faster support. Use the "Book a free demo" button in the pricing section.</p></details>
+      <details name="hr-pharmacy-faq"><summary>Can I use it on my mobile?</summary><p>Yes. It works on your counter computer, laptop or mobile, so you can check sales and stock even when you are not at the store.</p></details>
       <details name="hr-pharmacy-faq"><summary>Is my data safe?</summary><p>Your data is saved online, not on one computer, so a broken computer or theft can't delete it. Each staff member sees only what you allow, and every change is saved.</p></details>
-      <details name="hr-pharmacy-faq"><summary>Does it have a medicine list?</summary><p>Yes, a ready medicine list is included, so you can start billing straight away. You can add your own items any time.</p></details>
       <details name="hr-pharmacy-faq"><summary>Will it print on my printer?</summary><p>Yes. It prints A4, A5 and 80 mm thermal bills, with GST invoice layouts, your logo, and your DL and GST numbers.</p></details>
       <details name="hr-pharmacy-faq"><summary>How long will my staff take to learn it?</summary><p>It's easy: type a few letters, pick the medicine, press Enter. Search by name, salt or barcode. Our team is one call away while your staff learn.</p></details>
       <details name="hr-pharmacy-faq"><summary>What support do I get?</summary><p>24×7 help on phone, even in the evening and on Sunday.</p></details>

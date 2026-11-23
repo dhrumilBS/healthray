@@ -13,8 +13,7 @@ $hr_cl_form  = '[contact-form-7 id="e8978a5" title="PPC - Clinic"]';
 $hr_cl_up    = 'https://healthray.com/wp-content/uploads';
 $hr_cl_video = $hr_cl_up . '/2026/11/opd-tour.mp4';
 
-// Sales WhatsApp number (TO CONFIRM)
-$hr_cl_wa = 'https://wa.me/918980880819?text=' . rawurlencode('Hi, I want a free demo of Healthray clinic software.');
+$hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.');
 ?>
 <div class="hr-page" id="hr-page">
 

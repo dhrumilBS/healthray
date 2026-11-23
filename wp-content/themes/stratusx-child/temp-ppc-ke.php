@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Template Name: Healthray Kenya PPC - Hospital Software
+ * Template Name: PPC - HIMS Google Kenya
  * Kenya Google Ads page; CSS/JS/popup wiring in functions.php section 12 (key "ke", same as "ng").
  */
 

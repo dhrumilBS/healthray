@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: PPC HIMS Meta
+ * Template Name: PPC - HIMS Meta
  *
  * Meta / Instagram ads landing page (healthray.com/ppc/hms-meta/). Same system as the Google and ChatGPT pages:
  * css/ppc-hims.css (section 33 = this page), js/ppc-hims.js (section 8 = this page), templates/ppc-hims/ partials,
@@ -27,7 +27,7 @@ $ppc_no         = '<span class="pi" aria-hidden="true"><svg width="12" height="1
 $ppc_yes        = '<span class="pi" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="#047857" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
 $ppc_cost_dot   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="#0F68EA" stroke-width="2"/></svg>';
 $ppc_cost_tick  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="#047857" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-$ppc_wa_price   = 'https://wa.me/919714874435?text=Hi%20Healthray%2C%20I%20want%20to%20know%20the%20price%20for%20my%20hospital.%20Beds%3A%20___%20City%3A%20___';
+$ppc_wa_price   = hr_ppc_wa_url('Hi Healthray, I want to know the price for my hospital. Beds: ___ City: ___');
 
 $ppc_problems = array(
 	array( 'IPD patient details are on paper and files go missing', "Admission, bed, nursing notes and charges are saved in the software. Open any patient's file from any computer." ),
@@ -83,7 +83,7 @@ $ppc_problems = array(
               <li>We fix a demo time that suits you.</li>
               <li>You see the software working for a hospital like yours, in about 30 minutes.</li>
             </ol>
-            <a class="wa-done js-wa" href="https://wa.me/919714874435?text=Hi%20Healthray%2C%20I%20just%20booked%20a%20demo%20on%20your%20website." target="_blank" rel="noopener">Want to talk sooner? WhatsApp us →</a>
+            <a class="wa-done js-wa" href="<?php echo esc_url(hr_ppc_wa_url('Hi Healthray, I just booked a demo on your website.')); ?>" target="_blank" rel="noopener">Want to talk sooner? WhatsApp us →</a>
           </div>
         </div>
       </div>

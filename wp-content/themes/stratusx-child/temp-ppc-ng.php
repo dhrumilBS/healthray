@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Template Name: Healthray Nigeria PPC - Hospital Software
+ * Template Name: PPC - HIMS Google Nigeria
  * Nigeria Google Ads page; CSS/JS/popup wiring in functions.php section 12 (key "ng").
  */
 

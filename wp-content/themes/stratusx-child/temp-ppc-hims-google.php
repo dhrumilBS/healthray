@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: PPC - HMS Google
+ * Template Name: PPC - HIMS Google
  */
 
 defined('ABSPATH') || exit;

@@ -11,7 +11,7 @@
  * get_header/get_footer, wp_head or enqueue hooks here. CSS is scoped to #hr-chains, and to #myPopup for the popup.
  * Yoast handles the title, meta description, canonical and base schema; this file adds FAQPage.
  *
- * Lead form: "PPC - Hospital Chains" (CF7 03f048f, a copy of the PPC Form), in the hero card and in the site popup (#myPopup). Every "Book a demo"
+ * Lead form: the PPC Form (CF7 11eec7d), in the hero card and in the site popup (#myPopup). Every "Book a demo"
  * button has .hr-cta-btn, so js/script.js opens that popup; the popup gets this form and heading through the
  * hr_ppc_popup_args filter (templates/footer.php -> templates/lead-popup.php). On this page only, step 1 of the
  * form asks "How many hospitals are in your group?" (wpcf7_form_elements filter below); the answer is sent in the
@@ -19,7 +19,7 @@
  */
 defined('ABSPATH') || exit;
 
-$hr_chn_form = '[contact-form-7 id="03f048f" title="PPC - Hospital Chains"]';
+$hr_chn_form = '[contact-form-7 id="11eec7d" title="PPC Form"]';
 $hr_chn_up   = 'https://healthray.com/wp-content/uploads/';
 $hr_chn_logo = get_stylesheet_directory_uri() . '/assets/ppc-hims/';
 

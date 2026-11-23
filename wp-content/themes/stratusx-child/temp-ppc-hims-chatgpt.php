@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: PPC HIMS ChatGPT
+ * Template Name: PPC - HIMS ChatGPT
  */
 
 defined('ABSPATH') || exit;
