@@ -2223,6 +2223,12 @@ add_action('wp_footer', function () {
 <?php
 }, 20);
 
+// Hide the reCAPTCHA badge on every page, PPC and standalone pages included (they drop style.css).
+// visibility, not display:none: Google's recommended way, reCAPTCHA keeps working.
+add_action('wp_head', function () {
+	echo '<style id="hr-recaptcha-badge">.grecaptcha-badge{visibility:hidden!important;opacity:0!important;pointer-events:none!important}</style>' . "\n";
+}, 1);
+
 // Lazy-load reCAPTCHA
 add_action('wp_enqueue_scripts', function () {
 	if (!wp_script_is('wpcf7-recaptcha', 'enqueued') || !class_exists('WPCF7_RECAPTCHA')) {
