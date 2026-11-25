@@ -1,0 +1,6 @@
+/* ABDM page (27377) - only what common-landing.css does not already cover.
+   Numbered steps, table scroll, related cards, card links and the portrait image cap
+   are shared with the ABHA, DHIS, PM-JAY and Our Story pages, so they live in common-landing.css. */
+
+/* M1/M2/M3 table: narrower first column than common's 26% */
+.abdm-landing .versus-table td:first-child { width: 24%; }

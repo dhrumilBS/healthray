@@ -1,0 +1,36 @@
+/* Our Story page (31213) - only what common-landing.css does not already cover. */
+
+/* Four-card rows: the problem we saw, our values */
+.our-story-landing .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+
+/* Founder letter: card on the left, letter on the right */
+.our-story-landing .founder-grid { display: grid; grid-template-columns: 340px 1fr; gap: 48px; align-items: start; }
+.our-story-landing .founder-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+.our-story-landing .founder-card img { width: 100%; border-radius: 12px; margin-bottom: 16px; }
+.our-story-landing .founder-card h3 { font-size: 1.25rem; margin-bottom: 4px; }
+.our-story-landing .founder-card .role { font-size: .92rem; font-weight: 600; color: var(--ink); }
+.our-story-landing .founder-card .place { font-size: .88rem; margin-top: 2px; }
+.our-story-landing .founder-links { display: grid; gap: 10px; margin-top: 18px; }
+.our-story-landing .letter p + p { margin-top: 16px; }
+.our-story-landing .founder-quote { margin: 24px 0; padding: 4px 0 4px 22px; border-left: 4px solid var(--brand); }
+.our-story-landing .founder-quote p { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; line-height: 1.45; color: var(--ink); }
+.our-story-landing .founder-quote cite { display: block; margin-top: 10px; font-style: normal; font-size: .88rem; color: var(--ink-soft); }
+
+/* Vision and mission */
+.our-story-landing .mv-label { margin-bottom: 8px; font-size: .78rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--brand); }
+.our-story-landing .arch h3 { font-size: 1.2rem; line-height: 1.3; }
+.our-story-landing .arch p { font-size: .95rem; }
+
+/* [journey_timeline] prints its own <section> and Bootstrap .container: drop the extra spacing */
+.our-story-landing .jt-section { padding: 0; }
+.our-story-landing .jt-section .container { width: auto; max-width: none; margin: 0; padding: 0; }
+
+@media (max-width: 980px) {
+    .our-story-landing .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .our-story-landing .founder-grid { grid-template-columns: 1fr; gap: 28px; }
+    .our-story-landing .founder-card { max-width: 420px; }
+}
+
+@media (max-width: 720px) {
+    .our-story-landing .grid-4 { grid-template-columns: 1fr; }
+}

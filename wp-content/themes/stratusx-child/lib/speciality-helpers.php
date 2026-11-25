@@ -49,8 +49,8 @@ function hr_sp_defaults()
 {
 	return array(
 		'form_lead'    => '[contact-form-7 id="9a13f7a" title="NEW LEAD FORM - Home Page"]',
-		'form_demo'    => '[contact-form-7 id="5803552" title="Start free Demo - Main Section"]',
-		'form_footer'  => '[contact-form-7 id="3de5d32" title="CTA Form - CTA section"]',
+		'form_demo'    => '[contact-form-7 id="9a13f7a" title="NEW LEAD FORM - Home Page"]',
+		'form_footer'  => '[contact-form-7 id="9a13f7a" title="NEW LEAD FORM - Home Page"]',
 		'key_points'   => array(
 			array('icon' => 'globe', 'label' => 'World-wide compliance'),
 			array('icon' => 'clock', 'label' => '24/7 support'),

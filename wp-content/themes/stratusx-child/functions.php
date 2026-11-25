@@ -46,7 +46,7 @@ require_once get_stylesheet_directory() . '/lib/acf-speciality.php';
 
 // Landing page IDs
 if (!defined('HR_LANDING_PAGE_IDS')) {
-	define('HR_LANDING_PAGE_IDS', [167, 32399, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468, 82361, 82363, 82472, 82361, 82363, 82372]);
+	define('HR_LANDING_PAGE_IDS', [167, 26475, 26834, 26844, 27377, 31213, 32399, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468, 82361, 82363, 82472, 82361, 82363, 82372]);
 }
 
 
@@ -363,9 +363,15 @@ function remove_from_homepage()
 	);
 
 	// Remove only on landing pages
-	if (is_page(79691) || is_page(79713) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81834) || is_page(167) || is_single() || is_page(28110) || is_page(82361) || is_page(82363) || hr_is_modules_hub() || hr_is_login_portal_page() || is_page(82472) || hr_is_home_hms_page()) {
+	if (is_page(79691) || is_page(79713) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81834) || is_page(167) || is_page(27377) || is_page(26834) || is_page(26844) || is_page(26475) || is_page(31213) || is_single() || is_page(28110) || is_page(82361) || is_page(82363) || hr_is_modules_hub() || hr_is_login_portal_page() || is_page(82472) || hr_is_home_hms_page()) {
 		$styles = array_merge($styles, array('abha-card', 'common-theme', 'owl.carousal', 'my-elements'));
 		$scripts = array_merge($scripts, array('abha-card', 'common-theme', 'owl.carousal', 'toggle-tabs', 'my-element'));
+	}
+
+	// ABHA page: keep the ABHA Card plugin's CSS/JS (handle abha-card) for its [adharAuthForm] form
+	if (is_page(26834)) {
+		$styles = array_diff($styles, array('abha-card'));
+		$scripts = array_diff($scripts, array('abha-card'));
 	}
 
 	foreach ($styles as $handle) {
@@ -502,6 +508,11 @@ add_filter('body_class', function ($classes) {
 		82361 => 'ipd-landing',
 		82363 => 'opd-landing',
 		82472 => 'author-hub-page',
+		27377 => 'abdm-landing',
+		26834 => 'abha-landing',
+		26844 => 'dhis-landing',
+		26475 => 'pmjay-landing',
+		31213 => 'our-story-landing',
 
 	];
 	foreach ($landing_pages as $page_id => $class) {
@@ -561,7 +572,7 @@ add_filter('body_class', static function ($classes) {
 // Landing CSS and schema
 add_action('wp_head', function () {
 	// Shared landing CSS (not speciality)
-	if (is_page(79713) || is_page(79691) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81468) || is_page(81773) || is_page(81775)) {
+	if (is_page(79713) || is_page(79691) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81468) || is_page(81773) || is_page(81775) || is_page(27377) || is_page(26834) || is_page(26844) || is_page(26475) || is_page(31213)) {
 		$common_css_path = get_stylesheet_directory() . '/css/common-landing.css';
 		if (file_exists($common_css_path)) {
 			echo '<style id="common-landing-css-inline">' . file_get_contents($common_css_path) . '</style>' . "\n";
@@ -961,6 +972,46 @@ add_action('wp_head', function () {
 		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 	}
 
+	// ABDM page
+	if (is_page(27377)) {
+		$abdm_css_path = get_stylesheet_directory() . '/css/abdm-software.css';
+		if (file_exists($abdm_css_path)) {
+			echo '<style id="abdm-software-css-inline">' . file_get_contents($abdm_css_path) . '</style>' . "\n";
+		}
+	}
+
+	// ABHA page
+	if (is_page(26834)) {
+		$abha_css_path = get_stylesheet_directory() . '/css/abha-software.css';
+		if (file_exists($abha_css_path)) {
+			echo '<style id="abha-software-css-inline">' . file_get_contents($abha_css_path) . '</style>' . "\n";
+		}
+	}
+
+	// DHIS page
+	if (is_page(26844)) {
+		$dhis_css_path = get_stylesheet_directory() . '/css/dhis-software.css';
+		if (file_exists($dhis_css_path)) {
+			echo '<style id="dhis-software-css-inline">' . file_get_contents($dhis_css_path) . '</style>' . "\n";
+		}
+	}
+
+	// PM-JAY page
+	if (is_page(26475)) {
+		$pmjay_css_path = get_stylesheet_directory() . '/css/pmjay-software.css';
+		if (file_exists($pmjay_css_path)) {
+			echo '<style id="pmjay-software-css-inline">' . file_get_contents($pmjay_css_path) . '</style>' . "\n";
+		}
+	}
+
+	// Our Story page
+	if (is_page(31213)) {
+		$our_story_css_path = get_stylesheet_directory() . '/css/our-story-software.css';
+		if (file_exists($our_story_css_path)) {
+			echo '<style id="our-story-software-css-inline">' . file_get_contents($our_story_css_path) . '</style>' . "\n";
+		}
+	}
+
 	// Modules hub CSS and ItemList
 	if (hr_is_modules_hub()) {
 		$modules_css_path = get_stylesheet_directory() . '/css/modules-hub.css';
@@ -1236,8 +1287,193 @@ function healthray_modules_faq_items()
 	);
 }
 
-// IPD/OPD/Modules FAQ schema
+// ABDM FAQs - one list for the page accordion (temp-abdm-landing.php) and the FAQPage schema
+function healthray_abdm_faq_items()
+{
+	return array(
+		array(
+			'q' => 'What is ABDM?',
+			'a' => "ABDM, the Ayushman Bharat Digital Mission, is the Government of India's programme to build a connected digital health ecosystem. It gives every resident a free ABHA health ID, keeps national registries of doctors (HPR) and health facilities (HFR), and lets health records move between providers with the patient's consent.",
+		),
+		array(
+			'q' => 'When was ABDM launched and who runs it?',
+			'a' => 'Prime Minister Narendra Modi launched ABDM nationwide on 27 September 2021. It started as a pilot, the National Digital Health Mission, in six union territories in August 2020. The National Health Authority (NHA), under the Ministry of Health and Family Welfare, implements it.',
+		),
+		array(
+			'q' => 'What does ABDM integration mean for a hospital or clinic?',
+			'a' => "It means your hospital software can create and verify patients' ABHA numbers, link the records you create to those ABHA numbers, and share or receive records through ABDM with the patient's consent. Your facility is listed on the Health Facility Registry and your doctors on the Healthcare Professionals Registry.",
+		),
+		array(
+			'q' => 'What are ABDM milestones M1, M2 and M3?',
+			'a' => 'They are the three stages of ABDM integration for software. M1 covers creating and verifying ABHA numbers at registration. M2 makes your facility a Health Information Provider: the records you create are linked to the ABHA and can be shared. M3 makes it a Health Information User: with consent, you can request and view records created by other providers.',
+		),
+		array(
+			'q' => "Does ABDM store patients' medical records centrally?",
+			'a' => 'No. ABDM uses a federated design: records stay with the hospital, clinic or lab that created them. ABDM only routes a record from one provider to another when the patient approves the request through the consent manager.',
+		),
+		array(
+			'q' => 'Can patient records be shared through ABDM without consent?',
+			'a' => 'No. Every request to see a patient\'s records needs the patient\'s consent, given in the ABHA app or another approved app. The patient can choose which records to share, set how long access lasts and withdraw consent at any time.',
+		),
+		array(
+			'q' => 'Do hospitals get incentives for using ABDM?',
+			'a' => 'Yes. Under the Digital Health Incentive Scheme (DHIS), eligible hospitals, clinics, labs and digital solution companies earn incentives for health records linked to ABHA numbers, above a baseline set by the scheme. See our DHIS page for how the scheme works.',
+		),
+		array(
+			'q' => 'Is Healthray ABDM compliant?',
+			'a' => 'Yes. Healthray is NHA approved and ABDM compliant. ABHA creation and verification, and linking records to the patient\'s ABHA, are part of the normal OPD and IPD workflow, so your staff do not need a separate portal or a second login.',
+		),
+	);
+}
+
+// ABHA FAQs - one list for the page accordion (temp-abha-landing.php) and the FAQPage schema
+function healthray_abha_faq_items()
+{
+	return array(
+		array(
+			'q' => 'What is the Ayushman Bharat Health Account (ABHA)?',
+			'a' => 'ABHA is a free health ID from the Government of India, part of the Ayushman Bharat Digital Mission (ABDM). It has a 14-digit ABHA number and an ABHA address such as name@abdm, and it links the records that hospitals, clinics and labs create for you, so you can see them and share them with consent.',
+		),
+		array(
+			'q' => 'How do I create an ABHA card online?',
+			'a' => 'Enter your Aadhaar number in the form on this page, verify the OTP sent to your Aadhaar-linked mobile, confirm the mobile number for ABHA messages, choose your ABHA address and download the card. You can also create it on abha.abdm.gov.in or in the ABHA app.',
+		),
+		array(
+			'q' => 'Which documents are needed for ABHA registration?',
+			'a' => "Your Aadhaar number and the mobile phone linked to it, for the OTP. If you don't have Aadhaar, the official portal also accepts a driving licence. You don't need a PAN card, bank account, income certificate or caste certificate.",
+		),
+		array(
+			'q' => 'Is the ABHA card free?',
+			'a' => 'Yes. Creating an ABHA costs nothing, whether you create it on this page, on the government portal or in the ABHA app.',
+		),
+		array(
+			'q' => 'What is the difference between an ABHA number and an ABHA address?',
+			'a' => 'The ABHA number is a 14-digit number that identifies you and is printed on your ABHA card. The ABHA address is a username you choose, such as name@abdm, that you use to sign in to health apps and share records.',
+		),
+		array(
+			'q' => 'Is the ABHA card the same as the Ayushman card?',
+			'a' => 'No. ABHA is a health ID that links your records, and any resident of India can create one. The Ayushman card is for PM-JAY, the government health cover of up to ₹5 lakh per family per year, which only eligible families and citizens aged 70 or above get. An ABHA alone does not give you PM-JAY cover.',
+		),
+		array(
+			'q' => 'Is my health data safe with ABHA?',
+			'a' => 'ABDM does not keep your records in one central database. They stay with the hospitals and labs that created them, and they reach another provider only when you approve the request. You choose which records to share and for how long, and you can withdraw consent at any time.',
+		),
+		array(
+			'q' => 'Is ABHA mandatory?',
+			'a' => 'No. ABHA is voluntary. You can deactivate or delete your ABHA later if you no longer want it.',
+		),
+		array(
+			'q' => 'I already have an ABHA. How do I find it?',
+			'a' => 'Choose Mobile Number in the form on this page and verify the OTP: the ABHA addresses linked to your mobile number are listed. You can also sign in on abha.abdm.gov.in to download your card again.',
+		),
+		array(
+			'q' => 'Can a hospital create an ABHA for its patients?',
+			'a' => "Yes. Hospitals and clinics connected to ABDM can create or verify a patient's ABHA at registration. Healthray does this inside its OPD and IPD software, so the front desk does not need a separate portal.",
+		),
+	);
+}
+
+// DHIS FAQs - one list for the page accordion (temp-dhis-landing.php) and the FAQPage schema.
+// Rates: NHA DHIS Corrigendum 7 (9 April 2026), April-September 2026.
+function healthray_dhis_faq_items()
+{
+	return array(
+		array(
+			'q' => 'What is the Digital Health Incentive Scheme (DHIS)?',
+			'a' => "DHIS is a National Health Authority scheme under the Ayushman Bharat Digital Mission. Since 1 January 2023 it has paid health facilities and digital solution companies a fixed amount for each eligible digital health transaction, such as a record linked to a patient's ABHA, above a threshold of 100 a month.",
+		),
+		array(
+			'q' => 'Who is eligible for DHIS?',
+			'a' => 'Public and private health facilities registered on the Health Facility Registry, including hospitals, clinics, nursing homes, labs, diagnostic centres and pharmacies, of any size. Digital solution companies can also claim for transactions done in their software, if at least 10 of their facilities link records in a month.',
+		),
+		array(
+			'q' => 'How much incentive does a hospital get under DHIS?',
+			'a' => "For April to September 2026, NHA's Corrigendum 7 pays a health facility ₹10 for each discharge summary or diagnostic report and ₹5 for each other record, such as a prescription, linked to a KYC-verified ABHA, above the first 100 eligible transactions in the month. Digital solution companies get half these amounts.",
+		),
+		array(
+			'q' => 'What is the minimum number of transactions for DHIS?',
+			'a' => '100 eligible transactions a month. At 100 or fewer, neither the facility nor its software company is paid. Above that, the value of the first 100 is deducted from the total, starting with the lowest-paying records.',
+		),
+		array(
+			'q' => 'What counts as an eligible DHIS transaction?',
+			'a' => 'Mainly a health record linked to a KYC-verified ABHA address, counted at most once a day and five times a month for the same ABHA. Records shared after a consent request, and PM-JAY claims filed through NHCX, have their own rates. Scan & Share and health-locker transactions earn no record-linking incentive.',
+		),
+		array(
+			'q' => 'How do I register my hospital for DHIS?',
+			'a' => "Register the facility on the Health Facility Registry, then register for DHIS from the facility's HFR account with the bank account details for payment. Use software that links records to patients' ABHA, such as Healthray, and submit a claim each month.",
+		),
+		array(
+			'q' => 'Do software companies get DHIS incentives?',
+			'a' => 'Yes. For facilities using its software, a digital solution company earns ₹5 per discharge summary or diagnostic report and ₹2.50 per other record above the threshold, and ₹10 for each PM-JAY claim raised through NHCX in its software.',
+		),
+		array(
+			'q' => 'Has DHIS been extended?',
+			'a' => 'Yes. NHA has extended and revised the scheme several times since it started in January 2023. The latest published revision, Corrigendum 7 of 9 April 2026, covers transactions from April to September 2026. Check abdm.gov.in/dhis for the rules for later months.',
+		),
+		array(
+			'q' => 'How does Healthray help hospitals earn DHIS incentives?',
+			'a' => "Healthray is NHA approved and ABDM compliant. It creates and verifies ABHA at registration and links prescriptions, lab reports and discharge summaries to the patient's ABHA inside the normal OPD and IPD workflow. Those are the records DHIS pays for.",
+		),
+	);
+}
+
+// PM-JAY FAQs - one list for the page accordion (temp-pmjay-landing.php) and the FAQPage schema
+function healthray_pmjay_faq_items()
+{
+	return array(
+		array(
+			'q' => 'What is PMJAY?',
+			'a' => "PMJAY, or Ayushman Bharat Pradhan Mantri Jan Arogya Yojana, is the Government of India's health assurance scheme. It gives eligible families cashless hospital treatment of up to ₹5 lakh per family per year at government and empanelled private hospitals. It was launched on 23 September 2018 and is run by the National Health Authority.",
+		),
+		array(
+			'q' => 'Who is eligible for PMJAY?',
+			'a' => 'Families identified through the rural deprivation and urban occupation criteria of SECC 2011, families active under the earlier RSBY scheme and families added by their state. Every citizen aged 70 or above is also eligible, whatever their income.',
+		),
+		array(
+			'q' => 'How can I check if my name is in the PMJAY list?',
+			'a' => "Check on beneficiary.nha.gov.in or in the Ayushman app, ask at an empanelled hospital's Ayushman Bharat help desk, or call the PM-JAY helpline on 14555.",
+		),
+		array(
+			'q' => 'How do I get an Ayushman card?',
+			'a' => 'Once your eligibility is confirmed, complete eKYC with your Aadhaar on beneficiary.nha.gov.in or in the Ayushman app and download the card. Arogya Mitras at empanelled hospitals and Common Service Centres can also make it for you.',
+		),
+		array(
+			'q' => 'How much cover does PMJAY give?',
+			'a' => 'Up to ₹5 lakh per family per year, for secondary and tertiary hospital care. Any member of the family can use it, and there is no limit on family size or age.',
+		),
+		array(
+			'q' => 'Are pre-existing diseases covered under PMJAY?',
+			'a' => 'Yes. Pre-existing illnesses are covered from the first day.',
+		),
+		array(
+			'q' => 'Are senior citizens aged 70 and above covered under PMJAY?',
+			'a' => 'Yes. Since October 2024, every citizen aged 70 or above can get cover of up to ₹5 lakh a year through the Ayushman Vay Vandana card, whatever their income. Those whose families are already covered get a separate top-up of up to ₹5 lakh a year for themselves.',
+		),
+		array(
+			'q' => 'Can I use PMJAY in another state or at a private hospital?',
+			'a' => 'Yes. Covered treatment is cashless at any empanelled hospital in India, government or private, including hospitals in other states.',
+		),
+		array(
+			'q' => 'Is the Ayushman card the same as the ABHA card?',
+			'a' => 'No. The Ayushman card shows that you are covered under PM-JAY. The ABHA card is a free health ID that any resident can create to link their medical records. An ABHA does not give you PM-JAY cover.',
+		),
+	);
+}
+
+// IPD/OPD/Modules/ABDM/ABHA/DHIS/PM-JAY FAQ schema
 add_filter('hr_head_faqs', function ($faqs) {
+	if (is_page(27377)) {
+		return healthray_abdm_faq_items();
+	}
+	if (is_page(26834)) {
+		return healthray_abha_faq_items();
+	}
+	if (is_page(26844)) {
+		return healthray_dhis_faq_items();
+	}
+	if (is_page(26475)) {
+		return healthray_pmjay_faq_items();
+	}
 	if (is_page(82361)) {
 		return healthray_ipd_faq_items();
 	}

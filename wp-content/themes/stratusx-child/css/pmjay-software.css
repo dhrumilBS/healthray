@@ -1,0 +1,12 @@
+/* PM-JAY page (26475) - only what common-landing.css does not already cover. */
+
+/* The arch-shaped photo in "What is PMJAY" has its own shape: no frame */
+.pmjay-landing .define-grid .define-img { border: 0; }
+
+/* At-a-glance table: label column */
+.pmjay-landing .glance-table td:first-child { width: 30%; }
+
+/* Senior citizens (70+) note under the eligibility lists */
+.pmjay-landing .note-card { margin-top: 20px; background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--brand); border-radius: var(--radius); padding: 22px 24px; }
+.pmjay-landing .note-card h3 { margin-bottom: 6px; }
+.pmjay-landing .note-card p { font-size: .95rem; }

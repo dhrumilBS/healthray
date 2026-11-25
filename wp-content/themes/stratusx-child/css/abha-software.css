@@ -1,0 +1,18 @@
+/* ABHA page (26834) - only what common-landing.css does not already cover. */
+
+/* Hero: the ABHA Card plugin form ([adharAuthForm]) takes the lead card's place.
+   style.css centres .hero-grid text below 992px; the form's labels stay left-aligned. */
+.abha-landing .abha-form { text-align: left; }
+.abha-landing .abha-form h2 { font-size: 1.25rem; }
+.abha-landing .abha-form h3 { font-size: 1.05rem; }
+.abha-landing .portal-note { margin-top: 14px; font-size: .85rem; text-align: center; }
+.abha-landing .portal-note a { color: var(--brand); font-weight: 600; }
+
+/* The illustration and the phone screenshot have their own backgrounds: no frame */
+.abha-landing .define-grid img { border: 0; }
+.abha-landing .define-grid .btn { margin-top: 24px; }
+
+/* Phones: common re-orders the hero by class; put the form where the lead card goes */
+@media (max-width: 767px) {
+    .abha-landing .hero-grid .abha-form { order: 3; }
+}

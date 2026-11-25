@@ -453,6 +453,22 @@ function initReveal() {
 	reveals.forEach(function (el) { io.observe(el); });
 }
 
+/* **** 6b. One-open accordions: <details name="x"> groups (FAQ) **** */
+// Browsers with native support already keep one item open per name; this closes the
+// others where that support is missing. Only <details> with a name attribute are touched.
+
+function initExclusiveDetails() {
+	document.addEventListener('toggle', function (e) {
+		var item = e.target;
+		if (!item || item.tagName !== 'DETAILS' || !item.open || !item.getAttribute('name')) return;
+		document.querySelectorAll('details[name]').forEach(function (other) {
+			if (other !== item && other.open && other.getAttribute('name') === item.getAttribute('name')) {
+				other.open = false;
+			}
+		});
+	}, true); // toggle does not bubble: listen in the capture phase
+}
+
 /* **** 7. Preserve UTM / click-ID parameters on internal links
    Example: /page/?utm_source=FacebookAds  ->  /contact/?utm_source=FacebookAds **** */
 
@@ -741,6 +757,7 @@ initFormButtons();
 initOtherFieldToggle();
 initTrackingParamPreserver();
 initUtmFieldFallback();
+initExclusiveDetails();
 
 document.addEventListener('DOMContentLoaded', function () {
 	initNestedLists();

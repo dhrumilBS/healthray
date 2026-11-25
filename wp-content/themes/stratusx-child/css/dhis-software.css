@@ -1,0 +1,21 @@
+/* DHIS page (26844) - only what common-landing.css does not already cover. */
+
+/* The arch-shaped photo in "What is DHIS" has its own shape: no frame */
+.dhis-landing .define-grid .define-img { border: 0; }
+
+/* Incentive table: the transaction column needs more room than common's 26% */
+.dhis-landing .rates-table td:first-child { width: 40%; }
+
+/* Worked example */
+.dhis-landing .calc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.dhis-landing .calc-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
+.dhis-landing .calc-card h3 { margin-bottom: 14px; }
+.dhis-landing .calc-card ul { list-style: none; display: grid; gap: 10px; padding: 0; margin: 0; }
+.dhis-landing .calc-card li { display: flex; justify-content: space-between; gap: 16px; padding-bottom: 10px; border-bottom: 1px dashed var(--line); font-size: .92rem; color: var(--ink-soft); }
+.dhis-landing .calc-card li b { color: var(--ink); white-space: nowrap; }
+.dhis-landing .calc-card li.total { padding-bottom: 0; border-bottom: 0; font-weight: 700; color: var(--ink); }
+.dhis-landing .calc-card li.total b { color: var(--brand); font-size: 1.1rem; }
+
+@media (max-width: 720px) {
+    .dhis-landing .calc-grid { grid-template-columns: 1fr; }
+}

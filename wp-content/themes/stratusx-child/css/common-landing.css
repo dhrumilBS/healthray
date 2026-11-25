@@ -283,3 +283,32 @@ html { scroll-behavior: smooth; }
   .clinic-landing .outcomes-grid,
   .hims-landing .outcomes-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* Shared by the information pages: ABDM, ABHA, DHIS, PM-JAY, Our Story */
+/* Portrait illustration in .define-grid: keep it from towering over the copy */
+:is(.abdm-landing, .dhis-landing, .pmjay-landing) .define-grid .define-img { max-height: 520px; width: auto; margin: 0 auto; }
+/* Links inside cards, tick lists and the tinted intro copy */
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing) .card p a,
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing) .arch li a,
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing) .define p a { color: var(--brand); font-weight: 600; }
+/* Tables with three or more columns scroll sideways on phones instead of squashing */
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing) .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing) .table-scroll .versus-table { min-width: 640px; background: #fff; }
+/* Numbered steps (ol.num-steps, four items) */
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing) .num-steps { list-style: none; counter-reset: num-step; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 0; margin: 0; }
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing) .num-steps li { counter-increment: num-step; position: relative; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 26px 22px 24px; transition: border-color .2s, box-shadow .2s; }
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing) .num-steps li:hover { border-color: var(--brand); box-shadow: 0 14px 34px rgba(var(--ink-rgb), .1); }
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing) .num-steps li::before { content: counter(num-step); display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--brand); color: #fff; font-family: var(--font-display); font-weight: 800; margin-bottom: 16px; }
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing) .num-steps h3 { font-size: 1rem; margin-bottom: 8px; }
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing) .num-steps p { font-size: .9rem; }
+/* Cards that link to another page, with a "Read about ..." line at the bottom */
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing) .related-grid .card { display: flex; flex-direction: column; }
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing) .related-grid .more { margin-top: auto; padding-top: 14px; font-size: .9rem; font-weight: 600; color: var(--brand); }
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing) .related-grid .more::after { content: " \2192"; }
+@media (max-width: 980px) {
+  :is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing) .num-steps { grid-template-columns: repeat(2, 1fr); }
+  :is(.abdm-landing, .dhis-landing, .pmjay-landing) .define-grid .define-img { max-height: 420px; }
+}
+@media (max-width: 720px) {
+  :is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing) .num-steps { grid-template-columns: 1fr; }
+}
