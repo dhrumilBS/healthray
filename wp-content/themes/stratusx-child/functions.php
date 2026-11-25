@@ -2331,6 +2331,21 @@ function hr_ppc_inline_css($key)
 }
 
 // PPC body class
+// Common PPC header / footer CSS (templates/ppc/header.php, footer.php): printed once, where the header is
+function hr_ppc_common_css()
+{
+	static $done = false;
+	if ($done) {
+		return;
+	}
+	$done = true;
+	$file = get_stylesheet_directory() . '/css/ppc-common.css';
+	$css  = file_exists($file) ? hr_minify_css(hr_get_inline_css($file)) : '';
+	if ('' !== $css) {
+		echo '<style id="ppc-common-css">' . $css . '</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+}
+
 add_filter('body_class', function ($classes) {
 	$key = hr_ppc_page_key();
 	if ('' !== $key) {

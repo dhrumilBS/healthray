@@ -82,19 +82,7 @@ add_action('wp_enqueue_scripts', function () use ($hr_pharma_js_file, $hr_pharma
 <body <?php body_class('hr-pharmacy-landing'); ?>>
 <?php wp_body_open(); ?>
 
-<header class="site-header">
-  <div class="wrap">
-    <!-- Official Healthray logo from healthray.com. Not a link, so visitors stay on the page. -->
-    <div class="logo">
-      <img src="https://healthray.com/wp-content/uploads/2024/02/Healthray-Logo.svg" alt="Healthray" width="90" height="50">
-      <span class="logo-sub">Pharmacy</span>
-    </div>
-    <!-- The form is the only goal: no WhatsApp or phone links anywhere on this page. -->
-    <div class="header-actions">
-      <a class="btn btn-cta js-start" href="#start" data-cta="header_start">Start free</a>
-    </div>
-  </div>
-</header>
+<?php get_template_part('templates/ppc/header', null, array('cta' => 'Start free', 'href' => '#start', 'class' => 'js-start', 'attrs' => array('data-cta' => 'header_start'), 'label' => 'Pharmacy')); ?>
 
 <main>
 <!-- ============ HERO ============ -->
@@ -471,16 +459,7 @@ add_action('wp_enqueue_scripts', function () use ($hr_pharma_js_file, $hr_pharma
 </section>
 </main>
 
-<footer>
-  <div class="wrap">
-    © <span id="yr">2026</span> Healthray Technologies Pvt. Ltd.
-    <nav aria-label="Legal">
-      <a href="https://healthray.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
-      <a href="https://healthray.com/terms-condition/" target="_blank" rel="noopener">Terms</a>
-      <a href="https://healthray.com/contact/" target="_blank" rel="noopener">Contact</a>
-    </nav>
-  </div>
-</footer>
+<?php get_template_part('templates/ppc/footer'); ?>
 
 <div class="sticky" id="sticky" aria-hidden="true">
   <a class="btn btn-cta js-start" href="#start" data-cta="sticky_start" tabindex="-1">Start free</a>

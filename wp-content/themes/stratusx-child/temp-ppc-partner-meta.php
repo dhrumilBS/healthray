@@ -356,15 +356,7 @@ if (shortcode_exists('contact-form-7')) {
     }
   </style>
 
-  <header class="site-header">
-    <div class="wrap">
-      <div class="logo">
-        <img src="https://healthray.com/wp-content/uploads/2024/02/Healthray-Logo.svg" alt="Healthray" width="80" height="44">
-        <span class="logo-sub">Partner Program</span>
-      </div>
-      <a class="btn btn-cta btn-sm js-start" href="#start" data-cta="header_apply">Apply now</a>
-    </div>
-  </header>
+  <?php get_template_part('templates/ppc/header', null, array('cta' => 'Apply now', 'href' => '#start', 'class' => 'js-start', 'attrs' => array('data-cta' => 'header_apply'), 'label' => 'Partner Program')); ?>
 
   <main>
     <section class="hero">
@@ -893,15 +885,7 @@ if (shortcode_exists('contact-form-7')) {
     </section>
   </main>
 
-  <footer>
-    <div class="wrap">
-      <span>© <span id="yr">2026</span> Healthray Technologies Pvt. Ltd.</span>
-      <nav aria-label="Legal">
-        <a href="https://healthray.com/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
-        <a href="https://healthray.com/terms-condition/" target="_blank" rel="noopener">Terms</a>
-      </nav>
-    </div>
-  </footer>
+  <?php get_template_part('templates/ppc/footer'); ?>
 
   <div class="sticky" id="sticky" aria-hidden="true">
     <a class="btn btn-cta js-start" href="#start" data-cta="sticky_apply" tabindex="-1">Apply now, it’s free</a>
@@ -1393,7 +1377,8 @@ if (shortcode_exists('contact-form-7')) {
       addEventListener('resize', onScroll);
       onScroll();
 
-      document.getElementById('yr').textContent = new Date().getFullYear();
+      var yr = document.getElementById('yr');
+      if (yr) yr.textContent = new Date().getFullYear();
     })();
   </script>
   <?php wp_footer(); ?>

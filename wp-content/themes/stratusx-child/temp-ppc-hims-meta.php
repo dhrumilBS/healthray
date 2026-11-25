@@ -38,16 +38,7 @@ $ppc_problems = array(
 	array( "You find out the day's collection only at night", "See today's collection, OPD count and admissions on your phone, any time of the day." ),
 );
 ?>
-<header class="top">
-  <div class="wrap">
-    <?php // Logo is not linked on purpose: no exits from an ads page. ?>
-    <div class="brand"><img src="https://healthray.com/wp-content/uploads/2024/02/Healthray-Logo.svg" alt="Healthray"
-        width="150" height="34"><span class="fb">Healthray</span></div>
-    <div class="top-right">
-      <a class="btn btn-primary btn-sm hr-cta-btn" data-from="header" href="#demo">Book free demo</a>
-    </div>
-  </div>
-</header>
+<?php get_template_part('templates/ppc/header', null, array('cta' => 'Book free demo', 'class' => 'hr-cta-btn', 'attrs' => array('data-from' => 'header'))); ?>
 
 <main>
   <!-- 1. HERO: the pain from the ad in their words (kicker), what it is (h1), their 3 fears (sub). Form beside it. -->
@@ -560,7 +551,7 @@ $ppc_problems = array(
   </section>
 </main>
 
-<?php include __DIR__ . '/templates/ppc-hims/footer.php'; ?>
+<?php get_template_part('templates/ppc/footer'); ?>
 
 <?php $ppc_wa_message = "Hi Healthray, I saw your ad on Facebook / Instagram and want to see a demo of your hospital software. Please share pricing."; ?>
 <?php include __DIR__ . '/templates/ppc-hims/whatsapp.php'; ?>

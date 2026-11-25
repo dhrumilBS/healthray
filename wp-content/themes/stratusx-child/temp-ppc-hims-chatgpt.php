@@ -12,17 +12,7 @@ $ppc_popup = array(
 );
 require __DIR__ . '/templates/ppc-hims/setup.php';
 ?>
-<header class="top">
-  <div class="wrap">
-    <?php // Logo is not linked on purpose: no exits from an ads page. ?>
-    <div class="brand"><img src="https://healthray.com/wp-content/uploads/2024/02/Healthray-Logo.svg" alt="Healthray"
-        width="150" height="34"><span class="fb">Healthray</span></div>
-    <div class="top-right">
-      <a class="btn btn-primary btn-sm hr-cta-btn" href="#demo"><span class="cta-long">Get free demo and quotation</span><span
-          class="cta-short">Free demo + quotation</span></a>
-    </div>
-  </div>
-</header>
+<?php get_template_part('templates/ppc/header', null, array('cta' => 'Get free demo and quotation', 'cta_short' => 'Free demo + quotation', 'class' => 'hr-cta-btn')); ?>
 
 <main>
   <!-- 1. HERO: continues the ChatGPT conversation ("checking options") + the offer (demo + quotation) + form -->
@@ -459,7 +449,7 @@ require __DIR__ . '/templates/ppc-hims/setup.php';
   </section>
 </main>
 
-<?php include __DIR__ . '/templates/ppc-hims/footer.php'; ?>
+<?php get_template_part('templates/ppc/footer'); ?>
 
 <?php $ppc_wa_message = "Hi Healthray, I found you via ChatGPT and want to see a demo of your hospital software. Please share pricing."; ?>
 <?php include __DIR__ . '/templates/ppc-hims/whatsapp.php'; ?>

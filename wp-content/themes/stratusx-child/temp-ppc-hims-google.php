@@ -53,16 +53,7 @@ $ppc_hospitals = array(
 $ppc_icon_bed = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7v12M3 15h18v4M21 15v-3a3 3 0 0 0-3-3h-7v6"/><circle cx="7" cy="11.5" r="2"/></svg>';
 $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg>';
 ?>
-<header class="top">
-  <div class="wrap">
-    <?php // Logo is not linked on purpose: no exits from an ads page. ?>
-    <div class="brand"><img src="https://healthray.com/wp-content/uploads/2024/02/Healthray-Logo.svg" alt="Healthray"
-        width="150" height="34"><span class="fb">Healthray</span></div>
-    <div class="top-right">
-      <a class="btn btn-primary btn-sm hr-cta-btn" href="#demo">Book a free demo</a>
-    </div>
-  </div>
-</header>
+<?php get_template_part('templates/ppc/header', null, array('class' => 'hr-cta-btn')); ?>
 
 <main>
   <!-- 1. HERO: keyword match + the #1 fear answered + form without scrolling -->
@@ -819,13 +810,7 @@ $ppc_icon_cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
   </section>
 </main>
 
-<footer class="foot">
-  <div class="wrap">
-    <span>© <?php echo esc_html(wp_date('Y')); ?> Healthray Technologies Pvt. Ltd.<span class="foot-sep"> · </span><span
-        class="foot-loc">Surat, Gujarat · Since 2019</span></span>
-    <a href="https://healthray.com/privacy-policy/" rel="nofollow">Privacy policy</a>
-  </div>
-</footer>
+<?php get_template_part('templates/ppc/footer'); ?>
 
 <?php $ppc_wa_message = "Hi Healthray, I found you via Google and want to see a demo of your hospital software. Please share pricing."; ?>
 <?php include __DIR__ . '/templates/ppc-hims/whatsapp.php'; ?>

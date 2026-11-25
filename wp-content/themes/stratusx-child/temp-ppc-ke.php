@@ -47,16 +47,7 @@ $ke_logo = array(
   </symbol>
 </svg>
 
-<header class="top">
-  <div class="wrap">
-    <?php // Logo not linked on purpose: no exits from an ads page. ?>
-    <div class="brand"><img src="https://healthray.com/wp-content/uploads/2024/02/Healthray-Logo.svg" alt="Healthray"
-        width="150" height="34"><span class="fb">Healthray</span></div>
-    <div class="top-right">
-      <a class="btn btn-primary btn-sm hr-cta-btn" href="#demo">Book a free demo</a>
-    </div>
-  </div>
-</header>
+<?php get_template_part('templates/ppc/header', null, array('class' => 'hr-cta-btn')); ?>
 
 <main>
 <!-- Hero -->
@@ -457,7 +448,7 @@ $ke_logo = array(
 </section>
 </main>
 
-<?php include __DIR__ . '/templates/ppc-hims/footer.php'; ?>
+<?php get_template_part('templates/ppc/footer'); ?>
 
 <nav class="mbar" id="mbar" aria-label="Quick actions">
   <a class="go hr-cta-btn" href="#demo">Book a free demo</a>

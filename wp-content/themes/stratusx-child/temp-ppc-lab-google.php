@@ -27,12 +27,7 @@ $hr_lab_head = isset($hr_lab_heads[$hr_lab_k]) ? $hr_lab_heads[$hr_lab_k] : arra
 <script>
   window.HR_LAB = <?php echo wp_json_encode(array('uploads' => $hr_lab_up)); ?>;
 </script>
-<header class="top">
-  <div class="wrap tb">
-    <img src="<?php echo esc_url($hr_lab_up . '/2024/02/Healthray-Logo.svg'); ?>" alt="Healthray" width="150" height="40">
-    <div class="tb-r"><a class="bt sm" href="#demo" data-lab-pop>Book a free demo</a></div>
-  </div>
-</header>
+<?php get_template_part('templates/ppc/header', null, array('attrs' => array('data-lab-pop' => ''))); ?>
 
 <main>
 
@@ -331,9 +326,7 @@ $hr_lab_head = isset($hr_lab_heads[$hr_lab_k]) ? $hr_lab_heads[$hr_lab_k] : arra
 
 </main>
 
-<footer>
-  <div class="wrap"><span>&copy; <?php echo esc_html(gmdate('Y')); ?> Healthray Technologies Pvt. Ltd. &middot; Surat, Gujarat &middot; Since 2019</span><a href="<?php echo esc_url(home_url('/privacy-policy/')); ?>" rel="nofollow">Privacy policy</a></div>
-</footer>
+<?php get_template_part('templates/ppc/footer'); ?>
 
 <div class="bar off"><a class="bt" href="#demo">Book free demo</a></div>
 

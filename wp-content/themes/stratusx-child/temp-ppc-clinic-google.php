@@ -23,9 +23,7 @@ $hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.'
 <div class="hr-page" id="hr-page">
 
   <button type="button" class="ai-rib" data-ai-open aria-haspopup="dialog"><span class="ai-dot" aria-hidden="true"></span><span><b>New: AI Scribe</b> <span class="long">writes your notes while you talk to the patient.</span><span class="short">writes your notes as you talk.</span></span><span class="go">Watch 10 sec ▸</span></button>
-  <div class="top">
-    <div class="in"><img src="<?php echo esc_url($hr_cl_up . '/2024/02/Healthray-Logo.svg'); ?>" alt="Healthray"><a class="btn" href="#demo" data-hr-pop>Book a free demo</a></div>
-  </div>
+  <?php get_template_part('templates/ppc/header', null, array('attrs' => array('data-hr-pop' => ''))); ?>
 
   <section class="a-hero" id="demo">
     <div class="in">
@@ -466,9 +464,7 @@ $hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.'
     </div>
   </section>
 
-  <footer class="foot">
-    <div class="in"><span class="fid"><b>© <?php echo esc_html(gmdate('Y')); ?> Healthray Technologies Pvt. Ltd.</b> · Since 2019</span><a href="<?php echo esc_url(home_url('/privacy-policy/')); ?>" rel="nofollow">Privacy policy</a></div>
-  </footer>
+  <?php get_template_part('templates/ppc/footer'); ?>
 
 </div>
 <div class="mbar" id="mbar" aria-hidden="true"><a class="btn" href="#demo" tabindex="-1">Book a free demo</a></div>
