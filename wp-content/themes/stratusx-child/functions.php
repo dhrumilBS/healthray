@@ -2229,6 +2229,12 @@ add_action('wp_head', function () {
 	echo '<style id="hr-recaptcha-badge">.grecaptcha-badge{visibility:hidden!important;opacity:0!important;pointer-events:none!important}</style>' . "\n";
 }, 1);
 
+// reCAPTCHA v3 pass mark: 0.3 instead of CF7's 0.5. At 0.5 real doctors from Google Ads (scores 0.30-0.49)
+// were blocked as spam; bots still score below 0.3 (see the hr_cf7_spam_log option).
+add_filter('wpcf7_recaptcha_threshold', function () {
+	return 0.3;
+});
+
 // Lazy-load reCAPTCHA
 add_action('wp_enqueue_scripts', function () {
 	if (!wp_script_is('wpcf7-recaptcha', 'enqueued') || !class_exists('WPCF7_RECAPTCHA')) {
@@ -2356,8 +2362,8 @@ add_action('wp_head', function () {
 
 // PPC lead popup
 add_action('wp_footer', function () {
-	// Lab and clinic pages have their own popup (js/ppc-lab.js, js/ppc-clinic.js)
-	if ('' !== hr_ppc_page_key() && !in_array(hr_ppc_page_key(), array('lab', 'clinic'), true)) {
+	// Lab, clinic and diagnostic pages have their own popup (js/ppc-lab.js, js/ppc-clinic.js, js/ppc-diagnostic.js)
+	if ('' !== hr_ppc_page_key() && !in_array(hr_ppc_page_key(), array('lab', 'clinic', 'diagnostic'), true)) {
 		get_template_part('templates/lead-popup', null, (array) apply_filters('hr_ppc_popup_args', array()));
 	}
 }, 5);
