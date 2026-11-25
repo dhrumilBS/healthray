@@ -360,7 +360,8 @@ p,li{text-wrap:pretty}
   .sh-sub,.faq-note{margin-top:10px}
 
   .tb img{height:34px}
-  .tb-r .bt{display:none}
+  /* the header button stays on phones too, smaller (it opens the form popup) */
+  .tb-r .bt{padding:10px 14px;font-size:14px;min-height:44px;border-radius:10px}
 
   .hero .wrap{grid-template-columns:1fr;grid-template-areas:"copy" "form" "proof";gap:0;padding-block:28px 30px}
   .hero h1{font-size:31px;margin:10px 0 12px}
