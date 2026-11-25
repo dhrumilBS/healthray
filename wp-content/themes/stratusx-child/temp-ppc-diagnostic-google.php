@@ -5,7 +5,7 @@
  *
  * Page 82661, /ppc/diagnostic-google/. CSS/JS: css/ppc-diagnostic.css, js/ppc-diagnostic.js (loaded by functions.php, key "diagnostic").
  * Form: CF7 "PPC - Diagnostic centre", 2 steps; step 1 scans go in bed_size; all fields required; Odoo keys bed_size, name, mobile, email, city, ref.
- * Popup (data-dg-pop): top bar, 5 "Book a free demo", "Get my price", "Show me Healthray for my centre", FAQ link, phone bar.
+ * Popup (data-dg-pop): top bar, 6 "Book a free demo", "Get my price", "Show me Healthray for my centre", FAQ link, phone bar.
  * Label per ad group: ?k=dc|path|scan. SEO title, description and noindex: Yoast.
  */
 
@@ -128,6 +128,33 @@ $hr_dg_logos = array(
 			</div>
 			<div class="scan-cta">
 				<p>Bring one of your USG formats to the free demo. We show it in Healthray.</p><a class="bt" href="#demo" data-dg-pop>Book a free demo</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="s11" aria-labelledby="s11-h">
+		<div class="wrap">
+			<h2 class="big" id="s11-h">Your centre does sonography, X&#8209;ray or CT too? <span class="hl">Make their reports and bills in Healthray.</span></h2>
+			<p class="sh-sub">Healthray has 8 scans along with the lab. Each scan has its own report formats and its own list of patients. All of them go on one bill with blood tests.</p>
+			<div class="g11">
+				<?php
+				$hr_dg_scans = array(
+					array('usg', 'USG', 'Sonography reports', 'Hands in gloves on an ultrasound machine'),
+					array('xray', 'X&#8209;ray', 'Chest PA, knee and more', 'An X-ray room with the X-ray machine and table'),
+					array('dxray', 'Digital X&#8209;ray', 'With DICOM images', 'A technician looking at digital X-ray images on a computer'),
+					array('ct', 'CT scan', 'CT brain, CECT chest and more', 'A technician helping a patient at a CT scanner'),
+					array('mri', 'MRI', 'MRI brain, spine and more', 'A doctor with a patient at an MRI machine'),
+					array('ecg', 'ECG', 'Rest ECG reports', 'ECG leads being put on a patient'),
+					array('echo', '2D Echo', 'Echo and cardiogram reports', 'An ultrasound screen showing the heart'),
+					array('tmt', 'TMT', 'Treadmill test reports', 'A patient walking on a treadmill during a stress test'),
+				);
+				foreach ($hr_dg_scans as $s) {
+					echo '<figure class="pc"><img src="' . esc_url($hr_dg_m . '/s11-photo-' . $s[0] . '.webp') . '" width="600" height="450" loading="lazy" alt="' . esc_attr($s[3]) . '"><figcaption><b>' . $s[1] . '</b><span>' . esc_html($s[2]) . '</span></figcaption></figure>';
+				}
+				?>
+			</div>
+			<div class="s11-end">
+				<p>Tell us which scans you do. In the free demo, we show you those.</p><a class="bt" href="#demo" data-dg-pop>Book a free demo</a>
 			</div>
 		</div>
 	</section>

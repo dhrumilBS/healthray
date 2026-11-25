@@ -29,9 +29,10 @@ $hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.'
     <div class="in">
       <div class="a-l">
         <div class="a-copy">
-          <h1 class="kw">AI-powered clinic management software</h1>
-          <p class="big">Easy clinic software, made for <span class="spw" id="sp-word">your speciality</span>.</p>
-          <p class="lead">Prescriptions, appointments and bills in one place, with ready templates for 40+ specialities. Talk to your patient and AI Scribe writes the notes. You check and save.</p>
+          <p class="kw">AI-powered clinic software</p>
+          <h1 class="h1s">Clinic management software &amp; EMR for doctors</h1>
+          <p class="big">Easy clinic software and EMR, made for <span class="spw" id="sp-word">your speciality</span>.</p>
+          <p class="lead">EMR, e-prescriptions, appointment booking and bills in one place, with ready templates for 40+ specialities. Talk to your patient and AI Scribe writes the notes. You check and save.</p>
         </div>
         <div class="a-after">
           <ul class="ticks">
@@ -159,7 +160,7 @@ $hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.'
   <section class="sec see" id="desks" style="--dp-n:<?php echo $hr_cl_rx_media ? 5 : 4; ?>">
     <div class="in">
       <div class="dp-head">
-        <h2 class="sh">One software <em>for your whole clinic.</em></h2>
+        <h2 class="sh">One clinic management system <em>for your whole clinic.</em></h2>
         <p class="sh-sub">Each desk in your clinic gets its own screen, and all of them see the same patient file.</p>
       </div>
       <div class="dp-pin" id="dp-pin">
@@ -188,7 +189,7 @@ $hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.'
             <div id="dp-bodies">
               <div class="dp-body on">
                 <div>
-                  <h3>Patients get a token and see their turn on the TV</h3>
+                  <h3>Patient queue: a token and their turn on the TV</h3>
                   <p>Type the mobile number, the old patient comes up, the token prints. Any TV with internet shows each doctor's token, room and waiting time.</p><a class="more" href="#demo" data-hr-pop>See this in a demo →</a>
                 </div>
                 <ul class="dp-ticks">
@@ -200,7 +201,7 @@ $hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.'
               </div>
               <div class="dp-body">
                 <div>
-                  <h3>Patients book online and get reminders on WhatsApp</h3>
+                  <h3>Doctor appointment booking, with reminders on WhatsApp</h3>
                   <p>Set each doctor's timing once. Online bookings and walk-in patients come on the same list, and a reminder goes before every visit.</p><a class="more" href="#demo" data-hr-pop>See this in a demo →</a>
                 </div>
                 <ul class="dp-ticks">
@@ -213,10 +214,11 @@ $hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.'
               <?php if ($hr_cl_rx_media) : ?>
                 <div class="dp-body">
                   <div>
-                    <h3>Old reports and today's prescription on one screen</h3>
+                    <h3>EMR: old reports and today's e-prescription on one screen</h3>
                     <p>The doctor sees past visits, reports and medicines, and writes today's prescription from their own templates. It prints on your letterhead and goes to the patient's WhatsApp.</p><a class="more" href="#demo" data-hr-pop>See this in a demo →</a>
                   </div>
                   <ul class="dp-ticks">
+                    <li>Full patient records: visits, vitals, reports, notes</li>
                     <li>Last prescription repeated in one click</li>
                     <li>Allergies pop up in red</li>
                     <li>Hindi, Gujarati or 8 more languages</li>
@@ -226,7 +228,7 @@ $hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.'
               <?php endif; ?>
               <div class="dp-body">
                 <div>
-                  <h3>One bill for the doctor's fee and the tests</h3>
+                  <h3>Clinic billing: one bill for the doctor's fee and the tests</h3>
                   <p>The right consultation fee is on the bill as soon as the appointment is booked. Add tests, take cash, UPI or card, and send the bill on WhatsApp.</p><a class="more" href="#demo" data-hr-pop>See this in a demo →</a>
                 </div>
                 <ul class="dp-ticks">
@@ -238,7 +240,7 @@ $hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.'
               </div>
               <div class="dp-body">
                 <div>
-                  <h3>Today's patients and collection on your phone</h3>
+                  <h3>Clinic reports: today's patients and collection on your phone</h3>
                   <p>The day's collection comes on your WhatsApp at night. The full report opens on your phone any time, from anywhere.</p><a class="more" href="#demo" data-hr-pop>See this in a demo →</a>
                 </div>
                 <ul class="dp-ticks">
@@ -423,6 +425,18 @@ $hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.'
       </div>
       <div class="faq">
         <details name="clinic-faq" open>
+          <summary>What is clinic management software?</summary>
+          <p>Software that runs your clinic: patient registration, appointment booking, EMR, e-prescription, billing and reports, all in one place. Healthray does all of this in Chrome or on the mobile app.</p>
+        </details>
+        <details name="clinic-faq">
+          <summary>Is Healthray an EMR or an EHR?</summary>
+          <p>Both. Each patient's records (visits, vitals, reports, prescriptions, notes) are kept as an EMR in your clinic, and can be shared as an ABDM-linked health record (EHR) with the patient's ABHA ID.</p>
+        </details>
+        <details name="clinic-faq">
+          <summary>Can I write e-prescriptions?</summary>
+          <p>Yes. Pick from your own templates or repeat the last prescription in one click. It prints on your letterhead and goes to the patient on WhatsApp, in Hindi, Gujarati or 8 more languages.</p>
+        </details>
+        <details name="clinic-faq">
           <summary>I have only one doctor. Is Healthray too big for my clinic?</summary>
           <p>No. Single-doctor clinics use it. You start with appointments, prescriptions and bills, and add pharmacy or lab later in the same software.</p>
         </details>
@@ -448,7 +462,7 @@ $hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.'
         </details>
         <details name="clinic-faq">
           <summary>Does it make ABHA IDs?</summary>
-          <p>Yes. The ABHA ID is made or checked while the patient is being registered. Healthray is NHA approved and ABDM compliant.</p>
+          <p>Yes. The ABHA ID is made or checked while the patient is being registered. Healthray is ABDM compliant.</p>
         </details>
       </div>
       <p class="notfor"><b>Who Healthray is not for:</b> students looking for a project, and anyone looking for free software or source code.</p>

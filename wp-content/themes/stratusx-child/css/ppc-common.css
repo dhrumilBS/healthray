@@ -32,3 +32,23 @@ body footer.ppc-ft a:hover{color:#0f68ea}
 @media (max-width:820px){
   body footer.ppc-ft .ppc-ft-in{flex-direction:column;align-items:flex-start;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 }
+
+/* FAQ: one look on every PPC page (the Lab / Diagnostic "lines" look). Every <details name="..."> on a PPC page is a
+   FAQ question. ":not(#hr-faq)" only raises the weight of these rules above each page's own FAQ rules; no element has
+   that id. Questions and answers are not changed. One open at a time: the shared name, plus the script in
+   templates/ppc/footer.php for browsers that do not know it. */
+body details[name]:not(#hr-faq){margin:0;padding:0;background:none;border:0;border-top:1px solid #cfd8e6;border-radius:0;box-shadow:none}
+body details[name]:not(#hr-faq):last-of-type{border-bottom:1px solid #cfd8e6}
+body details[name]:not(#hr-faq) > summary{display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative;margin:0;padding:20px 0;list-style:none;cursor:pointer;background:none;border:0;font:800 20px/1.35 "Mulish",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:-.015em;color:#0d1b3e;text-transform:none;text-wrap:balance}
+body details[name]:not(#hr-faq) > summary::-webkit-details-marker{display:none}
+body details[name]:not(#hr-faq) > summary::before{content:none;display:none}
+body details[name]:not(#hr-faq) > summary::after{content:"";position:static;flex:none;display:block;width:11px;height:11px;margin:-4px 6px 0 0;padding:0;border:0;border-right:2.5px solid #0d1b3e;border-bottom:2.5px solid #0d1b3e;border-radius:0;background:none;font-size:0;line-height:0;color:transparent;transform:rotate(45deg);transition:transform .2s}
+body details[name]:not(#hr-faq)[open] > summary::after{transform:rotate(-135deg);margin-top:6px}
+body details[name]:not(#hr-faq) > summary:focus-visible{outline:3px solid #7fb0ff;outline-offset:3px;border-radius:4px}
+body details[name]:not(#hr-faq) > p{margin:0;padding:0 40px 24px 0;max-width:38em;background:none;font:400 16px/1.6 "Mulish",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#475569;text-wrap:pretty}
+body details[name]:not(#hr-faq) > p a{color:#0f68ea;font-weight:700}
+@media (max-width:820px){
+  body details[name]:not(#hr-faq) > summary{padding:18px 0;font-size:18px}
+  body details[name]:not(#hr-faq) > p{padding:0 8px 20px 0}
+}
+@media (prefers-reduced-motion:reduce){body details[name]:not(#hr-faq) > summary::after{transition:none}}
