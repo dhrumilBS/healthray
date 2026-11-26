@@ -335,6 +335,10 @@
 .ev-page .ev-details__row dd { margin: 2px 0 0; color: var(--hr-ink-strong); font-size: 15px; font-weight: 700; line-height: 1.45; overflow-wrap: anywhere; }
 .ev-page .ev-details__row dd .ev-status { margin-top: 2px; }
 .ev-page .ev-details__sub { display: block; margin-top: 2px; color: var(--hr-ink-faint); font-size: 13px; font-weight: 600; }
+/* Organiser and registration links (offsite, open in a new tab). */
+.ev-page .ev-details__row dd .ev-details__link { color: var(--hr-navy); font-weight: 700; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.ev-page .ev-details__row dd .ev-details__link:hover,
+.ev-page .ev-details__row dd .ev-details__link:focus-visible { color: var(--hr-navy); text-decoration-thickness: 2px; }
 
 /* Share */
 .ev-page .ev-share { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--hr-line); }

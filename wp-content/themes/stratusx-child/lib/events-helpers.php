@@ -12,6 +12,16 @@
  *   event_location    free text, e.g. "NESCO, GOREGAON, MUMBAI" or "Online - Webinar"
  *   event_type        free text, e.g. "CONFERENCE" or "Expo"
  *
+ * The organiser, registration and speaker fields come from the sidebar boxes
+ * registered in lib/events-schema.php:
+ *
+ *   event_organizer           organiser name
+ *   event_organizer_url       organiser / event website
+ *   event_registration_url    organiser page where visitors register
+ *   event_registration_price  entry price in INR, 0 = free registration
+ *   event_registration_opens  Ymd, only when registration opens after publishing
+ *   event_performers          speakers, one name per line
+ *
  * Status (upcoming / ongoing / past) is always derived from the dates in the
  * site timezone. The free-text `event_status` field is deliberately not used:
  * it is typed by hand and goes stale the day an event ends.
@@ -262,6 +272,9 @@ function hr_event_data( $post = null ) {
 	$online   = hr_event_is_online( $location );
 	$terms    = get_the_terms( $post, 'event_category' );
 	$title    = get_the_title( $post );
+	$price    = trim( (string) get_post_meta( $post->ID, 'event_registration_price', true ) );
+	$speakers = preg_split( '/\R/', wp_strip_all_tags( (string) get_post_meta( $post->ID, 'event_performers', true ) ) );
+	$speakers = array_values( array_unique( array_filter( array_map( 'trim', $speakers ), 'strlen' ) ) );
 
 	$data = array(
 		'id'           => (int) $post->ID,
@@ -283,6 +296,13 @@ function hr_event_data( $post = null ) {
 		'is_online'    => $online,
 		'terms'        => ( $terms && ! is_wp_error( $terms ) ) ? wp_list_pluck( $terms, 'name' ) : array(),
 		'excerpt'      => hr_event_excerpt( $post ),
+		// Organiser, registration and speakers (lib/events-schema.php).
+		'organizer'          => trim( wp_strip_all_tags( (string) get_post_meta( $post->ID, 'event_organizer', true ) ) ),
+		'organizer_url'      => esc_url_raw( trim( (string) get_post_meta( $post->ID, 'event_organizer_url', true ) ) ),
+		'registration_url'   => esc_url_raw( trim( (string) get_post_meta( $post->ID, 'event_registration_url', true ) ) ),
+		'registration_price' => ( is_numeric( $price ) && $price >= 0 ) ? 0 + $price : null, // int|float, null when not entered.
+		'registration_opens' => hr_event_parse_date( get_post_meta( $post->ID, 'event_registration_opens', true ) ),
+		'performers'         => $speakers,
 	);
 
 	$cache[ $post->ID ] = $data;
@@ -613,6 +633,8 @@ function hr_event_icon( $name, $size = 18 ) {
 		'zap'           => '<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>',
 		'headset'       => '<path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/><path d="M21 16v2a4 4 0 0 1-4 4h-5"/>',
 		'users'         => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+		'building'      => '<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4"/>',
+		'ticket'        => '<path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 17v2M13 11v2"/>',
 	);
 
 	$filled = array(

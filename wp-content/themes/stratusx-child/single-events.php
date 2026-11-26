@@ -33,6 +33,29 @@ while ( have_posts() ) :
 	$place_label   = $event['is_online'] ? 'Online' : 'Venue';
 	$place_icon    = $event['is_online'] ? 'globe' : 'pin';
 	$cta_label     = $is_live ? 'Book a Meeting' : 'Book a Free Demo';
+
+	// Registration link: the page Google's offer URL points to, so it must be visible here.
+	$registration = array();
+	if ( $is_live && '' !== $event['registration_url'] ) {
+		$reg_host  = preg_replace( '/^www\./i', '', (string) wp_parse_url( $event['registration_url'], PHP_URL_HOST ) );
+		$reg_opens = $event['registration_opens'];
+		$reg_price = $event['registration_price'];
+		$reg_note  = '';
+
+		if ( $reg_opens && $reg_opens > hr_events_today() ) {
+			$reg_note = 'Registration opens ' . wp_date( 'F j, Y', $reg_opens->getTimestamp() );
+		} elseif ( null !== $reg_price && 0.0 === (float) $reg_price ) {
+			$reg_note = 'Free entry with registration';
+		} elseif ( null !== $reg_price ) {
+			$reg_note = 'Entry ₹' . number_format_i18n( $reg_price, floor( $reg_price ) == $reg_price ? 0 : 2 );
+		}
+
+		$registration = array(
+			'url'   => $event['registration_url'],
+			'label' => '' !== $reg_host ? 'Register on ' . $reg_host : 'Register to visit',
+			'note'  => $reg_note,
+		);
+	}
 	?>
 	<main class="ev-page ev-single hr-single-wrapper" id="ev-main">
 		<article <?php post_class( 'ev-single__article' ); ?>>
@@ -205,6 +228,31 @@ while ( have_posts() ) :
 										</div>
 									<?php endif; ?>
 
+									<?php if ( '' !== $event['organizer'] ) : ?>
+										<div class="ev-details__row">
+											<dt><span class="ev-details__icon"><?= hr_event_icon( 'building', 18 ); ?></span>Organiser</dt>
+											<dd>
+												<?php if ( '' !== $event['organizer_url'] ) : ?>
+													<a class="ev-details__link" href="<?= esc_url( $event['organizer_url'] ); ?>" target="_blank" rel="noopener noreferrer"><?= esc_html( $event['organizer'] ); ?><span class="visually-hidden"> (opens in a new tab)</span></a>
+												<?php else : ?>
+													<?= esc_html( $event['organizer'] ); ?>
+												<?php endif; ?>
+											</dd>
+										</div>
+									<?php endif; ?>
+
+									<?php if ( $registration ) : ?>
+										<div class="ev-details__row">
+											<dt><span class="ev-details__icon"><?= hr_event_icon( 'ticket', 18 ); ?></span>Registration</dt>
+											<dd>
+												<a class="ev-details__link" href="<?= esc_url( $registration['url'] ); ?>" target="_blank" rel="noopener noreferrer"><?= esc_html( $registration['label'] ); ?><span class="visually-hidden"> (opens in a new tab)</span></a>
+												<?php if ( '' !== $registration['note'] ) : ?>
+													<span class="ev-details__sub"><?= esc_html( $registration['note'] ); ?></span>
+												<?php endif; ?>
+											</dd>
+										</div>
+									<?php endif; ?>
+
 									<?php if ( '' !== $event['type'] ) : ?>
 										<div class="ev-details__row">
 											<dt><span class="ev-details__icon"><?= hr_event_icon( 'tag', 18 ); ?></span>Format</dt>
@@ -216,6 +264,13 @@ while ( have_posts() ) :
 										<div class="ev-details__row">
 											<dt><span class="ev-details__icon"><?= hr_event_icon( 'flag', 18 ); ?></span>Category</dt>
 											<dd><?= esc_html( implode( ', ', $event['terms'] ) ); ?></dd>
+										</div>
+									<?php endif; ?>
+
+									<?php if ( $event['performers'] ) : ?>
+										<div class="ev-details__row">
+											<dt><span class="ev-details__icon"><?= hr_event_icon( 'users', 18 ); ?></span>Speakers</dt>
+											<dd><?= esc_html( implode( ', ', $event['performers'] ) ); ?></dd>
 										</div>
 									<?php endif; ?>
 
