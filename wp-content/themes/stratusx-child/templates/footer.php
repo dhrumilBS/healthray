@@ -1,4 +1,5 @@
-<?php get_template_part('templates/lead-popup'); ?>
+<?php // Pages may set the popup's form and heading through the hr_ppc_popup_args filter (e.g. temp-hospital-billing.php)
+get_template_part('templates/lead-popup', null, (array) apply_filters('hr_ppc_popup_args', array())); ?>
 
 <?php
 $hr_footer_type = apply_filters('hr_footer_type', get_field('footer_type'));
@@ -10,7 +11,6 @@ if ($hr_footer_type !== 'legacy') {
 ?>
 
 <footer class="footer-section">
-
 	<?php if (!empty(get_field('company_address', 'option')) || !empty(get_field('talk_to_team', 'option')) || !empty(get_field('customer_support_email', 'option'))) { ?>
 		<div class="footer">
 			<div class="container">
@@ -31,7 +31,6 @@ if ($hr_footer_type !== 'legacy') {
 						</div>
 					<?php } ?>
 
-
 					<?php if (!empty(get_field('talk_to_team', 'option'))) { ?>
 						<div class="col">
 							<div class="single-cta justify-content-start justify-content-lg-center">
@@ -48,7 +47,6 @@ if ($hr_footer_type !== 'legacy') {
 							</div>
 						</div>
 					<?php } ?>
-
 
 					<?php if (!empty(get_field('customer_support_email', 'option'))) { ?>
 						<div class="col">

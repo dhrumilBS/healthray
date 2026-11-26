@@ -312,6 +312,12 @@ add_action('wp_enqueue_scripts', function () {
 	if (is_page(82372)) {
 		wp_enqueue_script('modules-hub', get_stylesheet_directory_uri() . '/js/modules-hub.js', array(), hr_asset_version('/js/modules-hub.js'), true);
 	}
+	// Hospital billing software (/modules/hospital-billing-software/): css/hospital-billing.css + js/hospital-billing.js, see temp-hospital-billing.php
+	if (is_page(82741)) {
+		wp_enqueue_style('hr-billing', get_stylesheet_directory_uri() . '/css/hospital-billing.css', array('main_style'), hr_asset_version('/css/hospital-billing.css'));
+		wp_add_inline_style('hr-billing', '.hr-billing{--hr-sticky:127px}@media (max-width:1024px){.hr-billing{--hr-sticky:104px}}');
+		wp_enqueue_script('hr-billing', get_stylesheet_directory_uri() . '/js/hospital-billing.js', array(), hr_asset_version('/js/hospital-billing.js'), true);
+	}
 	if (hr_is_home_hms_page()) {
 		wp_enqueue_script('home-hms', get_stylesheet_directory_uri() . '/js/home-hms.js', array(), hr_asset_version('/js/home-hms.js'), true);
 		wp_enqueue_style('home-hms', get_stylesheet_directory_uri() . '/css/home-hms.css', array(), hr_asset_version('/css/home-hms.css'));
