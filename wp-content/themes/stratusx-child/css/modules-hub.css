@@ -202,8 +202,8 @@ html:has(body.modules-landing) { scroll-behavior: smooth; scroll-padding-top: 84
 
 .modules-landing .hx .formbox h2 { font-size: 23px; color: var(--primary); }
 .modules-landing .hx .formbox .fsub { font-size: 15px; margin: 8px 0; color: var(--hx-text-2); }
-.modules-landing .hx .mods { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
-@media (max-width:820px) {
+.modules-landing .hx .mods { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+@media (max-width:1080px) {
   .modules-landing .hx .mods { grid-template-columns: minmax(0, 1fr); }
 }
 
@@ -227,4 +227,19 @@ html:has(body.modules-landing) { scroll-behavior: smooth; scroll-padding-top: 84
 .modules-landing .hx .mod-demo:hover { text-decoration: underline; }
 @media (max-width:480px) {
   .modules-landing .hx .mod-links .btn { width: 100%; white-space: normal  }
+}
+
+/* Module cards: 3 in a row on desktop (OPD, IPD, Billing). Tablet: one card per row, picture beside the text. Phone: stacked. */
+@media (min-width:1081px) {
+  .modules-landing .hx .mod-body { padding: 24px 24px 26px; }
+  .modules-landing .hx .mod h3 { font-size: 23px; }
+  .modules-landing .hx .mod .sum { font-size: 15.5px; }
+  .modules-landing .hx .mod .ticks { gap: 8px; }
+  .modules-landing .hx .mod .ticks li { font-size: 15.5px; }
+  .modules-landing .hx .mod-links { gap: 10px 18px; }
+}
+@media (min-width:721px) and (max-width:1080px) {
+  .modules-landing .hx .mod { display: grid; grid-template-columns: minmax(0, 44%) minmax(0, 1fr); }
+  .modules-landing .hx .mod-pic { aspect-ratio: auto; height: 100%; min-height: 280px; border-bottom: 0; border-right: 1px solid var(--hx-line); }
+  .modules-landing .hx .mod-pic:not(.cut) img { object-position: 0 50%; }
 }

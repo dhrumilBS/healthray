@@ -1188,7 +1188,7 @@ function healthray_modules_registry()
 		array(
 			'id'      => 82363,
 			'key'     => 'opd',
-			'eyebrow' => 'OPD software for clinics and hospitals',
+			'eyebrow' => 'For your OPD patients',
 			'title'   => 'OPD Management Software',
 			'summary' => 'Token, appointments, the doctor\'s prescription, billing and reports in one software. Less crowd at reception, old records in one click, and the day\'s collection on your WhatsApp at night.',
 			'points'  => array(
@@ -1214,6 +1214,21 @@ function healthray_modules_registry()
 			'image'   => $up . 'beds-wash.webp',
 			'cutout'  => false,
 			'cta'     => 'See IPD management software',
+		),
+		array(
+			'id'      => 82741,
+			'key'     => 'billing',
+			'eyebrow' => 'For your billing counter',
+			'title'   => 'Hospital Billing Software',
+			'summary' => 'Make every bill of your hospital in one software: OPD bill, IPD bill and cashless TPA bill. Lab, pharmacy and room charges are added to the bill by themselves.',
+			'points'  => array(
+				'Room rent is added every night at the ward\'s rate',
+				'One report shows what was given but not billed',
+				'The right rate for cash, TPA and company patients',
+			),
+			'image'   => $up . 'bc-ipd.webp',
+			'cutout'  => false,
+			'cta'     => 'See hospital billing software',
 		),
 	);
 }
@@ -1276,7 +1291,7 @@ function healthray_modules_faq_items()
 	return array(
 		array(
 			'q' => 'What is a Healthray module?',
-			'a' => 'A module is one part of Healthray\'s hospital software, made for one kind of work, like the OPD or the wards (IPD). All modules work on the same patient file, so a patient\'s visits, reports and bills stay together.',
+			'a' => 'A module is one part of Healthray\'s hospital software, made for one kind of work, like the OPD, the wards (IPD) or the billing counter. All modules work on the same patient file, so a patient\'s visits, reports and bills stay together.',
 		),
 		array(
 			'q' => 'Can we start with just one module?',
