@@ -62,8 +62,6 @@ button,input,select{font-family:inherit}
 .a-copy{display:flex;flex-direction:column;gap:14px}
 .a-hero .kw{color:var(--sky)}
 .a-hero .big{font-size:48px;color:var(--white)}
-/* the H1 (keywords) sits between the small blue line and the big line */
-.a-hero .h1s{margin:-6px 0 0;font-size:21px;font-weight:800;letter-spacing:-.01em;line-height:1.3;color:rgba(255,255,255,.9);text-wrap:balance}
 .a-after{display:flex;flex-direction:column;gap:22px}
 .ticks{display:flex;flex-direction:column;gap:10px}
 .ticks li{display:flex;gap:10px;align-items:flex-start;font-size:16.5px;font-weight:700;color:var(--white)}
@@ -353,7 +351,6 @@ button,input,select{font-family:inherit}
   .a-l{display:contents}
   .a-copy{order:1}.card{order:2;padding:22px}.a-after{order:3}
   .a-hero .big{font-size:31px}
-  .a-hero .h1s{font-size:17px;margin-top:-4px}
   .card h2{font-size:22px}
   .hrow{align-items:flex-start}
 }

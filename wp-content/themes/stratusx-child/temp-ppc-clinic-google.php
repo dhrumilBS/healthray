@@ -29,10 +29,9 @@ $hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.'
     <div class="in">
       <div class="a-l">
         <div class="a-copy">
-          <p class="kw">AI-powered clinic software</p>
-          <h1 class="h1s">Clinic management software &amp; EMR for doctors</h1>
+          <h1 class="kw">Clinic management software &amp; EMR for doctors</h1>
           <p class="big">Easy clinic software and EMR, made for <span class="spw" id="sp-word">your speciality</span>.</p>
-          <p class="lead">EMR, e-prescriptions, appointment booking and bills in one place, with ready templates for 40+ specialities. Talk to your patient and AI Scribe writes the notes. You check and save.</p>
+          <p class="lead">EMR, e-prescriptions, appointment booking and bills in one place, with ready templates for 28+ specialities. Talk to your patient and AI Scribe writes the notes. You check and save.</p>
         </div>
         <div class="a-after">
           <ul class="ticks">
@@ -43,7 +42,7 @@ $hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.'
           <div class="a-trust">
             <div class="hrow">
               <div class="faces" aria-hidden="true"><img src="<?php echo esc_url($hr_cl_up . '/2024/04/Dr.-Milan-Modi.webp'); ?>" alt=""><img src="<?php echo esc_url($hr_cl_up . '/2025/10/Dr.-kaivan-shah.webp'); ?>" alt=""><img src="<?php echo esc_url($hr_cl_up . '/2025/10/Dr.-Gautam-Beladiya.webp'); ?>" alt=""><img src="<?php echo esc_url($hr_cl_up . '/2025/10/Dr.-Purav-Kansara.webp'); ?>" alt=""><img src="<?php echo esc_url($hr_cl_up . '/2026/10/Dr.-Hinal-Parmar-Rainbow-Hospital.webp'); ?>" alt=""></div>
-              <p><b>2,500+ hospitals and clinics</b> across India use Healthray</p>
+              <p><b>5000+ hospitals and clinics</b> across India use Healthray</p>
             </div>
             <div class="hrow">
               <div class="tiles"><span><img src="<?php echo esc_url($hr_cl_up . '/2026/07/NABH-ehr-certified-150x150.webp'); ?>" alt="NABH certified"></span><span><img src="<?php echo esc_url($hr_cl_up . '/2026/03/abdm-healthray-150x150.webp'); ?>" alt="ABDM compliant"></span><span><img src="<?php echo esc_url($hr_cl_up . '/2025/07/NHA.webp'); ?>" alt="NHA approved"></span><span><img src="<?php echo esc_url($hr_cl_up . '/2026/03/iso-27001-healthray-150x150.webp'); ?>" alt="ISO 27001"></span></div>
@@ -151,7 +150,11 @@ $hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.'
         <div class="player">
           <video id="s2a-v" muted playsinline preload="none" poster="<?php echo esc_url($hr_cl_up . '/2026/11/clinic-tour-v2-poster.jpg'); ?>" src="<?php echo esc_url($hr_cl_up . '/2026/11/clinic-tour-v2-web.mp4'); ?>"></video>
           <button class="pp" id="s2a-pp" type="button" aria-label="Play or pause the video">▶</button>
-          <button class="fs" id="s2a-fs" type="button" aria-label="Watch the video full screen"><svg class="fs-in" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg class="fs-out" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button>
+          <button class="fs" id="s2a-fs" type="button" aria-label="Watch the video full screen"><svg class="fs-in" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
+            </svg><svg class="fs-out" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" />
+            </svg></button>
         </div>
       </div>
     </div>
@@ -442,7 +445,7 @@ $hr_cl_wa = hr_ppc_wa_url('Hi, I want a free demo of Healthray clinic software.'
         </details>
         <details name="clinic-faq">
           <summary>Is it made for my speciality?</summary>
-          <p>Yes. Healthray has ready templates for 40+ specialities, like general physician, gynaec, child, bone, eye, ENT, skin and heart. Every doctor also makes their own prescription templates, so the medicines you write most are one click away.</p>
+          <p>Yes. Healthray has ready templates for 28+ specialities, like general physician, gynaec, child, bone, eye, ENT, skin and heart. Every doctor also makes their own prescription templates, so the medicines you write most are one click away.</p>
         </details>
         <details name="clinic-faq">
           <summary>My receptionist is not good with computers. Can they use it?</summary>
