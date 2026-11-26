@@ -46,7 +46,7 @@ require_once get_stylesheet_directory() . '/lib/acf-speciality.php';
 
 // Landing page IDs
 if (!defined('HR_LANDING_PAGE_IDS')) {
-	define('HR_LANDING_PAGE_IDS', [167, 26475, 26834, 26844, 27377, 31213, 32399, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468, 82361, 82363, 82472, 82361, 82363, 82372]);
+	define('HR_LANDING_PAGE_IDS', [167, 26475, 26834, 26844, 27377, 30243, 31051, 31079, 31213, 32399, 62094, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468, 82361, 82363, 82472, 82361, 82363, 82372]);
 }
 
 
@@ -368,7 +368,7 @@ function remove_from_homepage()
 	);
 
 	// Remove only on landing pages
-	if (is_page(79691) || is_page(79713) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81834) || is_page(167) || is_page(27377) || is_page(26834) || is_page(26844) || is_page(26475) || is_page(31213) || is_single() || is_page(28110) || is_page(82361) || is_page(82363) || hr_is_modules_hub() || hr_is_login_portal_page() || is_page(82472) || hr_is_home_hms_page()) {
+	if (is_page(79691) || is_page(79713) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81834) || is_page(167) || is_page(27377) || is_page(26834) || is_page(26844) || is_page(26475) || is_page(31213) || is_page(62094) || is_page(30243) || is_page(31051) || is_page(31079) || is_single() || is_page(28110) || is_page(82361) || is_page(82363) || hr_is_modules_hub() || hr_is_login_portal_page() || is_page(82472) || hr_is_home_hms_page()) {
 		$styles = array_merge($styles, array('abha-card', 'common-theme', 'owl.carousal', 'my-elements'));
 		$scripts = array_merge($scripts, array('abha-card', 'common-theme', 'owl.carousal', 'toggle-tabs', 'my-element'));
 	}
@@ -518,6 +518,10 @@ add_filter('body_class', function ($classes) {
 		26844 => 'dhis-landing',
 		26475 => 'pmjay-landing',
 		31213 => 'our-story-landing',
+		62094 => 'awards-landing',
+		30243 => 'why-healthray-landing',
+		31051 => 'telehealth-landing',
+		31079 => 'patient-flow-landing',
 
 	];
 	foreach ($landing_pages as $page_id => $class) {
@@ -581,7 +585,7 @@ add_filter('body_class', static function ($classes) {
 // Landing CSS and schema
 add_action('wp_head', function () {
 	// Shared landing CSS (not speciality)
-	if (is_page(79713) || is_page(79691) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81468) || is_page(81773) || is_page(81775) || is_page(27377) || is_page(26834) || is_page(26844) || is_page(26475) || is_page(31213)) {
+	if (is_page(79713) || is_page(79691) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81468) || is_page(81773) || is_page(81775) || is_page(27377) || is_page(26834) || is_page(26844) || is_page(26475) || is_page(31213) || is_page(62094) || is_page(30243) || is_page(31051) || is_page(31079)) {
 		$common_css_path = get_stylesheet_directory() . '/css/common-landing.css';
 		if (file_exists($common_css_path)) {
 			echo '<style id="common-landing-css-inline">' . file_get_contents($common_css_path) . '</style>' . "\n";
@@ -1050,60 +1054,19 @@ add_action('wp_head', function () {
 function healthray_ipd_faq_items()
 {
 	return array(
-		array(
-			'q' => 'What is IPD management software?',
-			'a' => 'IPD means in-patient department: the patients who are admitted and stay in your hospital. IPD management software is one software that reception, nurses, doctors and the billing counter all use for each admitted patient. It keeps the bed, the daily notes, the charges, the deposit and the discharge papers in one place.',
-		),
-		array(
-			'q' => 'What is the difference between OPD and IPD software?',
-			'a' => 'OPD software is for patients who see the doctor and go home the same day: token, prescription and one bill. IPD software is for patients who are admitted: bed, nursing care, a bill that runs for many days, deposits, TPA and discharge. In Healthray both are parts of the same software, so an OPD patient is admitted without typing the details again.',
-			'more' => 'See the <a href="' . esc_url(get_permalink(82363)) . '">OPD software</a>.',
-		),
-		array(
-			'q' => 'What is the price?',
-			'a' => 'There is no one fixed price. It depends on how many beds you have, which departments you want and whether you want it on the internet (cloud) or on your own server. A 40-bed hospital pays less than a 300-bed hospital. Within 24 hours of the demo you get the price for your hospital in writing. Moving your old data and training your staff are included.',
-		),
-		array(
-			'q' => 'How long does it take to start?',
-			'a' => 'Even a 200-bed hospital usually starts in one to three weeks. Rainbow Hospital in Vapi, with 100 beds, started in 14 working days.',
-		),
-		array(
-			'q' => 'Will billing stop on the day we change over?',
-			'a' => 'No. You change one department at a time: OPD and registration first, then IPD billing, pharmacy and lab. If something goes wrong, it stays small and gets fixed before the next department starts.',
-		),
-		array(
-			'q' => 'Our nurses are not good with computers. Can they use it?',
-			'a' => 'Yes. Each team learns only its own screens, at your hospital. A nurse\'s work is mostly ticking: tick the dose that was given, fill the BP and sugar chart, copy the last reading when nothing has changed.',
-		),
-		array(
-			'q' => 'Does it handle TPA, cashless and Ayushman (PMJAY) patients?',
-			'a' => 'Yes. The TPA, insurance company and policy number are noted at admission. All cashless patients come in one list with claim number and bill status, and the bill prints in the cashless format. Ayushman (PMJAY) patients are billed in the same software.',
-		),
-		array(
-			'q' => 'Can we make package bills?',
-			'a' => 'Yes. Make your packages once, then give a package to the patient at admission or later. The package prints on the bill, and a report shows all package patients.',
-		),
-		array(
-			'q' => 'Who can give a discount or change a bill?',
-			'a' => 'Each staff member has their own login and sees only their own screens. Every discount comes in one report, and another report shows the billing work done by each staff member.',
-		),
-		array(
-			'q' => 'What if the internet stops?',
-			'a' => 'Connect a mobile hotspot and keep working. Your data stays safe. A hospital can also run Healthray on its own server inside the hospital.',
-		),
-		array(
-			'q' => 'Is our data safe? If we stop, do we get it back?',
-			'a' => 'Healthray is ISO 27001 certified for data security. Each staff member has their own login. Your hospital owns its data, and you can take your records out at any time.',
-		),
-		array(
-			'q' => 'Do we need to buy anything? Does it work with our lab and pharmacy?',
-			'a' => 'Nothing special. It runs on the computers you already have, in the internet browser. Healthray also has lab, pharmacy, OT and OPD parts, and they all join the same patient record.',
-			'more' => 'Together they make the full <a href="https://healthray.com/hospital-information-management-system/">hospital software</a>.',
-		),
-		array(
-			'q' => 'Is help available at night?',
-			'a' => 'Yes. Help is there 24 hours, all 7 days, on call, chat and screen share, in English, Hindi or Gujarati.',
-		),
+		array('q' => 'What is IPD management software?', 'a' => 'IPD means in-patient department: the patients who are admitted and stay in your hospital. IPD management software is one software that reception, nurses, doctors and the billing counter all use for each admitted patient. It keeps the bed, the daily notes, the charges, the deposit and the discharge papers in one place.',),
+		array('q' => 'What is the difference between OPD and IPD software?', 'a' => 'OPD software is for patients who see the doctor and go home the same day: token, prescription and one bill. IPD software is for patients who are admitted: bed, nursing care, a bill that runs for many days, deposits, TPA and discharge. In Healthray both are parts of the same software, so an OPD patient is admitted without typing the details again.', 'more' => 'See the <a href="' . esc_url(get_permalink(82363)) . '">OPD software</a>.',),
+		array('q' => 'What is the price?', 'a' => 'There is no one fixed price. It depends on how many beds you have, which departments you want and whether you want it on the internet (cloud) or on your own server. A 40-bed hospital pays less than a 300-bed hospital. Within 24 hours of the demo you get the price for your hospital in writing. Moving your old data and training your staff are included.',),
+		array('q' => 'How long does it take to start?', 'a' => 'Even a 200-bed hospital usually starts in one to three weeks. Rainbow Hospital in Vapi, with 100 beds, started in 14 working days.',),
+		array('q' => 'Will billing stop on the day we change over?', 'a' => 'No. You change one department at a time: OPD and registration first, then IPD billing, pharmacy and lab. If something goes wrong, it stays small and gets fixed before the next department starts.',),
+		array('q' => 'Our nurses are not good with computers. Can they use it?', 'a' => 'Yes. Each team learns only its own screens, at your hospital. A nurse\'s work is mostly ticking: tick the dose that was given, fill the BP and sugar chart, copy the last reading when nothing has changed.',),
+		array('q' => 'Does it handle TPA, cashless and Ayushman (PMJAY) patients?', 'a' => 'Yes. The TPA, insurance company and policy number are noted at admission. All cashless patients come in one list with claim number and bill status, and the bill prints in the cashless format. Ayushman (PMJAY) patients are billed in the same software.',),
+		array('q' => 'Can we make package bills?', 'a' => 'Yes. Make your packages once, then give a package to the patient at admission or later. The package prints on the bill, and a report shows all package patients.',),
+		array('q' => 'Who can give a discount or change a bill?', 'a' => 'Each staff member has their own login and sees only their own screens. Every discount comes in one report, and another report shows the billing work done by each staff member.',),
+		array('q' => 'What if the internet stops?', 'a' => 'Connect a mobile hotspot and keep working. Your data stays safe. A hospital can also run Healthray on its own server inside the hospital.',),
+		array('q' => 'Is our data safe? If we stop, do we get it back?', 'a' => 'Healthray is ISO 27001 certified for data security. Each staff member has their own login. Your hospital owns its data, and you can take your records out at any time.',),
+		array('q' => 'Do we need to buy anything? Does it work with our lab and pharmacy?', 'a' => 'Nothing special. It runs on the computers you already have, in the internet browser. Healthray also has lab, pharmacy, OT and OPD parts, and they all join the same patient record.', 'more' => 'Together they make the full <a href="https://healthray.com/hospital-information-management-system/">hospital software</a>.',),
+		array('q' => 'Is help available at night?', 'a' => 'Yes. Help is there 24 hours, all 7 days, on call, chat and screen share, in English, Hindi or Gujarati.',),
 	);
 }
 
@@ -1111,71 +1074,22 @@ function healthray_ipd_faq_items()
 function healthray_opd_faq_items()
 {
 	return array(
-		array(
-			'q' => 'What is the price of Healthray OPD software?',
-			'a' => 'It depends on how many doctors, counters and branches you have, and whether you also want lab, pharmacy or IPD. After the demo we send you the price in writing. Moving your old data and training your staff are free. WhatsApp and SMS messages are paid separately, bought in advance, for example 5,000 SMS for ₹1,500.',
-		),
-		array(
-			'q' => 'How long does it take to start?',
-			'a' => 'A clinic starts in a few days. Even a 200-bed hospital usually starts in one to three weeks. OPD and registration go live first, so the counter never stops.',
-		),
-		array(
-			'q' => 'My receptionist is not good with computers. Can they use it?',
-			'a' => 'Yes. If they can use WhatsApp, they can learn Healthray. Training is free, and each person learns only their own work: reception learns registration, token and appointments, the doctor learns the prescription screen, the billing person learns bills.',
-		),
-		array(
-			'q' => 'Will my doctors have to type?',
-			'a' => 'Very little. The doctor picks from their own templates, repeats the last prescription in one click and searches medicines by name. AI Scribe can write the notes from the consultation, and the doctor checks and saves. A consultation takes no longer than writing on paper.',
-		),
-		array(
-			'q' => 'Can you move our data from our current software?',
-			'a' => 'Yes, free. Tell us what you use today, a register, Excel or another software. Our team moves your patient data and trains your staff, so you can stop the old software.',
-		),
-		array(
-			'q' => 'What if the internet stops?',
-			'a' => 'Connect a mobile hotspot and keep working. Your data stays safe on the cloud. A hospital can also run Healthray on its own server inside the hospital.',
-		),
-		array(
-			'q' => 'Is our patients\' data safe? Who can see it?',
-			'a' => 'Healthray is ISO 27001 certified for data security, NABH certified, ABDM compliant and NHA approved. Each staff member has their own login and sees only their own screens. Every change in a patient\'s file is saved with the staff name and time.',
-		),
-		array(
-			'q' => 'If we stop using Healthray, do we get our data back?',
-			'a' => 'Yes. Your patient data is yours. Ask us and we give it to you.',
-		),
-		array(
-			'q' => 'What support do we get after we start?',
-			'a' => 'Call, chat and screen share, 24×7, in English, Hindi or Gujarati, from a team that knows OPD work. Doctors on our Reviews page say support picks up during OPD hours.',
-		),
-		array(
-			'q' => 'What do we need to buy? Does it work on mobile?',
-			'a' => 'Nothing special. It runs in the browser on any computer, tablet or mobile. For the waiting-area TV, any TV with internet. No server needed, unless a hospital wants one.',
-		),
-		array(
-			'q' => 'Can patients book an OPD appointment online?',
-			'a' => 'Yes. From your link on Google, Instagram, WhatsApp or your website. They get a reminder before the visit. Online bookings and walk-in patients come on the same list at reception.',
-		),
-		array(
-			'q' => 'Can the prescription be printed in Hindi or Gujarati?',
-			'a' => 'Yes. Medicine instructions print in Hindi, Gujarati, Marathi, Tamil, Telugu, Kannada, Malayalam, Bengali, Punjabi and Odia, and go to the patient\'s WhatsApp.',
-		),
-		array(
-			'q' => 'Does it make ABHA IDs?',
-			'a' => 'Yes. ABHA IDs are made or checked at registration, as part of the normal OPD work.',
-		),
-		array(
-			'q' => 'Does it connect to lab, pharmacy and IPD?',
-			'a' => 'Yes. The OPD is one part of Healthray\'s hospital software. A clinic can use the OPD part alone. A hospital adds IPD, lab, pharmacy and TPA in the same software when it needs them.',
-			'html' => 'Yes. The OPD is one part of Healthray\'s <a href="https://healthray.com/hospital-information-management-system/">hospital software</a>. A clinic can use the OPD part alone. A hospital adds IPD, lab, pharmacy and TPA in the same software when it needs them.',
-		),
-		array(
-			'q' => 'We have more than one branch. Will it work?',
-			'a' => 'Yes. All branches run in one software. Each doctor has their own login and templates, and the owner sees every branch\'s patients and collection in one report.',
-		),
-		array(
-			'q' => 'What happens in the demo?',
-			'a' => 'A short video call. We register a patient, give a token, show the waiting TV, write a prescription and make a bill, set up the way your OPD runs. No charge, no need to decide on the call.',
-		),
+		array('q' => 'What is the price of Healthray OPD software?', 'a' => 'It depends on how many doctors, counters and branches you have, and whether you also want lab, pharmacy or IPD. After the demo we send you the price in writing. Moving your old data and training your staff are free. WhatsApp and SMS messages are paid separately, bought in advance, for example 5,000 SMS for ₹1,500.',),
+		array('q' => 'How long does it take to start?', 'a' => 'A clinic starts in a few days. Even a 200-bed hospital usually starts in one to three weeks. OPD and registration go live first, so the counter never stops.',),
+		array('q' => 'My receptionist is not good with computers. Can they use it?', 'a' => 'Yes. If they can use WhatsApp, they can learn Healthray. Training is free, and each person learns only their own work: reception learns registration, token and appointments, the doctor learns the prescription screen, the billing person learns bills.',),
+		array('q' => 'Will my doctors have to type?', 'a' => 'Very little. The doctor picks from their own templates, repeats the last prescription in one click and searches medicines by name. AI Scribe can write the notes from the consultation, and the doctor checks and saves. A consultation takes no longer than writing on paper.',),
+		array('q' => 'Can you move our data from our current software?', 'a' => 'Yes, free. Tell us what you use today, a register, Excel or another software. Our team moves your patient data and trains your staff, so you can stop the old software.',),
+		array('q' => 'What if the internet stops?', 'a' => 'Connect a mobile hotspot and keep working. Your data stays safe on the cloud. A hospital can also run Healthray on its own server inside the hospital.',),
+		array('q' => 'Is our patients\' data safe? Who can see it?', 'a' => 'Healthray is ISO 27001 certified for data security, NABH certified, ABDM compliant and NHA approved. Each staff member has their own login and sees only their own screens. Every change in a patient\'s file is saved with the staff name and time.',),
+		array('q' => 'If we stop using Healthray, do we get our data back?', 'a' => 'Yes. Your patient data is yours. Ask us and we give it to you.',),
+		array('q' => 'What support do we get after we start?', 'a' => 'Call, chat and screen share, 24×7, in English, Hindi or Gujarati, from a team that knows OPD work. Doctors on our Reviews page say support picks up during OPD hours.',),
+		array('q' => 'What do we need to buy? Does it work on mobile?', 'a' => 'Nothing special. It runs in the browser on any computer, tablet or mobile. For the waiting-area TV, any TV with internet. No server needed, unless a hospital wants one.',),
+		array('q' => 'Can patients book an OPD appointment online?', 'a' => 'Yes. From your link on Google, Instagram, WhatsApp or your website. They get a reminder before the visit. Online bookings and walk-in patients come on the same list at reception.',),
+		array('q' => 'Can the prescription be printed in Hindi or Gujarati?', 'a' => 'Yes. Medicine instructions print in Hindi, Gujarati, Marathi, Tamil, Telugu, Kannada, Malayalam, Bengali, Punjabi and Odia, and go to the patient\'s WhatsApp.',),
+		array('q' => 'Does it make ABHA IDs?', 'a' => 'Yes. ABHA IDs are made or checked at registration, as part of the normal OPD work.',),
+		array('q' => 'Does it connect to lab, pharmacy and IPD?', 'a' => 'Yes. The OPD is one part of Healthray\'s hospital software. A clinic can use the OPD part alone. A hospital adds IPD, lab, pharmacy and TPA in the same software when it needs them.', 'html' => 'Yes. The OPD is one part of Healthray\'s <a href="https://healthray.com/hospital-information-management-system/">hospital software</a>. A clinic can use the OPD part alone. A hospital adds IPD, lab, pharmacy and TPA in the same software when it needs them.',),
+		array('q' => 'We have more than one branch. Will it work?', 'a' => 'Yes. All branches run in one software. Each doctor has their own login and templates, and the owner sees every branch\'s patients and collection in one report.',),
+		array('q' => 'What happens in the demo?', 'a' => 'A short video call. We register a patient, give a token, show the waiting TV, write a prescription and make a bill, set up the way your OPD runs. No charge, no need to decide on the call.',),
 	);
 }
 
@@ -1303,22 +1217,10 @@ function healthray_module_cards($hub_id = 0)
 function healthray_modules_faq_items()
 {
 	return array(
-		array(
-			'q' => 'What is a Healthray module?',
-			'a' => 'A module is one part of Healthray\'s hospital software, made for one kind of work, like the OPD, the wards (IPD) or the billing counter. All modules work on the same patient file, so a patient\'s visits, reports and bills stay together.',
-		),
-		array(
-			'q' => 'Can we start with just one module?',
-			'a' => 'Yes. A clinic can use the OPD part alone. A hospital adds IPD, lab, pharmacy and TPA in the same software when it needs them.',
-		),
-		array(
-			'q' => 'What is the price?',
-			'a' => 'There is no one fixed price. It depends on which modules you want, how many doctors or beds you have, and whether you want it on the internet (cloud) or on your own server. After the demo we send you the price in writing. Moving your old data and training your staff are included.',
-		),
-		array(
-			'q' => 'How long does it take to start?',
-			'a' => 'A clinic starts in a few days. Even a 200-bed hospital usually starts in one to three weeks. OPD and registration go live first, so the counter never stops.',
-		),
+		array('q' => 'What is a Healthray module?', 'a' => 'A module is one part of Healthray\'s hospital software, made for one kind of work, like the OPD, the wards (IPD) or the billing counter. All modules work on the same patient file, so a patient\'s visits, reports and bills stay together.',),
+		array('q' => 'Can we start with just one module?', 'a' => 'Yes. A clinic can use the OPD part alone. A hospital adds IPD, lab, pharmacy and TPA in the same software when it needs them.',),
+		array('q' => 'What is the price?', 'a' => 'There is no one fixed price. It depends on which modules you want, how many doctors or beds you have, and whether you want it on the internet (cloud) or on your own server. After the demo we send you the price in writing. Moving your old data and training your staff are included.',),
+		array('q' => 'How long does it take to start?', 'a' => 'A clinic starts in a few days. Even a 200-bed hospital usually starts in one to three weeks. OPD and registration go live first, so the counter never stops.',),
 	);
 }
 
@@ -1326,38 +1228,14 @@ function healthray_modules_faq_items()
 function healthray_billing_faq_items()
 {
 	return array(
-		array(
-			'q' => 'Does it work for TPA, cashless and Ayushman (PM-JAY) patients?',
-			'a' => 'Yes. The insurance company and policy number are noted at admission. All cashless patients come in one list with their claim status. Ayushman patients are billed in the same software.',
-		),
-		array(
-			'q' => 'Does it make GST bills?',
-			'a' => 'Yes. You can add GST to the services that need it. The bill shows GST on each line, and the Item Wise Tax report gives the month\'s total for your accountant.',
-		),
-		array(
-			'q' => 'How much does hospital billing software cost in India?',
-			'a' => 'There is no fixed price. It depends on your number of beds, the departments you use, and whether you use it online or on your own computer (server). After the free demo, you get your price in writing within 24 hours.',
-		),
-		array(
-			'q' => 'Does it connect with Tally?',
-			'a' => 'Yes. Healthray connects with Tally. In the demo, ask us to show how your bills go into Tally.',
-		),
-		array(
-			'q' => 'Who can change or cancel a bill?',
-			'a' => 'Only the staff you allow. Each person has their own login with OTP and sees only the screens for their job. Every change is saved with the person\'s name and the time, and the Bill/Receipt Log report shows it.',
-		),
-		array(
-			'q' => 'Can bills print in our hospital\'s format?',
-			'a' => 'Yes. The IPD bill has 13 print formats, such as the cashless bill, summary bill, package detail and date-wise bill. The bill can also be sent on WhatsApp or email.',
-		),
-		array(
-			'q' => 'Is there a free download of hospital billing software?',
-			'a' => 'You do not need to download anything. Healthray opens in Chrome or any internet browser on the computers you already have. The demo is free.',
-		),
-		array(
-			'q' => 'If we stop using Healthray, do we get our data?',
-			'a' => 'Yes. We give you all your data within 30 days. We give this promise in writing, as per India\'s data law (DPDP Act, 2023). Your data is kept in India, or on your own computer inside the hospital.',
-		),
+		array('q' => 'Does it work for TPA, cashless and Ayushman (PM-JAY) patients?', 'a' => 'Yes. The insurance company and policy number are noted at admission. All cashless patients come in one list with their claim status. Ayushman patients are billed in the same software.',),
+		array('q' => 'Does it make GST bills?', 'a' => 'Yes. You can add GST to the services that need it. The bill shows GST on each line, and the Item Wise Tax report gives the month\'s total for your accountant.',),
+		array('q' => 'How much does hospital billing software cost in India?', 'a' => 'There is no fixed price. It depends on your number of beds, the departments you use, and whether you use it online or on your own computer (server). After the free demo, you get your price in writing within 24 hours.',),
+		array('q' => 'Does it connect with Tally?', 'a' => 'Yes. Healthray connects with Tally. In the demo, ask us to show how your bills go into Tally.',),
+		array('q' => 'Who can change or cancel a bill?', 'a' => 'Only the staff you allow. Each person has their own login with OTP and sees only the screens for their job. Every change is saved with the person\'s name and the time, and the Bill/Receipt Log report shows it.',),
+		array('q' => 'Can bills print in our hospital\'s format?', 'a' => 'Yes. The IPD bill has 13 print formats, such as the cashless bill, summary bill, package detail and date-wise bill. The bill can also be sent on WhatsApp or email.',),
+		array('q' => 'Is there a free download of hospital billing software?', 'a' => 'You do not need to download anything. Healthray opens in Chrome or any internet browser on the computers you already have. The demo is free.',),
+		array('q' => 'If we stop using Healthray, do we get our data?', 'a' => 'Yes. We give you all your data within 30 days. We give this promise in writing, as per India\'s data law (DPDP Act, 2023). Your data is kept in India, or on your own computer inside the hospital.',),
 	);
 }
 
@@ -1365,38 +1243,14 @@ function healthray_billing_faq_items()
 function healthray_abdm_faq_items()
 {
 	return array(
-		array(
-			'q' => 'What is ABDM?',
-			'a' => "ABDM, the Ayushman Bharat Digital Mission, is the Government of India's programme to build a connected digital health ecosystem. It gives every resident a free ABHA health ID, keeps national registries of doctors (HPR) and health facilities (HFR), and lets health records move between providers with the patient's consent.",
-		),
-		array(
-			'q' => 'When was ABDM launched and who runs it?',
-			'a' => 'Prime Minister Narendra Modi launched ABDM nationwide on 27 September 2021. It started as a pilot, the National Digital Health Mission, in six union territories in August 2020. The National Health Authority (NHA), under the Ministry of Health and Family Welfare, implements it.',
-		),
-		array(
-			'q' => 'What does ABDM integration mean for a hospital or clinic?',
-			'a' => "It means your hospital software can create and verify patients' ABHA numbers, link the records you create to those ABHA numbers, and share or receive records through ABDM with the patient's consent. Your facility is listed on the Health Facility Registry and your doctors on the Healthcare Professionals Registry.",
-		),
-		array(
-			'q' => 'What are ABDM milestones M1, M2 and M3?',
-			'a' => 'They are the three stages of ABDM integration for software. M1 covers creating and verifying ABHA numbers at registration. M2 makes your facility a Health Information Provider: the records you create are linked to the ABHA and can be shared. M3 makes it a Health Information User: with consent, you can request and view records created by other providers.',
-		),
-		array(
-			'q' => "Does ABDM store patients' medical records centrally?",
-			'a' => 'No. ABDM uses a federated design: records stay with the hospital, clinic or lab that created them. ABDM only routes a record from one provider to another when the patient approves the request through the consent manager.',
-		),
-		array(
-			'q' => 'Can patient records be shared through ABDM without consent?',
-			'a' => 'No. Every request to see a patient\'s records needs the patient\'s consent, given in the ABHA app or another approved app. The patient can choose which records to share, set how long access lasts and withdraw consent at any time.',
-		),
-		array(
-			'q' => 'Do hospitals get incentives for using ABDM?',
-			'a' => 'Yes. Under the Digital Health Incentive Scheme (DHIS), eligible hospitals, clinics, labs and digital solution companies earn incentives for health records linked to ABHA numbers, above a baseline set by the scheme. See our DHIS page for how the scheme works.',
-		),
-		array(
-			'q' => 'Is Healthray ABDM compliant?',
-			'a' => 'Yes. Healthray is NHA approved and ABDM compliant. ABHA creation and verification, and linking records to the patient\'s ABHA, are part of the normal OPD and IPD workflow, so your staff do not need a separate portal or a second login.',
-		),
+		array('q' => 'What is ABDM?', 'a' => "ABDM, the Ayushman Bharat Digital Mission, is the Government of India's programme to build a connected digital health ecosystem. It gives every resident a free ABHA health ID, keeps national registries of doctors (HPR) and health facilities (HFR), and lets health records move between providers with the patient's consent.",),
+		array('q' => 'When was ABDM launched and who runs it?', 'a' => 'Prime Minister Narendra Modi launched ABDM nationwide on 27 September 2021. It started as a pilot, the National Digital Health Mission, in six union territories in August 2020. The National Health Authority (NHA), under the Ministry of Health and Family Welfare, implements it.',),
+		array('q' => 'What does ABDM integration mean for a hospital or clinic?', 'a' => "It means your hospital software can create and verify patients' ABHA numbers, link the records you create to those ABHA numbers, and share or receive records through ABDM with the patient's consent. Your facility is listed on the Health Facility Registry and your doctors on the Healthcare Professionals Registry.",),
+		array('q' => 'What are ABDM milestones M1, M2 and M3?', 'a' => 'They are the three stages of ABDM integration for software. M1 covers creating and verifying ABHA numbers at registration. M2 makes your facility a Health Information Provider: the records you create are linked to the ABHA and can be shared. M3 makes it a Health Information User: with consent, you can request and view records created by other providers.',),
+		array('q' => "Does ABDM store patients' medical records centrally?", 'a' => 'No. ABDM uses a federated design: records stay with the hospital, clinic or lab that created them. ABDM only routes a record from one provider to another when the patient approves the request through the consent manager.',),
+		array('q' => 'Can patient records be shared through ABDM without consent?', 'a' => 'No. Every request to see a patient\'s records needs the patient\'s consent, given in the ABHA app or another approved app. The patient can choose which records to share, set how long access lasts and withdraw consent at any time.',),
+		array('q' => 'Do hospitals get incentives for using ABDM?', 'a' => 'Yes. Under the Digital Health Incentive Scheme (DHIS), eligible hospitals, clinics, labs and digital solution companies earn incentives for health records linked to ABHA numbers, above a baseline set by the scheme. See our DHIS page for how the scheme works.',),
+		array('q' => 'Is Healthray ABDM compliant?', 'a' => 'Yes. Healthray is NHA approved and ABDM compliant. ABHA creation and verification, and linking records to the patient\'s ABHA, are part of the normal OPD and IPD workflow, so your staff do not need a separate portal or a second login.',),
 	);
 }
 
@@ -1404,46 +1258,16 @@ function healthray_abdm_faq_items()
 function healthray_abha_faq_items()
 {
 	return array(
-		array(
-			'q' => 'What is the Ayushman Bharat Health Account (ABHA)?',
-			'a' => 'ABHA is a free health ID from the Government of India, part of the Ayushman Bharat Digital Mission (ABDM). It has a 14-digit ABHA number and an ABHA address such as name@abdm, and it links the records that hospitals, clinics and labs create for you, so you can see them and share them with consent.',
-		),
-		array(
-			'q' => 'How do I create an ABHA card online?',
-			'a' => 'Enter your Aadhaar number in the form on this page, verify the OTP sent to your Aadhaar-linked mobile, confirm the mobile number for ABHA messages, choose your ABHA address and download the card. You can also create it on abha.abdm.gov.in or in the ABHA app.',
-		),
-		array(
-			'q' => 'Which documents are needed for ABHA registration?',
-			'a' => "Your Aadhaar number and the mobile phone linked to it, for the OTP. If you don't have Aadhaar, the official portal also accepts a driving licence. You don't need a PAN card, bank account, income certificate or caste certificate.",
-		),
-		array(
-			'q' => 'Is the ABHA card free?',
-			'a' => 'Yes. Creating an ABHA costs nothing, whether you create it on this page, on the government portal or in the ABHA app.',
-		),
-		array(
-			'q' => 'What is the difference between an ABHA number and an ABHA address?',
-			'a' => 'The ABHA number is a 14-digit number that identifies you and is printed on your ABHA card. The ABHA address is a username you choose, such as name@abdm, that you use to sign in to health apps and share records.',
-		),
-		array(
-			'q' => 'Is the ABHA card the same as the Ayushman card?',
-			'a' => 'No. ABHA is a health ID that links your records, and any resident of India can create one. The Ayushman card is for PM-JAY, the government health cover of up to ₹5 lakh per family per year, which only eligible families and citizens aged 70 or above get. An ABHA alone does not give you PM-JAY cover.',
-		),
-		array(
-			'q' => 'Is my health data safe with ABHA?',
-			'a' => 'ABDM does not keep your records in one central database. They stay with the hospitals and labs that created them, and they reach another provider only when you approve the request. You choose which records to share and for how long, and you can withdraw consent at any time.',
-		),
-		array(
-			'q' => 'Is ABHA mandatory?',
-			'a' => 'No. ABHA is voluntary. You can deactivate or delete your ABHA later if you no longer want it.',
-		),
-		array(
-			'q' => 'I already have an ABHA. How do I find it?',
-			'a' => 'Choose Mobile Number in the form on this page and verify the OTP: the ABHA addresses linked to your mobile number are listed. You can also sign in on abha.abdm.gov.in to download your card again.',
-		),
-		array(
-			'q' => 'Can a hospital create an ABHA for its patients?',
-			'a' => "Yes. Hospitals and clinics connected to ABDM can create or verify a patient's ABHA at registration. Healthray does this inside its OPD and IPD software, so the front desk does not need a separate portal.",
-		),
+		array('q' => 'What is the Ayushman Bharat Health Account (ABHA)?', 'a' => 'ABHA is a free health ID from the Government of India, part of the Ayushman Bharat Digital Mission (ABDM). It has a 14-digit ABHA number and an ABHA address such as name@abdm, and it links the records that hospitals, clinics and labs create for you, so you can see them and share them with consent.',),
+		array('q' => 'How do I create an ABHA card online?', 'a' => 'Enter your Aadhaar number in the form on this page, verify the OTP sent to your Aadhaar-linked mobile, confirm the mobile number for ABHA messages, choose your ABHA address and download the card. You can also create it on abha.abdm.gov.in or in the ABHA app.',),
+		array('q' => 'Which documents are needed for ABHA registration?', 'a' => "Your Aadhaar number and the mobile phone linked to it, for the OTP. If you don't have Aadhaar, the official portal also accepts a driving licence. You don't need a PAN card, bank account, income certificate or caste certificate.",),
+		array('q' => 'Is the ABHA card free?', 'a' => 'Yes. Creating an ABHA costs nothing, whether you create it on this page, on the government portal or in the ABHA app.',),
+		array('q' => 'What is the difference between an ABHA number and an ABHA address?', 'a' => 'The ABHA number is a 14-digit number that identifies you and is printed on your ABHA card. The ABHA address is a username you choose, such as name@abdm, that you use to sign in to health apps and share records.',),
+		array('q' => 'Is the ABHA card the same as the Ayushman card?', 'a' => 'No. ABHA is a health ID that links your records, and any resident of India can create one. The Ayushman card is for PM-JAY, the government health cover of up to ₹5 lakh per family per year, which only eligible families and citizens aged 70 or above get. An ABHA alone does not give you PM-JAY cover.',),
+		array('q' => 'Is my health data safe with ABHA?', 'a' => 'ABDM does not keep your records in one central database. They stay with the hospitals and labs that created them, and they reach another provider only when you approve the request. You choose which records to share and for how long, and you can withdraw consent at any time.',),
+		array('q' => 'Is ABHA mandatory?', 'a' => 'No. ABHA is voluntary. You can deactivate or delete your ABHA later if you no longer want it.',),
+		array('q' => 'I already have an ABHA. How do I find it?', 'a' => 'Choose Mobile Number in the form on this page and verify the OTP: the ABHA addresses linked to your mobile number are listed. You can also sign in on abha.abdm.gov.in to download your card again.',),
+		array('q' => 'Can a hospital create an ABHA for its patients?', 'a' => "Yes. Hospitals and clinics connected to ABDM can create or verify a patient's ABHA at registration. Healthray does this inside its OPD and IPD software, so the front desk does not need a separate portal.",),
 	);
 }
 
@@ -1452,42 +1276,15 @@ function healthray_abha_faq_items()
 function healthray_dhis_faq_items()
 {
 	return array(
-		array(
-			'q' => 'What is the Digital Health Incentive Scheme (DHIS)?',
-			'a' => "DHIS is a National Health Authority scheme under the Ayushman Bharat Digital Mission. Since 1 January 2023 it has paid health facilities and digital solution companies a fixed amount for each eligible digital health transaction, such as a record linked to a patient's ABHA, above a threshold of 100 a month.",
-		),
-		array(
-			'q' => 'Who is eligible for DHIS?',
-			'a' => 'Public and private health facilities registered on the Health Facility Registry, including hospitals, clinics, nursing homes, labs, diagnostic centres and pharmacies, of any size. Digital solution companies can also claim for transactions done in their software, if at least 10 of their facilities link records in a month.',
-		),
-		array(
-			'q' => 'How much incentive does a hospital get under DHIS?',
-			'a' => "For April to September 2026, NHA's Corrigendum 7 pays a health facility ₹10 for each discharge summary or diagnostic report and ₹5 for each other record, such as a prescription, linked to a KYC-verified ABHA, above the first 100 eligible transactions in the month. Digital solution companies get half these amounts.",
-		),
-		array(
-			'q' => 'What is the minimum number of transactions for DHIS?',
-			'a' => '100 eligible transactions a month. At 100 or fewer, neither the facility nor its software company is paid. Above that, the value of the first 100 is deducted from the total, starting with the lowest-paying records.',
-		),
-		array(
-			'q' => 'What counts as an eligible DHIS transaction?',
-			'a' => 'Mainly a health record linked to a KYC-verified ABHA address, counted at most once a day and five times a month for the same ABHA. Records shared after a consent request, and PM-JAY claims filed through NHCX, have their own rates. Scan & Share and health-locker transactions earn no record-linking incentive.',
-		),
-		array(
-			'q' => 'How do I register my hospital for DHIS?',
-			'a' => "Register the facility on the Health Facility Registry, then register for DHIS from the facility's HFR account with the bank account details for payment. Use software that links records to patients' ABHA, such as Healthray, and submit a claim each month.",
-		),
-		array(
-			'q' => 'Do software companies get DHIS incentives?',
-			'a' => 'Yes. For facilities using its software, a digital solution company earns ₹5 per discharge summary or diagnostic report and ₹2.50 per other record above the threshold, and ₹10 for each PM-JAY claim raised through NHCX in its software.',
-		),
-		array(
-			'q' => 'Has DHIS been extended?',
-			'a' => 'Yes. NHA has extended and revised the scheme several times since it started in January 2023. The latest published revision, Corrigendum 7 of 9 April 2026, covers transactions from April to September 2026. Check abdm.gov.in/dhis for the rules for later months.',
-		),
-		array(
-			'q' => 'How does Healthray help hospitals earn DHIS incentives?',
-			'a' => "Healthray is NHA approved and ABDM compliant. It creates and verifies ABHA at registration and links prescriptions, lab reports and discharge summaries to the patient's ABHA inside the normal OPD and IPD workflow. Those are the records DHIS pays for.",
-		),
+		array('q' => 'What is the Digital Health Incentive Scheme (DHIS)?', 'a' => "DHIS is a National Health Authority scheme under the Ayushman Bharat Digital Mission. Since 1 January 2023 it has paid health facilities and digital solution companies a fixed amount for each eligible digital health transaction, such as a record linked to a patient's ABHA, above a threshold of 100 a month.",),
+		array('q' => 'Who is eligible for DHIS?', 'a' => 'Public and private health facilities registered on the Health Facility Registry, including hospitals, clinics, nursing homes, labs, diagnostic centres and pharmacies, of any size. Digital solution companies can also claim for transactions done in their software, if at least 10 of their facilities link records in a month.',),
+		array('q' => 'How much incentive does a hospital get under DHIS?', 'a' => "For April to September 2026, NHA's Corrigendum 7 pays a health facility ₹10 for each discharge summary or diagnostic report and ₹5 for each other record, such as a prescription, linked to a KYC-verified ABHA, above the first 100 eligible transactions in the month. Digital solution companies get half these amounts.",),
+		array('q' => 'What is the minimum number of transactions for DHIS?', 'a' => '100 eligible transactions a month. At 100 or fewer, neither the facility nor its software company is paid. Above that, the value of the first 100 is deducted from the total, starting with the lowest-paying records.',),
+		array('q' => 'What counts as an eligible DHIS transaction?', 'a' => 'Mainly a health record linked to a KYC-verified ABHA address, counted at most once a day and five times a month for the same ABHA. Records shared after a consent request, and PM-JAY claims filed through NHCX, have their own rates. Scan & Share and health-locker transactions earn no record-linking incentive.',),
+		array('q' => 'How do I register my hospital for DHIS?', 'a' => "Register the facility on the Health Facility Registry, then register for DHIS from the facility's HFR account with the bank account details for payment. Use software that links records to patients' ABHA, such as Healthray, and submit a claim each month.",),
+		array('q' => 'Do software companies get DHIS incentives?', 'a' => 'Yes. For facilities using its software, a digital solution company earns ₹5 per discharge summary or diagnostic report and ₹2.50 per other record above the threshold, and ₹10 for each PM-JAY claim raised through NHCX in its software.',),
+		array('q' => 'Has DHIS been extended?', 'a' => 'Yes. NHA has extended and revised the scheme several times since it started in January 2023. The latest published revision, Corrigendum 7 of 9 April 2026, covers transactions from April to September 2026. Check abdm.gov.in/dhis for the rules for later months.',),
+		array('q' => 'How does Healthray help hospitals earn DHIS incentives?', 'a' => "Healthray is NHA approved and ABDM compliant. It creates and verifies ABHA at registration and links prescriptions, lab reports and discharge summaries to the patient's ABHA inside the normal OPD and IPD workflow. Those are the records DHIS pays for.",),
 	);
 }
 
@@ -1495,46 +1292,77 @@ function healthray_dhis_faq_items()
 function healthray_pmjay_faq_items()
 {
 	return array(
-		array(
-			'q' => 'What is PMJAY?',
-			'a' => "PMJAY, or Ayushman Bharat Pradhan Mantri Jan Arogya Yojana, is the Government of India's health assurance scheme. It gives eligible families cashless hospital treatment of up to ₹5 lakh per family per year at government and empanelled private hospitals. It was launched on 23 September 2018 and is run by the National Health Authority.",
-		),
-		array(
-			'q' => 'Who is eligible for PMJAY?',
-			'a' => 'Families identified through the rural deprivation and urban occupation criteria of SECC 2011, families active under the earlier RSBY scheme and families added by their state. Every citizen aged 70 or above is also eligible, whatever their income.',
-		),
-		array(
-			'q' => 'How can I check if my name is in the PMJAY list?',
-			'a' => "Check on beneficiary.nha.gov.in or in the Ayushman app, ask at an empanelled hospital's Ayushman Bharat help desk, or call the PM-JAY helpline on 14555.",
-		),
-		array(
-			'q' => 'How do I get an Ayushman card?',
-			'a' => 'Once your eligibility is confirmed, complete eKYC with your Aadhaar on beneficiary.nha.gov.in or in the Ayushman app and download the card. Arogya Mitras at empanelled hospitals and Common Service Centres can also make it for you.',
-		),
-		array(
-			'q' => 'How much cover does PMJAY give?',
-			'a' => 'Up to ₹5 lakh per family per year, for secondary and tertiary hospital care. Any member of the family can use it, and there is no limit on family size or age.',
-		),
-		array(
-			'q' => 'Are pre-existing diseases covered under PMJAY?',
-			'a' => 'Yes. Pre-existing illnesses are covered from the first day.',
-		),
-		array(
-			'q' => 'Are senior citizens aged 70 and above covered under PMJAY?',
-			'a' => 'Yes. Since October 2024, every citizen aged 70 or above can get cover of up to ₹5 lakh a year through the Ayushman Vay Vandana card, whatever their income. Those whose families are already covered get a separate top-up of up to ₹5 lakh a year for themselves.',
-		),
-		array(
-			'q' => 'Can I use PMJAY in another state or at a private hospital?',
-			'a' => 'Yes. Covered treatment is cashless at any empanelled hospital in India, government or private, including hospitals in other states.',
-		),
-		array(
-			'q' => 'Is the Ayushman card the same as the ABHA card?',
-			'a' => 'No. The Ayushman card shows that you are covered under PM-JAY. The ABHA card is a free health ID that any resident can create to link their medical records. An ABHA does not give you PM-JAY cover.',
-		),
+		array('q' => 'What is PMJAY?', 'a' => "PMJAY, or Ayushman Bharat Pradhan Mantri Jan Arogya Yojana, is the Government of India's health assurance scheme. It gives eligible families cashless hospital treatment of up to ₹5 lakh per family per year at government and empanelled private hospitals. It was launched on 23 September 2018 and is run by the National Health Authority.",),
+		array('q' => 'Who is eligible for PMJAY?', 'a' => 'Families identified through the rural deprivation and urban occupation criteria of SECC 2011, families active under the earlier RSBY scheme and families added by their state. Every citizen aged 70 or above is also eligible, whatever their income.',),
+		array('q' => 'How can I check if my name is in the PMJAY list?', 'a' => "Check on beneficiary.nha.gov.in or in the Ayushman app, ask at an empanelled hospital's Ayushman Bharat help desk, or call the PM-JAY helpline on 14555.",),
+		array('q' => 'How do I get an Ayushman card?', 'a' => 'Once your eligibility is confirmed, complete eKYC with your Aadhaar on beneficiary.nha.gov.in or in the Ayushman app and download the card. Arogya Mitras at empanelled hospitals and Common Service Centres can also make it for you.',),
+		array('q' => 'How much cover does PMJAY give?', 'a' => 'Up to ₹5 lakh per family per year, for secondary and tertiary hospital care. Any member of the family can use it, and there is no limit on family size or age.',),
+		array('q' => 'Are pre-existing diseases covered under PMJAY?', 'a' => 'Yes. Pre-existing illnesses are covered from the first day.',),
+		array('q' => 'Are senior citizens aged 70 and above covered under PMJAY?', 'a' => 'Yes. Since October 2024, every citizen aged 70 or above can get cover of up to ₹5 lakh a year through the Ayushman Vay Vandana card, whatever their income. Those whose families are already covered get a separate top-up of up to ₹5 lakh a year for themselves.',),
+		array('q' => 'Can I use PMJAY in another state or at a private hospital?', 'a' => 'Yes. Covered treatment is cashless at any empanelled hospital in India, government or private, including hospitals in other states.',),
+		array('q' => 'Is the Ayushman card the same as the ABHA card?', 'a' => 'No. The Ayushman card shows that you are covered under PM-JAY. The ABHA card is a free health ID that any resident can create to link their medical records. An ABHA does not give you PM-JAY cover.',),
 	);
 }
 
-// IPD/OPD/Modules/Hospital billing/ABDM/ABHA/DHIS/PM-JAY FAQ schema
+// Awards & Certifications FAQs - page accordion (temp-awards-landing.php) and FAQPage schema
+function healthray_awards_faq_items()
+{
+	return array(
+		array('q' => 'Is Healthray ABDM compliant?', 'a' => "Yes. Healthray is NHA approved and ABDM compliant. ABHA creation and verification, and linking records to the patient's ABHA, happen inside the normal OPD and IPD workflow, with no separate portal.",),
+		array('q' => 'Is Healthray NABH certified?', 'a' => 'Yes. Healthray is NABH-certified healthcare software, listed on the official portal of the National Accreditation Board for Hospitals & Healthcare Providers. For hospitals pursuing or maintaining NABH accreditation, it generates the documentation assessors look for as part of daily work.',),
+		array('q' => 'What security certifications does Healthray hold?', 'a' => 'Healthray is ISO 27001 certified for information security and is HIPAA compliant. Its application is security-audited by a CERT-In empanelled auditor, and it enforces role-based access control, encryption in transit and at rest, and complete audit logs.',),
+		array('q' => 'Which health data standards does Healthray support?', 'a' => 'Healthray uses HL7 and FHIR for interoperability and SNOMED CT and ICD-10/11 for clinical terminology and coding, so records can be exchanged with laboratories, insurers and other ABDM-connected providers.',),
+		array('q' => 'Is Healthray approved by the National Health Authority?', 'a' => 'Yes. Healthray is NHA approved under the Ayushman Bharat Digital Mission, so hospitals can create ABHA numbers and link health records through the ABDM ecosystem.',),
+		array('q' => 'How is Healthray rated by its users?', 'a' => 'Healthray is rated 4.8 out of 5 on Capterra and SoftwareSuggest and is used by 2,500+ hospitals, clinics, laboratories and pharmacies across India.',),
+	);
+}
+
+// Why Healthray FAQs - page accordion (temp-why-healthray-landing.php) and FAQPage schema
+function healthray_why_faq_items()
+{
+	return array(
+		array('q' => 'What makes Healthray different from other hospital software?', 'a' => 'Healthray runs the whole hospital on one platform - OPD, IPD, EMR and EHR, laboratory, pharmacy, billing and HR - instead of separate tools that do not talk to each other. One patient record flows across every department, and the platform is NHA approved, ABDM compliant and NABH certified.',),
+		array('q' => 'Does Healthray scale as our hospital grows?', 'a' => 'Yes. A single clinic can start with appointments and EMR, then switch on pharmacy, laboratory, IPD, billing and extra branches later on the same platform, without changing systems or re-entering data.',),
+		array('q' => 'How does Healthray help management make decisions?', 'a' => 'Real-time dashboards and MIS reports show occupancy, revenue, department performance and stock, so management can act on current data instead of month-old spreadsheets.',),
+		array('q' => 'Is Healthray ABDM compliant and secure?', 'a' => 'Yes. Healthray is NHA approved and ABDM compliant, ISO 27001 certified and HIPAA compliant, with role-based access, encryption and audit logs, and a security audit by a CERT-In empanelled auditor.',),
+		array('q' => 'Does Healthray handle medical billing and insurance claims?', 'a' => 'Yes. Healthray covers OPD and IPD billing, GST invoicing, TPA and insurance claims, and PM-JAY and government scheme workflows, with charges posting to the patient bill in real time.',),
+		array('q' => 'Which facilities use Healthray?', 'a' => 'Multi-speciality hospitals, hospital and clinic chains, diagnostic and laboratory centres, pharmacy networks, government and trust hospitals, and healthcare providers in India and the USA.',),
+		array('q' => 'How long does it take to go live?', 'a' => 'Most clinics go live in about a week; mid-size hospitals in one to three weeks, including data migration, configuration and staff training. A dedicated onboarding team handles the transition so care is never interrupted.',),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. You can book a free 30-minute demo on your own workflow, with no credit card and no commitment. Data migration and staff training are included with implementation.',),
+	);
+}
+
+// Telehealth FAQs - page accordion (temp-telehealth-landing.php) and FAQPage schema
+function healthray_telehealth_faq_items()
+{
+	return array(
+		array('q' => 'What are telehealth services?', 'a' => 'Telehealth, also called telemedicine, is the delivery of healthcare remotely using technology: a doctor consults a patient by video, audio or chat instead of in person. On Healthray, teleconsultation runs on the same system as your OPD and IPD.',),
+		array('q' => 'Is teleconsultation legal in India?', 'a' => "Yes. India's Telemedicine Practice Guidelines, approved in 2020, let a registered medical practitioner consult patients remotely by video, audio or text and issue an e-prescription, within the conditions the guidelines set.",),
+		array('q' => 'How does a patient join a teleconsultation?', 'a' => 'The patient books a slot, then joins from the patient portal or a link and connects with the doctor by video, audio or chat at the scheduled time.',),
+		array('q' => 'Can a doctor prescribe during a teleconsultation?', 'a' => "Yes. The doctor writes an e-prescription during the consultation, following the Telemedicine Practice Guidelines, and it is saved to the patient's record like any other visit.",),
+		array('q' => 'Is patient data secure during a telehealth visit?', 'a' => "Consultations and records are encrypted and access-controlled, data handling follows India's DPDP Act, and records link to the patient's ABHA and are shared only with the patient's consent.",),
+		array('q' => 'Does telehealth work with the rest of Healthray?', 'a' => 'Yes. A teleconsultation uses the same patient record, e-prescriptions, billing and reports as an in-person visit, so nothing is entered twice.',),
+		array('q' => 'What does a clinic or hospital need to start?', 'a' => 'An internet connection and the Healthray platform. Our team sets up teleconsultation inside your existing workflow and trains your staff.',),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo and we will show teleconsultation on your own workflow. No credit card is required.',),
+	);
+}
+
+// Patient Flow FAQs - page accordion (temp-patient-flow-landing.php) and FAQPage schema
+function healthray_patient_flow_faq_items()
+{
+	return array(
+		array('q' => 'What is patient flow management?', 'a' => 'Patient flow management is how a hospital moves patients through each stage of a visit - booking, registration, queueing, consultation, treatment, billing and follow-up - with as little waiting and as few bottlenecks as possible. Healthray coordinates every stage on one system.',),
+		array('q' => 'How does Healthray reduce patient waiting time?', 'a' => 'Online booking and reminders cut no-shows, token and queue management with a waiting-area display keeps the OPD moving, and real-time dashboards show where patients are waiting so staff can act.',),
+		array('q' => 'Does it cover the whole journey, before, during and after the visit?', 'a' => 'Yes. Pre-visit (booking, reminders, insurance check), the visit (registration, queue, consultation, prescriptions, beds) and post-visit (follow-up, claims, feedback and monitoring) all run on the same platform.',),
+		array('q' => 'Does it send appointment reminders?', 'a' => 'Yes. Patients get reminders before their appointment, and a new slot automatically if a doctor is unavailable, which reduces missed and wasted appointments.',),
+		array('q' => 'Can patients pay and claim insurance digitally?', 'a' => 'Yes. Healthray supports digital payments and TPA and insurance claims, including PM-JAY and government scheme workflows, so billing and reimbursement are faster.',),
+		array('q' => 'Does it manage beds and wards?', 'a' => 'Yes. Bed and ward management shows availability and assignments in real time, so admitted patients are placed faster.',),
+		array('q' => 'Does it include teleconsultation?', 'a' => 'Yes. Teleconsultation is part of the platform and uses the same patient record as an in-person visit.',),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own workflow, with no credit card required.',),
+	);
+}
+
+// IPD/OPD/Modules/Hospital billing/ABDM/ABHA/DHIS/PM-JAY/Awards/Why Healthray/Telehealth/Patient Flow FAQ schema
 add_filter('hr_head_faqs', function ($faqs) {
 	if (is_page(27377)) {
 		return healthray_abdm_faq_items();
@@ -1547,6 +1375,18 @@ add_filter('hr_head_faqs', function ($faqs) {
 	}
 	if (is_page(26475)) {
 		return healthray_pmjay_faq_items();
+	}
+	if (is_page(62094)) {
+		return healthray_awards_faq_items();
+	}
+	if (is_page(30243)) {
+		return healthray_why_faq_items();
+	}
+	if (is_page(31051)) {
+		return healthray_telehealth_faq_items();
+	}
+	if (is_page(31079)) {
+		return healthray_patient_flow_faq_items();
 	}
 	if (is_page(82361)) {
 		return healthray_ipd_faq_items();
