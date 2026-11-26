@@ -455,6 +455,13 @@ html.hr-pharmacy-modal-open, html.hr-pharmacy-modal-open body {overflow:hidden !
 #hr-pharmacy-cf7 .hr-optin .wpcf7-list-item {margin:0}
 #hr-pharmacy-cf7 .hr-optin label {display:flex !important; align-items:flex-start; gap:8px; cursor:pointer}
 #hr-pharmacy-cf7 .hr-optin input[type="checkbox"] {appearance:auto !important; flex:0 0 16px !important; width:16px !important; height:16px !important; min-height:0 !important; margin:3px 0 0 !important; padding:0 !important; accent-color:var(--navy)}
+/* Step 2: two fields in a row (name + email, mobile + city) so the form is shorter; one per row on phones.
+   Everything that is not a field (picked line, button, notes, errors) keeps the full width. */
+@media (min-width: 481px) {
+#hr-pharmacy-cf7 .hr-fstep-2:not([hidden]) {display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 14px}
+#hr-pharmacy-cf7 .hr-fstep-2 > * {grid-column: 1 / -1}
+#hr-pharmacy-cf7 .hr-fstep-2 > .hr-field {grid-column: auto; min-width: 0}
+}
 #hr-pharmacy-cf7 .wpcf7-not-valid-tip, #hr-pharmacy-cf7 .hr-err {position:static !important; display:block; box-sizing:border-box !important; width:100% !important; max-width:100% !important; min-height:0 !important; height:auto !important; margin:6px 0 0 !important; padding:0 !important; border:0 !important; border-radius:0 !important; background:transparent !important; box-shadow:none !important; color:#C62828 !important; font:400 12px/1.5 Mulish,system-ui,sans-serif !important; text-align:left !important; white-space:normal !important}
 #hr-pharmacy-cf7 .wpcf7-not-valid-tip::before, #hr-pharmacy-cf7 .wpcf7-not-valid-tip::after {display:none !important}
 #hr-pharmacy-cf7 .wpcf7-response-output {margin:16px 0 0 !important; padding:10px; font-size:13px; line-height:1.5}

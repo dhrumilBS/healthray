@@ -5,7 +5,7 @@
 
 $hr_ipd_faqs = function_exists( 'healthray_ipd_faq_items' ) ? healthray_ipd_faq_items() : array();
 ?>
-<main class="hx" id="ipd-main">
+<main class="hx" id="ipd-main" data-hr-form="ipd_software_demo">
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4a.5.5 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 2.9 2.9 0 0 0-.9 2.2 5 5 0 0 0 1 2.7 11.6 11.6 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3Z"/></symbol>
@@ -46,7 +46,7 @@ $hr_ipd_faqs = function_exists( 'healthray_ipd_faq_items' ) ? healthray_ipd_faq_
       </div>
     </div>
     <div class="formbox" id="demo">
-      <h2>Book a Free Demo</h2>
+      <p class="hr-cta-title">Book a Free Demo</p>
       <p class="fsub">A video call. We show the software set up for your number of beds.</p>
       <?php echo do_shortcode( '[contact-form-7 id="9a13f7a" title="NEW LEAD FORM - Home Page"]' ); ?>
     </div>
@@ -300,16 +300,13 @@ $hr_ipd_faqs = function_exists( 'healthray_ipd_faq_items' ) ? healthray_ipd_faq_
   </div>
 </section>
 
-<section class="sec soft" id="faq">
-  <div class="wrap">
-    <div class="sec-head"><h2>Questions Before You Buy</h2></div>
-    <div class="faq">
-      <?php $hr_faq_i = 0; foreach ( $hr_ipd_faqs as $hr_faq ) : ?>
-      <details name="hx-faq"<?php echo 0 === $hr_faq_i++ ? ' open' : ''; ?>><summary><?php echo esc_html( $hr_faq['q'] ); ?></summary><p><?php echo esc_html( $hr_faq['a'] ); ?><?php if ( ! empty( $hr_faq['more'] ) ) { echo ' ' . wp_kses_post( $hr_faq['more'] ); } ?></p></details>
-      <?php endforeach; ?>
-    </div>
-  </div>
-</section>
+<?php
+// FAQ: shared section (templates/module-faq.php); the same items feed the FAQPage schema
+get_template_part( 'templates/module-faq', null, array(
+  'section_class' => 'sec soft',
+  'items'         => $hr_ipd_faqs,
+) );
+?>
 
 <section class="final">
   <div class="wrap">
@@ -321,7 +318,7 @@ $hr_ipd_faqs = function_exists( 'healthray_ipd_faq_items' ) ? healthray_ipd_faq_
       <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Maharshi-Desai-150x150.webp" alt="" loading="lazy" width="56" height="56"></span>
       <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Monil-Parmar-150x150.webp" alt="" loading="lazy" width="56" height="56"></span>
     </div>
-    <h2>See It Working for a Hospital Like Yours</h2>
+    <p class="hr-cta-title">See It Working for a Hospital Like Yours</p>
     <p>On a video call, we admit one patient, make the bill for three days and discharge the patient, set up for your number of beds. No charge. No need to decide on the call.</p>
     <div class="hx-row">
       <a class="btn btn-main" href="#demo">Book a free demo</a>

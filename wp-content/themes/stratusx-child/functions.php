@@ -303,14 +303,13 @@ add_action('wp_enqueue_scripts', function () {
 		wp_enqueue_script('pharmacy-software', get_stylesheet_directory_uri() . '/js/pharmacy-software.js', array(), hr_asset_version('/js/pharmacy-software.js'), true);
 	}
 
-	if (is_page(82361)) {
-		wp_enqueue_script('ipd-software', get_stylesheet_directory_uri() . '/js/ipd-software.js', array(), hr_asset_version('/js/ipd-software.js'), true);
+	// Module pages (OPD, IPD, Modules hub, Hospital billing): one shared script (FAQ, GTM events, demo popup, reviews, video)
+	if (is_page(82361) || is_page(82363) || is_page(82372) || hr_is_modules_hub() || is_page(82741)) {
+		wp_enqueue_script('modules-common', get_stylesheet_directory_uri() . '/js/modules-common.js', array(), hr_asset_version('/js/modules-common.js'), true);
 	}
+	// OPD only: the speciality picker above the hero form
 	if (is_page(82363)) {
-		wp_enqueue_script('opd-software', get_stylesheet_directory_uri() . '/js/opd-software.js', array(), hr_asset_version('/js/opd-software.js'), true);
-	}
-	if (is_page(82372)) {
-		wp_enqueue_script('modules-hub', get_stylesheet_directory_uri() . '/js/modules-hub.js', array(), hr_asset_version('/js/modules-hub.js'), true);
+		wp_enqueue_script('opd-software', get_stylesheet_directory_uri() . '/js/opd-software.js', array('modules-common'), hr_asset_version('/js/opd-software.js'), true);
 	}
 	// Hospital billing software (/modules/hospital-billing-software/): css/hospital-billing.css + js/hospital-billing.js, see temp-hospital-billing.php
 	if (is_page(82741)) {
@@ -534,6 +533,10 @@ add_filter('body_class', function ($classes) {
 	if (hr_is_modules_hub()) {
 		$classes[] = 'landing-page';
 		$classes[] = 'modules-landing';
+	}
+	// OPD, IPD and the Modules hub share css/modules-common.css, scoped to this class
+	if (is_page(82361) || is_page(82363) || hr_is_modules_hub()) {
+		$classes[] = 'hx-page';
 	}
 	if (is_single()) {
 		$classes[] = 'landing-page';
@@ -928,10 +931,7 @@ add_action('wp_head', function () {
 
 	// IPD page
 	if (is_page(82361)) {
-		$ipd_css_path = get_stylesheet_directory() . '/css/ipd-software.css';
-		if (file_exists($ipd_css_path)) {
-			echo '<style id="ipd-software-css-inline">' . file_get_contents($ipd_css_path) . '</style>' . "\n";
-		}
+		hr_print_module_css('ipd-software.css', 'ipd-software-css-inline');
 
 		$page_url = get_permalink(82361);
 		$schema = array(
@@ -954,10 +954,7 @@ add_action('wp_head', function () {
 
 	// OPD page
 	if (is_page(82363)) {
-		$opd_css_path = get_stylesheet_directory() . '/css/opd-software.css';
-		if (file_exists($opd_css_path)) {
-			echo '<style id="opd-software-css-inline">' . file_get_contents($opd_css_path) . '</style>' . "\n";
-		}
+		hr_print_module_css('opd-software.css', 'opd-software-css-inline');
 
 		$page_url = get_permalink(82363);
 		$schema = array(
@@ -1018,12 +1015,14 @@ add_action('wp_head', function () {
 		}
 	}
 
+	// Hospital billing: shared module CSS (FAQ component); its own css/hospital-billing.css is enqueued
+	if (is_page(82741)) {
+		hr_print_module_css();
+	}
+
 	// Modules hub CSS and ItemList
 	if (hr_is_modules_hub()) {
-		$modules_css_path = get_stylesheet_directory() . '/css/modules-hub.css';
-		if (file_exists($modules_css_path)) {
-			echo '<style id="modules-hub-css-inline">' . file_get_contents($modules_css_path) . '</style>' . "\n";
-		}
+		hr_print_module_css('modules-hub.css', 'modules-hub-css-inline');
 
 		$page_url = get_permalink();
 		$items    = array();
@@ -1180,6 +1179,21 @@ function healthray_opd_faq_items()
 	);
 }
 
+// Module pages (OPD 82363, IPD 82361, Modules hub, Hospital billing 82741): css/modules-common.css is printed once,
+// then the page's own CSS file. Both inline in <head>, as before.
+function hr_print_module_css($file = '', $id = '')
+{
+	static $common_done = false;
+	$dir = get_stylesheet_directory() . '/css/';
+	if (!$common_done && file_exists($dir . 'modules-common.css')) {
+		echo '<style id="modules-common-css-inline">' . file_get_contents($dir . 'modules-common.css') . '</style>' . "\n";
+		$common_done = true;
+	}
+	if ('' !== $file && file_exists($dir . $file)) {
+		echo '<style id="' . esc_attr($id) . '">' . file_get_contents($dir . $file) . '</style>' . "\n";
+	}
+}
+
 // Modules registry
 function healthray_modules_registry()
 {
@@ -1304,6 +1318,45 @@ function healthray_modules_faq_items()
 		array(
 			'q' => 'How long does it take to start?',
 			'a' => 'A clinic starts in a few days. Even a 200-bed hospital usually starts in one to three weeks. OPD and registration go live first, so the counter never stops.',
+		),
+	);
+}
+
+// Hospital billing FAQs - one list for the page accordion (temp-hospital-billing.php) and the FAQPage schema
+function healthray_billing_faq_items()
+{
+	return array(
+		array(
+			'q' => 'Does it work for TPA, cashless and Ayushman (PM-JAY) patients?',
+			'a' => 'Yes. The insurance company and policy number are noted at admission. All cashless patients come in one list with their claim status. Ayushman patients are billed in the same software.',
+		),
+		array(
+			'q' => 'Does it make GST bills?',
+			'a' => 'Yes. You can add GST to the services that need it. The bill shows GST on each line, and the Item Wise Tax report gives the month\'s total for your accountant.',
+		),
+		array(
+			'q' => 'How much does hospital billing software cost in India?',
+			'a' => 'There is no fixed price. It depends on your number of beds, the departments you use, and whether you use it online or on your own computer (server). After the free demo, you get your price in writing within 24 hours.',
+		),
+		array(
+			'q' => 'Does it connect with Tally?',
+			'a' => 'Yes. Healthray connects with Tally. In the demo, ask us to show how your bills go into Tally.',
+		),
+		array(
+			'q' => 'Who can change or cancel a bill?',
+			'a' => 'Only the staff you allow. Each person has their own login with OTP and sees only the screens for their job. Every change is saved with the person\'s name and the time, and the Bill/Receipt Log report shows it.',
+		),
+		array(
+			'q' => 'Can bills print in our hospital\'s format?',
+			'a' => 'Yes. The IPD bill has 13 print formats, such as the cashless bill, summary bill, package detail and date-wise bill. The bill can also be sent on WhatsApp or email.',
+		),
+		array(
+			'q' => 'Is there a free download of hospital billing software?',
+			'a' => 'You do not need to download anything. Healthray opens in Chrome or any internet browser on the computers you already have. The demo is free.',
+		),
+		array(
+			'q' => 'If we stop using Healthray, do we get our data?',
+			'a' => 'Yes. We give you all your data within 30 days. We give this promise in writing, as per India\'s data law (DPDP Act, 2023). Your data is kept in India, or on your own computer inside the hospital.',
 		),
 	);
 }
@@ -1481,7 +1534,7 @@ function healthray_pmjay_faq_items()
 	);
 }
 
-// IPD/OPD/Modules/ABDM/ABHA/DHIS/PM-JAY FAQ schema
+// IPD/OPD/Modules/Hospital billing/ABDM/ABHA/DHIS/PM-JAY FAQ schema
 add_filter('hr_head_faqs', function ($faqs) {
 	if (is_page(27377)) {
 		return healthray_abdm_faq_items();
@@ -1503,6 +1556,9 @@ add_filter('hr_head_faqs', function ($faqs) {
 	}
 	if (hr_is_modules_hub()) {
 		return healthray_modules_faq_items();
+	}
+	if (is_page(82741)) {
+		return healthray_billing_faq_items();
 	}
 	return $faqs;
 });

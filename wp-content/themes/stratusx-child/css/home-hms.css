@@ -1475,3 +1475,11 @@ html { scroll-behavior: smooth; }
 /* Skip link */
 .ppc-hims .skip { position: absolute; left: 12px; top: -60px; z-index: 100; background: var(--navy); color: var(--white); font-weight: 700; padding: 12px 18px; border-radius: 0 0 var(--r) var(--r); text-decoration: none; transition: top .15s; }
 .ppc-hims .skip:focus { top: 0; color: var(--white); }
+/* CTA lines that look like headings but are <p class="hr-cta-title"> for SEO (kept out of the heading outline):
+   "Book a free demo" (hero form card), "Did not find your question?" (FAQ box), "Every doctor on this page..." (closing).
+   Same look as the old h2/h3: the shared .ppc-hims h1-h3 rule, the site-wide capitalize on headings, then each place's size. */
+.ppc-hims p.hr-cta-title { color: var(--navy); line-height: 1.15; margin: 0; text-wrap: balance; letter-spacing: -.01em; text-transform: capitalize; }
+.ppc-hims .form-card p.hr-cta-title { font-size: 24px; font-weight: 800; }
+.ppc-hims .f1-talk p.hr-cta-title { color: var(--white); font-size: 20px; font-weight: 800; margin: 0; line-height: 1.15; }
+.ppc-hims .cz p.hr-cta-title { font-size: clamp(30px, 4.2vw, 48px); font-weight: 800; line-height: 1.1; letter-spacing: -.02em; }
+.ppc-hims .n2 p.hr-cta-title { max-width: 20ch; margin-inline: auto; }

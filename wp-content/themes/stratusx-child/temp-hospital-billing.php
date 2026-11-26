@@ -65,7 +65,7 @@ $hr_logo = get_stylesheet_directory_uri() . '/assets/ppc-hims/';
       </div>
     </div>
     <div class="card" id="a-form">
-      <h2>See your own bills in a free demo</h2>
+      <p class="hr-cta-title">See your own bills in a free demo</p>
       <p>In a 30-minute video call, we make an OPD bill, an IPD bill and a cashless bill for a hospital of your size.</p>
       <?php if ( shortcode_exists( 'contact-form-7' ) ) { echo do_shortcode( $hr_bill_form ); } ?>
       <p class="small" style="text-align:center">The demo is free. You do not have to buy.</p>
@@ -221,11 +221,20 @@ $hr_logo = get_stylesheet_directory_uri() . '/assets/ppc-hims/';
   </section>
 
   <!-- ===== Section 10 · Questions + last call (Version 1, approved) ===== -->
-  <section class="sec tint q10" id="faq">
-    <div class="in"><div class="sp10"><div class="sh"><h2>Questions owners ask about <span class="hl">hospital billing software</span></h2><p class="lead">Did not find yours? <a href="#a-form">Ask it in the free demo</a></p></div><div class="acc10"><details open><summary>Does it work for TPA, cashless and Ayushman (PM-JAY) patients?</summary><p>Yes. The insurance company and policy number are noted at admission. All cashless patients come in one list with their claim status. Ayushman patients are billed in the same software.</p></details><details><summary>Does it make GST bills?</summary><p>Yes. You can add GST to the services that need it. The bill shows GST on each line, and the Item Wise Tax report gives the month's total for your accountant.</p></details><details><summary>How much does hospital billing software cost in India?</summary><p>There is no fixed price. It depends on your number of beds, the departments you use, and whether you use it online or on your own computer (server). After the free demo, you get your price in writing within 24 hours.</p></details><details><summary>Does it connect with Tally?</summary><p>Yes. Healthray connects with Tally. In the demo, ask us to show how your bills go into Tally.</p></details><details><summary>Who can change or cancel a bill?</summary><p>Only the staff you allow. Each person has their own login with OTP and sees only the screens for their job. Every change is saved with the person's name and the time, and the Bill/Receipt Log report shows it.</p></details><details><summary>Can bills print in our hospital's format?</summary><p>Yes. The IPD bill has 13 print formats, such as the cashless bill, summary bill, package detail and date-wise bill. The bill can also be sent on WhatsApp or email.</p></details><details><summary>Is there a free download of hospital billing software?</summary><p>You do not need to download anything. Healthray opens in Chrome or any internet browser on the computers you already have. The demo is free.</p></details><details><summary>If we stop using Healthray, do we get our data?</summary><p>Yes. We give you all your data within 30 days. We give this promise in writing, as per India's data law (DPDP Act, 2023). Your data is kept in India, or on your own computer inside the hospital.</p></details></div></div></div>
-  </section>
+  <?php
+  // FAQ: shared section (templates/module-faq.php); the same items feed the FAQPage schema
+  get_template_part( 'templates/module-faq', null, array(
+    'section_class' => 'sec tint q10',
+    'wrap_class'    => 'in',
+    'head_class'    => 'sh',
+    'lead_class'    => 'lead',
+    'title'         => 'Questions owners ask about <span class="hl">hospital billing software</span>',
+    'lead'          => 'Did not find yours? <a href="#a-form">Ask it in the free demo</a>',
+    'items'         => function_exists( 'healthray_billing_faq_items' ) ? healthray_billing_faq_items() : array(),
+  ) );
+  ?>
   <section class="sec lc10" id="book">
-    <div class="in c10"><div class="faces10" aria-hidden="true"><span class="fs10"><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Bhaumik-Rathore-150x150.webp" alt="" width="44" height="44"><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Monil-Parmar-150x150.webp" alt="" width="44" height="44"><img src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Vimal-Dhaduk-150x150.webp" alt="" width="44" height="44"><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Arpit-gajjar-150x150.webp" alt="" width="44" height="44"></span><span>2,500+ hospitals and clinics use Healthray</span></div><h2 class="lh10">See your own bills in Healthray, <span class="hl">before you decide</span></h2><p class="lead">In a free 30-minute demo we make an OPD bill, an admitted patient's bill and a cashless bill for a hospital like yours.</p><a class="btn hr-cta-btn big10" href="#a-form">Show me Healthray for my hospital <span aria-hidden="true">→</span></a><p class="prom10">The demo is free. You do not have to buy.</p></div>
+    <div class="in c10"><div class="faces10" aria-hidden="true"><span class="fs10"><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Bhaumik-Rathore-150x150.webp" alt="" width="44" height="44"><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Monil-Parmar-150x150.webp" alt="" width="44" height="44"><img src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Vimal-Dhaduk-150x150.webp" alt="" width="44" height="44"><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Arpit-gajjar-150x150.webp" alt="" width="44" height="44"></span><span>2,500+ hospitals and clinics use Healthray</span></div><p class="lh10 hr-cta-title">See your own bills in Healthray, <span class="hl">before you decide</span></p><p class="lead">In a free 30-minute demo we make an OPD bill, an admitted patient's bill and a cashless bill for a hospital like yours.</p><a class="btn hr-cta-btn big10" href="#a-form">Show me Healthray for my hospital <span aria-hidden="true">→</span></a><p class="prom10">The demo is free. You do not have to buy.</p></div>
   </section>
 </div>
 </div><!-- /.hr-billing -->

@@ -41,7 +41,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
         </div>
 
         <div class="form-card" id="demo">
-          <h2>Book a free demo</h2>
+          <p class="hr-cta-title">Book a free demo</p>
           <p class="fc-sub">See Healthray set up for your hospital's size and departments. Free, 30 minutes, and you do not have to buy.</p>
 
           <?php echo do_shortcode('[contact-form-7 id="9a13f7a" title="NEW LEAD FORM - Home Page"]'); ?>
@@ -1019,7 +1019,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
           <h2 id="faqTitle">Common questions about hospital management software</h2>
           <p class="fq-lead">Short answers. If yours is not here, ask us.</p>
           <div class="f1-talk">
-            <h3>Did not find your question?</h3>
+            <p class="hr-cta-title">Did not find your question?</p>
             <p>Ask us in a free demo.</p>
             <a class="btn btn-primary hr-cta-btn" href="#demo">Book a free demo</a>
           </div>
@@ -1176,7 +1176,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
     <section class="section n2 cz" id="book-demo" aria-labelledby="bookDemoTitle">
       <div class="wrap">
         <div class="n2-faces" aria-hidden="true"><img src="https://healthray.com/wp-content/uploads/2026/10/Dr.-Hinal-Parmar-Rainbow-Hospital-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2026/10/Dr.-Deepika-Singhavi-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2025/12/Dr.-Bhaumik-Rathore-Vibrant-Multispecialty-Hospital-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2025/11/Dr.-Gunjan-Desai-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2026/10/Dr.-Ishita-Das-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2026/10/Dr.-Rajesh-B.-Dhirawani-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Vimal-Dhaduk-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Maharshi-Desai-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Ketan-Rupala-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Arpit-gajjar-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Monil-Parmar-150x150.webp" alt="" loading="lazy" width="68" height="68"></div>
-        <h2 id="bookDemoTitle">Every doctor on this page started with a 30-minute demo</h2>
+        <p class="hr-cta-title" id="bookDemoTitle">Every doctor on this page started with a 30-minute demo</p>
         <p class="n2-sub">Yours is free, on a video call, set up for a hospital your size. You get your price in writing within 24 hours.</p>
         <div class="cz-go center"><a class="btn btn-primary hr-cta-btn cz-btn" href="#demo">Book a free demo</a><span class="cz-or">or call <a href="tel:+919714874435">+91 97148 74435</a></span></div>
       </div>

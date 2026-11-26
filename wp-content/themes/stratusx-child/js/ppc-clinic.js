@@ -67,7 +67,8 @@
     var RULES = {
       'a-name': function (v) { return v.trim().length >= 2 ? '' : 'Please write your name.'; },
       'a-mob': function (v) { return /^[6-9]\d{9}$/.test(digits(v)) ? '' : 'Please write a 10-digit mobile number.'; },
-      'a-mail': function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? '' : 'Please write your email, for example you@gmail.com.'; }
+      'a-mail': function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? '' : 'Please write your email, for example you@gmail.com.'; },
+      'a-city': function (v) { return v.trim().length >= 2 ? '' : 'Please write your city.'; }
     };
     function fieldCheck(id, show) {
       var el = $(id); if (!el) return '';
@@ -80,14 +81,14 @@
     Object.keys(RULES).forEach(function (id) {
       var el = $(id); if (!el) return;
       el.addEventListener('blur', function () { if (el.value !== '') fieldCheck(id, true); });
-      el.addEventListener('input', function () { fieldCheck(id, el.closest('.field').classList.contains('bad')); if (id === 'a-mail') $('a-sugg').hidden = true; });
+      el.addEventListener('input', function () { fieldCheck(id, el.closest('.field').classList.contains('bad')); if (id === 'a-mail' && $('a-sugg')) $('a-sugg').hidden = true; });
     });
 
     /* email typo help: "Did you mean ...@gmail.com?" */
     var DOMS = ['gmail.com', 'yahoo.com', 'yahoo.in', 'hotmail.com', 'outlook.com', 'rediffmail.com', 'icloud.com', 'live.com'];
     function editDist(a, b) { var d = [], i, j; for (i = 0; i <= a.length; i++) d[i] = [i]; for (j = 0; j <= b.length; j++) d[0][j] = j; for (i = 1; i <= a.length; i++) for (j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return d[a.length][b.length]; }
     if (mail) mail.addEventListener('blur', function () {
-      var v = mail.value.trim().toLowerCase(), at = v.lastIndexOf('@'), s = $('a-sugg'); s.hidden = true; if (at < 1) return;
+      var v = mail.value.trim().toLowerCase(), at = v.lastIndexOf('@'), s = $('a-sugg'); if (!s) return; s.hidden = true; if (at < 1) return;
       var dom = v.slice(at + 1), best = null;
       DOMS.forEach(function (d) { var k = editDist(dom, d); if (k > 0 && k <= 2 && (!best || k < best.k)) best = { d: d, k: k }; });
       if (!best) return;
@@ -105,7 +106,7 @@
       function stop() { e.preventDefault(); e.stopImmediatePropagation(); }
       if (!bed || !bed.value) { stop(); step(1, true); return; }
       var bad = null;
-      ['a-name', 'a-mob', 'a-mail'].forEach(function (id) { if (fieldCheck(id, true)) { if (!bad) bad = id; pushEvent('clinic_form_error', { field: id.replace('a-', ''), form_position: where() }); } });
+      ['a-name', 'a-mob', 'a-mail', 'a-city'].forEach(function (id) { if (fieldCheck(id, true)) { if (!bad) bad = id; pushEvent('clinic_form_error', { field: id.replace('a-', ''), form_position: where() }); } });
       if (bad) { stop(); $(bad).focus(); return; }
       if (err) err.hidden = true;
       sentKind = bed.value;

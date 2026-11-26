@@ -548,3 +548,10 @@ button,input,select{font-family:inherit}
   .ais-foot{padding:12px 14px calc(16px + env(safe-area-inset-bottom,0px))}.ais-foot .btn{width:100%}
 }
 @media (prefers-reduced-motion:reduce){.ai-dot,.ais-rec.live i,.ais-rec.live .ais-wave s,.ais-act .go.ready{animation:none}}
+/* Step 2: two fields in a row (name + mobile, email + city) so the form is shorter; one per row on phones.
+   Everything that is not a field (chosen line, error, button, privacy line) keeps the full width. */
+@media (min-width:481px){
+#a-s2:not([hidden]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 12px;align-items:start}
+#a-s2>*{grid-column:1/-1}
+#a-s2>.field{grid-column:auto;min-width:0}
+}

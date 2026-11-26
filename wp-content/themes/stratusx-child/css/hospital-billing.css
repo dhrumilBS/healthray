@@ -347,16 +347,6 @@
 .hr-billing .box9{flex-direction:column;align-items:flex-start;padding:20px;margin-top:28px}
 }
 .hr-billing .q10 .lead a{color:var(--blue);font-weight:800}
-.hr-billing .acc10 details{border-bottom:1px solid #d6e0f0}
-.hr-billing .acc10 details:first-child{border-top:1px solid #d6e0f0}
-.hr-billing .acc10 summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;font-size:17.5px;font-weight:800;color:var(--ink);line-height:1.35}
-.hr-billing .acc10 summary::-webkit-details-marker{display:none}
-.hr-billing .acc10 summary::after{content:"";flex:none;width:10px;height:10px;border:solid var(--navy);border-width:0 2.5px 2.5px 0;transform:rotate(45deg);margin-right:6px;transition:transform .2s}
-.hr-billing .acc10 details[open] summary::after{transform:rotate(-135deg)}
-.hr-billing .acc10 summary:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
-.hr-billing .acc10 details p{font-size:16.5px;line-height:1.6;color:var(--slate);padding:0 0 20px;max-width:64ch}
-.hr-billing .sp10{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:56px;align-items:start}
-.hr-billing .sp10 .sh{position:sticky;top:var(--hr-sticky,24px);margin-bottom:0}
 .hr-billing .c10{text-align:center;display:flex;flex-direction:column;align-items:center}
 .hr-billing .faces10{display:flex;align-items:center;gap:12px;margin-bottom:22px}
 .hr-billing .fs10{display:flex}
@@ -369,10 +359,6 @@
 .hr-billing .big10{margin-top:26px;font-size:18px;padding:18px 34px;border-radius:12px}
 .hr-billing .prom10{margin-top:14px;font-size:14px;color:var(--slate)}
 @container (max-width: 820px){
-.hr-billing .sp10{grid-template-columns:1fr;gap:20px}
-.hr-billing .sp10 .sh{position:static}
-.hr-billing .acc10 summary{font-size:16.5px;padding:16px 0}
-.hr-billing .acc10 details p{font-size:15.5px}
 .hr-billing .lh10{font-size:30px}
 .hr-billing .big10{font-size:16.5px;padding:16px 22px;width:100%;max-width:360px}
 .hr-billing .faces10{flex-direction:column;gap:8px}
@@ -527,4 +513,11 @@ body #myPopup .widget-heading .description-text{margin:8px 0 0;color:var(--slate
 @media (max-width:480px){
 :is(.hr-billing #a-form,#myPopup) .hr-bed-options{grid-template-columns:1fr}
 body #myPopup{padding:22px}
+}
+/* CTA lines that look like headings but are <p class="hr-cta-title"> for SEO: the hero form-card title and the
+   closing call to action (.lh10). Same look as the old h2. */
+.hr-billing .card p.hr-cta-title{font-size:26px;font-weight:800;color:var(--ink);letter-spacing:-.01em;line-height:1.4;text-wrap:balance}
+.hr-billing .hr-page p.lh10{text-wrap:balance}
+@container (max-width: 820px){
+.hr-billing .card p.hr-cta-title{font-size:22px}
 }

@@ -7,7 +7,7 @@
 $hr_mod_cards = function_exists('healthray_module_cards') ? healthray_module_cards(get_queried_object_id()) : array();
 $hr_mod_faqs  = function_exists('healthray_modules_faq_items') ? healthray_modules_faq_items() : array();
 ?>
-<main class="hx" id="modules-main">
+<main class="hx" id="modules-main" data-hr-form="modules_demo">
 
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <symbol id="i-wa" viewBox="0 0 24 24">
@@ -52,7 +52,7 @@ $hr_mod_faqs  = function_exists('healthray_modules_faq_items') ? healthray_modul
         </div>
       </div>
       <div class="formbox" id="demo">
-        <h2>Book a Free Demo</h2>
+        <p class="hr-cta-title">Book a Free Demo</p>
         <p class="fsub">A video call. We show the modules you need, set up for your hospital or clinic.</p>
         <?php echo do_shortcode('[contact-form-7 id="9a13f7a" title="NEW LEAD FORM - Home Page"]'); ?>
       </div>
@@ -192,22 +192,13 @@ $hr_mod_faqs  = function_exists('healthray_modules_faq_items') ? healthray_modul
     </div>
   </section>
 
-  <section class="sec" id="faq">
-    <div class="wrap">
-      <div class="sec-head">
-        <h2>Questions Before You Buy</h2>
-      </div>
-      <div class="faq">
-        <?php $hr_faq_i = 0;
-        foreach ($hr_mod_faqs as $hr_faq) : ?>
-          <details name="hx-faq" <?php echo 0 === $hr_faq_i++ ? ' open' : ''; ?>>
-            <summary><?php echo esc_html($hr_faq['q']); ?></summary>
-            <p><?php echo esc_html($hr_faq['a']); ?></p>
-          </details>
-        <?php endforeach; ?>
-      </div>
-    </div>
-  </section>
+  <?php
+  // FAQ: shared section (templates/module-faq.php); the same items feed the FAQPage schema
+  get_template_part( 'templates/module-faq', null, array(
+    'section_class' => 'sec',
+    'items'         => $hr_mod_faqs,
+  ) );
+  ?>
 
   <section class="final">
     <div class="wrap">
@@ -224,7 +215,7 @@ $hr_mod_faqs  = function_exists('healthray_modules_faq_items') ? healthray_modul
         <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Monil-Parmar-150x150.webp" alt="" loading="lazy" width="56" height="56"></span>
         <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-kaivan-shah-150x150.webp" alt="" loading="lazy" width="56" height="56"></span>
       </div>
-      <h2>See the Modules Working for a Place Like Yours</h2>
+      <p class="hr-cta-title">See the Modules Working for a Place Like Yours</p>
       <p>A short video call, set up for your hospital or clinic. No charge. No need to decide on the call.</p>
       <div class="hx-row">
         <a class="btn btn-main" href="#demo">Book a free demo</a>
