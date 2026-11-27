@@ -108,16 +108,16 @@ function hr_is_home_hms_page()
 function hr_renamed_page_templates()
 {
 	return array(
-		'page-become-a-partner.php'              => 'temp-become-a-partner.php',
-		'page-home-hms.php'                      => 'temp-home-hms.php',
-		'page-hospital-chains.php'               => 'temp-hospital-chains.php',
-		'page-multispeciality-hospitals.php'     => 'temp-multispeciality-hospitals.php',
+		'page-become-a-partner.php' => 'temp-become-a-partner.php',
+		'page-home-hms.php' => 'temp-home-hms.php',
+		'page-hospital-chains.php' => 'temp-hospital-chains.php',
+		'page-multispeciality-hospitals.php' => 'temp-multispeciality-hospitals.php',
 		'page-small-hospitals-nursing-homes.php' => 'temp-small-hospitals-nursing-homes.php',
-		'page-pharma-software.php'               => 'temp-pharma-software.php',
-		'page-pharma-google.php'                 => 'temp-ppc-pharma-google.php',
-		'page-pharma-meta.php'                   => 'temp-ppc-pharma-meta.php',
-		'page-pharma-chatgpt.php'                => 'temp-ppc-pharma-chatgpt.php',
-		'page-partner-meta.php'                  => 'temp-ppc-partner-meta.php',
+		'page-pharma-software.php' => 'temp-pharma-software.php',
+		'page-pharma-google.php' => 'temp-ppc-pharma-google.php',
+		'page-pharma-meta.php' => 'temp-ppc-pharma-meta.php',
+		'page-pharma-chatgpt.php' => 'temp-ppc-pharma-chatgpt.php',
+		'page-partner-meta.php' => 'temp-ppc-partner-meta.php',
 	);
 }
 
@@ -459,7 +459,7 @@ add_filter('wpseo_canonical', function ($canonical) {
 	// Category pagination: first page
 	if (is_category() && is_paged()) {
 		$term_link = get_term_link(get_queried_object());
-		if (! is_wp_error($term_link)) {
+		if (!is_wp_error($term_link)) {
 			return $term_link;
 		}
 	}
@@ -617,37 +617,37 @@ add_action('wp_head', function () {
 		$page_url = get_permalink(81468);
 		$schema = array(
 			'@context' => 'https://schema.org',
-			'@graph'   => array(
+			'@graph' => array(
 				array(
-					'@type'           => 'ItemList',
-					'@id'             => $page_url . '#login-portals',
-					'name'            => 'Healthray Login Portals',
+					'@type' => 'ItemList',
+					'@id' => $page_url . '#login-portals',
+					'name' => 'Healthray Login Portals',
 					'itemListElement' => array(
 						array(
-							'@type'    => 'ListItem',
+							'@type' => 'ListItem',
 							'position' => 1,
-							'item'     => array(
+							'item' => array(
 								'@type' => 'WebPage',
-								'name'  => 'Healthray Hospital / HMS Login',
-								'url'   => 'https://ray.healthray.com/',
+								'name' => 'Healthray Hospital / HMS Login',
+								'url' => 'https://ray.healthray.com/',
 							),
 						),
 						array(
-							'@type'    => 'ListItem',
+							'@type' => 'ListItem',
 							'position' => 2,
-							'item'     => array(
+							'item' => array(
 								'@type' => 'WebPage',
-								'name'  => 'Healthray Pharmacy Login',
-								'url'   => 'https://pharmacy.healthray.com/',
+								'name' => 'Healthray Pharmacy Login',
+								'url' => 'https://pharmacy.healthray.com/',
 							),
 						),
 						array(
-							'@type'    => 'ListItem',
+							'@type' => 'ListItem',
 							'position' => 3,
-							'item'     => array(
+							'item' => array(
 								'@type' => 'WebPage',
-								'name'  => 'Healthray Laboratory Login',
-								'url'   => 'https://lab.healthray.com/',
+								'name' => 'Healthray Laboratory Login',
+								'url' => 'https://lab.healthray.com/',
 							),
 						),
 					),
@@ -882,27 +882,27 @@ add_action('wp_head', function () {
 
 		$schema = array(
 			'@context' => 'https://schema.org',
-			'@graph'   => array(
+			'@graph' => array(
 				array(
-					'@type'                  => 'SoftwareApplication',
-					'@id'                    => $page_url . '#software',
-					'name'                   => 'Healthray Pharmacy Software',
-					'operatingSystem'        => 'Web, Android, iOS',
-					'applicationCategory'    => 'BusinessApplication',
+					'@type' => 'SoftwareApplication',
+					'@id' => $page_url . '#software',
+					'name' => 'Healthray Pharmacy Software',
+					'operatingSystem' => 'Web, Android, iOS',
+					'applicationCategory' => 'BusinessApplication',
 					'applicationSubCategory' => 'Pharmacy Management Software',
-					'description'            => 'NABH-certified, ABDM-compliant pharmacy software (pharmacy management system, also known as medical store software) for Indian retail pharmacies, medical stores, hospital pharmacies and multi-store chains. GST billing and POS, inventory with FEFO expiry alerts, Schedule H/H1/X registers, e-prescriptions, delivery management, patient engagement and accounting on one platform.',
-					'url'                    => $page_url,
-					'publisher'              => array('@id' => home_url('/') . '#organization'),
-					'offers'                 => array(
-						'@type'         => 'Offer',
-						'price'         => '0',
+					'description' => 'NABH-certified, ABDM-compliant pharmacy software (pharmacy management system, also known as medical store software) for Indian retail pharmacies, medical stores, hospital pharmacies and multi-store chains. GST billing and POS, inventory with FEFO expiry alerts, Schedule H/H1/X registers, e-prescriptions, delivery management, patient engagement and accounting on one platform.',
+					'url' => $page_url,
+					'publisher' => array('@id' => home_url('/') . '#organization'),
+					'offers' => array(
+						'@type' => 'Offer',
+						'price' => '0',
 						'priceCurrency' => 'INR',
-						'description'   => 'Free demo and free trial available',
+						'description' => 'Free demo and free trial available',
 					),
-					'aggregateRating'        => array(
-						'@type'       => 'AggregateRating',
+					'aggregateRating' => array(
+						'@type' => 'AggregateRating',
 						'ratingValue' => '4.8',
-						'bestRating'  => '5',
+						'bestRating' => '5',
 						'ratingCount' => '180',
 					),
 				),
@@ -925,27 +925,27 @@ add_action('wp_head', function () {
 		$page_url = 'https://healthray.com/hospital-information-management-software/';
 		$schema = array(
 			'@context' => 'https://schema.org',
-			'@graph'   => array(
+			'@graph' => array(
 				array(
-					'@type'                  => 'SoftwareApplication',
-					'@id'                    => $page_url . '#software',
-					'name'                   => 'Healthray HIMS Software',
-					'operatingSystem'        => 'Web, Android, iOS',
-					'applicationCategory'    => 'BusinessApplication',
+					'@type' => 'SoftwareApplication',
+					'@id' => $page_url . '#software',
+					'name' => 'Healthray HIMS Software',
+					'operatingSystem' => 'Web, Android, iOS',
+					'applicationCategory' => 'BusinessApplication',
 					'applicationSubCategory' => 'Hospital Information Management System',
-					'description'            => 'NABH-certified, ABDM-compliant hospital information management system (HIMS) for Indian hospitals — registration with ABHA, OPD/IPD, OT scheduling, TPA billing, stores, HR and multi-facility MIS on one platform.',
-					'url'                    => $page_url,
-					'publisher'              => array('@id' => home_url('/') . '#organization'),
-					'offers'                 => array(
-						'@type'         => 'Offer',
-						'price'         => '0',
+					'description' => 'NABH-certified, ABDM-compliant hospital information management system (HIMS) for Indian hospitals — registration with ABHA, OPD/IPD, OT scheduling, TPA billing, stores, HR and multi-facility MIS on one platform.',
+					'url' => $page_url,
+					'publisher' => array('@id' => home_url('/') . '#organization'),
+					'offers' => array(
+						'@type' => 'Offer',
+						'price' => '0',
 						'priceCurrency' => 'INR',
-						'description'   => 'Free demo and free trial available',
+						'description' => 'Free demo and free trial available',
 					),
-					'aggregateRating'        => array(
-						'@type'       => 'AggregateRating',
+					'aggregateRating' => array(
+						'@type' => 'AggregateRating',
 						'ratingValue' => '4.8',
-						'bestRating'  => '5',
+						'bestRating' => '5',
 						'ratingCount' => '180',
 					),
 				),
@@ -961,16 +961,16 @@ add_action('wp_head', function () {
 		$page_url = get_permalink(82361);
 		$schema = array(
 			'@context' => 'https://schema.org',
-			'@graph'   => array(
+			'@graph' => array(
 				array(
-					'@type'               => 'SoftwareApplication',
-					'@id'                 => $page_url . '#software',
-					'name'                => 'Healthray IPD Management Software',
-					'operatingSystem'     => 'Web browser',
+					'@type' => 'SoftwareApplication',
+					'@id' => $page_url . '#software',
+					'name' => 'Healthray IPD Management Software',
+					'operatingSystem' => 'Web browser',
 					'applicationCategory' => 'BusinessApplication',
-					'description'         => 'IPD management software for hospitals and nursing homes in India: bed board and admission, nurse\'s and doctor\'s notes, orders from the ward, IPD billing with deposits, TPA and cashless billing, discharge summary and reports.',
-					'url'                 => $page_url,
-					'publisher'           => array('@id' => home_url('/') . '#organization'),
+					'description' => 'IPD management software for hospitals and nursing homes in India: bed board and admission, nurse\'s and doctor\'s notes, orders from the ward, IPD billing with deposits, TPA and cashless billing, discharge summary and reports.',
+					'url' => $page_url,
+					'publisher' => array('@id' => home_url('/') . '#organization'),
 				),
 			),
 		);
@@ -984,16 +984,16 @@ add_action('wp_head', function () {
 		$page_url = get_permalink(82363);
 		$schema = array(
 			'@context' => 'https://schema.org',
-			'@graph'   => array(
+			'@graph' => array(
 				array(
-					'@type'               => 'SoftwareApplication',
-					'@id'                 => $page_url . '#software',
-					'name'                => 'Healthray OPD Management Software',
-					'operatingSystem'     => 'Web browser',
+					'@type' => 'SoftwareApplication',
+					'@id' => $page_url . '#software',
+					'name' => 'Healthray OPD Management Software',
+					'operatingSystem' => 'Web browser',
 					'applicationCategory' => 'BusinessApplication',
-					'description'         => 'OPD management software for clinics and hospitals in India: registration and token, waiting-area TV, online appointments, the doctor\'s prescription screen, OPD billing and day-end reports.',
-					'url'                 => $page_url,
-					'publisher'           => array('@id' => home_url('/') . '#organization'),
+					'description' => 'OPD management software for clinics and hospitals in India: registration and token, waiting-area TV, online appointments, the doctor\'s prescription screen, OPD billing and day-end reports.',
+					'url' => $page_url,
+					'publisher' => array('@id' => home_url('/') . '#organization'),
 				),
 			),
 		);
@@ -1278,19 +1278,19 @@ add_action('wp_head', function () {
 		hr_print_module_css('modules-hub.css', 'modules-hub-css-inline');
 
 		$page_url = get_permalink();
-		$items    = array();
+		$items = array();
 		foreach (healthray_module_cards(get_queried_object_id()) as $n => $card) {
 			$items[] = array('@type' => 'ListItem', 'position' => $n + 1, 'name' => $card['title'], 'url' => $card['url']);
 		}
 		$schema = array(
 			'@context' => 'https://schema.org',
-			'@graph'   => array(
+			'@graph' => array(
 				array(
-					'@type'      => 'CollectionPage',
-					'@id'        => $page_url . '#modules',
-					'url'        => $page_url,
-					'name'       => 'Healthray Modules for Hospitals and Clinics',
-					'about'      => array('@id' => home_url('/') . '#organization'),
+					'@type' => 'CollectionPage',
+					'@id' => $page_url . '#modules',
+					'url' => $page_url,
+					'name' => 'Healthray Modules for Hospitals and Clinics',
+					'about' => array('@id' => home_url('/') . '#organization'),
 					'mainEntity' => array('@type' => 'ItemList', 'itemListElement' => $items),
 				),
 			),
@@ -1303,19 +1303,19 @@ add_action('wp_head', function () {
 function healthray_ipd_faq_items()
 {
 	return array(
-		array('q' => 'What is IPD management software?', 'a' => 'IPD means in-patient department: the patients who are admitted and stay in your hospital. IPD management software is one software that reception, nurses, doctors and the billing counter all use for each admitted patient. It keeps the bed, the daily notes, the charges, the deposit and the discharge papers in one place.',),
-		array('q' => 'What is the difference between OPD and IPD software?', 'a' => 'OPD software is for patients who see the doctor and go home the same day: token, prescription and one bill. IPD software is for patients who are admitted: bed, nursing care, a bill that runs for many days, deposits, TPA and discharge. In Healthray both are parts of the same software, so an OPD patient is admitted without typing the details again.', 'more' => 'See the <a href="' . esc_url(get_permalink(82363)) . '">OPD software</a>.',),
-		array('q' => 'What is the price?', 'a' => 'There is no one fixed price. It depends on how many beds you have, which departments you want and whether you want it on the internet (cloud) or on your own server. A 40-bed hospital pays less than a 300-bed hospital. Within 24 hours of the demo you get the price for your hospital in writing. Moving your old data and training your staff are included.',),
-		array('q' => 'How long does it take to start?', 'a' => 'Even a 200-bed hospital usually starts in one to three weeks. Rainbow Hospital in Vapi, with 100 beds, started in 14 working days.',),
-		array('q' => 'Will billing stop on the day we change over?', 'a' => 'No. You change one department at a time: OPD and registration first, then IPD billing, pharmacy and lab. If something goes wrong, it stays small and gets fixed before the next department starts.',),
-		array('q' => 'Our nurses are not good with computers. Can they use it?', 'a' => 'Yes. Each team learns only its own screens, at your hospital. A nurse\'s work is mostly ticking: tick the dose that was given, fill the BP and sugar chart, copy the last reading when nothing has changed.',),
-		array('q' => 'Does it handle TPA, cashless and Ayushman (PMJAY) patients?', 'a' => 'Yes. The TPA, insurance company and policy number are noted at admission. All cashless patients come in one list with claim number and bill status, and the bill prints in the cashless format. Ayushman (PMJAY) patients are billed in the same software.',),
-		array('q' => 'Can we make package bills?', 'a' => 'Yes. Make your packages once, then give a package to the patient at admission or later. The package prints on the bill, and a report shows all package patients.',),
-		array('q' => 'Who can give a discount or change a bill?', 'a' => 'Each staff member has their own login and sees only their own screens. Every discount comes in one report, and another report shows the billing work done by each staff member.',),
-		array('q' => 'What if the internet stops?', 'a' => 'Connect a mobile hotspot and keep working. Your data stays safe. A hospital can also run Healthray on its own server inside the hospital.',),
-		array('q' => 'Is our data safe? If we stop, do we get it back?', 'a' => 'Healthray is ISO 27001 certified for data security. Each staff member has their own login. Your hospital owns its data, and you can take your records out at any time.',),
-		array('q' => 'Do we need to buy anything? Does it work with our lab and pharmacy?', 'a' => 'Nothing special. It runs on the computers you already have, in the internet browser. Healthray also has lab, pharmacy, OT and OPD parts, and they all join the same patient record.', 'more' => 'Together they make the full <a href="https://healthray.com/hospital-information-management-system/">hospital software</a>.',),
-		array('q' => 'Is help available at night?', 'a' => 'Yes. Help is there 24 hours, all 7 days, on call, chat and screen share, in English, Hindi or Gujarati.',),
+		array('q' => 'What is IPD management software?', 'a' => 'IPD means in-patient department: the patients who are admitted and stay in your hospital. IPD management software is one software that reception, nurses, doctors and the billing counter all use for each admitted patient. It keeps the bed, the daily notes, the charges, the deposit and the discharge papers in one place.', ),
+		array('q' => 'What is the difference between OPD and IPD software?', 'a' => 'OPD software is for patients who see the doctor and go home the same day: token, prescription and one bill. IPD software is for patients who are admitted: bed, nursing care, a bill that runs for many days, deposits, TPA and discharge. In Healthray both are parts of the same software, so an OPD patient is admitted without typing the details again.', 'more' => 'See the <a href="' . esc_url(get_permalink(82363)) . '">OPD software</a>.', ),
+		array('q' => 'What is the price?', 'a' => 'There is no one fixed price. It depends on how many beds you have, which departments you want and whether you want it on the internet (cloud) or on your own server. A 40-bed hospital pays less than a 300-bed hospital. Within 24 hours of the demo you get the price for your hospital in writing. Moving your old data and training your staff are included.', ),
+		array('q' => 'How long does it take to start?', 'a' => 'Even a 200-bed hospital usually starts in one to three weeks. Rainbow Hospital in Vapi, with 100 beds, started in 14 working days.', ),
+		array('q' => 'Will billing stop on the day we change over?', 'a' => 'No. You change one department at a time: OPD and registration first, then IPD billing, pharmacy and lab. If something goes wrong, it stays small and gets fixed before the next department starts.', ),
+		array('q' => 'Our nurses are not good with computers. Can they use it?', 'a' => 'Yes. Each team learns only its own screens, at your hospital. A nurse\'s work is mostly ticking: tick the dose that was given, fill the BP and sugar chart, copy the last reading when nothing has changed.', ),
+		array('q' => 'Does it handle TPA, cashless and Ayushman (PMJAY) patients?', 'a' => 'Yes. The TPA, insurance company and policy number are noted at admission. All cashless patients come in one list with claim number and bill status, and the bill prints in the cashless format. Ayushman (PMJAY) patients are billed in the same software.', ),
+		array('q' => 'Can we make package bills?', 'a' => 'Yes. Make your packages once, then give a package to the patient at admission or later. The package prints on the bill, and a report shows all package patients.', ),
+		array('q' => 'Who can give a discount or change a bill?', 'a' => 'Each staff member has their own login and sees only their own screens. Every discount comes in one report, and another report shows the billing work done by each staff member.', ),
+		array('q' => 'What if the internet stops?', 'a' => 'Connect a mobile hotspot and keep working. Your data stays safe. A hospital can also run Healthray on its own server inside the hospital.', ),
+		array('q' => 'Is our data safe? If we stop, do we get it back?', 'a' => 'Healthray is ISO 27001 certified for data security. Each staff member has their own login. Your hospital owns its data, and you can take your records out at any time.', ),
+		array('q' => 'Do we need to buy anything? Does it work with our lab and pharmacy?', 'a' => 'Nothing special. It runs on the computers you already have, in the internet browser. Healthray also has lab, pharmacy, OT and OPD parts, and they all join the same patient record.', 'more' => 'Together they make the full <a href="https://healthray.com/hospital-information-management-system/">hospital software</a>.', ),
+		array('q' => 'Is help available at night?', 'a' => 'Yes. Help is there 24 hours, all 7 days, on call, chat and screen share, in English, Hindi or Gujarati.', ),
 	);
 }
 
@@ -1323,22 +1323,22 @@ function healthray_ipd_faq_items()
 function healthray_opd_faq_items()
 {
 	return array(
-		array('q' => 'What is the price of Healthray OPD software?', 'a' => 'It depends on how many doctors, counters and branches you have, and whether you also want lab, pharmacy or IPD. After the demo we send you the price in writing. Moving your old data and training your staff are free. WhatsApp and SMS messages are paid separately, bought in advance, for example 5,000 SMS for ₹1,500.',),
-		array('q' => 'How long does it take to start?', 'a' => 'A clinic starts in a few days. Even a 200-bed hospital usually starts in one to three weeks. OPD and registration go live first, so the counter never stops.',),
-		array('q' => 'My receptionist is not good with computers. Can they use it?', 'a' => 'Yes. If they can use WhatsApp, they can learn Healthray. Training is free, and each person learns only their own work: reception learns registration, token and appointments, the doctor learns the prescription screen, the billing person learns bills.',),
-		array('q' => 'Will my doctors have to type?', 'a' => 'Very little. The doctor picks from their own templates, repeats the last prescription in one click and searches medicines by name. AI Scribe can write the notes from the consultation, and the doctor checks and saves. A consultation takes no longer than writing on paper.',),
-		array('q' => 'Can you move our data from our current software?', 'a' => 'Yes, free. Tell us what you use today, a register, Excel or another software. Our team moves your patient data and trains your staff, so you can stop the old software.',),
-		array('q' => 'What if the internet stops?', 'a' => 'Connect a mobile hotspot and keep working. Your data stays safe on the cloud. A hospital can also run Healthray on its own server inside the hospital.',),
-		array('q' => 'Is our patients\' data safe? Who can see it?', 'a' => 'Healthray is ISO 27001 certified for data security, NABH certified, ABDM compliant and NHA approved. Each staff member has their own login and sees only their own screens. Every change in a patient\'s file is saved with the staff name and time.',),
-		array('q' => 'If we stop using Healthray, do we get our data back?', 'a' => 'Yes. Your patient data is yours. Ask us and we give it to you.',),
-		array('q' => 'What support do we get after we start?', 'a' => 'Call, chat and screen share, 24×7, in English, Hindi or Gujarati, from a team that knows OPD work. Doctors on our Reviews page say support picks up during OPD hours.',),
-		array('q' => 'What do we need to buy? Does it work on mobile?', 'a' => 'Nothing special. It runs in the browser on any computer, tablet or mobile. For the waiting-area TV, any TV with internet. No server needed, unless a hospital wants one.',),
-		array('q' => 'Can patients book an OPD appointment online?', 'a' => 'Yes. From your link on Google, Instagram, WhatsApp or your website. They get a reminder before the visit. Online bookings and walk-in patients come on the same list at reception.',),
-		array('q' => 'Can the prescription be printed in Hindi or Gujarati?', 'a' => 'Yes. Medicine instructions print in Hindi, Gujarati, Marathi, Tamil, Telugu, Kannada, Malayalam, Bengali, Punjabi and Odia, and go to the patient\'s WhatsApp.',),
-		array('q' => 'Does it make ABHA IDs?', 'a' => 'Yes. ABHA IDs are made or checked at registration, as part of the normal OPD work.',),
-		array('q' => 'Does it connect to lab, pharmacy and IPD?', 'a' => 'Yes. The OPD is one part of Healthray\'s hospital software. A clinic can use the OPD part alone. A hospital adds IPD, lab, pharmacy and TPA in the same software when it needs them.', 'html' => 'Yes. The OPD is one part of Healthray\'s <a href="https://healthray.com/hospital-information-management-system/">hospital software</a>. A clinic can use the OPD part alone. A hospital adds IPD, lab, pharmacy and TPA in the same software when it needs them.',),
-		array('q' => 'We have more than one branch. Will it work?', 'a' => 'Yes. All branches run in one software. Each doctor has their own login and templates, and the owner sees every branch\'s patients and collection in one report.',),
-		array('q' => 'What happens in the demo?', 'a' => 'A short video call. We register a patient, give a token, show the waiting TV, write a prescription and make a bill, set up the way your OPD runs. No charge, no need to decide on the call.',),
+		array('q' => 'What is the price of Healthray OPD software?', 'a' => 'It depends on how many doctors, counters and branches you have, and whether you also want lab, pharmacy or IPD. After the demo we send you the price in writing. Moving your old data and training your staff are free. WhatsApp and SMS messages are paid separately, bought in advance, for example 5,000 SMS for ₹1,500.', ),
+		array('q' => 'How long does it take to start?', 'a' => 'A clinic starts in a few days. Even a 200-bed hospital usually starts in one to three weeks. OPD and registration go live first, so the counter never stops.', ),
+		array('q' => 'My receptionist is not good with computers. Can they use it?', 'a' => 'Yes. If they can use WhatsApp, they can learn Healthray. Training is free, and each person learns only their own work: reception learns registration, token and appointments, the doctor learns the prescription screen, the billing person learns bills.', ),
+		array('q' => 'Will my doctors have to type?', 'a' => 'Very little. The doctor picks from their own templates, repeats the last prescription in one click and searches medicines by name. AI Scribe can write the notes from the consultation, and the doctor checks and saves. A consultation takes no longer than writing on paper.', ),
+		array('q' => 'Can you move our data from our current software?', 'a' => 'Yes, free. Tell us what you use today, a register, Excel or another software. Our team moves your patient data and trains your staff, so you can stop the old software.', ),
+		array('q' => 'What if the internet stops?', 'a' => 'Connect a mobile hotspot and keep working. Your data stays safe on the cloud. A hospital can also run Healthray on its own server inside the hospital.', ),
+		array('q' => 'Is our patients\' data safe? Who can see it?', 'a' => 'Healthray is ISO 27001 certified for data security, NABH certified, ABDM compliant and NHA approved. Each staff member has their own login and sees only their own screens. Every change in a patient\'s file is saved with the staff name and time.', ),
+		array('q' => 'If we stop using Healthray, do we get our data back?', 'a' => 'Yes. Your patient data is yours. Ask us and we give it to you.', ),
+		array('q' => 'What support do we get after we start?', 'a' => 'Call, chat and screen share, 24×7, in English, Hindi or Gujarati, from a team that knows OPD work. Doctors on our Reviews page say support picks up during OPD hours.', ),
+		array('q' => 'What do we need to buy? Does it work on mobile?', 'a' => 'Nothing special. It runs in the browser on any computer, tablet or mobile. For the waiting-area TV, any TV with internet. No server needed, unless a hospital wants one.', ),
+		array('q' => 'Can patients book an OPD appointment online?', 'a' => 'Yes. From your link on Google, Instagram, WhatsApp or your website. They get a reminder before the visit. Online bookings and walk-in patients come on the same list at reception.', ),
+		array('q' => 'Can the prescription be printed in Hindi or Gujarati?', 'a' => 'Yes. Medicine instructions print in Hindi, Gujarati, Marathi, Tamil, Telugu, Kannada, Malayalam, Bengali, Punjabi and Odia, and go to the patient\'s WhatsApp.', ),
+		array('q' => 'Does it make ABHA IDs?', 'a' => 'Yes. ABHA IDs are made or checked at registration, as part of the normal OPD work.', ),
+		array('q' => 'Does it connect to lab, pharmacy and IPD?', 'a' => 'Yes. The OPD is one part of Healthray\'s hospital software. A clinic can use the OPD part alone. A hospital adds IPD, lab, pharmacy and TPA in the same software when it needs them.', 'html' => 'Yes. The OPD is one part of Healthray\'s <a href="https://healthray.com/hospital-information-management-system/">hospital software</a>. A clinic can use the OPD part alone. A hospital adds IPD, lab, pharmacy and TPA in the same software when it needs them.', ),
+		array('q' => 'We have more than one branch. Will it work?', 'a' => 'Yes. All branches run in one software. Each doctor has their own login and templates, and the owner sees every branch\'s patients and collection in one report.', ),
+		array('q' => 'What happens in the demo?', 'a' => 'A short video call. We register a patient, give a token, show the waiting TV, write a prescription and make a bill, set up the way your OPD runs. No charge, no need to decide on the call.', ),
 	);
 }
 
@@ -1363,49 +1363,64 @@ function healthray_modules_registry()
 	$up = 'https://healthray.com/wp-content/uploads/2026/11/';
 	return array(
 		array(
-			'id'      => 82363,
-			'key'     => 'opd',
+			'id' => 82363,
+			'key' => 'opd',
 			'eyebrow' => 'For your OPD patients',
-			'title'   => 'OPD Management Software',
+			'title' => 'OPD Management Software',
 			'summary' => 'Token, appointments, the doctor\'s prescription, billing and reports in one software. Less crowd at reception, old records in one click, and the day\'s collection on your WhatsApp at night.',
-			'points'  => array(
+			'points' => array(
 				'Patients get a token and see their turn on the TV',
 				'Old reports and today\'s prescription on one screen',
 				'Patients book online and get reminders on WhatsApp',
 			),
-			'image'   => $up . 'token-tv.webp',
-			'cutout'  => true,
-			'cta'     => 'See OPD management software',
+			'image' => $up . 'token-tv.webp',
+			'cutout' => true,
+			'cta' => 'See OPD management software',
 		),
 		array(
-			'id'      => 82361,
-			'key'     => 'ipd',
+			'id' => 82361,
+			'key' => 'ipd',
 			'eyebrow' => 'For your admitted patients (IPD)',
-			'title'   => 'IPD Management Software',
+			'title' => 'IPD Management Software',
 			'summary' => 'IPD means your admitted patients. This one software handles all their work, from giving the bed to the final bill: beds, nurse\'s notes, daily charges, deposits, TPA and discharge.',
-			'points'  => array(
+			'points' => array(
 				'See every free bed without calling the ward',
 				'The bill is made every day, not on the last day',
 				'Send the patient home without a long wait',
 			),
-			'image'   => $up . 'beds-wash.webp',
-			'cutout'  => false,
-			'cta'     => 'See IPD management software',
+			'image' => $up . 'beds-wash.webp',
+			'cutout' => false,
+			'cta' => 'See IPD management software',
 		),
 		array(
-			'id'      => 82741,
-			'key'     => 'billing',
+			'id' => 82741,
+			'key' => 'billing',
 			'eyebrow' => 'For your billing counter',
-			'title'   => 'Hospital Billing Software',
+			'title' => 'Hospital Billing Software',
 			'summary' => 'Make every bill of your hospital in one software: OPD bill, IPD bill and cashless TPA bill. Lab, pharmacy and room charges are added to the bill by themselves.',
-			'points'  => array(
+			'points' => array(
 				'Room rent is added every night at the ward\'s rate',
 				'One report shows what was given but not billed',
 				'The right rate for cash, TPA and company patients',
 			),
-			'image'   => $up . 'bc-ipd.webp',
-			'cutout'  => false,
-			'cta'     => 'See hospital billing software',
+			'image' => $up . 'bc-ipd.webp',
+			'cutout' => false,
+			'cta' => 'See hospital billing software',
+		),
+		array(
+			'id' => 82798,
+			'key' => 'tpa',
+			'eyebrow' => 'For your TPA and insurance desk',
+			'title' => 'TPA & Insurance Management Software',
+			'summary' => 'Every cashless patient in one list: the TPA, the insurance company, the claim number and whether it is paid or still due. Each cashless bill is made at that TPA\'s own rate list.',
+			'points' => array(
+				'Every cashless patient in one list, paid or due',
+				'Each TPA\'s bill made at its own rate list',
+				'See what is pending and follow up before it ages',
+			),
+			'image' => $up . 's4-list.webp',
+			'cutout' => false,
+			'cta' => 'See TPA & insurance software',
 		),
 	);
 }
@@ -1420,20 +1435,20 @@ function healthray_module_cards($hub_id = 0)
 	}
 
 	$cards = array();
-	$seen  = array($hub_id => true);
+	$seen = array($hub_id => true);
 
 	foreach (healthray_modules_registry() as $module) {
 		if ('publish' !== get_post_status($module['id'])) {
 			continue;
 		}
-		$module['url']        = get_permalink($module['id']);
-		$cards[]              = $module;
+		$module['url'] = get_permalink($module['id']);
+		$cards[] = $module;
 		$seen[$module['id']] = true;
 	}
 
 	if ($hub_id) {
 		$children = get_pages(array(
-			'parent'      => $hub_id,
+			'parent' => $hub_id,
 			'post_status' => 'publish',
 			'sort_column' => 'menu_order,post_title',
 		));
@@ -1442,18 +1457,18 @@ function healthray_module_cards($hub_id = 0)
 				continue;
 			}
 			$summary = has_excerpt($child->ID) ? get_the_excerpt($child->ID) : (string) get_post_meta($child->ID, '_yoast_wpseo_metadesc', true);
-			$title   = get_the_title($child->ID);
+			$title = get_the_title($child->ID);
 			$cards[] = array(
-				'id'      => $child->ID,
-				'key'     => $child->post_name,
+				'id' => $child->ID,
+				'key' => $child->post_name,
 				'eyebrow' => '',
-				'title'   => $title,
+				'title' => $title,
 				'summary' => wp_strip_all_tags($summary),
-				'points'  => array(),
-				'image'   => (string) get_the_post_thumbnail_url($child->ID, 'large'),
-				'cutout'  => false,
-				'cta'     => 'See ' . $title,
-				'url'     => get_permalink($child->ID),
+				'points' => array(),
+				'image' => (string) get_the_post_thumbnail_url($child->ID, 'large'),
+				'cutout' => false,
+				'cta' => 'See ' . $title,
+				'url' => get_permalink($child->ID),
 			);
 			$seen[$child->ID] = true;
 		}
@@ -1466,10 +1481,10 @@ function healthray_module_cards($hub_id = 0)
 function healthray_modules_faq_items()
 {
 	return array(
-		array('q' => 'What is a Healthray module?', 'a' => 'A module is one part of Healthray\'s hospital software, made for one kind of work, like the OPD, the wards (IPD) or the billing counter. All modules work on the same patient file, so a patient\'s visits, reports and bills stay together.',),
-		array('q' => 'Can we start with just one module?', 'a' => 'Yes. A clinic can use the OPD part alone. A hospital adds IPD, lab, pharmacy and TPA in the same software when it needs them.',),
-		array('q' => 'What is the price?', 'a' => 'There is no one fixed price. It depends on which modules you want, how many doctors or beds you have, and whether you want it on the internet (cloud) or on your own server. After the demo we send you the price in writing. Moving your old data and training your staff are included.',),
-		array('q' => 'How long does it take to start?', 'a' => 'A clinic starts in a few days. Even a 200-bed hospital usually starts in one to three weeks. OPD and registration go live first, so the counter never stops.',),
+		array('q' => 'What is a Healthray module?', 'a' => 'A module is one part of Healthray\'s hospital software, made for one kind of work, like the OPD, the wards (IPD) or the billing counter. All modules work on the same patient file, so a patient\'s visits, reports and bills stay together.', ),
+		array('q' => 'Can we start with just one module?', 'a' => 'Yes. A clinic can use the OPD part alone. A hospital adds IPD, lab, pharmacy and TPA in the same software when it needs them.', ),
+		array('q' => 'What is the price?', 'a' => 'There is no one fixed price. It depends on which modules you want, how many doctors or beds you have, and whether you want it on the internet (cloud) or on your own server. After the demo we send you the price in writing. Moving your old data and training your staff are included.', ),
+		array('q' => 'How long does it take to start?', 'a' => 'A clinic starts in a few days. Even a 200-bed hospital usually starts in one to three weeks. OPD and registration go live first, so the counter never stops.', ),
 	);
 }
 
@@ -1477,14 +1492,14 @@ function healthray_modules_faq_items()
 function healthray_billing_faq_items()
 {
 	return array(
-		array('q' => 'Does it work for TPA, cashless and Ayushman (PM-JAY) patients?', 'a' => 'Yes. The insurance company and policy number are noted at admission. All cashless patients come in one list with their claim status. Ayushman patients are billed in the same software.',),
-		array('q' => 'Does it make GST bills?', 'a' => 'Yes. You can add GST to the services that need it. The bill shows GST on each line, and the Item Wise Tax report gives the month\'s total for your accountant.',),
-		array('q' => 'How much does hospital billing software cost in India?', 'a' => 'There is no fixed price. It depends on your number of beds, the departments you use, and whether you use it online or on your own computer (server). After the free demo, you get your price in writing within 24 hours.',),
-		array('q' => 'Does it connect with Tally?', 'a' => 'Yes. Healthray connects with Tally. In the demo, ask us to show how your bills go into Tally.',),
-		array('q' => 'Who can change or cancel a bill?', 'a' => 'Only the staff you allow. Each person has their own login with OTP and sees only the screens for their job. Every change is saved with the person\'s name and the time, and the Bill/Receipt Log report shows it.',),
-		array('q' => 'Can bills print in our hospital\'s format?', 'a' => 'Yes. The IPD bill has 13 print formats, such as the cashless bill, summary bill, package detail and date-wise bill. The bill can also be sent on WhatsApp or email.',),
-		array('q' => 'Is there a free download of hospital billing software?', 'a' => 'You do not need to download anything. Healthray opens in Chrome or any internet browser on the computers you already have. The demo is free.',),
-		array('q' => 'If we stop using Healthray, do we get our data?', 'a' => 'Yes. We give you all your data within 30 days. We give this promise in writing, as per India\'s data law (DPDP Act, 2023). Your data is kept in India, or on your own computer inside the hospital.',),
+		array('q' => 'Does it work for TPA, cashless and Ayushman (PM-JAY) patients?', 'a' => 'Yes. The insurance company and policy number are noted at admission. All cashless patients come in one list with their claim status. Ayushman patients are billed in the same software.', ),
+		array('q' => 'Does it make GST bills?', 'a' => 'Yes. You can add GST to the services that need it. The bill shows GST on each line, and the Item Wise Tax report gives the month\'s total for your accountant.', ),
+		array('q' => 'How much does hospital billing software cost in India?', 'a' => 'There is no fixed price. It depends on your number of beds, the departments you use, and whether you use it online or on your own computer (server). After the free demo, you get your price in writing within 24 hours.', ),
+		array('q' => 'Does it connect with Tally?', 'a' => 'Yes. Healthray connects with Tally. In the demo, ask us to show how your bills go into Tally.', ),
+		array('q' => 'Who can change or cancel a bill?', 'a' => 'Only the staff you allow. Each person has their own login with OTP and sees only the screens for their job. Every change is saved with the person\'s name and the time, and the Bill/Receipt Log report shows it.', ),
+		array('q' => 'Can bills print in our hospital\'s format?', 'a' => 'Yes. The IPD bill has 13 print formats, such as the cashless bill, summary bill, package detail and date-wise bill. The bill can also be sent on WhatsApp or email.', ),
+		array('q' => 'Is there a free download of hospital billing software?', 'a' => 'You do not need to download anything. Healthray opens in Chrome or any internet browser on the computers you already have. The demo is free.', ),
+		array('q' => 'If we stop using Healthray, do we get our data?', 'a' => 'Yes. We give you all your data within 30 days. We give this promise in writing, as per India\'s data law (DPDP Act, 2023). Your data is kept in India, or on your own computer inside the hospital.', ),
 	);
 }
 
@@ -1492,14 +1507,14 @@ function healthray_billing_faq_items()
 function healthray_abdm_faq_items()
 {
 	return array(
-		array('q' => 'What is ABDM?', 'a' => "ABDM, the Ayushman Bharat Digital Mission, is the Government of India's programme to build a connected digital health ecosystem. It gives every resident a free ABHA health ID, keeps national registries of doctors (HPR) and health facilities (HFR), and lets health records move between providers with the patient's consent.",),
-		array('q' => 'When was ABDM launched and who runs it?', 'a' => 'Prime Minister Narendra Modi launched ABDM nationwide on 27 September 2021. It started as a pilot, the National Digital Health Mission, in six union territories in August 2020. The National Health Authority (NHA), under the Ministry of Health and Family Welfare, implements it.',),
-		array('q' => 'What does ABDM integration mean for a hospital or clinic?', 'a' => "It means your hospital software can create and verify patients' ABHA numbers, link the records you create to those ABHA numbers, and share or receive records through ABDM with the patient's consent. Your facility is listed on the Health Facility Registry and your doctors on the Healthcare Professionals Registry.",),
-		array('q' => 'What are ABDM milestones M1, M2 and M3?', 'a' => 'They are the three stages of ABDM integration for software. M1 covers creating and verifying ABHA numbers at registration. M2 makes your facility a Health Information Provider: the records you create are linked to the ABHA and can be shared. M3 makes it a Health Information User: with consent, you can request and view records created by other providers.',),
-		array('q' => "Does ABDM store patients' medical records centrally?", 'a' => 'No. ABDM uses a federated design: records stay with the hospital, clinic or lab that created them. ABDM only routes a record from one provider to another when the patient approves the request through the consent manager.',),
-		array('q' => 'Can patient records be shared through ABDM without consent?', 'a' => 'No. Every request to see a patient\'s records needs the patient\'s consent, given in the ABHA app or another approved app. The patient can choose which records to share, set how long access lasts and withdraw consent at any time.',),
-		array('q' => 'Do hospitals get incentives for using ABDM?', 'a' => 'Yes. Under the Digital Health Incentive Scheme (DHIS), eligible hospitals, clinics, labs and digital solution companies earn incentives for health records linked to ABHA numbers, above a baseline set by the scheme. See our DHIS page for how the scheme works.',),
-		array('q' => 'Is Healthray ABDM compliant?', 'a' => 'Yes. Healthray is NHA approved and ABDM compliant. ABHA creation and verification, and linking records to the patient\'s ABHA, are part of the normal OPD and IPD workflow, so your staff do not need a separate portal or a second login.',),
+		array('q' => 'What is ABDM?', 'a' => "ABDM, the Ayushman Bharat Digital Mission, is the Government of India's programme to build a connected digital health ecosystem. It gives every resident a free ABHA health ID, keeps national registries of doctors (HPR) and health facilities (HFR), and lets health records move between providers with the patient's consent.", ),
+		array('q' => 'When was ABDM launched and who runs it?', 'a' => 'Prime Minister Narendra Modi launched ABDM nationwide on 27 September 2021. It started as a pilot, the National Digital Health Mission, in six union territories in August 2020. The National Health Authority (NHA), under the Ministry of Health and Family Welfare, implements it.', ),
+		array('q' => 'What does ABDM integration mean for a hospital or clinic?', 'a' => "It means your hospital software can create and verify patients' ABHA numbers, link the records you create to those ABHA numbers, and share or receive records through ABDM with the patient's consent. Your facility is listed on the Health Facility Registry and your doctors on the Healthcare Professionals Registry.", ),
+		array('q' => 'What are ABDM milestones M1, M2 and M3?', 'a' => 'They are the three stages of ABDM integration for software. M1 covers creating and verifying ABHA numbers at registration. M2 makes your facility a Health Information Provider: the records you create are linked to the ABHA and can be shared. M3 makes it a Health Information User: with consent, you can request and view records created by other providers.', ),
+		array('q' => "Does ABDM store patients' medical records centrally?", 'a' => 'No. ABDM uses a federated design: records stay with the hospital, clinic or lab that created them. ABDM only routes a record from one provider to another when the patient approves the request through the consent manager.', ),
+		array('q' => 'Can patient records be shared through ABDM without consent?', 'a' => 'No. Every request to see a patient\'s records needs the patient\'s consent, given in the ABHA app or another approved app. The patient can choose which records to share, set how long access lasts and withdraw consent at any time.', ),
+		array('q' => 'Do hospitals get incentives for using ABDM?', 'a' => 'Yes. Under the Digital Health Incentive Scheme (DHIS), eligible hospitals, clinics, labs and digital solution companies earn incentives for health records linked to ABHA numbers, above a baseline set by the scheme. See our DHIS page for how the scheme works.', ),
+		array('q' => 'Is Healthray ABDM compliant?', 'a' => 'Yes. Healthray is NHA approved and ABDM compliant. ABHA creation and verification, and linking records to the patient\'s ABHA, are part of the normal OPD and IPD workflow, so your staff do not need a separate portal or a second login.', ),
 	);
 }
 
@@ -1507,16 +1522,16 @@ function healthray_abdm_faq_items()
 function healthray_abha_faq_items()
 {
 	return array(
-		array('q' => 'What is the Ayushman Bharat Health Account (ABHA)?', 'a' => 'ABHA is a free health ID from the Government of India, part of the Ayushman Bharat Digital Mission (ABDM). It has a 14-digit ABHA number and an ABHA address such as name@abdm, and it links the records that hospitals, clinics and labs create for you, so you can see them and share them with consent.',),
-		array('q' => 'How do I create an ABHA card online?', 'a' => 'Enter your Aadhaar number in the form on this page, verify the OTP sent to your Aadhaar-linked mobile, confirm the mobile number for ABHA messages, choose your ABHA address and download the card. You can also create it on abha.abdm.gov.in or in the ABHA app.',),
-		array('q' => 'Which documents are needed for ABHA registration?', 'a' => "Your Aadhaar number and the mobile phone linked to it, for the OTP. If you don't have Aadhaar, the official portal also accepts a driving licence. You don't need a PAN card, bank account, income certificate or caste certificate.",),
-		array('q' => 'Is the ABHA card free?', 'a' => 'Yes. Creating an ABHA costs nothing, whether you create it on this page, on the government portal or in the ABHA app.',),
-		array('q' => 'What is the difference between an ABHA number and an ABHA address?', 'a' => 'The ABHA number is a 14-digit number that identifies you and is printed on your ABHA card. The ABHA address is a username you choose, such as name@abdm, that you use to sign in to health apps and share records.',),
-		array('q' => 'Is the ABHA card the same as the Ayushman card?', 'a' => 'No. ABHA is a health ID that links your records, and any resident of India can create one. The Ayushman card is for PM-JAY, the government health cover of up to ₹5 lakh per family per year, which only eligible families and citizens aged 70 or above get. An ABHA alone does not give you PM-JAY cover.',),
-		array('q' => 'Is my health data safe with ABHA?', 'a' => 'ABDM does not keep your records in one central database. They stay with the hospitals and labs that created them, and they reach another provider only when you approve the request. You choose which records to share and for how long, and you can withdraw consent at any time.',),
-		array('q' => 'Is ABHA mandatory?', 'a' => 'No. ABHA is voluntary. You can deactivate or delete your ABHA later if you no longer want it.',),
-		array('q' => 'I already have an ABHA. How do I find it?', 'a' => 'Choose Mobile Number in the form on this page and verify the OTP: the ABHA addresses linked to your mobile number are listed. You can also sign in on abha.abdm.gov.in to download your card again.',),
-		array('q' => 'Can a hospital create an ABHA for its patients?', 'a' => "Yes. Hospitals and clinics connected to ABDM can create or verify a patient's ABHA at registration. Healthray does this inside its OPD and IPD software, so the front desk does not need a separate portal.",),
+		array('q' => 'What is the Ayushman Bharat Health Account (ABHA)?', 'a' => 'ABHA is a free health ID from the Government of India, part of the Ayushman Bharat Digital Mission (ABDM). It has a 14-digit ABHA number and an ABHA address such as name@abdm, and it links the records that hospitals, clinics and labs create for you, so you can see them and share them with consent.', ),
+		array('q' => 'How do I create an ABHA card online?', 'a' => 'Enter your Aadhaar number in the form on this page, verify the OTP sent to your Aadhaar-linked mobile, confirm the mobile number for ABHA messages, choose your ABHA address and download the card. You can also create it on abha.abdm.gov.in or in the ABHA app.', ),
+		array('q' => 'Which documents are needed for ABHA registration?', 'a' => "Your Aadhaar number and the mobile phone linked to it, for the OTP. If you don't have Aadhaar, the official portal also accepts a driving licence. You don't need a PAN card, bank account, income certificate or caste certificate.", ),
+		array('q' => 'Is the ABHA card free?', 'a' => 'Yes. Creating an ABHA costs nothing, whether you create it on this page, on the government portal or in the ABHA app.', ),
+		array('q' => 'What is the difference between an ABHA number and an ABHA address?', 'a' => 'The ABHA number is a 14-digit number that identifies you and is printed on your ABHA card. The ABHA address is a username you choose, such as name@abdm, that you use to sign in to health apps and share records.', ),
+		array('q' => 'Is the ABHA card the same as the Ayushman card?', 'a' => 'No. ABHA is a health ID that links your records, and any resident of India can create one. The Ayushman card is for PM-JAY, the government health cover of up to ₹5 lakh per family per year, which only eligible families and citizens aged 70 or above get. An ABHA alone does not give you PM-JAY cover.', ),
+		array('q' => 'Is my health data safe with ABHA?', 'a' => 'ABDM does not keep your records in one central database. They stay with the hospitals and labs that created them, and they reach another provider only when you approve the request. You choose which records to share and for how long, and you can withdraw consent at any time.', ),
+		array('q' => 'Is ABHA mandatory?', 'a' => 'No. ABHA is voluntary. You can deactivate or delete your ABHA later if you no longer want it.', ),
+		array('q' => 'I already have an ABHA. How do I find it?', 'a' => 'Choose Mobile Number in the form on this page and verify the OTP: the ABHA addresses linked to your mobile number are listed. You can also sign in on abha.abdm.gov.in to download your card again.', ),
+		array('q' => 'Can a hospital create an ABHA for its patients?', 'a' => "Yes. Hospitals and clinics connected to ABDM can create or verify a patient's ABHA at registration. Healthray does this inside its OPD and IPD software, so the front desk does not need a separate portal.", ),
 	);
 }
 
@@ -1525,15 +1540,15 @@ function healthray_abha_faq_items()
 function healthray_dhis_faq_items()
 {
 	return array(
-		array('q' => 'What is the Digital Health Incentive Scheme (DHIS)?', 'a' => "DHIS is a National Health Authority scheme under the Ayushman Bharat Digital Mission. Since 1 January 2023 it has paid health facilities and digital solution companies a fixed amount for each eligible digital health transaction, such as a record linked to a patient's ABHA, above a threshold of 100 a month.",),
-		array('q' => 'Who is eligible for DHIS?', 'a' => 'Public and private health facilities registered on the Health Facility Registry, including hospitals, clinics, nursing homes, labs, diagnostic centres and pharmacies, of any size. Digital solution companies can also claim for transactions done in their software, if at least 10 of their facilities link records in a month.',),
-		array('q' => 'How much incentive does a hospital get under DHIS?', 'a' => "For April to September 2026, NHA's Corrigendum 7 pays a health facility ₹10 for each discharge summary or diagnostic report and ₹5 for each other record, such as a prescription, linked to a KYC-verified ABHA, above the first 100 eligible transactions in the month. Digital solution companies get half these amounts.",),
-		array('q' => 'What is the minimum number of transactions for DHIS?', 'a' => '100 eligible transactions a month. At 100 or fewer, neither the facility nor its software company is paid. Above that, the value of the first 100 is deducted from the total, starting with the lowest-paying records.',),
-		array('q' => 'What counts as an eligible DHIS transaction?', 'a' => 'Mainly a health record linked to a KYC-verified ABHA address, counted at most once a day and five times a month for the same ABHA. Records shared after a consent request, and PM-JAY claims filed through NHCX, have their own rates. Scan & Share and health-locker transactions earn no record-linking incentive.',),
-		array('q' => 'How do I register my hospital for DHIS?', 'a' => "Register the facility on the Health Facility Registry, then register for DHIS from the facility's HFR account with the bank account details for payment. Use software that links records to patients' ABHA, such as Healthray, and submit a claim each month.",),
-		array('q' => 'Do software companies get DHIS incentives?', 'a' => 'Yes. For facilities using its software, a digital solution company earns ₹5 per discharge summary or diagnostic report and ₹2.50 per other record above the threshold, and ₹10 for each PM-JAY claim raised through NHCX in its software.',),
-		array('q' => 'Has DHIS been extended?', 'a' => 'Yes. NHA has extended and revised the scheme several times since it started in January 2023. The latest published revision, Corrigendum 7 of 9 April 2026, covers transactions from April to September 2026. Check abdm.gov.in/dhis for the rules for later months.',),
-		array('q' => 'How does Healthray help hospitals earn DHIS incentives?', 'a' => "Healthray is NHA approved and ABDM compliant. It creates and verifies ABHA at registration and links prescriptions, lab reports and discharge summaries to the patient's ABHA inside the normal OPD and IPD workflow. Those are the records DHIS pays for.",),
+		array('q' => 'What is the Digital Health Incentive Scheme (DHIS)?', 'a' => "DHIS is a National Health Authority scheme under the Ayushman Bharat Digital Mission. Since 1 January 2023 it has paid health facilities and digital solution companies a fixed amount for each eligible digital health transaction, such as a record linked to a patient's ABHA, above a threshold of 100 a month.", ),
+		array('q' => 'Who is eligible for DHIS?', 'a' => 'Public and private health facilities registered on the Health Facility Registry, including hospitals, clinics, nursing homes, labs, diagnostic centres and pharmacies, of any size. Digital solution companies can also claim for transactions done in their software, if at least 10 of their facilities link records in a month.', ),
+		array('q' => 'How much incentive does a hospital get under DHIS?', 'a' => "For April to September 2026, NHA's Corrigendum 7 pays a health facility ₹10 for each discharge summary or diagnostic report and ₹5 for each other record, such as a prescription, linked to a KYC-verified ABHA, above the first 100 eligible transactions in the month. Digital solution companies get half these amounts.", ),
+		array('q' => 'What is the minimum number of transactions for DHIS?', 'a' => '100 eligible transactions a month. At 100 or fewer, neither the facility nor its software company is paid. Above that, the value of the first 100 is deducted from the total, starting with the lowest-paying records.', ),
+		array('q' => 'What counts as an eligible DHIS transaction?', 'a' => 'Mainly a health record linked to a KYC-verified ABHA address, counted at most once a day and five times a month for the same ABHA. Records shared after a consent request, and PM-JAY claims filed through NHCX, have their own rates. Scan & Share and health-locker transactions earn no record-linking incentive.', ),
+		array('q' => 'How do I register my hospital for DHIS?', 'a' => "Register the facility on the Health Facility Registry, then register for DHIS from the facility's HFR account with the bank account details for payment. Use software that links records to patients' ABHA, such as Healthray, and submit a claim each month.", ),
+		array('q' => 'Do software companies get DHIS incentives?', 'a' => 'Yes. For facilities using its software, a digital solution company earns ₹5 per discharge summary or diagnostic report and ₹2.50 per other record above the threshold, and ₹10 for each PM-JAY claim raised through NHCX in its software.', ),
+		array('q' => 'Has DHIS been extended?', 'a' => 'Yes. NHA has extended and revised the scheme several times since it started in January 2023. The latest published revision, Corrigendum 7 of 9 April 2026, covers transactions from April to September 2026. Check abdm.gov.in/dhis for the rules for later months.', ),
+		array('q' => 'How does Healthray help hospitals earn DHIS incentives?', 'a' => "Healthray is NHA approved and ABDM compliant. It creates and verifies ABHA at registration and links prescriptions, lab reports and discharge summaries to the patient's ABHA inside the normal OPD and IPD workflow. Those are the records DHIS pays for.", ),
 	);
 }
 
@@ -1541,15 +1556,15 @@ function healthray_dhis_faq_items()
 function healthray_pmjay_faq_items()
 {
 	return array(
-		array('q' => 'What is PMJAY?', 'a' => "PMJAY, or Ayushman Bharat Pradhan Mantri Jan Arogya Yojana, is the Government of India's health assurance scheme. It gives eligible families cashless hospital treatment of up to ₹5 lakh per family per year at government and empanelled private hospitals. It was launched on 23 September 2018 and is run by the National Health Authority.",),
-		array('q' => 'Who is eligible for PMJAY?', 'a' => 'Families identified through the rural deprivation and urban occupation criteria of SECC 2011, families active under the earlier RSBY scheme and families added by their state. Every citizen aged 70 or above is also eligible, whatever their income.',),
-		array('q' => 'How can I check if my name is in the PMJAY list?', 'a' => "Check on beneficiary.nha.gov.in or in the Ayushman app, ask at an empanelled hospital's Ayushman Bharat help desk, or call the PM-JAY helpline on 14555.",),
-		array('q' => 'How do I get an Ayushman card?', 'a' => 'Once your eligibility is confirmed, complete eKYC with your Aadhaar on beneficiary.nha.gov.in or in the Ayushman app and download the card. Arogya Mitras at empanelled hospitals and Common Service Centres can also make it for you.',),
-		array('q' => 'How much cover does PMJAY give?', 'a' => 'Up to ₹5 lakh per family per year, for secondary and tertiary hospital care. Any member of the family can use it, and there is no limit on family size or age.',),
-		array('q' => 'Are pre-existing diseases covered under PMJAY?', 'a' => 'Yes. Pre-existing illnesses are covered from the first day.',),
-		array('q' => 'Are senior citizens aged 70 and above covered under PMJAY?', 'a' => 'Yes. Since October 2024, every citizen aged 70 or above can get cover of up to ₹5 lakh a year through the Ayushman Vay Vandana card, whatever their income. Those whose families are already covered get a separate top-up of up to ₹5 lakh a year for themselves.',),
-		array('q' => 'Can I use PMJAY in another state or at a private hospital?', 'a' => 'Yes. Covered treatment is cashless at any empanelled hospital in India, government or private, including hospitals in other states.',),
-		array('q' => 'Is the Ayushman card the same as the ABHA card?', 'a' => 'No. The Ayushman card shows that you are covered under PM-JAY. The ABHA card is a free health ID that any resident can create to link their medical records. An ABHA does not give you PM-JAY cover.',),
+		array('q' => 'What is PMJAY?', 'a' => "PMJAY, or Ayushman Bharat Pradhan Mantri Jan Arogya Yojana, is the Government of India's health assurance scheme. It gives eligible families cashless hospital treatment of up to ₹5 lakh per family per year at government and empanelled private hospitals. It was launched on 23 September 2018 and is run by the National Health Authority.", ),
+		array('q' => 'Who is eligible for PMJAY?', 'a' => 'Families identified through the rural deprivation and urban occupation criteria of SECC 2011, families active under the earlier RSBY scheme and families added by their state. Every citizen aged 70 or above is also eligible, whatever their income.', ),
+		array('q' => 'How can I check if my name is in the PMJAY list?', 'a' => "Check on beneficiary.nha.gov.in or in the Ayushman app, ask at an empanelled hospital's Ayushman Bharat help desk, or call the PM-JAY helpline on 14555.", ),
+		array('q' => 'How do I get an Ayushman card?', 'a' => 'Once your eligibility is confirmed, complete eKYC with your Aadhaar on beneficiary.nha.gov.in or in the Ayushman app and download the card. Arogya Mitras at empanelled hospitals and Common Service Centres can also make it for you.', ),
+		array('q' => 'How much cover does PMJAY give?', 'a' => 'Up to ₹5 lakh per family per year, for secondary and tertiary hospital care. Any member of the family can use it, and there is no limit on family size or age.', ),
+		array('q' => 'Are pre-existing diseases covered under PMJAY?', 'a' => 'Yes. Pre-existing illnesses are covered from the first day.', ),
+		array('q' => 'Are senior citizens aged 70 and above covered under PMJAY?', 'a' => 'Yes. Since October 2024, every citizen aged 70 or above can get cover of up to ₹5 lakh a year through the Ayushman Vay Vandana card, whatever their income. Those whose families are already covered get a separate top-up of up to ₹5 lakh a year for themselves.', ),
+		array('q' => 'Can I use PMJAY in another state or at a private hospital?', 'a' => 'Yes. Covered treatment is cashless at any empanelled hospital in India, government or private, including hospitals in other states.', ),
+		array('q' => 'Is the Ayushman card the same as the ABHA card?', 'a' => 'No. The Ayushman card shows that you are covered under PM-JAY. The ABHA card is a free health ID that any resident can create to link their medical records. An ABHA does not give you PM-JAY cover.', ),
 	);
 }
 
@@ -1557,12 +1572,12 @@ function healthray_pmjay_faq_items()
 function healthray_awards_faq_items()
 {
 	return array(
-		array('q' => 'Is Healthray ABDM compliant?', 'a' => "Yes. Healthray is NHA approved and ABDM compliant. ABHA creation and verification, and linking records to the patient's ABHA, happen inside the normal OPD and IPD workflow, with no separate portal.",),
-		array('q' => 'Is Healthray NABH certified?', 'a' => 'Yes. Healthray is NABH-certified healthcare software, listed on the official portal of the National Accreditation Board for Hospitals & Healthcare Providers. For hospitals pursuing or maintaining NABH accreditation, it generates the documentation assessors look for as part of daily work.',),
-		array('q' => 'What security certifications does Healthray hold?', 'a' => 'Healthray is ISO 27001 certified for information security and is HIPAA compliant. Its application is security-audited by a CERT-In empanelled auditor, and it enforces role-based access control, encryption in transit and at rest, and complete audit logs.',),
-		array('q' => 'Which health data standards does Healthray support?', 'a' => 'Healthray uses HL7 and FHIR for interoperability and SNOMED CT and ICD-10/11 for clinical terminology and coding, so records can be exchanged with laboratories, insurers and other ABDM-connected providers.',),
-		array('q' => 'Is Healthray approved by the National Health Authority?', 'a' => 'Yes. Healthray is NHA approved under the Ayushman Bharat Digital Mission, so hospitals can create ABHA numbers and link health records through the ABDM ecosystem.',),
-		array('q' => 'How is Healthray rated by its users?', 'a' => 'Healthray is rated 4.8 out of 5 on Capterra and SoftwareSuggest and is used by 2,500+ hospitals, clinics, laboratories and pharmacies across India.',),
+		array('q' => 'Is Healthray ABDM compliant?', 'a' => "Yes. Healthray is NHA approved and ABDM compliant. ABHA creation and verification, and linking records to the patient's ABHA, happen inside the normal OPD and IPD workflow, with no separate portal.", ),
+		array('q' => 'Is Healthray NABH certified?', 'a' => 'Yes. Healthray is NABH-certified healthcare software, listed on the official portal of the National Accreditation Board for Hospitals & Healthcare Providers. For hospitals pursuing or maintaining NABH accreditation, it generates the documentation assessors look for as part of daily work.', ),
+		array('q' => 'What security certifications does Healthray hold?', 'a' => 'Healthray is ISO 27001 certified for information security and is HIPAA compliant. Its application is security-audited by a CERT-In empanelled auditor, and it enforces role-based access control, encryption in transit and at rest, and complete audit logs.', ),
+		array('q' => 'Which health data standards does Healthray support?', 'a' => 'Healthray uses HL7 and FHIR for interoperability and SNOMED CT and ICD-10/11 for clinical terminology and coding, so records can be exchanged with laboratories, insurers and other ABDM-connected providers.', ),
+		array('q' => 'Is Healthray approved by the National Health Authority?', 'a' => 'Yes. Healthray is NHA approved under the Ayushman Bharat Digital Mission, so hospitals can create ABHA numbers and link health records through the ABDM ecosystem.', ),
+		array('q' => 'How is Healthray rated by its users?', 'a' => 'Healthray is rated 4.8 out of 5 on Capterra and SoftwareSuggest and is used by 2,500+ hospitals, clinics, laboratories and pharmacies across India.', ),
 	);
 }
 
@@ -1570,14 +1585,14 @@ function healthray_awards_faq_items()
 function healthray_why_faq_items()
 {
 	return array(
-		array('q' => 'What makes Healthray different from other hospital software?', 'a' => 'Healthray runs the whole hospital on one platform - OPD, IPD, EMR and EHR, laboratory, pharmacy, billing and HR - instead of separate tools that do not talk to each other. One patient record flows across every department, and the platform is NHA approved, ABDM compliant and NABH certified.',),
-		array('q' => 'Does Healthray scale as our hospital grows?', 'a' => 'Yes. A single clinic can start with appointments and EMR, then switch on pharmacy, laboratory, IPD, billing and extra branches later on the same platform, without changing systems or re-entering data.',),
-		array('q' => 'How does Healthray help management make decisions?', 'a' => 'Real-time dashboards and MIS reports show occupancy, revenue, department performance and stock, so management can act on current data instead of month-old spreadsheets.',),
-		array('q' => 'Is Healthray ABDM compliant and secure?', 'a' => 'Yes. Healthray is NHA approved and ABDM compliant, ISO 27001 certified and HIPAA compliant, with role-based access, encryption and audit logs, and a security audit by a CERT-In empanelled auditor.',),
-		array('q' => 'Does Healthray handle medical billing and insurance claims?', 'a' => 'Yes. Healthray covers OPD and IPD billing, GST invoicing, TPA and insurance claims, and PM-JAY and government scheme workflows, with charges posting to the patient bill in real time.',),
-		array('q' => 'Which facilities use Healthray?', 'a' => 'Multi-speciality hospitals, hospital and clinic chains, diagnostic and laboratory centres, pharmacy networks, government and trust hospitals, and healthcare providers in India and the USA.',),
-		array('q' => 'How long does it take to go live?', 'a' => 'Most clinics go live in about a week; mid-size hospitals in one to three weeks, including data migration, configuration and staff training. A dedicated onboarding team handles the transition so care is never interrupted.',),
-		array('q' => 'Is there a free demo?', 'a' => 'Yes. You can book a free 30-minute demo on your own workflow, with no credit card and no commitment. Data migration and staff training are included with implementation.',),
+		array('q' => 'What makes Healthray different from other hospital software?', 'a' => 'Healthray runs the whole hospital on one platform - OPD, IPD, EMR and EHR, laboratory, pharmacy, billing and HR - instead of separate tools that do not talk to each other. One patient record flows across every department, and the platform is NHA approved, ABDM compliant and NABH certified.', ),
+		array('q' => 'Does Healthray scale as our hospital grows?', 'a' => 'Yes. A single clinic can start with appointments and EMR, then switch on pharmacy, laboratory, IPD, billing and extra branches later on the same platform, without changing systems or re-entering data.', ),
+		array('q' => 'How does Healthray help management make decisions?', 'a' => 'Real-time dashboards and MIS reports show occupancy, revenue, department performance and stock, so management can act on current data instead of month-old spreadsheets.', ),
+		array('q' => 'Is Healthray ABDM compliant and secure?', 'a' => 'Yes. Healthray is NHA approved and ABDM compliant, ISO 27001 certified and HIPAA compliant, with role-based access, encryption and audit logs, and a security audit by a CERT-In empanelled auditor.', ),
+		array('q' => 'Does Healthray handle medical billing and insurance claims?', 'a' => 'Yes. Healthray covers OPD and IPD billing, GST invoicing, TPA and insurance claims, and PM-JAY and government scheme workflows, with charges posting to the patient bill in real time.', ),
+		array('q' => 'Which facilities use Healthray?', 'a' => 'Multi-speciality hospitals, hospital and clinic chains, diagnostic and laboratory centres, pharmacy networks, government and trust hospitals, and healthcare providers in India and the USA.', ),
+		array('q' => 'How long does it take to go live?', 'a' => 'Most clinics go live in about a week; mid-size hospitals in one to three weeks, including data migration, configuration and staff training. A dedicated onboarding team handles the transition so care is never interrupted.', ),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. You can book a free 30-minute demo on your own workflow, with no credit card and no commitment. Data migration and staff training are included with implementation.', ),
 	);
 }
 
@@ -1585,14 +1600,14 @@ function healthray_why_faq_items()
 function healthray_telehealth_faq_items()
 {
 	return array(
-		array('q' => 'What are telehealth services?', 'a' => 'Telehealth, also called telemedicine, is the delivery of healthcare remotely using technology: a doctor consults a patient by video, audio or chat instead of in person. On Healthray, teleconsultation runs on the same system as your OPD and IPD.',),
-		array('q' => 'Is teleconsultation legal in India?', 'a' => "Yes. India's Telemedicine Practice Guidelines, approved in 2020, let a registered medical practitioner consult patients remotely by video, audio or text and issue an e-prescription, within the conditions the guidelines set.",),
-		array('q' => 'How does a patient join a teleconsultation?', 'a' => 'The patient books a slot, then joins from the patient portal or a link and connects with the doctor by video, audio or chat at the scheduled time.',),
-		array('q' => 'Can a doctor prescribe during a teleconsultation?', 'a' => "Yes. The doctor writes an e-prescription during the consultation, following the Telemedicine Practice Guidelines, and it is saved to the patient's record like any other visit.",),
-		array('q' => 'Is patient data secure during a telehealth visit?', 'a' => "Consultations and records are encrypted and access-controlled, data handling follows India's DPDP Act, and records link to the patient's ABHA and are shared only with the patient's consent.",),
-		array('q' => 'Does telehealth work with the rest of Healthray?', 'a' => 'Yes. A teleconsultation uses the same patient record, e-prescriptions, billing and reports as an in-person visit, so nothing is entered twice.',),
-		array('q' => 'What does a clinic or hospital need to start?', 'a' => 'An internet connection and the Healthray platform. Our team sets up teleconsultation inside your existing workflow and trains your staff.',),
-		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo and we will show teleconsultation on your own workflow. No credit card is required.',),
+		array('q' => 'What are telehealth services?', 'a' => 'Telehealth, also called telemedicine, is the delivery of healthcare remotely using technology: a doctor consults a patient by video, audio or chat instead of in person. On Healthray, teleconsultation runs on the same system as your OPD and IPD.', ),
+		array('q' => 'Is teleconsultation legal in India?', 'a' => "Yes. India's Telemedicine Practice Guidelines, approved in 2020, let a registered medical practitioner consult patients remotely by video, audio or text and issue an e-prescription, within the conditions the guidelines set.", ),
+		array('q' => 'How does a patient join a teleconsultation?', 'a' => 'The patient books a slot, then joins from the patient portal or a link and connects with the doctor by video, audio or chat at the scheduled time.', ),
+		array('q' => 'Can a doctor prescribe during a teleconsultation?', 'a' => "Yes. The doctor writes an e-prescription during the consultation, following the Telemedicine Practice Guidelines, and it is saved to the patient's record like any other visit.", ),
+		array('q' => 'Is patient data secure during a telehealth visit?', 'a' => "Consultations and records are encrypted and access-controlled, data handling follows India's DPDP Act, and records link to the patient's ABHA and are shared only with the patient's consent.", ),
+		array('q' => 'Does telehealth work with the rest of Healthray?', 'a' => 'Yes. A teleconsultation uses the same patient record, e-prescriptions, billing and reports as an in-person visit, so nothing is entered twice.', ),
+		array('q' => 'What does a clinic or hospital need to start?', 'a' => 'An internet connection and the Healthray platform. Our team sets up teleconsultation inside your existing workflow and trains your staff.', ),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo and we will show teleconsultation on your own workflow. No credit card is required.', ),
 	);
 }
 
@@ -1600,14 +1615,14 @@ function healthray_telehealth_faq_items()
 function healthray_patient_flow_faq_items()
 {
 	return array(
-		array('q' => 'What is patient flow management?', 'a' => 'Patient flow management is how a hospital moves patients through each stage of a visit - booking, registration, queueing, consultation, treatment, billing and follow-up - with as little waiting and as few bottlenecks as possible. Healthray coordinates every stage on one system.',),
-		array('q' => 'How does Healthray reduce patient waiting time?', 'a' => 'Online booking and reminders cut no-shows, token and queue management with a waiting-area display keeps the OPD moving, and real-time dashboards show where patients are waiting so staff can act.',),
-		array('q' => 'Does it cover the whole journey, before, during and after the visit?', 'a' => 'Yes. Pre-visit (booking, reminders, insurance check), the visit (registration, queue, consultation, prescriptions, beds) and post-visit (follow-up, claims, feedback and monitoring) all run on the same platform.',),
-		array('q' => 'Does it send appointment reminders?', 'a' => 'Yes. Patients get reminders before their appointment, and a new slot automatically if a doctor is unavailable, which reduces missed and wasted appointments.',),
-		array('q' => 'Can patients pay and claim insurance digitally?', 'a' => 'Yes. Healthray supports digital payments and TPA and insurance claims, including PM-JAY and government scheme workflows, so billing and reimbursement are faster.',),
-		array('q' => 'Does it manage beds and wards?', 'a' => 'Yes. Bed and ward management shows availability and assignments in real time, so admitted patients are placed faster.',),
-		array('q' => 'Does it include teleconsultation?', 'a' => 'Yes. Teleconsultation is part of the platform and uses the same patient record as an in-person visit.',),
-		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own workflow, with no credit card required.',),
+		array('q' => 'What is patient flow management?', 'a' => 'Patient flow management is how a hospital moves patients through each stage of a visit - booking, registration, queueing, consultation, treatment, billing and follow-up - with as little waiting and as few bottlenecks as possible. Healthray coordinates every stage on one system.', ),
+		array('q' => 'How does Healthray reduce patient waiting time?', 'a' => 'Online booking and reminders cut no-shows, token and queue management with a waiting-area display keeps the OPD moving, and real-time dashboards show where patients are waiting so staff can act.', ),
+		array('q' => 'Does it cover the whole journey, before, during and after the visit?', 'a' => 'Yes. Pre-visit (booking, reminders, insurance check), the visit (registration, queue, consultation, prescriptions, beds) and post-visit (follow-up, claims, feedback and monitoring) all run on the same platform.', ),
+		array('q' => 'Does it send appointment reminders?', 'a' => 'Yes. Patients get reminders before their appointment, and a new slot automatically if a doctor is unavailable, which reduces missed and wasted appointments.', ),
+		array('q' => 'Can patients pay and claim insurance digitally?', 'a' => 'Yes. Healthray supports digital payments and TPA and insurance claims, including PM-JAY and government scheme workflows, so billing and reimbursement are faster.', ),
+		array('q' => 'Does it manage beds and wards?', 'a' => 'Yes. Bed and ward management shows availability and assignments in real time, so admitted patients are placed faster.', ),
+		array('q' => 'Does it include teleconsultation?', 'a' => 'Yes. Teleconsultation is part of the platform and uses the same patient record as an in-person visit.', ),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own workflow, with no credit card required.', ),
 	);
 }
 
@@ -1615,14 +1630,14 @@ function healthray_patient_flow_faq_items()
 function healthray_patient_engagement_faq_items()
 {
 	return array(
-		array('q' => 'What is patient engagement software?', 'a' => 'Patient engagement software gives patients a portal and mobile app to take part in their own care: book appointments, get reminders, consult a doctor online, pay bills and read their prescriptions, lab reports and records. It runs on the same record your staff use.',),
-		array('q' => 'What can patients do with Healthray\'s patient engagement software?', 'a' => 'Book and reschedule appointments, get appointment and medicine reminders, consult doctors by video, audio or chat, message the care team, pay bills online, and view their prescriptions, lab reports and past visits.',),
-		array('q' => 'Is patient data secure?', 'a' => 'Yes. Healthray is ISO 27001 certified for information security and ABDM compliant. Each user has their own login, and every change to a record is saved with the user and the time.',),
-		array('q' => 'Can patients book appointments online?', 'a' => 'Yes. Patients book and reschedule from your website, Google or WhatsApp. If a doctor cancels, the next free slot is offered and the patient is notified at once.',),
-		array('q' => 'Does it support teleconsultation?', 'a' => 'Yes. Patients consult doctors by video, audio or chat, linked to the same patient record as an in-person visit, so nothing is entered twice.',),
-		array('q' => 'Can patients see their prescriptions, reports and bills?', 'a' => 'Yes. Prescriptions, lab reports, past visits and invoices sit in one place on the patient\'s phone, so they can follow their own health and their medical spend.',),
-		array('q' => 'Which languages does it support?', 'a' => 'Support is available in English, Hindi and Gujarati, and prescriptions can be printed in several Indian languages for the patient.',),
-		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own workflow, with no credit card required. Data migration and staff training are included.',),
+		array('q' => 'What is patient engagement software?', 'a' => 'Patient engagement software gives patients a portal and mobile app to take part in their own care: book appointments, get reminders, consult a doctor online, pay bills and read their prescriptions, lab reports and records. It runs on the same record your staff use.', ),
+		array('q' => 'What can patients do with Healthray\'s patient engagement software?', 'a' => 'Book and reschedule appointments, get appointment and medicine reminders, consult doctors by video, audio or chat, message the care team, pay bills online, and view their prescriptions, lab reports and past visits.', ),
+		array('q' => 'Is patient data secure?', 'a' => 'Yes. Healthray is ISO 27001 certified for information security and ABDM compliant. Each user has their own login, and every change to a record is saved with the user and the time.', ),
+		array('q' => 'Can patients book appointments online?', 'a' => 'Yes. Patients book and reschedule from your website, Google or WhatsApp. If a doctor cancels, the next free slot is offered and the patient is notified at once.', ),
+		array('q' => 'Does it support teleconsultation?', 'a' => 'Yes. Patients consult doctors by video, audio or chat, linked to the same patient record as an in-person visit, so nothing is entered twice.', ),
+		array('q' => 'Can patients see their prescriptions, reports and bills?', 'a' => 'Yes. Prescriptions, lab reports, past visits and invoices sit in one place on the patient\'s phone, so they can follow their own health and their medical spend.', ),
+		array('q' => 'Which languages does it support?', 'a' => 'Support is available in English, Hindi and Gujarati, and prescriptions can be printed in several Indian languages for the patient.', ),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own workflow, with no credit card required. Data migration and staff training are included.', ),
 	);
 }
 
@@ -1630,13 +1645,13 @@ function healthray_patient_engagement_faq_items()
 function healthray_medical_iot_faq_items()
 {
 	return array(
-		array('q' => 'What is medical IoT (IoMT)?', 'a' => 'The Internet of Medical Things is the idea of connecting the devices and systems a hospital uses so their data flows into one place, instead of sitting in separate machines and registers, ready for monitoring, analytics and quicker decisions.',),
-		array('q' => 'What does Healthray\'s medical IoT solution do?', 'a' => 'It holds the single patient record, exchanges data over open standards like HL7 and FHIR, supports remote monitoring through the patient app, and turns the data into charts and alerts on one dashboard.',),
-		array('q' => 'How does connected data help patient care?', 'a' => 'When readings and records come together in one place, staff can spot problems earlier and make quicker, better-informed decisions, with less manual data entry.',),
-		array('q' => 'Does it support remote patient monitoring?', 'a' => 'Yes. Patients share readings and consult from home through the patient app and teleconsultation, so your team can keep an eye on them between visits.',),
-		array('q' => 'Can it work with our existing systems and devices?', 'a' => 'Healthray exchanges data over the HL7 and FHIR standards rather than locking it in. Which specific systems and devices can be connected is scoped during the demo.',),
-		array('q' => 'Is the data secure?', 'a' => 'Yes. Healthray is ISO 27001 certified and ABDM compliant, with a separate login for every user, so connected data stays private and traceable.',),
-		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own workflow, with no credit card required.',),
+		array('q' => 'What is medical IoT (IoMT)?', 'a' => 'The Internet of Medical Things is the idea of connecting the devices and systems a hospital uses so their data flows into one place, instead of sitting in separate machines and registers, ready for monitoring, analytics and quicker decisions.', ),
+		array('q' => 'What does Healthray\'s medical IoT solution do?', 'a' => 'It holds the single patient record, exchanges data over open standards like HL7 and FHIR, supports remote monitoring through the patient app, and turns the data into charts and alerts on one dashboard.', ),
+		array('q' => 'How does connected data help patient care?', 'a' => 'When readings and records come together in one place, staff can spot problems earlier and make quicker, better-informed decisions, with less manual data entry.', ),
+		array('q' => 'Does it support remote patient monitoring?', 'a' => 'Yes. Patients share readings and consult from home through the patient app and teleconsultation, so your team can keep an eye on them between visits.', ),
+		array('q' => 'Can it work with our existing systems and devices?', 'a' => 'Healthray exchanges data over the HL7 and FHIR standards rather than locking it in. Which specific systems and devices can be connected is scoped during the demo.', ),
+		array('q' => 'Is the data secure?', 'a' => 'Yes. Healthray is ISO 27001 certified and ABDM compliant, with a separate login for every user, so connected data stays private and traceable.', ),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own workflow, with no credit card required.', ),
 	);
 }
 
@@ -1644,14 +1659,14 @@ function healthray_medical_iot_faq_items()
 function healthray_inventory_faq_items()
 {
 	return array(
-		array('q' => 'What is hospital inventory management software?', 'a' => 'It keeps track of everything a hospital buys and uses - medicines, consumables and equipment - across the pharmacy, wards and central store, recording what came in, what went out and what is left, all in one system.',),
-		array('q' => 'What does Healthray\'s inventory software track?', 'a' => 'Medicines, consumables and assets across the pharmacy, wards and stores, with quantities, locations, batches and expiry dates, plus purchase and supplier history.',),
-		array('q' => 'Does it handle GST billing?', 'a' => 'Yes. You can raise GST-ready invoices and purchase records, add a digital signature and export to PDF from the same screen.',),
-		array('q' => 'Does it alert on low stock and expiry?', 'a' => 'Yes. Automatic alerts warn you before an item runs out or reaches its expiry date, so you reorder in time and throw away less.',),
-		array('q' => 'Does it forecast demand?', 'a' => 'Yes. Healthray predicts how much of each item you will need from past usage, so you order the right quantity instead of overstocking or running out.',),
-		array('q' => 'Is it cloud-based and secure?', 'a' => 'Yes. It runs in the browser on the cloud and is ISO 27001 certified for information security, with a separate login for every user.',),
-		array('q' => 'Does it connect with the pharmacy and the hospital system?', 'a' => 'Yes. Inventory shares the same platform as the pharmacy and the hospital management system, so a medicine dispensed to a patient updates stock at once.',),
-		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own item list, with no credit card required. Data migration and staff training are included.',),
+		array('q' => 'What is hospital inventory management software?', 'a' => 'It keeps track of everything a hospital buys and uses - medicines, consumables and equipment - across the pharmacy, wards and central store, recording what came in, what went out and what is left, all in one system.', ),
+		array('q' => 'What does Healthray\'s inventory software track?', 'a' => 'Medicines, consumables and assets across the pharmacy, wards and stores, with quantities, locations, batches and expiry dates, plus purchase and supplier history.', ),
+		array('q' => 'Does it handle GST billing?', 'a' => 'Yes. You can raise GST-ready invoices and purchase records, add a digital signature and export to PDF from the same screen.', ),
+		array('q' => 'Does it alert on low stock and expiry?', 'a' => 'Yes. Automatic alerts warn you before an item runs out or reaches its expiry date, so you reorder in time and throw away less.', ),
+		array('q' => 'Does it forecast demand?', 'a' => 'Yes. Healthray predicts how much of each item you will need from past usage, so you order the right quantity instead of overstocking or running out.', ),
+		array('q' => 'Is it cloud-based and secure?', 'a' => 'Yes. It runs in the browser on the cloud and is ISO 27001 certified for information security, with a separate login for every user.', ),
+		array('q' => 'Does it connect with the pharmacy and the hospital system?', 'a' => 'Yes. Inventory shares the same platform as the pharmacy and the hospital management system, so a medicine dispensed to a patient updates stock at once.', ),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own item list, with no credit card required. Data migration and staff training are included.', ),
 	);
 }
 
@@ -1659,13 +1674,13 @@ function healthray_inventory_faq_items()
 function healthray_epr_faq_items()
 {
 	return array(
-		array('q' => 'What is electronic patient records software?', 'a' => 'It creates and manages the digital version of a patient\'s chart - their details, history, diagnoses, prescriptions, lab and radiology results, bills and discharge papers - in one place, and controls who can see it.',),
-		array('q' => 'How is EPR different from EMR and EHR?', 'a' => 'The electronic patient record is the digital chart itself. The EMR manages those records within one hospital or clinic, and the EHR shares them across a network. On Healthray all three use the same record.',),
-		array('q' => 'What is in an electronic patient record?', 'a' => 'Demographics, visit history, diagnoses, prescriptions, lab and radiology results, bills and discharge papers, all filed under one patient and visible to the right staff.',),
-		array('q' => 'Is the data secure?', 'a' => 'Yes. Healthray is ISO 27001 certified and ABDM compliant, with a login per user and a full audit trail, so records cannot be lost or read by the wrong person.',),
-		array('q' => 'Can records be shared between departments and hospitals?', 'a' => 'Yes. Records are exchanged across departments and hospitals over the HL7 and FHIR standards and ABDM, so care is not held up by missing history.',),
-		array('q' => 'Does it work for both hospitals and clinics?', 'a' => 'Yes. The same electronic patient records software suits a single clinic and a multi-department hospital, and grows with you.',),
-		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own workflow, with no credit card required. Data migration and staff training are included.',),
+		array('q' => 'What is electronic patient records software?', 'a' => 'It creates and manages the digital version of a patient\'s chart - their details, history, diagnoses, prescriptions, lab and radiology results, bills and discharge papers - in one place, and controls who can see it.', ),
+		array('q' => 'How is EPR different from EMR and EHR?', 'a' => 'The electronic patient record is the digital chart itself. The EMR manages those records within one hospital or clinic, and the EHR shares them across a network. On Healthray all three use the same record.', ),
+		array('q' => 'What is in an electronic patient record?', 'a' => 'Demographics, visit history, diagnoses, prescriptions, lab and radiology results, bills and discharge papers, all filed under one patient and visible to the right staff.', ),
+		array('q' => 'Is the data secure?', 'a' => 'Yes. Healthray is ISO 27001 certified and ABDM compliant, with a login per user and a full audit trail, so records cannot be lost or read by the wrong person.', ),
+		array('q' => 'Can records be shared between departments and hospitals?', 'a' => 'Yes. Records are exchanged across departments and hospitals over the HL7 and FHIR standards and ABDM, so care is not held up by missing history.', ),
+		array('q' => 'Does it work for both hospitals and clinics?', 'a' => 'Yes. The same electronic patient records software suits a single clinic and a multi-department hospital, and grows with you.', ),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own workflow, with no credit card required. Data migration and staff training are included.', ),
 	);
 }
 
@@ -1673,14 +1688,14 @@ function healthray_epr_faq_items()
 function healthray_medical_college_faq_items()
 {
 	return array(
-		array('q' => 'What is medical college software?', 'a' => 'It runs the administration of a medical college - admissions and fees, student records and attendance, timetables and academics, hostel, faculty and counselling - in one system instead of scattered registers and spreadsheets.',),
-		array('q' => 'What does Healthray\'s medical college software manage?', 'a' => 'Admissions and fees, student records and attendance, timetables, e-books and academics, hostel occupancy and finances, faculty duties and workload, and counselling, with an analytics dashboard over all of it.',),
-		array('q' => 'How does it integrate with the teaching hospital?', 'a' => 'The same platform that manages students also runs the teaching hospital, so students train on real cases, faculty track clinical rotations, and academic and clinical records stay in one place.',),
-		array('q' => 'Does it handle admissions and online fees?', 'a' => 'Yes. You can build admission forms and fee receipts, accept fees online and send reminders for what is due.',),
-		array('q' => 'Does it manage hostel and faculty?', 'a' => 'Yes. It tracks occupied and vacant rooms, room item lists, documents and hostel finances, and keeps a record and ledger for every professor and trainer with their duties and workload.',),
-		array('q' => 'Does it track attendance and clinical rotations?', 'a' => 'Yes. It records student and faculty attendance, builds timetables with AI help, and tracks each student\'s clinical rotation in the teaching hospital.',),
-		array('q' => 'Is college data secure?', 'a' => 'Yes. Healthray is ISO 27001 certified for information security, and each user has their own login, so college and student data stays protected.',),
-		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own setup, with no credit card required. Data migration and staff training are included.',),
+		array('q' => 'What is medical college software?', 'a' => 'It runs the administration of a medical college - admissions and fees, student records and attendance, timetables and academics, hostel, faculty and counselling - in one system instead of scattered registers and spreadsheets.', ),
+		array('q' => 'What does Healthray\'s medical college software manage?', 'a' => 'Admissions and fees, student records and attendance, timetables, e-books and academics, hostel occupancy and finances, faculty duties and workload, and counselling, with an analytics dashboard over all of it.', ),
+		array('q' => 'How does it integrate with the teaching hospital?', 'a' => 'The same platform that manages students also runs the teaching hospital, so students train on real cases, faculty track clinical rotations, and academic and clinical records stay in one place.', ),
+		array('q' => 'Does it handle admissions and online fees?', 'a' => 'Yes. You can build admission forms and fee receipts, accept fees online and send reminders for what is due.', ),
+		array('q' => 'Does it manage hostel and faculty?', 'a' => 'Yes. It tracks occupied and vacant rooms, room item lists, documents and hostel finances, and keeps a record and ledger for every professor and trainer with their duties and workload.', ),
+		array('q' => 'Does it track attendance and clinical rotations?', 'a' => 'Yes. It records student and faculty attendance, builds timetables with AI help, and tracks each student\'s clinical rotation in the teaching hospital.', ),
+		array('q' => 'Is college data secure?', 'a' => 'Yes. Healthray is ISO 27001 certified for information security, and each user has their own login, so college and student data stays protected.', ),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own setup, with no credit card required. Data migration and staff training are included.', ),
 	);
 }
 
@@ -1688,13 +1703,13 @@ function healthray_medical_college_faq_items()
 function healthray_doctor_app_faq_items()
 {
 	return array(
-		array('q' => 'What is the Healthray doctor mobile app?', 'a' => 'The Healthray doctor mobile app is the doctor\'s view of Healthray on a phone. It carries patient records, e-prescriptions, appointments, the OPD queue, lab and radiology reports, teleconsultation and your collections and doctor share into one app.',),
-		array('q' => 'Is the Healthray doctor mobile app free to download?', 'a' => 'Yes. The app is free to download on Android and iOS, and you sign in with your Healthray account. Book a free demo and our team will set you up.',),
-		array('q' => 'Which devices does the doctor mobile app support?', 'a' => 'The app works on Android phones from Google Play and on iPhones from the App Store, and it stays in sync with the web version you use at the hospital.',),
-		array('q' => 'Can I write e-prescriptions from the doctor mobile app?', 'a' => 'Yes. You can write and share e-prescriptions from your phone, and each one saves to the same patient record your front desk and pharmacy use.',),
-		array('q' => 'Is patient data on the doctor mobile app secure?', 'a' => 'Yes. Healthray is ISO 27001 certified and HIPAA compliant, and it is ABDM compliant and NHA approved, so patient data is protected to recognised standards.',),
-		array('q' => 'Does the doctor mobile app work with my existing Healthray system?', 'a' => 'Yes. The app shows the same records as your Healthray EMR and EHR, so what you see on your phone is what your team sees at the hospital. Data migration and staff training are included.',),
-		array('q' => 'How long does it take to get started with the doctor mobile app?', 'a' => 'Most hospitals start in 1 to 3 weeks. Data migration and staff training are included, and support is available 24x7 in English, Hindi and Gujarati.',),
+		array('q' => 'What is the Healthray doctor mobile app?', 'a' => 'The Healthray doctor mobile app is the doctor\'s view of Healthray on a phone. It carries patient records, e-prescriptions, appointments, the OPD queue, lab and radiology reports, teleconsultation and your collections and doctor share into one app.', ),
+		array('q' => 'Is the Healthray doctor mobile app free to download?', 'a' => 'Yes. The app is free to download on Android and iOS, and you sign in with your Healthray account. Book a free demo and our team will set you up.', ),
+		array('q' => 'Which devices does the doctor mobile app support?', 'a' => 'The app works on Android phones from Google Play and on iPhones from the App Store, and it stays in sync with the web version you use at the hospital.', ),
+		array('q' => 'Can I write e-prescriptions from the doctor mobile app?', 'a' => 'Yes. You can write and share e-prescriptions from your phone, and each one saves to the same patient record your front desk and pharmacy use.', ),
+		array('q' => 'Is patient data on the doctor mobile app secure?', 'a' => 'Yes. Healthray is ISO 27001 certified and HIPAA compliant, and it is ABDM compliant and NHA approved, so patient data is protected to recognised standards.', ),
+		array('q' => 'Does the doctor mobile app work with my existing Healthray system?', 'a' => 'Yes. The app shows the same records as your Healthray EMR and EHR, so what you see on your phone is what your team sees at the hospital. Data migration and staff training are included.', ),
+		array('q' => 'How long does it take to get started with the doctor mobile app?', 'a' => 'Most hospitals start in 1 to 3 weeks. Data migration and staff training are included, and support is available 24x7 in English, Hindi and Gujarati.', ),
 	);
 }
 
@@ -1702,13 +1717,13 @@ function healthray_doctor_app_faq_items()
 function healthray_patient_app_faq_items()
 {
 	return array(
-		array('q' => 'What is the Healthray patient mobile app?', 'a' => 'It is a free app for patients on Android and iOS. From their phone, patients can book appointments, get reminders, view their prescriptions, lab reports and bills, pay online, link their ABHA number and consult a doctor by video, audio or chat.',),
-		array('q' => 'Is the patient mobile app free to download?', 'a' => 'Yes. The app is free for patients on Google Play and the App Store. Your hospital runs it as part of Healthray, and data migration and staff training are included.',),
-		array('q' => 'Can patients link their ABHA number in the app?', 'a' => 'Yes. Patients can link their ABHA number and keep their health records in one place across providers. Healthray is ABDM compliant and NHA approved.',),
-		array('q' => 'Can patients book appointments and get reminders?', 'a' => 'Yes. Patients book and reschedule appointments from the app and get a reminder before each visit, plus medicine reminders that help them stay on their treatment.',),
-		array('q' => 'Can patients see their prescriptions and lab reports?', 'a' => 'Yes. Prescriptions, lab reports, past visits and bills sit in one place on the patient\'s phone, ready to read or share whenever they need them.',),
-		array('q' => 'Can patients pay bills and consult a doctor online?', 'a' => 'Yes. Bills are raised digitally and paid online in a click, and patients can consult doctors by video, audio or chat, all linked to the same record.',),
-		array('q' => 'Is patient data in the app secure?', 'a' => 'Yes. Healthray is ISO 27001 certified and HIPAA compliant, ABDM compliant and NABH certified, and you get 24x7 support in English, Hindi and Gujarati.',),
+		array('q' => 'What is the Healthray patient mobile app?', 'a' => 'It is a free app for patients on Android and iOS. From their phone, patients can book appointments, get reminders, view their prescriptions, lab reports and bills, pay online, link their ABHA number and consult a doctor by video, audio or chat.', ),
+		array('q' => 'Is the patient mobile app free to download?', 'a' => 'Yes. The app is free for patients on Google Play and the App Store. Your hospital runs it as part of Healthray, and data migration and staff training are included.', ),
+		array('q' => 'Can patients link their ABHA number in the app?', 'a' => 'Yes. Patients can link their ABHA number and keep their health records in one place across providers. Healthray is ABDM compliant and NHA approved.', ),
+		array('q' => 'Can patients book appointments and get reminders?', 'a' => 'Yes. Patients book and reschedule appointments from the app and get a reminder before each visit, plus medicine reminders that help them stay on their treatment.', ),
+		array('q' => 'Can patients see their prescriptions and lab reports?', 'a' => 'Yes. Prescriptions, lab reports, past visits and bills sit in one place on the patient\'s phone, ready to read or share whenever they need them.', ),
+		array('q' => 'Can patients pay bills and consult a doctor online?', 'a' => 'Yes. Bills are raised digitally and paid online in a click, and patients can consult doctors by video, audio or chat, all linked to the same record.', ),
+		array('q' => 'Is patient data in the app secure?', 'a' => 'Yes. Healthray is ISO 27001 certified and HIPAA compliant, ABDM compliant and NABH certified, and you get 24x7 support in English, Hindi and Gujarati.', ),
 	);
 }
 
@@ -1716,13 +1731,13 @@ function healthray_patient_app_faq_items()
 function healthray_billing_software_faq_items()
 {
 	return array(
-		array('q' => 'What is medical billing software?', 'a' => 'Medical billing software is the system a hospital or clinic uses to make its bills - OPD, IPD, cashless TPA and package bills - with GST applied only where it is due. In India it means the same as hospital billing software, not US-style insurance-claim submission.',),
-		array('q' => 'Is medical billing software the same as hospital billing software?', 'a' => 'Yes. In India both terms mean the software that prepares a hospital\'s own bills - OPD, IPD, cashless TPA and Ayushman bills with GST. Healthray runs all of them in one system linked to the patient record.',),
-		array('q' => 'How does Healthray stop missed charges?', 'a' => 'Lab, pharmacy and room charges are added to the bill automatically, and a Revenue Leakage report lists medicines and tests that were given but not billed, so your staff can recover them before the patient is discharged.',),
-		array('q' => 'Can it keep different rates for TPAs, companies and wards?', 'a' => 'Yes. You can keep separate rate lists per payer - cash, each TPA and each company - and per ward such as General, Private and ICU, and import them from Excel, so the right rate is applied on every bill.',),
-		array('q' => 'Does it handle GST and doctor shares?', 'a' => 'Yes. GST is applied only on the services that need it and comes with tax reports, and each doctor\'s share is calculated automatically from the services billed.',),
-		array('q' => 'What billing reports do I get?', 'a' => 'You get a collection report by mode - cash, UPI and card - a discount report that records the reason and the staff name, and the Revenue Leakage report, so you can see every amount collected and every charge missed.',),
-		array('q' => 'How long does it take to start, and what support is included?', 'a' => 'Most hospitals start in 1 to 3 weeks, with data migration and staff training included. You get 24x7 support in English, Hindi and Gujarati.',),
+		array('q' => 'What is medical billing software?', 'a' => 'Medical billing software is the system a hospital or clinic uses to make its bills - OPD, IPD, cashless TPA and package bills - with GST applied only where it is due. In India it means the same as hospital billing software, not US-style insurance-claim submission.', ),
+		array('q' => 'Is medical billing software the same as hospital billing software?', 'a' => 'Yes. In India both terms mean the software that prepares a hospital\'s own bills - OPD, IPD, cashless TPA and Ayushman bills with GST. Healthray runs all of them in one system linked to the patient record.', ),
+		array('q' => 'How does Healthray stop missed charges?', 'a' => 'Lab, pharmacy and room charges are added to the bill automatically, and a Revenue Leakage report lists medicines and tests that were given but not billed, so your staff can recover them before the patient is discharged.', ),
+		array('q' => 'Can it keep different rates for TPAs, companies and wards?', 'a' => 'Yes. You can keep separate rate lists per payer - cash, each TPA and each company - and per ward such as General, Private and ICU, and import them from Excel, so the right rate is applied on every bill.', ),
+		array('q' => 'Does it handle GST and doctor shares?', 'a' => 'Yes. GST is applied only on the services that need it and comes with tax reports, and each doctor\'s share is calculated automatically from the services billed.', ),
+		array('q' => 'What billing reports do I get?', 'a' => 'You get a collection report by mode - cash, UPI and card - a discount report that records the reason and the staff name, and the Revenue Leakage report, so you can see every amount collected and every charge missed.', ),
+		array('q' => 'How long does it take to start, and what support is included?', 'a' => 'Most hospitals start in 1 to 3 weeks, with data migration and staff training included. You get 24x7 support in English, Hindi and Gujarati.', ),
 	);
 }
 
@@ -1730,13 +1745,13 @@ function healthray_billing_software_faq_items()
 function healthray_billing_services_faq_items()
 {
 	return array(
-		array('q' => 'What does "medical billing services" mean with Healthray?', 'a' => 'It means your own billing team does the work inside Healthray\'s software, not an outside agency. Your team raises OPD and IPD bills, files cashless TPA and Ayushman claims, applies rate lists and GST, and tracks collections, all on the same record your clinical and front-desk staff use.',),
-		array('q' => 'Does Healthray do our billing for us?', 'a' => 'No. Healthray is software your own team runs. It builds bills from the patient record, files claims and produces reports, but your staff stays in control of every charge, discount and payment.',),
-		array('q' => 'What billing can our team handle in Healthray?', 'a' => 'Your team can raise OPD, IPD, cashless TPA and Ayushman bills, apply rate lists and GST, record payments, manage discounts and refunds, and run collection, discount and revenue-leakage reports.',),
-		array('q' => 'How does Healthray help improve collections?', 'a' => 'Charges from every department are added to the bill as care happens, so fewer are missed. Claims are tracked to payment and the revenue-leakage report flags money that slipped through, so your finance team can act on it.',),
-		array('q' => 'Can we file insurance and government scheme claims?', 'a' => 'Yes. Your team can file cashless TPA, insurance and Ayushman Bharat claims from the bill and track each one to payment. Healthray is ABDM compliant and NHA approved.',),
-		array('q' => 'Is our financial data secure and compliant?', 'a' => 'Yes. Healthray is ISO 27001 certified, HIPAA compliant and NABH certified, and it uses the HL7 and FHIR standards. Bills follow the required format with GST applied correctly.',),
-		array('q' => 'How long does it take to start, and what support do we get?', 'a' => 'Most hospitals start in 1 to 3 weeks, with data migration and staff training included. You get 24x7 support in English, Hindi and Gujarati, plus a free demo before you decide.',),
+		array('q' => 'What does "medical billing services" mean with Healthray?', 'a' => 'It means your own billing team does the work inside Healthray\'s software, not an outside agency. Your team raises OPD and IPD bills, files cashless TPA and Ayushman claims, applies rate lists and GST, and tracks collections, all on the same record your clinical and front-desk staff use.', ),
+		array('q' => 'Does Healthray do our billing for us?', 'a' => 'No. Healthray is software your own team runs. It builds bills from the patient record, files claims and produces reports, but your staff stays in control of every charge, discount and payment.', ),
+		array('q' => 'What billing can our team handle in Healthray?', 'a' => 'Your team can raise OPD, IPD, cashless TPA and Ayushman bills, apply rate lists and GST, record payments, manage discounts and refunds, and run collection, discount and revenue-leakage reports.', ),
+		array('q' => 'How does Healthray help improve collections?', 'a' => 'Charges from every department are added to the bill as care happens, so fewer are missed. Claims are tracked to payment and the revenue-leakage report flags money that slipped through, so your finance team can act on it.', ),
+		array('q' => 'Can we file insurance and government scheme claims?', 'a' => 'Yes. Your team can file cashless TPA, insurance and Ayushman Bharat claims from the bill and track each one to payment. Healthray is ABDM compliant and NHA approved.', ),
+		array('q' => 'Is our financial data secure and compliant?', 'a' => 'Yes. Healthray is ISO 27001 certified, HIPAA compliant and NABH certified, and it uses the HL7 and FHIR standards. Bills follow the required format with GST applied correctly.', ),
+		array('q' => 'How long does it take to start, and what support do we get?', 'a' => 'Most hospitals start in 1 to 3 weeks, with data migration and staff training included. You get 24x7 support in English, Hindi and Gujarati, plus a free demo before you decide.', ),
 	);
 }
 
@@ -1823,12 +1838,12 @@ function healthray_head()
 
 	if (is_page(79691)) {
 		$faqs = array(
-			array('q' => 'What is a hospital management system (HMS)?', 'a' => "A hospital management system is software that runs a hospital's daily operations on one platform - patient registration, OPD and IPD workflows, electronic medical records, pharmacy, laboratory, billing, insurance and TPA claims, inventory and staff management. Healthray's HMS connects all of these so every department works from the same real-time data.",),
-			array('q' => 'Is Healthray ABDM compliant?', 'a' => 'Yes. Healthray is NHA-approved and ABDM-compliant. You can create and verify ABHA IDs at registration, link health records to the Ayushman Bharat Digital Mission ecosystem, and support PMJAY workflows - all inside your normal OPD and IPD process.',),
-			array('q' => 'How much does hospital management software cost in India?', 'a' => 'Pricing depends on hospital size, bed count and the modules you need - a small clinic pays far less than a 200-bed multi-speciality hospital. Healthray offers flexible plans for clinics, nursing homes and hospitals. Book a free demo and we will share a quote matched to your facility.',),
-			array('q' => 'Can Healthray work for small clinics as well as large hospitals?', 'a' => 'Yes. A solo practitioner can start with appointments and EMR, a clinic can add pharmacy and lab, and a multi-speciality hospital can run full OPD/IPD, billing, TPA and HR on the same platform. You activate modules as you grow - no need to change software later.',),
-			array('q' => 'Is patient data secure on a cloud-based hospital management system?', 'a' => 'Healthray uses encrypted storage and transmission, role-based access control and audit logs, with automatic cloud backups. Data handling follows Indian healthcare data-protection requirements, and standards such as FHIR, SNOMED CT and ICD-10/11 keep records interoperable and structured.',),
-			array('q' => 'How long does it take to implement Healthray in a hospital?', 'a' => 'Most clinics go live within days; mid-size hospitals are typically operational in one to three weeks, including data migration, workflow setup and staff training. A dedicated onboarding team handles the transition so patient care is never interrupted.',),
+			array('q' => 'What is a hospital management system (HMS)?', 'a' => "A hospital management system is software that runs a hospital's daily operations on one platform - patient registration, OPD and IPD workflows, electronic medical records, pharmacy, laboratory, billing, insurance and TPA claims, inventory and staff management. Healthray's HMS connects all of these so every department works from the same real-time data.", ),
+			array('q' => 'Is Healthray ABDM compliant?', 'a' => 'Yes. Healthray is NHA-approved and ABDM-compliant. You can create and verify ABHA IDs at registration, link health records to the Ayushman Bharat Digital Mission ecosystem, and support PMJAY workflows - all inside your normal OPD and IPD process.', ),
+			array('q' => 'How much does hospital management software cost in India?', 'a' => 'Pricing depends on hospital size, bed count and the modules you need - a small clinic pays far less than a 200-bed multi-speciality hospital. Healthray offers flexible plans for clinics, nursing homes and hospitals. Book a free demo and we will share a quote matched to your facility.', ),
+			array('q' => 'Can Healthray work for small clinics as well as large hospitals?', 'a' => 'Yes. A solo practitioner can start with appointments and EMR, a clinic can add pharmacy and lab, and a multi-speciality hospital can run full OPD/IPD, billing, TPA and HR on the same platform. You activate modules as you grow - no need to change software later.', ),
+			array('q' => 'Is patient data secure on a cloud-based hospital management system?', 'a' => 'Healthray uses encrypted storage and transmission, role-based access control and audit logs, with automatic cloud backups. Data handling follows Indian healthcare data-protection requirements, and standards such as FHIR, SNOMED CT and ICD-10/11 keep records interoperable and structured.', ),
+			array('q' => 'How long does it take to implement Healthray in a hospital?', 'a' => 'Most clinics go live within days; mid-size hospitals are typically operational in one to three weeks, including data migration, workflow setup and staff training. A dedicated onboarding team handles the transition so patient care is never interrupted.', ),
 		);
 	} elseif (is_page(79713)) {
 		$faqs = array(
@@ -1846,7 +1861,7 @@ function healthray_head()
 			array('q' => 'What is EHR software?', 'a' => "EHR software (Electronic Health Records software) maintains a patient's complete, longitudinal health history - consultations, diagnoses, prescriptions, lab results and imaging - in one digital record designed to be shared across departments, branches and other healthcare providers. Unlike a paper file or an isolated digital chart, an EHR system follows the patient: every authorized clinician sees the same up-to-date record, wherever care happens."),
 			array('q' => 'What is the difference between EHR and EMR software?', 'a' => "An EMR (Electronic Medical Record) is the digital chart used within a single practice or hospital for day-to-day consultations. An EHR (Electronic Health Record) is broader: it aggregates the patient's history across providers and locations, built on interoperability standards so records can move with the patient. If you run one clinic, an EMR may be enough; if you run multiple departments, branches or coordinate care with other providers, you need an EHR system. Healthray provides both on one platform."),
 			array('q' => "Is Healthray's EHR software ABDM compliant?", 'a' => 'Yes. Healthray is NHA-approved and ABDM-compliant. Patients\' ABHA IDs are created and verified at registration, and their health records can be linked to the Ayushman Bharat Digital Mission ecosystem - so records created in your hospital become part of the patient\'s national digital health history, with patient consent.'),
-			array('q' => 'Is Healthray NABH certified?', 'a' => 'Yes. Healthray is NABH-certified healthcare software, listed on the official portal of the National Accreditation Board for Hospitals & Healthcare Providers. For hospitals pursuing or maintaining NABH accreditation, using NABH-certified software supports your digital health standards compliance out of the box.',),
+			array('q' => 'Is Healthray NABH certified?', 'a' => 'Yes. Healthray is NABH-certified healthcare software, listed on the official portal of the National Accreditation Board for Hospitals & Healthcare Providers. For hospitals pursuing or maintaining NABH accreditation, using NABH-certified software supports your digital health standards compliance out of the box.', ),
 			array('q' => 'Can patient records be shared across hospital branches?', 'a' => 'Yes. Multi-branch hospitals and clinic networks run on one shared EHR: a patient registered at one branch can be treated at another with their full history, allergies, medications and reports already available. Role-based access ensures each staff member sees only what their role permits, and every access is logged.'),
 			array('q' => 'How much does EHR software cost in India?', 'a' => 'EHR software pricing in India depends on the number of doctors, branches and modules you need - a single clinic pays far less than a multi-branch hospital network. Healthray offers flexible plans with a free trial, and pricing scales with your organization rather than penalizing growth. Book a demo and we will share a quote matched to your setup.'),
 			array('q' => 'Is patient data secure in a cloud-based EHR system?', 'a' => 'Yes. Healthray encrypts health records in transit and at rest, enforces role-based access control, logs every view and edit in audit trails, and backs data up continuously on redundant cloud infrastructure with 99.9% uptime. Records follow HL7/FHIR, SNOMED CT and ICD-10/11 standards, and data handling aligns with Indian data-protection requirements including the DPDP Act.'),
@@ -1855,63 +1870,63 @@ function healthray_head()
 		);
 	} elseif (is_page(79865)) {
 		$faqs = array(
-			array('q' => 'What is clinic management software?', 'a' => "Clinic management software is a single platform that runs a clinic's daily operations: appointment booking and queues, patient registration, electronic medical records, e-prescriptions, billing and payments, pharmacy and lab coordination, and reporting. Instead of registers, spreadsheets and separate tools, the front desk, doctors and accounts all work from one system - so patient information is entered once and flows everywhere it's needed.",),
-			array('q' => 'Is clinic management software the same as practice management software?', 'a' => "Largely, yes - the two terms describe the same category. 'Practice management software' emphasizes the administrative side of a doctor's practice (scheduling, billing, claims), while 'clinic management software' usually implies the full clinical picture too, including EMR and e-prescriptions. Healthray covers both: complete practice administration plus clinical records, on one platform, with a mobile app for doctors who manage their practice on the go.",),
-			array('q' => 'What is the difference between clinic software and hospital management software?', 'a' => 'Clinic management software is built for outpatient practices - appointments, consultations, billing and day-to-day admin for one or a few doctors. Hospital management software (HMS) adds inpatient workflows: bed and ward management, IPD billing, operation theatre scheduling, TPA claims and multi-department coordination. Healthray runs on one platform across both, so a clinic that grows into a hospital activates the additional modules without migrating systems.',),
-			array('q' => 'How much does clinic management software cost in India?', 'a' => 'Pricing depends on the number of doctors, locations and modules you need - a solo practitioner pays far less than a multi-doctor polyclinic. Healthray offers flexible plans that start small and scale with your practice, plus a free trial. Book a demo and we will share a quote matched to your clinic\'s size.',),
-			array('q' => "Is Healthray's clinic software ABDM compliant?", 'a' => "Yes. Healthray is NHA-approved and ABDM-compliant. Your clinic can create and verify patients' ABHA IDs at registration and link health records to the Ayushman Bharat Digital Mission ecosystem - inside the normal front-desk workflow, without separate software.",),
-			array('q' => 'Is Healthray NABH certified?', 'a' => 'Yes. Healthray is NABH-certified healthcare software, listed on the official portal of the National Accreditation Board for Hospitals & Healthcare Providers. For clinics pursuing NABH entry-level accreditation, using NABH-certified software supports your digital compliance requirements out of the box.',),
-			array('q' => 'Does it work for a single-doctor clinic?', 'a' => 'Yes. A solo practitioner can start with appointments, EMR and billing - the modules a small clinic actually uses - at pricing that matches a small practice. As the clinic grows, pharmacy, laboratory, teleconsultation and additional locations can be switched on without changing systems or re-entering data.',),
-			array('q' => 'How long does clinic software implementation take?', 'a' => "Most clinics go live in about 7 days, including data migration from registers or older software, workflow setup and staff training. Larger polyclinics with pharmacy and lab typically take 1–2 weeks. Healthray's onboarding team handles the transition so consultations continue without interruption.",),
-			array('q' => 'Is there a free trial or demo of the clinic management software?', 'a' => "Yes. You can take a free trial of Healthray's clinic management software, or book a free 30-minute demo where a product specialist walks through your clinic's daily flow - booking, consultation, e-prescription and billing. No credit card is required.",),
+			array('q' => 'What is clinic management software?', 'a' => "Clinic management software is a single platform that runs a clinic's daily operations: appointment booking and queues, patient registration, electronic medical records, e-prescriptions, billing and payments, pharmacy and lab coordination, and reporting. Instead of registers, spreadsheets and separate tools, the front desk, doctors and accounts all work from one system - so patient information is entered once and flows everywhere it's needed.", ),
+			array('q' => 'Is clinic management software the same as practice management software?', 'a' => "Largely, yes - the two terms describe the same category. 'Practice management software' emphasizes the administrative side of a doctor's practice (scheduling, billing, claims), while 'clinic management software' usually implies the full clinical picture too, including EMR and e-prescriptions. Healthray covers both: complete practice administration plus clinical records, on one platform, with a mobile app for doctors who manage their practice on the go.", ),
+			array('q' => 'What is the difference between clinic software and hospital management software?', 'a' => 'Clinic management software is built for outpatient practices - appointments, consultations, billing and day-to-day admin for one or a few doctors. Hospital management software (HMS) adds inpatient workflows: bed and ward management, IPD billing, operation theatre scheduling, TPA claims and multi-department coordination. Healthray runs on one platform across both, so a clinic that grows into a hospital activates the additional modules without migrating systems.', ),
+			array('q' => 'How much does clinic management software cost in India?', 'a' => 'Pricing depends on the number of doctors, locations and modules you need - a solo practitioner pays far less than a multi-doctor polyclinic. Healthray offers flexible plans that start small and scale with your practice, plus a free trial. Book a demo and we will share a quote matched to your clinic\'s size.', ),
+			array('q' => "Is Healthray's clinic software ABDM compliant?", 'a' => "Yes. Healthray is NHA-approved and ABDM-compliant. Your clinic can create and verify patients' ABHA IDs at registration and link health records to the Ayushman Bharat Digital Mission ecosystem - inside the normal front-desk workflow, without separate software.", ),
+			array('q' => 'Is Healthray NABH certified?', 'a' => 'Yes. Healthray is NABH-certified healthcare software, listed on the official portal of the National Accreditation Board for Hospitals & Healthcare Providers. For clinics pursuing NABH entry-level accreditation, using NABH-certified software supports your digital compliance requirements out of the box.', ),
+			array('q' => 'Does it work for a single-doctor clinic?', 'a' => 'Yes. A solo practitioner can start with appointments, EMR and billing - the modules a small clinic actually uses - at pricing that matches a small practice. As the clinic grows, pharmacy, laboratory, teleconsultation and additional locations can be switched on without changing systems or re-entering data.', ),
+			array('q' => 'How long does clinic software implementation take?', 'a' => "Most clinics go live in about 7 days, including data migration from registers or older software, workflow setup and staff training. Larger polyclinics with pharmacy and lab typically take 1–2 weeks. Healthray's onboarding team handles the transition so consultations continue without interruption.", ),
+			array('q' => 'Is there a free trial or demo of the clinic management software?', 'a' => "Yes. You can take a free trial of Healthray's clinic management software, or book a free 30-minute demo where a product specialist walks through your clinic's daily flow - booking, consultation, e-prescription and billing. No credit card is required.", ),
 		);
 	} elseif (is_page(79924)) {
 		$faqs = array(
-			array('q' => 'What is LIMS software?', 'a' => "LIMS software (Laboratory Information Management System) runs a laboratory's entire operation on one platform: test orders and sample tracking, analyzer interfacing, result validation and reporting, quality control, inventory, billing and patient delivery. Instead of registers, Excel sheets and manual transcription from analyzers, every sample is traceable from collection to signed report - with fewer errors and faster turnaround times.",),
-			array('q' => 'What is the difference between LIMS and LIS?', 'a' => 'The two terms overlap heavily. LIS (Laboratory Information System) traditionally describes patient-centric hospital lab systems, while LIMS (Laboratory Information Management System) is the broader term covering sample-centric workflows in diagnostic, research and industrial labs too. Healthray covers both: patient-centric reporting for clinical and hospital labs, plus sample-centric tracking, QC and inventory for every other lab type.',),
-			array('q' => 'Is this pathology lab software?', 'a' => "Yes. Pathology labs are Healthray LIMS's largest user group in India - the platform handles pathology, biochemistry, hematology, microbiology and molecular workflows, along with radiology (RIS), blood bank and multi-branch diagnostic chains. If you searched for pathology lab software, this is the same category of product.",),
-			array('q' => 'How much does LIMS software cost in India?', 'a' => "Pricing depends on your lab's size, branches and modules - a single collection center pays far less than a multi-branch diagnostic chain with blood bank and imaging. Healthray offers flexible plans with a free trial, and a 10% discount is currently available on premium plans. Book a demo and we will share a quote matched to your lab.",),
-			array('q' => 'Does Healthray LIMS support NABL (ISO 15189) accreditation?', 'a' => 'Yes. The platform is built to support NABL (ISO 15189) accreditation workflows: automated QC tracking with Levey-Jennings and Westgard rules, document and SOP version control, complete audit trails, staff competency records, equipment calibration logs and inspection-ready compliance reports. Healthray itself is NABH-certified healthcare software, listed on the official NABH portal.',),
-			array('q' => "Is Healthray's lab software ABDM compliant?", 'a' => "Yes. Healthray is NHA-approved and ABDM-compliant. Labs can verify patients' ABHA IDs at registration and, with patient consent, link reports to the Ayushman Bharat Digital Mission ecosystem - inside the normal front-desk workflow.",),
-			array('q' => 'Should I choose cloud-based LIMS or on-premise?', 'a' => 'Most labs choose cloud: no server room, automatic updates, access from any branch or device, and automated backups with 99.9% uptime. On-premise and hybrid deployments are available for labs with specific infrastructure or policy requirements. Healthray supports all three models on the same platform.',),
-			array('q' => 'How long does LIMS implementation take?', 'a' => "You can start printing bills and reports in about 10 minutes with the standard test catalog. Full implementation - custom test panels, reference ranges, analyzer interfacing and staff training - typically takes a few days to two weeks depending on lab size, with migration from registers or older software handled by Healthray's onboarding team.",),
-			array('q' => 'Is there a free trial or free version of the lab software?', 'a' => 'Yes. You can take a free trial of Healthray\'s LIMS software, or book a free demo where a product specialist walks through your lab\'s daily flow - booking, sample tracking, result entry and report delivery. Small pathology labs can also explore our <a href="https://healthray.com/free-pathology-lab-software/">free pathology lab software</a> plan to get started at no cost.',),
+			array('q' => 'What is LIMS software?', 'a' => "LIMS software (Laboratory Information Management System) runs a laboratory's entire operation on one platform: test orders and sample tracking, analyzer interfacing, result validation and reporting, quality control, inventory, billing and patient delivery. Instead of registers, Excel sheets and manual transcription from analyzers, every sample is traceable from collection to signed report - with fewer errors and faster turnaround times.", ),
+			array('q' => 'What is the difference between LIMS and LIS?', 'a' => 'The two terms overlap heavily. LIS (Laboratory Information System) traditionally describes patient-centric hospital lab systems, while LIMS (Laboratory Information Management System) is the broader term covering sample-centric workflows in diagnostic, research and industrial labs too. Healthray covers both: patient-centric reporting for clinical and hospital labs, plus sample-centric tracking, QC and inventory for every other lab type.', ),
+			array('q' => 'Is this pathology lab software?', 'a' => "Yes. Pathology labs are Healthray LIMS's largest user group in India - the platform handles pathology, biochemistry, hematology, microbiology and molecular workflows, along with radiology (RIS), blood bank and multi-branch diagnostic chains. If you searched for pathology lab software, this is the same category of product.", ),
+			array('q' => 'How much does LIMS software cost in India?', 'a' => "Pricing depends on your lab's size, branches and modules - a single collection center pays far less than a multi-branch diagnostic chain with blood bank and imaging. Healthray offers flexible plans with a free trial, and a 10% discount is currently available on premium plans. Book a demo and we will share a quote matched to your lab.", ),
+			array('q' => 'Does Healthray LIMS support NABL (ISO 15189) accreditation?', 'a' => 'Yes. The platform is built to support NABL (ISO 15189) accreditation workflows: automated QC tracking with Levey-Jennings and Westgard rules, document and SOP version control, complete audit trails, staff competency records, equipment calibration logs and inspection-ready compliance reports. Healthray itself is NABH-certified healthcare software, listed on the official NABH portal.', ),
+			array('q' => "Is Healthray's lab software ABDM compliant?", 'a' => "Yes. Healthray is NHA-approved and ABDM-compliant. Labs can verify patients' ABHA IDs at registration and, with patient consent, link reports to the Ayushman Bharat Digital Mission ecosystem - inside the normal front-desk workflow.", ),
+			array('q' => 'Should I choose cloud-based LIMS or on-premise?', 'a' => 'Most labs choose cloud: no server room, automatic updates, access from any branch or device, and automated backups with 99.9% uptime. On-premise and hybrid deployments are available for labs with specific infrastructure or policy requirements. Healthray supports all three models on the same platform.', ),
+			array('q' => 'How long does LIMS implementation take?', 'a' => "You can start printing bills and reports in about 10 minutes with the standard test catalog. Full implementation - custom test panels, reference ranges, analyzer interfacing and staff training - typically takes a few days to two weeks depending on lab size, with migration from registers or older software handled by Healthray's onboarding team.", ),
+			array('q' => 'Is there a free trial or free version of the lab software?', 'a' => 'Yes. You can take a free trial of Healthray\'s LIMS software, or book a free demo where a product specialist walks through your lab\'s daily flow - booking, sample tracking, result entry and report delivery. Small pathology labs can also explore our <a href="https://healthray.com/free-pathology-lab-software/">free pathology lab software</a> plan to get started at no cost.', ),
 		);
 	} elseif (is_page(79928)) {
 		$faqs = array(
-			array('q' => 'What is pharmacy software?', 'a' => "Pharmacy software runs a pharmacy's entire day on one platform: prescription intake, GST billing at the counter, inventory with batch and expiry tracking, purchase orders to wholesalers, regulatory registers, and end-of-day accounting. Instead of manual bill books, stock registers and separate accounting tools, every strip that enters or leaves the store is traceable - with faster billing, fewer expired losses and inspection-ready records.",),
-			array('q' => 'Is this the same as medical store software or chemist shop software?', 'a' => 'Yes. Medical store software, chemist shop software, pharmacy management system and pharmacy software all describe the same category - software that runs a medicine retail counter and its stock. Healthray covers the full range: a single neighbourhood medical store, a chain of chemist shops, or a hospital\'s in-house pharmacy, on one platform.',),
-			array('q' => 'How much does pharmacy software cost in India?', 'a' => 'Pricing depends on your setup - a single medical store pays far less than a multi-store chain or a hospital pharmacy with ward supply. Healthray offers flexible plans with a free trial, and a 10% discount is currently available on premium plans. Book a demo and we will share a quote matched to your pharmacy.',),
-			array('q' => 'Does it handle GST billing and e-way bills?', 'a' => 'Yes. The billing counter generates GST-compliant invoices for retail and credit sales, supports UPI, card and cash payments, and produces GSTR-ready reports and e-way bill documentation. Stock movements sync to the accounting ledgers in real time, so your P&L and tax filings never need manual reconciliation.',),
-			array('q' => 'Does it maintain Schedule H, H1 and narcotics registers?', 'a' => 'Yes. Sales of Schedule H, H1 and X drugs are recorded with prescription details, doctor information and patient records as required under the Drugs and Cosmetics Rules, and the software maintains the corresponding digital registers with complete audit trails - ready for drug inspector visits without paper registers.',),
-			array('q' => 'Does it work for both retail pharmacies and hospital pharmacies?', 'a' => 'Yes. A retail medical store gets fast GST billing, expiry-safe inventory and wholesaler purchase management. A hospital pharmacy gets indent-based ward supply, doctor e-prescription integration and charges that post directly to patient bills. Both run on the same platform, so a pharmacy attached to a clinic or hospital shares one stock and one set of accounts.',),
-			array('q' => "Is Healthray's pharmacy software ABDM compliant?", 'a' => 'Yes. Healthray is NHA-approved and ABDM-compliant, and it is NABH-certified healthcare software listed on the official NABH portal. Pharmacies connected to Healthray clinics and hospitals participate in the ABHA-linked digital health ecosystem, with patient consent, inside the normal workflow.',),
-			array('q' => 'How long does implementation take?', 'a' => "A single medical store can start billing the same day - product masters for common Indian brands come preloaded, and your existing stock is imported from Excel or your old software. Multi-store chains and hospital pharmacies typically take a few days to two weeks including staff training, with migration handled by Healthray's onboarding team.",),
-			array('q' => 'Is there a free trial or free version of the pharmacy software?', 'a' => 'Yes. You can take a free trial of Healthray\'s pharmacy software, or book a free demo where a product specialist walks through your counter\'s daily flow - billing, stock entry, expiry alerts and reports. Small medical stores can also explore our free pharmacy software plan to get started at no cost.',),
+			array('q' => 'What is pharmacy software?', 'a' => "Pharmacy software runs a pharmacy's entire day on one platform: prescription intake, GST billing at the counter, inventory with batch and expiry tracking, purchase orders to wholesalers, regulatory registers, and end-of-day accounting. Instead of manual bill books, stock registers and separate accounting tools, every strip that enters or leaves the store is traceable - with faster billing, fewer expired losses and inspection-ready records.", ),
+			array('q' => 'Is this the same as medical store software or chemist shop software?', 'a' => 'Yes. Medical store software, chemist shop software, pharmacy management system and pharmacy software all describe the same category - software that runs a medicine retail counter and its stock. Healthray covers the full range: a single neighbourhood medical store, a chain of chemist shops, or a hospital\'s in-house pharmacy, on one platform.', ),
+			array('q' => 'How much does pharmacy software cost in India?', 'a' => 'Pricing depends on your setup - a single medical store pays far less than a multi-store chain or a hospital pharmacy with ward supply. Healthray offers flexible plans with a free trial, and a 10% discount is currently available on premium plans. Book a demo and we will share a quote matched to your pharmacy.', ),
+			array('q' => 'Does it handle GST billing and e-way bills?', 'a' => 'Yes. The billing counter generates GST-compliant invoices for retail and credit sales, supports UPI, card and cash payments, and produces GSTR-ready reports and e-way bill documentation. Stock movements sync to the accounting ledgers in real time, so your P&L and tax filings never need manual reconciliation.', ),
+			array('q' => 'Does it maintain Schedule H, H1 and narcotics registers?', 'a' => 'Yes. Sales of Schedule H, H1 and X drugs are recorded with prescription details, doctor information and patient records as required under the Drugs and Cosmetics Rules, and the software maintains the corresponding digital registers with complete audit trails - ready for drug inspector visits without paper registers.', ),
+			array('q' => 'Does it work for both retail pharmacies and hospital pharmacies?', 'a' => 'Yes. A retail medical store gets fast GST billing, expiry-safe inventory and wholesaler purchase management. A hospital pharmacy gets indent-based ward supply, doctor e-prescription integration and charges that post directly to patient bills. Both run on the same platform, so a pharmacy attached to a clinic or hospital shares one stock and one set of accounts.', ),
+			array('q' => "Is Healthray's pharmacy software ABDM compliant?", 'a' => 'Yes. Healthray is NHA-approved and ABDM-compliant, and it is NABH-certified healthcare software listed on the official NABH portal. Pharmacies connected to Healthray clinics and hospitals participate in the ABHA-linked digital health ecosystem, with patient consent, inside the normal workflow.', ),
+			array('q' => 'How long does implementation take?', 'a' => "A single medical store can start billing the same day - product masters for common Indian brands come preloaded, and your existing stock is imported from Excel or your old software. Multi-store chains and hospital pharmacies typically take a few days to two weeks including staff training, with migration handled by Healthray's onboarding team.", ),
+			array('q' => 'Is there a free trial or free version of the pharmacy software?', 'a' => 'Yes. You can take a free trial of Healthray\'s pharmacy software, or book a free demo where a product specialist walks through your counter\'s daily flow - billing, stock entry, expiry alerts and reports. Small medical stores can also explore our free pharmacy software plan to get started at no cost.', ),
 		);
 	} elseif (is_page(81124)) {
 		$faqs = array(
-			array('q' => 'What does Healthray HIMS software include?', 'a' => 'Healthray HIMS covers the whole hospital on one system: registration with ABHA, OPD and queues, IPD with ward and bed management, operation theatre scheduling, emergency and casualty, billing with TPA and insurance claims, central stores and procurement, biomedical asset tracking, HR and payroll, MIS dashboards and multi-facility control. Clinical records, laboratory, radiology and pharmacy run as integrated modules on the same platform rather than as separate software.',),
-			array('q' => 'HMS, HIMS or HMIS - which one does my hospital need?', 'a' => 'For hospital software the terms are used interchangeably in the market, and Healthray is one platform behind all three names. In practice, buyers say HMS when they mean day-to-day hospital operations, and HIMS or HMIS when the emphasis is on the information system itself - integration, data governance, reporting and IT architecture, which is the language most Indian hospital tenders use. Note that HMIS can also refer to the government\'s public health reporting portal, which is a different system altogether.',),
-			array('q' => 'How much does HIMS software cost in India?', 'a' => 'Pricing depends on bed count, number of facilities, modules and deployment model - a 50-bed single hospital costs far less than a multi-city chain with on-premise servers. Healthray offers module-wise and enterprise plans with a free trial. Book a demo and we will share a quote matched to your hospital\'s size and rollout plan.',),
-			array('q' => 'Can Healthray HIMS be deployed on-premise for government or trust hospitals?', 'a' => 'Yes. The same platform deploys on cloud, on-premise or hybrid, so hospitals with data-residency conditions, tender requirements or limited connectivity can run it inside their own infrastructure. Our team supports tender documentation, technical compliance sheets and phased institutional rollouts.',),
-			array('q' => 'Does it support NABH accreditation documentation?', 'a' => 'Yes. Healthray is NABH-certified healthcare software, listed on the official NABH portal. The platform maintains the records accreditation assessors ask for - clinical documentation, consent forms, incident and audit trails, equipment and calibration logs, staff records and quality indicators - so evidence is generated by daily work instead of assembled before an assessment.',),
-			array('q' => 'Is Healthray HIMS ABDM compliant?', 'a' => 'Yes. Healthray is NHA-approved and ABDM-compliant. Hospitals create and verify ABHA IDs at registration and, with patient consent, link records to the Ayushman Bharat Digital Mission ecosystem. PMJAY and government scheme workflows are supported inside the billing and claims modules.',),
-			array('q' => 'Can one system run multiple hospitals or branches?', 'a' => 'Yes. Hospital chains run every facility on one platform with shared patient records, facility-level access control, and consolidated MIS across locations - while each hospital keeps its own tariffs, formulary, departments and reporting. Group management sees network-wide occupancy, revenue and utilization from a single dashboard.',),
-			array('q' => 'How long does HIMS implementation take for a 200-bed hospital?', 'a' => 'A typical 200-bed hospital goes live in one to three weeks, phased department by department - registration and OPD first, then IPD and billing, then stores, HR and analytics. The timeline includes data migration from your existing system, tariff and formulary configuration, role-based staff training and a parallel-run period so patient care is never interrupted.',),
-			array('q' => 'Can you migrate data from our existing hospital information system?', 'a' => 'Yes. Migration from legacy systems, spreadsheets or paper records is included in every implementation. Our team maps your existing patient master, tariffs, formulary and outstanding balances, runs a validation pass with your staff, and keeps the old system readable during the parallel-run period.',),
+			array('q' => 'What does Healthray HIMS software include?', 'a' => 'Healthray HIMS covers the whole hospital on one system: registration with ABHA, OPD and queues, IPD with ward and bed management, operation theatre scheduling, emergency and casualty, billing with TPA and insurance claims, central stores and procurement, biomedical asset tracking, HR and payroll, MIS dashboards and multi-facility control. Clinical records, laboratory, radiology and pharmacy run as integrated modules on the same platform rather than as separate software.', ),
+			array('q' => 'HMS, HIMS or HMIS - which one does my hospital need?', 'a' => 'For hospital software the terms are used interchangeably in the market, and Healthray is one platform behind all three names. In practice, buyers say HMS when they mean day-to-day hospital operations, and HIMS or HMIS when the emphasis is on the information system itself - integration, data governance, reporting and IT architecture, which is the language most Indian hospital tenders use. Note that HMIS can also refer to the government\'s public health reporting portal, which is a different system altogether.', ),
+			array('q' => 'How much does HIMS software cost in India?', 'a' => 'Pricing depends on bed count, number of facilities, modules and deployment model - a 50-bed single hospital costs far less than a multi-city chain with on-premise servers. Healthray offers module-wise and enterprise plans with a free trial. Book a demo and we will share a quote matched to your hospital\'s size and rollout plan.', ),
+			array('q' => 'Can Healthray HIMS be deployed on-premise for government or trust hospitals?', 'a' => 'Yes. The same platform deploys on cloud, on-premise or hybrid, so hospitals with data-residency conditions, tender requirements or limited connectivity can run it inside their own infrastructure. Our team supports tender documentation, technical compliance sheets and phased institutional rollouts.', ),
+			array('q' => 'Does it support NABH accreditation documentation?', 'a' => 'Yes. Healthray is NABH-certified healthcare software, listed on the official NABH portal. The platform maintains the records accreditation assessors ask for - clinical documentation, consent forms, incident and audit trails, equipment and calibration logs, staff records and quality indicators - so evidence is generated by daily work instead of assembled before an assessment.', ),
+			array('q' => 'Is Healthray HIMS ABDM compliant?', 'a' => 'Yes. Healthray is NHA-approved and ABDM-compliant. Hospitals create and verify ABHA IDs at registration and, with patient consent, link records to the Ayushman Bharat Digital Mission ecosystem. PMJAY and government scheme workflows are supported inside the billing and claims modules.', ),
+			array('q' => 'Can one system run multiple hospitals or branches?', 'a' => 'Yes. Hospital chains run every facility on one platform with shared patient records, facility-level access control, and consolidated MIS across locations - while each hospital keeps its own tariffs, formulary, departments and reporting. Group management sees network-wide occupancy, revenue and utilization from a single dashboard.', ),
+			array('q' => 'How long does HIMS implementation take for a 200-bed hospital?', 'a' => 'A typical 200-bed hospital goes live in one to three weeks, phased department by department - registration and OPD first, then IPD and billing, then stores, HR and analytics. The timeline includes data migration from your existing system, tariff and formulary configuration, role-based staff training and a parallel-run period so patient care is never interrupted.', ),
+			array('q' => 'Can you migrate data from our existing hospital information system?', 'a' => 'Yes. Migration from legacy systems, spreadsheets or paper records is included in every implementation. Our team maps your existing patient master, tariffs, formulary and outstanding balances, runs a validation pass with your staff, and keeps the old system readable during the parallel-run period.', ),
 		);
 	} elseif (is_page(167)) {
 		// Keep in sync with temp-contact.php
 		$faqs = array(
-			array('q' => 'How quickly will someone reply to my enquiry?', 'a' => '97% of enquiries get a first response in under 30 minutes during working hours, and every enquiry is answered within one business day. Phone is fastest if you need an answer the same day; email suits detailed requirements, tender documents and anything with an attachment.',),
-			array('q' => 'Is the demo free, and how long does it take?', 'a' => 'Yes, the demo is free and there is no credit card or commitment involved. It usually runs 30 to 45 minutes and is built around your own workflow - OPD and queues, IPD and billing, laboratory reporting or pharmacy counter - rather than a generic product tour. Most teams have a short discovery call first so the demo is worth the time.',),
-			array('q' => 'How do I get pricing for my hospital, clinic or lab?', 'a' => 'Pricing depends on your facility size, number of branches and which modules you switch on, so we quote per facility rather than publish one number. Plan structures for clinics, hospitals, labs and pharmacies are on the Healthray pricing page, and a written quote follows the demo - module list, migration scope and go-live timeline included.',),
-			array('q' => 'I already use Healthray. How do I raise a support ticket?', 'a' => 'Email contact@healthray.com with your hospital name and the priority level, or call your account manager on +91-971-487-4435. Support runs on phone, email and ticketing during working hours, with targets of one hour for critical system-down issues, four hours for minor issues and five days for feature requests.',),
-			array('q' => 'Do you work with hospitals outside India?', 'a' => 'Yes. Healthray runs in 5+ countries alongside its Indian base of 2,500+ hospitals, clinics, laboratories and pharmacies. Mention your country and regulatory requirements in the form and the reply will cover deployment model, data residency and local compliance rather than sending you Indian-only material.',),
-			array('q' => 'Can you help with a tender, RFP or government procurement?', 'a' => 'Yes. Send the tender document or RFP to contact@healthray.com with the submission deadline. Our team supports technical compliance sheets, deployment declarations for on-premise or hybrid requirements, and phased institutional rollout plans for government, trust and medical college hospitals.',),
-			array('q' => 'I want to resell or implement Healthray. Who do I speak to?', 'a' => 'Consultants, resellers and healthcare IT firms should start on the Healthray become a partner page, which covers the channel programme and commercial model. You can also use the enquiry form on the contact page and choose "Channel Partner / Consultant" as your business type.',),
-			array('q' => 'Where is the Healthray office, and can I visit?', 'a' => 'Healthray Technologies Pvt. Ltd. is at 1st Floor, A - Millenium Point, Opp. Gabani Kidney Hospital, Station Rd, Surat 395003, Gujarat, India. Visitors are welcome - call +91-971-487-4435 first so the right person is free when you arrive.',),
+			array('q' => 'How quickly will someone reply to my enquiry?', 'a' => '97% of enquiries get a first response in under 30 minutes during working hours, and every enquiry is answered within one business day. Phone is fastest if you need an answer the same day; email suits detailed requirements, tender documents and anything with an attachment.', ),
+			array('q' => 'Is the demo free, and how long does it take?', 'a' => 'Yes, the demo is free and there is no credit card or commitment involved. It usually runs 30 to 45 minutes and is built around your own workflow - OPD and queues, IPD and billing, laboratory reporting or pharmacy counter - rather than a generic product tour. Most teams have a short discovery call first so the demo is worth the time.', ),
+			array('q' => 'How do I get pricing for my hospital, clinic or lab?', 'a' => 'Pricing depends on your facility size, number of branches and which modules you switch on, so we quote per facility rather than publish one number. Plan structures for clinics, hospitals, labs and pharmacies are on the Healthray pricing page, and a written quote follows the demo - module list, migration scope and go-live timeline included.', ),
+			array('q' => 'I already use Healthray. How do I raise a support ticket?', 'a' => 'Email contact@healthray.com with your hospital name and the priority level, or call your account manager on +91-971-487-4435. Support runs on phone, email and ticketing during working hours, with targets of one hour for critical system-down issues, four hours for minor issues and five days for feature requests.', ),
+			array('q' => 'Do you work with hospitals outside India?', 'a' => 'Yes. Healthray runs in 5+ countries alongside its Indian base of 2,500+ hospitals, clinics, laboratories and pharmacies. Mention your country and regulatory requirements in the form and the reply will cover deployment model, data residency and local compliance rather than sending you Indian-only material.', ),
+			array('q' => 'Can you help with a tender, RFP or government procurement?', 'a' => 'Yes. Send the tender document or RFP to contact@healthray.com with the submission deadline. Our team supports technical compliance sheets, deployment declarations for on-premise or hybrid requirements, and phased institutional rollout plans for government, trust and medical college hospitals.', ),
+			array('q' => 'I want to resell or implement Healthray. Who do I speak to?', 'a' => 'Consultants, resellers and healthcare IT firms should start on the Healthray become a partner page, which covers the channel programme and commercial model. You can also use the enquiry form on the contact page and choose "Channel Partner / Consultant" as your business type.', ),
+			array('q' => 'Where is the Healthray office, and can I visit?', 'a' => 'Healthray Technologies Pvt. Ltd. is at 1st Floor, A - Millenium Point, Opp. Gabani Kidney Hospital, Station Rd, Surat 395003, Gujarat, India. Visitors are welcome - call +91-971-487-4435 first so the right person is free when you arrive.', ),
 		);
 	}
 
@@ -2030,7 +2045,7 @@ function hr_schema_extra()
 	if (!is_singular()) {
 		return $cache;
 	}
-	$raw  = get_post_meta(get_queried_object_id(), '_hr_schema_extra', true);
+	$raw = get_post_meta(get_queried_object_id(), '_hr_schema_extra', true);
 	$data = is_string($raw) && '' !== $raw ? json_decode($raw, true) : null;
 	return $cache = is_array($data) ? $data : array();
 }
@@ -2733,11 +2748,11 @@ add_action('wp_footer', function () {
 	if (!function_exists('wpcf7_enqueue_scripts')) {
 		return;
 	}
-?>
+	?>
 	<script id="cf7-phone-live-clear">
-		(function() {
+		(function () {
 			var RULES = <?php echo wp_json_encode(cf7_country_rules()); ?>;
-			var dialCodesSorted = Object.keys(RULES).sort(function(a, b) {
+			var dialCodesSorted = Object.keys(RULES).sort(function (a, b) {
 				return b.length - a.length;
 			});
 
@@ -2759,7 +2774,7 @@ add_action('wp_footer', function () {
 				return false;
 			}
 
-			document.addEventListener('input', function(e) {
+			document.addEventListener('input', function (e) {
 				var wrap = e.target.closest('.wpcf7-form-control-wrap.your-number');
 				if (!wrap) return;
 
@@ -2778,7 +2793,7 @@ add_action('wp_footer', function () {
 			});
 		})();
 	</script>
-<?php
+	<?php
 }, 20);
 
 // Hide the reCAPTCHA badge on every page, PPC and standalone pages included (they drop style.css).
@@ -2810,7 +2825,7 @@ add_action('wp_enqueue_scripts', function () {
 	wp_enqueue_script('hr-recaptcha-lazy', get_stylesheet_directory_uri() . '/js/recaptcha-lazy.js', array('contact-form-7'), hr_asset_version('/js/recaptcha-lazy.js'), array('in_footer' => true, 'strategy' => 'defer'));
 	wp_add_inline_script('hr-recaptcha-lazy', 'var hrRecaptcha = ' . wp_json_encode(array(
 		'sitekey' => $service->get_sitekey(),
-		'src'     => add_query_arg('render', $service->get_sitekey(), $api),
+		'src' => add_query_arg('render', $service->get_sitekey(), $api),
 		'actions' => apply_filters('wpcf7_recaptcha_actions', array('homepage' => 'homepage', 'contactform' => 'contactform')),
 	)) . ';', 'before');
 }, 30);
@@ -2824,9 +2839,9 @@ add_action('wpcf7_submit', function ($contact_form, $result) {
 	$log = get_option('hr_cf7_spam_log', array());
 	$log = is_array($log) ? $log : array();
 	$log[] = array(
-		'time'    => current_time('mysql'),
+		'time' => current_time('mysql'),
 		'form_id' => $contact_form->id(),
-		'page'    => $submission ? (string) $submission->get_meta('url') : '',
+		'page' => $submission ? (string) $submission->get_meta('url') : '',
 		'reasons' => $submission ? wp_list_pluck((array) $submission->get_spam_log(), 'reason') : array(),
 	);
 	update_option('hr_cf7_spam_log', array_slice($log, -100), false);
@@ -2898,7 +2913,7 @@ function hr_ppc_common_css()
 	}
 	$done = true;
 	$file = get_stylesheet_directory() . '/css/ppc-common.css';
-	$css  = file_exists($file) ? hr_minify_css(hr_get_inline_css($file)) : '';
+	$css = file_exists($file) ? hr_minify_css(hr_get_inline_css($file)) : '';
 	if ('' !== $css) {
 		echo '<style id="ppc-common-css">' . $css . '</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput
 	}
@@ -2927,8 +2942,8 @@ add_action('wp_head', function () {
 
 	wp_print_inline_script_tag(
 		'document.addEventListener("error",function(e){var i=e.target,s,f;if(i.tagName!=="IMG"||!i.closest(".top,main"))return;'
-			. 's=i.getAttribute("data-fallback-src");if(s){i.removeAttribute("data-fallback-src");i.src=s;return;}'
-			. 'f=i.getAttribute("data-fallback");if(f){i.parentNode.textContent=f;return;}i.parentNode.classList.add("noimg");},true);',
+		. 's=i.getAttribute("data-fallback-src");if(s){i.removeAttribute("data-fallback-src");i.src=s;return;}'
+		. 'f=i.getAttribute("data-fallback");if(f){i.parentNode.textContent=f;return;}i.parentNode.classList.add("noimg");},true);',
 		array('id' => 'ppc-img-fallback')
 	);
 }, 50);
@@ -3041,8 +3056,6 @@ add_action('wp_head', function () {
 		echo '<style id="contact-form-7-inline-css">' . hr_minify_css($css) . '</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 }, 51);
-
-
 
 // =============================================================================
 // == 14. HANDL UTM (CACHE-SAFE MODE)

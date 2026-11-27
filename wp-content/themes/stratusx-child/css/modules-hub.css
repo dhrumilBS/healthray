@@ -20,7 +20,7 @@
   to { transform: translateX(-50%); }
 }
 
-.modules-landing .hx .mods { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.modules-landing .hx .mods { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
 @media (max-width:1080px) {
   .modules-landing .hx .mods { grid-template-columns: minmax(0, 1fr); }
 }
@@ -47,7 +47,7 @@
   .modules-landing .hx .mod-links .btn { width: 100%; white-space: normal  }
 }
 
-/* Module cards: 3 in a row on desktop (OPD, IPD, Billing). Tablet: one card per row, picture beside the text. Phone: stacked. */
+/* Module cards: 2 per row on desktop (OPD, IPD, Billing, TPA). Tablet: one card per row, picture beside the text. Phone: stacked. */
 @media (min-width:1081px) {
   .modules-landing .hx .mod-body { padding: 24px 24px 26px; }
   .modules-landing .hx .mod h3 { font-size: 23px; }
