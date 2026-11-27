@@ -46,7 +46,7 @@ require_once get_stylesheet_directory() . '/lib/acf-speciality.php';
 
 // Landing page IDs
 if (!defined('HR_LANDING_PAGE_IDS')) {
-	define('HR_LANDING_PAGE_IDS', [167, 26475, 26834, 26844, 27377, 30243, 31051, 31079, 31213, 32399, 62094, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468, 82361, 82363, 82472, 82361, 82363, 82372]);
+	define('HR_LANDING_PAGE_IDS', [167, 26475, 26834, 26844, 27377, 28423, 30286, 30243, 31051, 31079, 31213, 32399, 57646, 57873, 59673, 62094, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468, 82361, 82363, 82472, 82361, 82363, 82372]);
 }
 
 
@@ -368,7 +368,7 @@ function remove_from_homepage()
 	);
 
 	// Remove only on landing pages
-	if (is_page(79691) || is_page(79713) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81834) || is_page(167) || is_page(27377) || is_page(26834) || is_page(26844) || is_page(26475) || is_page(31213) || is_page(62094) || is_page(30243) || is_page(31051) || is_page(31079) || is_single() || is_page(28110) || is_page(82361) || is_page(82363) || hr_is_modules_hub() || hr_is_login_portal_page() || is_page(82472) || hr_is_home_hms_page()) {
+	if (is_page(79691) || is_page(79713) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81834) || is_page(167) || is_page(27377) || is_page(26834) || is_page(26844) || is_page(26475) || is_page(31213) || is_page(62094) || is_page(30243) || is_page(31051) || is_page(31079) || is_single() || is_page(28110) || is_page(82361) || is_page(82363) || hr_is_modules_hub() || hr_is_login_portal_page() || is_page(82472) || hr_is_home_hms_page() || is_page(28423) || is_page(30286) || is_page(57646) || is_page(57873) || is_page(59673)) {
 		$styles = array_merge($styles, array('abha-card', 'common-theme', 'owl.carousal', 'my-elements'));
 		$scripts = array_merge($scripts, array('abha-card', 'common-theme', 'owl.carousal', 'toggle-tabs', 'my-element'));
 	}
@@ -497,6 +497,11 @@ add_filter('body_class', function ($classes) {
 	$classes = array_values(array_diff($classes, $remove));
 
 	$landing_pages = [
+		28423 => 'patient-engagement-landing',
+		30286 => 'medical-iot-landing',
+		57646 => 'inventory-landing',
+		57873 => 'epr-landing',
+		59673 => 'medical-college-landing',
 		32399 => '',
 		79691 => '',
 		79713 => 'emr-landing',
@@ -585,7 +590,7 @@ add_filter('body_class', static function ($classes) {
 // Landing CSS and schema
 add_action('wp_head', function () {
 	// Shared landing CSS (not speciality)
-	if (is_page(79713) || is_page(79691) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81468) || is_page(81773) || is_page(81775) || is_page(27377) || is_page(26834) || is_page(26844) || is_page(26475) || is_page(31213) || is_page(62094) || is_page(30243) || is_page(31051) || is_page(31079)) {
+	if (is_page(79713) || is_page(79691) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81468) || is_page(81773) || is_page(81775) || is_page(27377) || is_page(26834) || is_page(26844) || is_page(26475) || is_page(31213) || is_page(62094) || is_page(30243) || is_page(31051) || is_page(31079) || is_page(28423) || is_page(30286) || is_page(57646) || is_page(57873) || is_page(59673)) {
 		$common_css_path = get_stylesheet_directory() . '/css/common-landing.css';
 		if (file_exists($common_css_path)) {
 			echo '<style id="common-landing-css-inline">' . file_get_contents($common_css_path) . '</style>' . "\n";
@@ -1024,6 +1029,142 @@ add_action('wp_head', function () {
 		hr_print_module_css();
 	}
 
+	// Patient Engagement page (product schema; CSS via common-landing)
+	if (is_page(28423)) {
+		$page_url = 'https://healthray.com/patient-engagement-software/';
+		$schema = array(
+			'@context' => 'https://schema.org',
+			'@graph' => array(
+				array(
+					'@type' => 'SoftwareApplication',
+					'@id' => $page_url . '#software',
+					'name' => 'Healthray Patient Engagement Software',
+					'operatingSystem' => 'Web, Android, iOS',
+					'applicationCategory' => 'BusinessApplication',
+					'applicationSubCategory' => 'Patient Engagement Software',
+					'description' => 'Patient engagement software for Indian hospitals and clinics: a patient portal and mobile app for online appointments, reminders, teleconsultation, secure messaging, digital invoices and payments, and access to prescriptions, lab reports and bills, all linked to the same record staff use. ABDM compliant and ISO 27001 secure.',
+					'url' => $page_url,
+					'publisher' => array('@id' => home_url('/') . '#organization'),
+					'offers' => array(
+						'@type' => 'Offer',
+						'price' => '0',
+						'priceCurrency' => 'INR',
+						'description' => 'Free demo and free trial available',
+					),
+					'aggregateRating' => array(
+						'@type' => 'AggregateRating',
+						'ratingValue' => '4.8',
+						'bestRating' => '5',
+						'ratingCount' => '180',
+					),
+				),
+			),
+		);
+		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+	}
+
+	// Inventory Management page (product schema; CSS via common-landing)
+	if (is_page(57646)) {
+		$page_url = 'https://healthray.com/inventory-management-software/';
+		$schema = array(
+			'@context' => 'https://schema.org',
+			'@graph' => array(
+				array(
+					'@type' => 'SoftwareApplication',
+					'@id' => $page_url . '#software',
+					'name' => 'Healthray Inventory Management Software',
+					'operatingSystem' => 'Web, Android, iOS',
+					'applicationCategory' => 'BusinessApplication',
+					'applicationSubCategory' => 'Hospital Inventory Management Software',
+					'description' => 'Hospital inventory management software for Indian hospitals, clinics and pharmacies: real-time stock tracking across pharmacy, wards and stores, demand forecasting, low-stock and expiry alerts, GST billing, purchase and order management and visual reports, on the same platform as the pharmacy and hospital management system.',
+					'url' => $page_url,
+					'publisher' => array('@id' => home_url('/') . '#organization'),
+					'offers' => array(
+						'@type' => 'Offer',
+						'price' => '0',
+						'priceCurrency' => 'INR',
+						'description' => 'Free demo and free trial available',
+					),
+					'aggregateRating' => array(
+						'@type' => 'AggregateRating',
+						'ratingValue' => '4.8',
+						'bestRating' => '5',
+						'ratingCount' => '180',
+					),
+				),
+			),
+		);
+		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+	}
+
+	// Electronic Patient Records page (product schema; CSS via common-landing)
+	if (is_page(57873)) {
+		$page_url = 'https://healthray.com/electronic-patient-records/';
+		$schema = array(
+			'@context' => 'https://schema.org',
+			'@graph' => array(
+				array(
+					'@type' => 'SoftwareApplication',
+					'@id' => $page_url . '#software',
+					'name' => 'Healthray Electronic Patient Records Software',
+					'operatingSystem' => 'Web, Android, iOS',
+					'applicationCategory' => 'BusinessApplication',
+					'applicationSubCategory' => 'Electronic Patient Records Software',
+					'description' => 'Cloud-ready electronic patient records (EPR) software for Indian hospitals and clinics: one digital record per patient with history, diagnoses, prescriptions, lab and radiology results, billing and discharge, interoperable over HL7/FHIR and ABDM, ISO 27001 secure with a full audit trail.',
+					'url' => $page_url,
+					'publisher' => array('@id' => home_url('/') . '#organization'),
+					'offers' => array(
+						'@type' => 'Offer',
+						'price' => '0',
+						'priceCurrency' => 'INR',
+						'description' => 'Free demo and free trial available',
+					),
+					'aggregateRating' => array(
+						'@type' => 'AggregateRating',
+						'ratingValue' => '4.8',
+						'bestRating' => '5',
+						'ratingCount' => '180',
+					),
+				),
+			),
+		);
+		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+	}
+
+	// Medical College page (product schema; CSS via common-landing)
+	if (is_page(59673)) {
+		$page_url = 'https://healthray.com/medical-college-software/';
+		$schema = array(
+			'@context' => 'https://schema.org',
+			'@graph' => array(
+				array(
+					'@type' => 'SoftwareApplication',
+					'@id' => $page_url . '#software',
+					'name' => 'Healthray Medical College Software',
+					'operatingSystem' => 'Web, Android, iOS',
+					'applicationCategory' => 'BusinessApplication',
+					'applicationSubCategory' => 'Medical College Management Software',
+					'description' => 'Medical college management software for Indian medical colleges: admissions and fees, student records and attendance, timetables and academics with e-books, hostel, faculty and counselling management, integrated with the teaching hospital that runs on Healthray. ISO 27001 secure.',
+					'url' => $page_url,
+					'publisher' => array('@id' => home_url('/') . '#organization'),
+					'offers' => array(
+						'@type' => 'Offer',
+						'price' => '0',
+						'priceCurrency' => 'INR',
+						'description' => 'Free demo and free trial available',
+					),
+					'aggregateRating' => array(
+						'@type' => 'AggregateRating',
+						'ratingValue' => '4.8',
+						'bestRating' => '5',
+						'ratingCount' => '180',
+					),
+				),
+			),
+		);
+		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+	}
+
 	// Modules hub CSS and ItemList
 	if (hr_is_modules_hub()) {
 		hr_print_module_css('modules-hub.css', 'modules-hub-css-inline');
@@ -1362,7 +1503,80 @@ function healthray_patient_flow_faq_items()
 	);
 }
 
-// IPD/OPD/Modules/Hospital billing/ABDM/ABHA/DHIS/PM-JAY/Awards/Why Healthray/Telehealth/Patient Flow FAQ schema
+// Patient Engagement FAQs - page accordion (temp-patient-engagement-landing.php) and FAQPage schema
+function healthray_patient_engagement_faq_items()
+{
+	return array(
+		array('q' => 'What is patient engagement software?', 'a' => 'Patient engagement software gives patients a portal and mobile app to take part in their own care: book appointments, get reminders, consult a doctor online, pay bills and read their prescriptions, lab reports and records. It runs on the same record your staff use.',),
+		array('q' => 'What can patients do with Healthray\'s patient engagement software?', 'a' => 'Book and reschedule appointments, get appointment and medicine reminders, consult doctors by video, audio or chat, message the care team, pay bills online, and view their prescriptions, lab reports and past visits.',),
+		array('q' => 'Is patient data secure?', 'a' => 'Yes. Healthray is ISO 27001 certified for information security and ABDM compliant. Each user has their own login, and every change to a record is saved with the user and the time.',),
+		array('q' => 'Can patients book appointments online?', 'a' => 'Yes. Patients book and reschedule from your website, Google or WhatsApp. If a doctor cancels, the next free slot is offered and the patient is notified at once.',),
+		array('q' => 'Does it support teleconsultation?', 'a' => 'Yes. Patients consult doctors by video, audio or chat, linked to the same patient record as an in-person visit, so nothing is entered twice.',),
+		array('q' => 'Can patients see their prescriptions, reports and bills?', 'a' => 'Yes. Prescriptions, lab reports, past visits and invoices sit in one place on the patient\'s phone, so they can follow their own health and their medical spend.',),
+		array('q' => 'Which languages does it support?', 'a' => 'Support is available in English, Hindi and Gujarati, and prescriptions can be printed in several Indian languages for the patient.',),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own workflow, with no credit card required. Data migration and staff training are included.',),
+	);
+}
+
+// Medical IoT FAQs - page accordion (temp-medical-iot-landing.php) and FAQPage schema
+function healthray_medical_iot_faq_items()
+{
+	return array(
+		array('q' => 'What is medical IoT (IoMT)?', 'a' => 'The Internet of Medical Things is the idea of connecting the devices and systems a hospital uses so their data flows into one place, instead of sitting in separate machines and registers, ready for monitoring, analytics and quicker decisions.',),
+		array('q' => 'What does Healthray\'s medical IoT solution do?', 'a' => 'It holds the single patient record, exchanges data over open standards like HL7 and FHIR, supports remote monitoring through the patient app, and turns the data into charts and alerts on one dashboard.',),
+		array('q' => 'How does connected data help patient care?', 'a' => 'When readings and records come together in one place, staff can spot problems earlier and make quicker, better-informed decisions, with less manual data entry.',),
+		array('q' => 'Does it support remote patient monitoring?', 'a' => 'Yes. Patients share readings and consult from home through the patient app and teleconsultation, so your team can keep an eye on them between visits.',),
+		array('q' => 'Can it work with our existing systems and devices?', 'a' => 'Healthray exchanges data over the HL7 and FHIR standards rather than locking it in. Which specific systems and devices can be connected is scoped during the demo.',),
+		array('q' => 'Is the data secure?', 'a' => 'Yes. Healthray is ISO 27001 certified and ABDM compliant, with a separate login for every user, so connected data stays private and traceable.',),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own workflow, with no credit card required.',),
+	);
+}
+
+// Inventory FAQs - page accordion (temp-inventory-landing.php) and FAQPage schema
+function healthray_inventory_faq_items()
+{
+	return array(
+		array('q' => 'What is hospital inventory management software?', 'a' => 'It keeps track of everything a hospital buys and uses - medicines, consumables and equipment - across the pharmacy, wards and central store, recording what came in, what went out and what is left, all in one system.',),
+		array('q' => 'What does Healthray\'s inventory software track?', 'a' => 'Medicines, consumables and assets across the pharmacy, wards and stores, with quantities, locations, batches and expiry dates, plus purchase and supplier history.',),
+		array('q' => 'Does it handle GST billing?', 'a' => 'Yes. You can raise GST-ready invoices and purchase records, add a digital signature and export to PDF from the same screen.',),
+		array('q' => 'Does it alert on low stock and expiry?', 'a' => 'Yes. Automatic alerts warn you before an item runs out or reaches its expiry date, so you reorder in time and throw away less.',),
+		array('q' => 'Does it forecast demand?', 'a' => 'Yes. Healthray predicts how much of each item you will need from past usage, so you order the right quantity instead of overstocking or running out.',),
+		array('q' => 'Is it cloud-based and secure?', 'a' => 'Yes. It runs in the browser on the cloud and is ISO 27001 certified for information security, with a separate login for every user.',),
+		array('q' => 'Does it connect with the pharmacy and the hospital system?', 'a' => 'Yes. Inventory shares the same platform as the pharmacy and the hospital management system, so a medicine dispensed to a patient updates stock at once.',),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own item list, with no credit card required. Data migration and staff training are included.',),
+	);
+}
+
+// Electronic Patient Records FAQs - page accordion (temp-epr-landing.php) and FAQPage schema
+function healthray_epr_faq_items()
+{
+	return array(
+		array('q' => 'What is electronic patient records software?', 'a' => 'It creates and manages the digital version of a patient\'s chart - their details, history, diagnoses, prescriptions, lab and radiology results, bills and discharge papers - in one place, and controls who can see it.',),
+		array('q' => 'How is EPR different from EMR and EHR?', 'a' => 'The electronic patient record is the digital chart itself. The EMR manages those records within one hospital or clinic, and the EHR shares them across a network. On Healthray all three use the same record.',),
+		array('q' => 'What is in an electronic patient record?', 'a' => 'Demographics, visit history, diagnoses, prescriptions, lab and radiology results, bills and discharge papers, all filed under one patient and visible to the right staff.',),
+		array('q' => 'Is the data secure?', 'a' => 'Yes. Healthray is ISO 27001 certified and ABDM compliant, with a login per user and a full audit trail, so records cannot be lost or read by the wrong person.',),
+		array('q' => 'Can records be shared between departments and hospitals?', 'a' => 'Yes. Records are exchanged across departments and hospitals over the HL7 and FHIR standards and ABDM, so care is not held up by missing history.',),
+		array('q' => 'Does it work for both hospitals and clinics?', 'a' => 'Yes. The same electronic patient records software suits a single clinic and a multi-department hospital, and grows with you.',),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own workflow, with no credit card required. Data migration and staff training are included.',),
+	);
+}
+
+// Medical College FAQs - page accordion (temp-medical-college-landing.php) and FAQPage schema
+function healthray_medical_college_faq_items()
+{
+	return array(
+		array('q' => 'What is medical college software?', 'a' => 'It runs the administration of a medical college - admissions and fees, student records and attendance, timetables and academics, hostel, faculty and counselling - in one system instead of scattered registers and spreadsheets.',),
+		array('q' => 'What does Healthray\'s medical college software manage?', 'a' => 'Admissions and fees, student records and attendance, timetables, e-books and academics, hostel occupancy and finances, faculty duties and workload, and counselling, with an analytics dashboard over all of it.',),
+		array('q' => 'How does it integrate with the teaching hospital?', 'a' => 'The same platform that manages students also runs the teaching hospital, so students train on real cases, faculty track clinical rotations, and academic and clinical records stay in one place.',),
+		array('q' => 'Does it handle admissions and online fees?', 'a' => 'Yes. You can build admission forms and fee receipts, accept fees online and send reminders for what is due.',),
+		array('q' => 'Does it manage hostel and faculty?', 'a' => 'Yes. It tracks occupied and vacant rooms, room item lists, documents and hostel finances, and keeps a record and ledger for every professor and trainer with their duties and workload.',),
+		array('q' => 'Does it track attendance and clinical rotations?', 'a' => 'Yes. It records student and faculty attendance, builds timetables with AI help, and tracks each student\'s clinical rotation in the teaching hospital.',),
+		array('q' => 'Is college data secure?', 'a' => 'Yes. Healthray is ISO 27001 certified for information security, and each user has their own login, so college and student data stays protected.',),
+		array('q' => 'Is there a free demo?', 'a' => 'Yes. Book a free 30-minute demo on your own setup, with no credit card required. Data migration and staff training are included.',),
+	);
+}
+
+// IPD/OPD/Modules/Hospital billing/ABDM/ABHA/DHIS/PM-JAY/Awards/Why Healthray/Telehealth/Patient Flow/Patient Engagement/Medical IoT/Inventory/EPR/Medical College FAQ schema
 add_filter('hr_head_faqs', function ($faqs) {
 	if (is_page(27377)) {
 		return healthray_abdm_faq_items();
@@ -1387,6 +1601,21 @@ add_filter('hr_head_faqs', function ($faqs) {
 	}
 	if (is_page(31079)) {
 		return healthray_patient_flow_faq_items();
+	}
+	if (is_page(28423)) {
+		return healthray_patient_engagement_faq_items();
+	}
+	if (is_page(30286)) {
+		return healthray_medical_iot_faq_items();
+	}
+	if (is_page(57646)) {
+		return healthray_inventory_faq_items();
+	}
+	if (is_page(57873)) {
+		return healthray_epr_faq_items();
+	}
+	if (is_page(59673)) {
+		return healthray_medical_college_faq_items();
 	}
 	if (is_page(82361)) {
 		return healthray_ipd_faq_items();

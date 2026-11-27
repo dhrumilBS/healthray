@@ -288,9 +288,9 @@ html { scroll-behavior: smooth; }
 /* Portrait illustration in .define-grid: keep it from towering over the copy */
 :is(.abdm-landing, .dhis-landing, .pmjay-landing) .define-grid .define-img { max-height: 520px; width: auto; margin: 0 auto; }
 /* Links inside cards, tick lists and the tinted intro copy */
-:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing, .awards-landing, .why-healthray-landing, .telehealth-landing, .patient-flow-landing) .card p a,
-:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing, .awards-landing, .why-healthray-landing, .telehealth-landing, .patient-flow-landing) .arch li a,
-:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing, .awards-landing, .why-healthray-landing, .telehealth-landing, .patient-flow-landing) .define p a { color: var(--brand); font-weight: 600; }
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing, .awards-landing, .why-healthray-landing, .telehealth-landing, .patient-flow-landing, .patient-engagement-landing, .medical-iot-landing, .inventory-landing, .epr-landing, .medical-college-landing) .card p a,
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing, .awards-landing, .why-healthray-landing, .telehealth-landing, .patient-flow-landing, .patient-engagement-landing, .medical-iot-landing, .inventory-landing, .epr-landing, .medical-college-landing) .arch li a,
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing, .awards-landing, .why-healthray-landing, .telehealth-landing, .patient-flow-landing, .patient-engagement-landing, .medical-iot-landing, .inventory-landing, .epr-landing, .medical-college-landing) .define p a { color: var(--brand); font-weight: 600; }
 /* Tables with three or more columns scroll sideways on phones instead of squashing */
 :is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .telehealth-landing, .patient-flow-landing) .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 :is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .telehealth-landing, .patient-flow-landing) .table-scroll .versus-table { min-width: 640px; background: #fff; }
@@ -302,9 +302,9 @@ html { scroll-behavior: smooth; }
 :is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .telehealth-landing, .patient-flow-landing) .num-steps h3 { font-size: 1rem; margin-bottom: 8px; }
 :is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .telehealth-landing, .patient-flow-landing) .num-steps p { font-size: .9rem; }
 /* Cards that link to another page, with a "Read about ..." line at the bottom */
-:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing, .awards-landing, .why-healthray-landing, .telehealth-landing, .patient-flow-landing) .related-grid .card { display: flex; flex-direction: column; }
-:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing, .awards-landing, .why-healthray-landing, .telehealth-landing, .patient-flow-landing) .related-grid .more { margin-top: auto; padding-top: 14px; font-size: .9rem; font-weight: 600; color: var(--brand); }
-:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing, .awards-landing, .why-healthray-landing, .telehealth-landing, .patient-flow-landing) .related-grid .more::after { content: " \2192"; }
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing, .awards-landing, .why-healthray-landing, .telehealth-landing, .patient-flow-landing, .patient-engagement-landing, .medical-iot-landing, .inventory-landing, .epr-landing, .medical-college-landing) .related-grid .card { display: flex; flex-direction: column; }
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing, .awards-landing, .why-healthray-landing, .telehealth-landing, .patient-flow-landing, .patient-engagement-landing, .medical-iot-landing, .inventory-landing, .epr-landing, .medical-college-landing) .related-grid .more { margin-top: auto; padding-top: 14px; font-size: .9rem; font-weight: 600; color: var(--brand); }
+:is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .our-story-landing, .awards-landing, .why-healthray-landing, .telehealth-landing, .patient-flow-landing, .patient-engagement-landing, .medical-iot-landing, .inventory-landing, .epr-landing, .medical-college-landing) .related-grid .more::after { content: " \2192"; }
 @media (max-width: 980px) {
   :is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .telehealth-landing, .patient-flow-landing) .num-steps { grid-template-columns: repeat(2, 1fr); }
   :is(.abdm-landing, .dhis-landing, .pmjay-landing) .define-grid .define-img { max-height: 420px; }
