@@ -312,3 +312,32 @@ html { scroll-behavior: smooth; }
 @media (max-width: 720px) {
   :is(.abdm-landing, .abha-landing, .dhis-landing, .pmjay-landing, .telehealth-landing, .patient-flow-landing) .num-steps { grid-template-columns: 1fr; }
 }
+
+/* App download band (doctor / patient mobile app pages) */
+:is(.doctor-app-landing, .patient-app-landing) .app-dl { display: grid; grid-template-columns: 1fr 320px; gap: 48px; align-items: center; background: linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-dark) 130%); border-radius: 24px; padding: 52px 56px; overflow: hidden; }
+:is(.doctor-app-landing, .patient-app-landing) .app-dl .eyebrow { color: #9ec3ff; }
+:is(.doctor-app-landing, .patient-app-landing) .app-dl h2 { color: #fff; margin-bottom: 14px; }
+:is(.doctor-app-landing, .patient-app-landing) .app-dl-copy > p { color: #c6d6f5; max-width: 460px; margin-bottom: 26px; }
+:is(.doctor-app-landing, .patient-app-landing) .store-badges { display: flex; flex-wrap: wrap; gap: 14px; }
+:is(.doctor-app-landing, .patient-app-landing) .store-badge { display: inline-flex; align-items: center; gap: 12px; background: #0d1b3e; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 12px; padding: 10px 18px; color: #fff; text-decoration: none; transition: transform 0.2s ease, background 0.2s ease; }
+:is(.doctor-app-landing, .patient-app-landing) .store-badge:hover { background: #15275a; transform: translateY(-2px); }
+:is(.doctor-app-landing, .patient-app-landing) .store-badge svg { width: 26px; height: 26px; flex: none; }
+:is(.doctor-app-landing, .patient-app-landing) .store-badge span { display: flex; flex-direction: column; line-height: 1.15; text-align: left; }
+:is(.doctor-app-landing, .patient-app-landing) .store-badge small { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.04em; color: #b9c8e6; }
+:is(.doctor-app-landing, .patient-app-landing) .store-badge b { font-size: 1.05rem; font-weight: 700; }
+:is(.doctor-app-landing, .patient-app-landing) .app-trust { display: flex; flex-wrap: wrap; gap: 10px 20px; margin: 22px 0 0; }
+:is(.doctor-app-landing, .patient-app-landing) .app-trust span { display: inline-flex; align-items: center; gap: 7px; font-size: 0.85rem; color: #c6d6f5; }
+:is(.doctor-app-landing, .patient-app-landing) .app-trust svg { width: 17px; height: 17px; stroke: var(--hr-hero-success); fill: none; flex: none; }
+:is(.doctor-app-landing, .patient-app-landing) .app-dl-art { display: flex; justify-content: center; }
+:is(.doctor-app-landing, .patient-app-landing) .app-phone { width: 100%; max-width: 240px; height: auto; filter: drop-shadow(0 24px 50px rgba(0, 0, 0, 0.35)); }
+@media (max-width: 980px) {
+  :is(.doctor-app-landing, .patient-app-landing) .app-dl { grid-template-columns: 1fr; gap: 32px; padding: 44px 32px; text-align: center; }
+  :is(.doctor-app-landing, .patient-app-landing) .app-dl-copy > p { margin-left: auto; margin-right: auto; }
+  :is(.doctor-app-landing, .patient-app-landing) .store-badges, :is(.doctor-app-landing, .patient-app-landing) .app-trust { justify-content: center; }
+  :is(.doctor-app-landing, .patient-app-landing) .app-dl-art { order: -1; }
+  :is(.doctor-app-landing, .patient-app-landing) .app-phone { max-width: 196px; }
+}
+@media (max-width: 720px) {
+  :is(.doctor-app-landing, .patient-app-landing) .app-dl { padding: 34px 16px; }
+  :is(.doctor-app-landing, .patient-app-landing) .store-badge { padding: 9px 16px; }
+}

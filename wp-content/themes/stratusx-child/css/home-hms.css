@@ -233,7 +233,6 @@ html { scroll-behavior: smooth; }
 	.ppc-hims .video { max-width: 300px; }
 }
 @media (max-width: 480px) {
-	.ppc-hims .video { max-width: 250px; border-radius: 22px; }
 	.ppc-hims .video .cap { font-size: 13px; left: 16px; right: 16px; bottom: 16px; }
 	.ppc-hims .video .cap b { font-size: 16px; }
 }
@@ -556,8 +555,23 @@ html { scroll-behavior: smooth; }
 	.ppc-hims .hero { padding-top: 20px; }
 	.ppc-hims .hero h1 { font-size: 28px; margin-top: 10px; }
 	.ppc-hims .hero-sub { font-size: 16px; margin-top: 12px; }
-	.ppc-hims .mini-trust { margin-top: 12px; }
-	.ppc-hims .hero-grid { row-gap: 20px; }
+	.ppc-hims .mini-trust { margin-top: 12px; justify-content: center; }
+	.ppc-hims .hero-grid { row-gap: 14px; display: flex; flex-direction: column; }
+	/* Form after title on phones */
+	.ppc-hims .hero-copy { display: contents; }
+	.ppc-hims .hero .eyebrow { order: 1; align-self: center; text-align: center; }
+	.ppc-hims .hero .hero-title { order: 2; }
+	.ppc-hims .hero .form-card { order: 3; }
+	.ppc-hims .hero .hero-sub { order: 4; }
+	.ppc-hims .hero .mini-trust { order: 5; }
+	.ppc-hims .hero .hero-proof { order: 6; }
+	/* Center proof block */
+	.ppc-hims .hero-proof { text-align: center; }
+	.ppc-hims .hero-proof .faces { flex-direction: column; align-items: center; gap: 10px; }
+	.ppc-hims .hero-proof .faces p { max-width: 32ch; }
+	.ppc-hims .hero-proof .trust-row { justify-content: center; }
+	.ppc-hims .hero-proof .seals { justify-content: center; }
+	.ppc-hims .hero-proof .ratings { justify-content: center; }
 	.ppc-hims #demo .fc-sub { display: none; }
 	.ppc-hims .form-card { padding: 20px 18px; }
 	.ppc-hims .section { padding-block: 56px; }
@@ -1310,18 +1324,9 @@ html { scroll-behavior: smooth; }
 	.ppc-hims .top-nav { display: none; }
 }
 
-/* Phone sticky demo bar */
-.ppc-hims .mcta { display: none; }
+/* Phone anchor offset */
 @media (max-width: 900px) {
-	.ppc-hims .mcta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; display: flex; gap: 10px; padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); background: var(--white); box-shadow: 0 -6px 22px rgba(15, 23, 42, .14); transform: translateY(110%); transition: transform .25s ease; }
-	.ppc-hims .mcta.show { transform: none; }
-	.ppc-hims .mcta .btn { flex: 1; min-height: 50px; padding: 0 16px; font-size: 16px; box-shadow: none; }
-	.ppc-hims .mcta-call { flex: none; display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 18px; border: 1.5px solid var(--navy); border-radius: 12px; color: var(--navy); font-weight: 800; font-size: 16px; text-decoration: none; }
-	.ppc-hims .ft { padding-bottom: 78px; }
 	.ppc-hims .hr-home-main>section[id] { scroll-margin-top: 12px; }
-}
-@media (prefers-reduced-motion: reduce) {
-	.ppc-hims .mcta { transition: none; }
 }
 
 /* Phone departments chip row */
@@ -1475,10 +1480,8 @@ html { scroll-behavior: smooth; }
 /* Skip link */
 .ppc-hims .skip { position: absolute; left: 12px; top: -60px; z-index: 100; background: var(--navy); color: var(--white); font-weight: 700; padding: 12px 18px; border-radius: 0 0 var(--r) var(--r); text-decoration: none; transition: top .15s; }
 .ppc-hims .skip:focus { top: 0; color: var(--white); }
-/* CTA lines that look like headings but are <p class="hr-cta-title"> for SEO (kept out of the heading outline):
-   "Book a free demo" (hero form card), "Did not find your question?" (FAQ box), "Every doctor on this page..." (closing).
-   Same look as the old h2/h3: the shared .ppc-hims h1-h3 rule, the site-wide capitalize on headings, then each place's size. */
-.ppc-hims p.hr-cta-title { color: var(--navy); line-height: 1.15; margin: 0; text-wrap: balance; letter-spacing: -.01em; text-transform: capitalize; }
+/* SEO CTA titles */
+.ppc-hims p.hr-cta-title { color: var(--navy); line-height: 1.15; margin: 0 0 12px; text-wrap: balance; letter-spacing: -.01em; text-transform: capitalize; }
 .ppc-hims .form-card p.hr-cta-title { font-size: 24px; font-weight: 800; }
 .ppc-hims .f1-talk p.hr-cta-title { color: var(--white); font-size: 20px; font-weight: 800; margin: 0; line-height: 1.15; }
 .ppc-hims .cz p.hr-cta-title { font-size: clamp(30px, 4.2vw, 48px); font-weight: 800; line-height: 1.1; letter-spacing: -.02em; }

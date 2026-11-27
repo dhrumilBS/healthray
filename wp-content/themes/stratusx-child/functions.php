@@ -46,7 +46,7 @@ require_once get_stylesheet_directory() . '/lib/acf-speciality.php';
 
 // Landing page IDs
 if (!defined('HR_LANDING_PAGE_IDS')) {
-	define('HR_LANDING_PAGE_IDS', [167, 26475, 26834, 26844, 27377, 28423, 30286, 30243, 31051, 31079, 31213, 32399, 57646, 57873, 59673, 62094, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468, 82361, 82363, 82472, 82361, 82363, 82372]);
+	define('HR_LANDING_PAGE_IDS', [167, 26475, 26834, 26844, 27377, 28345, 28423, 28530, 30286, 30317, 30956, 30243, 31051, 31079, 31213, 32399, 57646, 57873, 59673, 62094, 79691, 79713, 79754, 79865, 79924, 79928, 81124, 81468, 82361, 82363, 82472, 82361, 82363, 82372]);
 }
 
 
@@ -317,6 +317,12 @@ add_action('wp_enqueue_scripts', function () {
 		wp_add_inline_style('hr-billing', '.hr-billing{--hr-sticky:127px}@media (max-width:1024px){.hr-billing{--hr-sticky:104px}}');
 		wp_enqueue_script('hr-billing', get_stylesheet_directory_uri() . '/js/hospital-billing.js', array(), hr_asset_version('/js/hospital-billing.js'), true);
 	}
+	// TPA & insurance management software (/modules/tpa-insurance-claims/): css/tpa.css + js/tpa.js, see temp-tpa-insurance.php
+	if (is_page(82798)) {
+		wp_enqueue_style('hr-tpa', get_stylesheet_directory_uri() . '/css/tpa.css', array('main_style'), hr_asset_version('/css/tpa.css'));
+		wp_add_inline_style('hr-tpa', '.hr-tpa{--hr-sticky:127px}@media (max-width:1024px){.hr-tpa{--hr-sticky:104px}}');
+		wp_enqueue_script('hr-tpa', get_stylesheet_directory_uri() . '/js/tpa.js', array(), hr_asset_version('/js/tpa.js'), true);
+	}
 	if (hr_is_home_hms_page()) {
 		wp_enqueue_script('home-hms', get_stylesheet_directory_uri() . '/js/home-hms.js', array(), hr_asset_version('/js/home-hms.js'), true);
 		wp_enqueue_style('home-hms', get_stylesheet_directory_uri() . '/css/home-hms.css', array(), hr_asset_version('/css/home-hms.css'));
@@ -368,7 +374,7 @@ function remove_from_homepage()
 	);
 
 	// Remove only on landing pages
-	if (is_page(79691) || is_page(79713) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81834) || is_page(167) || is_page(27377) || is_page(26834) || is_page(26844) || is_page(26475) || is_page(31213) || is_page(62094) || is_page(30243) || is_page(31051) || is_page(31079) || is_single() || is_page(28110) || is_page(82361) || is_page(82363) || hr_is_modules_hub() || hr_is_login_portal_page() || is_page(82472) || hr_is_home_hms_page() || is_page(28423) || is_page(30286) || is_page(57646) || is_page(57873) || is_page(59673)) {
+	if (is_page(79691) || is_page(79713) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81834) || is_page(167) || is_page(27377) || is_page(26834) || is_page(26844) || is_page(26475) || is_page(31213) || is_page(62094) || is_page(30243) || is_page(31051) || is_page(31079) || is_single() || is_page(28110) || is_page(82361) || is_page(82363) || hr_is_modules_hub() || hr_is_login_portal_page() || is_page(82472) || hr_is_home_hms_page() || is_page(28423) || is_page(30286) || is_page(57646) || is_page(57873) || is_page(59673) || is_page(30317) || is_page(30956) || is_page(28345) || is_page(28530) || is_page(82742)) {
 		$styles = array_merge($styles, array('abha-card', 'common-theme', 'owl.carousal', 'my-elements'));
 		$scripts = array_merge($scripts, array('abha-card', 'common-theme', 'owl.carousal', 'toggle-tabs', 'my-element'));
 	}
@@ -502,6 +508,10 @@ add_filter('body_class', function ($classes) {
 		57646 => 'inventory-landing',
 		57873 => 'epr-landing',
 		59673 => 'medical-college-landing',
+		30317 => 'doctor-app-landing',
+		30956 => 'patient-app-landing',
+		28345 => 'billing-software-landing',
+		28530 => 'billing-services-landing',
 		32399 => '',
 		79691 => '',
 		79713 => 'emr-landing',
@@ -589,8 +599,14 @@ add_filter('body_class', static function ($classes) {
 
 // Landing CSS and schema
 add_action('wp_head', function () {
+	// TPA page: preload the hero background (LCP element), see temp-tpa-insurance.php
+	if (is_page(82798)) {
+		$tpa_up = trailingslashit(wp_upload_dir()['baseurl']) . '2026/11/';   // hero images are in the Media Library
+		echo '<link rel="preload" as="image" href="' . esc_url($tpa_up . 'bg-rainbow.webp') . '" imagesrcset="' . esc_url($tpa_up . 'bg-rainbow-900.webp') . ' 900w, ' . esc_url($tpa_up . 'bg-rainbow.webp') . ' 1600w" imagesizes="100vw" fetchpriority="high">' . "\n";
+	}
+
 	// Shared landing CSS (not speciality)
-	if (is_page(79713) || is_page(79691) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81468) || is_page(81773) || is_page(81775) || is_page(27377) || is_page(26834) || is_page(26844) || is_page(26475) || is_page(31213) || is_page(62094) || is_page(30243) || is_page(31051) || is_page(31079) || is_page(28423) || is_page(30286) || is_page(57646) || is_page(57873) || is_page(59673)) {
+	if (is_page(79713) || is_page(79691) || is_page(79754) || is_page(79865) || is_page(79924) || is_page(79928) || is_page(32399) || is_page(81124) || is_page(81468) || is_page(81773) || is_page(81775) || is_page(27377) || is_page(26834) || is_page(26844) || is_page(26475) || is_page(31213) || is_page(62094) || is_page(30243) || is_page(31051) || is_page(31079) || is_page(28423) || is_page(30286) || is_page(57646) || is_page(57873) || is_page(59673) || is_page(30317) || is_page(30956) || is_page(28345) || is_page(28530)) {
 		$common_css_path = get_stylesheet_directory() . '/css/common-landing.css';
 		if (file_exists($common_css_path)) {
 			echo '<style id="common-landing-css-inline">' . file_get_contents($common_css_path) . '</style>' . "\n";
@@ -1165,6 +1181,98 @@ add_action('wp_head', function () {
 		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
 	}
 
+	// Doctor Mobile App page (product schema; CSS via common-landing)
+	if (is_page(30317)) {
+		$page_url = 'https://healthray.com/doctor-mobile-app/';
+		$schema = array(
+			'@context' => 'https://schema.org',
+			'@graph' => array(
+				array(
+					'@type' => 'SoftwareApplication',
+					'@id' => $page_url . '#software',
+					'name' => 'Healthray Doctor App',
+					'operatingSystem' => 'Android, iOS',
+					'applicationCategory' => 'HealthApplication',
+					'applicationSubCategory' => 'Doctor Mobile App',
+					'description' => 'Healthray doctor mobile app for Indian doctors: patient records (EMR), e-prescriptions, appointments and the OPD queue, lab and radiology reports, teleconsultation and collections, in sync with the Healthray web app. ABDM compliant and ISO 27001 secure.',
+					'url' => $page_url,
+					'downloadUrl' => 'https://play.google.com/store/apps/details?id=com.healthray.doctor',
+					'publisher' => array('@id' => home_url('/') . '#organization'),
+					'offers' => array(
+						'@type' => 'Offer',
+						'price' => '0',
+						'priceCurrency' => 'INR',
+						'description' => 'Free to download; free demo available',
+					),
+				),
+			),
+		);
+		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+	}
+
+	// Patient Mobile App page (product schema; CSS via common-landing)
+	if (is_page(30956)) {
+		$page_url = 'https://healthray.com/patient-mobile-app/';
+		$schema = array(
+			'@context' => 'https://schema.org',
+			'@graph' => array(
+				array(
+					'@type' => 'SoftwareApplication',
+					'@id' => $page_url . '#software',
+					'name' => 'Healthray Patient App',
+					'operatingSystem' => 'Android, iOS',
+					'applicationCategory' => 'HealthApplication',
+					'applicationSubCategory' => 'Patient Mobile App',
+					'description' => 'Healthray patient mobile app: book appointments, get appointment and medicine reminders, view prescriptions, lab reports and bills, pay online, link an ABHA number and consult by video, audio or chat. ABDM compliant and ISO 27001 secure.',
+					'url' => $page_url,
+					'downloadUrl' => 'https://play.google.com/store/apps/details?id=com.healthray.patient',
+					'publisher' => array('@id' => home_url('/') . '#organization'),
+					'offers' => array(
+						'@type' => 'Offer',
+						'price' => '0',
+						'priceCurrency' => 'INR',
+						'description' => 'Free to download; free demo available',
+					),
+				),
+			),
+		);
+		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+	}
+
+	// Medical Billing Software page (product schema; CSS via common-landing)
+	if (is_page(28345)) {
+		$page_url = 'https://healthray.com/medical-billing-software/';
+		$schema = array(
+			'@context' => 'https://schema.org',
+			'@graph' => array(
+				array(
+					'@type' => 'SoftwareApplication',
+					'@id' => $page_url . '#software',
+					'name' => 'Healthray Medical Billing Software',
+					'operatingSystem' => 'Web, Android, iOS',
+					'applicationCategory' => 'BusinessApplication',
+					'applicationSubCategory' => 'Medical Billing Software',
+					'description' => 'Medical billing software for Indian hospitals and clinics: OPD, IPD, cashless TPA and package bills in one system, with lab, pharmacy and room charges added automatically, a revenue leakage report, rate lists per payer and ward, GST and tax reports, automatic doctor share, and collection and discount reports. ABDM compliant and ISO 27001 secure.',
+					'url' => $page_url,
+					'publisher' => array('@id' => home_url('/') . '#organization'),
+					'offers' => array(
+						'@type' => 'Offer',
+						'price' => '0',
+						'priceCurrency' => 'INR',
+						'description' => 'Free demo and free trial available',
+					),
+					'aggregateRating' => array(
+						'@type' => 'AggregateRating',
+						'ratingValue' => '4.8',
+						'bestRating' => '5',
+						'ratingCount' => '180',
+					),
+				),
+			),
+		);
+		echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+	}
+
 	// Modules hub CSS and ItemList
 	if (hr_is_modules_hub()) {
 		hr_print_module_css('modules-hub.css', 'modules-hub-css-inline');
@@ -1576,7 +1684,63 @@ function healthray_medical_college_faq_items()
 	);
 }
 
-// IPD/OPD/Modules/Hospital billing/ABDM/ABHA/DHIS/PM-JAY/Awards/Why Healthray/Telehealth/Patient Flow/Patient Engagement/Medical IoT/Inventory/EPR/Medical College FAQ schema
+// Doctor App FAQs - page accordion (temp-doctor-app-landing.php) and FAQPage schema
+function healthray_doctor_app_faq_items()
+{
+	return array(
+		array('q' => 'What is the Healthray doctor mobile app?', 'a' => 'The Healthray doctor mobile app is the doctor\'s view of Healthray on a phone. It carries patient records, e-prescriptions, appointments, the OPD queue, lab and radiology reports, teleconsultation and your collections and doctor share into one app.',),
+		array('q' => 'Is the Healthray doctor mobile app free to download?', 'a' => 'Yes. The app is free to download on Android and iOS, and you sign in with your Healthray account. Book a free demo and our team will set you up.',),
+		array('q' => 'Which devices does the doctor mobile app support?', 'a' => 'The app works on Android phones from Google Play and on iPhones from the App Store, and it stays in sync with the web version you use at the hospital.',),
+		array('q' => 'Can I write e-prescriptions from the doctor mobile app?', 'a' => 'Yes. You can write and share e-prescriptions from your phone, and each one saves to the same patient record your front desk and pharmacy use.',),
+		array('q' => 'Is patient data on the doctor mobile app secure?', 'a' => 'Yes. Healthray is ISO 27001 certified and HIPAA compliant, and it is ABDM compliant and NHA approved, so patient data is protected to recognised standards.',),
+		array('q' => 'Does the doctor mobile app work with my existing Healthray system?', 'a' => 'Yes. The app shows the same records as your Healthray EMR and EHR, so what you see on your phone is what your team sees at the hospital. Data migration and staff training are included.',),
+		array('q' => 'How long does it take to get started with the doctor mobile app?', 'a' => 'Most hospitals start in 1 to 3 weeks. Data migration and staff training are included, and support is available 24x7 in English, Hindi and Gujarati.',),
+	);
+}
+
+// Patient App FAQs - page accordion (temp-patient-app-landing.php) and FAQPage schema
+function healthray_patient_app_faq_items()
+{
+	return array(
+		array('q' => 'What is the Healthray patient mobile app?', 'a' => 'It is a free app for patients on Android and iOS. From their phone, patients can book appointments, get reminders, view their prescriptions, lab reports and bills, pay online, link their ABHA number and consult a doctor by video, audio or chat.',),
+		array('q' => 'Is the patient mobile app free to download?', 'a' => 'Yes. The app is free for patients on Google Play and the App Store. Your hospital runs it as part of Healthray, and data migration and staff training are included.',),
+		array('q' => 'Can patients link their ABHA number in the app?', 'a' => 'Yes. Patients can link their ABHA number and keep their health records in one place across providers. Healthray is ABDM compliant and NHA approved.',),
+		array('q' => 'Can patients book appointments and get reminders?', 'a' => 'Yes. Patients book and reschedule appointments from the app and get a reminder before each visit, plus medicine reminders that help them stay on their treatment.',),
+		array('q' => 'Can patients see their prescriptions and lab reports?', 'a' => 'Yes. Prescriptions, lab reports, past visits and bills sit in one place on the patient\'s phone, ready to read or share whenever they need them.',),
+		array('q' => 'Can patients pay bills and consult a doctor online?', 'a' => 'Yes. Bills are raised digitally and paid online in a click, and patients can consult doctors by video, audio or chat, all linked to the same record.',),
+		array('q' => 'Is patient data in the app secure?', 'a' => 'Yes. Healthray is ISO 27001 certified and HIPAA compliant, ABDM compliant and NABH certified, and you get 24x7 support in English, Hindi and Gujarati.',),
+	);
+}
+
+// Medical Billing Software FAQs - page accordion (temp-billing-software-landing.php) and FAQPage schema
+function healthray_billing_software_faq_items()
+{
+	return array(
+		array('q' => 'What is medical billing software?', 'a' => 'Medical billing software is the system a hospital or clinic uses to make its bills - OPD, IPD, cashless TPA and package bills - with GST applied only where it is due. In India it means the same as hospital billing software, not US-style insurance-claim submission.',),
+		array('q' => 'Is medical billing software the same as hospital billing software?', 'a' => 'Yes. In India both terms mean the software that prepares a hospital\'s own bills - OPD, IPD, cashless TPA and Ayushman bills with GST. Healthray runs all of them in one system linked to the patient record.',),
+		array('q' => 'How does Healthray stop missed charges?', 'a' => 'Lab, pharmacy and room charges are added to the bill automatically, and a Revenue Leakage report lists medicines and tests that were given but not billed, so your staff can recover them before the patient is discharged.',),
+		array('q' => 'Can it keep different rates for TPAs, companies and wards?', 'a' => 'Yes. You can keep separate rate lists per payer - cash, each TPA and each company - and per ward such as General, Private and ICU, and import them from Excel, so the right rate is applied on every bill.',),
+		array('q' => 'Does it handle GST and doctor shares?', 'a' => 'Yes. GST is applied only on the services that need it and comes with tax reports, and each doctor\'s share is calculated automatically from the services billed.',),
+		array('q' => 'What billing reports do I get?', 'a' => 'You get a collection report by mode - cash, UPI and card - a discount report that records the reason and the staff name, and the Revenue Leakage report, so you can see every amount collected and every charge missed.',),
+		array('q' => 'How long does it take to start, and what support is included?', 'a' => 'Most hospitals start in 1 to 3 weeks, with data migration and staff training included. You get 24x7 support in English, Hindi and Gujarati.',),
+	);
+}
+
+// Medical Billing Services FAQs - page accordion (temp-billing-services-landing.php) and FAQPage schema
+function healthray_billing_services_faq_items()
+{
+	return array(
+		array('q' => 'What does "medical billing services" mean with Healthray?', 'a' => 'It means your own billing team does the work inside Healthray\'s software, not an outside agency. Your team raises OPD and IPD bills, files cashless TPA and Ayushman claims, applies rate lists and GST, and tracks collections, all on the same record your clinical and front-desk staff use.',),
+		array('q' => 'Does Healthray do our billing for us?', 'a' => 'No. Healthray is software your own team runs. It builds bills from the patient record, files claims and produces reports, but your staff stays in control of every charge, discount and payment.',),
+		array('q' => 'What billing can our team handle in Healthray?', 'a' => 'Your team can raise OPD, IPD, cashless TPA and Ayushman bills, apply rate lists and GST, record payments, manage discounts and refunds, and run collection, discount and revenue-leakage reports.',),
+		array('q' => 'How does Healthray help improve collections?', 'a' => 'Charges from every department are added to the bill as care happens, so fewer are missed. Claims are tracked to payment and the revenue-leakage report flags money that slipped through, so your finance team can act on it.',),
+		array('q' => 'Can we file insurance and government scheme claims?', 'a' => 'Yes. Your team can file cashless TPA, insurance and Ayushman Bharat claims from the bill and track each one to payment. Healthray is ABDM compliant and NHA approved.',),
+		array('q' => 'Is our financial data secure and compliant?', 'a' => 'Yes. Healthray is ISO 27001 certified, HIPAA compliant and NABH certified, and it uses the HL7 and FHIR standards. Bills follow the required format with GST applied correctly.',),
+		array('q' => 'How long does it take to start, and what support do we get?', 'a' => 'Most hospitals start in 1 to 3 weeks, with data migration and staff training included. You get 24x7 support in English, Hindi and Gujarati, plus a free demo before you decide.',),
+	);
+}
+
+// IPD/OPD/Modules/Hospital billing/ABDM/ABHA/DHIS/PM-JAY/Awards/Why Healthray/Telehealth/Patient Flow/Patient Engagement/Medical IoT/Inventory/EPR/Medical College/Doctor App/Patient App/Billing Software/Billing Services FAQ schema
 add_filter('hr_head_faqs', function ($faqs) {
 	if (is_page(27377)) {
 		return healthray_abdm_faq_items();
@@ -1616,6 +1780,18 @@ add_filter('hr_head_faqs', function ($faqs) {
 	}
 	if (is_page(59673)) {
 		return healthray_medical_college_faq_items();
+	}
+	if (is_page(30317)) {
+		return healthray_doctor_app_faq_items();
+	}
+	if (is_page(30956)) {
+		return healthray_patient_app_faq_items();
+	}
+	if (is_page(28345)) {
+		return healthray_billing_software_faq_items();
+	}
+	if (is_page(28530)) {
+		return healthray_billing_services_faq_items();
 	}
 	if (is_page(82361)) {
 		return healthray_ipd_faq_items();

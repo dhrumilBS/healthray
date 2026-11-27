@@ -4,13 +4,13 @@
  * Template Name: Healthray Home - RS
  * Template Post Type: page
  */
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
   exit;
 }
-$hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 department pictures (NN-name.webp, NN-name-phone.webp)
+$hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // department images
 ?>
 <script id="ppc-img-fallback">
-  document.addEventListener("error", function(e) {
+  document.addEventListener("error", function (e) {
     var i = e.target,
       s, f;
     if (i.tagName !== "IMG" || !i.closest(".hr-home-main")) return;
@@ -30,7 +30,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
 </script>
 <div class="ppc-hims">
   <div class="hr-home-main" id="hr-home-main">
-    <!-- 1. HERO: keyword match + the #1 fear answered + form without scrolling -->
+    <!-- Hero -->
     <section class="hero">
       <div class="wrap hero-grid">
         <div class="hero-copy">
@@ -50,32 +50,20 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
         <div class="hero-proof">
           <div class="faces">
             <div class="pile">
-              <span><img
-                  src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Ketan-Rupala-150x150.webp"
-                  alt="Dr. Ketan Rupala" width="44" height="44" data-fallback="KR"></span>
-              <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Bhaumik-Rathore-150x150.webp"
-                  alt="Dr. Bhaumik Rathore" width="44" height="44" data-fallback="BR"></span>
-              <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Maharshi-Desai-150x150.webp"
-                  alt="Dr. Maharshi Desai" width="44" height="44" data-fallback="MD"></span>
-              <span><img src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Vimal-Dhaduk-150x150.webp"
-                  alt="Dr. Vimal Dhaduk" width="44" height="44" data-fallback="VD"></span>
-              <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Arpit-gajjar-150x150.webp"
-                  alt="Dr. Arpit Gajjar" width="44" height="44" data-fallback="AG"></span>
+              <span><img src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Ketan-Rupala-150x150.webp" alt="Dr. Ketan Rupala" width="44" height="44" data-fallback="KR"></span>
+              <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Bhaumik-Rathore-150x150.webp" alt="Dr. Bhaumik Rathore" width="44" height="44" data-fallback="BR"></span>
+              <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Maharshi-Desai-150x150.webp" alt="Dr. Maharshi Desai" width="44" height="44" data-fallback="MD"></span>
+              <span><img src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Vimal-Dhaduk-150x150.webp" alt="Dr. Vimal Dhaduk" width="44" height="44" data-fallback="VD"></span>
+              <span><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Arpit-gajjar-150x150.webp" alt="Dr. Arpit Gajjar" width="44" height="44" data-fallback="AG"></span>
             </div>
             <p><b>2,500+ hospitals and clinics</b> across India run on Healthray</p>
           </div>
           <div class="trust-row">
             <div class="seals">
-              <span class="seal"><img
-                  src="https://healthray.com/wp-content/uploads/2026/07/NABH-ehr-certified-150x150.webp"
-                  alt="NABH certified" width="42" height="42"><span class="fb">NABH</span></span>
-              <span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/09/ABDM-Logo-Healthray.webp"
-                  alt="ABDM compliant" width="42" height="42"><span class="fb">ABDM</span></span>
-              <span class="seal"><img src="https://healthray.com/wp-content/uploads/2025/07/NHA.webp" alt="NHA approved"
-                  width="42" height="42"><span class="fb">NHA</span></span>
-              <span class="seal"><img
-                  src="https://healthray.com/wp-content/uploads/2026/03/iso-27001-healthray-150x150.webp" alt="ISO 27001"
-                  width="42" height="42"><span class="fb">ISO 27001</span></span>
+              <span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/07/NABH-ehr-certified-150x150.webp" alt="NABH certified" width="42" height="42"><span class="fb">NABH</span></span>
+              <span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/09/ABDM-Logo-Healthray.webp" alt="ABDM compliant" width="42" height="42"><span class="fb">ABDM</span></span>
+              <span class="seal"><img src="https://healthray.com/wp-content/uploads/2025/07/NHA.webp" alt="NHA approved" width="42" height="42"><span class="fb">NHA</span></span>
+              <span class="seal"><img src="https://healthray.com/wp-content/uploads/2026/03/iso-27001-healthray-150x150.webp" alt="ISO 27001" width="42" height="42"><span class="fb">ISO 27001</span></span>
             </div>
             <p class="seal-text"><b>NABH certified, ABDM compliant</b><br>NHA approved · ISO 27001 data security</p>
           </div>
@@ -88,7 +76,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
       </div>
     </section>
 
-    <!-- 2. HOSPITALS + SIZE: "a hospital like mine uses this". Bed badge on each tile (confirmed numbers only). -->
+    <!-- Hospitals -->
     <section class="logos" aria-label="Hospitals using Healthray">
       <div class="wrap">
         <p class="lg-label">Hospitals and medical colleges that run on Healthray</p>
@@ -423,7 +411,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
       </div>
     </section>
 
-    <!-- 3. PRODUCT WALKTHROUGH: "what does it look like, is it easy?" - shown right after peer proof. -->
+    <!-- Walkthrough -->
     <section class="section tint walk" id="video-tour" aria-labelledby="walkTitle">
       <div class="wrap">
         <div class="sec-head">
@@ -433,11 +421,8 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
         </div>
         <div class="player" id="player">
           <div class="player-screen">
-            <img class="player-poster" loading="lazy" decoding="async"
-              src="https://healthray.com/wp-content/uploads/2026/11/home-tour-poster.jpg" width="1920" height="1080"
-              alt="Healthray dashboard: OPD visits, IPD admissions, bed occupancy, collections and today's patients">
-            <video id="walkVideo" muted loop playsinline preload="none" disablepictureinpicture disableremoteplayback
-              controlslist="nodownload noremoteplayback" width="1920" height="1080" aria-hidden="true">
+            <img class="player-poster" loading="lazy" decoding="async" src="https://healthray.com/wp-content/uploads/2026/11/home-tour-poster.jpg" width="1920" height="1080" alt="Healthray dashboard: OPD visits, IPD admissions, bed occupancy, collections and today's patients">
+            <video id="walkVideo" muted loop playsinline preload="none" disablepictureinpicture disableremoteplayback controlslist="nodownload noremoteplayback" width="1920" height="1080" aria-hidden="true">
               <source src="https://healthray.com/wp-content/uploads/2026/11/home-tour-web.mp4" type="video/mp4">
             </video>
           </div>
@@ -451,8 +436,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
             </svg>
           </button>
           <button type="button" class="vt vt-fs" id="walkFs" aria-label="Watch the walkthrough full screen">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
-              stroke-linejoin="round" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4" />
             </svg>
           </button>
@@ -464,9 +448,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
       </div>
     </section>
 
-    <!-- 4. DEPARTMENTS COVERED: large still of the real screen, its text underneath, numbered list on the left.
-       Computer: the list and picture stay pinned under the top bar while the page scrolls, one department per step of scrolling,
-       and the page moves on after Reports (js/departments.js). Phone: the names are a row you swipe, and it changes by itself. -->
+    <!-- Departments -->
     <section class="section dp dpG auto" id="departments" aria-labelledby="departmentsTitle" style="--auto:6000ms" data-auto="6000">
       <div class="wrap">
         <div class="dp-head">
@@ -678,7 +660,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
       </div>
     </section>
 
-    <!-- 2c. WHO IT IS FOR (version 2, chosen 17 Nov 2026): the owner's question, answered with one big "Yes.", then the 8 kinds of hospital as a tick grid with a real customer under the ones we can name. Only facts from healthray.com pages and real customers. -->
+    <!-- Who it's for -->
     <section class="section ty" id="hospital-types" aria-labelledby="typesTitle">
       <div class="wrap t2-grid">
         <div class="t2-head">
@@ -721,7 +703,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
       </div>
     </section>
 
-    <!-- 3. THE REAL FEAR: "will my staff use it / will switching break things?" answered by customers, not by us -->
+    <!-- Staff fear -->
     <section class="section tint" id="staff">
       <div class="wrap">
         <div class="sec-head">
@@ -738,10 +720,8 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
             </blockquote>
             <div class="q-by">
               <span class="q-icon q-initials" aria-hidden="true">MP</span>
-              <span><b>Dr. Monil Parmar</b>Universal Superspeciality Hospital<br><span class="verified"><svg width="12"
-                    height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="m5 12.5 4.5 4.5L19 7.5" stroke="#047857" stroke-width="3" stroke-linecap="round"
-                      stroke-linejoin="round" />
+              <span><b>Dr. Monil Parmar</b>Universal Superspeciality Hospital<br><span class="verified"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="m5 12.5 4.5 4.5L19 7.5" stroke="#047857" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>Verified Healthray customer</span></span>
             </div>
             <div class="bbmh-note">
@@ -755,15 +735,12 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
           </div>
           <div class="reel-wrap">
             <div class="video" id="video">
-              <video id="storyVideo" playsinline preload="none" disablepictureinpicture controlslist="nodownload"
-                src="https://healthray.com/wp-content/uploads/2026/08/Universal-Hospital-Surat-Review_-How-Healthray-Streamlined-Our-Workflow.mp4#t=0.5"></video>
+              <video id="storyVideo" playsinline preload="none" disablepictureinpicture controlslist="nodownload" src="https://healthray.com/wp-content/uploads/2026/08/Universal-Hospital-Surat-Review_-How-Healthray-Streamlined-Our-Workflow.mp4#t=0.5"></video>
               <button type="button" id="playBtn" class="story-cover">
-                <img src="https://i.ytimg.com/vi/VRHZ9ejnBWk/oardefault.jpg" alt="" width="1080" height="1920" loading="lazy"
-                  data-fallback-src="https://i.ytimg.com/vi/VRHZ9ejnBWk/hqdefault.jpg">
+                <img src="https://i.ytimg.com/vi/VRHZ9ejnBWk/oardefault.jpg" alt="" width="1080" height="1920" loading="lazy" data-fallback-src="https://i.ytimg.com/vi/VRHZ9ejnBWk/hqdefault.jpg">
                 <span class="shade"></span>
                 <span class="tag">Customer story</span>
-                <span class="cap"><span class="watch"><i><svg width="14" height="14" viewBox="0 0 24 24"
-                        aria-hidden="true">
+                <span class="cap"><span class="watch"><i><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M8 5v14l11-7z" fill="#fff" />
                       </svg></i>Watch his story</span><b>Divyesh Gandhi</b>Head of Operations, Universal Hospital,
                   Surat</span>
@@ -784,7 +761,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
       </div>
     </section>
 
-    <!-- 3b. HOW THE SWITCH HAPPENS: placed right after the staff worry, so the "how" answers the fear (real sequence, so it is numbered) + real certification badges -->
+    <!-- Switch steps -->
     <section class="section sw-sec" id="switching">
       <div class="wrap">
         <div class="sec-head">
@@ -820,7 +797,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
       </div>
     </section>
 
-    <!-- 7. CASE STUDIES: six hospitals, real building photo, one number each, whole row links to the case study -->
+    <!-- Case studies -->
     <section class="section tint rs" id="case-studies">
       <div class="wrap">
         <div class="sec-head">
@@ -858,7 +835,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
         <p class="cs-all"><a href="https://healthray.com/case-studies/">See all case studies →</a></p>
       </div>
     </section>
-    <!-- 8. TESTIMONIALS: doctor reviews in a sliding row (js/proof.js), in the style of the IPD page -->
+    <!-- Testimonials -->
     <section class="section rs" id="testimonials" data-rail>
       <div class="wrap">
         <div class="tm-head">
@@ -904,7 +881,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
       </div>
     </section>
 
-    <!-- 9. PRICE: what decides the price, beside what is always included. No figure is shown because none is published. -->
+    <!-- Pricing -->
     <section class="section tint pr" id="pricing" aria-labelledby="pricingTitle">
       <div class="wrap">
         <div class="p1-head">
@@ -939,7 +916,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
         </div>
       </div>
     </section>
-    <!-- 10. DATA SAFETY AND GOVERNMENT RULES: navy band. The promise and three numbers from the published data agreement (healthray.com/dpa/), with the real certificates on a white card. -->
+    <!-- Data safety -->
     <section class="d1 dz" id="data-safety" aria-labelledby="dataSafetyTitle">
       <div class="wrap d1-grid">
         <div>
@@ -1012,7 +989,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
       </div>
     </section>
 
-    <!-- 11. QUESTIONS: a small demo box and 11 questions. The FAQ structured data below repeats exactly these questions and answers. -->
+    <!-- FAQ -->
     <section class="section tint fq" id="faq" aria-labelledby="faqTitle">
       <div class="wrap f1-grid">
         <div class="f1-side">
@@ -1172,7 +1149,7 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
       }
     </script>
 
-    <!-- 12. CLOSING: the real doctors from this page, one line, one button to the demo form at the top. -->
+    <!-- Closing CTA -->
     <section class="section n2 cz" id="book-demo" aria-labelledby="bookDemoTitle">
       <div class="wrap">
         <div class="n2-faces" aria-hidden="true"><img src="https://healthray.com/wp-content/uploads/2026/10/Dr.-Hinal-Parmar-Rainbow-Hospital-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2026/10/Dr.-Deepika-Singhavi-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2025/12/Dr.-Bhaumik-Rathore-Vibrant-Multispecialty-Hospital-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2025/11/Dr.-Gunjan-Desai-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2026/10/Dr.-Ishita-Das-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2026/10/Dr.-Rajesh-B.-Dhirawani-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Vimal-Dhaduk-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Maharshi-Desai-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2024/04/Dr.-Ketan-Rupala-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Arpit-gajjar-150x150.webp" alt="" loading="lazy" width="68" height="68"><img src="https://healthray.com/wp-content/uploads/2025/10/Dr.-Monil-Parmar-150x150.webp" alt="" loading="lazy" width="68" height="68"></div>
@@ -1182,5 +1159,4 @@ $hr_img = 'https://healthray.com/wp-content/uploads/2026/11'; // the 9 departmen
       </div>
     </section>
   </div>
-  <div class="mcta" id="mcta"><a class="btn btn-primary hr-cta-btn" href="#demo">Book a free demo</a></div>
 </div>
