@@ -20,7 +20,11 @@
     });});
 
     var mob=box.querySelector('[name="your-number"]');
-    if(mob)mob.addEventListener('input',function(){var v=this.value.replace(/\D/g,'');if(v.length>10&&v.indexOf('91')===0)v=v.slice(2);if(v.length>10&&v.charAt(0)==='0')v=v.slice(1);this.value=v.slice(0,10);});
+    function fixMob(){if(!mob)return;var v=mob.value.trim(),d=v.replace(/\D/g,'');if(!v||v.charAt(0)==='+')return;
+      if(d.length===12&&d.indexOf('91')===0)d=d.slice(2);else if(d.length===11&&d.charAt(0)==='0')d=d.slice(1);
+      if(d.length===10)mob.value='+91 '+d;}
+    if(mob)mob.addEventListener('blur',fixMob);
+    wrap.addEventListener('submit',fixMob,true);
     wrap.addEventListener('wpcf7mailsent',function(){
       pushEvent('tpa_form_sent',{bed_size:bedIn?bedIn.value:'',form_position:where});
     });
